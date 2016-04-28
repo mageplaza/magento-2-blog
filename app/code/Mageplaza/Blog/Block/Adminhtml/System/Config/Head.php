@@ -50,6 +50,7 @@ class Head extends \Magento\Config\Block\System\Config\Form\Field
 //
 //                            </li>';
 //		return $html;
+		
 		return parent::render($element);
 	}
 
