@@ -101,6 +101,7 @@
                     <label>Meta keywords for posts list page</label>
                 </field>
             </group>
+
             <group id="share" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"
                    showInStore="1">
                 <label>Social</label>
