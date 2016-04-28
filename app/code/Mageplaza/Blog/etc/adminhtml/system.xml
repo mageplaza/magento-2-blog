@@ -101,6 +101,19 @@
                     <label>Meta keywords for posts list page</label>
                 </field>
             </group>
+            <group id="share" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Comments</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="pubid_id"
+                       translate="label" type="text" sortOrder="1" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Pubid Id</label>
+                </field>
+            </group>
         </section>
     </system>
 </config>

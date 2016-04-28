@@ -13,6 +13,9 @@
             <comment>
                 <type>4</type>
             </comment>
+            <share>
+                <enabled>1</enabled>
+            </share>
         </blog>
     </default>
 </config>
