@@ -1,0 +1,18 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <blog>
+            <general>
+                <enabled>1</enabled>
+                <name>Block</name>
+            </general>
+            <sidebar>
+                <number_recent_posts>5</number_recent_posts>
+                <number_mostview_posts>5</number_mostview_posts>
+            </sidebar>
+            <comment>
+                <type>4</type>
+            </comment>
+        </blog>
+    </default>
+</config>

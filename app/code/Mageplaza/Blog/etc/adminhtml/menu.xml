@@ -22,5 +22,6 @@
         <add id="Mageplaza_Blog::tag" title="Tags" module="Mageplaza_Blog" sortOrder="20" action="mageplaza_blog/tag" resource="Mageplaza_Blog::tag" parent="Mageplaza_Blog::blog"/>
         <add id="Mageplaza_Blog::topic" title="Topics" module="Mageplaza_Blog" sortOrder="30" action="mageplaza_blog/topic" resource="Mageplaza_Blog::topic" parent="Mageplaza_Blog::blog"/>
         <add id="Mageplaza_Blog::category" title="Categories" module="Mageplaza_Blog" sortOrder="40" action="mageplaza_blog/category" resource="Mageplaza_Blog::category" parent="Mageplaza_Blog::blog"/>
+        <add id="Mageplaza_Blog::settings" title="Setting" module="Mageplaza_Blog" sortOrder="50" action="adminhtml/system_config/edit/section/blog" resource="Mageplaza_Blog::settings" parent="Mageplaza_Blog::blog"/>
     </menu>
 </config>

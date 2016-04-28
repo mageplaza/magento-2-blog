@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="mageplaza" translate="label" sortOrder="400">
+            <label>mageplaza</label>
+        </tab>
+        <section id="blog" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1"
+                 showInStore="1">
+            <class>separator-top</class>
+            <label>Better Blog</label>
+            <tab>mageplaza</tab>
+            <resource>Mageplaza_Blog::blog</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>General</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="name"
+                       translate="label" type="text" sortOrder="11" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Blog name</label>
+                    <comment>Blog name</comment>
+                </field>
+                <field id="url_prefix"
+                       translate="label" type="text" sortOrder="15" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Blog Url</label>
+                    <comment>Blog Url</comment>
+                </field>
+                <field id="toplinks" translate="label comment" type="select" sortOrder="20" showInDefault="20"
+                       showInWebsite="1" showInStore="1">
+                    <label>Show Blog Link in Top links</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="footer" translate="label comment" type="select" sortOrder="25" showInDefault="20"
+                       showInWebsite="1" showInStore="1">
+                    <label>Show Blog Link in Footer links</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sidebar_right" translate="label comment" type="select" sortOrder="30" showInDefault="20"
+                       showInWebsite="1" showInStore="1">
+                    <label>Show Sidebar Right</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sidebar_left" translate="label comment" type="select" sortOrder="30" showInDefault="20"
+                       showInWebsite="1" showInStore="1">
+                    <label>Show Sidebar Left</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="sidebar" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Sidebar</label>
+                <field id="number_recent_posts"
+                       translate="label" type="text" sortOrder="1" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Number of recent posts</label>
+                </field>
+                <field id="number_mostview_posts"
+                       translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Number of most view posts</label>
+                </field>
+            </group>
+            <group id="comment" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Comments</label>
+                <field id="type"
+                       translate="label" type="select" sortOrder="1" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Number of recent posts</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Type</source_model>
+                </field>
+            </group>
+            <group id="seo" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Seo</label>
+                meta_title
+                <field id="meta_title"
+                       translate="label" type="text" sortOrder="1" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Meta title for posts list page</label>
+                </field>
+                <field id="meta_description"
+                       translate="label" type="textarea" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Meta description for posts list page</label>
+                </field>
+                <field id="meta_keywords"
+                       translate="label" type="textarea" sortOrder="15" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Meta keywords for posts list page</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
