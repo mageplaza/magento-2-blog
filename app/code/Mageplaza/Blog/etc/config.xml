@@ -4,7 +4,9 @@
         <blog>
             <general>
                 <enabled>1</enabled>
-                <name>Block</name>
+                <name>Blog</name>
+                <url_prefix>news</url_prefix>
+                <url_suffix>.html</url_suffix>
             </general>
             <sidebar>
                 <number_recent_posts>5</number_recent_posts>

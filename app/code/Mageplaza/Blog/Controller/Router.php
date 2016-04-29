@@ -12,114 +12,127 @@ namespace Mageplaza\Blog\Controller;
  */
 class Router implements \Magento\Framework\App\RouterInterface
 {
-    /**
-     * @var \Magento\Framework\App\ActionFactory
-     */
-    protected $actionFactory;
+	/**
+	 * @var \Magento\Framework\App\ActionFactory
+	 */
+	protected $actionFactory;
 
-    /**
-     * Event manager
-     *
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $_eventManager;
+	/**
+	 * Event manager
+	 *
+	 * @var \Magento\Framework\Event\ManagerInterface
+	 */
+	protected $_eventManager;
 
-    /**
-     * Store manager
-     *
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
+	/**
+	 * Store manager
+	 *
+	 * @var \Magento\Store\Model\StoreManagerInterface
+	 */
+	protected $_storeManager;
 
-    /**
-     * Page factory
-     *
-     * @var \Magento\Cms\Model\PageFactory
-     */
-    protected $_pageFactory;
+	/**
+	 * Page factory
+	 *
+	 * @var \Magento\Cms\Model\PageFactory
+	 */
+	protected $_pageFactory;
 
-    /**
-     * Config primary
-     *
-     * @var \Magento\Framework\App\State
-     */
-    protected $_appState;
+	/**
+	 * Config primary
+	 *
+	 * @var \Magento\Framework\App\State
+	 */
+	protected $_appState;
 
-    /**
-     * Url
-     *
-     * @var \Magento\Framework\UrlInterface
-     */
-    protected $_url;
+	/**
+	 * Url
+	 *
+	 * @var \Magento\Framework\UrlInterface
+	 */
+	protected $_url;
 
-    /**
-     * Response
-     *
-     * @var \Magento\Framework\App\ResponseInterface
-     */
-    protected $_response;
+	/**
+	 * Response
+	 *
+	 * @var \Magento\Framework\App\ResponseInterface
+	 */
+	protected $_response;
+	/**
+	 * Helper
+	 *
+	 * @var \Mageplaza\Blog\Helper\Data
+	 */
+	protected $_helper;
 
-    /**
-     * @param \Magento\Framework\App\ActionFactory $actionFactory
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Cms\Model\PageFactory $pageFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\ResponseInterface $response
-     */
-    public function __construct(
-        \Magento\Framework\App\ActionFactory $actionFactory,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\UrlInterface $url,
-        \Magento\Cms\Model\PageFactory $pageFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\ResponseInterface $response
-    ) {
-        $this->actionFactory = $actionFactory;
-        $this->_eventManager = $eventManager;
-        $this->_url = $url;
-        $this->_pageFactory = $pageFactory;
-        $this->_storeManager = $storeManager;
-        $this->_response = $response;
-    }
+	/**
+	 * @param \Magento\Framework\App\ActionFactory $actionFactory
+	 * @param \Magento\Framework\Event\ManagerInterface $eventManager
+	 * @param \Magento\Framework\UrlInterface $url
+	 * @param \Magento\Cms\Model\PageFactory $pageFactory
+	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+	 * @param \Magento\Framework\App\ResponseInterface $response
+	 */
+	public function __construct(
+		\Magento\Framework\App\ActionFactory $actionFactory,
+		\Magento\Framework\Event\ManagerInterface $eventManager,
+		\Magento\Framework\UrlInterface $url,
+		\Magento\Cms\Model\PageFactory $pageFactory,
+		\Magento\Store\Model\StoreManagerInterface $storeManager,
+		\Magento\Framework\App\ResponseInterface $response,
+		\Mageplaza\Blog\Helper\Data $helper
+	)
+	{
+		$this->actionFactory = $actionFactory;
+		$this->_eventManager = $eventManager;
+		$this->_url          = $url;
+		$this->_pageFactory  = $pageFactory;
+		$this->_storeManager = $storeManager;
+		$this->_response     = $response;
+		$this->_helper       = $helper;
+	}
 
-    /**
-     * Validate and Match Cms Page and modify request
-     *
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @return bool
-     */
-    public function match(\Magento\Framework\App\RequestInterface $request)
-    {
-        $identifier = trim($request->getPathInfo(), '/');
-            \Zend_Debug::dump($identifier);die;
-        $condition = new \Magento\Framework\DataObject(['identifier' => $identifier, 'continue' => true]);
-        $this->_eventManager->dispatch(
-            'cms_controller_router_match_before',
-            ['router' => $this, 'condition' => $condition]
-        );
-        $identifier = $condition->getIdentifier();
+	/**
+	 * Validate and Match Cms Page and modify request
+	 *
+	 * @param \Magento\Framework\App\RequestInterface $request
+	 * @return bool
+	 */
+	public function match(\Magento\Framework\App\RequestInterface $request)
+	{
+		$helper = $this->_helper;
+		if ($helper->getBlogConfig('general/enabled')) {
+			$url_prefix = $helper->getBlogConfig('general/url_prefix');
+			$url_suffix = $helper->getBlogConfig('general/url_suffix');
+			if ($url_prefix == '') {
+				return $this;
+			}
+			$path = trim($request->getPathInfo(), '/');
+			if (strpos($path, $url_prefix) == 0) {
+				$array = explode('/', $path);
+				if (count($array) == 1) {
+//					$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, 'kiu');
+					$request->setPathInfo('/' . 'blog/post/index');
+					return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+				} elseif (count($array) == 2) {
+					$url_key = $array[1];
+					$post=$this->_helper->getPostByUrl($url_key);
+					if($post && $post->getId()){
+						$request->setPathInfo('/' . 'blog/post/view/id='.$post->getId());
+						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+					}
 
-        if ($condition->getRedirectUrl()) {
-            $this->_response->setRedirect($condition->getRedirectUrl());
-            $request->setDispatched(true);
-            return $this->actionFactory->create('Magento\Framework\App\Action\Redirect');
-        }
+				} elseif (count($array) == 3) {
+					$type = $array[1];
+					if ($type == 'tag') {
+						$tagName = $array[2];
+						
+					}
+				}
 
-        if (!$condition->getContinue()) {
-            return null;
-        }
+			}
+		}
 
-        /** @var \Magento\Cms\Model\Page $page */
-        $page = $this->_pageFactory->create();
-        $pageId = $page->checkIdentifier($identifier, $this->_storeManager->getStore()->getId());
-        if (!$pageId) {
-            return null;
-        }
-
-        $request->setModuleName('blog')->setControllerName('page')->setActionName('view')->setParam('page_id', $pageId);
-        $request->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
-
-        return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
-    }
+		return $this;
+	}
 }
