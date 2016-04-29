@@ -27,7 +27,7 @@ class Listpost extends Template
 	protected $helperData;
 	protected $objectManager;
 	protected $storeManager;
-
+	protected $localeDate;
 	public function __construct(
 		Context $context,
 		HelperData $helperData,
@@ -39,6 +39,7 @@ class Listpost extends Template
 		$this->helperData    = $helperData;
 		$this->objectManager = $objectManager;
 		$this->storeManager  = $storeManager;
+		$this->localeDate=$context->getLocaleDate();
 		parent::__construct($context, $data);
 	}
 
@@ -50,5 +51,14 @@ class Listpost extends Template
 	}
 	public function getImageUrl($image){
 		return $this->helperData->getImageUrl($image);
+	}
+	public function getCreatedAtStoreDate($createdAt)
+	{
+		return $this->_localeDate->scopeDate($this->storeManager->getStore(), $createdAt, true);
+	}
+	public function getPostCategoryHtml($post)
+	{
+		return $this->helperData->getPostCategoryHtml($post);
+
 	}
 }

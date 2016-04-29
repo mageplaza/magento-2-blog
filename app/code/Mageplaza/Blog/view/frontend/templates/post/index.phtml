@@ -36,9 +36,8 @@ $posts=$block->getPostList();
 
 
                 <div class="mp-post-info">
-<!--                    --><?php //echo $this->__('Posted on'); ?><!-- --><?php //echo Mage::helper('core')->formatDate($posts->getCreatedAt(), 'medium', false) ?><!-- |-->
-<!--					--><?php //echo $this->__('Posted in'); ?><!-- --><?php //echo $posts->getPostCategoryHtml(); ?>
-<!--					--><?php //if(Mage::helper('mageplaza_betterblog')->canShowCommentCount()) echo '| '. Mage::helper('mageplaza_betterblog')->formatCommentCount($posts->getCommentCount()); ?>
+                    <?php echo __('Posted on'); ?> <?php echo $post->getCreatedAt() ?> |
+					<?php echo __('Posted in'); ?> <?php echo $block->getPostCategoryHtml(); ?>
                 </div>
 
 

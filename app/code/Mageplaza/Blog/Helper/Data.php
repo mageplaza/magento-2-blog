@@ -100,5 +100,22 @@ class Data extends AbstractHelper
 	{
 		return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
 	}
+	public function getPostCategoryHtml($post)
+	{
+		return 'aaa';
+		$categories = $this->getPostCategories($post);
+		if (!$categories) return null;
+		$categoryHtml = array();
 
+		foreach ($categories as $_cat) {
+			$categoryHtml[] = '<a href="' . $_cat->getCategoryUrl() . '">' . $_cat->getName() . '</a>';
+		}
+
+		$result = implode(', ', $categoryHtml);
+		return $result;
+
+	}
+	public function getPostCategories($post){
+		return 'aaa';
+	}
 }
