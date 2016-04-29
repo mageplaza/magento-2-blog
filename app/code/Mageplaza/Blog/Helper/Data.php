@@ -8,6 +8,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\ScopeInterface;
 use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\CategoryFactory;
 
 class Data extends AbstractHelper
 {
@@ -15,17 +16,20 @@ class Data extends AbstractHelper
 	protected $storeManager;
 	protected $objectManager;
 	protected $postfactory;
+	protected $categoryfactory;
 
 	public function __construct(
 		Context $context,
 		ObjectManagerInterface $objectManager,
 		StoreManagerInterface $storeManager,
-		PostFactory $postFactory
+		PostFactory $postFactory,
+		CategoryFactory $categoryFactory
 	)
 	{
-		$this->objectManager = $objectManager;
-		$this->storeManager  = $storeManager;
-		$this->postfactory   = $postFactory;
+		$this->objectManager   = $objectManager;
+		$this->storeManager    = $storeManager;
+		$this->postfactory     = $postFactory;
+		$this->categoryfactory = $categoryFactory;
 		parent::__construct($context);
 	}
 
@@ -48,6 +52,16 @@ class Data extends AbstractHelper
 		$posts = $this->postfactory->create();
 		$list  = $posts->getCollection()
 			->addFieldToFilter('enabled', 1);
+
+		return $list;
+	}
+
+	public function getCategoryCollection($array)
+	{
+		$category = $this->categoryfactory->create();
+		$list     = $category->getCollection()
+			->addFieldToFilter('enabled', 1)
+			->addFieldToFilter('category_id', array('in' => $array));
 
 		return $list;
 	}
@@ -100,22 +114,27 @@ class Data extends AbstractHelper
 	{
 		return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
 	}
+
+	public function getCategoryUrl($category)
+	{
+		return $this->_getUrl($this->getBlogConfig('general/url_prefix').'/category'.$category->getUrlKey().$this->getBlogConfig('general/url_suffix'));
+	}
+
 	public function getPostCategoryHtml($post)
 	{
-		return 'aaa';
-		$categories = $this->getPostCategories($post);
-		if (!$categories) return null;
+
+		$categories = $this->getCategoryCollection($post->getCategoryIds());
+
+		if (!$categories->getSize()) return null;
 		$categoryHtml = array();
 
 		foreach ($categories as $_cat) {
-			$categoryHtml[] = '<a href="' . $_cat->getCategoryUrl() . '">' . $_cat->getName() . '</a>';
+			$categoryHtml[] = '<a href="' . $this->getCategoryUrl($_cat) . '">' . $_cat->getName() . '</a>';
 		}
 
 		$result = implode(', ', $categoryHtml);
+
 		return $result;
 
-	}
-	public function getPostCategories($post){
-		return 'aaa';
 	}
 }

@@ -37,7 +37,7 @@ $posts=$block->getPostList();
 
                 <div class="mp-post-info">
                     <?php echo __('Posted on'); ?> <?php echo $post->getCreatedAt() ?> |
-					<?php echo __('Posted in'); ?> <?php echo $block->getPostCategoryHtml(); ?>
+					<?php echo __('Posted in'); ?> <?php echo $block->getPostCategoryHtml($post); ?>
                 </div>
 
 
