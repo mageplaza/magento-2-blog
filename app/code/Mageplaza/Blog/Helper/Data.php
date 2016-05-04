@@ -47,13 +47,22 @@ class Data extends AbstractHelper
 		return $this->getConfigValue(self::XML_PATH_BLOG . $code, $storeId);
 	}
 
-	public function getPostList()
+	public function getPostList($type = null, $id = null)
 	{
-		$posts = $this->postfactory->create();
-		$list  = $posts->getCollection()
-			->addFieldToFilter('enabled', 1);
+		$list          = '';
+		$posts         = $this->postfactory->create();
+		$categoryModel = $this->categoryfactory->create();
+		if ($type == null) {
+			$list = $posts->getCollection();
+		} elseif ($type == 'category') {
+			$category = $categoryModel->load($id);
+			$list     = $category->getSelectedPostsCollection();
+		}
 
-		return $list;
+		if (count($list))
+			return $list->addFieldToFilter('enabled', 1);
+
+		return $posts;
 	}
 
 	public function getCategoryCollection($array)
@@ -158,12 +167,12 @@ class Data extends AbstractHelper
 		return $post;
 	}
 
-	public function getCategoryByParam($code,$param)
+	public function getCategoryByParam($code, $param)
 	{
-		if($code=='id'){
+		if ($code == 'id') {
 			return $this->categoryfactory->create()->load($param);
-		}else{
-			return $this->categoryfactory->create()->load($param,$code);
+		} else {
+			return $this->categoryfactory->create()->load($param, $code);
 		}
 
 	}

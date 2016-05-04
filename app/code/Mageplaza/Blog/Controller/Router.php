@@ -127,6 +127,7 @@ class Router implements \Magento\Framework\App\RouterInterface
 
 				} elseif (count($array) == 3) {
 					$type = $array[1];
+
 					if ($type == 'post' && $array[2] == 'index') {
 						if ($array[2] == 'index') {
 							$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $url_key);
@@ -151,9 +152,9 @@ class Router implements \Magento\Framework\App\RouterInterface
 					if ($type == 'tag') {
 						$tagName = $array[2];
 					}
-					if ($type == 'cartegory') {
+					if ($type == 'category') {
 						$categoryName = $array[2];
-						$category    = $this->_helper->getCategoryByParam('url_key',$url_key);
+						$category    = $this->_helper->getCategoryByParam('url_key',$categoryName);
 						if ($category && $category->getId()) {
 							$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
 							$request->setPathInfo('/' . 'blog/category/view/id/' . $category->getId());
