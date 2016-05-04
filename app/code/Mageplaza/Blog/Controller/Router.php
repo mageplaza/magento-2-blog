@@ -111,30 +111,55 @@ class Router implements \Magento\Framework\App\RouterInterface
 			if (strpos($path, $url_prefix) == 0) {
 				$array = explode('/', $path);
 				if (count($array) == 1) {
-//					$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, 'kiu');
+					$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
 					$request->setPathInfo('/' . 'blog/post/index');
+
 					return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
 				} elseif (count($array) == 2) {
 					$url_key = $array[1];
-					$post=$this->_helper->getPostByUrl($url_key);
-					if($post && $post->getId()){
-						$request->setPathInfo('/' . 'blog/post/view/id/'.$post->getId());
+					$post    = $this->_helper->getPostByUrl($url_key);
+					if ($post && $post->getId()) {
+						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $url_key);
+						$request->setPathInfo('/' . 'blog/post/view/id/' . $post->getId());
+
 						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
 					}
 
 				} elseif (count($array) == 3) {
 					$type = $array[1];
+					if ($type == 'post' && $array[2] == 'index') {
+						if ($array[2] == 'index') {
+							$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $url_key);
+							$request->setPathInfo('/' . 'blog/post/index');
+
+							return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+						} else {
+							$url_key = $array[2];
+							$post    = $this->_helper->getPostByUrl($url_key);
+							if ($post && $post->getId()) {
+								$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $url_key);
+								$request->setPathInfo('/' . 'blog/post/view/id/' . $post->getId());
+
+								return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+							}
+
+						}
+					}
+					if ($type == 'topic') {
+						$topicName = $array[2];
+					}
 					if ($type == 'tag') {
 						$tagName = $array[2];
-
 					}
-					if($type=='post' && $array[2]=='index'){
-						$request->setPathInfo('/' . 'blog/post/index');
-						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+					if ($type == 'cartegory') {
+						$categoryName = $array[2];
+						$category    = $this->_helper->getCategoryByParam('url_key',$url_key);
+						if ($category && $category->getId()) {
+							$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
+							$request->setPathInfo('/' . 'blog/category/view/id/' . $category->getId());
 
-					}
-					if($type=='cartegory'){
-
+							return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+						}
 					}
 				}
 

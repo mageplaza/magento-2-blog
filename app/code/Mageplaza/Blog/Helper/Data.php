@@ -130,7 +130,7 @@ class Data extends AbstractHelper
 
 	public function getCategoryUrl($category)
 	{
-		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/category' . $category->getUrlKey() . $this->getBlogConfig('general/url_suffix'));
+		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/category/' . $category->getUrlKey());
 	}
 
 	public function getPostCategoryHtml($post)
@@ -156,5 +156,15 @@ class Data extends AbstractHelper
 		$post = $this->postfactory->create()->load($id);
 
 		return $post;
+	}
+
+	public function getCategoryByParam($code,$param)
+	{
+		if($code=='id'){
+			return $this->categoryfactory->create()->load($param);
+		}else{
+			return $this->categoryfactory->create()->load($param,$code);
+		}
+
 	}
 }
