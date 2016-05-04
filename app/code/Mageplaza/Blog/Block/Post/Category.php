@@ -24,6 +24,10 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class Category extends Template
 {
+	protected $helperData;
+	protected $objectManager;
+	protected $storeManager;
+	protected $localeDate;
 	public function __construct(
 		Context $context,
 		HelperData $helperData,

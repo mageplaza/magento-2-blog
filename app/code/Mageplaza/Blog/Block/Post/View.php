@@ -24,6 +24,11 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class View extends Template
 {
+	protected $helperData;
+	protected $objectManager;
+	protected $storeManager;
+	protected $localeDate;
+
 	public function __construct(
 		Context $context,
 		HelperData $helperData,
@@ -37,4 +42,31 @@ class View extends Template
 		$this->storeManager  = $storeManager;
 		parent::__construct($context, $data);
 	}
+
+	public function getCurrentPost()
+	{
+		return $this->helperData->getPost($this->getRequest()->getParam('id'));
+	}
+
+	public function getUrlByPost($post)
+	{
+		return $this->helperData->getUrlByPost($post);
+	}
+
+	public function getImageUrl($image)
+	{
+		return $this->helperData->getImageUrl($image);
+	}
+
+	public function getCreatedAtStoreDate($createdAt)
+	{
+		return $this->_localeDate->scopeDate($this->storeManager->getStore(), $createdAt, true);
+	}
+
+	public function getPostCategoryHtml($post)
+	{
+		return $this->helperData->getPostCategoryHtml($post);
+
+	}
+
 }

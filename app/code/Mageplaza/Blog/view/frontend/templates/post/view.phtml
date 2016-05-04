@@ -1,0 +1,57 @@
+
+<?php $_post = $block->getCurrentPost();
+
+?>
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-568cdc40e9eab41d"
+		async="async"></script>
+
+	<div class="page-title post-title">
+        <h1><?php echo $_post->getName(); ?></h1>
+    </div>
+	<div class="post-view">
+
+        <div class="mp-post-info">
+            <?php echo __('Posted on'); ?> <?php echo $_post->getCreatedAt() ?>
+			|
+			<?php echo __('Posted in'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> |
+        </div>
+
+        <br>
+
+        <div class="post-image">
+           <?php if ($_post->getImage()) : ?>
+			   <a href="<?php echo $block->getUrlByPost($_post) ?>">
+                            <img
+								src="<?php echo $block->getImageUrl($_post->getImage()); ?>"
+								alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
+                        </a>
+		   <?php endif; ?>
+        </div>
+
+
+        <div class="post-post_content">
+            <?php echo $_post->getPostContent(); ?>
+        </div>
+
+    </div>
+
+
+	<div class="post-sharing-button">
+        <div class="addthis_sharing_toolbox"></div>
+    </div>
+    <div class="post-same-topics post-list">
+        <?php $topicCollection = $_post->getSelectedTopicsCollection(); ?>
+		<?php if ($topicCollection): ?>
+			<h2><?php echo __('Topic'); ?></h2>
+			<ul>
+                <?php foreach ($topicCollection as $topic): ?>
+					<li>
+                        <a href="<?php echo '' ?>"><?php echo $topic->getName(); ?></a>
+                    </li>
+				<?php endforeach; ?>
+
+            </ul>
+
+		<?php endif; ?>
+
+    </div>

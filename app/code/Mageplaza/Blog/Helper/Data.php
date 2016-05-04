@@ -87,7 +87,20 @@ class Data extends AbstractHelper
 
 	public function getPostByUrl($url)
 	{
-		return true;
+		$url   = $this->checkSuffix($url);
+		$posts = $this->postfactory->create()->load($url, 'url_key');
+
+		return $posts;
+	}
+
+	public function checkSuffix($url)
+	{
+		$url_suffix = $this->getBlogConfig('general/url_suffix');
+		if (strpos($url, $url_suffix)) {
+			$url = str_replace($url_suffix, '', $url);
+		}
+
+		return $url;
 	}
 
 	public function getPostsByTag($tag)
@@ -117,7 +130,7 @@ class Data extends AbstractHelper
 
 	public function getCategoryUrl($category)
 	{
-		return $this->_getUrl($this->getBlogConfig('general/url_prefix').'/category'.$category->getUrlKey().$this->getBlogConfig('general/url_suffix'));
+		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/category' . $category->getUrlKey() . $this->getBlogConfig('general/url_suffix'));
 	}
 
 	public function getPostCategoryHtml($post)
@@ -136,5 +149,12 @@ class Data extends AbstractHelper
 
 		return $result;
 
+	}
+
+	public function getPost($id)
+	{
+		$post = $this->postfactory->create()->load($id);
+
+		return $post;
 	}
 }

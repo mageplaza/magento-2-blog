@@ -118,7 +118,7 @@ class Router implements \Magento\Framework\App\RouterInterface
 					$url_key = $array[1];
 					$post=$this->_helper->getPostByUrl($url_key);
 					if($post && $post->getId()){
-						$request->setPathInfo('/' . 'blog/post/view/id='.$post->getId());
+						$request->setPathInfo('/' . 'blog/post/view/id/'.$post->getId());
 						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
 					}
 
@@ -126,13 +126,20 @@ class Router implements \Magento\Framework\App\RouterInterface
 					$type = $array[1];
 					if ($type == 'tag') {
 						$tagName = $array[2];
-						
+
+					}
+					if($type=='post' && $array[2]=='index'){
+						$request->setPathInfo('/' . 'blog/post/index');
+						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+
+					}
+					if($type=='cartegory'){
+
 					}
 				}
 
 			}
 		}
 
-		return $this;
 	}
 }
