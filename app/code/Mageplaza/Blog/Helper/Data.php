@@ -9,6 +9,8 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\ScopeInterface;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\CategoryFactory;
+use Mageplaza\Blog\Model\TagFactory;
+use Mageplaza\Blog\Model\TopicFactory;
 
 class Data extends AbstractHelper
 {
@@ -17,19 +19,25 @@ class Data extends AbstractHelper
 	protected $objectManager;
 	protected $postfactory;
 	protected $categoryfactory;
+	protected $tagfactory;
+	protected $topicfactory;
 
 	public function __construct(
 		Context $context,
 		ObjectManagerInterface $objectManager,
 		StoreManagerInterface $storeManager,
 		PostFactory $postFactory,
-		CategoryFactory $categoryFactory
+		CategoryFactory $categoryFactory,
+		TagFactory $tagFactory,
+		TopicFactory $topicFactory
 	)
 	{
 		$this->objectManager   = $objectManager;
 		$this->storeManager    = $storeManager;
 		$this->postfactory     = $postFactory;
 		$this->categoryfactory = $categoryFactory;
+		$this->tagfactory      = $tagFactory;
+		$this->topicfactory    = $topicFactory;
 		parent::__construct($context);
 	}
 
@@ -52,11 +60,19 @@ class Data extends AbstractHelper
 		$list          = '';
 		$posts         = $this->postfactory->create();
 		$categoryModel = $this->categoryfactory->create();
+		$tagModel      = $this->tagfactory->create();
+		$topicModel    = $this->topicfactory->create();
 		if ($type == null) {
 			$list = $posts->getCollection();
 		} elseif ($type == 'category') {
 			$category = $categoryModel->load($id);
 			$list     = $category->getSelectedPostsCollection();
+		} elseif ($type == 'tag') {
+			$tag  = $tagModel->load($id);
+			$list = $tag->getSelectedPostsCollection();
+		} elseif ($type == 'topic') {
+			$topic = $topicModel->load($id);
+			$list  = $topic->getSelectedPostsCollection();
 		}
 
 		if (count($list))
