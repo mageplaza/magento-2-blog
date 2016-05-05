@@ -56,9 +56,26 @@
     </div>
 	<div class="mp-comment">
 			<?php $typeComment = $block->checkComment(); ?>
-			<?php if($typeComment== Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>
-			<?php elseif ($typeComment== Mageplaza\Blog\Model\Config\Source\Comments\Type::FACEBOOK): ?>
-				<div class="box-collateral box-reviews" id="post-reviews">
+		<?php if($typeComment== Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>
+			<div class="box-collateral box-reviews" id="post-reviews">
+        <h2><?php echo __('Comments') ?></h2>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = '<?php echo $block->helperComment('disqus');?>';
+
+			/* * * DON'T EDIT BELOW THIS LINE * * */
+			(function() {
+				var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+				dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+				(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+			})();
+        </script>
+
+
+    </div>
+		<?php elseif ($typeComment== Mageplaza\Blog\Model\Config\Source\Comments\Type::FACEBOOK): ?>
+			<div class="box-collateral box-reviews" id="post-reviews">
         <h2><?php echo __('Comments') ?></h2>
 
         <div id="fb-root"></div>
@@ -76,5 +93,5 @@
 
     </div>
 
-			<?php endif; ?>
+		<?php endif; ?>
 	</div>
