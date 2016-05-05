@@ -23,7 +23,7 @@ class Listpost extends Frontend
 
 	public function getPostList()
 	{
-		return $this->helperData->getPostList('topic',$this->getRequest()->getParam('id'));
+		return $this->helperData->getPostList('category',$this->getRequest()->getParam('id'));
 	}
 
 }

@@ -22,6 +22,6 @@ class Listpost extends Frontend
 {
 
 	public function getPostList(){
-		return $this->helperData->getPostList('tag',$this->getRequest()->getParam('id'));
+		return $this->helperData->getPostList('topic',$this->getRequest()->getParam('id'));
 	}
 }
