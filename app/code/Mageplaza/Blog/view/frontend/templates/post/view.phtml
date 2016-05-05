@@ -46,7 +46,7 @@
 			<ul>
                 <?php foreach ($topicCollection as $topic): ?>
 					<li>
-                        <a href="<?php echo '' ?>"><?php echo $topic->getName(); ?></a>
+                        <a href="<?php echo $block->getTopicUrl($topic) ?>"><?php echo $topic->getName(); ?></a>
                     </li>
 				<?php endforeach; ?>
 

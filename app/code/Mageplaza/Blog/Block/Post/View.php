@@ -15,58 +15,14 @@
  */
 namespace Mageplaza\Blog\Block\Post;
 
-use Magento\Framework\View\Element\Template;
+use Mageplaza\Blog\Block\Frontend;
 
-use Magento\Framework\View\Element\Template\Context;
-use Mageplaza\Blog\Helper\Data as HelperData;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\StoreManagerInterface;
-
-class View extends Template
+class View extends Frontend
 {
-	protected $helperData;
-	protected $objectManager;
-	protected $storeManager;
-	protected $localeDate;
 
-	public function __construct(
-		Context $context,
-		HelperData $helperData,
-		ObjectManagerInterface $objectManager,
-		StoreManagerInterface $storeManager,
-		array $data = []
-	)
+	public function getTopicUrl($topic)
 	{
-		$this->helperData    = $helperData;
-		$this->objectManager = $objectManager;
-		$this->storeManager  = $storeManager;
-		parent::__construct($context, $data);
-	}
-
-	public function getCurrentPost()
-	{
-		return $this->helperData->getPost($this->getRequest()->getParam('id'));
-	}
-
-	public function getUrlByPost($post)
-	{
-		return $this->helperData->getUrlByPost($post);
-	}
-
-	public function getImageUrl($image)
-	{
-		return $this->helperData->getImageUrl($image);
-	}
-
-	public function getCreatedAtStoreDate($createdAt)
-	{
-		return $this->_localeDate->scopeDate($this->storeManager->getStore(), $createdAt, true);
-	}
-
-	public function getPostCategoryHtml($post)
-	{
-		return $this->helperData->getPostCategoryHtml($post);
-
+		return $this->helperData->getTopicUrl($topic);
 	}
 
 }

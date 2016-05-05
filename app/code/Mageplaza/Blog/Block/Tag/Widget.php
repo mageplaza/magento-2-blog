@@ -13,22 +13,22 @@
  * @copyright Copyright (c) 2016
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Mageplaza\Blog\Block\Category;
+namespace Mageplaza\Blog\Block\Tag;
 
 
 use Mageplaza\Blog\Block\Frontend;
 
 class Widget extends Frontend
 {
-	public function getCategoryList()
+	public function getTagList()
 	{
 		$postId = $this->getRequest()->getParam('id');
 
-		return $this->helperData->getCategoryByPost($postId);
+		return $this->helperData->getTagsByPost($postId);
 	}
 
-	public function getCategoryUrl($category)
+	public function getTagUrl($tag)
 	{
-		return $this->helperData->getCategoryUrl($category);
+		return $this->helperData->getTagUrl($tag);
 	}
 }

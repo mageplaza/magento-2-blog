@@ -15,50 +15,13 @@
  */
 namespace Mageplaza\Blog\Block\Post;
 
-use Magento\Framework\View\Element\Template;
 
-use Magento\Framework\View\Element\Template\Context;
-use Mageplaza\Blog\Helper\Data as HelperData;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Mageplaza\Blog\Block\Frontend;
 
-class Listpost extends Template
+class Listpost extends Frontend
 {
-	protected $helperData;
-	protected $objectManager;
-	protected $storeManager;
-	protected $localeDate;
-	public function __construct(
-		Context $context,
-		HelperData $helperData,
-		ObjectManagerInterface $objectManager,
-		StoreManagerInterface $storeManager,
-		array $data = []
-	)
-	{
-		$this->helperData    = $helperData;
-		$this->objectManager = $objectManager;
-		$this->storeManager  = $storeManager;
-		$this->localeDate=$context->getLocaleDate();
-		parent::__construct($context, $data);
-	}
 
 	public function getPostList(){
 		return $this->helperData->getPostList();
-	}
-	public function getUrlByPost($post){
-		return $this->helperData->getUrlByPost($post);
-	}
-	public function getImageUrl($image){
-		return $this->helperData->getImageUrl($image);
-	}
-	public function getCreatedAtStoreDate($createdAt)
-	{
-		return $this->_localeDate->scopeDate($this->storeManager->getStore(), $createdAt, true);
-	}
-	public function getPostCategoryHtml($post)
-	{
-		return $this->helperData->getPostCategoryHtml($post);
-
 	}
 }

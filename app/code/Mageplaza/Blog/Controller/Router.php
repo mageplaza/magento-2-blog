@@ -130,7 +130,7 @@ class Router implements \Magento\Framework\App\RouterInterface
 
 					if ($type == 'post' && $array[2] == 'index') {
 						if ($array[2] == 'index') {
-							$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $url_key);
+							$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
 							$request->setPathInfo('/' . 'blog/post/index');
 
 							return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
@@ -147,10 +147,18 @@ class Router implements \Magento\Framework\App\RouterInterface
 						}
 					}
 					if ($type == 'topic') {
-						$topicName = $array[2];
+						$topicId = $array[2];
+						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
+						$request->setPathInfo('/' . 'blog/topic/view/id/' . $topicId);
+						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+
 					}
 					if ($type == 'tag') {
-						$tagName = $array[2];
+						$tagId = $array[2];
+						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
+						$request->setPathInfo('/' . 'blog/tag/view/id/' . $tagId);
+
+						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
 					}
 					if ($type == 'category') {
 						$categoryName = $array[2];

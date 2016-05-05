@@ -158,6 +158,16 @@ class Data extends AbstractHelper
 		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/category/' . $category->getUrlKey());
 	}
 
+	public function getTagUrl($tag)
+	{
+		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/tag/' . $tag->getId());
+	}
+
+	public function getTopicUrl($topic)
+	{
+		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/topic/' . $topic->getId());
+	}
+
 	public function getPostCategoryHtml($post)
 	{
 
@@ -199,4 +209,19 @@ class Data extends AbstractHelper
 
 		return $post->getSelectedCategoriesCollection();
 	}
+
+	public function getTagsByPost($postId)
+	{
+		$post = $this->postfactory->create()->load($postId);
+
+		return $post->getSelectedTagsCollection();
+	}
+
+	public function getTopicByPost($postId)
+	{
+		$post = $this->postfactory->create()->load($postId);
+
+		return $post->getSelectedTopicsCollection();
+	}
+
 }

@@ -1,0 +1,23 @@
+<?php
+$tags = $block->getTagList();
+?>
+<div class="mp-sidebar">
+	<div class="block-title">
+			<p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Tags') ?></p>
+
+	</div>
+	<?php if ($tags->getSize()): ?>
+		<ul>
+
+<?php foreach ($tags as $tag): ?>
+	<li>
+		<a href="<?php echo $block->getTagUrl($tag) ?>"><?php echo $tag->getName() ?>
+		</a>
+	</li>
+
+<?php endforeach; ?>
+</ul>
+	<?php else: ?>
+		<?php echo __('No Tags') ?>
+	<?php endif; ?>
+</div>
