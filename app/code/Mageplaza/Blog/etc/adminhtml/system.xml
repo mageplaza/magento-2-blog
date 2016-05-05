@@ -93,6 +93,43 @@
                     <label>Number of recent posts</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Type</source_model>
                 </field>
+                <field id="disqus"
+                       translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Disqus unique name</label>
+                    <comment><![CDATA[Create at <a href="https://disqus.com/admin/create/" target="_blank">Disqus</a>]]></comment>
+                    <depends><field id="type">3</field></depends>
+                </field>
+                <field id="facebook_appid"
+                       translate="label" type="text" sortOrder="15" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Facebook: AppID</label>
+                    <comment><![CDATA[Regiter AppID <a href="https://developers.facebook.com/apps/" target="_blank">here</a>]]></comment>
+                    <depends><field id="type">2</field></depends>
+                </field>
+                <field id="facebook_number_comment"
+                       translate="label" type="text" sortOrder="20" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Facebook: Number of comment</label>
+                    <comment><![CDATA[The number of comments to show by default. The minimum value is 1.]]></comment>
+                    <depends><field id="type">2</field></depends>
+                </field>
+                <field id="facebook_colorscheme"
+                       translate="label" type="select" sortOrder="25" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Facebook: Color scheme</label>
+                    <depends><field id="type">2</field></depends>
+                    <comment><![CDATA[Light/Dark]]></comment>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Facebook\Colorscheme</source_model>
+                </field>
+                <field id="facebook_order_by"
+                       translate="label" type="select" sortOrder="30" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Facebook: Order by</label>
+                    <depends><field id="type">2</field></depends>
+                    <comment><![CDATA[The order to use when displaying comments. Can be "social", "reverse_time", or "time".]]></comment>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Facebook\Orderby</source_model>
+                </field>
             </group>
             <group id="seo" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1"
                    showInStore="1">

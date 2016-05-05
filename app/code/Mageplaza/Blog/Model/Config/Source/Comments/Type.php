@@ -24,7 +24,7 @@ class Type implements \Magento\Framework\Option\ArrayInterface
 
 	public function toOptionArray()
 	{
-		return [['value' => self::DEFAULT_COMMENT, 'label' => __('Default Comment Form')], ['value' => self::DISQUS, 'label' => __('Disqus Comment')], ['value' => self::FACEBOOK, 'label' => __('Facebook Comment')], ['value' => self::DISABLE, 'label' => __('Disable Completely')]];
+		return [ ['value' => self::DISQUS, 'label' => __('Disqus Comment')], ['value' => self::FACEBOOK, 'label' => __('Facebook Comment')], ['value' => self::DISABLE, 'label' => __('Disable Completely')]];
 	}
 
 	/**
@@ -34,6 +34,6 @@ class Type implements \Magento\Framework\Option\ArrayInterface
 	 */
 	public function toArray()
 	{
-		return [self::DISABLE => __('Disable Completely'), self::FACEBOOK => __('Facebook Comment'),self::DISQUS=> __('Disqus Comment'),self::DEFAULT_COMMENT=> __('Default Comment Form')];
+		return [self::DISABLE => __('Disable Completely'), self::FACEBOOK => __('Facebook Comment'),self::DISQUS=> __('Disqus Comment')];
 	}
 }

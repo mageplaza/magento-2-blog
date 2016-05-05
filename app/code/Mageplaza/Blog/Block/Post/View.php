@@ -25,4 +25,12 @@ class View extends Frontend
 		return $this->helperData->getTopicUrl($topic);
 	}
 
+	public function checkComment()
+	{
+		if ($this->helperData->getBlogConfig('general/enabled'))
+			return false;
+		$comment = $this->helperData->getBlogConfig('comment/type');
+
+		return $comment;
+	}
 }

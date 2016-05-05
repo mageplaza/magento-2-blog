@@ -14,6 +14,11 @@
             </sidebar>
             <comment>
                 <type>4</type>
+                <disqus>mageplazablog</disqus>
+                <facebook_number_comment>10</facebook_number_comment>
+                <facebook_appid>1562328304081606</facebook_appid>
+                <facebook_colorscheme>light</facebook_colorscheme>
+                <facebook_order_by>social</facebook_order_by>
             </comment>
             <share>
                 <enabled>1</enabled>
