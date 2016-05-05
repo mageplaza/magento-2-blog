@@ -192,4 +192,11 @@ class Data extends AbstractHelper
 		}
 
 	}
+
+	public function getCategoryByPost($postId)
+	{
+		$post = $this->postfactory->create()->load($postId);
+
+		return $post->getSelectedCategoriesCollection();
+	}
 }
