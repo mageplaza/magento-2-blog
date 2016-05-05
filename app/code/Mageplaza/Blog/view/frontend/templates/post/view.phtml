@@ -54,12 +54,10 @@
 		<?php endif; ?>
 
     </div>
-
 	<div class="mp-comment">
 			<?php $typeComment = $block->checkComment(); ?>
 			<?php if($typeComment== Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>
 			<?php elseif ($typeComment== Mageplaza\Blog\Model\Config\Source\Comments\Type::FACEBOOK): ?>
-
 				<div class="box-collateral box-reviews" id="post-reviews">
         <h2><?php echo __('Comments') ?></h2>
 
@@ -73,8 +71,8 @@
 			}(document, 'script', 'facebook-jssdk'));</script>
 
 
-        <div class="fb-comments" data-href="<?php echo $_post->getPostUrl();?>" data-numposts="<?php echo $this->getNumberOfComments();?>"
-			 data-width="100%" data-colorscheme="<?php echo $this->getColor()?>" ddata-order-by="<?php echo $this->getOrderBy()?>"></div>
+        <div class="fb-comments" data-href="<?php echo $block->getUrlByPost($_post);?>" data-numposts="<?php echo $block->helperComment('facebook_number_comment');?>"
+			 data-width="100%" data-colorscheme="<?php echo $block->helperComment('facebook_colorscheme')?>" ddata-order-by="<?php echo $block->helperComment('facebook_order_by')?>"></div>
 
     </div>
 

@@ -27,10 +27,13 @@ class View extends Frontend
 
 	public function checkComment()
 	{
-		if ($this->helperData->getBlogConfig('general/enabled'))
+		if (!$this->helperData->getBlogConfig('general/enabled'))
 			return false;
 		$comment = $this->helperData->getBlogConfig('comment/type');
 
 		return $comment;
+	}
+	public function helperComment($code){
+		return $this->helperData->getBlogConfig('comment/'.$code);
 	}
 }
