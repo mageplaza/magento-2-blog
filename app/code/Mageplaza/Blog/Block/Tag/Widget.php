@@ -22,9 +22,8 @@ class Widget extends Frontend
 {
 	public function getTagList()
 	{
-		$postId = $this->getRequest()->getParam('id');
 
-		return $this->helperData->getTagsByPost($postId);
+		return $this->helperData->getTagList();
 	}
 
 	public function getTagUrl($tag)

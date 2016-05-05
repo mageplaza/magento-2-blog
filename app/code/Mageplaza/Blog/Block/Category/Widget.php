@@ -22,9 +22,7 @@ class Widget extends Frontend
 {
 	public function getCategoryList()
 	{
-		$postId = $this->getRequest()->getParam('id');
-
-		return $this->helperData->getCategoryByPost($postId);
+		return $this->helperData->getCategoryList();
 	}
 
 	public function getCategoryUrl($category)

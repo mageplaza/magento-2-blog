@@ -80,7 +80,21 @@ class Data extends AbstractHelper
 
 		return $posts;
 	}
+	public function getCategoryList()
+	{
+		$category = $this->categoryfactory->create();
+		$list     = $category->getCollection()
+			->addFieldToFilter('enabled', 1);
 
+		return $list;
+	}
+	public function getTagList()
+	{
+		$tag = $this->tagfactory->create();
+		$list     = $tag->getCollection()
+			->addFieldToFilter('enabled', 1);
+		return $list;
+	}
 	public function getCategoryCollection($array)
 	{
 		$category = $this->categoryfactory->create();

@@ -25,6 +25,14 @@ class View extends Frontend
 		return $this->helperData->getTopicUrl($topic);
 	}
 
+	public function getTagUrl($tag)
+	{
+		return $this->helperData->getTagUrl($tag);
+	}
+	public function getCategoryUrl($category)
+	{
+		return $this->helperData->getCategoryUrl($category);
+	}
 	public function checkComment()
 	{
 		if (!$this->helperData->getBlogConfig('general/enabled'))
@@ -33,7 +41,9 @@ class View extends Frontend
 
 		return $comment;
 	}
-	public function helperComment($code){
-		return $this->helperData->getBlogConfig('comment/'.$code);
+
+	public function helperComment($code)
+	{
+		return $this->helperData->getBlogConfig('comment/' . $code);
 	}
 }

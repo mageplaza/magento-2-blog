@@ -38,7 +38,25 @@
 	<div class="post-sharing-button">
         <div class="addthis_sharing_toolbox"></div>
     </div>
-    <div class="post-same-topics post-list">
+
+<div class="post-same-categories category-list">
+        <?php $categoryCollection = $_post->getSelectedCategoriesCollection(); ?>
+	<?php if ($categoryCollection): ?>
+		<h2><?php echo __('Categories'); ?></h2>
+		<ul>
+                <?php foreach ($categoryCollection as $category): ?>
+					<li>
+                        <a href="<?php echo $block->getCategoryUrl($category) ?>"><?php echo $category->getName(); ?></a>
+                    </li>
+				<?php endforeach; ?>
+
+            </ul>
+
+	<?php endif; ?>
+
+    </div>
+
+    <div class="post-same-topics topic-list">
         <?php $topicCollection = $_post->getSelectedTopicsCollection(); ?>
 		<?php if ($topicCollection): ?>
 			<h2><?php echo __('Topic'); ?></h2>
@@ -52,6 +70,22 @@
             </ul>
 
 		<?php endif; ?>
+
+    </div>
+  <div class="post-same-tags tag-list">
+        <?php $tagCollection = $_post->getSelectedTagsCollection(); ?>
+	  <?php if ($tagCollection): ?>
+		  <h2><?php echo __('Tag'); ?></h2>
+		  <ul>
+                <?php foreach ($tagCollection as $tag): ?>
+					<li>
+                        <a href="<?php echo $block->getTagUrl($tag) ?>"><?php echo $tag->getName(); ?></a>
+                    </li>
+				<?php endforeach; ?>
+
+            </ul>
+
+	  <?php endif; ?>
 
     </div>
 	<div class="mp-comment">
