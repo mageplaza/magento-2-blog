@@ -22,6 +22,10 @@ class Recentpost extends Frontend
 {
 	public function getRecentPost()
 	{
+		$ob       = $this->objectManager->get('Mageplaza\Blog\Model\Post');
+		$posts = $ob->getCollection();
+		$posts->setOrder('created_at', 'DESC');
 
+		return $posts;
 	}
 }
