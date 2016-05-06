@@ -80,6 +80,7 @@ class Data extends AbstractHelper
 
 		return $posts;
 	}
+
 	public function getCategoryList()
 	{
 		$category = $this->categoryfactory->create();
@@ -88,13 +89,16 @@ class Data extends AbstractHelper
 
 		return $list;
 	}
+
 	public function getTagList()
 	{
-		$tag = $this->tagfactory->create();
-		$list     = $tag->getCollection()
+		$tag  = $this->tagfactory->create();
+		$list = $tag->getCollection()
 			->addFieldToFilter('enabled', 1);
+
 		return $list;
 	}
+
 	public function getCategoryCollection($array)
 	{
 		$category = $this->categoryfactory->create();
@@ -122,6 +126,11 @@ class Data extends AbstractHelper
 		}
 
 		return $this->_getUrl($urlKey);
+	}
+
+	public function getBlogUrl($code)
+	{
+		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/' . $code);
 	}
 
 	public function getPostByUrl($url)

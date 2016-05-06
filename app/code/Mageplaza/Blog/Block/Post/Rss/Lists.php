@@ -97,10 +97,16 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
 			'charset'     => 'UTF-8',
 			'language'    => $lang,
 		];
-
-		$posts = $this->rssModel->create()->getCollection();
-
+		$limit      = 10;
+		$count      = 0;
+		$posts      = $this->rssModel->create()->getCollection();
+		$posts
+			->addFieldToFilter('enabled', 1)
+			->setOrder('post_id', 'DESC');
 		foreach ($posts as $item) {
+			$count++;
+			if ($count > $limit)
+				break;
 			/** @var $item \Magento\Catalog\Model\Product */
 			$item->setAllowedInRss(true);
 			$item->setAllowedPriceInRss(true);
