@@ -110,6 +110,7 @@ class Router implements \Magento\Framework\App\RouterInterface
 			$path = trim($request->getPathInfo(), '/');
 			if (strpos($path, $url_prefix) == 0) {
 				$array = explode('/', $path);
+
 				if (count($array) == 1) {
 					$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
 					$request->setPathInfo('/' . 'blog/post/index');
@@ -146,10 +147,18 @@ class Router implements \Magento\Framework\App\RouterInterface
 
 						}
 					}
+					if ($type == 'post' && strpos($path, 'rss')) {
+						$path = str_replace($url_prefix, 'blog', $path);
+						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
+						$request->setPathInfo($path);
+
+						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+					}
 					if ($type == 'topic') {
 						$topicId = $array[2];
 						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
 						$request->setPathInfo('/' . 'blog/topic/view/id/' . $topicId);
+
 						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
 
 					}
@@ -162,13 +171,21 @@ class Router implements \Magento\Framework\App\RouterInterface
 					}
 					if ($type == 'category') {
 						$categoryName = $array[2];
-						$category    = $this->_helper->getCategoryByParam('url_key',$categoryName);
+						$category     = $this->_helper->getCategoryByParam('url_key', $categoryName);
 						if ($category && $category->getId()) {
 							$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
 							$request->setPathInfo('/' . 'blog/category/view/id/' . $category->getId());
 
 							return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
 						}
+					}
+				} elseif (count($array) > 3) {
+					if (strpos($path, 'rss')) {
+						$path = str_replace($url_prefix, 'blog', $path);
+						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
+						$request->setPathInfo($path);
+
+						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
 					}
 				}
 

@@ -130,7 +130,7 @@ class Data extends AbstractHelper
 
 	public function getBlogUrl($code)
 	{
-		return $this->_getUrl('blog' . '/' . $code);
+		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/' . $code);
 	}
 
 	public function getPostByUrl($url)
