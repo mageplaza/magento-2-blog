@@ -42,9 +42,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                     null,
                     [
-                        'unsigned' => true,
+                        'identity' => true,
                         'nullable' => false,
-                        'primary'   => true,
+                        'primary'  => true,
+                        'unsigned' => true,
                     ],
                     'Traffic ID'
                 )

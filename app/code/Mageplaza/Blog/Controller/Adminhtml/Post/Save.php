@@ -44,6 +44,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 	 * @var \Magento\Backend\Helper\Js
 	 */
 	protected $jsHelper;
+	protected $trafficFactory;
 
 	/**
 	 * constructor
@@ -60,6 +61,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 	public function __construct(
 		\Mageplaza\Blog\Model\Upload $uploadModel,
 		\Mageplaza\Blog\Model\Post\Image $imageModel,
+		\Mageplaza\Blog\Model\TrafficFactory $trafficFactory,
 		\Magento\Backend\Model\Session $backendSession,
 		\Magento\Backend\Helper\Js $jsHelper,
 		\Mageplaza\Blog\Model\PostFactory $postFactory,
@@ -70,6 +72,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 	{
 		$this->uploadModel    = $uploadModel;
 		$this->imageModel     = $imageModel;
+		$this->trafficFactory = $trafficFactory;
 		$this->backendSession = $backendSession;
 		$this->jsHelper       = $jsHelper;
 		parent::__construct($postFactory, $registry, $resultRedirectFactory, $context);
@@ -119,6 +122,13 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 			);
 			try {
 				$post->save();
+
+				$trafficModel=$this->trafficFactory->create()->load($post->getId(),'post_id');
+				if(!$trafficModel->getId()){
+					$trafficData=array('post_id'=>$post->getId(),'numbers_view'=>'0');
+					$trafficModel->setData($trafficData);
+					$trafficModel->save();
+				}
 				$this->messageManager->addSuccess(__('The Post has been saved.'));
 				$this->backendSession->setMageplazaBlogPostData(false);
 				if ($this->getRequest()->getParam('back')) {
