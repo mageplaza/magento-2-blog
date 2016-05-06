@@ -20,8 +20,8 @@
         <referenceContainer name="sidebar.main">
             <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"
                    template="Mageplaza_Blog::sidebar/mostview.phtml"/>
-            <block class="Mageplaza\Blog\Block\Sidebar\Recentpost" name="mp.blog.view.sidebar.recentpost"
-                   template="Mageplaza_Blog::sidebar/recentpost.phtml"/>
+            <!--<block class="Mageplaza\Blog\Block\Sidebar\Recentpost" name="mp.blog.view.sidebar.recentpost"-->
+                   <!--template="Mageplaza_Blog::sidebar/recentpost.phtml"/>-->
             <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category"
                    template="Mageplaza_Blog::category/widget.phtml"/>
             <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"
