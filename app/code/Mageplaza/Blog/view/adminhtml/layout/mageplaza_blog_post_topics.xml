@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza_Blog extension
+ *                     NOTICE OF LICENSE
+ * 
+ *                     This source file is subject to the MIT License
+ *                     that is bundled with this package in the file LICENSE.txt.
+ *                     It is also available through the world-wide-web at this URL:
+ *                     http://opensource.org/licenses/mit-license.php
+ * 
+ *                     @category  Mageplaza
+ *                     @package   Mageplaza_Blog
+ *                     @copyright Copyright (c) 2016
+ *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
+    <container name="root" label="Root" output="1">
+        <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Topic" name="post.edit.tab.topic"/>
+        <block class="Magento\Backend\Block\Widget\Grid\Serializer" name="topic_grid_serializer">
+            <arguments>
+                <argument name="input_names" xsi:type="string">position</argument>
+                <argument name="grid_block" xsi:type="string">post.edit.tab.topic</argument>
+                <argument name="callback" xsi:type="string">getSelectedTopics</argument>
+                <argument name="input_element_name" xsi:type="string">topics</argument>
+                <argument name="reload_param_name" xsi:type="string">post_topics</argument>
+            </arguments>
+        </block>
+    </container>
+</layout>

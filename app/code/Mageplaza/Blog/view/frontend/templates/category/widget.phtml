@@ -1,0 +1,30 @@
+<?php
+$categories = $block->getCategoryList();
+$limit = 5;
+$count = 0;
+?>
+<div class="mp-sidebar">
+	<div class="block-title">
+			<p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Categories') ?></p>
+
+	</div>
+	<?php if ($categories->getSize()): ?>
+		<ul>
+
+<?php foreach ($categories as $category): ?>
+	<?php
+	$count++;
+	if ($count > $limit)
+		break;
+	?>
+	<li>
+		<a href="<?php echo $block->getCategoryUrl($category) ?>"><?php echo $category->getName() ?>
+		</a>
+	</li>
+
+<?php endforeach; ?>
+</ul>
+	<?php else: ?>
+		<?php echo __('No Categories') ?>
+	<?php endif; ?>
+</div>

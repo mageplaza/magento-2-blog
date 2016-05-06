@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza_Blog extension
+ *                     NOTICE OF LICENSE
+ * 
+ *                     This source file is subject to the MIT License
+ *                     that is bundled with this package in the file LICENSE.txt.
+ *                     It is also available through the world-wide-web at this URL:
+ *                     http://opensource.org/licenses/mit-license.php
+ * 
+ *                     @category  Mageplaza
+ *                     @package   Mageplaza_Blog
+ *                     @copyright Copyright (c) 2016
+ *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="editor"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Mageplaza\Blog\Block\Adminhtml\Topic\Edit" name="mageplaza_blog_topic_edit"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Mageplaza\Blog\Block\Adminhtml\Topic\Edit\Tabs" name="mageplaza_blog_topic_tabs">
+                <block class="Mageplaza\Blog\Block\Adminhtml\Topic\Edit\Tab\Topic" name="mageplaza_blog_topic_edit_tab_topic"/>
+                <block class="Mageplaza\Blog\Block\Adminhtml\Topic\Edit\Tab\Post" name="mageplaza_blog_topic_edit_tab_post"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">topic</argument>
+                    <argument name="block" xsi:type="string">mageplaza_blog_topic_edit_tab_topic</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">post</argument>
+                    <argument name="block" xsi:type="string">mageplaza_blog_topic_edit_tab_post</argument>
+                </action>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

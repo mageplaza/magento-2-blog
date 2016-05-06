@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="mageplaza" translate="label" sortOrder="400">
+            <label>mageplaza</label>
+        </tab>
+        <section id="blog" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1"
+                 showInStore="1">
+            <class>separator-top</class>
+            <label>Better Blog</label>
+            <tab>mageplaza</tab>
+            <resource>Mageplaza_Blog::blog</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>General</label>
+
+                <field id="head"
+                       translate="label" type="button" sortOrder="1" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <frontend_model>Mageplaza\Blog\Block\Adminhtml\System\Config\Head</frontend_model>
+                </field>
+
+                <field id="enabled" translate="label comment" type="select" sortOrder="2" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="name"
+                       translate="label" type="text" sortOrder="11" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Blog name</label>
+                    <comment>Blog name</comment>
+                </field>
+                <field id="url_prefix"
+                       translate="label" type="text" sortOrder="15" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Url Prefix</label>
+                </field>
+                <field id="url_suffix"
+                       translate="label" type="text" sortOrder="16" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Url Suffix</label>
+                    <comment>Leave empty for no suffix. Default: html</comment>
+                </field>
+                <field id="toplinks" translate="label comment" type="select" sortOrder="20" showInDefault="20"
+                       showInWebsite="1" showInStore="1">
+                    <label>Show Blog Link in Top links</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="footer" translate="label comment" type="select" sortOrder="25" showInDefault="20"
+                       showInWebsite="1" showInStore="1">
+                    <label>Show Blog Link in Footer links</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sidebar_right" translate="label comment" type="select" sortOrder="30" showInDefault="20"
+                       showInWebsite="1" showInStore="1">
+                    <label>Show Sidebar Right</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sidebar_left" translate="label comment" type="select" sortOrder="30" showInDefault="20"
+                       showInWebsite="1" showInStore="1">
+                    <label>Show Sidebar Left</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="sidebar" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Sidebar</label>
+                <field id="number_recent_posts"
+                       translate="label" type="text" sortOrder="1" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Number of recent posts</label>
+                </field>
+                <field id="number_mostview_posts"
+                       translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Number of most view posts</label>
+                </field>
+            </group>
+            <group id="comment" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Comments</label>
+                <field id="type"
+                       translate="label" type="select" sortOrder="1" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Number of recent posts</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Type</source_model>
+                </field>
+                <field id="disqus"
+                       translate="label" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Disqus unique name</label>
+                    <comment><![CDATA[Create at <a href="https://disqus.com/admin/create/" target="_blank">Disqus</a>]]></comment>
+                    <depends><field id="type">3</field></depends>
+                </field>
+                <field id="facebook_appid"
+                       translate="label" type="text" sortOrder="15" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Facebook: AppID</label>
+                    <comment><![CDATA[Regiter AppID <a href="https://developers.facebook.com/apps/" target="_blank">here</a>]]></comment>
+                    <depends><field id="type">2</field></depends>
+                </field>
+                <field id="facebook_number_comment"
+                       translate="label" type="text" sortOrder="20" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Facebook: Number of comment</label>
+                    <comment><![CDATA[The number of comments to show by default. The minimum value is 1.]]></comment>
+                    <depends><field id="type">2</field></depends>
+                </field>
+                <field id="facebook_colorscheme"
+                       translate="label" type="select" sortOrder="25" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Facebook: Color scheme</label>
+                    <depends><field id="type">2</field></depends>
+                    <comment><![CDATA[Light/Dark]]></comment>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Facebook\Colorscheme</source_model>
+                </field>
+                <field id="facebook_order_by"
+                       translate="label" type="select" sortOrder="30" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Facebook: Order by</label>
+                    <depends><field id="type">2</field></depends>
+                    <comment><![CDATA[The order to use when displaying comments. Can be "social", "reverse_time", or "time".]]></comment>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Facebook\Orderby</source_model>
+                </field>
+            </group>
+            <group id="seo" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Seo</label>
+                <field id="meta_title"
+                       translate="label" type="text" sortOrder="1" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Meta title for posts list page</label>
+                </field>
+                <field id="meta_description"
+                       translate="label" type="textarea" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Meta description for posts list page</label>
+                </field>
+                <field id="meta_keywords"
+                       translate="label" type="textarea" sortOrder="15" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Meta keywords for posts list page</label>
+                </field>
+            </group>
+            <group id="share" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Social</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="pubid_id"
+                       translate="label" type="text" sortOrder="1" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Pubid Id</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

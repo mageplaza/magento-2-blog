@@ -1,0 +1,75 @@
+<?php
+$posts = $block->getPostList();
+
+?>
+	<div class="page-title">
+	Blog
+</div>
+<?php $checkRss = $block->checkRss();
+if ($checkRss):
+	?>
+	<div class="mp-blog-rss">
+            <a href="<?php echo $checkRss ?>" class="bb-rss-icon"><img src="http://localhost.com/ce192/skin/frontend/base/default/images/mageplaza_betterblog/rss.png" width="16px"> </a>
+        </div>
+<?php endif; ?>
+<?php if ($posts->getSize() > 0) : ?>
+	<?php //echo $this->getPagerHtml(); ?>
+	<div class="post-list-container">
+        <?php foreach ($posts as $post) : ?>
+			<?php
+//			\Zend_Debug::dump($block->getUrlByPost($post));die;
+			?>
+			<div class="post-list-item">
+
+                <div class="post-image">
+                    <?php if ($post->getImage()) : ?>
+						<a href="<?php echo $block->getUrlByPost($post) ?>">
+                            <img
+								src="<?php echo $block->getImageUrl($post->getImage()); ?>"
+								alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
+                        </a>
+					<?php endif; ?>
+                </div>
+
+
+                <h2 class="mp-post-title">
+                    <a href="<?php echo $block->getUrlByPost($post) ?>">
+                        <?php echo $post->getName(); ?>
+                    </a>
+                </h2>
+
+
+                <div class="mp-post-info">
+                    <?php echo __('Posted on'); ?> <?php echo $post->getCreatedAt() ?> |
+					<?php echo __('Posted in'); ?> <?php echo $block->getPostCategoryHtml($post); ?>
+                </div>
+
+
+                <div class="post-short-description">
+                    <p><?php echo $post->getShortDescription(); ?><?php echo __('[...]'); ?></p>
+                </div>
+
+                <div class="mp-clearfix"></div>
+
+
+                <div class="mp-post-meta-info mp-alignright">
+                        <div class="actions">
+                            <a class="mp-read-more" href="<?php echo $block->getUrlByPost($post); ?>"
+							   title="<?php echo __('Read More'); ?>"><?php echo __('Read More'); ?></a>
+                        </div>
+
+
+                </div>
+
+
+                <br/><br/>
+
+            </div>
+		<?php endforeach; ?>
+    </div>
+	<!--	--><?php //echo $this->getPagerHtml(); ?>
+<?php else : ?>
+	<div class="post-list-container">
+        <?php echo __('There are no posts at this moment'); ?>
+    </div>
+<?php endif; ?>
