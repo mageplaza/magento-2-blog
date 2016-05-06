@@ -75,4 +75,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Rss\RssManagerInterface">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="blog_posts" xsi:type="string">Mageplaza\Blog\Block\Post\Rss\Lists</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
