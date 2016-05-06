@@ -28,4 +28,8 @@ class Recentpost extends Frontend
 
 		return $posts;
 	}
+	public function getLimitPost()
+	{
+		return $this->helperData->getBlogConfig('sidebar/number_recent_posts');
+	}
 }
