@@ -79,6 +79,7 @@
         <arguments>
             <argument name="dataProviders" xsi:type="array">
                 <item name="blog_posts" xsi:type="string">Mageplaza\Blog\Block\Post\Rss\Lists</item>
+                <item name="blog_categories" xsi:type="string">Mageplaza\Blog\Block\Post\Rss\Category</item>
             </argument>
         </arguments>
     </type>

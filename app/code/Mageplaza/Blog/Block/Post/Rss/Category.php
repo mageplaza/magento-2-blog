@@ -11,7 +11,7 @@ use Magento\Framework\App\Rss\DataProviderInterface;
  * Class NewProducts
  * @package Magento\Catalog\Block\Rss\Product
  */
-class Lists extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
+class Category extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {
 	/**
 	 * @var \Mageplaza\Blog\Helper\Image
@@ -47,7 +47,7 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
 	 */
 	public function __construct(
 		\Magento\Framework\View\Element\Template\Context $context,
-		\Mageplaza\Blog\Model\PostFactory $rssModel,
+		\Mageplaza\Blog\Model\CategoryFactory $rssModel,
 		\Mageplaza\Blog\Helper\Data $helper,
 		\Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder,
 		array $data = []
@@ -65,7 +65,7 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
 	 */
 	protected function _construct()
 	{
-		$this->setCacheKey('rss_blog_posts_store_' . $this->getStoreId());
+		$this->setCacheKey('rss_blog_categories_store_' . $this->getStoreId());
 		parent::_construct();
 	}
 
@@ -82,8 +82,9 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
 	 */
 	public function getRssData()
 	{
+		$categoryId=$this->getRequest()->getParam('category_id');
 		$storeModel = $this->storeManager->getStore($this->getStoreId());
-		$newUrl     = $this->rssUrlBuilder->getUrl(['store_id' => $this->getStoreId(), 'type' => 'blog_posts']);
+		$newUrl     = $this->rssUrlBuilder->getUrl(['store_id' => $this->getStoreId(), 'type' => 'blog_categories','category_id'=>$categoryId]);
 		$title      = __('List Posts from %1', $storeModel->getFrontendName());
 		$lang       = $this->_scopeConfig->getValue(
 			'general/locale/code',
@@ -99,7 +100,8 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
 		];
 		$limit      = 10;
 		$count      = 0;
-		$posts      = $this->rssModel->create()->getCollection();
+		$category      = $this->rssModel->create()->load($categoryId);
+		$posts=$category->getSelectedPostsCollection();
 		$posts
 			->addFieldToFilter('enabled', 1)
 			->setOrder('post_id', 'DESC');
@@ -107,6 +109,7 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
 			$count++;
 			if ($count > $limit)
 				break;
+			/** @var $item \Magento\Catalog\Model\Product */
 			$item->setAllowedInRss(true);
 			$item->setAllowedPriceInRss(true);
 
@@ -164,7 +167,7 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
 	{
 		$data = [];
 		if ($this->isAllowed()) {
-			$url  = $this->rssUrlBuilder->getUrl(['type' => 'blog_posts']);
+			$url  = $this->rssUrlBuilder->getUrl(['type' => 'blog_categories']);
 			$data = ['label' => __('Posts'), 'link' => $url];
 		}
 
