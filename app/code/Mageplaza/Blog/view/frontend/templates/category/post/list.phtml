@@ -6,6 +6,13 @@ $posts=$block->getPostList();
 <div class="page-title">
 	Blog
 </div>
+<?php $checkRss = $block->checkRss();
+if ($checkRss):
+	?>
+	<div class="mp-blog-rss">
+            <a href="<?php echo $checkRss ?>" class="bb-rss-icon"><img src="http://localhost.com/ce192/skin/frontend/base/default/images/mageplaza_betterblog/rss.png" width="16px"> </a>
+        </div>
+<?php endif; ?>
 <?php if ($posts->getSize() > 0) : ?>
 	<?php //echo $this->getPagerHtml(); ?>
 	<div class="post-list-container">

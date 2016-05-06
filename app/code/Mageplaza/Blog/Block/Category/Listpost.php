@@ -23,7 +23,14 @@ class Listpost extends Frontend
 
 	public function getPostList()
 	{
-		return $this->helperData->getPostList('category',$this->getRequest()->getParam('id'));
+		return $this->helperData->getPostList('category', $this->getRequest()->getParam('id'));
 	}
 
+	public function checkRss()
+	{
+		$categoryId = $this->getRequest()->getParam('id');
+		if (!$categoryId)
+			return false;
+		return $this->helperData->getBlogUrl('category/rss/category_id/' . $categoryId);
+	}
 }
