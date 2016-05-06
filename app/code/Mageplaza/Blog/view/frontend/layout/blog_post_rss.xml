@@ -9,7 +9,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Feeds" name="blog.rss.feeds" template="Mageplaza_Blog::feeds.phtml"/>
+            <block class="Mageplaza\Blog\Block\Feeds" name="blog.rss.feeds"/>
         </referenceContainer>
     </body>
 </page>
