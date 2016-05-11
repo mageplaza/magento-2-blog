@@ -1,0 +1,174 @@
+<?php 
+/**
+ * Mageplaza_Blog extension
+ *                     NOTICE OF LICENSE
+ * 
+ *                     This source file is subject to the MIT License
+ *                     that is bundled with this package in the file LICENSE.txt.
+ *                     It is also available through the world-wide-web at this URL:
+ *                     http://opensource.org/licenses/mit-license.php
+ * 
+ *                     @category  Mageplaza
+ *                     @package   Mageplaza_Blog
+ *                     @copyright Copyright (c) 2016
+ *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ */
+?>
+<div id="category-edit-container" class="category-content">
+    <?php echo $block->getChildHtml('form') ?>
+</div>
+<script>
+require([
+    "jquery",
+    "tinymce",
+    "loadingPopup",
+    "mage/backend/floating-header"
+], function(jQuery, tinyMCE){
+
+//<![CDATA[
+    function categoryReset(url,useAjax){
+        if(useAjax){
+            var params = {active_tab_id:false};
+            updateContent(url, params);
+        }else{
+            location.href = url;
+        }
+    }
+
+    /**
+    * Delete some Category
+    * This routine get categoryId explicitly, so even if currently selected tree node is out of sync
+    * with this form, we surely delete same Category in the tree and at backend
+    */
+    function categoryDelete(url) {
+        if (confirm('<?php echo __('Are you sure you want to delete this Category?') ?>')){
+            location.href = url;
+        }
+    }
+
+    /**
+     * Update Category content area
+     */
+    function updateContent(url, params, refreshTree) {
+        var node        = tree.getNodeById(tree.currentNodeId),
+            parentNode  = node && node.parentNode,
+            parentId,
+            redirectUrl,
+            params;
+
+        params = jQuery.extend(params || {}, {
+            form_key: FORM_KEY
+        });
+
+        if (params.node_name) {
+            node.setText(params.node_name);
+        }
+
+        (function($){
+            var $categoryContainer = $('#category-edit-container'),
+                messagesContainer = $('.messages');
+            messagesContainer.html('');
+            $.ajax({
+                url: url + (url.match(new RegExp('\\?')) ? '&isAjax=true' : '?isAjax=true' ),
+                data: params,
+                context: $('body'),
+                showLoader: true
+            }).done(function(data){
+                if (data.content) {
+                    var pageActions = $('.page-actions');
+                    for (var i =0;i<pageActions.length;i++) {
+                        if ($(pageActions[i]).data('floatingHeader')) {
+                            $(pageActions[i]).floatingHeader('destroy');
+                        }
+                    }
+                    try {
+                        $('#category-edit-container .wysiwyg-editor').each(function(index, element) {
+                            tinyMCE.execCommand('mceRemoveControl', false, $(element).attr('id'));
+                        });
+                        $categoryContainer.html('');
+                    } catch (e) {
+                        alert(e.message);
+                    }
+                    $categoryContainer.html(data.content).trigger('contentUpdated');
+                    setTimeout(function() {
+                        $('#category-edit-container .wysiwyg-editor').each(function(index, element) {
+                            tinyMCE.execCommand('mceRemoveControl', false, $(element).attr('id'));
+                            tinyMCE.execCommand('mceAddControl', true, $(element).attr('id'));
+                        });
+                        $('.page-actions').floatingHeader({
+                            'title': '.category-edit-title'
+                        });
+                        $('body').trigger('contentUpdated');
+                        try {
+                            if (refreshTree) {
+                                window.refreshTreeArea();
+                            }
+                        } catch (e) {
+                            alert(e.message);
+                        };
+                    }, 25);
+                }
+
+                if (data.messages && data.messages.length > 0) {
+                    messagesContainer.html(data.messages);
+                }
+                if (data.toolbar) {
+                    $('[data-ui-id="page-actions-toolbar-content-header"]').replaceWith(data.toolbar)
+                }
+            });
+        })(jQuery);
+    }
+
+    /**
+     * Refresh tree nodes after saving or deleting a category
+     */
+    function refreshTreeArea(transport)
+    {
+        var config,
+            url;
+
+        if (tree && window.editingCategoryBreadcrumbs) {
+            if (tree.nodeForDelete) {
+                var node = tree.getNodeById(tree.nodeForDelete);
+                tree.nodeForDelete = false;
+
+                if (node) { // Check maybe tree became somehow not synced with ajax and we're trying to delete unknown node
+                    node.parentNode.removeChild(node);
+                    tree.currentNodeId = false;
+                }
+            }
+            // category created - add its node
+            else if (tree.addNodeTo) {
+                var parent = tree.getNodeById(tree.addNodeTo);
+                tree.addNodeTo = false;
+
+                if (parent) { // Check maybe tree became somehow not synced with ajax and we're trying to add to unknown node
+                    config = editingCategoryBreadcrumbs[editingCategoryBreadcrumbs.length - 1];
+
+                    window.location.href = tree.buildUrl(config.id);
+                }
+            }
+
+            // update all affected categories nodes names
+            for (var i = 0; i < editingCategoryBreadcrumbs.length; i++) {
+                var node = tree.getNodeById(editingCategoryBreadcrumbs[i].id);
+                if (node) {
+                    node.setText(editingCategoryBreadcrumbs[i].text);
+                }
+            }
+        }
+    }
+
+    function displayLoadingMask() {
+        jQuery('body').loadingPopup();
+    }
+
+    window.refreshTreeArea = refreshTreeArea;
+    window.updateContent = updateContent;
+    window.categoryDelete = categoryDelete;
+    window.categoryReset = categoryReset;
+    window.displayLoadingMask = displayLoadingMask;
+//]]>
+
+});
+</script>

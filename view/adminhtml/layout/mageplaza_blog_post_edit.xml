@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza_Blog extension
+ *                     NOTICE OF LICENSE
+ * 
+ *                     This source file is subject to the MIT License
+ *                     that is bundled with this package in the file LICENSE.txt.
+ *                     It is also available through the world-wide-web at this URL:
+ *                     http://opensource.org/licenses/mit-license.php
+ * 
+ *                     @category  Mageplaza
+ *                     @package   Mageplaza_Blog
+ *                     @copyright Copyright (c) 2016
+ *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mageplaza_Blog::category/category-selector.css"/>
+    </head>
+    <update handle="editor"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit" name="mageplaza_blog_post_edit"/>
+            <block class="Mageplaza\Blog\Block\Adminhtml\Category\NewCategory" name="new-category" template="Mageplaza_Blog::category/new.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tabs" name="mageplaza_blog_post_tabs">
+                <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Post" name="mageplaza_blog_post_edit_tab_post"/>
+                <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Tag" name="mageplaza_blog_post_edit_tab_tag"/>
+                <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Topic" name="mageplaza_blog_post_edit_tab_topic"/>
+                <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Category" name="mageplaza_blog_post_edit_tab_category"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">post</argument>
+                    <argument name="block" xsi:type="string">mageplaza_blog_post_edit_tab_post</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">tag</argument>
+                    <argument name="block" xsi:type="string">mageplaza_blog_post_edit_tab_tag</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">topic</argument>
+                    <argument name="block" xsi:type="string">mageplaza_blog_post_edit_tab_topic</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">category</argument>
+                    <argument name="block" xsi:type="string">mageplaza_blog_post_edit_tab_category</argument>
+                </action>
+            </block>
+        </referenceContainer>
+    </body>
+</page>
