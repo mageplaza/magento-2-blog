@@ -10,6 +10,7 @@
         <title>
             Tag
         </title>
+        <css src="Mageplaza_Blog::css/view/style.css"/>
     </head>
     <body>
         <referenceContainer name="content">
