@@ -24,4 +24,8 @@ class Listpost extends Frontend
 	public function getPostList(){
 		return $this->helperData->getPostList('tag',$this->getRequest()->getParam('id'));
 	}
+	public function checkRss()
+	{
+		return $this->helperData->getBlogUrl('post/rss');
+	}
 }

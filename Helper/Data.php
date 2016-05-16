@@ -225,7 +225,24 @@ class Data extends AbstractHelper
 		}
 
 	}
+	public function getTagByParam($code, $param)
+	{
+		if ($code == 'id') {
+			return $this->tagfactory->create()->load($param);
+		} else {
+			return $this->tagfactory->create()->load($param, $code);
+		}
 
+	}
+	public function getTopicByParam($code, $param)
+	{
+		if ($code == 'id') {
+			return $this->topicfactory->create()->load($param);
+		} else {
+			return $this->topicfactory->create()->load($param, $code);
+		}
+
+	}
 	public function getCategoryByPost($postId)
 	{
 		$post = $this->postfactory->create()->load($postId);
@@ -245,6 +262,10 @@ class Data extends AbstractHelper
 		$post = $this->postfactory->create()->load($postId);
 
 		return $post->getSelectedTopicsCollection();
+	}
+	public function getCurrentUrl(){
+		$model=$this->objectManager->get('Magento\Framework\UrlInterface');
+		return $model->getCurrentUrl();
 	}
 
 }

@@ -63,9 +63,113 @@ class Frontend extends Template
 	{
 		return $this->_localeDate->scopeDate($this->storeManager->getStore(), $createdAt, true);
 	}
+
 	public function getPostCategoryHtml($post)
 	{
 		return $this->helperData->getPostCategoryHtml($post);
 
 	}
+
+	protected function _prepareLayout()
+	{
+		$actionName = $this->getRequest()->getFullActionName();
+//		\Zend_Debug::dump($actionName);die;
+		$breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
+		if ($breadcrumbs) {
+			if ($actionName == 'blog_post_index') {
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				)->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $this->helperData->getBlogConfig('general/url_prefix'), 'title' => $this->helperData->getBlogConfig('general/url_prefix')]
+				);
+			} elseif ($actionName == 'blog_post_view') {
+				$post     = $this->getCurrentPost();
+				$category = $post->getSelectedCategoriesCollection()->addFieldToFilter('enabled', 1)->getFirstItem();
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				);
+				$breadcrumbs->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
+				);
+				$breadcrumbs->addCrumb(
+					$category->getUrlKey(),
+					['label' => $category->getName(),
+					 'title' => $category->getName(),
+					 'link'  => $this->helperData->getCategoryUrl($category)]
+				);
+				$breadcrumbs->addCrumb(
+					$post->getUrlKey(),
+					['label' => $post->getName(),
+					 'title' => $post->getName()]
+				);
+			} elseif ($actionName == 'blog_tag_view') {
+				$tag=$this->helperData->getTagByParam('id',$this->getRequest()->getParam('id'));
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				)->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
+
+				)->addCrumb(
+					'Tag',
+					['label' => 'Tag',
+					 'title' => 'Tag']
+				)->addCrumb(
+					'Tag'.$tag->getId(),
+					['label' => $tag->getName(),
+					 'title' => $tag->getName()]
+				);
+
+			}elseif ($actionName == 'blog_topic_view') {
+				$topic=$this->helperData->getTopicByParam('id',$this->getRequest()->getParam('id'));
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				)->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
+
+				)->addCrumb(
+					'Topic',
+					['label' => 'Topic',
+					 'title' => 'Topic']
+				)->addCrumb(
+					'topic'.$topic->getId(),
+					['label' => $topic->getName(),
+					 'title' => $topic->getName()]
+				);
+			}
+
+		}
+
+		return parent::_prepareLayout();
+	}
+
 }

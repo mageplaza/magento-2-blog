@@ -10,6 +10,8 @@
         <title>
             Category
         </title>
+        <css src="Mageplaza_Blog::css/index/style.css"/>
+
     </head>
     <body>
         <referenceContainer name="content">

@@ -19,7 +19,7 @@ use Mageplaza\Blog\Block\Frontend;
 
 class View extends Frontend
 {
-
+	
 	public function getTopicUrl($topic)
 	{
 		return $this->helperData->getTopicUrl($topic);

@@ -21,7 +21,12 @@ use Mageplaza\Blog\Block\Frontend;
 class Listpost extends Frontend
 {
 
-	public function getPostList(){
-		return $this->helperData->getPostList('topic',$this->getRequest()->getParam('id'));
+	public function getPostList()
+	{
+		return $this->helperData->getPostList('topic', $this->getRequest()->getParam('id'));
+	}
+	public function checkRss()
+	{
+		return $this->helperData->getBlogUrl('post/rss');
 	}
 }
