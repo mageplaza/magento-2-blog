@@ -13,8 +13,7 @@
  *                     @copyright Copyright (c) 2016
  *                     @license   http://opensource.org/licenses/mit-license.php MIT License
  */
-?>
-<?php
+
 \Magento\Framework\Component\ComponentRegistrar::register(
     \Magento\Framework\Component\ComponentRegistrar::MODULE,
     'Mageplaza_Blog',
