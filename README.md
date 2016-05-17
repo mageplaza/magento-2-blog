@@ -60,3 +60,14 @@ Better blog is integrated with Addthis, that why your customers can share posts 
 
 ##RSS Optimization
 Full RSS integration into Magento 2. The blog RSS feed appears right next to the standard product and Magento 2 RSS feeds, allowing users that are familiar with your website to easily find all the blog RSS feeds easily and simply.
+
+
+## How to install?
+
+After installing magento 2, run these commands:
+
+~~~
+composer config repositories.mageplaza-magento-2-blog-extension git git@github.com:mageplaza/magento-2-blog-extension.git
+sudo composer require mageplaza/magento-2-blog-extension:dev-master
+php bin/magento setup:upgrade
+~~~
