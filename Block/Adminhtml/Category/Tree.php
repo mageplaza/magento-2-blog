@@ -36,13 +36,6 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     protected $jsonEncoder;
 
     /**
-     * Resource Helper
-     * 
-     * @var \Magento\Framework\DB\Helper
-     */
-    protected $resourceHelper;
-
-    /**
      * Backend Session
      * 
      * @var \Magento\Backend\Model\Auth\Session
@@ -50,11 +43,18 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     protected $backendSession;
 
     /**
+     * Resource Helper
+     * 
+     * @var \Magento\Framework\DB\Helper
+     */
+    protected $resourceHelper;
+
+    /**
      * constructor
      * 
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Backend\Model\Auth\Session $backendSession
+     * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Framework\Registry $registry
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
@@ -64,8 +64,8 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
      */
     public function __construct(
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Backend\Model\Auth\Session $backendSession,
+        \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Framework\Registry $registry,
         \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree,
         \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
@@ -75,8 +75,8 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     )
     {
         $this->jsonEncoder    = $jsonEncoder;
-        $this->resourceHelper = $resourceHelper;
         $this->backendSession = $backendSession;
+        $this->resourceHelper = $resourceHelper;
         parent::__construct($registry, $categoryTree, $categoryFactory, $categoryCollectionFactory, $context, $data);
     }
 

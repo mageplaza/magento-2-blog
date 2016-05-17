@@ -73,7 +73,6 @@ class Frontend extends Template
 	protected function _prepareLayout()
 	{
 		$actionName = $this->getRequest()->getFullActionName();
-//		\Zend_Debug::dump($actionName);die;
 		$breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
 		if ($breadcrumbs) {
 			if ($actionName == 'blog_post_index') {
@@ -105,12 +104,14 @@ class Frontend extends Template
 					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 					 'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
 				);
-				$breadcrumbs->addCrumb(
-					$category->getUrlKey(),
-					['label' => $category->getName(),
-					 'title' => $category->getName(),
-					 'link'  => $this->helperData->getCategoryUrl($category)]
-				);
+				if($category->getId()){
+					$breadcrumbs->addCrumb(
+						$category->getUrlKey(),
+						['label' => $category->getName(),
+						 'title' => $category->getName(),
+						 'link'  => $this->helperData->getCategoryUrl($category)]
+					);
+				}
 				$breadcrumbs->addCrumb(
 					$post->getUrlKey(),
 					['label' => $post->getName(),

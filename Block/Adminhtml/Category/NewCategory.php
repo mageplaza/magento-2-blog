@@ -16,8 +16,8 @@
 namespace Mageplaza\Blog\Block\Adminhtml\Category;
 
 /**
- * @method NewCategory setUseContainer(\bool $use)
  * @method \bool getUseContainer()
+ * @method NewCategory setUseContainer(\bool $use)
  */
 class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
 {
