@@ -206,6 +206,10 @@ class Frontend extends Template
 			if ($keywords) {
 				$this->pageConfig->setRobots($array[$robot]);
 			}
+			$pageMainTitle = $this->getLayout()->getBlock('page.main.title');
+			if ($pageMainTitle) {
+				$pageMainTitle->setPageTitle($post->getName());
+			}
 		} else {
 			$title = $this->helperData->getBlogConfig('seo/meta_title');
 			if ($title) {
@@ -218,6 +222,10 @@ class Frontend extends Template
 			$keywords = $this->helperData->getBlogConfig('seo/meta_keywords');
 			if ($keywords) {
 				$this->pageConfig->setKeywords($keywords);
+			}
+			$pageMainTitle = $this->getLayout()->getBlock('page.main.title');
+			if ($pageMainTitle) {
+				$pageMainTitle->setPageTitle($this->helperData->getBlogConfig('general/name'));
 			}
 		}
 	}
