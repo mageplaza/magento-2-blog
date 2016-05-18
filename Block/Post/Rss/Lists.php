@@ -102,6 +102,7 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
 		$posts      = $this->rssModel->create()->getCollection();
 		$posts
 			->addFieldToFilter('enabled', 1)
+			->addFieldToFilter('in_rss', 1)
 			->setOrder('post_id', 'DESC');
 		foreach ($posts as $item) {
 			$count++;
