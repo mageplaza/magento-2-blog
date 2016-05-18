@@ -24,7 +24,6 @@ class View extends Frontend
 	{
 		return $this->helperData->getTopicUrl($topic);
 	}
-
 	public function getTagUrl($tag)
 	{
 		return $this->helperData->getTagUrl($tag);

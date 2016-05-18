@@ -1,10 +1,11 @@
 <?php $_post = $block->getCurrentPost();
 
 ?>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-568cdc40e9eab41d"
-		async="async"></script>
-
-	<div class="page-title post-title">
+<?php if($block->getBlogConfig('share/enabled')):?>
+	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $block->getBlogConfig('share/pubid_id') ?>"
+			async="async"></script>
+<?php endif; ?>
+<div class="page-title post-title">
         <h1><?php echo $_post->getName(); ?></h1>
     </div>
 	<div class="post-view">
@@ -41,7 +42,7 @@
 
 <div class="post-same-categories category-list">
         <?php $categoryCollection = $_post->getSelectedCategoriesCollection(); ?>
-	<?php if ($categoryCollection): ?>
+	<?php if (count($categoryCollection)): ?>
 		<h2><?php echo __('Categories'); ?></h2>
 		<ul>
                 <?php foreach ($categoryCollection as $category): ?>
@@ -58,7 +59,7 @@
 
     <div class="post-same-topics topic-list">
         <?php $topicCollection = $_post->getSelectedTopicsCollection(); ?>
-		<?php if ($topicCollection): ?>
+		<?php if (count($topicCollection)): ?>
 			<h2><?php echo __('Topic'); ?></h2>
 			<ul>
                 <?php foreach ($topicCollection as $topic): ?>
@@ -74,7 +75,7 @@
     </div>
   <div class="post-same-tags tag-list">
         <?php $tagCollection = $_post->getSelectedTagsCollection(); ?>
-	  <?php if ($tagCollection): ?>
+	  <?php if (count($tagCollection)): ?>
 		  <h2><?php echo __('Tag'); ?></h2>
 		  <ul>
                 <?php foreach ($tagCollection as $tag): ?>

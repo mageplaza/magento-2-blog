@@ -70,9 +70,14 @@ class Frontend extends Template
 
 	}
 
+	public function getBlogConfig($code)
+	{
+		return $this->helperData->getBlogConfig($code);
+	}
+
 	protected function _prepareLayout()
 	{
-		$actionName = $this->getRequest()->getFullActionName();
+		$actionName  = $this->getRequest()->getFullActionName();
 		$breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
 		if ($breadcrumbs) {
 			if ($actionName == 'blog_post_index') {
@@ -104,7 +109,7 @@ class Frontend extends Template
 					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 					 'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
 				);
-				if($category->getId()){
+				if ($category->getId()) {
 					$breadcrumbs->addCrumb(
 						$category->getUrlKey(),
 						['label' => $category->getName(),
@@ -118,7 +123,7 @@ class Frontend extends Template
 					 'title' => $post->getName()]
 				);
 			} elseif ($actionName == 'blog_tag_view') {
-				$tag=$this->helperData->getTagByParam('id',$this->getRequest()->getParam('id'));
+				$tag = $this->helperData->getTagByParam('id', $this->getRequest()->getParam('id'));
 				$breadcrumbs->addCrumb(
 					'home',
 					[
@@ -137,13 +142,13 @@ class Frontend extends Template
 					['label' => 'Tag',
 					 'title' => 'Tag']
 				)->addCrumb(
-					'Tag'.$tag->getId(),
+					'Tag' . $tag->getId(),
 					['label' => $tag->getName(),
 					 'title' => $tag->getName()]
 				);
 
-			}elseif ($actionName == 'blog_topic_view') {
-				$topic=$this->helperData->getTopicByParam('id',$this->getRequest()->getParam('id'));
+			} elseif ($actionName == 'blog_topic_view') {
+				$topic = $this->helperData->getTopicByParam('id', $this->getRequest()->getParam('id'));
 				$breadcrumbs->addCrumb(
 					'home',
 					[
@@ -162,7 +167,7 @@ class Frontend extends Template
 					['label' => 'Topic',
 					 'title' => 'Topic']
 				)->addCrumb(
-					'topic'.$topic->getId(),
+					'topic' . $topic->getId(),
 					['label' => $topic->getName(),
 					 'title' => $topic->getName()]
 				);
