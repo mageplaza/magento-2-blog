@@ -92,6 +92,8 @@ class Frontend extends Template
 					$this->helperData->getBlogConfig('general/url_prefix'),
 					['label' => $this->helperData->getBlogConfig('general/url_prefix'), 'title' => $this->helperData->getBlogConfig('general/url_prefix')]
 				);
+				$this->applySeoCode();
+
 			} elseif ($actionName == 'blog_post_view') {
 				$post     = $this->getCurrentPost();
 				$category = $post->getSelectedCategoriesCollection()->addFieldToFilter('enabled', 1)->getFirstItem();
@@ -122,6 +124,8 @@ class Frontend extends Template
 					['label' => $post->getName(),
 					 'title' => $post->getName()]
 				);
+				$this->applySeoCode($post);
+
 			} elseif ($actionName == 'blog_tag_view') {
 				$tag = $this->helperData->getTagByParam('id', $this->getRequest()->getParam('id'));
 				$breadcrumbs->addCrumb(
@@ -146,6 +150,7 @@ class Frontend extends Template
 					['label' => $tag->getName(),
 					 'title' => $tag->getName()]
 				);
+				$this->applySeoCode();
 
 			} elseif ($actionName == 'blog_topic_view') {
 				$topic = $this->helperData->getTopicByParam('id', $this->getRequest()->getParam('id'));
@@ -171,11 +176,49 @@ class Frontend extends Template
 					['label' => $topic->getName(),
 					 'title' => $topic->getName()]
 				);
+				$this->applySeoCode($topic);
 			}
 
 		}
 
+
 		return parent::_prepareLayout();
 	}
 
+	public function applySeoCode($post = null)
+	{
+		if ($post) {
+			$title = $post->getMetaTitle();
+			if ($title) {
+				$this->pageConfig->getTitle()->set($title);
+			}
+			$description = $post->getMetaDescription();
+			if ($description) {
+				$this->pageConfig->setDescription($description);
+			}
+			$keywords = $post->getMetaKeywords();
+			if ($keywords) {
+				$this->pageConfig->setKeywords($keywords);
+			}
+			$robot      = $post->getMetaRobots();
+			$robotModel = $this->objectManager->get('Mageplaza\Blog\Model\Post\Source\MetaRobots');
+			$array      = $robotModel->getOptionArray();
+			if ($keywords) {
+				$this->pageConfig->setRobots($array[$robot]);
+			}
+		} else {
+			$title = $this->helperData->getBlogConfig('seo/meta_title');
+			if ($title) {
+				$this->pageConfig->getTitle()->set($title);
+			}
+			$description = $this->helperData->getBlogConfig('seo/meta_description');
+			if ($description) {
+				$this->pageConfig->setDescription($description);
+			}
+			$keywords = $this->helperData->getBlogConfig('seo/meta_keywords');
+			if ($keywords) {
+				$this->pageConfig->setKeywords($keywords);
+			}
+		}
+	}
 }

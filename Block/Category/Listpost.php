@@ -49,7 +49,10 @@ class Listpost extends Frontend
 				 'title' => $category->getName()
 				]
 			);
+
 		}
+		$this->applySeoCode($category);
+
 	}
 
 	public function getPostList()
