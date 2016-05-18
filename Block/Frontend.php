@@ -191,6 +191,9 @@ class Frontend extends Template
 			$title = $post->getMetaTitle();
 			if ($title) {
 				$this->pageConfig->getTitle()->set($title);
+			}else{
+				$this->pageConfig->getTitle()->set($post->getName());
+
 			}
 			$description = $post->getMetaDescription();
 			if ($description) {
