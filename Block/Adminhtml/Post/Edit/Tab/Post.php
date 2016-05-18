@@ -135,15 +135,6 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             ]
         );
         $fieldset->addField(
-            'views',
-            'text',
-            [
-                'name'  => 'views',
-                'label' => __('Views'),
-                'title' => __('Views'),
-            ]
-        );
-        $fieldset->addField(
             'enabled',
             'select',
             [

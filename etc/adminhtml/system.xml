@@ -133,7 +133,7 @@
             </group>
             <group id="seo" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1"
                    showInStore="1">
-                <label>Seo</label>
+                <label>SEO</label>
                 <field id="meta_title"
                        translate="label" type="text" sortOrder="1" showInDefault="1"
                        showInWebsite="1" showInStore="1">
