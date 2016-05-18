@@ -183,12 +183,12 @@ class Data extends AbstractHelper
 
 	public function getTagUrl($tag)
 	{
-		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/tag/' . $tag->getId());
+		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/tag/' . $tag->getUrlKey());
 	}
 
 	public function getTopicUrl($topic)
 	{
-		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/topic/' . $topic->getId());
+		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/topic/' . $topic->getUrlKey());
 	}
 
 	public function getPostCategoryHtml($post)

@@ -216,7 +216,13 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 null,
                 [],
                 'Tag Updated At'
-            )
+            )->addColumn(
+                    'url_key',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    255,
+                    [],
+                    'Tag URL Key'
+                )
             ->setComment('Tag Table');
             $installer->getConnection()->createTable($table);
 

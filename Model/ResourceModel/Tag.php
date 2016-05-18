@@ -95,6 +95,37 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($object->isObjectNew()) {
             $object->setCreatedAt($this->date->date());
         }
+        //Check Url Key
+
+        if ($object->isObjectNew()) {
+            $count   = 0;
+            $objName = $object->getName();
+            if ($object->getUrlKey()) {
+                $urlKey = $object->getUrlKey();
+            } else {
+                $urlKey = $this->generateUrlKey($objName, $count);
+            }
+            while ($this->checkUrlKey($urlKey)) {
+                $count++;
+                $urlKey = $this->generateUrlKey($urlKey, $count);
+            }
+            $object->setUrlKey($urlKey);
+        } else {
+            $objectId = $object->getId();
+            $count    = 0;
+            $objName  = $object->getName();
+            if ($object->getUrlKey()) {
+                $urlKey = $object->getUrlKey();
+            } else {
+                $urlKey = $this->generateUrlKey($objName, $count);
+            }
+            while ($this->checkUrlKey($urlKey, $objectId)) {
+                $count++;
+                $urlKey = $this->generateUrlKey($urlKey, $count);
+            }
+
+            $object->setUrlKey($urlKey);
+        }
         return parent::_beforeSave($object);
     }
     /**
@@ -185,5 +216,53 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $tag->setAffectedPostIds($postIds);
         }
         return $this;
+    }
+    public function generateUrlKey($name, $count)
+    {
+        // replace non letter or digits by -
+        $text = preg_replace('~[^\pL\d]+~u', '-', $name);
+
+        // transliterate
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+        // remove unwanted characters
+        $text = preg_replace('~[^-\w]+~', '', $text);
+
+        // trim
+        $text = trim($text, '-');
+
+        // remove duplicate -
+        $text = preg_replace('~-+~', '-', $text);
+
+        // lowercase
+        $text = strtolower($text);
+        if ($count == 0)
+            $count = '';
+        if (empty($text)) {
+            return 'n-a' . $count;
+        }
+
+        return $text . $count;
+    }
+
+    public function checkUrlKey($url, $id = null)
+    {
+        $adapter = $this->getConnection();
+        if ($id) {
+            $select            = $adapter->select()
+                ->from($this->getMainTable(), '*')
+                ->where('url_key = :url_key')
+                ->where('tag_id != :tag_id');
+            $binds['url_key']  = (string)$url;
+            $binds ['tag_id'] = (int)$id;
+        } else {
+            $select = $adapter->select()
+                ->from($this->getMainTable(), '*')
+                ->where('url_key = :url_key');
+            $binds  = ['url_key' => (string)$url];
+        }
+        $result = $adapter->fetchOne($select, $binds);
+
+        return $result;
     }
 }

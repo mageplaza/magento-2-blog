@@ -111,7 +111,15 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
                 'values' => $this->booleanOptions->toOptionArray(),
             ]
         );
-
+        $fieldset->addField(
+            'url_key',
+            'text',
+            [
+                'name'  => 'url_key',
+                'label' => __('URL Key'),
+                'title' => __('URL Key'),
+            ]
+        );
         $tagData = $this->_session->getData('mageplaza_blog_tag_data', true);
         if ($tagData) {
             $tag->addData($tagData);

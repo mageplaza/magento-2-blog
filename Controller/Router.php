@@ -156,17 +156,19 @@ class Router implements \Magento\Framework\App\RouterInterface
 						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
 					}
 					if ($type == 'topic') {
-						$topicId = $array[2];
+						$topicUrlKey = $array[2];
+						$topic       = $this->_helper->getTopicByParam('url_key', $topicUrlKey);
 						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
-						$request->setPathInfo('/' . 'blog/topic/view/id/' . $topicId);
+						$request->setPathInfo('/' . 'blog/topic/view/id/' . $topic->getId());
 
 						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
 
 					}
 					if ($type == 'tag') {
-						$tagId = $array[2];
+						$tagUrlKey = $array[2];
+						$tag       = $this->_helper->getTagByParam('url_key', $tagUrlKey);
 						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
-						$request->setPathInfo('/' . 'blog/tag/view/id/' . $tagId);
+						$request->setPathInfo('/' . 'blog/tag/view/id/' . $tag->getId());
 
 						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
 					}
