@@ -3,10 +3,7 @@
 $posts=$block->getPostList();
 
 ?>
-<div class="page-title">
-	Blog
-</div>
-<?php $checkRss = $block->checkRss();
+	<?php $checkRss = $block->checkRss();
 if ($checkRss):
 	?>
 	<div class="mp-blog-rss">
