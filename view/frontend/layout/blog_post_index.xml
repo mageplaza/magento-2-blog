@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-right"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mageplaza_Blog::css/index/style.css"/>
+    </head>
+    <body>
+        <referenceBlock name="header.links">
+        </referenceBlock>
+        <!--<referenceBlock name="breadcrumbs">-->
+        <!--<action method="addCrumb">-->
+        <!--<argument name="crumbName" xsi:type="string">Home</argument>-->
+        <!--<argument name="crumbInfo" xsi:type="array">-->
+        <!--<item name="title" xsi:type="string">Home</item>-->
+        <!--<item name="label" xsi:type="string">Home</item>-->
+        <!--<item name="link" xsi:type="string">/aaaaaaaaaaa</item>-->
+        <!--</argument>-->
+        <!--</action>-->
+        <!--<action method="addCrumb">-->
+        <!--<argument name="crumbName" xsi:type="string">Contact Us</argument>-->
+        <!--<argument name="crumbInfo" xsi:type="array">-->
+        <!--<item name="title" xsi:type="string">Contact Us</item>-->
+        <!--<item name="label" xsi:type="string">Contact Us</item>-->
+        <!--</argument>-->
+        <!--</action>-->
+        <!--</referenceBlock>-->
+        <referenceContainer name="content">
+            <block class="Mageplaza\Blog\Block\Post\Listpost" template="Mageplaza_Blog::post/index.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="sidebar.main">
+            <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"
+                   template="Mageplaza_Blog::sidebar/mostview.phtml"/>
+            <block class="Mageplaza\Blog\Block\Sidebar\Recentpost" name="mp.blog.view.sidebar.recentpost"
+                   template="Mageplaza_Blog::sidebar/recentpost.phtml"/>
+            <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category"
+                   template="Mageplaza_Blog::category/widget.phtml"/>
+            <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"
+                   template="Mageplaza_Blog::tag/widget.phtml"/>
+        </referenceContainer>
+    </body>
+</page>
+
