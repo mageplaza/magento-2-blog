@@ -1,0 +1,36 @@
+<?php
+$posts = $block->getPostList();
+?>
+<?php if ($posts->getSize() > 0) : ?>
+	<div class="post-list-container">
+        <?php foreach ($posts as $post) : ?>
+			<div class="post-list-item">
+                <div class="post-image">
+                    <?php if ($post->getImage()) : ?>
+						<a href="<?php echo $block->getUrlByPost($post) ?>">
+                            <img
+								src="<?php echo $block->getImageUrl($post->getImage()); ?>"
+								alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
+                        </a>
+					<?php endif; ?>
+                </div>
+
+                <h2 class="mp-post-title">
+                    <a href="<?php echo $block->getUrlByPost($post) ?>">
+                        <?php echo $post->getName(); ?>
+                    </a>
+                </h2>
+
+
+                <div class="post-short-description">
+                    <p><?php echo $post->getShortDescription(); ?><?php echo __('[...]'); ?></p>
+                </div>
+
+            </div>
+		<?php endforeach; ?>
+    </div>
+<?php else : ?>
+	<div class="post-list-container">
+        <?php echo __('There are no posts at this moment'); ?>
+    </div>
+<?php endif; ?>
