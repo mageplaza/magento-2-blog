@@ -127,6 +127,29 @@ class Frontend extends Template
 				);
 				$this->applySeoCode($post);
 
+			} elseif($actionName == 'blog_category_view'){
+				$category = $this->helperData->getCategoryByParam('id', $this->getRequest()->getParam('id'));
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				);
+				$breadcrumbs->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
+					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
+				)->addCrumb(
+					$category->getUrlKey(),
+					['label' => ucfirst($category->getName()),
+					 'title' => $category->getName(),
+					]
+				);
+				$this->applySeoCode();
+
 			} elseif ($actionName == 'blog_tag_view') {
 				$tag = $this->helperData->getTagByParam('id', $this->getRequest()->getParam('id'));
 				$breadcrumbs->addCrumb(
