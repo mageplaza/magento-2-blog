@@ -79,6 +79,7 @@ class Frontend extends Template
 	{
 		$actionName  = $this->getRequest()->getFullActionName();
 		$breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
+		$breadcrumbsLabel = ucfirst($this->helperData->getBlogConfig('general/url_prefix'));
 		if ($breadcrumbs) {
 			if ($actionName == 'blog_post_index') {
 				$breadcrumbs->addCrumb(
@@ -90,7 +91,7 @@ class Frontend extends Template
 					]
 				)->addCrumb(
 					$this->helperData->getBlogConfig('general/url_prefix'),
-					['label' => $this->helperData->getBlogConfig('general/url_prefix'), 'title' => $this->helperData->getBlogConfig('general/url_prefix')]
+					['label' => $breadcrumbsLabel, 'title' => $this->helperData->getBlogConfig('general/url_prefix')]
 				);
 				$this->applySeoCode();
 
@@ -107,21 +108,21 @@ class Frontend extends Template
 				);
 				$breadcrumbs->addCrumb(
 					$this->helperData->getBlogConfig('general/url_prefix'),
-					['label' => $this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
 					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 					 'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
 				);
 				if ($category->getId()) {
 					$breadcrumbs->addCrumb(
 						$category->getUrlKey(),
-						['label' => $category->getName(),
+						['label' => ucfirst($category->getName()),
 						 'title' => $category->getName(),
 						 'link'  => $this->helperData->getCategoryUrl($category)]
 					);
 				}
 				$breadcrumbs->addCrumb(
 					$post->getUrlKey(),
-					['label' => $post->getName(),
+					['label' => ucfirst($post->getName()),
 					 'title' => $post->getName()]
 				);
 				$this->applySeoCode($post);
@@ -137,7 +138,7 @@ class Frontend extends Template
 					]
 				)->addCrumb(
 					$this->helperData->getBlogConfig('general/url_prefix'),
-					['label' => $this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
 					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 					 'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
 
@@ -147,7 +148,7 @@ class Frontend extends Template
 					 'title' => 'Tag']
 				)->addCrumb(
 					'Tag' . $tag->getId(),
-					['label' => $tag->getName(),
+					['label' => ucfirst($tag->getName()),
 					 'title' => $tag->getName()]
 				);
 				$this->applySeoCode();
@@ -163,7 +164,7 @@ class Frontend extends Template
 					]
 				)->addCrumb(
 					$this->helperData->getBlogConfig('general/url_prefix'),
-					['label' => $this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
 					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 					 'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
 
@@ -173,7 +174,7 @@ class Frontend extends Template
 					 'title' => 'Topic']
 				)->addCrumb(
 					'topic' . $topic->getId(),
-					['label' => $topic->getName(),
+					['label' => ucfirst($topic->getName()),
 					 'title' => $topic->getName()]
 				);
 				$this->applySeoCode($topic);

@@ -9,7 +9,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="Mageplaza_Blog::css/view/style.css"/>
-
+        <css src="Mageplaza_Blog::css/view/mp.css"/>
     </head>
     <body>
         <referenceContainer name="content">
