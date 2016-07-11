@@ -1,11 +1,12 @@
 <?php $_post = $block->getCurrentPost();
 
 ?>
-<?php if($block->getBlogConfig('share/enabled')):?>
+
+<?php if ($block->getBlogConfig('share/enabled')): ?>
 	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $block->getBlogConfig('share/pubid_id') ?>"
 			async="async"></script>
 <?php endif; ?>
-	<div class="post-view">
+<div class="post-view">
 
         <div class="mp-post-info">
             <?php echo __('Posted on'); ?> <?php echo $_post->getCreatedAt() ?>
@@ -88,7 +89,7 @@
     </div>
 	<div class="mp-comment">
 			<?php $typeComment = $block->checkComment(); ?>
-		<?php if($typeComment== Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>
+		<?php if ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>
 			<div class="box-collateral box-reviews" id="post-reviews">
         <h2><?php echo __('Comments') ?></h2>
 
@@ -97,8 +98,10 @@
             var disqus_shortname = '<?php echo $block->helperComment('disqus');?>';
 
 			/* * * DON'T EDIT BELOW THIS LINE * * */
-			(function() {
-				var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			(function () {
+				var dsq = document.createElement('script');
+				dsq.type = 'text/javascript';
+				dsq.async = true;
 				dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
 				(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 			})();
@@ -106,22 +109,23 @@
 
 
     </div>
-		<?php elseif ($typeComment== Mageplaza\Blog\Model\Config\Source\Comments\Type::FACEBOOK): ?>
+		<?php elseif ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::FACEBOOK): ?>
 			<div class="box-collateral box-reviews" id="post-reviews">
         <h2><?php echo __('Comments') ?></h2>
 
         <div id="fb-root"></div>
-        <script>(function(d, s, id) {
+        <script>(function (d, s, id) {
 				var js, fjs = d.getElementsByTagName(s)[0];
 				if (d.getElementById(id)) return;
-				js = d.createElement(s); js.id = id;
+				js = d.createElement(s);
+				js.id = id;
 				js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId=<?php echo $this->getAppId()?>";
 				fjs.parentNode.insertBefore(js, fjs);
 			}(document, 'script', 'facebook-jssdk'));</script>
 
 
-        <div class="fb-comments" data-href="<?php echo $block->getUrlByPost($_post);?>" data-numposts="<?php echo $block->helperComment('facebook_number_comment');?>"
-			 data-width="100%" data-colorscheme="<?php echo $block->helperComment('facebook_colorscheme')?>" ddata-order-by="<?php echo $block->helperComment('facebook_order_by')?>"></div>
+        <div class="fb-comments" data-href="<?php echo $block->getUrlByPost($_post); ?>" data-numposts="<?php echo $block->helperComment('facebook_number_comment'); ?>"
+			 data-width="100%" data-colorscheme="<?php echo $block->helperComment('facebook_colorscheme') ?>" ddata-order-by="<?php echo $block->helperComment('facebook_order_by') ?>"></div>
 
     </div>
 
