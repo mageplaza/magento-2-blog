@@ -2,3 +2,85 @@
     font-size: 18px;
     font-weight: 300;
 }
+.mpcss a.tags-list {
+    background: #fff;
+    border: 1px solid #bbb;
+    color: inherit;
+    font-weight: normal;
+    font-size: 100%;
+    border-radius: 1px;
+    display: inline-block;
+    margin-bottom: 5px;
+}
+.mpcss a.tags-list:hover {
+    background: #fff;
+    color: inherit;
+}
+.category-list .fa.fa-angle-right {
+    font-size: 17px;
+}
+.mpcss a.list-categories {
+    color: inherit;
+}
+.mpcss a.list-categories:hover {
+    text-decoration: none;
+}
+.mpcss h2.list-title{
+    margin-bottom: 30px;
+}
+.mpcss .list-post-tabs {
+    padding: 20px 10px;
+    display: inline-flex;
+    border-bottom: 1px solid #ddd;
+    color: inherit;
+}
+.mpcss .list-post-tabs:hover {
+    text-decoration: none;
+    background: #e7e7e7;
+}
+.list-post-tabs .post-left {
+    float: left;
+    width: 25%;
+    margin-right: 4px;
+}
+.list-post-tabs .post-right {
+    float: left;
+    width: 73%;
+}
+.list-post-tabs .post-right span {
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+.list-post-tabs .post-right span.create-at {
+    font-size: 12px;
+}
+.mpcss .tab-pane.fade {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+.mpcss {
+    width: 100%;
+}
+.mpcss ul.nav-tabs{
+    width:100%;
+}
+.mpcss ul.nav-tabs li{
+    width: 50%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.mpcss ul.nav-tabs li a{
+    text-align: center;
+    margin-right: 0px;
+    border-radius: 0px;
+    background: #e7e7e7;
+}
+.mpcss .list-post-tabs:last-child {
+    border-bottom: none;
+}

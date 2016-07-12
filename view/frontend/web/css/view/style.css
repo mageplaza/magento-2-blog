@@ -1,18 +1,6 @@
 .post-post_content{
     margin: 10px 0 10px 0;
 }
-.category-list .fa.fa-angle-right {
-    font-size: 17px;
-}
-.mpcss a.list-categories {
-    color: inherit;
-}
-.mpcss a.list-categories:hover {
-    text-decoration: none;
-}
-.mpcss h2.list-title{
-    margin-bottom: 30px;
-}
 .mpcss .mp-post-info a {
     color: inherit;
 }
@@ -22,15 +10,8 @@
 .mpcss .mp-post-info span {
     color: #6f6f6f;;
 }
-.mpcss a.tags-list {
-    background: #fff;
-    border: 1px solid #bbb;
-    color: inherit;
-    font-weight: normal;
-    font-size: 100%;
-    border-radius: 1px;
-}
-.mpcss a.tags-list:hover {
-    background: #fff;
-    color: inherit;
+@media (min-width: 768px) {
+    .mpcss .post-sharing-button {
+        text-align: right;
+    }
 }

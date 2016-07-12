@@ -32,34 +32,51 @@
 				<span><?php echo __('Categories: '); ?></span>
 				<?php echo $block->getPostCategoryHtml($_post); ?>&nbsp;|&nbsp;
 				<span><?php echo __('Tags: '); ?></span>
-
+				<?php $tagCollection = $_post->getSelectedTagsCollection(); ?>
+				<?php if (count($tagCollection)): ?>
+					<?php foreach ($tagCollection as $tag): ?>
+						<a class="mp-info" href="<?php echo $block->getTagUrl($tag) ?>"><?php echo $tag->getName(); ?></a>,
+					<?php endforeach; ?>
+				<?php endif; ?>
 			</div>
 			<hr/>
         </div>
 	</div>
 </div>
 
-	<div class="post-sharing-button">
-        <div class="addthis_sharing_toolbox"></div>
-    </div>
-
-<div class="post-same-categories category-list mpcss">
-        <?php $categoryCollection = $_post->getSelectedCategoriesCollection(); ?>
-	<?php if (count($categoryCollection)): ?>
+<?php if ($block->getBlogConfig('share/enabled')): ?>
+	<div class="mpcss">
 		<div class="row">
-			<div class="col-xs-12"><h2 class="list-title"><?php echo __('Categories'); ?></h2></div>
-
-			<div class="col-sm-4 col-xs-12">
-                <?php foreach ($categoryCollection as $category): ?>
-					<i class="fa fa-angle-right"></i>&nbsp;<a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>" title="<?php echo $category->getName(); ?>"><?php echo $category->getName(); ?></a>
-					<hr/>
-				<?php endforeach; ?>
-            </div>
+			<div class="col-sm-6 col-xs-12">
+				<h4>Share This Story, Choose Your Platform!</h4>
+			</div>
+			<div class="col-sm-6 col-xs-12">
+				<div class="post-sharing-button">
+						<div class="addthis_sharing_toolbox"></div>
+				</div>
+			</div>
 		</div>
+	</div>
+<?php endif; ?>
 
-	<?php endif; ?>
 
-    </div>
+<!--<div class="post-same-categories category-list mpcss">-->
+<!--        --><?php //$categoryCollection = $_post->getSelectedCategoriesCollection(); ?>
+<!--	--><?php //if (count($categoryCollection)): ?>
+<!--		<div class="row">-->
+<!--			<div class="col-xs-12"><h2 class="list-title">--><?php //echo __('Categories'); ?><!--</h2></div>-->
+<!---->
+<!--			<div class="col-sm-4 col-xs-12">-->
+<!--                --><?php //foreach ($categoryCollection as $category): ?>
+<!--					<i class="fa fa-angle-right"></i>&nbsp;<a class="list-categories" href="--><?php //echo $block->getCategoryUrl($category) ?><!--" title="--><?php //echo $category->getName(); ?><!--">--><?php //echo $category->getName(); ?><!--</a>-->
+<!--					<hr/>-->
+<!--				--><?php //endforeach; ?>
+<!--            </div>-->
+<!--		</div>-->
+<!---->
+<!--	--><?php //endif; ?>
+<!---->
+<!--    </div>-->
 
     <div class="post-same-topics topic-list">
         <?php $topicCollection = $_post->getSelectedTopicsCollection(); ?>
@@ -77,61 +94,61 @@
 		<?php endif; ?>
 
     </div>
-  <div class="post-same-tags tag-list mpcss">
-	  <div class="row">
-        <?php $tagCollection = $_post->getSelectedTagsCollection(); ?>
-	  <?php if (count($tagCollection)): ?>
-		  <div class="col-xs-12"><h2 class="list-title"><?php echo __('Tags'); ?></h2></div>
-		  <div class="col-xs-12 col-sm-4">
-                <?php foreach ($tagCollection as $tag): ?>
-					<a class="label label-default tags-list" href="<?php echo $block->getTagUrl($tag) ?>"><?php echo $tag->getName(); ?></a>
-				<?php endforeach; ?>
-
-		  </div>
-	  </div>
-	  <?php endif; ?>
-
-    </div>
+<!--  <div class="post-same-tags tag-list mpcss">-->
+<!--	  <div class="row">-->
+<!--        --><?php //$tagCollection = $_post->getSelectedTagsCollection(); ?>
+<!--	  --><?php //if (count($tagCollection)): ?>
+<!--		  <div class="col-xs-12"><h2 class="list-title">--><?php //echo __('Tags'); ?><!--</h2></div>-->
+<!--		  <div class="col-xs-12 col-sm-4">-->
+<!--                --><?php //foreach ($tagCollection as $tag): ?>
+<!--					<a class="label label-default tags-list" href="--><?php //echo $block->getTagUrl($tag) ?><!--">--><?php //echo $tag->getName(); ?><!--</a>-->
+<!--				--><?php //endforeach; ?>
+<!---->
+<!--		  </div>-->
+<!--	  </div>-->
+<!--	  --><?php //endif; ?>
+<!---->
+<!--    </div>-->
 	<div class="mp-comment">
-			<?php $typeComment = $block->checkComment(); ?>
+		<?php $typeComment = $block->checkComment(); ?>
 		<?php if ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>
 			<div class="box-collateral box-reviews" id="post-reviews">
-        <h2><?php echo __('Comments') ?></h2>
+				<h2><?php echo __('Comments') ?></h2>
 
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-            var disqus_shortname = '<?php echo $block->helperComment('disqus');?>';
+				<div id="disqus_thread"></div>
+				<script type="text/javascript">
+					var disqus_shortname = '<?php echo $block->helperComment('disqus');?>';
 
-			/* * * DON'T EDIT BELOW THIS LINE * * */
-			(function () {
-				var dsq = document.createElement('script');
-				dsq.type = 'text/javascript';
-				dsq.async = true;
-				dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-				(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-			})();
-        </script>
+					/* * * DON'T EDIT BELOW THIS LINE * * */
+					(function () {
+						var dsq = document.createElement('script');
+						dsq.type = 'text/javascript';
+						dsq.async = true;
+						dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+						(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+					})();
+				</script>
 
 
-    </div>
+   	 		</div>
 		<?php elseif ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::FACEBOOK): ?>
 			<div class="box-collateral box-reviews" id="post-reviews">
-        <h2><?php echo __('Comments') ?></h2>
+				<h2><?php echo __('Comments') ?></h2>
 
-        <div id="fb-root"></div>
-        <script>(function (d, s, id) {
-				var js, fjs = d.getElementsByTagName(s)[0];
-				if (d.getElementById(id)) return;
-				js = d.createElement(s);
-				js.id = id;
-				js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId=<?php echo $this->getAppId()?>";
-				fjs.parentNode.insertBefore(js, fjs);
-			}(document, 'script', 'facebook-jssdk'));</script>
+				<div id="fb-root"></div>
+				<script>(function (d, s, id) {
+						var js, fjs = d.getElementsByTagName(s)[0];
+						if (d.getElementById(id)) return;
+						js = d.createElement(s);
+						js.id = id;
+						js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId=<?php echo $this->getAppId()?>";
+						fjs.parentNode.insertBefore(js, fjs);
+					}(document, 'script', 'facebook-jssdk'));</script>
 
 
-        <div class="fb-comments" data-href="<?php echo $block->getUrlByPost($_post); ?>" data-numposts="<?php echo $block->helperComment('facebook_number_comment'); ?>"
-			 data-width="100%" data-colorscheme="<?php echo $block->helperComment('facebook_colorscheme') ?>" ddata-order-by="<?php echo $block->helperComment('facebook_order_by') ?>"></div>
+				<div class="fb-comments" data-href="<?php echo $block->getUrlByPost($_post); ?>" data-numposts="<?php echo $block->helperComment('facebook_number_comment'); ?>"
+					 data-width="100%" data-colorscheme="<?php echo $block->helperComment('facebook_colorscheme') ?>" ddata-order-by="<?php echo $block->helperComment('facebook_order_by') ?>"></div>
 
-    </div>
+    		</div>
 		<?php endif; ?>
 	</div>

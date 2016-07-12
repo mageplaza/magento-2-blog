@@ -1,28 +1,114 @@
 <?php
 $posts = $block->getMosviewPosts();
+$postsRecent = $block->getRecentPost();
 $limit = $block->getLimitPost();
+$limitRecent = $block->getLimitRecentPost();
 $count = 0;
 ?>
-	<div class="block-title">
-			<p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Most Views') ?></p>
+<div class="mpcss">
+	<ul class="nav nav-tabs">
+		<li class="active"><a data-toggle="tab" href="#mostview"><?php echo __('Popular') ?></a></li>
+		<li><a data-toggle="tab" href="#mostrecent"><?php echo __('Recent') ?></a></li>
+	</ul>
+	<div class="tab-content">
+		<div id="mostview" class="tab-pane fade in active">
+			<?php if ($posts->getSize()): ?>
+				<?php foreach ($posts as $post): ?>
+				<?php
+				$count++;
+				if ($count > $limit)
+					break;
+				?>
+					<a class="list-post-tabs" href="<?php echo $block->getUrlByPost($post) ?>">
+						<div class="post-left">
+							<img class="img-responsive" src="<?php echo $block->getImageUrl($post->getImage())?>">
+						</div>
+						<div class="post-right">
+							<span><?php echo $post->getName() ?></span>
+							<span class="create-at"><?php echo $post->getCreatedAt()?></span>
+						</div>
+					</a>
+				<?php endforeach; ?>
+			<?php else: ?>
+				<?php echo __('No Posts') ?>
+			<?php endif; ?>
+		</div>
+		<div id="mostrecent" class="tab-pane fade">
+			<?php if ($postsRecent->getSize()): ?>
+				<?php foreach ($postsRecent as $post): ?>
+					<?php
+					$count++;
+					if ($count > $limitRecent)
+						break;
+					?>
+					
+					<a class="list-post-tabs" href="<?php echo $block->getUrlByPost($post) ?>">
+						<div class="post-left">
+							<img class="img-responsive" src="<?php echo $block->getImageUrl($post->getImage())?>">
+						</div>
+						<div class="post-right">
+							<span><?php echo $post->getName() ?></span>
+							<span class="create-at"><?php echo $post->getCreatedAt()?></span>
+						</div>
+					</a>
 
-	</div>
-	<?php if ($posts->getSize()): ?>
-		<ul>
+				<?php endforeach; ?>
 
-<?php foreach ($posts as $post): ?>
-	<?php
-	$count++;
-	if ($count > $limit)
-		break;
-	?>
-	<li>
-		<a href="<?php echo $block->getUrlByPost($post) ?>"><?php echo $post->getName() ?>
-		</a>
-	</li>
+			<?php else: ?>
+				<?php echo __('No Posts') ?>
+			<?php endif; ?>
+		</div>
+  	</div>
+</div>
 
-<?php endforeach; ?>
-</ul>
-	<?php else: ?>
-		<?php echo __('No Posts') ?>
-	<?php endif; ?>
+<!--<div class="mp-sidebar">-->
+<!--	<div class="block-title">-->
+<!--			<p class="block-mp-sidebar-heading" role="heading" aria-level="2">--><?php //echo __('Most Views') ?><!--</p>-->
+<!---->
+<!--	</div>-->
+<!--	--><?php //if ($posts->getSize()): ?>
+<!--		<ul>-->
+<!---->
+<?php //foreach ($posts as $post): ?>
+<!--	--><?php
+//	$count++;
+//	if ($count > $limit)
+//		break;
+//	?>
+<!--	<li>-->
+<!--		<a href="--><?php //echo $block->getUrlByPost($post) ?><!--">--><?php //echo $post->getName() ?>
+<!--		</a>-->
+<!--	</li>-->
+<!---->
+<?php //endforeach; ?>
+<!--</ul>-->
+<!--	--><?php //else: ?>
+<!--		--><?php //echo __('No Posts') ?>
+<!--	--><?php //endif; ?>
+<!--	</div>-->
+<!---->
+<!--<div class="mp-sidebar">-->
+<!--	<div class="block-title">-->
+<!--			<p class="block-mp-sidebar-heading" role="heading" aria-level="2">--><?php //echo __('Most Recents') ?><!--</p>-->
+<!---->
+<!--	</div>-->
+<!--	--><?php //if ($postsRecent->getSize()): ?>
+<!--		<ul>-->
+<!---->
+<?php //foreach ($postsRecent as $post): ?>
+<!--	--><?php
+//	$count++;
+//	if ($count > $limit)
+//		break;
+//	?>
+<!--	<li>-->
+<!--		<a href="--><?php //echo $block->getUrlByPost($post) ?><!--">--><?php //echo $post->getName() ?>
+<!--		</a>-->
+<!--	</li>-->
+<!---->
+<?php //endforeach; ?>
+<!--</ul>-->
+<!--	--><?php //else: ?>
+<!--		--><?php //echo __('No Posts') ?>
+<!--	--><?php //endif; ?>
+<!--</div>-->
