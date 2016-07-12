@@ -6,17 +6,9 @@
 	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $block->getBlogConfig('share/pubid_id') ?>"
 			async="async"></script>
 <?php endif; ?>
-<div class="post-view">
-
-        <div class="mp-post-info">
-            <?php echo __('Posted on'); ?> <?php echo $_post->getCreatedAt() ?>
-			|
-			<?php echo __('Posted in'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> |
-        </div>
-
-        <br>
-
-        <div class="post-image">
+<div class="post-view mpcss">
+	<div class="row">
+        <div class="post-image col-xs-12">
            <?php if ($_post->getImage()) : ?>
 			   <a href="<?php echo $block->getUrlByPost($_post) ?>">
                             <img
@@ -27,29 +19,44 @@
         </div>
 
 
-        <div class="post-post_content">
+        <div class="post-post_content col-xs-12">
             <?php echo $_post->getPostContent(); ?>
         </div>
 
-    </div>
+		<div class="col-xs-12">
+			<hr/>
+			<div class="mp-post-info">
+				<span><?php echo __('By ');?></span>
+				<a class="mp-info" href="<?php echo 'admin';?>">admin</a>&nbsp;|&nbsp;
+				<span><?php echo $_post->getCreatedAt(); ?></span>&nbsp;|&nbsp;
+				<span><?php echo __('Categories: '); ?></span>
+				<?php echo $block->getPostCategoryHtml($_post); ?>&nbsp;|&nbsp;
+				<span><?php echo __('Tags: '); ?></span>
+
+			</div>
+			<hr/>
+        </div>
+	</div>
+</div>
 
 
 	<div class="post-sharing-button">
         <div class="addthis_sharing_toolbox"></div>
     </div>
 
-<div class="post-same-categories category-list">
+<div class="post-same-categories category-list mpcss">
         <?php $categoryCollection = $_post->getSelectedCategoriesCollection(); ?>
 	<?php if (count($categoryCollection)): ?>
-		<h2><?php echo __('Categories'); ?></h2>
-		<ul>
-                <?php foreach ($categoryCollection as $category): ?>
-					<li>
-                        <a href="<?php echo $block->getCategoryUrl($category) ?>"><?php echo $category->getName(); ?></a>
-                    </li>
-				<?php endforeach; ?>
+		<div class="row">
+			<div class="col-xs-12"><h2 class="list-title"><?php echo __('Categories'); ?></h2></div>
 
-            </ul>
+			<div class="col-sm-4 col-xs-12">
+                <?php foreach ($categoryCollection as $category): ?>
+					<i class="fa fa-angle-right"></i>&nbsp;<a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>" title="<?php echo $category->getName(); ?>"><?php echo $category->getName(); ?></a>
+					<hr/>
+				<?php endforeach; ?>
+            </div>
+		</div>
 
 	<?php endif; ?>
 
@@ -71,19 +78,18 @@
 		<?php endif; ?>
 
     </div>
-  <div class="post-same-tags tag-list">
+  <div class="post-same-tags tag-list mpcss">
+	  <div class="row">
         <?php $tagCollection = $_post->getSelectedTagsCollection(); ?>
 	  <?php if (count($tagCollection)): ?>
-		  <h2><?php echo __('Tag'); ?></h2>
-		  <ul>
+		  <div class="col-xs-12"><h2 class="list-title"><?php echo __('Tags'); ?></h2></div>
+		  <div class="col-xs-12 col-sm-4">
                 <?php foreach ($tagCollection as $tag): ?>
-					<li>
-                        <a href="<?php echo $block->getTagUrl($tag) ?>"><?php echo $tag->getName(); ?></a>
-                    </li>
+					<a class="label label-default tags-list" href="<?php echo $block->getTagUrl($tag) ?>"><?php echo $tag->getName(); ?></a>
 				<?php endforeach; ?>
 
-            </ul>
-
+		  </div>
+	  </div>
 	  <?php endif; ?>
 
     </div>

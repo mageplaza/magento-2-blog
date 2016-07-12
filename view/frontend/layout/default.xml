@@ -9,6 +9,8 @@
     <head>
         <css src="Mageplaza_Blog::css/sidebar/style.css"/>
         <css src="Mageplaza_Blog::css/sidebar/mp.css"/>
+        <css src="Mageplaza_Blog::css/sidebar/font-awesome.css"/>
+        <css src="Mageplaza_Blog::css/sidebar/font-awesome.min.css"/>
     </head>
     <body>
         <referenceBlock name="footer_links">

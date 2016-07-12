@@ -10,6 +10,8 @@
     <head>
         <css src="Mageplaza_Blog::css/view/style.css"/>
         <css src="Mageplaza_Blog::css/view/mp.css"/>
+        <css src="Mageplaza_Blog::css/view/font-awesome.css"/>
+        <css src="Mageplaza_Blog::css/view/font-awesome.min.css"/>
     </head>
     <body>
         <referenceContainer name="content">
