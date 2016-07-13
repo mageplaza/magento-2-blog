@@ -7,3 +7,21 @@
     line-height: 18px;
     padding: 0 0 10px 0;
 }
+.mpcss h2.mp-post-title a {
+    color: #1abc9c;
+}
+.mpcss h2.mp-post-title a:hover {
+    text-decoration: none;
+}
+.mpcss a.mp-read-more {
+    color: #1abc9c;
+}
+.mpcss a.mp-read-more:hover {
+    color: #1abc9c;
+}
+.mpcss a.mp-category{
+    color: #1abc9c;
+}
+.mpcss a.mp-category:hover{
+    color: #1abc9c;
+}

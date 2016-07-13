@@ -20,3 +20,9 @@
     background: #f6f6f6;
     margin-top: 40px;
 }
+.mpcss a.mp-category{
+    color: #1abc9c;
+}
+.mpcss a.mp-category:hover{
+    color: #1abc9c;
+}

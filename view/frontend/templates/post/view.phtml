@@ -60,23 +60,7 @@
 <?php endif; ?>
 
 
-<!--<div class="post-same-categories category-list mpcss">-->
-<!--        --><?php //$categoryCollection = $_post->getSelectedCategoriesCollection(); ?>
-<!--	--><?php //if (count($categoryCollection)): ?>
-<!--		<div class="row">-->
-<!--			<div class="col-xs-12"><h2 class="list-title">--><?php //echo __('Categories'); ?><!--</h2></div>-->
-<!---->
-<!--			<div class="col-sm-4 col-xs-12">-->
-<!--                --><?php //foreach ($categoryCollection as $category): ?>
-<!--					<i class="fa fa-angle-right"></i>&nbsp;<a class="list-categories" href="--><?php //echo $block->getCategoryUrl($category) ?><!--" title="--><?php //echo $category->getName(); ?><!--">--><?php //echo $category->getName(); ?><!--</a>-->
-<!--					<hr/>-->
-<!--				--><?php //endforeach; ?>
-<!--            </div>-->
-<!--		</div>-->
-<!---->
-<!--	--><?php //endif; ?>
-<!---->
-<!--    </div>-->
+
 
     <div class="post-same-topics topic-list">
         <?php $topicCollection = $_post->getSelectedTopicsCollection(); ?>
@@ -94,21 +78,7 @@
 		<?php endif; ?>
 
     </div>
-<!--  <div class="post-same-tags tag-list mpcss">-->
-<!--	  <div class="row">-->
-<!--        --><?php //$tagCollection = $_post->getSelectedTagsCollection(); ?>
-<!--	  --><?php //if (count($tagCollection)): ?>
-<!--		  <div class="col-xs-12"><h2 class="list-title">--><?php //echo __('Tags'); ?><!--</h2></div>-->
-<!--		  <div class="col-xs-12 col-sm-4">-->
-<!--                --><?php //foreach ($tagCollection as $tag): ?>
-<!--					<a class="label label-default tags-list" href="--><?php //echo $block->getTagUrl($tag) ?><!--">--><?php //echo $tag->getName(); ?><!--</a>-->
-<!--				--><?php //endforeach; ?>
-<!---->
-<!--		  </div>-->
-<!--	  </div>-->
-<!--	  --><?php //endif; ?>
-<!---->
-<!--    </div>-->
+
 	<div class="mp-comment">
 		<?php $typeComment = $block->checkComment(); ?>
 		<?php if ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>

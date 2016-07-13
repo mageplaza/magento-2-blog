@@ -69,6 +69,12 @@
                     <label>Show Sidebar Left</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="display_style" translate="label comment" type="select" sortOrder="40" showInDefault="1"
+                        showInStore="1" showInWebsite="1">
+                    <label>Display blogs style</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\Blogview\Display</source_model>
+                    <comment>Grid view style is better</comment>
+                </field>
             </group>
             <group id="sidebar" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
                    showInStore="1">
