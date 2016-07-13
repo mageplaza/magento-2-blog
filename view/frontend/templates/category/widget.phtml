@@ -10,6 +10,7 @@ $count = 0;
 
 		</div>
 		<div class="col-xs-12">
+			<ul class="menu-categories">
 			<?php if ($categories->getSize()): ?>
 
 
@@ -19,14 +20,15 @@ $count = 0;
 			if ($count > $limit)
 				break;
 			?>
-					<i class="fa fa-angle-right"></i>&nbsp;<a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>"><?php echo $category->getName() ?></a>
-					<hr/>
+					<li class="category-item" ><i class="fa fa-angle-right"></i><a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>"><?php echo $category->getName() ?></a></li>
+
 
 			<?php endforeach; ?>
 
 			<?php else: ?>
 				<?php echo __('No Categories') ?>
 			<?php endif; ?>
+			</ul>
 		</div>
 	</div>
 </div>

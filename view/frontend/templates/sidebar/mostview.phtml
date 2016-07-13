@@ -5,7 +5,7 @@ $limit = $block->getLimitPost();
 $limitRecent = $block->getLimitRecentPost();
 $count = 0;
 ?>
-<div class="mpcss">
+<div class="mp-sidebar mpcss">
 	<ul class="nav nav-tabs">
 		<li class="active"><a data-toggle="tab" href="#mostview"><?php echo __('Popular') ?></a></li>
 		<li><a data-toggle="tab" href="#mostrecent"><?php echo __('Recent') ?></a></li>
@@ -59,55 +59,3 @@ $count = 0;
 		</div>
   	</div>
 </div>
-
-<!--<div class="mp-sidebar">-->
-<!--	<div class="block-title">-->
-<!--			<p class="block-mp-sidebar-heading" role="heading" aria-level="2">--><?php //echo __('Most Views') ?><!--</p>-->
-<!---->
-<!--	</div>-->
-<!--	--><?php //if ($posts->getSize()): ?>
-<!--		<ul>-->
-<!---->
-<?php //foreach ($posts as $post): ?>
-<!--	--><?php
-//	$count++;
-//	if ($count > $limit)
-//		break;
-//	?>
-<!--	<li>-->
-<!--		<a href="--><?php //echo $block->getUrlByPost($post) ?><!--">--><?php //echo $post->getName() ?>
-<!--		</a>-->
-<!--	</li>-->
-<!---->
-<?php //endforeach; ?>
-<!--</ul>-->
-<!--	--><?php //else: ?>
-<!--		--><?php //echo __('No Posts') ?>
-<!--	--><?php //endif; ?>
-<!--	</div>-->
-<!---->
-<!--<div class="mp-sidebar">-->
-<!--	<div class="block-title">-->
-<!--			<p class="block-mp-sidebar-heading" role="heading" aria-level="2">--><?php //echo __('Most Recents') ?><!--</p>-->
-<!---->
-<!--	</div>-->
-<!--	--><?php //if ($postsRecent->getSize()): ?>
-<!--		<ul>-->
-<!---->
-<?php //foreach ($postsRecent as $post): ?>
-<!--	--><?php
-//	$count++;
-//	if ($count > $limit)
-//		break;
-//	?>
-<!--	<li>-->
-<!--		<a href="--><?php //echo $block->getUrlByPost($post) ?><!--">--><?php //echo $post->getName() ?>
-<!--		</a>-->
-<!--	</li>-->
-<!---->
-<?php //endforeach; ?>
-<!--</ul>-->
-<!--	--><?php //else: ?>
-<!--		--><?php //echo __('No Posts') ?>
-<!--	--><?php //endif; ?>
-<!--</div>-->

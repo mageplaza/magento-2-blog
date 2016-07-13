@@ -2,6 +2,12 @@
     font-size: 18px;
     font-weight: 300;
 }
+.mp-sidebar{
+    margin-bottom: 50px;
+}
+.mpcss .sidebar-tags{
+    margin-bottom: 15px;
+}
 .mpcss a.tags-list {
     background: #fff;
     border: 1px solid #bbb;
@@ -11,16 +17,26 @@
     border-radius: 1px;
     display: inline-block;
     margin-bottom: 5px;
+    padding: 10px;
 }
-.mpcss a.tags-list:hover {
-    background: #fff;
-    color: inherit;
+.mpcss a.label.label-default.tags-list:hover {
+    background: #1abc9c;
+    border: 1px solid;
+}
+.mpcss ul.menu-categories{
+    padding: 0px;
+}
+.mpcss ul.menu-categories li.category-item{
+    list-style: none;
+    padding: 10px 0px;
+    border-bottom: 1px solid #ddd;
 }
 .category-list .fa.fa-angle-right {
     font-size: 17px;
 }
 .mpcss a.list-categories {
     color: inherit;
+    margin-left: 8px;
 }
 .mpcss a.list-categories:hover {
     text-decoration: none;
@@ -36,7 +52,7 @@
 }
 .mpcss .list-post-tabs:hover {
     text-decoration: none;
-    background: #e7e7e7;
+    background: #fbfbfb;
 }
 .list-post-tabs .post-left {
     float: left;
@@ -74,13 +90,28 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    border-top-style: solid;
+    border-top-color: #eee;
+    font-size: 16px;
+}
+@media(width: 768px){
+    .mpcss ul.nav-tabs li{
+        font-size: 12px;
+    }
+}
+.mpcss ul.nav-tabs li.active{
+    border-top-color: #1abc9c;
+    border-top-style: solid;
 }
 .mpcss ul.nav-tabs li a{
     text-align: center;
     margin-right: 0px;
     border-radius: 0px;
-    background: #e7e7e7;
+    background: #eee;
 }
 .mpcss .list-post-tabs:last-child {
     border-bottom: none;
+}
+.mpcss .fa.fa-angle-right {
+    font-size: larger;
 }

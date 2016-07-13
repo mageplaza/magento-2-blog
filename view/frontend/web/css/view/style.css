@@ -12,6 +12,11 @@
 }
 @media (min-width: 768px) {
     .mpcss .post-sharing-button {
-        text-align: right;
+        text-align: center;
     }
+}
+.mpcss .sharing{
+    padding: 20px 30px;
+    background: #f6f6f6;
+    margin-top: 40px;
 }
