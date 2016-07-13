@@ -53,6 +53,9 @@ class MetaRobots implements \Magento\Framework\Option\ArrayInterface
 
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getOptionArray()
 	{
 		return array(self::INDEXFOLLOW => 'INDEX,FOLLOW', self::NOINDEXNOFOLLOW => 'NOINDEX,NOFOLLOW', self::NOINDEXFOLLOW => 'NOINDEX,FOLLOW', self::INDEXNOFOLLOW => 'INDEX,NOFOLLOW');

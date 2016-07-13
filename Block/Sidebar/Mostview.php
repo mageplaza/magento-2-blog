@@ -20,6 +20,9 @@ use Mageplaza\Blog\Block\Frontend;
 
 class Mostview extends Frontend
 {
+	/**
+	 * @return mixed
+	 */
 	public function getMosviewPosts()
 	{
 		$ob    = $this->objectManager->get('Mageplaza\Blog\Model\Traffic');
@@ -34,6 +37,9 @@ class Mostview extends Frontend
 		return $posts;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getLimitPost()
 	{
 		return $this->helperData->getBlogConfig('sidebar/number_mostview_posts');

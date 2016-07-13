@@ -22,6 +22,16 @@ class Index extends Action
 	protected $helperData;
 	protected $storeManager;
 
+	/**
+	 * Index constructor.
+	 * @param \Magento\Framework\App\Action\Context $context
+	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+	 * @param \Mageplaza\Blog\Helper\Data $helperBlog
+	 * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+	 * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
+	 * @param \Magento\Customer\Model\Url $customerUrl
+	 * @param \Magento\Customer\Model\Session $customerSession
+	 */
 	public function __construct(
 		Context $context,
 		StoreManagerInterface $storeManager,
@@ -41,6 +51,9 @@ class Index extends Action
 
 	}
 
+	/**
+	 * @return \Magento\Framework\View\Result\Page
+	 */
 	public function execute()
 	{
 		return $this->resultPageFactory->create();

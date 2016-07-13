@@ -20,14 +20,21 @@ use Mageplaza\Blog\Block\Frontend;
 
 class Recentpost extends Frontend
 {
+	/**
+	 * @return mixed
+	 */
 	public function getRecentPost()
 	{
-		$ob       = $this->objectManager->get('Mageplaza\Blog\Model\Post');
+		$ob    = $this->objectManager->get('Mageplaza\Blog\Model\Post');
 		$posts = $ob->getCollection();
 		$posts->setOrder('created_at', 'DESC');
 
 		return $posts;
 	}
+
+	/**
+	 * @return mixed
+	 */
 	public function getLimitPost()
 	{
 		return $this->helperData->getBlogConfig('sidebar/number_recent_posts');

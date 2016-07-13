@@ -159,7 +159,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="pubid_id"
-                       translate="label" type="text" sortOrder="2" showInDefault="1"
+                       translate="label" type="text" sortOrder="1" showInDefault="1"
                        showInWebsite="1" showInStore="1">
                     <label>Pubid Id</label>
                 </field>

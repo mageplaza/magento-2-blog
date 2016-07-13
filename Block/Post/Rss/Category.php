@@ -82,9 +82,9 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
 	 */
 	public function getRssData()
 	{
-		$categoryId=$this->getRequest()->getParam('category_id');
+		$categoryId = $this->getRequest()->getParam('category_id');
 		$storeModel = $this->storeManager->getStore($this->getStoreId());
-		$newUrl     = $this->rssUrlBuilder->getUrl(['store_id' => $this->getStoreId(), 'type' => 'blog_categories','category_id'=>$categoryId]);
+		$newUrl     = $this->rssUrlBuilder->getUrl(['store_id' => $this->getStoreId(), 'type' => 'blog_categories', 'category_id' => $categoryId]);
 		$title      = __('List Posts from %1', $storeModel->getFrontendName());
 		$lang       = $this->_scopeConfig->getValue(
 			'general/locale/code',
@@ -100,8 +100,8 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
 		];
 		$limit      = 10;
 		$count      = 0;
-		$category      = $this->rssModel->create()->load($categoryId);
-		$posts=$category->getSelectedPostsCollection();
+		$category   = $this->rssModel->create()->load($categoryId);
+		$posts      = $category->getSelectedPostsCollection();
 		$posts
 			->addFieldToFilter('enabled', 1)
 			->setOrder('post_id', 'DESC');

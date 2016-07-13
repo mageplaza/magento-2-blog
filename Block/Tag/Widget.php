@@ -20,12 +20,19 @@ use Mageplaza\Blog\Block\Frontend;
 
 class Widget extends Frontend
 {
+	/**
+	 * @return $this
+	 */
 	public function getTagList()
 	{
 
 		return $this->helperData->getTagList();
 	}
 
+	/**
+	 * @param $tag
+	 * @return string
+	 */
 	public function getTagUrl($tag)
 	{
 		return $this->helperData->getTagUrl($tag);

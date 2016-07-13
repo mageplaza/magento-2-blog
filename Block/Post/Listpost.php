@@ -20,12 +20,17 @@ use Mageplaza\Blog\Block\Frontend;
 
 class Listpost extends Frontend
 {
-
+	/**
+	 * @return $this|\Mageplaza\Blog\Model\Post
+	 */
 	public function getPostList()
 	{
 		return $this->helperData->getPostList();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function checkRss()
 	{
 		return $this->helperData->getBlogUrl('post/rss');

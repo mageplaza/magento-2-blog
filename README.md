@@ -71,8 +71,3 @@ composer config repositories.mageplaza-magento-2-blog-extension git git@github.c
 sudo composer require mageplaza/magento-2-blog-extension:dev-master
 php bin/magento setup:upgrade
 ~~~
-
-
-## License
-
-https://www.mageplaza.com/LICENSE.txt

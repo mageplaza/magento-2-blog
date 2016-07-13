@@ -13,13 +13,16 @@ namespace Mageplaza\Blog\Model\Config\Source\Comments\Facebook;
 class Orderby implements \Magento\Framework\Option\ArrayInterface
 {
 	const SOCIAL = 'social';
-	const REVERSE_TIME  = 'reverse_time';
-	const TIME  = 'time';
+	const REVERSE_TIME = 'reverse_time';
+	const TIME = 'time';
 
+	/**
+	 * @return array
+	 */
 	public function toOptionArray()
-{
-	return [['value' => self::SOCIAL, 'label' => __('Social')], ['value' => self::REVERSE_TIME, 'label' => __('Reverse time')], ['value' => self::TIME, 'label' => __('Time')]];
-}
+	{
+		return [['value' => self::SOCIAL, 'label' => __('Social')], ['value' => self::REVERSE_TIME, 'label' => __('Reverse time')], ['value' => self::TIME, 'label' => __('Time')]];
+	}
 
 	/**
 	 * Get options in "key-value" format
@@ -27,12 +30,15 @@ class Orderby implements \Magento\Framework\Option\ArrayInterface
 	 * @return array
 	 */
 	public function toArray()
-{
-	return [self::SOCIAL => __('Social'), self::REVERSE_TIME => __('Reverse time'), self::TIME => __('Time')];
-}
+	{
+		return [self::SOCIAL => __('Social'), self::REVERSE_TIME => __('Reverse time'), self::TIME => __('Time')];
+	}
 
+	/**
+	 * @return array
+	 */
 	public function getAllOptions()
-{
-	return $this->toOptionArray();
-}
+	{
+		return $this->toOptionArray();
+	}
 }

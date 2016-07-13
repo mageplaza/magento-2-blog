@@ -22,6 +22,9 @@ class Type implements \Magento\Framework\Option\ArrayInterface
 	const DEFAULT_COMMENT = 1;
 	const DISABLE = 4;
 
+	/**
+	 * @return array
+	 */
 	public function toOptionArray()
 	{
 		return [ ['value' => self::DISQUS, 'label' => __('Disqus Comment')], ['value' => self::FACEBOOK, 'label' => __('Facebook Comment')], ['value' => self::DISABLE, 'label' => __('Disable Completely')]];

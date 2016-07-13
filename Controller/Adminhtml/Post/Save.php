@@ -86,7 +86,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 	public function execute()
 	{
 		$data = $this->getRequest()->getPost('post');
-		if (isset($_FILES['image']) AND ($_FILES['image']['name'] == '')) {
+		if (($_FILES['image']['name'] == '')) {
 			if (isset($data['image'])) {
 				unset($data['image']);
 			}

@@ -22,6 +22,16 @@ class Data extends AbstractHelper
 	protected $tagfactory;
 	protected $topicfactory;
 
+	/**
+	 * Data constructor.
+	 * @param \Magento\Framework\App\Helper\Context $context
+	 * @param \Magento\Framework\ObjectManagerInterface $objectManager
+	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+	 * @param \Mageplaza\Blog\Model\PostFactory $postFactory
+	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+	 * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
+	 * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
+	 */
 	public function __construct(
 		Context $context,
 		ObjectManagerInterface $objectManager,
@@ -41,6 +51,11 @@ class Data extends AbstractHelper
 		parent::__construct($context);
 	}
 
+	/**
+	 * @param $field
+	 * @param null $storeId
+	 * @return mixed
+	 */
 	public function getConfigValue($field, $storeId = null)
 	{
 		return $this->scopeConfig->getValue(
@@ -50,11 +65,21 @@ class Data extends AbstractHelper
 		);
 	}
 
+	/**
+	 * @param $code
+	 * @param null $storeId
+	 * @return mixed
+	 */
 	public function getBlogConfig($code, $storeId = null)
 	{
 		return $this->getConfigValue(self::XML_PATH_BLOG . $code, $storeId);
 	}
 
+	/**
+	 * @param null $type
+	 * @param null $id
+	 * @return $this|\Mageplaza\Blog\Model\Post
+	 */
 	public function getPostList($type = null, $id = null)
 	{
 		$list          = '';
@@ -81,6 +106,9 @@ class Data extends AbstractHelper
 		return $posts;
 	}
 
+	/**
+	 * @return $this
+	 */
 	public function getCategoryList()
 	{
 		$category = $this->categoryfactory->create();
@@ -90,6 +118,9 @@ class Data extends AbstractHelper
 		return $list;
 	}
 
+	/**
+	 * @return $this
+	 */
 	public function getTagList()
 	{
 		$tag  = $this->tagfactory->create();
@@ -99,6 +130,10 @@ class Data extends AbstractHelper
 		return $list;
 	}
 
+	/**
+	 * @param $array
+	 * @return $this
+	 */
 	public function getCategoryCollection($array)
 	{
 		$category = $this->categoryfactory->create();
@@ -109,6 +144,10 @@ class Data extends AbstractHelper
 		return $list;
 	}
 
+	/**
+	 * @param $post
+	 * @return string
+	 */
 	public function getUrlByPost($post)
 	{
 		if ($post->getUrlKey()) {
@@ -128,11 +167,19 @@ class Data extends AbstractHelper
 		return $this->_getUrl($urlKey);
 	}
 
+	/**
+	 * @param $code
+	 * @return string
+	 */
 	public function getBlogUrl($code)
 	{
 		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/' . $code);
 	}
 
+	/**
+	 * @param $url
+	 * @return $this
+	 */
 	public function getPostByUrl($url)
 	{
 		$url   = $this->checkSuffix($url);
@@ -141,6 +188,10 @@ class Data extends AbstractHelper
 		return $posts;
 	}
 
+	/**
+	 * @param $url
+	 * @return mixed
+	 */
 	public function checkSuffix($url)
 	{
 		$url_suffix = $this->getBlogConfig('general/url_suffix');
@@ -151,6 +202,10 @@ class Data extends AbstractHelper
 		return $url;
 	}
 
+	/**
+	 * @param $tag
+	 * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+	 */
 	public function getPostsByTag($tag)
 	{
 		$posts      = $this->postfactory->create();
@@ -159,6 +214,10 @@ class Data extends AbstractHelper
 		return $collection;
 	}
 
+	/**
+	 * @param $category
+	 * @return bool
+	 */
 	public function getPostsByCategory($category)
 	{
 		$collection = true;
@@ -166,31 +225,54 @@ class Data extends AbstractHelper
 		return $collection;
 	}
 
+	/**
+	 * @param $image
+	 * @return string
+	 */
 	public function getImageUrl($image)
 	{
 		return $this->getBaseMediaUrl() . '/' . $image;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getBaseMediaUrl()
 	{
 		return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
 	}
 
+	/**
+	 * @param $category
+	 * @return string
+	 */
 	public function getCategoryUrl($category)
 	{
 		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/category/' . $category->getUrlKey());
 	}
 
+	/**
+	 * @param $tag
+	 * @return string
+	 */
 	public function getTagUrl($tag)
 	{
 		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/tag/' . $tag->getUrlKey());
 	}
 
+	/**
+	 * @param $topic
+	 * @return string
+	 */
 	public function getTopicUrl($topic)
 	{
 		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/topic/' . $topic->getUrlKey());
 	}
 
+	/**
+	 * @param $post
+	 * @return null
+	 */
 	public function getPostCategoryHtml($post)
 	{
 
@@ -209,6 +291,10 @@ class Data extends AbstractHelper
 
 	}
 
+	/**
+	 * @param $id
+	 * @return $this
+	 */
 	public function getPost($id)
 	{
 		$post = $this->postfactory->create()->load($id);
@@ -216,6 +302,11 @@ class Data extends AbstractHelper
 		return $post;
 	}
 
+	/**
+	 * @param $code
+	 * @param $param
+	 * @return $this
+	 */
 	public function getCategoryByParam($code, $param)
 	{
 		if ($code == 'id') {
@@ -225,6 +316,12 @@ class Data extends AbstractHelper
 		}
 
 	}
+
+	/**
+	 * @param $code
+	 * @param $param
+	 * @return $this
+	 */
 	public function getTagByParam($code, $param)
 	{
 		if ($code == 'id') {
@@ -234,6 +331,12 @@ class Data extends AbstractHelper
 		}
 
 	}
+
+	/**
+	 * @param $code
+	 * @param $param
+	 * @return $this
+	 */
 	public function getTopicByParam($code, $param)
 	{
 		if ($code == 'id') {
@@ -243,6 +346,11 @@ class Data extends AbstractHelper
 		}
 
 	}
+
+	/**
+	 * @param $postId
+	 * @return \Mageplaza\Blog\Model\ResourceModel\Category\Collection
+	 */
 	public function getCategoryByPost($postId)
 	{
 		$post = $this->postfactory->create()->load($postId);
@@ -250,6 +358,10 @@ class Data extends AbstractHelper
 		return $post->getSelectedCategoriesCollection();
 	}
 
+	/**
+	 * @param $postId
+	 * @return \Mageplaza\Blog\Model\ResourceModel\Tag\Collection
+	 */
 	public function getTagsByPost($postId)
 	{
 		$post = $this->postfactory->create()->load($postId);
@@ -257,12 +369,20 @@ class Data extends AbstractHelper
 		return $post->getSelectedTagsCollection();
 	}
 
+	/**
+	 * @param $postId
+	 * @return \Mageplaza\Blog\Model\ResourceModel\Topic\Collection
+	 */
 	public function getTopicByPost($postId)
 	{
 		$post = $this->postfactory->create()->load($postId);
 
 		return $post->getSelectedTopicsCollection();
 	}
+
+	/**
+	 * @return mixed
+	 */
 	public function getCurrentUrl(){
 		$model=$this->objectManager->get('Magento\Framework\UrlInterface');
 		return $model->getCurrentUrl();
