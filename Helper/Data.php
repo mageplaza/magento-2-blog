@@ -282,7 +282,7 @@ class Data extends AbstractHelper
 		$categoryHtml = array();
 
 		foreach ($categories as $_cat) {
-			$categoryHtml[] = '<a href="' . $this->getCategoryUrl($_cat) . '">' . $_cat->getName() . '</a>';
+			$categoryHtml[] = '<a class="mp-info" href="' . $this->getCategoryUrl($_cat) . '">' . $_cat->getName() . '</a>';
 		}
 
 		$result = implode(', ', $categoryHtml);

@@ -3,28 +3,28 @@ $tags = $block->getTagList();
 $limit = 5;
 $count = 0;
 ?>
-<div class="mp-sidebar">
-	<div class="block-title">
-			<p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Tags') ?></p>
+<div class="mp-sidebar mpcss">
+	<div class="row">
+		<div class="block-title col-xs-12 sidebar-tags">
+				<p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Tags') ?></p>
 
-	</div>
-	<?php if ($tags->getSize()): ?>
-		<ul>
+		</div>
+		<?php if ($tags->getSize()): ?>
+		<div class="col-xs-12">
 
-<?php foreach ($tags as $tag): ?>
-	<?php
-	$count++;
-	if ($count > $limit)
-		break;
-	?>
-	<li>
-		<a href="<?php echo $block->getTagUrl($tag) ?>"><?php echo $tag->getName() ?>
-		</a>
-	</li>
+		<?php foreach ($tags as $tag): ?>
+			<?php
+			$count++;
+			if ($count > $limit)
+				break;
+			?>
+			<a class="label label-default tags-list" href="<?php echo $block->getTagUrl($tag) ?>"><?php echo $tag->getName(); ?></a>
+		<?php endforeach; ?>
+			<hr/>
+		</div>
+		<?php else: ?>
+			<?php echo __('No Tags') ?>
+		<?php endif; ?>
 
-<?php endforeach; ?>
-</ul>
-	<?php else: ?>
-<!--		--><?php //echo __('No Tags') ?>
-	<?php endif; ?>
+		</div>
 </div>

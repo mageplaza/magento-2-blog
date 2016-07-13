@@ -3,28 +3,32 @@ $categories = $block->getCategoryList();
 $limit = 5;
 $count = 0;
 ?>
-<div class="mp-sidebar">
-	<div class="block-title">
-			<p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Categories') ?></p>
+<div class="mp-sidebar mpcss">
+	<div class="row">
+		<div class="block-title col-xs-12">
+				<p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Categories') ?></p>
 
+		</div>
+		<div class="col-xs-12">
+			<ul class="menu-categories">
+			<?php if ($categories->getSize()): ?>
+
+
+			<?php foreach ($categories as $category): ?>
+			<?php
+			$count++;
+			if ($count > $limit)
+				break;
+			?>
+					<li class="category-item" ><i class="fa fa-angle-right"></i><a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>"><?php echo $category->getName() ?></a></li>
+
+
+			<?php endforeach; ?>
+
+			<?php else: ?>
+				<?php echo __('No Categories') ?>
+			<?php endif; ?>
+			</ul>
+		</div>
 	</div>
-	<?php if ($categories->getSize()): ?>
-		<ul>
-
-<?php foreach ($categories as $category): ?>
-	<?php
-	$count++;
-	if ($count > $limit)
-		break;
-	?>
-	<li>
-		<a href="<?php echo $block->getCategoryUrl($category) ?>"><?php echo $category->getName() ?>
-		</a>
-	</li>
-
-<?php endforeach; ?>
-</ul>
-	<?php else: ?>
-<!--		--><?php //echo __('No Categories') ?>
-	<?php endif; ?>
 </div>
