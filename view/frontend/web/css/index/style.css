@@ -7,21 +7,22 @@
     line-height: 18px;
     padding: 0 0 10px 0;
 }
-.mpcss h2.mp-post-title a {
+h2.mp-post-title a {
     color: #1abc9c;
 }
-.mpcss h2.mp-post-title a:hover {
+h2.mp-post-title a:hover {
     text-decoration: none;
+	color: #1abc9c;
 }
-.mpcss a.mp-read-more {
+.mp-post-meta-info a.mp-read-more {
     color: #1abc9c;
 }
-.mpcss a.mp-read-more:hover {
+.mp-post-meta-info a.mp-read-more:hover {
     color: #1abc9c;
 }
-.mpcss a.mp-category{
+.mp-post-info a.mp-info{
     color: #1abc9c;
 }
-.mpcss a.mp-category:hover{
+.mp-post-info a.mp-info:hover{
     color: #1abc9c;
 }

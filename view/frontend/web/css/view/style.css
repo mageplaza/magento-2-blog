@@ -1,28 +1,32 @@
 .post-post_content{
     margin: 10px 0 10px 0;
 }
-.mpcss .mp-post-info a {
-    color: inherit;
+.mp-post-info{
+    margin: 0px;
 }
-.mpcss .mp-post-info a:hover {
+.mp-post-info a.mp-info {
+    color: #1abc9c;
+}
+.mp-post-info a.mp-info:hover {
     text-decoration: none;
+	color: #1abc9c;
 }
-.mpcss .mp-post-info span {
+.mp-post-info span {
     color: #6f6f6f;;
 }
 @media (min-width: 768px) {
-    .mpcss .post-sharing-button {
+    .post-sharing-button {
         text-align: center;
     }
 }
-.mpcss .sharing{
+#sharing{
     padding: 20px 30px;
     background: #f6f6f6;
     margin-top: 40px;
 }
-.mpcss a.mp-category{
-    color: #1abc9c;
-}
-.mpcss a.mp-category:hover{
-    color: #1abc9c;
+@media (min-width: 768px){
+	#sharing .share-col-left {
+		float: left;
+		width: 50%;
+	}
 }
