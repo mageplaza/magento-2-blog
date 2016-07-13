@@ -38,6 +38,7 @@ ul.menu-categories a.list-categories {
 }
 ul.menu-categories a.list-categories:hover {
     text-decoration: none;
+    color: #1abc9c;
 }
 h2.list-title{
     margin-bottom: 30px;
@@ -67,6 +68,7 @@ h2.list-title{
 #mostrecent a.list-post-tabs:hover {
     text-decoration: none;
     background: #fbfbfb;
+    color: #1abc9c;
 }
 .list-post-tabs .post-left {
     float: left;
