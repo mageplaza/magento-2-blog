@@ -75,6 +75,11 @@
                     <source_model>Mageplaza\Blog\Model\Config\Source\Blogview\Display</source_model>
                     <comment>Grid view style is better</comment>
                 </field>
+                <field id="enable_mpbootstrap" translate="label comment" type="select" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1">
+                    <label>Enable Bootstrap</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If you already had bootstrap css library, then select no.</comment>
+                </field>
             </group>
             <group id="sidebar" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
                    showInStore="1">

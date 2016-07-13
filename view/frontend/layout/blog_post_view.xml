@@ -9,11 +9,14 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="Mageplaza_Blog::css/view/style.css"/>
-        <css src="Mageplaza_Blog::css/view/mp.css"/>
+        <!--<css src="Mageplaza_Blog::css/view/mp.css"/>-->
         <css src="Mageplaza_Blog::css/view/font-awesome.css"/>
         <css src="Mageplaza_Blog::css/view/font-awesome.min.css"/>
         <script src="Mageplaza_Blog::js/jquery-1.12.4.min.js"/>
         <script src="Mageplaza_Blog::js/bootstrap.min.js"/>
+    </head>
+    <head ifconfig="blog/general/enable_mpbootstrap">
+        <css src="Mageplaza_Blog::css/view/mp.css"/>
     </head>
     <body>
         <referenceContainer name="content">
