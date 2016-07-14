@@ -64,6 +64,7 @@ h2.list-title{
 #mostview a.list-post-tabs:hover {
     text-decoration: none;
     background: #fbfbfb;
+    color: #1abc9c;
 }
 #mostrecent a.list-post-tabs:hover {
     text-decoration: none;

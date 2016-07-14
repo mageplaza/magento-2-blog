@@ -83,19 +83,94 @@
         <?php $topicCollection = $_post->getSelectedTopicsCollection(); ?>
 		<?php if (count($topicCollection)): ?>
 			<h2><?php echo __('Topic'); ?></h2>
-			<ul>
-                <?php foreach ($topicCollection as $topic): ?>
-					<li>
-                        <a href="<?php echo $block->getTopicUrl($topic) ?>"><?php echo $topic->getName(); ?></a>
-                    </li>
-				<?php endforeach; ?>
+<!--			<div class="owl-carousel">-->
+<!--                --><?php //foreach ($topicCollection as $topic): ?>
+<!--					--><?php //$relatedPost = $this->helper('Mageplaza\Blog\Helper\Data')->getPostByUrl($block->getTopicUrl($topic)); ?>
+<!--					<div>-->
+<!--						<img class="img-responsive" src="--><?php //echo $block->getImageUrl($_post->getImage()); ?><!--">-->
+<!--                        <a href="--><?php //echo $block->getTopicUrl($topic) ?><!--">--><?php //echo $topic->getName(); ?><!--</a>-->
+<!--                    </div>-->
+<!--				--><?php //endforeach; ?>
+<!--			</div>-->
 
-            </ul>
 
 		<?php endif; ?>
 
     </div>
 
+<div class="container">
+		<div class="mpcss row" id="related-post" style="    overflow: hidden;">
+			<div class="owl-carousel">
+				<div style="margin-right: 1em; ">
+					<a href="#0"><img src="<?php echo $block->getImageUrl($_post->getImage());?>" ></a>
+					<h5>Post title</h5>
+				</div>
+
+				<div style="margin-right: 1em; ">
+					<a href="#0"><img src="<?php echo $block->getImageUrl($_post->getImage());?>" ></a>
+					<h5>Post title</h5>
+				</div>
+
+				<div style="margin-right: 1em; ">
+					<a href="#0"><img src="<?php echo $block->getImageUrl($_post->getImage());?>" ></a>
+					<h5>Post title</h5>
+				</div>
+
+				<div style="margin-right: 1em; ">
+					<a href="#0"><img src="<?php echo $block->getImageUrl($_post->getImage());?>" ></a>
+					<h5>Post title</h5>
+				</div>
+
+				<div style="margin-right: 1em; ">
+					<a href="#0"><img src="<?php echo $block->getImageUrl($_post->getImage());?>" ></a>
+					<h5>Post title</h5>
+				</div>
+
+				<div style="margin-right: 1em; ">
+					<a href="#0"><img src="<?php echo $block->getImageUrl($_post->getImage());?>" ></a>
+					<h5>Post title</h5>
+				</div>
+
+				<div style="margin-right: 1em; ">
+					<a href="#0"><img src="<?php echo $block->getImageUrl($_post->getImage());?>" ></a>
+					<h5>Post title</h5>
+				</div>
+
+				
+
+			</div>
+			<script>
+				jQuery.noConflict();
+				jQuery(document).ready(function() {
+					var owl = jQuery('.owl-carousel');
+					owl.owlCarousel({
+						items: 4,
+						loop: true,
+						margin: 10,
+						autoplay: true,
+						autoplayTimeout: 1000,
+						autoplayHoverPause: true,
+						nav: true,
+						dots: true,
+						lazyLoad: true
+					});
+					jQuery('.play').on('click', function() {
+						owl.trigger('play.owl.autoplay', [1000])
+					});
+					jQuery('.stop').on('click', function() {
+						owl.trigger('stop.owl.autoplay')
+					})
+				})
+				//				jQuery.noConflict();
+				//				jQuery(document).ready(function () {
+				//					jQuery('.owl-carousel').owlCarousel();
+				//				})
+			</script>
+
+		
+	</div>
+
+</div>
 	<div class="mp-comment">
 		<?php $typeComment = $block->checkComment(); ?>
 		<?php if ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>
