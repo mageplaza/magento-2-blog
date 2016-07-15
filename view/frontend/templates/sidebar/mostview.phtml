@@ -1,9 +1,6 @@
 <?php
 $posts = $block->getMosviewPosts();
 $postsRecent = $block->getRecentPost();
-$limit = $block->getLimitPost();
-$limitRecent = $block->getLimitRecentPost();
-$count = 0;
 ?>
 <div class="mp-sidebar mpcss">
 	<ul class="nav nav-tabs">
@@ -14,11 +11,6 @@ $count = 0;
 		<div id="mostview" class="tab-pane fade in active">
 			<?php if ($posts->getSize()): ?>
 				<?php foreach ($posts as $post): ?>
-				<?php
-				$count++;
-				if ($count > $limit)
-					break;
-				?>
 					<a class="list-post-tabs" href="<?php echo $block->getUrlByPost($post) ?>">
 						<div class="post-left">
 							<img class="img-responsive" src="<?php echo $block->getImageUrl($post->getImage())?>">
@@ -42,11 +34,6 @@ $count = 0;
 		<div id="mostrecent" class="tab-pane fade">
 			<?php if ($postsRecent->getSize()): ?>
 				<?php foreach ($postsRecent as $post): ?>
-					<?php
-					$count++;
-					if ($count > $limitRecent)
-						break;
-					?>
 					<a class="list-post-tabs" href="<?php echo $block->getUrlByPost($post) ?>">
 						<div class="post-left">
 							<img class="img-responsive" src="<?php echo $block->getImageUrl($post->getImage())?>">
@@ -54,11 +41,7 @@ $count = 0;
 						<div class="post-right">
 							<span><?php echo $post->getName() ?></span>
 							<span class="create-at">
-								<?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-									$object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
-									$dateFormat = date('Y-m-d',$object->timestamp($post->getCreatedAt()));
-									echo $dateFormat;
-								?>
+								<?php echo $post->getFormatCreatedAt(); ?>
 							</span>
 						</div>
 					</a>

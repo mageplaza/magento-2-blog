@@ -44,7 +44,7 @@ if ($checkRss):
 
 
 							<div class="post-short-description">
-								<p><?php echo $post->getShortDescription(); ?><?php echo __('[...]'); ?></p>
+								<p><?php echo $post->getShortDescription(); ?></p>
 							</div>
 
 							<div class="mp-clearfix"></div>
@@ -53,7 +53,7 @@ if ($checkRss):
 							<div class="mp-post-meta-info mp-alignright">
 									<div class="actions">
 										<a class="mp-read-more" href="<?php echo $block->getUrlByPost($post); ?>"
-										   title="<?php echo __('Read More'); ?>"><?php echo __('Read More'); ?></a>
+										   title="<?php echo __('Read More'); ?>"><?php echo __('Read more'); ?></a>
 									</div>
 							</div>
 						</div>
@@ -62,7 +62,7 @@ if ($checkRss):
 			<?php endforeach; ?>
 		</div>
     </div>
-	<!--	--><?php //echo $this->getPagerHtml(); ?>
+		<?php echo $this->getPagerHtml(); ?>
 <?php else : ?>
 	<div class="post-list-container">
         <?php echo __('There are no posts at this moment'); ?>

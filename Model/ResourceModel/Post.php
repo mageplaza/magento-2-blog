@@ -385,6 +385,27 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 		return $adapter->fetchCol($select);
 	}
 
+	/**
+	 * @param \Mageplaza\Blog\Model\Post $post
+	 * @return array
+	 */
+	public function getTopicIds(\Mageplaza\Blog\Model\Post $post)
+	{
+		$adapter = $this->getConnection();
+		$select  = $adapter->select()->from(
+			$this->postTopicTable,
+			'topic_id'
+		)
+			->where(
+				'post_id = ?',
+				(int)$post->getId()
+			);
+
+		return $adapter->fetchCol($select);
+	}
+
+
+
 	public function generateUrlKey($name, $count)
 	{
 		// replace non letter or digits by -

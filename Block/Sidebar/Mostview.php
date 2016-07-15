@@ -29,6 +29,7 @@ class Mostview extends Frontend
 			'main_table.post_id=mageplaza_blog_post.post_id',
 			'*'
 		);
+		$posts->setPageSize($this->getLimitPost())->setCurPage(1);
 		$posts->setOrder('numbers_view', 'DESC');
 
 		return $posts;
