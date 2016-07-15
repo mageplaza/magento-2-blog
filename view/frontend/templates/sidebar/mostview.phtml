@@ -25,7 +25,13 @@ $count = 0;
 						</div>
 						<div class="post-right">
 							<span><?php echo $post->getName() ?></span>
-							<span class="create-at"><?php echo $post->getCreatedAt()?></span>
+							<span class="create-at">
+								<?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+								$object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
+								$dateFormat = date('Y-m-d',$object->timestamp($post->getCreatedAt()));
+								echo $dateFormat;
+								?>
+							</span>
 						</div>
 					</a>
 				<?php endforeach; ?>
@@ -47,7 +53,13 @@ $count = 0;
 						</div>
 						<div class="post-right">
 							<span><?php echo $post->getName() ?></span>
-							<span class="create-at"><?php echo $post->getCreatedAt()?></span>
+							<span class="create-at">
+								<?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+									$object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
+									$dateFormat = date('Y-m-d',$object->timestamp($post->getCreatedAt()));
+									echo $dateFormat;
+								?>
+							</span>
 						</div>
 					</a>
 
@@ -57,5 +69,6 @@ $count = 0;
 				<?php echo __('No Posts') ?>
 			<?php endif; ?>
 		</div>
+		
   	</div>
 </div>

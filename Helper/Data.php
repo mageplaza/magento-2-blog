@@ -168,7 +168,7 @@ class Data extends AbstractHelper
 
 	public function getImageUrl($image)
 	{
-		return $this->getBaseMediaUrl() . '/' . $image;
+		return $this->getBaseMediaUrl() . $image;
 	}
 
 	public function getBaseMediaUrl()

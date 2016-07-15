@@ -109,9 +109,9 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 	 */
 	protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
 	{
-		$object->setUpdatedAt($this->date->date());
+		$object->setUpdatedAt($this->date->date('Y-m-d'));
 		if ($object->isObjectNew()) {
-			$object->setCreatedAt($this->date->date());
+			$object->setCreatedAt($this->date->date('Y-m-d'));
 		}
 		if ($object->isObjectNew()) {
 			$count   = 0;

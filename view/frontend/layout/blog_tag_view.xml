@@ -21,6 +21,7 @@
                    template="Mageplaza_Blog::tag/widget.phtml"/>
         </referenceContainer>
         <referenceContainer name="content">
+            <block class="Mageplaza\Blog\Block\Frontend" name="mp.blog.header" template="Mageplaza_Blog::blog/header.phtml"/>
             <block class="Mageplaza\Blog\Block\Tag\Listpost" template="Mageplaza_Blog::category/post/list.phtml"/>
         </referenceContainer>
     </body>

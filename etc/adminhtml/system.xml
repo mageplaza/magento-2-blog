@@ -80,6 +80,14 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>If you already had bootstrap css library, then select no.</comment>
                 </field>
+                <field id="font_color" translate="label comment" type="text" sortOrder="60" showInWebsite="1" showInStore="1" showInDefault="1">
+                    <label>Choose blog's color</label>
+                    <comment>Type color code. Eg: #1abc9c, #1979c3...</comment>
+                </field>
+                <field id="display_author" translate="label comment" type="select" sortOrder="70" showInWebsite="1" showInStore="1" showInDefault="1">
+                    <label>Display author in blog</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
             <group id="sidebar" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
                    showInStore="1">

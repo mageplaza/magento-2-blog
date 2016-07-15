@@ -28,15 +28,24 @@
 			<div class="mp-post-info">
 				<span><?php echo __('By ');?></span>
 				<a class="mp-info">admin</a>&nbsp;|&nbsp;
-				<span><?php echo $_post->getCreatedAt(); ?></span>&nbsp;|&nbsp;
+				<span><?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+							$object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
+							$dateFormat = date('Y-m-d',$object->timestamp($_post->getCreatedAt()));
+							echo $dateFormat;
+					?></span>&nbsp;|&nbsp;
 				<span><?php echo __('Categories: '); ?></span>
 				<?php echo $block->getPostCategoryHtml($_post); ?>&nbsp;|&nbsp;
 				<span><?php echo __('Tags: '); ?></span>
 				<?php $tagCollection = $_post->getSelectedTagsCollection(); ?>
 				<?php if (count($tagCollection)): ?>
-					<?php foreach ($tagCollection as $tag): ?>
-						<a class="mp-info" href="<?php echo $block->getTagUrl($tag) ?>"><?php echo $tag->getName(); ?></a>,
-					<?php endforeach; ?>
+					<?php
+						$listTags = array();
+						foreach ($tagCollection as $tag){
+							$listTags[] = '<a class="mp-info" href="'. $block->getTagUrl($tag).'">'.$tag->getName().'</a>';
+						}
+						$arrTags = implode(',',$listTags);
+						echo $arrTags;
+					?>
 				<?php endif; ?>
 			</div>
 			<hr/>
@@ -62,7 +71,7 @@
 	<div class="mpcss about-admin">
 		<div class="row">
 			<div class="col-xs-12 author-title">
-				<h4 class="admin-title">About the Author: <a>admin</a></h4>
+				<h4 class="admin-title">About the Author: <a class="mp-info">admin</a></h4>
 				<div id="admin-border"></div>
 			</div>
 			<div class="col-xs-12 author-des">
@@ -82,63 +91,22 @@
     <div class="post-same-topics topic-list">
         <?php $topicCollection = $_post->getSelectedTopicsCollection(); ?>
 		<?php if (count($topicCollection)): ?>
-			<h2><?php echo __('Topic'); ?></h2>
-<!--			<div class="owl-carousel">-->
-<!--                --><?php //foreach ($topicCollection as $topic): ?>
-<!--					--><?php //$relatedPost = $this->helper('Mageplaza\Blog\Helper\Data')->getPostByUrl($block->getTopicUrl($topic)); ?>
-<!--					<div>-->
-<!--						<img class="img-responsive" src="--><?php //echo $block->getImageUrl($_post->getImage()); ?><!--">-->
-<!--                        <a href="--><?php //echo $block->getTopicUrl($topic) ?><!--">--><?php //echo $topic->getName(); ?><!--</a>-->
-<!--                    </div>-->
-<!--				--><?php //endforeach; ?>
-<!--			</div>-->
+			<h2><?php echo __('Related Posts'); ?></h2>
+			<div class="owl-carousel" id="related-post" style="overflow: hidden;">
+                <?php foreach ($topicCollection as $topic): ?>
+					
+					<div class="relate-content" style="margin-right: 10px;">
+                        <a class="mp-relate-link" href="<?php echo $block->getTopicUrl($topic) ?>"><img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage());?>">
+							<?php echo $topic->getName(); ?></a>
+                    </div>
+				<?php endforeach; ?>
+			</div>
 
 
 		<?php endif; ?>
 
     </div>
 
-<div class="container">
-		<div class="mpcss row" id="related-post" style="    overflow: hidden;">
-			<div class="owl-carousel">
-				<div style="margin-right: 1em; ">
-					<a href="#0"><img src="<?php echo $block->getImageUrl($_post->getImage());?>" ></a>
-					<h5>Post title</h5>
-				</div>
-
-				<div style="margin-right: 1em; ">
-					<a href="#0"><img src="<?php echo $block->getImageUrl($_post->getImage());?>" ></a>
-					<h5>Post title</h5>
-				</div>
-
-				<div style="margin-right: 1em; ">
-					<a href="#0"><img src="<?php echo $block->getImageUrl($_post->getImage());?>" ></a>
-					<h5>Post title</h5>
-				</div>
-
-				<div style="margin-right: 1em; ">
-					<a href="#0"><img src="<?php echo $block->getImageUrl($_post->getImage());?>" ></a>
-					<h5>Post title</h5>
-				</div>
-
-				<div style="margin-right: 1em; ">
-					<a href="#0"><img src="<?php echo $block->getImageUrl($_post->getImage());?>" ></a>
-					<h5>Post title</h5>
-				</div>
-
-				<div style="margin-right: 1em; ">
-					<a href="#0"><img src="<?php echo $block->getImageUrl($_post->getImage());?>" ></a>
-					<h5>Post title</h5>
-				</div>
-
-				<div style="margin-right: 1em; ">
-					<a href="#0"><img src="<?php echo $block->getImageUrl($_post->getImage());?>" ></a>
-					<h5>Post title</h5>
-				</div>
-
-				
-
-			</div>
 			<script>
 				jQuery.noConflict();
 				jQuery(document).ready(function() {
@@ -161,16 +129,8 @@
 						owl.trigger('stop.owl.autoplay')
 					})
 				})
-				//				jQuery.noConflict();
-				//				jQuery(document).ready(function () {
-				//					jQuery('.owl-carousel').owlCarousel();
-				//				})
 			</script>
 
-		
-	</div>
-
-</div>
 	<div class="mp-comment">
 		<?php $typeComment = $block->checkComment(); ?>
 		<?php if ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>

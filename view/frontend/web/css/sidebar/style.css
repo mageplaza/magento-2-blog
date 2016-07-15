@@ -23,6 +23,9 @@ a.label.label-default.tags-list:hover {
     background: #1abc9c;
     border: 1px solid;
 }
+a.label.label-default.tags-list:focus{
+    background: #1abc9c;
+}
 ul.menu-categories{
     padding: 0px;
 }
@@ -39,6 +42,9 @@ ul.menu-categories a.list-categories {
 ul.menu-categories a.list-categories:hover {
     text-decoration: none;
     color: #1abc9c;
+}
+ul.menu-categories a.list-categories:focus{
+    text-decoration: none;
 }
 h2.list-title{
     margin-bottom: 30px;
@@ -66,10 +72,16 @@ h2.list-title{
     background: #fbfbfb;
     color: #1abc9c;
 }
+#mostview a.list-post-tabs:focus{
+    text-decoration: none;
+}
 #mostrecent a.list-post-tabs:hover {
     text-decoration: none;
     background: #fbfbfb;
     color: #1abc9c;
+}
+#mostrecent a.list-post-tabs:focus{
+    text-decoration: none;
 }
 .list-post-tabs .post-left {
     float: left;

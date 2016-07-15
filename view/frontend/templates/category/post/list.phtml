@@ -11,7 +11,7 @@ if ($checkRss):
         </div>
 <?php endif; ?>
 <?php if ($posts->getSize() > 0) : ?>
-	<?php //echo $this->getPagerHtml(); ?>
+	<?php echo $this->getPagerHtml(); ?>
 	<div class="post-list-container">
         <?php foreach ($posts as $post) : ?>
 			<?php
@@ -64,7 +64,7 @@ if ($checkRss):
             </div>
 		<?php endforeach; ?>
     </div>
-	<!--	--><?php //echo $this->getPagerHtml(); ?>
+		<?php echo $this->getPagerHtml(); ?>
 <?php else : ?>
 	<div class="post-list-container">
         <?php echo __('There are no posts at this moment'); ?>
