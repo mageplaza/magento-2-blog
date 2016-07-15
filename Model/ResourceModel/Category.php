@@ -93,7 +93,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $object->setUpdatedAt($this->date->date('Y-m-d'));
         if ($object->isObjectNew()) {
-            $object->setCreatedAt($this->date->date('yy-mm-dd'));
+            $object->setCreatedAt($this->date->date('Y-m-d'));
         }
         /** @var \Mageplaza\Blog\Model\Category $object */
         parent::_beforeSave($object);

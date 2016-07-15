@@ -39,13 +39,13 @@ class Listpost extends Frontend
 			);
 			$breadcrumbs->addCrumb(
 				$this->helperData->getBlogConfig('general/url_prefix'),
-				['label' => $this->helperData->getBlogConfig('general/url_prefix'),
+				['label' => ucfirst($this->helperData->getBlogConfig('general/url_prefix')),
 				 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 				 'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
 			);
 			$breadcrumbs->addCrumb(
 				$categoryName,
-				['label' => $category->getName(),
+				['label' => ucfirst($category->getName()),
 				 'title' => $category->getName()
 				]
 			);
