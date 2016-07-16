@@ -74,12 +74,14 @@ h2.list-title{
     display: inline-flex;
     border-bottom: 1px solid #ddd;
     color: inherit;
+    width: 100%;
 }
 #mostview a.list-post-tabs {
     padding: 20px 10px;
     display: inline-flex;
     border-bottom: 1px solid #ddd;
     color: inherit;
+    width: 100%;
 }
 #mostview a.list-post-tabs:focus{
     text-decoration: none;
