@@ -105,3 +105,6 @@ a.mp-relate-link img.img-responsive{
     height: 200px;
     display: block;
 }
+.owl-item{
+    width:246px !important;
+}
