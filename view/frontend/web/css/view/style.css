@@ -100,3 +100,8 @@
 #related-post .owl-page.active span {
     background: #f55567;
 }
+a.mp-relate-link img.img-responsive{
+    margin:0 auto;
+    height: 200px;
+    display: block;
+}

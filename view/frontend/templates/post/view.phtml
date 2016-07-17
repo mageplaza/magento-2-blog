@@ -73,48 +73,48 @@
 	</div>
 */ ?>
 
-<?php //$relatedPosts = $_post->getRelatedPostsCollection(); ?>
-<?php //if (count($relatedPosts)): ?>
-<!---->
-<!--	<div class="post-same-topics topic-list">-->
-<!--	<h2>--><?php //echo __('Related Posts'); ?><!--</h2>-->
-<!--		<div class="owl-carousel" id="related-post" style="overflow: hidden;">-->
-<!--                --><?php //foreach ($relatedPosts as $relatedPost): ?>
-<!--					<div class="relate-content" style="margin-right: 10px;">-->
-<!--                        <a class="mp-relate-link" href="--><?php //echo $block->getUrlByPost($relatedPost) ?><!--"><img class="img-responsive" src="--><?php //echo $block->getImageUrl($relatedPost->getImage()); ?><!--" alt="--><?php //echo $block->escapeHtml($relatedPost->getName()); ?><!--">-->
-<!--							--><?php //echo $relatedPost->getName(); ?><!--</a>-->
-<!--                    </div>-->
-<!--				--><?php //endforeach; ?>
-<!--			</div>-->
-<!---->
-<!---->
-<!---->
-<!--    </div>-->
-<!---->
-<!--	<script>-->
-<!--				jQuery.noConflict();-->
-<!--				jQuery(document).ready(function () {-->
-<!--					var owl = jQuery('.owl-carousel');-->
-<!--					owl.owlCarousel({-->
-<!--						items: 4,-->
-<!--						loop: true,-->
-<!--						margin: 10,-->
-<!--						autoplay: false,-->
-<!--						autoplayTimeout: 1000,-->
-<!--						autoplayHoverPause: true,-->
-<!--						nav: false,-->
-<!--						dots: false,-->
-<!--						lazyLoad: true-->
-<!--					});-->
-<!--					jQuery('.play').on('click', function () {-->
-<!--						owl.trigger('play.owl.autoplay', [1000])-->
-<!--					});-->
-<!--					jQuery('.stop').on('click', function () {-->
-<!--						owl.trigger('stop.owl.autoplay')-->
-<!--					})-->
-<!--				})-->
-<!--			</script>-->
-<?php //endif; ?>
+<?php $relatedPosts = $_post->getRelatedPostsCollection(); ?>
+<?php if (count($relatedPosts)): ?>
+
+	<div class="post-same-topics topic-list">
+	<h2><?php echo __('Related Posts'); ?></h2>
+		<div class="owl-carousel" id="related-post" style="overflow: hidden;">
+                <?php foreach ($relatedPosts as $relatedPost): ?>
+					<div class="relate-content" style="margin-right: 10px;">
+                        <a class="mp-relate-link" href="<?php echo $block->getUrlByPost($relatedPost) ?>"><img class="img-responsive" src="<?php echo $block->getImageUrl($relatedPost->getImage()); ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
+							<?php echo $relatedPost->getName(); ?></a>
+                    </div>
+				<?php endforeach; ?>
+			</div>
+
+
+
+    </div>
+
+	<script>
+				jQuery.noConflict();
+				jQuery(document).ready(function () {
+					var owl = jQuery('.owl-carousel');
+					owl.owlCarousel({
+						items: 4,
+						loop: true,
+						margin: 10,
+						autoplay: false,
+						autoplayTimeout: 1000,
+						autoplayHoverPause: true,
+						nav: false,
+						dots: false,
+						lazyLoad: true
+					});
+					jQuery('.play').on('click', function () {
+						owl.trigger('play.owl.autoplay', [1000])
+					});
+					jQuery('.stop').on('click', function () {
+						owl.trigger('stop.owl.autoplay')
+					})
+				})
+			</script>
+<?php endif; ?>
 
 <div class=" mp-comment">
 <?php $typeComment = $block->checkComment(); ?>
