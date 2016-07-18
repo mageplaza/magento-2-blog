@@ -84,9 +84,9 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<h2><?php echo __('Related Posts'); ?></h2>
-				<div class="owl-carousel" id="related-post" style="overflow: hidden;">
+				<div class="owl-carousel owl-theme" id="related-post">
 					<?php foreach ($relatedPosts as $relatedPost): ?>
-						<div class="relate-content" style="margin-right: 10px;">
+						<div class="relate-content item" style="margin-right:10px;">
 							<a class="mp-relate-link" href="<?php echo $block->getUrlByPost($relatedPost) ?>"><img class="img-responsive" src="<?php echo $block->getImageUrl($relatedPost->getImage()); ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
 								<?php echo $relatedPost->getName(); ?></a>
 						</div>

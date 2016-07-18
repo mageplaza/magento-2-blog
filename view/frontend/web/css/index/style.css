@@ -48,3 +48,12 @@ h2.mp-post-title a:hover:focus {
 .post-list-item {
     margin-bottom: 40px;
 }
+.post-short-description {
+    max-width: 100%;
+}
+.post-short-description p {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 20px;
+}
