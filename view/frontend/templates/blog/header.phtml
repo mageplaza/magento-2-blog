@@ -26,6 +26,10 @@
 	color: <?php if($block->getBlogConfig('general/font_color')) echo $block->getBlogConfig('general/font_color')?> !important;
 	text-decoration: none;
 }
+.owl-item a.mp-relate-link:hover{
+	color: <?php if($block->getBlogConfig('general/font_color')) echo $block->getBlogConfig('general/font_color')?> !important;
+	text-decoration: none;
+}
 ul.nav-tabs li.active{
 	border-top-color: <?php if($block->getBlogConfig('general/font_color')) echo $block->getBlogConfig('general/font_color')?> !important;
 	border-top-style: solid;
@@ -55,6 +59,10 @@ h2.mp-post-title a {
 	color: <?php if($block->getBlogConfig('general/font_color')) echo $block->getBlogConfig('general/font_color')?> !important;;
 }
 h2.mp-post-title a:hover {
+	text-decoration: none;
+	color: <?php if($block->getBlogConfig('general/font_color')) echo $block->getBlogConfig('general/font_color')?> !important;;
+}
+h2.mp-post-title a.post-link-title:focus {
 	text-decoration: none;
 	color: <?php if($block->getBlogConfig('general/font_color')) echo $block->getBlogConfig('general/font_color')?> !important;;
 }

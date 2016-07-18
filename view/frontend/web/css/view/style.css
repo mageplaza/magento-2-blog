@@ -20,6 +20,10 @@
 .owl-item a.mp-relate-link{
     color: #1abc9c;
 }
+.owl-item a.mp-relate-link:hover{
+    color: #1abc9c;
+    text-decoration: none;
+}
 .owl-item a.mp-relate-link:focus{
     color: #1abc9c;
     text-decoration: none;
@@ -84,9 +88,6 @@
 }
 .owl-item .relate-content{
     text-align: center;
-}
-.owl-item a.mp-relate-link:hover{
-    text-decoration: none;
 }
 .post-same-topics.topic-list {
     margin-top: 50px;

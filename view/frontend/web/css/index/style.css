@@ -17,6 +17,9 @@ h2.mp-post-title a:hover {
 .mp-post-info a.mp-info:hover{
     color: #1abc9c;
 }
+h2.mp-post-title a:hover:focus {
+    text-decoration: none;
+}
 .mp-blog-rss{
     text-align: right;
 }
