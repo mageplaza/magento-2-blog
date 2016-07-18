@@ -1,18 +1,9 @@
-.mp-blog-rss{
-    text-align: right;
-}
-.mp-post-info{
-    color: #999999;
-    font-size: 10px;
-    line-height: 18px;
-    padding: 0 0 10px 0;
-}
 h2.mp-post-title a {
     color: #1abc9c;
 }
 h2.mp-post-title a:hover {
     text-decoration: none;
-	color: #1abc9c;
+    color: #1abc9c;
 }
 .mp-post-meta-info a.mp-read-more {
     color: #1abc9c;
@@ -25,4 +16,32 @@ h2.mp-post-title a:hover {
 }
 .mp-post-info a.mp-info:hover{
     color: #1abc9c;
+}
+.mp-blog-rss{
+    text-align: right;
+}
+.mp-post-info{
+    color: #999999;
+    font-size: 10px;
+    line-height: 18px;
+    padding: 0 0 10px 0;
+}
+.post-image img.img-responsive {
+    max-height: 400px;
+}
+.post-item-wraper {
+    border: 1px solid #eee;
+}
+.post-item-wraper:hover {
+    border: 1px solid #eee;
+    box-shadow: 3px 3px 4px 0 rgba(0,0,0,0.3);
+}
+.post-info-wraper {
+    padding: 20px 15px 10px 15px;
+}
+.post-info-wraper h2.mp-post-title{
+    margin-top: 0px;
+}
+.post-list-item {
+    margin-bottom: 40px;
 }

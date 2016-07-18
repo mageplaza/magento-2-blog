@@ -5,9 +5,6 @@ use Magento\Framework\Exception\NotFoundException;
 
 class Rss extends  \Magento\Rss\Controller\Feed
 {
-	/**
-	 * @throws \Magento\Framework\Exception\NotFoundException
-	 */
 	public function execute()
 	{
 

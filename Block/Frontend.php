@@ -29,14 +29,6 @@ class Frontend extends Template
 	protected $storeManager;
 	protected $localeDate;
 
-	/**
-	 * Frontend constructor.
-	 * @param \Magento\Framework\View\Element\Template\Context $context
-	 * @param \Mageplaza\Blog\Helper\Data $helperData
-	 * @param \Magento\Framework\ObjectManagerInterface $objectManager
-	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-	 * @param array $data
-	 */
 	public function __construct(
 		Context $context,
 		HelperData $helperData,
@@ -52,68 +44,42 @@ class Frontend extends Template
 		parent::__construct($context, $data);
 	}
 
-	/**
-	 * @return $this
-	 */
 	public function getCurrentPost()
 	{
 		return $this->helperData->getPost($this->getRequest()->getParam('id'));
 	}
 
-	/**
-	 * @param $post
-	 * @return string
-	 */
 	public function getUrlByPost($post)
 	{
 		return $this->helperData->getUrlByPost($post);
 	}
 
-	/**
-	 * @param $image
-	 * @return string
-	 */
 	public function getImageUrl($image)
 	{
 		return $this->helperData->getImageUrl($image);
 	}
 
-	/**
-	 * @param $createdAt
-	 * @return \DateTime
-	 */
 	public function getCreatedAtStoreDate($createdAt)
 	{
 		return $this->_localeDate->scopeDate($this->storeManager->getStore(), $createdAt, true);
 	}
 
-	/**
-	 * @param $post
-	 * @return null
-	 */
 	public function getPostCategoryHtml($post)
 	{
 		return $this->helperData->getPostCategoryHtml($post);
 
 	}
 
-	/**
-	 * @param $code
-	 * @return mixed
-	 */
 	public function getBlogConfig($code)
 	{
 		return $this->helperData->getBlogConfig($code);
 	}
 
-	/**
-	 * @return $this
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 */
 	protected function _prepareLayout()
 	{
 		$actionName  = $this->getRequest()->getFullActionName();
 		$breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
+		$breadcrumbsLabel = ucfirst($this->helperData->getBlogConfig('general/url_prefix'));
 		if ($breadcrumbs) {
 			if ($actionName == 'blog_post_index') {
 				$breadcrumbs->addCrumb(
@@ -125,7 +91,7 @@ class Frontend extends Template
 					]
 				)->addCrumb(
 					$this->helperData->getBlogConfig('general/url_prefix'),
-					['label' => $this->helperData->getBlogConfig('general/url_prefix'), 'title' => $this->helperData->getBlogConfig('general/url_prefix')]
+					['label' => $breadcrumbsLabel, 'title' => $this->helperData->getBlogConfig('general/url_prefix')]
 				);
 				$this->applySeoCode();
 
@@ -142,21 +108,21 @@ class Frontend extends Template
 				);
 				$breadcrumbs->addCrumb(
 					$this->helperData->getBlogConfig('general/url_prefix'),
-					['label' => $this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
 					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 					 'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
 				);
 				if ($category->getId()) {
 					$breadcrumbs->addCrumb(
 						$category->getUrlKey(),
-						['label' => $category->getName(),
+						['label' => ucfirst($category->getName()),
 						 'title' => $category->getName(),
 						 'link'  => $this->helperData->getCategoryUrl($category)]
 					);
 				}
 				$breadcrumbs->addCrumb(
 					$post->getUrlKey(),
-					['label' => $post->getName(),
+					['label' => ucfirst($post->getName()),
 					 'title' => $post->getName()]
 				);
 				$this->applySeoCode($post);
@@ -195,7 +161,7 @@ class Frontend extends Template
 					]
 				)->addCrumb(
 					$this->helperData->getBlogConfig('general/url_prefix'),
-					['label' => $this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
 					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 					 'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
 
@@ -205,7 +171,7 @@ class Frontend extends Template
 					 'title' => 'Tag']
 				)->addCrumb(
 					'Tag' . $tag->getId(),
-					['label' => $tag->getName(),
+					['label' => ucfirst($tag->getName()),
 					 'title' => $tag->getName()]
 				);
 				$this->applySeoCode();
@@ -221,7 +187,7 @@ class Frontend extends Template
 					]
 				)->addCrumb(
 					$this->helperData->getBlogConfig('general/url_prefix'),
-					['label' => $this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
 					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 					 'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
 
@@ -231,7 +197,7 @@ class Frontend extends Template
 					 'title' => 'Topic']
 				)->addCrumb(
 					'topic' . $topic->getId(),
-					['label' => $topic->getName(),
+					['label' => ucfirst($topic->getName()),
 					 'title' => $topic->getName()]
 				);
 				$this->applySeoCode($topic);
@@ -243,9 +209,6 @@ class Frontend extends Template
 		return parent::_prepareLayout();
 	}
 
-	/**
-	 * @param null $post
-	 */
 	public function applySeoCode($post = null)
 	{
 		if ($post) {

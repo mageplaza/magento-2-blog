@@ -20,16 +20,13 @@ use Mageplaza\Blog\Block\Frontend;
 
 class Listpost extends Frontend
 {
-	/**
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 */
 	protected function _prepareLayout()
 	{
 		$url          = $this->helperData->getCurrentUrl();
 		$array        = explode('/', $url);
 		$key          = array_search('category', $array) + 1;
 		$categoryName = ($array[$key]);
-		$category     = $this->helperData->getCategoryByParam('url_key', $categoryName);
+		$category=$this->helperData->getCategoryByParam('url_key',$categoryName);
 		$breadcrumbs  = $this->getLayout()->getBlock('breadcrumbs');
 		if ($breadcrumbs) {
 			$breadcrumbs->addCrumb(
@@ -42,13 +39,13 @@ class Listpost extends Frontend
 			);
 			$breadcrumbs->addCrumb(
 				$this->helperData->getBlogConfig('general/url_prefix'),
-				['label' => $this->helperData->getBlogConfig('general/url_prefix'),
+				['label' => ucfirst($this->helperData->getBlogConfig('general/url_prefix')),
 				 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 				 'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
 			);
 			$breadcrumbs->addCrumb(
 				$categoryName,
-				['label' => $category->getName(),
+				['label' => ucfirst($category->getName()),
 				 'title' => $category->getName()
 				]
 			);
@@ -58,17 +55,11 @@ class Listpost extends Frontend
 
 	}
 
-	/**
-	 * @return $this|\Mageplaza\Blog\Model\Post
-	 */
 	public function getPostList()
 	{
 		return $this->helperData->getPostList('category', $this->getRequest()->getParam('id'));
 	}
 
-	/**
-	 * @return bool|string
-	 */
 	public function checkRss()
 	{
 		$categoryId = $this->getRequest()->getParam('id');

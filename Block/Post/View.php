@@ -19,36 +19,22 @@ use Mageplaza\Blog\Block\Frontend;
 
 class View extends Frontend
 {
-	/**
-	 * @param $topic
-	 * @return string
-	 */
+
 	public function getTopicUrl($topic)
 	{
 		return $this->helperData->getTopicUrl($topic);
 	}
 
-	/**
-	 * @param $tag
-	 * @return string
-	 */
 	public function getTagUrl($tag)
 	{
 		return $this->helperData->getTagUrl($tag);
 	}
 
-	/**
-	 * @param $category
-	 * @return string
-	 */
 	public function getCategoryUrl($category)
 	{
 		return $this->helperData->getCategoryUrl($category);
 	}
 
-	/**
-	 * @return bool|mixed
-	 */
 	public function checkComment()
 	{
 		if (!$this->helperData->getBlogConfig('general/enabled'))
@@ -58,12 +44,29 @@ class View extends Frontend
 		return $comment;
 	}
 
-	/**
-	 * @param $code
-	 * @return mixed
-	 */
 	public function helperComment($code)
 	{
 		return $this->helperData->getBlogConfig('comment/' . $code);
 	}
+
+	/**
+	 * get tag list
+	 * @param $post
+	 * @return string
+	 */
+	public function getTagList($post)
+	{
+		$tagCollection = $post->getSelectedTagsCollection();
+		$result        = '';
+		if (count($tagCollection)):
+			$listTags = array();
+			foreach ($tagCollection as $tag) {
+				$listTags[] = '<a class="mp-info" href="' . $this->getTagUrl($tag) . '">' . $tag->getName() . '</a>';
+			}
+			$result = implode(', ', $listTags);
+		endif;
+
+		return $result;
+	}
+
 }

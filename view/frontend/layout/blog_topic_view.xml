@@ -8,15 +8,11 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="Mageplaza_Blog::css/index/style.css"/>
-        <!--<css src="Mageplaza_Blog::css/index/mp.css"/>-->
-        <css src="Mageplaza_Blog::css/index/font-awesome.css"/>
-        <css src="Mageplaza_Blog::css/index/font-awesome.min.css"/>
-        <script src="Mageplaza_Blog::js/jquery-1.12.4.min.js"/>
-        <!--<script src="Mageplaza_Blog::js/bootstrap.min.js"/>-->
     </head>
     <body>
         <referenceContainer name="content">
             <block class="Mageplaza\Blog\Block\Topic\Listpost" template="Mageplaza_Blog::category/post/list.phtml"/>
+            <block class="Mageplaza\Blog\Block\Frontend" name="mp.blog.header" template="Mageplaza_Blog::blog/header.phtml"/>
         </referenceContainer>
         <referenceContainer name="sidebar.main">
             <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"
@@ -27,6 +23,8 @@
                    template="Mageplaza_Blog::category/widget.phtml"/>
             <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"
                    template="Mageplaza_Blog::tag/widget.phtml"/>
+
+
         </referenceContainer>
     </body>
 </page>

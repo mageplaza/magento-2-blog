@@ -80,6 +80,29 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>If you already had bootstrap css library, then select no.</comment>
                 </field>
+                <field id="font_color" translate="label comment" type="text" sortOrder="60" showInWebsite="1" showInStore="1" showInDefault="1">
+                    <label>Choose blog's color</label>
+                    <comment>Type color code. Eg: #1abc9c, #1979c3...</comment>
+                </field>
+                <field id="display_author" translate="label comment" type="select" sortOrder="70" showInWebsite="1" showInStore="1" showInDefault="1">
+                    <label>Display author in blog</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If your choose Yes, Author name, avatar and author description will be display in blog</comment>
+                </field>
+                <field id="author_name" translate="label comment" type="text" sortOrder="80" showInWebsite="1" showInStore="1" showInDefault="1">
+                    <label>Author name</label>
+                    <comment>Author name in your blog</comment>
+                </field>
+                <field id="upload_image" translate="label comment" type="image" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Author avatar</label>
+                    <backend_model>Mageplaza\Blog\Model\Config\Source\Backend\Image</backend_model>
+                    <base_url type="media" scope_info="1">mageplaza/author</base_url>
+                    <comment>Author avatar in your blog</comment>
+                </field>
+                <field id="author_description" translate="label" type="textarea" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Author description</label>
+                    <comment>This field is required if you choose Yes at Display author in blog</comment>
+                </field>
             </group>
             <group id="sidebar" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
                    showInStore="1">

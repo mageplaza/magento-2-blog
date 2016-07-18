@@ -9,16 +9,16 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="Mageplaza_Blog::css/view/style.css"/>
-        <!--<css src="Mageplaza_Blog::css/view/mp.css"/>-->
-        <css src="Mageplaza_Blog::css/view/font-awesome.css"/>
-        <css src="Mageplaza_Blog::css/view/font-awesome.min.css"/>
-        <script src="Mageplaza_Blog::js/jquery-1.12.4.min.js"/>
-        <!--<script src="Mageplaza_Blog::js/bootstrap.min.js"/>-->
+        <block class="Mageplaza\Blog\Block\Frontend" name="mp.blog.header" template="Mageplaza_Blog::blog/header.phtml"/>
     </head>
     <body>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Post\View" name="mp.blog.view.mainnn"
-                   template="Mageplaza_Blog::post/view.phtml"/>
+            <block class="Mageplaza\Blog\Block\Post\View" name="mp.blog.view" template="Mageplaza_Blog::post/view.phtml"/>
+            <block class="Magento\Cms\Block\Block" name="mageplaza_blog_author_admin">
+                <arguments>
+                    <argument name="mageplaza_blog_author_admin" xsi:type="string">mageplaza_blog_author_admin</argument>
+                </arguments>
+            </block>
         </referenceContainer>
         <referenceContainer name="sidebar.main">
             <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"

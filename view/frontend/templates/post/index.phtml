@@ -14,59 +14,55 @@ if ($checkRss):
 	<div class="post-list-container mpcss">
 		<div class="row">
 			<?php foreach ($posts as $post) : ?>
-				<?php
-	//			\Zend_Debug::dump($block->getUrlByPost($post));die;
-				?>
 				<div class="post-list-item <?php if($block->getBlogConfig('general/display_style') == 2){echo ' col-sm-6';}else echo ' col-sm-12';?>">
-
-					<div class="post-image">
-						<?php if ($post->getImage()) : ?>
-							<a href="<?php echo $block->getUrlByPost($post) ?>">
-								<img class="img-responsive"
-									src="<?php echo $block->getImageUrl($post->getImage()); ?>"
-									alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
-							</a>
-						<?php endif; ?>
-					</div>
-
-
-					<h2 class="mp-post-title">
-						<a title="<?php echo $post->getName(); ?>" href="<?php echo $block->getUrlByPost($post) ?>">
-							<?php echo $post->getName(); ?>
-						</a>
-					</h2>
-
-
-					<div class="mp-post-info">
-						<?php echo __('Posted on'); ?> <?php echo $post->getCreatedAt() ?> |
-						<?php echo __('Posted in'); ?> <?php echo $block->getPostCategoryHtml($post); ?>
-					</div>
+					<div class="post-item-wraper">
+						<div class="post-image">
+							<?php if ($post->getImage()) : ?>
+								<a href="<?php echo $block->getUrlByPost($post) ?>">
+									<img class="img-responsive"
+										src="<?php echo $block->getImageUrl($post->getImage()); ?>"
+										alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
+								</a>
+							<?php endif; ?>
+						</div>
+						<div class="post-info-wraper">
+							<h2 class="mp-post-title">
+								<a class="post-link-title" title="<?php echo $post->getName(); ?>" href="<?php echo $block->getUrlByPost($post) ?>">
+									<?php echo $post->getName();?>
+								</a>
+							</h2>
 
 
-					<div class="post-short-description">
-						<p><?php echo $post->getShortDescription(); ?><?php echo __('[...]'); ?></p>
-					</div>
-
-					<div class="mp-clearfix"></div>
-
-
-					<div class="mp-post-meta-info mp-alignright">
-							<div class="actions">
-								<a class="mp-read-more" href="<?php echo $block->getUrlByPost($post); ?>"
-								   title="<?php echo __('Read More'); ?>"><?php echo __('Read More'); ?></a>
+							<div class="mp-post-info">
+								<?php echo __('Posted on'); ?> <?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+																$object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
+																$dateFormat = date('Y-m-d',$object->timestamp($post->getCreatedAt()));
+																echo $dateFormat;
+																?> |
+								<?php echo __('Posted in'); ?> <?php echo $block->getPostCategoryHtml($post); ?>
 							</div>
 
 
+							<div class="post-short-description">
+								<p><?php echo $post->getShortDescription(); ?></p>
+							</div>
+
+							<div class="mp-clearfix"></div>
+
+
+							<div class="mp-post-meta-info mp-alignright">
+									<div class="actions">
+										<a class="mp-read-more" href="<?php echo $block->getUrlByPost($post); ?>"
+										   title="<?php echo __('Read More'); ?>"><?php echo __('Read more'); ?></a>
+									</div>
+							</div>
+						</div>
 					</div>
-
-
-					<br/><br/>
-
 				</div>
 			<?php endforeach; ?>
 		</div>
     </div>
-	<!--	--><?php //echo $this->getPagerHtml(); ?>
+		<?php echo $this->getPagerHtml(); ?>
 <?php else : ?>
 	<div class="post-list-container">
         <?php echo __('There are no posts at this moment'); ?>

@@ -2,250 +2,244 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
- * @category  Mageplaza
- * @package   Mageplaza_Blog
- * @copyright Copyright (c) 2016
- * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * 
+ *                     @category  Mageplaza
+ *                     @package   Mageplaza_Blog
+ *                     @copyright Copyright (c) 2016
+ *                     @license   http://opensource.org/licenses/mit-license.php MIT License
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Category;
 
 class AbstractCategory extends \Magento\Backend\Block\Template
 {
-	/**
-	 * Core registry
-	 *
-	 * @var \Magento\Framework\Registry
-	 */
-	protected $coreRegistry;
+    /**
+     * Core registry
+     * 
+     * @var \Magento\Framework\Registry
+     */
+    protected $coreRegistry;
 
-	/**
-	 * Category tree model instance
-	 *
-	 * @var \Mageplaza\Blog\Model\ResourceModel\Category\Tree
-	 */
-	protected $categoryTree;
+    /**
+     * Category tree model instance
+     * 
+     * @var \Mageplaza\Blog\Model\ResourceModel\Category\Tree
+     */
+    protected $categoryTree;
 
-	/**
-	 * Category factory
-	 *
-	 * @var \Mageplaza\Blog\Model\CategoryFactory
-	 */
-	protected $categoryFactory;
+    /**
+     * Category factory
+     * 
+     * @var \Mageplaza\Blog\Model\CategoryFactory
+     */
+    protected $categoryFactory;
 
-	/**
-	 * Category collection factory
-	 *
-	 * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
-	 */
-	protected $categoryCollectionFactory;
+    /**
+     * Category collection factory
+     * 
+     * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
+     */
+    protected $categoryCollectionFactory;
 
-	/**
-	 * constructor
-	 *
-	 * @param \Magento\Framework\Registry $coreRegistry
-	 * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree
-	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-	 * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
-	 * @param \Magento\Backend\Block\Widget\Context $context
-	 * @param array $data
-	 */
-	public function __construct(
-		\Magento\Framework\Registry $coreRegistry,
-		\Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree,
-		\Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
-		\Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-		\Magento\Backend\Block\Widget\Context $context,
-		array $data = []
-	)
-	{
-		$this->coreRegistry              = $coreRegistry;
-		$this->categoryTree              = $categoryTree;
-		$this->categoryFactory           = $categoryFactory;
-		$this->categoryCollectionFactory = $categoryCollectionFactory;
-		parent::__construct($context, $data);
-	}
+    /**
+     * constructor
+     * 
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree
+     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\Registry $coreRegistry,
+        \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree,
+        \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        \Magento\Backend\Block\Widget\Context $context,
+        array $data = []
+    )
+    {
+        $this->coreRegistry              = $coreRegistry;
+        $this->categoryTree              = $categoryTree;
+        $this->categoryFactory           = $categoryFactory;
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
+        parent::__construct($context, $data);
+    }
 
-	/**
-	 * Retrieve current Category instance
-	 *
-	 * @return \Mageplaza\Blog\Model\Category
-	 */
-	public function getCategory()
-	{
-		return $this->coreRegistry->registry('mageplaza_blog_category');
-	}
+    /**
+     * Retrieve current Category instance
+     *
+     * @return \Mageplaza\Blog\Model\Category
+     */
+    public function getCategory()
+    {
+        return $this->coreRegistry->registry('mageplaza_blog_category');
+    }
 
-	/**
-	 * @return int|string|null
-	 */
-	public function getCategoryId()
-	{
-		if ($this->getCategory()) {
-			return $this->getCategory()->getId();
-		}
+    /**
+     * @return int|string|null
+     */
+    public function getCategoryId()
+    {
+        if ($this->getCategory()) {
+            return $this->getCategory()->getId();
+        }
+        return \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
+    }
 
-		return \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
-	}
+    /**
+     * @return string
+     */
+    public function getCategoryName()
+    {
+        return $this->getCategory()->getName();
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getCategoryName()
-	{
-		return $this->getCategory()->getName();
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getCategoryPath()
-	{
-		if ($this->getCategory()) {
-			return $this->getCategory()->getPath();
-		}
-
-		return \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
-	}
+    /**
+     * @return mixed
+     */
+    public function getCategoryPath()
+    {
+        if ($this->getCategory()) {
+            return $this->getCategory()->getPath();
+        }
+        return \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
+    }
 
 
-	/**
-	 * @param null $parentNodeCategory
-	 * @param int $recursionLevel
-	 * @return Node|mixed
-	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-	 */
-	public function getRoot($parentNodeCategory = null, $recursionLevel = 3)
-	{
-		if ($parentNodeCategory !== null && $parentNodeCategory->getId()) {
-			return $this->getNode($parentNodeCategory, $recursionLevel);
-		}
-		$root = $this->coreRegistry->registry('mageplaza_blog_category_root');
-		if ($root === null) {
-			$rootId = \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
+    /**
+     * @param null $parentNodeCategory
+     * @param int $recursionLevel
+     * @return Node|mixed
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function getRoot($parentNodeCategory = null, $recursionLevel = 3)
+    {
+        if ($parentNodeCategory !== null && $parentNodeCategory->getId()) {
+            return $this->getNode($parentNodeCategory, $recursionLevel);
+        }
+        $root = $this->coreRegistry->registry('mageplaza_blog_category_root');
+        if ($root === null) {
+            $rootId = \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
 
-			$tree = $this->categoryTree->load(null, $recursionLevel);
+            $tree = $this->categoryTree->load(null, $recursionLevel);
 
-			if ($this->getCategory()) {
-				$tree->loadEnsuredNodes($this->getCategory(), $tree->getNodeById($rootId));
-			}
+            if ($this->getCategory()) {
+                $tree->loadEnsuredNodes($this->getCategory(), $tree->getNodeById($rootId));
+            }
 
-			$tree->addCollectionData($this->getCategoryCollection());
+            $tree->addCollectionData($this->getCategoryCollection());
 
-			$root = $tree->getNodeById($rootId);
+            $root = $tree->getNodeById($rootId);
 
-			if ($root && $rootId != \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
-				$root->setIsVisible(true);
-			} elseif ($root && $root->getId() == \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
-				$root->setName(__('ROOT'));
-			}
+            if ($root && $rootId != \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
+                $root->setIsVisible(true);
+            } elseif ($root && $root->getId() == \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
+                $root->setName(__('ROOT'));
+            }
 
-			$this->coreRegistry->register('mageplaza_blog_category_root', $root);
-		}
+            $this->coreRegistry->register('mageplaza_blog_category_root', $root);
+        }
 
-		return $root;
-	}
+        return $root;
+    }
 
-	/**
-	 * @return \Mageplaza\Blog\Model\ResourceModel\Category\Collection
-	 */
-	public function getCategoryCollection()
-	{
-		$collection = $this->getData('category_collection');
-		if ($collection === null) {
-			$collection = $this->categoryCollectionFactory->create();
-			$this->setData('category_collection', $collection);
-		}
+    /**
+     * @return \Mageplaza\Blog\Model\ResourceModel\Category\Collection
+     */
+    public function getCategoryCollection()
+    {
+        $collection = $this->getData('category_collection');
+        if ($collection === null) {
+            $collection = $this->categoryCollectionFactory->create();
+            $this->setData('category_collection', $collection);
+        }
+        return $collection;
+    }
 
-		return $collection;
-	}
+    /**
+     * Get and register Categories root by specified Categories IDs
+     *
+     * IDs can be arbitrary set of any Categories ids.
+     * Tree with minimal required nodes (all parents and neighbours) will be built.
+     * If ids are empty, default tree with depth = 2 will be returned.
+     *
+     * @param array $ids
+     * @return mixed
+     */
+    public function getRootByIds($ids)
+    {
+        $root = $this->coreRegistry->registry('mageplaza_blog_category_root');
+        if (null === $root) {
+            $ids = $this->categoryTree->getExistingCategoryIdsBySpecifiedIds($ids);
+            $tree = $this->categoryTree->loadByIds($ids);
+            $rootId = \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
+            $root = $tree->getNodeById($rootId);
+            if ($root && $rootId != \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
+                $root->setIsVisible(true);
+            } elseif ($root && $root->getId() == \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
+                $root->setName(__('Root'));
+            }
 
-	/**
-	 * Get and register Categories root by specified Categories IDs
-	 *
-	 * IDs can be arbitrary set of any Categories ids.
-	 * Tree with minimal required nodes (all parents and neighbours) will be built.
-	 * If ids are empty, default tree with depth = 2 will be returned.
-	 *
-	 * @param array $ids
-	 * @return mixed
-	 */
-	public function getRootByIds($ids)
-	{
-		$root = $this->coreRegistry->registry('mageplaza_blog_category_root');
-		if (null === $root) {
-			$ids    = $this->categoryTree->getExistingCategoryIdsBySpecifiedIds($ids);
-			$tree   = $this->categoryTree->loadByIds($ids);
-			$rootId = \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
-			$root   = $tree->getNodeById($rootId);
-			if ($root && $rootId != \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
-				$root->setIsVisible(true);
-			} elseif ($root && $root->getId() == \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
-				$root->setName(__('Root'));
-			}
+            $tree->addCollectionData($this->getCategoryCollection());
+            $this->coreRegistry->register('mageplaza_blog_category_root', $root);
+        }
+        return $root;
+    }
 
-			$tree->addCollectionData($this->getCategoryCollection());
-			$this->coreRegistry->register('mageplaza_blog_category_root', $root);
-		}
+    /**
+     * @param $parentNodeCategory
+     * @param int $recursionLevel
+     * @return Node
+     */
+    public function getNode($parentNodeCategory, $recursionLevel = 2)
+    {
+        $nodeId = $parentNodeCategory->getId();
+        $node = $this->categoryTree->loadNode($nodeId);
+        $node->loadChildren($recursionLevel);
 
-		return $root;
-	}
+        if ($node && $nodeId != \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
+            $node->setIsVisible(true);
+        } elseif ($node && $node->getId() == \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
+            $node->setName(__('Root'));
+        }
 
-	/**
-	 * @param $parentNodeCategory
-	 * @param int $recursionLevel
-	 * @return Node
-	 */
-	public function getNode($parentNodeCategory, $recursionLevel = 2)
-	{
-		$nodeId = $parentNodeCategory->getId();
-		$node   = $this->categoryTree->loadNode($nodeId);
-		$node->loadChildren($recursionLevel);
+        $this->categoryTree->addCollectionData($this->getCategoryCollection());
 
-		if ($node && $nodeId != \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
-			$node->setIsVisible(true);
-		} elseif ($node && $node->getId() == \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
-			$node->setName(__('Root'));
-		}
+        return $node;
+    }
 
-		$this->categoryTree->addCollectionData($this->getCategoryCollection());
+    /**
+     * @param array $args
+     * @return string
+     */
+    public function getSaveUrl(array $args = [])
+    {
+        $params = ['_current' => false, '_query' => false];
+        $params = array_merge($params, $args);
+        return $this->getUrl('mageplaza_blog/*/save', $params);
+    }
 
-		return $node;
-	}
-
-	/**
-	 * @param array $args
-	 * @return string
-	 */
-	public function getSaveUrl(array $args = [])
-	{
-		$params = ['_current' => false, '_query' => false];
-		$params = array_merge($params, $args);
-
-		return $this->getUrl('mageplaza_blog/*/save', $params);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getEditUrl()
-	{
-		return $this->getUrl(
-			'mageplaza_blog/category/edit',
-			['_query' => false, 'id' => null, 'parent' => null]
-		);
-	}
-
-	/**
-	 * @return []
-	 */
-	public function getRootIds()
-	{
-		return [\Mageplaza\Blog\Model\Category::TREE_ROOT_ID];
-	}
+    /**
+     * @return string
+     */
+    public function getEditUrl()
+    {
+        return $this->getUrl(
+            'mageplaza_blog/category/edit',
+            ['_query' => false, 'id' => null, 'parent' => null]
+        );
+    }
+    /**
+     * @return []
+     */
+    public function getRootIds()
+    {
+        return [\Mageplaza\Blog\Model\Category::TREE_ROOT_ID];
+    }
 }

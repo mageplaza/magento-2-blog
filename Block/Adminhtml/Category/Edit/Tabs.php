@@ -2,16 +2,16 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
- * @category  Mageplaza
- * @package   Mageplaza_Blog
- * @copyright Copyright (c) 2016
- * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * 
+ *                     @category  Mageplaza
+ *                     @package   Mageplaza_Blog
+ *                     @copyright Copyright (c) 2016
+ *                     @license   http://opensource.org/licenses/mit-license.php MIT License
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit;
 
@@ -20,97 +20,96 @@ namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit;
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
-	/**
-	 * Tabs template
-	 *
-	 * @var string
-	 */
-	protected $_template = 'Magento_Backend::widget/tabshoriz.phtml';
+    /**
+     * Tabs template
+     * 
+     * @var string
+     */
+    protected $_template = 'Magento_Backend::widget/tabshoriz.phtml';
 
-	/**
-	 * Registry
-	 *
-	 * @var \Magento\Framework\Registry
-	 */
-	protected $coreRegistry;
+    /**
+     * Registry
+     * 
+     * @var \Magento\Framework\Registry
+     */
+    protected $coreRegistry;
 
-	/**
-	 * constructor
-	 *
-	 * @param \Magento\Framework\Registry $coreRegistry
-	 * @param \Magento\Backend\Block\Template\Context $context
-	 * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-	 * @param \Magento\Backend\Model\Auth\Session $authSession
-	 * @param array $data
-	 */
-	public function __construct(
-		\Magento\Framework\Registry $coreRegistry,
-		\Magento\Backend\Block\Template\Context $context,
-		\Magento\Framework\Json\EncoderInterface $jsonEncoder,
-		\Magento\Backend\Model\Auth\Session $authSession,
-		array $data = []
-	)
-	{
-		$this->coreRegistry = $coreRegistry;
-		parent::__construct($context, $jsonEncoder, $authSession, $data);
-	}
-
-
-	/**
-	 * Initialize Tabs
-	 *
-	 * @return void
-	 */
-	protected function _construct()
-	{
-		parent::_construct();
-		$this->setId('category_info_tabs');
-		$this->setDestElementId('category_tab_content');
-		$this->setTitle(__('Category Data'));
-	}
-
-	/**
-	 * Retrieve Category object
-	 *
-	 * @return \Mageplaza\Blog\Model\Category
-	 */
-	public function getCategory()
-	{
-		return $this->coreRegistry->registry('mageplaza_blog_category');
-	}
+    /**
+     * constructor
+     * 
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\Backend\Model\Auth\Session $authSession,
+        array $data = []
+    )
+    {
+        $this->coreRegistry = $coreRegistry;
+        parent::__construct($context, $jsonEncoder, $authSession, $data);
+    }
 
 
-	/**
-	 * Prepare Layout Content
-	 *
-	 * @return $this
-	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-	 */
-	protected function _prepareLayout()
-	{
-		$this->addTab(
-			'category',
-			[
-				'label'   => __('Category information'),
-				'content' => $this->getLayout()->createBlock(
-					'Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Category',
-					'mageplaza_blog_category_edit_tab_category'
-				)->toHtml()
-			]
-		);
-		$this->addTab(
-			'post',
-			[
-				'label'   => __('Posts'),
-				'content' => $this->getLayout()->createBlock(
-					'Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Post',
-					'mageplaza_blog_category_edit_tab_post'
-				)->toHtml()
-			]
-		);
-		// dispatch event add custom tabs
-		$this->_eventManager->dispatch('adminhtml_mageplaza_blog_category_tabs', ['tabs' => $this]);
+    /**
+     * Initialize Tabs
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        parent::_construct();
+        $this->setId('category_info_tabs');
+        $this->setDestElementId('category_tab_content');
+        $this->setTitle(__('Category Data'));
+    }
 
-		return parent::_prepareLayout();
-	}
+    /**
+     * Retrieve Category object
+     *
+     * @return \Mageplaza\Blog\Model\Category
+     */
+    public function getCategory()
+    {
+        return $this->coreRegistry->registry('mageplaza_blog_category');
+    }
+
+
+    /**
+     * Prepare Layout Content
+     *
+     * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function _prepareLayout()
+    {
+        $this->addTab(
+            'category',
+            [
+                'label' => __('Category information'),
+                'content' => $this->getLayout()->createBlock(
+                    'Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Category',
+                    'mageplaza_blog_category_edit_tab_category'
+                )->toHtml()
+            ]
+        );
+        $this->addTab(
+            'post',
+            [
+                'label' => __('Posts'),
+                'content' => $this->getLayout()->createBlock(
+                    'Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Post',
+                    'mageplaza_blog_category_edit_tab_post'
+                )->toHtml()
+            ]
+        );
+        // dispatch event add custom tabs
+        $this->_eventManager->dispatch('adminhtml_mageplaza_blog_category_tabs', ['tabs' => $this]);
+        return parent::_prepareLayout();
+    }
 }

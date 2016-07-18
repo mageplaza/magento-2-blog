@@ -13,15 +13,12 @@ namespace Mageplaza\Blog\Model\Config\Source\Comments\Facebook;
 class Colorscheme implements \Magento\Framework\Option\ArrayInterface
 {
 	const LIGHT = 'light';
-	const DARK = 'dark';
+	const DARK  = 'dark';
 
-	/**
-	 * @return array
-	 */
 	public function toOptionArray()
-	{
-		return [['value' => self::LIGHT, 'label' => __('Light')], ['value' => self::DARK, 'label' => __('Dark')]];
-	}
+{
+	return [['value' => self::LIGHT, 'label' => __('Light')], ['value' => self::DARK, 'label' => __('Dark')]];
+}
 
 	/**
 	 * Get options in "key-value" format
@@ -29,15 +26,12 @@ class Colorscheme implements \Magento\Framework\Option\ArrayInterface
 	 * @return array
 	 */
 	public function toArray()
-	{
-		return [self::LIGHT => __('Light'), self::DARK => __('Dark')];
-	}
+{
+	return [self::LIGHT => __('Light'), self::DARK => __('Dark')];
+}
 
-	/**
-	 * @return array
-	 */
 	public function getAllOptions()
-	{
-		return $this->toOptionArray();
-	}
+{
+	return $this->toOptionArray();
+}
 }

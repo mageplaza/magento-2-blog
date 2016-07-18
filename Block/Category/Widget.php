@@ -20,18 +20,12 @@ use Mageplaza\Blog\Block\Frontend;
 
 class Widget extends Frontend
 {
-	/**
-	 * @return $this
-	 */
+	
 	public function getCategoryList()
 	{
 		return $this->helperData->getCategoryList();
 	}
 
-	/**
-	 * @param $category
-	 * @return string
-	 */
 	public function getCategoryUrl($category)
 	{
 		return $this->helperData->getCategoryUrl($category);

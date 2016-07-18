@@ -8,15 +8,16 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="Mageplaza_Blog::css/sidebar/style.css"/>
-        <script src="Mageplaza_Blog::js/bootstrap.min.js"/>
+        <css src="Mageplaza_Blog::css/index/owl.carousel.css"/>
+        <css src="Mageplaza_Blog::css/index/owl.theme.css"/>
+        <css src="Mageplaza_Blog::css/index/font-awesome.css"/>
+        <css src="Mageplaza_Blog::css/index/font-awesome.min.css"/>
+        <script src="Mageplaza_Blog::js/jquery-1.12.4.min.js"/>
+        <script src="Mageplaza_Blog::js/owl.carousel.min.js"/>
     </head>
     <body>
         <referenceContainer name='root'>
-            <block
-                    class='Mageplaza\Blog\Block\Html\Init'
-                    name='Mageplaza_Blog_Block_Html_Init'
-                    ifconfig='blog/general/enable_mpbootstrap'
-            />
+            <block class='Mageplaza\Blog\Block\Html\Init' name='Mageplaza_Blog_Block_Html_Init' ifconfig='blog/general/enable_mpbootstrap' />
         </referenceContainer>
         <referenceBlock name="footer_links">
             <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_footer_link">

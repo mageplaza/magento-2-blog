@@ -1,20 +1,15 @@
-<?php $_post = $block->getCurrentPost();
 
-?>
+<?php $_post = $block->getCurrentPost(); ?>
 
 <?php if ($block->getBlogConfig('share/enabled')): ?>
 	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $block->getBlogConfig('share/pubid_id') ?>"
 			async="async"></script>
 <?php endif; ?>
-<div class="post-view mpcss">
+<div class="mpcss post-view">
 	<div class="row">
         <div class="post-image col-xs-12">
            <?php if ($_post->getImage()) : ?>
-			   <a href="<?php echo $block->getUrlByPost($_post) ?>">
-                            <img
-								src="<?php echo $block->getImageUrl($_post->getImage()); ?>"
-								alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
-                        </a>
+			   <a href="<?php echo $block->getUrlByPost($_post) ?>"><img src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/></a>
 		   <?php endif; ?>
         </div>
 
@@ -26,18 +21,14 @@
 		<div class="col-xs-12">
 			<hr/>
 			<div class="mp-post-info">
+				<?php if($block->getBlogConfig('general/display_author')):?>
 				<span><?php echo __('By ');?></span>
-				<a class="mp-info">admin</a>&nbsp;|&nbsp;
-				<span><?php echo $_post->getCreatedAt(); ?></span>&nbsp;|&nbsp;
-				<span><?php echo __('Categories: '); ?></span>
-				<?php echo $block->getPostCategoryHtml($_post); ?>&nbsp;|&nbsp;
-				<span><?php echo __('Tags: '); ?></span>
-				<?php $tagCollection = $_post->getSelectedTagsCollection(); ?>
-				<?php if (count($tagCollection)): ?>
-					<?php foreach ($tagCollection as $tag): ?>
-						<a class="mp-info" href="<?php echo $block->getTagUrl($tag) ?>"><?php echo $tag->getName(); ?></a>,
-					<?php endforeach; ?>
-				<?php endif; ?>
+								<a class="mp-info"><?php echo $block->getBlogConfig('general/author_name')?></a>&nbsp;|&nbsp;
+				<?php endif;?>
+				<span><i class="fa fa-calendar-times-o"></i> <?php echo $_post->getFormatCreatedAt(); ?></span> |
+				<span><i class="fa fa-folder-open-o"></i> <?php echo __('Categories:'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> </span> |
+				<span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span>
+
 			</div>
 			<hr/>
         </div>
@@ -48,7 +39,7 @@
 	<div class="mpcss">
 		<div id="sharing">
 			<div class="share-col-left">
-				<h5>Share This Story, Choose Your Platform!</h5>
+				<h5><?php echo __('Share this post, Hit on social buttons!'); ?></h5>
 			</div>
 			<div class="share-col-right">
 				<div class="post-sharing-button">
@@ -59,47 +50,81 @@
 	</div>
 <?php endif; ?>
 
+<?php
+/**
+ * About the author content
+ */
+?>
+<?php if($block->getBlogConfig('general/display_author') && $block->getBlogConfig('general/author_description')): ?>
 	<div class="mpcss about-admin">
 		<div class="row">
 			<div class="col-xs-12 author-title">
-				<h4 class="admin-title">About the Author: <a>admin</a></h4>
+				<h4 class="admin-title"><?php echo __('About the Author: ');?><a class="mp-info"><?php if($block->getBlogConfig('general/author_name')) echo $block->getBlogConfig('general/author_name');?></a></h4>
 				<div id="admin-border"></div>
 			</div>
 			<div class="col-xs-12 author-des">
+				<?php if($block->getBlogConfig('general/upload_image')):?>
 				<div class="admin-avatar">
-					<img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>">
+					<img class="img-responsive" src="<?php echo $block->getImageUrl('mageplaza/author/'.$block->getBlogConfig('general/upload_image'));?>">
 				</div>
+				<?php endif;?>
 				<div class="admin-description">
-					<p>This is description This is description This is description This is description This is description
-						This is description This is description This is description This is description This is description</p>
+					<?php echo $block->getBlogConfig('general/author_description');?>
+<!--					--><?php //echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('mageplaza_blog_author_admin')->toHtml(); ?>
 				</div>
 			</div>
 		</div>
 	</div>
+<?php endif;?>
 
+<?php $relatedPosts = $_post->getRelatedPostsCollection(); ?>
+<?php if (count($relatedPosts)): ?>
 
-
-    <div class="post-same-topics topic-list">
-        <?php $topicCollection = $_post->getSelectedTopicsCollection(); ?>
-		<?php if (count($topicCollection)): ?>
-			<h2><?php echo __('Topic'); ?></h2>
-			<ul>
-                <?php foreach ($topicCollection as $topic): ?>
-					<li>
-                        <a href="<?php echo $block->getTopicUrl($topic) ?>"><?php echo $topic->getName(); ?></a>
-                    </li>
-				<?php endforeach; ?>
-
-            </ul>
-
-		<?php endif; ?>
-
+	<div class="post-same-topics topic-list mpcss">
+		<div class="row">
+			<div class="col-xs-12">
+				<h2><?php echo __('Related Posts'); ?></h2>
+				<div class="owl-carousel" id="related-post" style="overflow: hidden;">
+					<?php foreach ($relatedPosts as $relatedPost): ?>
+						<div class="relate-content" style="margin-right: 10px;">
+							<a class="mp-relate-link" href="<?php echo $block->getUrlByPost($relatedPost) ?>"><img class="img-responsive" src="<?php echo $block->getImageUrl($relatedPost->getImage()); ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
+								<?php echo $relatedPost->getName(); ?></a>
+						</div>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		</div>
     </div>
 
-	<div class="mp-comment">
-		<?php $typeComment = $block->checkComment(); ?>
-		<?php if ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>
-			<div class="box-collateral box-reviews" id="post-reviews">
+	<script>
+				jQuery.noConflict();
+				jQuery(document).ready(function () {
+					var owl = jQuery('.owl-carousel');
+					owl.owlCarousel({
+						items: 4,
+						loop: true,
+						margin: 10,
+						autoplay: false,
+						autoplayTimeout: 1000,
+						autoplayHoverPause: true,
+						nav: false,
+						dots: false,
+						lazyLoad: true
+					});
+					jQuery('.play').on('click', function () {
+						owl.trigger('play.owl.autoplay', [1000])
+					});
+					jQuery('.stop').on('click', function () {
+						owl.trigger('stop.owl.autoplay')
+					})
+				})
+			</script>
+<?php endif; ?>
+
+<div class=" mp-comment">
+<?php $typeComment = $block->checkComment(); ?>
+	<?php if ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>
+		<div class="box-collateral box-reviews" id="post-reviews">
 				<h2><?php echo __('Comments') ?></h2>
 
 				<div id="disqus_thread"></div>
@@ -118,8 +143,8 @@
 
 
    	 		</div>
-		<?php elseif ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::FACEBOOK): ?>
-			<div class="box-collateral box-reviews" id="post-reviews">
+	<?php elseif ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::FACEBOOK): ?>
+		<div class="box-collateral box-reviews" id="post-reviews">
 				<h2><?php echo __('Comments') ?></h2>
 
 				<div id="fb-root"></div>
@@ -137,5 +162,6 @@
 					 data-width="100%" data-colorscheme="<?php echo $block->helperComment('facebook_colorscheme') ?>" ddata-order-by="<?php echo $block->helperComment('facebook_order_by') ?>"></div>
 
     		</div>
-		<?php endif; ?>
-	</div>
+	<?php endif; ?>
+</div>
+<!--Comments-->
