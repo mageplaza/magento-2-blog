@@ -169,3 +169,9 @@ a.mp-relate-link img.img-responsive{
 .owl-item{
     width:246px !important;
 }
+.owl-stage-outer {
+    height: 220px;
+}
+.owl-carousel .owl-stage {
+    height: 220px;
+}
