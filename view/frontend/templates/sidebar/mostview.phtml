@@ -2,6 +2,11 @@
 $posts = $block->getMosviewPosts();
 $postsRecent = $block->getRecentPost();
 ?>
+
+<div class="mp-sidebar mpcss row">
+	<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('mageplaza_blog_sidebar_above_popular_widget')->toHtml();?>
+</div>
+
 <div class="mp-sidebar mpcss">
 		<ul class="nav nav-tabs">
 			<li class="active"><a data-toggle="tab" href="#mostview"><?php echo __('Popular') ?></a></li>

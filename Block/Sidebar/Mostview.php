@@ -42,12 +42,13 @@ class Mostview extends Frontend
 
 	public function getRecentPost()
 	{
-		$ob       = $this->objectManager->get('Mageplaza\Blog\Model\Post');
+		$ob    = $this->objectManager->get('Mageplaza\Blog\Model\Post');
 		$posts = $ob->getCollection();
 		$posts->setOrder('created_at', 'DESC');
 
 		return $posts;
 	}
+
 	public function getLimitRecentPost()
 	{
 		return $this->helperData->getBlogConfig('sidebar/number_recent_posts');

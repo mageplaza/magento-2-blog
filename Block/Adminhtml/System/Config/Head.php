@@ -42,8 +42,8 @@ class Head extends \Magento\Config\Block\System\Config\Form\Field
 	{
 //		$html='<li class="notice-msg">
 //
-//                                        * <a href="https://mageplaza.freshdesk.com/support/solutions/folders/6000213306" target="_blank">User Guide</a> <br>
-//                                        * <a href="https://mageplaza.freshdesk.com/support/discussions/topics/new?forum_id=6000240988" target="_blank">Report a problem</a> <br>
+//                                        * <a href="https://docs.mageplaza.com/blog-m2/" target="_blank">User Guide</a> <br>
+//                                        * <a href="https://mageplaza.freshdesk.com/support/discussions/topics/new?forum_id=6000241371" target="_blank">Report a problem</a> <br>
 //                                        * Your default blog URL <strong>domain.com/blog/</strong> <br>
 //                                        * Atom Feed <strong>domain.com/blog/post/rss/</strong> <br>
 //                                        * Sitemap <strong>domain.com/sitemap/blog.xml</strong> <br>
