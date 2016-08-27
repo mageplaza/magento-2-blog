@@ -17,5 +17,6 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 
 class PostsGrid extends \Mageplaza\Blog\Controller\Adminhtml\Topic\Posts
 {
+    public $action;
 
 }

@@ -17,5 +17,6 @@ namespace Mageplaza\Blog\Block\Adminhtml\Topic;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
+    public $action;
 
 }

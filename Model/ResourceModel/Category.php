@@ -382,7 +382,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($afterCategoryId) {
             $select = $adapter->select()->from($table, 'position')->where('category_id = :category_id');
             $position = $adapter->fetchOne($select, ['category_id' => $afterCategoryId]);
-            $position += 1;
+            $position++;
         } else {
             $position = 1;
         }

@@ -97,6 +97,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
             $post = $this->initPost();
             $post->setData($data);
             if (($_FILES['image']['name'] == '')) {
+                $image = '';
             } else {
                 $image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
                 $post->setImage('mageplaza/blog/post/image' . $image);
