@@ -17,44 +17,43 @@ namespace Mageplaza\Blog\Model\Post\Source;
 
 class MetaRobots implements \Magento\Framework\Option\ArrayInterface
 {
-	const INDEXFOLLOW = 1;
-	const NOINDEXNOFOLLOW = 2;
-	const NOINDEXFOLLOW = 3;
-	const INDEXNOFOLLOW = 4;
+    const INDEXFOLLOW = 1;
+    const NOINDEXNOFOLLOW = 2;
+    const NOINDEXFOLLOW = 3;
+    const INDEXNOFOLLOW = 4;
 
 
-	/**
-	 * to option array
-	 *
-	 * @return array
-	 */
-	public function toOptionArray()
-	{
-		$options = [
-			[
-				'value' => self::INDEXFOLLOW,
-				'label' => __('INDEX,FOLLOW')
-			],
-			[
-				'value' => self::NOINDEXNOFOLLOW,
-				'label' => __('NOINDEX,NOFOLLOW')
-			],
-			[
-				'value' => self::NOINDEXFOLLOW,
-				'label' => __('NOINDEX,FOLLOW')
-			],
-			[
-				'value' => self::INDEXNOFOLLOW,
-				'label' => __('INDEX,NOFOLLOW')
-			],
-		];
+    /**
+     * to option array
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        $options = [
+            [
+                'value' => self::INDEXFOLLOW,
+                'label' => __('INDEX,FOLLOW')
+            ],
+            [
+                'value' => self::NOINDEXNOFOLLOW,
+                'label' => __('NOINDEX,NOFOLLOW')
+            ],
+            [
+                'value' => self::NOINDEXFOLLOW,
+                'label' => __('NOINDEX,FOLLOW')
+            ],
+            [
+                'value' => self::INDEXNOFOLLOW,
+                'label' => __('INDEX,NOFOLLOW')
+            ],
+        ];
 
-		return $options;
+        return $options;
+    }
 
-	}
-
-	public function getOptionArray()
-	{
-		return array(self::INDEXFOLLOW => 'INDEX,FOLLOW', self::NOINDEXNOFOLLOW => 'NOINDEX,NOFOLLOW', self::NOINDEXFOLLOW => 'NOINDEX,FOLLOW', self::INDEXNOFOLLOW => 'INDEX,NOFOLLOW');
-	}
+    public function getOptionArray()
+    {
+        return [self::INDEXFOLLOW => 'INDEX,FOLLOW', self::NOINDEXNOFOLLOW => 'NOINDEX,NOFOLLOW', self::NOINDEXFOLLOW => 'NOINDEX,FOLLOW', self::INDEXNOFOLLOW => 'INDEX,NOFOLLOW'];
+    }
 }

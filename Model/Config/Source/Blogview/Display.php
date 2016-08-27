@@ -12,27 +12,27 @@ namespace Mageplaza\Blog\Model\Config\Source\Blogview;
 
 class Display implements \Magento\Framework\Option\ArrayInterface
 {
-	/**
-	 * Options getter
-	 *
-	 * @return array
-	 */
+    /**
+     * Options getter
+     *
+     * @return array
+     */
 
-	const LIST_VIEW = 1;
-	const GRID = 2;
+    const LIST_VIEW = 1;
+    const GRID = 2;
 
-	public function toOptionArray()
-	{
-		return [ ['value' => self::LIST_VIEW, 'label' => __('List View')], ['value' => self::GRID, 'label' => __('Grid View')]];
-	}
+    public function toOptionArray()
+    {
+        return [ ['value' => self::LIST_VIEW, 'label' => __('List View')], ['value' => self::GRID, 'label' => __('Grid View')]];
+    }
 
-	/**
-	 * Get options in "key-value" format
-	 *
-	 * @return array
-	 */
-	public function toArray()
-	{
-		return [self::LIST_VIEW => __('List View'), self::GRID => __('Grid View')];
-	}
+    /**
+     * Get options in "key-value" format
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [self::LIST_VIEW => __('List View'), self::GRID => __('Grid View')];
+    }
 }

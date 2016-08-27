@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- * 
+ *
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- * 
+ *
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -23,21 +23,21 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * JSON encoder
-     * 
+     *
      * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $jsonEncoder;
 
     /**
      * Category collection factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
     protected $categoryCollectionFactory;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      * @param \Magento\Backend\Block\Template\Context $context
@@ -52,8 +52,8 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->jsonEncoder               = $jsonEncoder;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         parent::__construct($context, $registry, $formFactory, $data);
@@ -124,7 +124,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
     protected function getParentCategoryOptions()
     {
         $items = $this->categoryCollectionFactory->create()
-            ->addOrder('Category_id','ASC')
+            ->addOrder('Category_id', 'ASC')
             ->setPageSize(3)->load()->getItems();
 
         $result = [];
@@ -175,4 +175,5 @@ require(["jquery","mage/mage"],function($) {  // waiting for dependencies at fir
 });
 </script>
 HTML;
-    }}
+    }
+}

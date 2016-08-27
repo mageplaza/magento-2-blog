@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- * 
+ *
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- * 
+ *
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -217,12 +217,12 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 [],
                 'Tag Updated At'
             )->addColumn(
-                    'url_key',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    255,
-                    [],
-                    'Tag URL Key'
-                )
+                'url_key',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                255,
+                [],
+                'Tag URL Key'
+            )
             ->setComment('Tag Table');
             $installer->getConnection()->createTable($table);
 

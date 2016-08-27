@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- * 
+ *
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- * 
+ *
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -22,14 +22,14 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
 {
     /**
      * Post image model
-     * 
+     *
      * @var \Mageplaza\Blog\Model\Post\Image
      */
     protected $imageModel;
 
     /**
      * constructor
-     * 
+     *
      * @param \Mageplaza\Blog\Model\Post\Image $imageModel
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
@@ -44,8 +44,8 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\UrlInterface $urlBuilder,
         array $data
-    )
-    {
+    ) {
+    
         $this->imageModel = $imageModel;
         parent::__construct($factoryElement, $factoryCollection, $escaper, $urlBuilder, $data);
     }

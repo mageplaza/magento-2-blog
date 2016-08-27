@@ -1,12 +1,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- * 
+ *
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- * 
+ *
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -52,15 +52,20 @@ define([
             var newCategoryForm = $('#new_category_form');
             newCategoryForm.mage('validation', {
                 errorPlacement: function (error, element) {
-                    error.insertAfter(element.is('#new_category_parent') ?
+                    error.insertAfter(
+                        element.is('#new_category_parent') ?
                         $('#new_category_parent-suggest').closest('.mage-suggest') :
-                        element);
+                        element
+                    );
                 }
             }).on('highlight.validate', function (e) {
                 var options = $(this).validation('option');
                 if ($(e.target).is('#new_category_parent')) {
-                    options.highlight($('#new_category_parent-suggest').get(0),
-                        options.errorClass, options.validClass || '');
+                    options.highlight(
+                        $('#new_category_parent-suggest').get(0),
+                        options.errorClass,
+                        options.validClass || ''
+                    );
                 }
             });
             this.element.modal({
@@ -80,8 +85,11 @@ define([
                     var validationOptions = newCategoryForm.validation('option');
 
                     $('#new_category_name, #new_category_parent-suggest').val('');
-                    validationOptions.unhighlight($('#new_category_parent-suggest').get(0),
-                        validationOptions.errorClass, validationOptions.validClass || '');
+                    validationOptions.unhighlight(
+                        $('#new_category_parent-suggest').get(0),
+                        validationOptions.errorClass,
+                        validationOptions.validClass || ''
+                    );
                     newCategoryForm.validation('clearError');
                     $('#category_ids-suggest').focus();
                 },
@@ -137,3 +145,4 @@ define([
 
     return $.mage.newCategoryDialog;
 });
+

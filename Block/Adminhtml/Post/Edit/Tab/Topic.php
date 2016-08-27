@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- * 
+ *
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- * 
+ *
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -19,28 +19,28 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Mage
 {
     /**
      * Topic collection factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory
      */
     protected $topicCollectionFactory;
 
     /**
      * Registry
-     * 
+     *
      * @var \Magento\Framework\Registry
      */
     protected $coreRegistry;
 
     /**
      * Topic factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\TopicFactory
      */
     protected $topicFactory;
 
     /**
      * constructor
-     * 
+     *
      * @param \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory $topicCollectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
@@ -55,8 +55,8 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Mage
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->topicCollectionFactory = $topicCollectionFactory;
         $this->coreRegistry           = $coreRegistry;
         $this->topicFactory           = $topicFactory;
@@ -94,9 +94,9 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Mage
             $constraint = 'related.post_id=0';
         }
         $collection->getSelect()->joinLeft(
-            array('related' => $collection->getTable('mageplaza_blog_post_topic')),
+            ['related' => $collection->getTable('mageplaza_blog_post_topic')],
             'related.topic_id=main_table.topic_id AND '.$constraint,
-            array('position')
+            ['position']
         );
         $this->setCollection($collection);
         parent::_prepareCollection();

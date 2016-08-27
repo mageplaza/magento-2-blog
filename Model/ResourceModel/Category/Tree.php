@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- * 
+ *
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- * 
+ *
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -19,91 +19,91 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
 {
     /**
      * ID field
-     * 
+     *
      * @var string
      */
     const ID_FIELD = 'id';
 
     /**
      * Path field
-     * 
+     *
      * @var string
      */
     const PATH_FIELD = 'path';
 
     /**
      * Order field
-     * 
+     *
      * @var string
      */
     const ORDER_FIELD = 'order';
 
     /**
      * Level field
-     * 
+     *
      * @var string
      */
     const LEVEL_FIELD = 'level';
 
     /**
      * Event manager
-     * 
+     *
      * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $eventManager;
 
     /**
      * Collection factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
     protected $collectionFactory;
 
     /**
      * Category Resource instance
-     * 
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category
      */
     protected $categoryResource;
 
     /**
      * Cache instance
-     * 
+     *
      * @var \Magento\Framework\App\CacheInterface
      */
     protected $cache;
 
     /**
      * Store Manager instance
-     * 
+     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
      * App resource
-     * 
+     *
      * @var \Magento\Framework\App\ResourceConnection
      */
     protected $coreResource;
 
     /**
      * Category Collection
-     * 
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\Collection
      */
     protected $collection;
 
     /**
      * Inactive Category Ids
-     * 
+     *
      * @var array
      */
     protected $inactiveCategoryIds;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $collectionFactory
      * @param \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource
@@ -118,8 +118,8 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\ResourceConnection $coreResource
-    )
-    {
+    ) {
+    
         $this->eventManager      = $eventManager;
         $this->collectionFactory = $collectionFactory;
         $this->categoryResource  = $categoryResource;

@@ -15,19 +15,18 @@
  */
 namespace Mageplaza\Blog\Block\Post;
 
-
 use Mageplaza\Blog\Block\Frontend;
 
 class Listpost extends Frontend
 {
 
-	public function getPostList()
-	{
-		return $this->helperData->getPostList();
-	}
+    public function getPostList()
+    {
+        return $this->helperData->getPostList();
+    }
 
-	public function checkRss()
-	{
-		return $this->helperData->getBlogUrl('post/rss');
-	}
+    public function checkRss()
+    {
+        return $this->helperData->getBlogUrl('post/rss');
+    }
 }

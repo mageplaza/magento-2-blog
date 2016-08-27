@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- * 
+ *
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- * 
+ *
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -19,28 +19,28 @@ class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Date model
-     * 
+     *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $date;
 
     /**
      * Event Manager
-     * 
+     *
      * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $eventManager;
 
     /**
      * Post relation model
-     * 
+     *
      * @var string
      */
     protected $topicPostTable;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -49,8 +49,8 @@ class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\ResourceModel\Db\Context $context
-    )
-    {
+    ) {
+    
         $this->date         = $date;
         $this->eventManager = $eventManager;
         parent::__construct($context);
@@ -173,8 +173,8 @@ class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $insert = array_diff_key($posts, $oldPosts);
         $delete = array_diff_key($oldPosts, $posts);
         $update = array_intersect_key($posts, $oldPosts);
-        $_update = array();
-        foreach ($update as $key=>$settings) {
+        $_update = [];
+        foreach ($update as $key => $settings) {
             if (isset($oldPosts[$key]) && $oldPosts[$key] != $settings['position']) {
                 $_update[$key] = $settings;
             }
@@ -236,8 +236,9 @@ class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         // lowercase
         $text = strtolower($text);
-        if ($count == 0)
+        if ($count == 0) {
             $count = '';
+        }
         if (empty($text)) {
             return 'n-a' . $count;
         }

@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- * 
+ *
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- * 
+ *
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -19,21 +19,21 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Tag
 {
     /**
      * Backend session
-     * 
+     *
      * @var \Magento\Backend\Model\Session
      */
     protected $backendSession;
 
     /**
      * JS helper
-     * 
+     *
      * @var \Magento\Backend\Helper\Js
      */
     protected $jsHelper;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Backend\Model\Session $backendSession
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
@@ -48,8 +48,8 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Tag
         \Magento\Framework\Registry $registry,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
-    )
-    {
+    ) {
+    
         $this->backendSession = $backendSession;
         $this->jsHelper       = $jsHelper;
         parent::__construct($tagFactory, $registry, $resultRedirectFactory, $context);

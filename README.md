@@ -64,11 +64,11 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
 
 ## How to install?
 
-After installing magento 2, run these commands:
+After installing Magento 2, run these commands:
 
 ~~~
 composer config repositories.mageplaza-magento-2-blog-extension git git@github.com:mageplaza/magento-2-blog-extension.git
-sudo composer require mageplaza/magento-2-blog-extension:dev-master
+composer require mageplaza/magento-2-blog-extension:dev-master
 php bin/magento setup:upgrade
 ~~~
 

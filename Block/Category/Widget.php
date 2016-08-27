@@ -15,19 +15,18 @@
  */
 namespace Mageplaza\Blog\Block\Category;
 
-
 use Mageplaza\Blog\Block\Frontend;
 
 class Widget extends Frontend
 {
-	
-	public function getCategoryList()
-	{
-		return $this->helperData->getCategoryList();
-	}
+    
+    public function getCategoryList()
+    {
+        return $this->helperData->getCategoryList();
+    }
 
-	public function getCategoryUrl($category)
-	{
-		return $this->helperData->getCategoryUrl($category);
-	}
+    public function getCategoryUrl($category)
+    {
+        return $this->helperData->getCategoryUrl($category);
+    }
 }
