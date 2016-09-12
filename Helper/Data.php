@@ -2,7 +2,7 @@
 
 namespace Mageplaza\Blog\Helper;
 
-use Magento\Framework\App\Helper\AbstractHelper;
+use Mageplaza\Core\Helper\AbstractData;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\Helper\Context;
@@ -12,7 +12,7 @@ use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\TagFactory;
 use Mageplaza\Blog\Model\TopicFactory;
 
-class Data extends AbstractHelper
+class Data extends AbstractData
 {
     const XML_PATH_BLOG = 'blog/';
     protected $storeManager;
@@ -145,7 +145,7 @@ class Data extends AbstractHelper
     public function checkSuffix($url)
     {
         $url_suffix = $this->getBlogConfig('general/url_suffix');
-        if (strpos($url, $url_suffix)) {
+        if (strpos($url, $url_suffix) !== false) {
             $url = str_replace($url_suffix, '', $url);
         }
 

@@ -86,20 +86,14 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
     public function execute()
     {
         $data = $this->getRequest()->getPost('post');
-        if (isset($_FILES['image']) and ($_FILES['image']['name'] == '')) {
-            if (isset($data['image'])) {
-                unset($data['image']);
-            }
-        }
-
+       
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $post = $this->initPost();
             $post->setData($data);
-            if (($_FILES['image']['name'] == '')) {
-                $image = '';
-            } else {
-                $image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
+            
+            $image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
+            if($image){
                 $post->setImage('mageplaza/blog/post/image' . $image);
             }
             $tags = $this->getRequest()->getPost('tags', -1);
