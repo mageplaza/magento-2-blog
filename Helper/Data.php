@@ -2,7 +2,7 @@
 
 namespace Mageplaza\Blog\Helper;
 
-use Mageplaza\Core\Helper\AbstractData;
+use Mageplaza\Core\Helper\AbstractData as CoreHelper;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\Helper\Context;
@@ -12,7 +12,7 @@ use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\TagFactory;
 use Mageplaza\Blog\Model\TopicFactory;
 
-class Data extends AbstractData
+class Data extends CoreHelper
 {
     const XML_PATH_BLOG = 'blog/';
     protected $storeManager;
