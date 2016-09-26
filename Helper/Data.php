@@ -38,7 +38,7 @@ class Data extends AbstractData
         $this->categoryfactory = $categoryFactory;
         $this->tagfactory      = $tagFactory;
         $this->topicfactory    = $topicFactory;
-        parent::__construct($context);
+        parent::__construct($context, $objectManager, $storeManager);
     }
 
     public function getConfigValue($field, $storeId = null)
