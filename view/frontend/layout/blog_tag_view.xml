@@ -6,17 +6,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-right" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <head>
-        <css src="Mageplaza_Blog::css/index/style.css"/>
-        <css src="Mageplaza_Blog::css/index/owl.carousel.css"/>
-        <css src="Mageplaza_Blog::css/index/owl.theme.css"/>
-        <css src="Mageplaza_Blog::css/index/font-awesome.css"/>
-        <css src="Mageplaza_Blog::css/index/font-awesome.min.css"/>
-        <script src="Mageplaza_Blog::js/jquery-1.12.4.min.js"/>
-        <script src="Mageplaza_Blog::js/owl.carousel.min.js"/>
-        <block class="Mageplaza\Blog\Block\Frontend" name="mp.blog.header" template="Mageplaza_Blog::blog/header.phtml"/>
-
-    </head>
+    <update handle="blog_post_head_handle" />
     <body>
         <referenceContainer name="sidebar.main">
             <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"

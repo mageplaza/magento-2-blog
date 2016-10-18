@@ -109,7 +109,7 @@ class Router implements \Magento\Framework\App\RouterInterface
             }
             $path = trim($request->getPathInfo(), '/');
 
-            if (strpos($path, $url_prefix) === false) {
+            if (strpos($path, $url_prefix) === 0) {
                 $array = explode('/', $path);
 
                 if (count($array) == 1) {

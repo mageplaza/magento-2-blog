@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-right" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mageplaza_Blog::css/index/style.css"/>
+        <css src="Mageplaza_Core::css/owl.carousel.css"/>
+        <css src="Mageplaza_Core::css/owl.theme.css"/>
+        <css src="Mageplaza_Core::css/font-awesome.min.css"/>
+        <block class="Mageplaza\Blog\Block\Frontend" name="mp.blog.header" template="Mageplaza_Blog::blog/header.phtml"/>
+    </head>
+</page>
+

@@ -15,8 +15,6 @@ use Mageplaza\Blog\Model\TopicFactory;
 class Data extends CoreHelper
 {
     const XML_PATH_BLOG = 'blog/';
-    protected $storeManager;
-    protected $objectManager;
     protected $postfactory;
     protected $categoryfactory;
     protected $tagfactory;
@@ -32,22 +30,11 @@ class Data extends CoreHelper
         TopicFactory $topicFactory
     ) {
     
-        $this->objectManager   = $objectManager;
-        $this->storeManager    = $storeManager;
         $this->postfactory     = $postFactory;
         $this->categoryfactory = $categoryFactory;
         $this->tagfactory      = $tagFactory;
         $this->topicfactory    = $topicFactory;
         parent::__construct($context, $objectManager, $storeManager);
-    }
-
-    public function getConfigValue($field, $storeId = null)
-    {
-        return $this->scopeConfig->getValue(
-            $field,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
     }
 
     public function getBlogConfig($code, $storeId = null)
