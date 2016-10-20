@@ -82,6 +82,13 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
 
 
 
+## Contribute to this module
+
+Feel free to **Fork** and contrinute to this module and create a pull request so we will merge your changes to `master` branch.
+
 ## License
 
+Mageplaza License
 https://www.mageplaza.com/LICENSE.txt
+
+Website: https://www.mageplaza.com/
