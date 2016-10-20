@@ -2,6 +2,25 @@ Magento 2 Blog extension is integrated right into the Magento backend so you can
 
 Visit https://www.mageplaza.com/magento-2-blog-extension/ or https://www.mageplaza.com for more information
 
+
+## How to install?
+
+After installing Magento 2, run these commands:
+
+~~~
+composer require mageplaza/core-m2
+composer require mageplaza/magento-2-blog-extension
+php bin/magento setup:upgrade
+php bin/magento setup:static-content:deploy
+~~~
+
+## Documentations
+
+- User guide: https://docs.mageplaza.com/blog-m2/
+- Installation guide: https://docs.mageplaza.com/kb/installation.html
+
+
+
 ##Blog benefits
 
 Magento 2 blog extension can give you a greate opportunity to communicate with your potential and existing customers. Blog posts can help you to create a 2-way communication platform to publish new information such as news, promotions, comming products. Read more benefits of Blog.
@@ -61,17 +80,6 @@ Better blog is integrated with Addthis, that why your customers can share posts 
 ##RSS Optimization
 Full RSS integration into Magento 2. The blog RSS feed appears right next to the standard product and Magento 2 RSS feeds, allowing users that are familiar with your website to easily find all the blog RSS feeds easily and simply.
 
-
-## How to install?
-
-After installing Magento 2, run these commands:
-
-~~~
-composer require mageplaza/core-m2
-composer require mageplaza/magento-2-blog-extension
-php bin/magento setup:upgrade
-php bin/magento setup:static-content:deploy
-~~~
 
 
 ## License
