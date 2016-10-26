@@ -1,6 +1,25 @@
-Magento 2 Blog extension is integrated right into the Magento backend so you can manage your blog and your e-commerce store all in the one place. It is the perfect marketing tool for your bussiness that not only provides update information to your existing customers but also drive more visitors to your online store.
+**Magento 2 Blog extension** is integrated right into the Magento backend so you can manage your blog and your e-commerce store all in the one place. It is the perfect marketing tool for your bussiness that not only provides update information to your existing customers but also drive more visitors to your online store.
 
 Visit https://www.mageplaza.com/magento-2-blog-extension/ or https://www.mageplaza.com for more information
+
+
+## How to install?
+
+After installing Magento 2, run these commands:
+
+~~~
+composer require mageplaza/core-m2
+composer require mageplaza/magento-2-blog-extension
+php bin/magento setup:upgrade
+php bin/magento setup:static-content:deploy
+~~~
+
+## Documentations
+
+- User guide: https://docs.mageplaza.com/blog-m2/
+- Installation guide: https://docs.mageplaza.com/kb/installation.html
+
+
 
 ##Blog benefits
 
@@ -62,17 +81,14 @@ Better blog is integrated with Addthis, that why your customers can share posts 
 Full RSS integration into Magento 2. The blog RSS feed appears right next to the standard product and Magento 2 RSS feeds, allowing users that are familiar with your website to easily find all the blog RSS feeds easily and simply.
 
 
-## How to install?
 
-After installing Magento 2, run these commands:
+## Contribute to this module
 
-~~~
-composer config repositories.mageplaza-magento-2-blog-extension git git@github.com:mageplaza/magento-2-blog-extension.git
-composer require mageplaza/magento-2-blog-extension:dev-master
-php bin/magento setup:upgrade
-~~~
-
+Feel free to **Fork** and contrinute to this module and create a pull request so we will merge your changes to `master` branch.
 
 ## License
 
+Mageplaza License
 https://www.mageplaza.com/LICENSE.txt
+
+Website: https://www.mageplaza.com/
