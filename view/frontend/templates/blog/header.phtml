@@ -1,5 +1,15 @@
 <style type="text/css">
-
+/**/
+.base{
+color: <?php if($block->getBlogConfig('general/font_color')) echo $block->getBlogConfig('general/font_color')?> !important;
+}
+ul.nav-tabs li{
+    /*border-top-color: #eea;*/
+    border-top-color: <?php if($block->getBlogConfig('general/font_color')) echo $block->getBlogConfig('general/font_color')?> !important;
+	border-top-style: solid;
+    
+}
+/**/
 .mp-post-info a.mp-info {
 	color: <?php if($block->getBlogConfig('general/font_color')) echo $block->getBlogConfig('general/font_color')?> !important;
 }

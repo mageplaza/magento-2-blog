@@ -62,11 +62,11 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         \Mageplaza\Blog\Model\Upload $uploadModel,
         \Mageplaza\Blog\Model\Post\Image $imageModel,
         \Mageplaza\Blog\Model\TrafficFactory $trafficFactory,
-        \Magento\Backend\Model\Session $backendSession,
+        \Magento\Backend\Model\Auth\Session $backendSession,
         \Magento\Backend\Helper\Js $jsHelper,
         \Mageplaza\Blog\Model\PostFactory $postFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        //\Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     ) {
     
@@ -75,7 +75,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         $this->trafficFactory = $trafficFactory;
         $this->backendSession = $backendSession;
         $this->jsHelper       = $jsHelper;
-        parent::__construct($postFactory, $registry, $resultRedirectFactory, $context);
+        parent::__construct($postFactory, $registry, $context);
     }
 
     /**

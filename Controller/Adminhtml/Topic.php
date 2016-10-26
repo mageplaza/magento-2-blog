@@ -49,13 +49,13 @@ abstract class Topic extends \Magento\Backend\App\Action
     public function __construct(
         \Mageplaza\Blog\Model\TopicFactory $topicFactory,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        //\Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     ) {
     
         $this->topicFactory          = $topicFactory;
         $this->coreRegistry          = $coreRegistry;
-        $this->resultRedirectFactory = $resultRedirectFactory;
+        //$this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 

@@ -37,12 +37,12 @@ class Tags extends \Mageplaza\Blog\Controller\Adminhtml\Post
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Mageplaza\Blog\Model\PostFactory $tagFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        //\Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     ) {
     
         $this->resultLayoutFactory = $resultLayoutFactory;
-        parent::__construct($tagFactory, $registry, $resultRedirectFactory, $context);
+        parent::__construct($tagFactory, $registry, $context);
     }
 
     /**

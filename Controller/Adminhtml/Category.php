@@ -49,13 +49,13 @@ abstract class Category extends \Magento\Backend\App\Action
     public function __construct(
         \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        //\Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     ) {
     
         $this->categoryFactory       = $categoryFactory;
         $this->coreRegistry          = $coreRegistry;
-        $this->resultRedirectFactory = $resultRedirectFactory;
+       // $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 

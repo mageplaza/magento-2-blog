@@ -37,12 +37,12 @@ class RefreshPath extends \Mageplaza\Blog\Controller\Adminhtml\Category
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        //\Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     ) {
     
         $this->resultJsonFactory = $resultJsonFactory;
-        parent::__construct($categoryFactory, $coreRegistry, $resultRedirectFactory, $context);
+        parent::__construct($categoryFactory, $coreRegistry, $context);
     }
 
 

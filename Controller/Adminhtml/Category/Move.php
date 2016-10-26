@@ -55,14 +55,14 @@ class Move extends \Mageplaza\Blog\Controller\Adminhtml\Category
         \Psr\Log\LoggerInterface $logger,
         \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        //\Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     ) {
     
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory     = $layoutFactory;
         $this->logger            = $logger;
-        parent::__construct($categoryFactory, $coreRegistry, $resultRedirectFactory, $context);
+        parent::__construct($categoryFactory, $coreRegistry, $context);
     }
 
     /**

@@ -42,17 +42,17 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Tag
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Magento\Backend\Model\Session $backendSession,
+        \Magento\Backend\Model\Auth\Session $backendSession,
         \Magento\Backend\Helper\Js $jsHelper,
         \Mageplaza\Blog\Model\TagFactory $tagFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        //\Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     ) {
     
         $this->backendSession = $backendSession;
         $this->jsHelper       = $jsHelper;
-        parent::__construct($tagFactory, $registry, $resultRedirectFactory, $context);
+        parent::__construct($tagFactory, $registry, $context);
     }
 
     /**

@@ -46,13 +46,13 @@ class SuggestCategories extends \Mageplaza\Blog\Controller\Adminhtml\Category
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        //\Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     ) {
     
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory     = $layoutFactory;
-        parent::__construct($categoryFactory, $coreRegistry, $resultRedirectFactory, $context);
+        parent::__construct($categoryFactory, $coreRegistry, $context);
     }
 
     /**

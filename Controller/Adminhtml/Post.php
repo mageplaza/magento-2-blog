@@ -49,13 +49,13 @@ abstract class Post extends \Magento\Backend\App\Action
     public function __construct(
         \Mageplaza\Blog\Model\PostFactory $postFactory,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        //\Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     ) {
     
         $this->postFactory           = $postFactory;
         $this->coreRegistry          = $coreRegistry;
-        $this->resultRedirectFactory = $resultRedirectFactory;
+        //$this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
