@@ -10,7 +10,7 @@
     <body>
         <referenceContainer name="content">
             <block class="Mageplaza\Blog\Block\Frontend" name="mp.blog.header" template="Mageplaza_Blog::blog/header.phtml"/>
-            <block class="Mageplaza\Blog\Block\Category\Listpost" template="Mageplaza_Blog::category/post/list.phtml"/>
+            <block class="Mageplaza\Blog\Block\Category\Listpost" name="mp.blog.category.listpost" template="Mageplaza_Blog::category/post/list.phtml"/>
         </referenceContainer>
         <referenceContainer name="catalog-sidebar-right-top">
             <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview" ifconfig="blog/general/sidebar_right" template="Mageplaza_Blog::sidebar/mostview.phtml"/>

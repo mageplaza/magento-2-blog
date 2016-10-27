@@ -4,7 +4,7 @@
     <body>
         <referenceContainer name="content">
             <block class="Mageplaza\Blog\Block\Frontend" name="mp.blog.header" template="Mageplaza_Blog::blog/header.phtml"/>
-            <block class="Mageplaza\Blog\Block\Post\Listpost" template="Mageplaza_Blog::post/index.phtml"/>
+            <block class="Mageplaza\Blog\Block\Post\Listpost" name="mp.blog.post.listpost" template="Mageplaza_Blog::post/index.phtml"/>
         </referenceContainer>
         <referenceContainer name="sidebar.additional">
             <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview" before="catalog.compare.sidebar" ifconfig="blog/general/sidebar_right"

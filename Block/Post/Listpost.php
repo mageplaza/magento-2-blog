@@ -22,7 +22,17 @@ class Listpost extends Frontend
 
     public function getPostList()
     {
-        return $this->helperData->getPostList();
+        $collection = $this->helperData->getPostList();
+
+        if ($collection->getSize()) {
+            // create pager block for collection
+            $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'mp.blog.post.pager');
+            // assign collection to pager
+            $pager->setLimit(10)->setCollection($collection);
+            $this->setChild('pager', $pager);// set pager block in layout
+        }
+
+        return $collection;
     }
 
     public function checkRss()
