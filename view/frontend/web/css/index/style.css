@@ -32,17 +32,17 @@ h2.mp-post-title a:hover:focus {
 .post-image img.img-responsive {
     max-height: 400px;
 }
-.post-item-wraper {
+.post-item-wrapper {
     border: 1px solid #eee;
 }
-.post-item-wraper:hover {
+.post-item-wrapper:hover {
     border: 1px solid #eee;
     box-shadow: 3px 3px 4px 0 rgba(0,0,0,0.3);
 }
-.post-info-wraper {
+.post-info-wrapper {
     padding: 20px 15px 10px 15px;
 }
-.post-info-wraper h2.mp-post-title{
+.post-info-wrapper h2.mp-post-title{
     margin-top: 0px;
     overflow: hidden;
     text-overflow: ellipsis;

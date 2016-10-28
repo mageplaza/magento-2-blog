@@ -62,7 +62,7 @@ class Data extends CoreHelper
             $list  = $topic->getSelectedPostsCollection();
         }
 
-        if (count($list)) {
+        if ($list->getSize()) {
             return $list->addFieldToFilter('enabled', 1);
         }
 

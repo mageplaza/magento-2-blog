@@ -205,7 +205,7 @@ class Frontend extends Template
 
 	public function getPagerHtml()
 	{
-		return $this->getChildHtml('paper');
+		return $this->getChildHtml('pager');
 	}
 
 	public function applySeoCode($post = null)

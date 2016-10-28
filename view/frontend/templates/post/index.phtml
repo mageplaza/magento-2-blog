@@ -15,7 +15,7 @@ if ($checkRss):
 		<div class="row">
 			<?php foreach ($posts as $post) : ?>
 				<div class="post-list-item <?php if($block->getBlogConfig('general/display_style') == 2){echo ' col-sm-6';}else echo ' col-sm-12';?>">
-					<div class="post-item-wraper">
+					<div class="post-item-wrapper">
 						<div class="post-image">
 							<?php if ($post->getImage()) : ?>
 								<a href="<?php echo $block->getUrlByPost($post) ?>">
@@ -25,7 +25,7 @@ if ($checkRss):
 								</a>
 							<?php endif; ?>
 						</div>
-						<div class="post-info-wraper">
+						<div class="post-info-wrapper">
 							<h2 class="mp-post-title">
 								<a class="post-link-title" title="<?php echo $post->getName(); ?>" href="<?php echo $block->getUrlByPost($post) ?>">
 									<?php echo $post->getName();?>
@@ -38,8 +38,11 @@ if ($checkRss):
 																$object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
 																$dateFormat = date('Y-m-d',$object->timestamp($post->getCreatedAt()));
 																echo $dateFormat;
-																?> |
-								<?php echo __('Posted in'); ?> <?php echo $block->getPostCategoryHtml($post); ?>
+																?>
+								<?php
+									$categoryHtml = $block->getPostCategoryHtml($post);
+									echo $categoryHtml ?  __(' | Posted in %1', $categoryHtml) : '';
+								?>
 							</div>
 
 
