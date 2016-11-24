@@ -93,7 +93,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
             $post->setData($data);
             
             $image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
-            if($image){
+            if ($image) {
                 $post->setImage('mageplaza/blog/post/image' . $image);
             }
             $tags = $this->getRequest()->getPost('tags', -1);

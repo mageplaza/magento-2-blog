@@ -27,11 +27,12 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(
-        \Magento\Framework\Setup\SchemaSetupInterface $setup, \Magento\Framework\Setup\ModuleContextInterface $context
+        \Magento\Framework\Setup\SchemaSetupInterface $setup,
+        \Magento\Framework\Setup\ModuleContextInterface $context
     ) {
         $installer = $setup;
         $installer->startSetup();
-        if ( ! $installer->tableExists('mageplaza_blog_post')) {
+        if (! $installer->tableExists('mageplaza_blog_post')) {
             $table = $installer->getConnection()->newTable(
                 $installer->getTable('mageplaza_blog_post')
             )
@@ -168,7 +169,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
             );
         }
-        if ( ! $installer->tableExists('mageplaza_blog_tag')) {
+        if (! $installer->tableExists('mageplaza_blog_tag')) {
             $table = $installer->getConnection()->newTable(
                 $installer->getTable('mageplaza_blog_tag')
             )
@@ -239,7 +240,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
             );
         }
-        if ( ! $installer->tableExists('mageplaza_blog_topic')) {
+        if (! $installer->tableExists('mageplaza_blog_topic')) {
             $table = $installer->getConnection()->newTable(
                 $installer->getTable('mageplaza_blog_topic')
             )
@@ -339,7 +340,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
             );
         }
-        if ( ! $installer->tableExists('mageplaza_blog_category')) {
+        if (! $installer->tableExists('mageplaza_blog_category')) {
             $table = $installer->getConnection()->newTable(
                 $installer->getTable('mageplaza_blog_category')
             )
@@ -474,7 +475,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
             );
         }
-        if ( ! $installer->tableExists('mageplaza_blog_post_tag')) {
+        if (! $installer->tableExists('mageplaza_blog_post_tag')) {
             $table = $installer->getConnection()
                 ->newTable($installer->getTable('mageplaza_blog_post_tag'));
             $table->addColumn(
@@ -563,7 +564,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ->setComment('Post To Tag Link Table');
             $installer->getConnection()->createTable($table);
         }
-        if ( ! $installer->tableExists('mageplaza_blog_post_topic')) {
+        if (! $installer->tableExists('mageplaza_blog_post_topic')) {
             $table = $installer->getConnection()
                 ->newTable($installer->getTable('mageplaza_blog_post_topic'));
             $table->addColumn(
@@ -652,7 +653,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ->setComment('Post To Topic Link Table');
             $installer->getConnection()->createTable($table);
         }
-        if ( ! $installer->tableExists('mageplaza_blog_post_category')) {
+        if (! $installer->tableExists('mageplaza_blog_post_category')) {
             $table = $installer->getConnection()
                 ->newTable($installer->getTable('mageplaza_blog_post_category'));
             $table->addColumn(

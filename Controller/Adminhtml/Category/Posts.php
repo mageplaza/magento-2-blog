@@ -42,7 +42,7 @@ class Posts extends \Mageplaza\Blog\Controller\Adminhtml\Category
     ) {
     
         $this->resultLayoutFactory = $resultLayoutFactory;
-        parent::__construct($postFactory, $registry,$context);
+        parent::__construct($postFactory, $registry, $context);
     }
 
     /**
