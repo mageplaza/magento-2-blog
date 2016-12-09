@@ -1,27 +1,35 @@
 **Magento 2 Blog extension** is integrated right into the Magento backend so you can manage your blog and your e-commerce store all in the one place. It is the perfect marketing tool for your bussiness that not only provides update information to your existing customers but also drive more visitors to your online store.
 
-Visit https://www.mageplaza.com/magento-2-blog-extension/ or https://www.mageplaza.com for more information
-
-
-## How to install?
-
-After installing Magento 2, run these commands:
-
-~~~
-composer require mageplaza/core-m2
-composer require mageplaza/magento-2-blog-extension
-php bin/magento setup:upgrade
-php bin/magento setup:static-content:deploy
-~~~
 
 ## Documentations
 
 - User guide: https://docs.mageplaza.com/blog-m2/
-- Installation guide: https://docs.mageplaza.com/kb/installation.html
+
+## How to install?
+
+### Install Package from Mageplaza
+
+Download the latest version at https://www.mageplaza.com/magento-2-blog-extension/
+then follow [installation guide](https://docs.mageplaza.com/kb/installation.html)
+
+### Install via composer
+
+Run the following command in Magento 2 root folder
 
 
+```
+composer require mageplaza/magento-2-blog-extension
+php bin/magento setup:upgrade
+php bin/magento setup:static-content:deploy
+```
 
-##Blog benefits
+
+## Contribute to this module
+
+Feel free to **Fork** and contrinute to this module and create a pull request so we will merge your changes to `master` branch.
+
+
+## Blog benefits
 
 Magento 2 blog extension can give you a greate opportunity to communicate with your potential and existing customers. Blog posts can help you to create a 2-way communication platform to publish new information such as news, promotions, comming products. Read more benefits of Blog.
 
@@ -47,7 +55,6 @@ Writing a blog enables you to interact with your website visitors. You can accom
 - Responsive design
 - SEO friendly
 - Post attributes
-- Multiselect categories
 - Multiselect tags
 - Numerous Comment engine: Magento Built-in comments, Facebook Comment, Disqus Comment.
 - RSS Optimization
@@ -81,10 +88,6 @@ Better blog is integrated with Addthis, that why your customers can share posts 
 Full RSS integration into Magento 2. The blog RSS feed appears right next to the standard product and Magento 2 RSS feeds, allowing users that are familiar with your website to easily find all the blog RSS feeds easily and simply.
 
 
-
-## Contribute to this module
-
-Feel free to **Fork** and contrinute to this module and create a pull request so we will merge your changes to `master` branch.
 
 ## License
 
