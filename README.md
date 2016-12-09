@@ -3,19 +3,18 @@
 
 ## Documentations
 
-- User guide: https://docs.mageplaza.com/blog-m2/
+- [User guide](https://docs.mageplaza.com/blog-m2/)
 
 ## How to install?
 
 ### Install Package from Mageplaza
 
-Download the latest version at https://www.mageplaza.com/magento-2-blog-extension/
-then follow [installation guide](https://docs.mageplaza.com/kb/installation.html)
+- Download the latest version at [Mageplaza Blog for Magento 2](https://www.mageplaza.com/magento-2-blog-extension/)
+-  [Installation guide](https://docs.mageplaza.com/kb/installation.html)
 
 ### Install via composer
 
 Run the following command in Magento 2 root folder
-
 
 ```
 composer require mageplaza/magento-2-blog-extension
