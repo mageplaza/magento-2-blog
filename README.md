@@ -3,7 +3,8 @@
 
 ## Documentations
 
-- [User guide](https://docs.mageplaza.com/blog-m2/)
+- User guide: https://docs.mageplaza.com/blog-m2/
+- Contribute on Github: https://github.com/mageplaza/magento-2-blog-extension/
 
 ## How to install?
 
