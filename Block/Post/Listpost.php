@@ -20,24 +20,28 @@ use Mageplaza\Blog\Block\Frontend;
 class Listpost extends Frontend
 {
 
-    public function getPostList()
-    {
-        $collection = $this->helperData->getPostList()
-        ->setOrder('created_at', 'desc');
+	public function getPostList()
+	{
+		$limit = $this->getData('limit') ? $this->getData('limit') : 10;
 
-        if ($collection->getSize()) {
-            // create pager block for collection
-            $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'mp.blog.post.pager');
-            // assign collection to pager
-            $pager->setLimit(10)->setCollection($collection);
-            $this->setChild('pager', $pager);// set pager block in layout
-        }
+		$collection = $this->helperData->getPostList()
+			->setPageSize($limit)
+			->setCurPage(1)
+			->setOrder('created_at', 'desc');
 
-        return $collection;
-    }
+		if ($collection->getSize()) {
+			// create pager block for collection
+			$pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'mp.blog.post.pager');
+			// assign collection to pager
+			$pager->setLimit(10)->setCollection($collection);
+			$this->setChild('pager', $pager);// set pager block in layout
+		}
 
-    public function checkRss()
-    {
-        return $this->helperData->getBlogUrl('post/rss');
-    }
+		return $collection;
+	}
+
+	public function checkRss()
+	{
+		return $this->helperData->getBlogUrl('post/rss');
+	}
 }
