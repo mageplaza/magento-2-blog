@@ -1,12 +1,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -36,7 +36,7 @@ define([
             var widget = this;
             $('#new_category_parent').before($('<input>', {
                 id: 'new_category_parent-suggest',
-                placeholder: $.mage.__('start typing to search Category')
+                placeholder: $.mage.__('start typing to search Faqcat')
             }));
 
             $('#new_category_parent-suggest').treeSuggest(this.options.suggestOptions)
@@ -48,30 +48,25 @@ define([
 
             $.validator.addMethod('validate-parent-category', function () {
                 return $('#new_category_parent').val() || $('#new_category_parent-suggest').val() === '';
-            }, $.mage.__('Choose existing Category.'));
+            }, $.mage.__('Choose existing Faqcat.'));
             var newCategoryForm = $('#new_category_form');
             newCategoryForm.mage('validation', {
                 errorPlacement: function (error, element) {
-                    error.insertAfter(
-                        element.is('#new_category_parent') ?
+                    error.insertAfter(element.is('#new_category_parent') ?
                         $('#new_category_parent-suggest').closest('.mage-suggest') :
-                        element
-                    );
+                        element);
                 }
             }).on('highlight.validate', function (e) {
                 var options = $(this).validation('option');
                 if ($(e.target).is('#new_category_parent')) {
-                    options.highlight(
-                        $('#new_category_parent-suggest').get(0),
-                        options.errorClass,
-                        options.validClass || ''
-                    );
+                    options.highlight($('#new_category_parent-suggest').get(0),
+                        options.errorClass, options.validClass || '');
                 }
             });
             this.element.modal({
                 type: 'slide',
                 modalClass: 'mage-new-category-dialog form-inline',
-                title: $.mage.__('Create Category'),
+                title: $.mage.__('Create Faqcat'),
                 opened: function () {
                     var enteredName = $('#category_ids-suggest').val();
 
@@ -85,16 +80,13 @@ define([
                     var validationOptions = newCategoryForm.validation('option');
 
                     $('#new_category_name, #new_category_parent-suggest').val('');
-                    validationOptions.unhighlight(
-                        $('#new_category_parent-suggest').get(0),
-                        validationOptions.errorClass,
-                        validationOptions.validClass || ''
-                    );
+                    validationOptions.unhighlight($('#new_category_parent-suggest').get(0),
+                        validationOptions.errorClass, validationOptions.validClass || '');
                     newCategoryForm.validation('clearError');
                     $('#category_ids-suggest').focus();
                 },
                 buttons: [{
-                    text: $.mage.__('Create Category'),
+                    text: $.mage.__('Create Faqcat'),
                     class: 'action-primary',
                     click: function (e) {
                         if (!newCategoryForm.valid()) {
@@ -145,4 +137,3 @@ define([
 
     return $.mage.newCategoryDialog;
 });
-

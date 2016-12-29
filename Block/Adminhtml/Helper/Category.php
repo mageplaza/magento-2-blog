@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -19,42 +19,42 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
 {
     /**
      * Collection factory
-     *
+     * 
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
     protected $collectionFactory;
 
     /**
      * Backend helper
-     *
+     * 
      * @var \Magento\Backend\Helper\Data
      */
     protected $backendData;
 
     /**
      * Layout instance
-     *
+     * 
      * @var \Magento\Framework\View\LayoutInterface
      */
     protected $layout;
 
     /**
      * Json encoder instance
-     *
+     * 
      * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $jsonEncoder;
 
     /**
      * Authorization
-     *
+     * 
      * @var \Magento\Framework\AuthorizationInterface
      */
     protected $authorization;
 
     /**
      * constructor
-     *
+     * 
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Framework\View\LayoutInterface $layout
@@ -75,8 +75,8 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
         \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Framework\Escaper $escaper,
         array $data = []
-    ) {
-    
+    )
+    {
         $this->collectionFactory = $collectionFactory;
         $this->backendData       = $backendData;
         $this->layout            = $layout;
@@ -118,7 +118,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
     }
 
     /**
-     * Get Category collection
+     * Get Faqcat collection
      *
      * @return \Mageplaza\Blog\Model\ResourceModel\Category\Collection
      */
@@ -128,16 +128,16 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
     }
 
     /**
-     * Attach Category suggest widget initialization
+     * Attach Faqcat suggest widget initialization
      *
      * @return string
      */
     public function getAfterElementHtml()
     {
         $htmlId = $this->getHtmlId();
-        $suggestPlaceholder = __('start typing to search Category');
+        $suggestPlaceholder = __('start typing to search Faqcat');
         $selectorOptions = $this->jsonEncoder->encode($this->getSelectorOptions());
-        $newCategoryCaption = __('New Category');
+        $newCategoryCaption = __('New Faqcat');
         /** @var \Magento\Backend\Block\Widget\Button $button */
         $button = $this->layout->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData([
@@ -168,12 +168,12 @@ HTML;
      */
     protected function getSelectorOptions()
     {
-        return [
+        return array(
             'source' => $this->backendData->getUrl('mageplaza_blog/category/suggestCategories'),
             'valueField' => '#' . $this->getHtmlId(),
             'className' => 'category-select',
             'multiselect' => true,
             'showAll' => true
-        ];
+        );
     }
 }

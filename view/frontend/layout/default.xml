@@ -11,7 +11,7 @@
     </head>
     <body>
         <referenceContainer name='root'>
-            <block class='Mageplaza\Blog\Block\Html\Init' name='Mageplaza_Blog_Block_Html_Init' template="init.phtml" />
+            <block class='Mageplaza\Blog\Block\Html\Init' name='Mageplaza_Blog_Block_Html_Init' ifconfig='blog/general/enable_mpbootstrap' />
         </referenceContainer>
         <referenceBlock name="footer_links">
             <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_footer_link">

@@ -213,7 +213,7 @@ function reRenderTree(switcherParams) {
         }
 
         if (tree.useAjax) {
-            // retain current selected Category id
+            // retain current selected Faqcat id
             url = tree.switchTreeUrl + switcherParams.scopeParams + 'category_id/' + tree.currentNodeId + '/';
             // load from cache
             // load from ajax
@@ -258,7 +258,7 @@ function _renderNewTree(config, scopeParams) {
 
     tree.loadTree(config, true);
 
-    // try to select current Category
+    // try to select current Faqcat
     var selectedNode = tree.getNodeById(config.parameters.category_id);
     if (selectedNode) {
         tree.currentNodeId = config.parameters.category_id;
@@ -275,7 +275,7 @@ function _renderNewTree(config, scopeParams) {
             url = url + 'category_id/' + config.parameters.category_id;
         }
         <?php endif;?>
-    //updateContent(url); //commented since ajax requests replaced with http ones to load a Category
+    //updateContent(url); //commented since ajax requests replaced with http ones to load a Faqcat
 }
 
 jQuery(function () {

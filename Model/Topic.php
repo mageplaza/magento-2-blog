@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -47,42 +47,42 @@ class Topic extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Cache tag
-     *
+     * 
      * @var string
      */
     const CACHE_TAG = 'mageplaza_blog_topic';
 
     /**
      * Cache tag
-     *
+     * 
      * @var string
      */
     protected $_cacheTag = 'mageplaza_blog_topic';
 
     /**
      * Event prefix
-     *
+     * 
      * @var string
      */
     protected $_eventPrefix = 'mageplaza_blog_topic';
 
     /**
      * Post Collection
-     *
+     * 
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
     protected $postCollection;
 
     /**
      * Post Collection Factory
-     *
+     * 
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
     protected $postCollectionFactory;
 
     /**
      * constructor
-     *
+     * 
      * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -97,8 +97,8 @@ class Topic extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
-    ) {
-    
+    )
+    {
         $this->postCollectionFactory = $postCollectionFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -141,7 +141,7 @@ class Topic extends \Magento\Framework\Model\AbstractModel
     public function getPostsPosition()
     {
         if (!$this->getId()) {
-            return [];
+            return array();
         }
         $array = $this->getData('posts_position');
         if (is_null($array)) {

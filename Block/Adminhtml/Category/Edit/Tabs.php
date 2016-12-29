@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -22,21 +22,21 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
      * Tabs template
-     *
+     * 
      * @var string
      */
     protected $_template = 'Magento_Backend::widget/tabshoriz.phtml';
 
     /**
      * Registry
-     *
+     * 
      * @var \Magento\Framework\Registry
      */
     protected $coreRegistry;
 
     /**
      * constructor
-     *
+     * 
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -49,8 +49,8 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Backend\Model\Auth\Session $authSession,
         array $data = []
-    ) {
-    
+    )
+    {
         $this->coreRegistry = $coreRegistry;
         parent::__construct($context, $jsonEncoder, $authSession, $data);
     }
@@ -70,7 +70,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     }
 
     /**
-     * Retrieve Category object
+     * Retrieve Faqcat object
      *
      * @return \Mageplaza\Blog\Model\Category
      */

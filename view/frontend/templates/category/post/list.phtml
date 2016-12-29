@@ -16,7 +16,7 @@ if ($checkRss):
 		<div class="row">
 			<?php foreach ($posts as $post) : ?>
 				<div class="post-list-item <?php if($block->getBlogConfig('general/display_style') == 2){echo ' col-sm-6';}else echo ' col-sm-12';?>">
-					<div class="post-item-wrapper">
+					<div class="post-item-wraper">
 						<div class="post-image">
 							<?php if ($post->getImage()) : ?>
 								<a href="<?php echo $block->getUrlByPost($post) ?>">
@@ -26,7 +26,7 @@ if ($checkRss):
 								</a>
 							<?php endif; ?>
 						</div>
-						<div class="post-info-wrapper">
+						<div class="post-info-wraper">
 							<h2 class="mp-post-title">
 								<a class="post-link-title" title="<?php echo $post->getName(); ?>" href="<?php echo $block->getUrlByPost($post) ?>">
 									<?php echo $post->getName();?>
@@ -69,3 +69,27 @@ if ($checkRss):
         <?php echo __('There are no posts at this moment'); ?>
     </div>
 <?php endif; ?>
+<script>
+							less = {
+								env: "production",
+								logLevel: 2,
+								async: false,
+								fileAsync: false,
+								poll: 1000,
+								functions: {},
+								dumpLineNumbers: "comments",
+								relativeUrls: false,
+								useFileCache: true,
+								modifyVars: {
+									'@color': '<?php echo $block->getBlogConfig('general/font_color')?>'
+								}
+
+							};
+</script>
+<script>
+	jQuery.noConflict();
+	require([
+		'jquery',
+		'Mageplaza_Blog/js/less.min'
+	]);
+</script>

@@ -1,28 +1,4 @@
-ul.nav-tabs li.active{
-    border-top-color: #1abc9c;
-    border-top-style: solid;
-}
-a.label.label-default.tags-list:hover {
-    background: #1abc9c;
-    border: 1px solid;
-}
-a.label.label-default.tags-list:focus{
-    background: #1abc9c;
-}
-ul.menu-categories a.list-categories:hover {
-    text-decoration: none;
-    color: #1abc9c;
-}
-#mostview a.list-post-tabs:hover {
-    text-decoration: none;
-    background: #fbfbfb;
-    color: #1abc9c;
-}
-#mostrecent a.list-post-tabs:hover {
-    text-decoration: none;
-    background: #fbfbfb;
-    color: #1abc9c;
-}
+
 .block-title p{
     font-size: 18px;
     font-weight: 300;

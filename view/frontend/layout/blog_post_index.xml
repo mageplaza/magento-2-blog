@@ -1,21 +1,29 @@
 <?xml version="1.0"?>
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="3columns" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="blog_post_head_handle" />
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-right" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mageplaza_Blog::css/index/style.css"/>
+        <css src="Mageplaza_Blog::css/index/style-color.less" rel="stylesheet/less" type="text/less"/>
+        <css src="Mageplaza_Blog::css/index/owl.carousel.css"/>
+        <css src="Mageplaza_Blog::css/index/owl.theme.css"/>
+        <css src="Mageplaza_Core::css/font-awesome.min.css"/>
+        <!--<script src="Mageplaza_Blog::js/jquery-1.12.4.min.js"/>-->
+        <script src="Mageplaza_Blog::js/owl.carousel.min.js"/>
+    </head>
+
     <body>
+        <referenceBlock name="header.links">
+        </referenceBlock>
+
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Frontend" name="mp.blog.header" template="Mageplaza_Blog::blog/header.phtml"/>
-            <block class="Mageplaza\Blog\Block\Post\Listpost" name="mp.blog.post.listpost" template="Mageplaza_Blog::post/index.phtml"/>
-        </referenceContainer>
-        <referenceContainer name="sidebar.additional">
-            <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview" before="catalog.compare.sidebar" ifconfig="blog/general/sidebar_right"
-            template="Mageplaza_Blog::sidebar/mostview.phtml"/>
-            <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category" before="catalog.compare.sidebar" ifconfig="blog/general/sidebar_right" template="Mageplaza_Blog::category/widget.phtml"/>
-            <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag" before="catalog.compare.sidebar" ifconfig="blog/general/sidebar_right" template="Mageplaza_Blog::tag/widget.phtml"/>
+            <block class="Mageplaza\Blog\Block\Post\Listpost" template="Mageplaza_Blog::post/index.phtml"/>
         </referenceContainer>
         <referenceContainer name="sidebar.main">
-            <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview.left" ifconfig="blog/general/sidebar_left" template="Mageplaza_Blog::sidebar/mostview.phtml"/>
-            <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category.left" ifconfig="blog/general/sidebar_left" template="Mageplaza_Blog::category/widget.phtml"/>
-            <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag.left" ifconfig="blog/general/sidebar_left" template="Mageplaza_Blog::tag/widget.phtml"/>
+            <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"
+                   template="Mageplaza_Blog::sidebar/mostview.phtml"/>
+            <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category"
+                   template="Mageplaza_Blog::category/widget.phtml"/>
+            <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"
+                   template="Mageplaza_Blog::tag/widget.phtml"/>
         </referenceContainer>
     </body>
 </page>

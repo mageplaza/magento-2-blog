@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -18,21 +18,21 @@ namespace Mageplaza\Blog\Setup;
 class InstallData implements \Magento\Framework\Setup\InstallDataInterface
 {
     /**
-     * Category setup factory
-     *
+     * Faqcat setup factory
+     * 
      * @var \Mageplaza\Blog\Setup\CategorySetupFactory
      */
     protected $categorySetupFactory;
 
     /**
      * constructor
-     *
+     * 
      * @param \Mageplaza\Blog\Setup\CategorySetupFactory $categorySetupFactory
      */
     public function __construct(
         \Mageplaza\Blog\Setup\CategorySetupFactory $categorySetupFactory
-    ) {
-    
+    )
+    {
         $this->categorySetupFactory = $categorySetupFactory;
     }
 
@@ -44,7 +44,7 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
     {
         /** @var \Mageplaza\Blog\Setup\CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
-        // Create Root Category Node
+        // Create Root Faqcat Node
         $category = $categorySetup->createCategory();
         $category
             ->setPath('1')
@@ -54,5 +54,6 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
             ->setName('ROOT')
             ->setInitialSetupFlag(true)
             ->save();
+
     }
 }

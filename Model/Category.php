@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -56,57 +56,57 @@ namespace Mageplaza\Blog\Model;
 class Category extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * Root of the Category tree
-     *
+     * Root of the Faqcat tree
+     * 
      * @var string
      */
     const TREE_ROOT_ID = 1;
 
     /**
      * Cache tag
-     *
+     * 
      * @var string
      */
     const CACHE_TAG = 'mageplaza_blog_category';
 
     /**
      * Cache tag
-     *
+     * 
      * @var string
      */
     protected $_cacheTag = 'mageplaza_blog_category';
 
     /**
      * Event prefix
-     *
+     * 
      * @var string
      */
     protected $_eventPrefix = 'mageplaza_blog_category';
 
     /**
      * Post Collection
-     *
+     * 
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
     protected $postCollection;
 
     /**
-     * Category Factory
-     *
+     * Faqcat Factory
+     * 
      * @var \Mageplaza\Blog\Model\CategoryFactory
      */
     protected $categoryFactory;
 
     /**
      * Post Collection Factory
-     *
+     * 
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
     protected $postCollectionFactory;
 
     /**
      * constructor
-     *
+     * 
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
      * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
      * @param \Magento\Framework\Model\Context $context
@@ -123,8 +123,8 @@ class Category extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
-    ) {
-    
+    )
+    {
         $this->categoryFactory       = $categoryFactory;
         $this->postCollectionFactory = $postCollectionFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -180,7 +180,7 @@ class Category extends \Magento\Framework\Model\AbstractModel
 
     /**
      * get all parent ids
-     *
+     * 
      * @return array
      */
     public function getParentIds()
@@ -189,8 +189,8 @@ class Category extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * move Category in tree
-     *
+     * move Faqcat in tree
+     * 
      * @param $parentId
      * @param $afterCategoryId
      * @return $this
@@ -203,19 +203,19 @@ class Category extends \Magento\Framework\Model\AbstractModel
             $parent = $this->categoryFactory->create()->load($parentId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Sorry, but we can\'t move the Category because we can\'t find the new parent Category you selected.'),
+                __('Sorry, but we can\'t move the Faqcat because we can\'t find the new parent Faqcat you selected.'),
                 $e
             );
         }
 
         if (!$this->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Sorry, but we can\'t move the Category because we can\'t find the new parent Category you selected.')
+                __('Sorry, but we can\'t move the Faqcat because we can\'t find the new parent Faqcat you selected.')
             );
         } elseif ($parent->getId() == $this->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'We can\'t perform this Category move operation because the parent Category matches the child Category.'
+                    'We can\'t perform this Faqcat move operation because the parent Faqcat matches the child Faqcat.'
                 )
             );
         }
@@ -256,7 +256,7 @@ class Category extends \Magento\Framework\Model\AbstractModel
     public function getPostsPosition()
     {
         if (!$this->getId()) {
-            return [];
+            return array();
         }
         $array = $this->getData('posts_position');
         if (is_null($array)) {

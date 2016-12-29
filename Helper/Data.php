@@ -11,14 +11,18 @@ use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\TagFactory;
 use Mageplaza\Blog\Model\TopicFactory;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
 
 class Data extends CoreHelper
 {
     const XML_PATH_BLOG = 'blog/';
+    const POST_IMG = 'mageplaza/blog/post/image';
+
     protected $postfactory;
     protected $categoryfactory;
     protected $tagfactory;
     protected $topicfactory;
+    protected $_store;
 
     public function __construct(
         Context $context,
@@ -27,13 +31,15 @@ class Data extends CoreHelper
         PostFactory $postFactory,
         CategoryFactory $categoryFactory,
         TagFactory $tagFactory,
-        TopicFactory $topicFactory
+        TopicFactory $topicFactory,
+        TemplateContext $templateContext
     ) {
     
         $this->postfactory     = $postFactory;
         $this->categoryfactory = $categoryFactory;
         $this->tagfactory      = $tagFactory;
         $this->topicfactory    = $topicFactory;
+        $this->_store = $templateContext->getStoreManager();
         parent::__construct($context, $objectManager, $storeManager);
     }
 
@@ -45,6 +51,7 @@ class Data extends CoreHelper
     public function getPostList($type = null, $id = null)
     {
         $list          = '';
+        $storeId = $this->_store->getStore()->getId();
         $posts         = $this->postfactory->create();
         $categoryModel = $this->categoryfactory->create();
         $tagModel      = $this->tagfactory->create();
@@ -63,7 +70,7 @@ class Data extends CoreHelper
         }
 
         if ($list->getSize()) {
-            return $list->addFieldToFilter('enabled', 1);
+            return $list->addFieldToFilter('enabled', 1)->addFieldToFilter('store_ids', ['eq' => $storeId]);
         }
 
         return $posts;
@@ -71,9 +78,10 @@ class Data extends CoreHelper
 
     public function getCategoryList()
     {
+        $storeId = $this->_store->getStore()->getId();
         $category = $this->categoryfactory->create();
         $list     = $category->getCollection()
-            ->addFieldToFilter('enabled', 1);
+            ->addFieldToFilter('enabled', 1)->addFieldToFilter('store_ids', ['eq' => $storeId]);
 
         return $list;
     }
@@ -156,7 +164,7 @@ class Data extends CoreHelper
 
     public function getImageUrl($image)
     {
-        return $this->getBaseMediaUrl() . $image;
+        return $this->getBaseMediaUrl(). self::POST_IMG . $image;
     }
 
     public function getBaseMediaUrl()
@@ -253,5 +261,40 @@ class Data extends CoreHelper
     {
         $model=$this->objectManager->get('Magento\Framework\UrlInterface');
         return $model->getCurrentUrl();
+    }
+
+    /**
+     * get most view post
+     */
+    public function getMosviewPosts()
+    {
+        $storeId = $this->_store->getStore()->getId();
+        $ob    = $this->objectManager->get('Mageplaza\Blog\Model\Traffic');
+        $posts = $ob->getCollection();
+        $posts->join(
+            'mageplaza_blog_post',
+            'main_table.post_id=mageplaza_blog_post.post_id',
+            '*'
+        );
+        $posts->addFieldToFilter('store_ids', ['eq' => $storeId])
+            ->setPageSize($this->getBlogConfig('sidebar/number_mostview_posts'))->setCurPage(1);
+        $posts->setOrder('numbers_view', 'DESC');
+
+        return $posts;
+    }
+
+    /**
+     * get recent post
+     */
+    public function getRecentPost()
+    {
+        $storeId = $this->_store->getStore()->getId();
+        $posts = $this->postfactory->create()->getCollection()
+            ->addFieldToFilter('store_ids', ['eq' => $storeId])
+            ->setPageSize($this->getBlogConfig('sidebar/number_recent_posts'))
+            ->setCurPage(1)
+            ->setOrder('created_at', 'DESC');
+
+        return $posts;
     }
 }

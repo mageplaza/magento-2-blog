@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -19,21 +19,21 @@ class CategoriesJson extends \Mageplaza\Blog\Controller\Adminhtml\Category
 {
     /**
      * JSON Result Factory
-     *
+     * 
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
      * Layout Factory
-     *
+     * 
      * @var \Magento\Framework\View\LayoutFactory
      */
     protected $layoutFactory;
 
     /**
      * constructor
-     *
+     * 
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
@@ -46,13 +46,13 @@ class CategoriesJson extends \Mageplaza\Blog\Controller\Adminhtml\Category
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Registry $coreRegistry,
-        //\Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
-    ) {
-    
+    )
+    {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory     = $layoutFactory;
-        parent::__construct($categoryFactory, $coreRegistry, $context);
+        parent::__construct($categoryFactory, $coreRegistry, $resultRedirectFactory, $context);
     }
 
     /**

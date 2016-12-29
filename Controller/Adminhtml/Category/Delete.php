@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -34,7 +34,7 @@ class Delete extends \Mageplaza\Blog\Controller\Adminhtml\Category
                 $category->load($id);
                 $name = $category->getName();
                 $category->delete();
-                $this->messageManager->addSuccess(__('The Category has been deleted.'));
+                $this->messageManager->addSuccess(__('The Faqcat has been deleted.'));
                 $this->_eventManager->dispatch(
                     'adminhtml_mageplaza_blog_category_on_delete',
                     ['name' => $name, 'status' => 'success']
@@ -54,7 +54,7 @@ class Delete extends \Mageplaza\Blog\Controller\Adminhtml\Category
             }
         }
         // display error message
-        $this->messageManager->addError(__('Category to delete was not found.'));
+        $this->messageManager->addError(__('Faqcat to delete was not found.'));
         // go to grid
         $resultRedirect->setPath('mageplaza_blog/*/');
         return $resultRedirect;

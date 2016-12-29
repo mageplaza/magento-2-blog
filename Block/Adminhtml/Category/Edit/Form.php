@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -19,28 +19,28 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
 {
     /**
      * Additional buttons
-     *
+     * 
      * @var array
      */
     protected $additionalButtons = [];
 
     /**
      * Block template
-     *
+     * 
      * @var string
      */
     protected $_template = 'category/edit/form.phtml';
 
     /**
      * JSON encoder
-     *
+     * 
      * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $jsonEncoder;
 
     /**
      * constructor
-     *
+     * 
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Registry $registry
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree
@@ -57,8 +57,8 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
         \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Magento\Backend\Block\Widget\Context $context,
         array $data = []
-    ) {
-    
+    )
+    {
         $this->jsonEncoder = $jsonEncoder;
         parent::__construct($registry, $categoryTree, $categoryFactory, $categoryCollectionFactory, $context, $data);
     }
@@ -70,7 +70,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     {
         $category   = $this->getCategory();
         $categoryId = (int)$category->getId();
-        // 0 when we create Category, otherwise some value for editing Category
+        // 0 when we create Faqcat, otherwise some value for editing Faqcat
 
         $this->setChild(
             'tabs',
@@ -239,7 +239,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * Get parent Category id
+     * Get parent Faqcat id
      *
      * @return int
      */
@@ -249,7 +249,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * Get Category  id
+     * Get Faqcat  id
      *
      * @return int
      */

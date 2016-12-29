@@ -70,6 +70,16 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     'Post Content'
                 )
                 ->addColumn(
+                    'store_ids',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    null,
+                    [
+                        'nullable' => false,
+                        'unsigned' => true,
+                    ],
+                    'Store Id'
+                )
+                ->addColumn(
                     'image',
                     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     255,
@@ -369,6 +379,16 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     '64k',
                     [],
                     'Category Description'
+                )
+                ->addColumn(
+                    'store_ids',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    null,
+                    [
+                        'nullable' => false,
+                        'unsigned' => true,
+                    ],
+                    'Store Id'
                 )
                 ->addColumn(
                     'url_key',

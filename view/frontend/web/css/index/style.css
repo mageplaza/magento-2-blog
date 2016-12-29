@@ -1,22 +1,4 @@
-h2.mp-post-title a {
-    color: #1abc9c;
-}
-h2.mp-post-title a:hover {
-    text-decoration: none;
-    color: #1abc9c;
-}
-.mp-post-meta-info a.mp-read-more {
-    color: #1abc9c;
-}
-.mp-post-meta-info a.mp-read-more:hover {
-    color: #1abc9c;
-}
-.mp-post-info a.mp-info{
-    color: #1abc9c;
-}
-.mp-post-info a.mp-info:hover{
-    color: #1abc9c;
-}
+
 h2.mp-post-title a:hover:focus {
     text-decoration: none;
 }
@@ -27,28 +9,22 @@ h2.mp-post-title a:hover:focus {
     color: #999999;
     font-size: 10px;
     line-height: 18px;
-    padding: 0 0 10px 0;
 }
 .post-image img.img-responsive {
-    max-height: 400px;
+    height: 400px;
+    width: 100%;
 }
-.post-item-wrapper {
+.post-item-wraper {
     border: 1px solid #eee;
 }
-.post-item-wrapper:hover {
+.post-item-wraper:hover {
     border: 1px solid #eee;
     box-shadow: 3px 3px 4px 0 rgba(0,0,0,0.3);
 }
-.post-info-wrapper {
+.post-info-wraper {
     padding: 20px 15px 10px 15px;
 }
-.post-info-wrapper h2.mp-post-title{
-    margin-top: 0px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #1abc9c;
-}
+
 .post-list-item {
     margin-bottom: 40px;
 }
@@ -59,39 +35,11 @@ h2.mp-post-title a:hover:focus {
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 3em;
+    max-height: 20px;
 }
 
 
-.mp-post-info a.mp-info {
-    color: #1abc9c;
-}
-.mp-post-info a.mp-info:hover {
-    text-decoration: none;
-    color: #1abc9c;
-}
-.nav .nav-tabs li.active{
-    border-top-color: #1abc9c;
-}
 
-.about-admin h4.admin-title a{
-    color: #1abc9c;
-}
-
-.about-admin h4.admin-title a:hover {
-    color: #1abc9c;
-}
-.owl-item a.mp-relate-link{
-    color: #1abc9c;
-}
-.owl-item a.mp-relate-link:hover{
-    color: #1abc9c;
-    text-decoration: none;
-}
-.owl-item a.mp-relate-link:focus{
-    color: #1abc9c;
-    text-decoration: none;
-}
 .mp-post-info span {
     color: #6f6f6f;;
 }
@@ -170,15 +118,21 @@ a.mp-relate-link img.img-responsive{
     height: 200px;
     display: block;
 }
-.owl-item{
-    width:246px !important;
-}
+/*.owl-item{*/
+    /*width:246px !important;*/
+/*}*/
 .owl-stage-outer {
     height: 220px;
 }
 .owl-carousel .owl-stage {
     height: 220px;
 }
+.nav-tabs a{
+    cursor: pointer;
+    color: #555 !important;
+}
 
-
-
+.tab-content{
+    border: 1px solid #ddd;
+    border-top: none;
+}
