@@ -10,7 +10,7 @@ $count = 0;
 
 		</div>
 		<div class="col-xs-12">
-			<?php if ($tags->getSize()): ?>
+			<?php if (count($tags) > 0): ?>
 				<?php foreach ($tags as $tag): ?>
 					<?php
 					$count++;

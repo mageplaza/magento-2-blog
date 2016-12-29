@@ -51,7 +51,6 @@ class Data extends CoreHelper
     public function getPostList($type = null, $id = null)
     {
         $list          = '';
-        $storeId = $this->_store->getStore()->getId();
         $posts         = $this->postfactory->create();
         $categoryModel = $this->categoryfactory->create();
         $tagModel      = $this->tagfactory->create();
@@ -70,7 +69,12 @@ class Data extends CoreHelper
         }
 
         if ($list->getSize()) {
-            return $list->addFieldToFilter('enabled', 1)->addFieldToFilter('store_ids', ['eq' => $storeId]);
+            $list->setOrder('created_at', 'desc')
+                ->addFieldToFilter('enabled', 1);
+//            $result = $this->filterItems($list);
+//            if($result == '') return '';
+//            return $result;
+            return $list;
         }
 
         return $posts;
@@ -78,12 +82,11 @@ class Data extends CoreHelper
 
     public function getCategoryList()
     {
-        $storeId = $this->_store->getStore()->getId();
         $category = $this->categoryfactory->create();
-        $list     = $category->getCollection()
-            ->addFieldToFilter('enabled', 1)->addFieldToFilter('store_ids', ['eq' => $storeId]);
-
-        return $list;
+        $list     = $category->getCollection()->addFieldToFilter('enabled', 1);
+        $result = $this->filterItems($list);
+        if($result == '') return '';
+        return $result;
     }
 
     public function getTagList()
@@ -91,8 +94,9 @@ class Data extends CoreHelper
         $tag  = $this->tagfactory->create();
         $list = $tag->getCollection()
             ->addFieldToFilter('enabled', 1);
-
-        return $list;
+        $result = $this->filterItems($list);
+        if($result == '') return '';
+        return $result;
     }
 
     public function getCategoryCollection($array)
@@ -101,8 +105,9 @@ class Data extends CoreHelper
         $list     = $category->getCollection()
             ->addFieldToFilter('enabled', 1)
             ->addFieldToFilter('category_id', ['in' => $array]);
-
-        return $list;
+        $result = $this->filterItems($list);
+        if($result == '') return '';
+        return $result;
     }
 
     public function getUrlByPost($post)
@@ -113,7 +118,7 @@ class Data extends CoreHelper
 
             $urlKey = '';
             if ($url_prefix) {
-                $urlKey .= $url_prefix . '/';
+                $urlKey .= $url_prefix . '/post/';
             }
             $urlKey .= $post->getUrlKey();
             if ($url_suffix) {
@@ -133,7 +138,6 @@ class Data extends CoreHelper
     {
         $url   = $this->checkSuffix($url);
         $posts = $this->postfactory->create()->load($url, 'url_key');
-
         return $posts;
     }
 
@@ -150,9 +154,10 @@ class Data extends CoreHelper
     public function getPostsByTag($tag)
     {
         $posts      = $this->postfactory->create();
-        $collection = $posts->getCollection();
-
-        return $collection;
+        $collection = $posts->getCollection()->addFieldToFilter('enabled', 1);;
+        $result = $this->filterItems($collection);
+        if($result == '') return '';
+        return $result;
     }
 
     public function getPostsByCategory($category)
@@ -189,18 +194,15 @@ class Data extends CoreHelper
 
     public function getPostCategoryHtml($post)
     {
-
         $categories = $this->getCategoryCollection($post->getCategoryIds());
-
-        if (!$categories->getSize()) {
-            return null;
-        }
         $categoryHtml = [];
-
-        foreach ($categories as $_cat) {
-            $categoryHtml[] = '<a class="mp-info" href="' . $this->getCategoryUrl($_cat) . '">' . $_cat->getName() . '</a>';
+        if (empty($categories)) {
+            return null;
+        }else {
+            foreach ($categories as $_cat) {
+                $categoryHtml[] = '<a class="mp-info" href="' . $this->getCategoryUrl($_cat) . '">' . $_cat->getName() . '</a>';
+            }
         }
-
         $result = implode(', ', $categoryHtml);
 
         return $result;
@@ -209,10 +211,8 @@ class Data extends CoreHelper
     public function getPost($id)
     {
         $post = $this->postfactory->create()->load($id);
-
         return $post;
     }
-
     public function getCategoryByParam($code, $param)
     {
         if ($code == 'id') {
@@ -240,23 +240,19 @@ class Data extends CoreHelper
     public function getCategoryByPost($postId)
     {
         $post = $this->postfactory->create()->load($postId);
-
         return $post->getSelectedCategoriesCollection();
     }
-
     public function getTagsByPost($postId)
     {
         $post = $this->postfactory->create()->load($postId);
-
         return $post->getSelectedTagsCollection();
     }
-
     public function getTopicByPost($postId)
     {
         $post = $this->postfactory->create()->load($postId);
-
         return $post->getSelectedTopicsCollection();
     }
+
     public function getCurrentUrl()
     {
         $model=$this->objectManager->get('Magento\Framework\UrlInterface');
@@ -268,19 +264,17 @@ class Data extends CoreHelper
      */
     public function getMosviewPosts()
     {
-        $storeId = $this->_store->getStore()->getId();
         $ob    = $this->objectManager->get('Mageplaza\Blog\Model\Traffic');
-        $posts = $ob->getCollection();
+        $posts = $ob->getCollection()->addFieldToFilter('enabled', 1);;
         $posts->join(
             'mageplaza_blog_post',
             'main_table.post_id=mageplaza_blog_post.post_id',
             '*'
         );
-        $posts->addFieldToFilter('store_ids', ['eq' => $storeId])
-            ->setPageSize($this->getBlogConfig('sidebar/number_mostview_posts'))->setCurPage(1);
         $posts->setOrder('numbers_view', 'DESC');
-
-        return $posts;
+        $postList = $this->filterItems($posts, $this->getBlogConfig('sidebar/number_mostview_posts'));
+        if($postList == '') return '';
+        return $postList;
     }
 
     /**
@@ -288,13 +282,33 @@ class Data extends CoreHelper
      */
     public function getRecentPost()
     {
-        $storeId = $this->_store->getStore()->getId();
-        $posts = $this->postfactory->create()->getCollection()
-            ->addFieldToFilter('store_ids', ['eq' => $storeId])
-            ->setPageSize($this->getBlogConfig('sidebar/number_recent_posts'))
-            ->setCurPage(1)
+        $posts = $this->postfactory->create()
+            ->getCollection()
+            ->addFieldToFilter('enabled', 1)
             ->setOrder('created_at', 'DESC');
+        $postList = $this->filterItems($posts, $this->getBlogConfig('sidebar/number_recent_posts'));
+        if($postList == '') return '';
+        return $postList;
+    }
 
-        return $posts;
+    /**
+     * filter items by store
+     */
+    public function filterItems($items, $limit = null){
+        $storeId = $this->_store->getStore()->getId();
+        $list = array();
+        $count = 0;
+        foreach ($items as $item) {
+            $itemStore = $item->getStoreIds() ? explode(',', $item->getStoreIds()) : '-1';
+            if (in_array($storeId, $itemStore)) {
+                $count++;
+                if ($limit && $count > $limit) break;
+                array_push($list, $item);
+            }
+        }
+        
+        if($count == 0) return '';
+
+        return $list;
     }
 }

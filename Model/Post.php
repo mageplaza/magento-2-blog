@@ -205,7 +205,9 @@ class Post extends \Magento\Framework\Model\AbstractModel
 	{
 		$values                  = [];
 		$values['in_rss']        = '1';
+		$values['enabled'] = '1';
 		$values['allow_comment'] = '1';
+		$values['store_ids'] = '1';
 
 		return $values;
 	}
@@ -376,16 +378,14 @@ class Post extends \Magento\Framework\Model\AbstractModel
 	public function getRelatedPostsCollection()
 	{
 		if ($this->getTopicSting()) {
-			//		if (is_null($this->relatedPostCollection)) {
 			$collection = $this->postCollectionFactory->create();
 
 			$collection->join(
 				'mageplaza_blog_post_topic',
-				'main_table.post_id=mageplaza_blog_post_topic.post_id AND mageplaza_blog_post_topic.post_id != ' . $this->getId() . ' AND mageplaza_blog_post_topic.topic_id IN (' . $this->getTopicSting() . ')',
+				'main_table.post_id=mageplaza_blog_post_topic.post_id AND mageplaza_blog_post_topic.post_id != "' . $this->getId() . '" AND mageplaza_blog_post_topic.topic_id IN (' . $this->getTopicSting() . ')',
 				['position']
 			);
 			$this->relatedPostCollection = $collection;
-//		}
 		}
 		return $this->relatedPostCollection;
 	}

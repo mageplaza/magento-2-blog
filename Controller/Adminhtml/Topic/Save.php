@@ -63,6 +63,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Topic
     public function execute()
     {
         $data = $this->getRequest()->getPost('topic');
+        $data['store_ids'] = implode(',', $data['store_ids']);
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $topic = $this->initTopic();

@@ -10,11 +10,11 @@ if ($checkRss):
             <a href="<?php echo $checkRss ?>" class="bb-rss-icon"><img src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px"> </a>
         </div>
 <?php endif; ?>
-<?php if ($posts->getSize() > 0) : ?>
-	<?php echo $this->getPagerHtml(); ?>
+<?php if (count($posts) > 0) : ?>
 	<div class="post-list-container mpcss">
 		<div class="row">
 			<?php foreach ($posts as $post) : ?>
+				<?php if($block->filterPost($post)): ?>
 				<div class="post-list-item <?php if($block->getBlogConfig('general/display_style') == 2){echo ' col-sm-6';}else echo ' col-sm-12';?>">
 					<div class="post-item-wraper">
 						<div class="post-image">
@@ -60,6 +60,7 @@ if ($checkRss):
 						</div>
 					</div>
 				</div>
+				<?php endif;?>
 			<?php endforeach; ?>
 		</div>
     </div>

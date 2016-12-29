@@ -136,3 +136,7 @@ a.mp-relate-link img.img-responsive{
     border: 1px solid #ddd;
     border-top: none;
 }
+.share-col-right{
+    display: inline-block;
+    width: 50%;
+}

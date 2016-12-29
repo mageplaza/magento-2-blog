@@ -86,6 +86,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 	public function execute()
 	{
 		$data = $this->getRequest()->getPost('post');
+		$data['store_ids'] = implode(',', $data['store_ids']);
 		if (isset($_FILES['image']) AND ($_FILES['image']['name'] == '')) {
 			if (isset($data['image'])) {
 				unset($data['image']);
@@ -100,7 +101,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 
 			} else {
 				$image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
-				$post->setImage('mageplaza/blog/post/image' . $image);
+				$post->setImage($image);
 			}
 			$tags = $this->getRequest()->getPost('tags', -1);
 			if ($tags != -1) {

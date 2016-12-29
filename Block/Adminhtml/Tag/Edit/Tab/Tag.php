@@ -31,6 +31,8 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
      */
     protected $booleanOptions;
 
+    protected $_systemStore;
+
     /**
      * constructor
      * 
@@ -44,6 +46,7 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
     public function __construct(
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Config\Model\Config\Source\Yesno $booleanOptions,
+        \Magento\Store\Model\System\Store $systemStore,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -52,6 +55,7 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
     {
         $this->wysiwygConfig  = $wysiwygConfig;
         $this->booleanOptions = $booleanOptions;
+        $this->_systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -99,6 +103,17 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
                 'label' => __('Description'),
                 'title' => __('Description'),
                 'config'    => $this->wysiwygConfig->getConfig()
+            ]
+        );
+        $fieldset->addField(
+            'store_ids',
+            'multiselect',
+            [
+                'name'  => 'store_ids',
+                'label' => __('Store Views'),
+                'title' => __('Store Views'),
+                'note' => __('Select Store Views'),
+                'values' => $this->_systemStore->getStoreValuesForForm(false, true),
             ]
         );
         $fieldset->addField(

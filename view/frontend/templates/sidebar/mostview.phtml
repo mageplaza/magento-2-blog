@@ -10,7 +10,7 @@ $postsRecent = $block->getRecentPost();
 		
 		<div class="tab-content">
 			<div id="mostview">
-				<?php if ($posts->getSize()): ?>
+				<?php if (count($posts) > 0): ?>
 					<?php foreach ($posts as $post): ?>
 						<a class="list-post-tabs" href="<?php echo $block->getUrlByPost($post) ?>">
 							<div class="post-left">
@@ -34,7 +34,7 @@ $postsRecent = $block->getRecentPost();
 				<?php endif; ?>
 			</div>
 			<div id="mostrecent" style="display:none">
-				<?php if ($postsRecent->getSize()): ?>
+				<?php if (count($postsRecent) > 0): ?>
 					<?php foreach ($postsRecent as $post): ?>
 						<a class="list-post-tabs" href="<?php echo $block->getUrlByPost($post) ?>">
 							<div class="post-left">

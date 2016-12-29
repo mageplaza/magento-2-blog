@@ -210,6 +210,16 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     'Tag Description'
                 )
                 ->addColumn(
+                    'store_ids',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    null,
+                    [
+                        'nullable' => false,
+                        'unsigned' => true,
+                    ],
+                    'Store Id'
+                )
+                ->addColumn(
                     'enabled',
                     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                     1,
@@ -279,6 +289,16 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     '64k',
                     [],
                     'Topic Description'
+                )
+                ->addColumn(
+                    'store_ids',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    null,
+                    [
+                        'nullable' => false,
+                        'unsigned' => true,
+                    ],
+                    'Store Id'
                 )
                 ->addColumn(
                     'enabled',

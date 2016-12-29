@@ -130,7 +130,7 @@ class Router implements \Magento\Framework\App\RouterInterface
 				} elseif (count($array) == 3) {
 					$type = $array[1];
 
-					if ($type == 'post' && $array[2] == 'index') {
+					if ($type == 'post') {
 						if ($array[2] == 'index') {
 							$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
 							$request->setPathInfo('/' . 'blog/post/index');

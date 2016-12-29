@@ -63,6 +63,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Tag
     public function execute()
     {
         $data = $this->getRequest()->getPost('tag');
+        $data['store_ids'] = implode(',', $data['store_ids']);
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $tag = $this->initTag();

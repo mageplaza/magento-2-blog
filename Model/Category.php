@@ -159,6 +159,8 @@ class Category extends \Magento\Framework\Model\AbstractModel
     public function getDefaultValues()
     {
         $values = [];
+        $values['store_ids'] = '1';
+        $values['enabled'] = '1';
 
         return $values;
     }

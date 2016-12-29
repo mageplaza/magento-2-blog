@@ -38,6 +38,8 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      */
     protected $metaRobotsOptions;
 
+    protected $_systemStore;
+
     /**
      * constructor
      * 
@@ -53,6 +55,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Config\Model\Config\Source\Yesno $booleanOptions,
         \Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobotsOptions,
+        \Magento\Store\Model\System\Store $systemStore,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -62,6 +65,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         $this->wysiwygConfig     = $wysiwygConfig;
         $this->booleanOptions    = $booleanOptions;
         $this->metaRobotsOptions = $metaRobotsOptions;
+        $this->_systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -122,6 +126,17 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'title' => __('Content'),
                 'note' => __('Post Content'),
                 'config'    => $this->wysiwygConfig->getConfig()
+            ]
+        );
+        $fieldset->addField(
+            'store_ids',
+            'multiselect',
+            [
+                'name'  => 'store_ids',
+                'label' => __('Store Views'),
+                'title' => __('Store Views'),
+                'note' => __('Select Store Views'),
+                'values' => $this->_systemStore->getStoreValuesForForm(false, true),
             ]
         );
         $fieldset->addField(

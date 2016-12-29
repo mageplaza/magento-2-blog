@@ -1,10 +1,12 @@
 
 <?php $_post = $block->getCurrentPost(); ?>
+<?php if($block->filterPost($_post)): ?>
 
 <?php if ($block->getBlogConfig('share/enabled')): ?>
 	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $block->getBlogConfig('share/pubid_id') ?>"
 			async="async"></script>
 <?php endif; ?>
+
 <div class="mpcss post-view">
 	<div class="row">
         <div class="post-image col-xs-12">
@@ -97,7 +99,11 @@
     </div>
 
 	<script>
-				jQuery.noConflict();
+			jQuery.noConflict();
+			require([
+				'jquery',
+				'mageplaza/core/owl.carousel'
+			], function ($) {
 				jQuery(document).ready(function () {
 					var owl = jQuery('.owl-carousel');
 					owl.owlCarousel({
@@ -117,8 +123,9 @@
 					jQuery('.stop').on('click', function () {
 						owl.trigger('stop.owl.autoplay')
 					})
-				})
-			</script>
+				});
+			});
+	</script>
 	<?php else:?>
 		<?php echo __('No Post')?>
 <?php endif; ?>
@@ -190,3 +197,5 @@
 		'Mageplaza_Blog/js/less.min'
 	]);
 </script>
+
+<?php endif;?>

@@ -19,6 +19,7 @@ a.label.label-default.tags-list {
     display: inline-block;
     margin-bottom: 5px;
     padding: 10px;
+    margin-right: 5px
 }
 ul.menu-categories{
     padding: 0px;

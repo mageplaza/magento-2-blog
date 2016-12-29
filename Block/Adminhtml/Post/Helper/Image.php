@@ -55,7 +55,7 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
      *
      * @return string
      */
-    protected function getUrl()
+    protected function _getUrl()
     {
         $url = false;
         if ($this->getValue()) {

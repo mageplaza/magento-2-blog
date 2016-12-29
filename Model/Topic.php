@@ -133,6 +133,7 @@ class Topic extends \Magento\Framework\Model\AbstractModel
     {
         $values = [];
         $values['enabled'] = '1';
+        $values['store_ids'] = '1';
         return $values;
     }
     /**
