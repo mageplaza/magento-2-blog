@@ -59,7 +59,7 @@ if ($checkRss):
 			<?php endforeach; ?>
 		</div>
     </div>
-		<?php echo $this->getPagerHtml(); ?>
+		<?php if(count($posts) > $block->getBlogConfig('general/pagination')){ echo $this->getPagerHtml();} ?>
 <?php else : ?>
 	<div class="post-list-container">
         <?php echo __('There are no posts at this moment'); ?>

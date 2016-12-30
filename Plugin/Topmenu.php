@@ -6,45 +6,25 @@ use Magento\Framework\Data\Tree\NodeFactory;
 
 class Topmenu
 {
-	/**
-	 * @var NodeFactory
-	 */
-	protected $nodeFactory;
-	
 	protected $helper;
 
 	public function __construct(
-		NodeFactory $nodeFactory,
 		\Mageplaza\Blog\Helper\Data $helper
 	) {
 		$this->helper = $helper;
-		$this->nodeFactory = $nodeFactory;
 	}
 
-	public function beforeGetHtml(
-		\Magento\Theme\Block\Html\Topmenu $subject,
-		$outermostClass = '',
-		$childrenWrapClass = '',
-		$limit = 0
-	) {
-		$node = $this->nodeFactory->create(
-			[
-				'data' => $this->getNodeAsArray(),
-				'idField' => 'id',
-				'tree' => $subject->getMenu()->getTree()
-			]
-		);
-		$subject->getMenu()->addChild($node);
-	}
-
-	protected function getNodeAsArray()
+	public function afterGetHtml(\Magento\Theme\Block\Html\Topmenu $topmenu, $html)
 	{
-		return [
-			'name' => $this->helper->getBlogConfig('general/name'),
-			'id' => 'mp-blog-topmenu',
-			'url' => $this->helper->getBlogUrl(''),
-			'has_active' => false,
-			'is_active' => false // (expression to determine if menu item is selected or not)
-		];
+
+
+		$html .= "<li class=\"level0 level-top ui-menu-item\">";
+		$html .= "<a href=\"" . $this->helper->getBlogUrl('')
+			. "\" class=\"level-top ui-corner-all\" aria-haspopup=\"true\" tabindex=\"-1\" role=\"menuitem\">
+			<span class=\"ui-menu-icon ui-icon ui-icon-carat-1-e\"></span><span>"
+			. $this->helper->getBlogConfig('general/name') . "</span></a>";
+		$html .= "</li>";
+		return $html;
 	}
+
 }

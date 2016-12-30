@@ -133,3 +133,9 @@ a.mp-relate-link img.img-responsive{
     display: inline-block;
     width: 50%;
 }
+.pager {
+    text-align: center;
+}
+.pager span.toolbar-number {
+    display: none;
+}
