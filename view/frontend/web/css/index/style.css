@@ -98,8 +98,9 @@ h2.mp-post-title a:hover:focus {
     float:left;
     width: calc(100% - 215px);
 }
-.owl-item .relate-content{
+.mpcss .relate-content{
     text-align: center;
+    margin-top: 15px;
 }
 .post-same-topics.topic-list {
     margin-top: 50px;
@@ -110,7 +111,7 @@ h2.mp-post-title a:hover:focus {
 .mp-post-info a.mp-info:focus {
     text-decoration: none;
 }
-#related-post .owl-page.active span {
+#related-post a.mp-relate-link {
     background: #f55567;
 }
 a.mp-relate-link img.img-responsive{
@@ -118,15 +119,7 @@ a.mp-relate-link img.img-responsive{
     height: 200px;
     display: block;
 }
-/*.owl-item{*/
-    /*width:246px !important;*/
-/*}*/
-.owl-stage-outer {
-    height: 220px;
-}
-.owl-carousel .owl-stage {
-    height: 220px;
-}
+
 .nav-tabs a{
     cursor: pointer;
     color: #555 !important;

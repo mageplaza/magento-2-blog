@@ -9,9 +9,9 @@
                 <url_prefix>blog</url_prefix>
                 <url_suffix>.html</url_suffix>
                 <sidebar_right>1</sidebar_right>
-                <enable_mpbootstrap>1</enable_mpbootstrap>
                 <font_color>#1abc9c</font_color>
                 <pagination>10</pagination>
+                <related_post>5</related_post>
             </general>
             <sidebar>
                 <number_recent_posts>5</number_recent_posts>

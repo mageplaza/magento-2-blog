@@ -10,11 +10,15 @@
         <css src="Mageplaza_Blog::css/sidebar/style.css"/>
     </head>
     <body>
-        <referenceContainer name='root'>
-            <block class='Mageplaza\Blog\Block\Html\Init' name='Mageplaza_Blog_Block_Html_Init' ifconfig='blog/general/enable_mpbootstrap' />
-        </referenceContainer>
         <referenceBlock name="footer_links">
             <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_footer_link">
+                <arguments>
+                    <argument name="label" xsi:type="string" translate="true">Blog</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceBlock name="main.nav">
+            <block class="Mageplaza\Blog\Block\Html\Footer">
                 <arguments>
                     <argument name="label" xsi:type="string" translate="true">Blog</argument>
                 </arguments>

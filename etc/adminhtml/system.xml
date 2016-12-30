@@ -69,16 +69,16 @@
                     <label>Show Sidebar Left</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="related_post" translate="label comment" type="text" sortOrder="35" showInDefault="1"
+                       showInStore="1" showInWebsite="1">
+                    <label>Limit related post</label>
+                    <comment>Number of related post in post view page</comment>
+                </field>
                 <field id="display_style" translate="label comment" type="select" sortOrder="40" showInDefault="1"
                         showInStore="1" showInWebsite="1">
                     <label>Display blogs style</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\Blogview\Display</source_model>
                     <comment>Grid view style is better</comment>
-                </field>
-                <field id="enable_mpbootstrap" translate="label comment" type="select" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1">
-                    <label>Enable Bootstrap</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>If you already had bootstrap css library, then select no.</comment>
                 </field>
                 <field id="font_color" translate="label comment" type="text" sortOrder="60" showInWebsite="1" showInStore="1" showInDefault="1">
                     <label>Choose blog's color</label>

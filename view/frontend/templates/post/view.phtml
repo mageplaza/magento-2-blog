@@ -79,53 +79,33 @@
 	</div>
 <?php endif;?>
 
-<?php $relatedPosts = $_post->getRelatedPostsCollection(); ?>
+	<?php
+		$relatedPosts = $_post->getRelatedPostsCollection();
+		$countRelated = 0;
+		$limitRelated = $block->getBlogConfig('general/related_post');
+	?>
 <?php if (count($relatedPosts)): ?>
 
 	<div class="post-same-topics topic-list mpcss">
 		<div class="row">
-			<div class="col-xs-12">
+			<div class="col-xs-12 row">
 				<h2><?php echo __('Related Posts'); ?></h2>
-				<div class="owl-carousel owl-theme" id="related-post">
 					<?php foreach ($relatedPosts as $relatedPost): ?>
-						<div class="relate-content item" style="margin-right:10px;">
+						<?php
+							if($block->filterPost($relatedPost)):
+								$countRelated++;
+							?>
+								<?php if($countRelated > $limitRelated) break; ?>
+						<div class="relate-content item col-xs-3" style="margin-right:10px;">
 							<a class="mp-relate-link" href="<?php echo $block->getUrlByPost($relatedPost) ?>"><img class="img-responsive" src="<?php echo $block->getImageUrl($relatedPost->getImage()); ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
 								<?php echo $relatedPost->getName(); ?></a>
 						</div>
+							<?php endif; ?>
 					<?php endforeach; ?>
-				</div>
 			</div>
 		</div>
     </div>
 
-	<script>
-			jQuery.noConflict();
-			require([
-				'jquery',
-				'mageplaza/core/owl.carousel'
-			], function ($) {
-				jQuery(document).ready(function () {
-					var owl = jQuery('.owl-carousel');
-					owl.owlCarousel({
-						items: 4,
-						loop: true,
-						margin: 10,
-						autoplay: true,
-						autoplayTimeout: 4000,
-						autoplayHoverPause: true,
-						nav: false,
-						dots: false,
-						lazyLoad: true
-					});
-					jQuery('.play').on('click', function () {
-						owl.trigger('play.owl.autoplay', [1000])
-					});
-					jQuery('.stop').on('click', function () {
-						owl.trigger('stop.owl.autoplay')
-					})
-				});
-			});
-	</script>
 	<?php else:?>
 		<?php echo __('No Post')?>
 <?php endif; ?>

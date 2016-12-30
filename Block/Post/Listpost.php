@@ -28,7 +28,7 @@ class Listpost extends Frontend
             // create pager block for collection
             $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'mp.blog.post.pager');
             // assign collection to pager
-            $pager->setLimit($this->helperData->getBlogConfig('general/pagination'))->setCollection($collection);
+            $pager->setLimit($this->helperData->getBlogConfig('general/pagination')+1)->setCollection($collection);
             $this->setChild('pager', $pager);// set pager block in layout
         }
 

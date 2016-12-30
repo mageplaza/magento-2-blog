@@ -308,7 +308,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
 			$collection = $this->categoryCollectionFactory->create();
 			$collection->join(
 				'mageplaza_blog_post_category',
-				'main_table.category_id=mageplaza_blog_post_category.category_id AND mageplaza_blog_post_category.post_id=' . $this->getId(),
+				'main_table.category_id=mageplaza_blog_post_category.category_id AND mageplaza_blog_post_category.post_id="' . $this->getId().'"',
 				['position']
 			);
 			$this->categoryCollection = $collection;

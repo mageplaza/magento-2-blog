@@ -103,13 +103,12 @@ class Router implements \Magento\Framework\App\RouterInterface
 		$helper = $this->_helper;
 		if ($helper->getBlogConfig('general/enabled')) {
 			$url_prefix = $helper->getBlogConfig('general/url_prefix');
-			$url_suffix = $helper->getBlogConfig('general/url_suffix');
 			if ($url_prefix == '') {
 				return $this;
 			}
 			$path = trim($request->getPathInfo(), '/');
 
-			if (strpos($path, $url_prefix) === 0) {
+			if (strpos($path, $url_prefix) !== false) {
 				$array = explode('/', $path);
 
 				if (count($array) == 1) {
@@ -162,7 +161,6 @@ class Router implements \Magento\Framework\App\RouterInterface
 						$request->setPathInfo('/' . 'blog/topic/view/id/' . $topic->getId());
 
 						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
-
 					}
 					if ($type == 'tag') {
 						$tagUrlKey = $array[2];
@@ -193,6 +191,8 @@ class Router implements \Magento\Framework\App\RouterInterface
 				}
 
 			}
+
+
 		}
 
 	}
