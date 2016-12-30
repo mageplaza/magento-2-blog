@@ -34,11 +34,7 @@ if ($checkRss):
 
 
 							<div class="mp-post-info">
-								<?php echo __('Posted on'); ?> <?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-																$object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
-																$dateFormat = date('Y-m-d',$object->timestamp($post->getCreatedAt()));
-																echo $dateFormat;
-																?> |
+								<?php echo __('Posted on'); ?> <?php echo $block->formatCreatedAt($post->getCreatedAt()); ?> |
 								<?php echo __('Posted in'); ?> <?php echo $block->getPostCategoryHtml($post); ?>
 							</div>
 
@@ -70,21 +66,21 @@ if ($checkRss):
     </div>
 <?php endif; ?>
 <script>
-							less = {
-								env: "production",
-								logLevel: 2,
-								async: false,
-								fileAsync: false,
-								poll: 1000,
-								functions: {},
-								dumpLineNumbers: "comments",
-								relativeUrls: false,
-								useFileCache: true,
-								modifyVars: {
-									'@color': '<?php echo $block->getBlogConfig('general/font_color')?>'
-								}
+	less = {
+		env: "production",
+		logLevel: 2,
+		async: false,
+		fileAsync: false,
+		poll: 1000,
+		functions: {},
+		dumpLineNumbers: "comments",
+		relativeUrls: false,
+		useFileCache: true,
+		modifyVars: {
+			'@color': '<?php echo $block->getBlogConfig('general/font_color')?>'
+		}
 
-							};
+	};
 </script>
 <script>
 	jQuery.noConflict();

@@ -88,6 +88,16 @@ class Frontend extends Template
         return false;
     }
 
+    /**
+     * format post created_at
+     */
+    public function formatCreatedAt($createdAt){
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
+        $dateFormat = date('Y-m-d',$object->timestamp($createdAt));
+        return $dateFormat;
+    }
+
     protected function _prepareLayout()
     {
         $actionName       = $this->getRequest()->getFullActionName();
@@ -159,7 +169,7 @@ class Frontend extends Template
                      'title' => $category->getName(),
                     ]
                 );
-                $this->applySeoCode();
+                $this->applySeoCode($category);
             } elseif ($actionName == 'blog_tag_view') {
                 $tag = $this->helperData->getTagByParam('id', $this->getRequest()->getParam('id'));
                 $breadcrumbs->addCrumb(
@@ -183,7 +193,7 @@ class Frontend extends Template
                     ['label' => ucfirst($tag->getName()),
                      'title' => $tag->getName()]
                 );
-                $this->applySeoCode();
+                $this->applySeoCode($tag);
             } elseif ($actionName == 'blog_topic_view') {
                 $topic = $this->helperData->getTopicByParam('id', $this->getRequest()->getParam('id'));
                 $breadcrumbs->addCrumb(

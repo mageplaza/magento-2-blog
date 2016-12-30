@@ -17,12 +17,5 @@
                 </arguments>
             </block>
         </referenceBlock>
-        <referenceBlock name="main.nav">
-            <block class="Mageplaza\Blog\Block\Html\Footer">
-                <arguments>
-                    <argument name="label" xsi:type="string" translate="true">Blog</argument>
-                </arguments>
-            </block>
-        </referenceBlock>
     </body>
 </page>
