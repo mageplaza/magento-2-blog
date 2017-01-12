@@ -70,10 +70,8 @@ class Data extends CoreHelper
 
         if ($list->getSize()) {
             $list->setOrder('created_at', 'desc')
-                ->addFieldToFilter('enabled', 1);
-//            $result = $this->filterItems($list);
-//            if($result == '') return '';
-//            return $result;
+                ->addFieldToFilter('enabled', 1)
+				->addFieldToFilter('store_ids', ['eq' => $this->_store->getStore()->getId()]);
             return $list;
         }
 

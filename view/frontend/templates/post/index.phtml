@@ -4,24 +4,23 @@ $posts = $block->getPostList();
 <?php $checkRss = $block->checkRss();
 if ($checkRss):
 	?>
-	<div class="mp-blog-rss">
+    <div class="mp-blog-rss">
             <a href="<?php echo $checkRss ?>" class="bb-rss-icon"><img src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px"> </a>
         </div>
 <?php endif; ?>
 <?php if (count($posts) > 0) : ?>
 	<?php //echo $this->getPagerHtml(); ?>
-	<div class="post-list-container mpcss">
+    <div class="post-list-container mpcss">
 		<div class="row">
 			<?php foreach ($posts as $post) : ?>
-				<?php if($block->filterPost($post)): ?>
-				<div class="post-list-item <?php if($block->getBlogConfig('general/display_style') == 2){echo ' col-sm-6';}else echo ' col-sm-12';?>">
+                    <div class="post-list-item <?php if($block->getBlogConfig('general/display_style') == 2){echo ' col-sm-6';}else echo ' col-sm-12';?>">
 					<div class="post-item-wraper">
 						<div class="post-image">
 							<?php if ($post->getImage()) : ?>
-								<a href="<?php echo $block->getUrlByPost($post) ?>">
+                                <a href="<?php echo $block->getUrlByPost($post) ?>">
 									<img class="img-responsive"
-										src="<?php echo $block->getImageUrl($post->getImage()); ?>"
-										alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
+                                         src="<?php echo $block->getImageUrl($post->getImage()); ?>"
+                                         alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
 								</a>
 							<?php endif; ?>
 						</div>
@@ -49,52 +48,51 @@ if ($checkRss):
 							<div class="mp-post-meta-info mp-alignright">
 									<div class="actions">
 										<a class="mp-read-more" href="<?php echo $block->getUrlByPost($post); ?>"
-										   title="<?php echo __('Read More'); ?>"><?php echo __('Read more'); ?></a>
+                                           title="<?php echo __('Read More'); ?>"><?php echo __('Read more'); ?></a>
 									</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<?php endif; ?>
 			<?php endforeach; ?>
 		</div>
     </div>
-		<?php if(count($posts) > $block->getBlogConfig('general/pagination')){ echo $this->getPagerHtml();} ?>
+	<?php if(count($posts) > $block->getBlogConfig('general/pagination')){ echo $this->getPagerHtml();} ?>
 <?php else : ?>
-	<div class="post-list-container">
+    <div class="post-list-container">
         <?php echo __('There are no posts at this moment'); ?>
     </div>
 <?php endif; ?>
 <script>
 	less = {
-		env: "production",
-		logLevel: 2,
-		async: false,
-		fileAsync: false,
-		poll: 1000,
-		functions: {},
-		dumpLineNumbers: "comments",
-		relativeUrls: false,
-		useFileCache: true,
-		modifyVars: {
-			'@color': '<?php echo $block->getBlogConfig('general/font_color')?>'
-		}
+        env: "production",
+        logLevel: 2,
+        async: false,
+        fileAsync: false,
+        poll: 1000,
+        functions: {},
+        dumpLineNumbers: "comments",
+        relativeUrls: false,
+        useFileCache: true,
+        modifyVars: {
+            '@color': '<?php echo $block->getBlogConfig('general/font_color')?>'
+        }
 
-	};
+    };
 </script>
 <script>
 	jQuery.noConflict();
-	require([
-		'jquery',
-		'Mageplaza_Blog/js/less.min'
-	],function ($) {
-		jQuery(document).ready(function () {
-			jQuery("#popular-tab").click(function () {
-				jQuery("#recent-tab").css("display", "block");
-			});
-			jQuery("#recent-tab").click(function () {
-				jQuery("#popular-tab").css("display", "block");
-			});
-		});
-	});
+    require([
+        'jquery',
+        'Mageplaza_Blog/js/less.min'
+    ],function ($) {
+        jQuery(document).ready(function () {
+            jQuery("#popular-tab").click(function () {
+                jQuery("#recent-tab").css("display", "block");
+            });
+            jQuery("#recent-tab").click(function () {
+                jQuery("#popular-tab").css("display", "block");
+            });
+        });
+    });
 </script>
