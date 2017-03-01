@@ -2,20 +2,15 @@
 $posts = $block->getMosviewPosts();
 $postsRecent = $block->getRecentPost();
 ?>
-
-<div class="mp-sidebar mpcss row">
-	<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('mageplaza_blog_sidebar_above_popular_widget')->toHtml();?>
-</div>
-
 <div class="mp-sidebar mpcss">
 		<ul class="nav nav-tabs">
-			<li class="active"><a data-toggle="tab" href="#mostview"><?php echo __('Popular') ?></a></li>
-			<li><a data-toggle="tab" href="#mostrecent"><?php echo __('Recent') ?></a></li>
+			<li id="tab-1" class="active"><a id="popular-tab"><?php echo __('Popular') ?></a></li>
+			<li id="tab-2"><a id="recent-tab"><?php echo __('Recent') ?></a></li>
 		</ul>
 		
 		<div class="tab-content">
-			<div id="mostview" class="tab-pane fade in active">
-				<?php if ($posts->getSize()): ?>
+			<div id="mostview">
+				<?php if (count($posts) > 0): ?>
 					<?php foreach ($posts as $post): ?>
 						<a class="list-post-tabs" href="<?php echo $block->getUrlByPost($post) ?>">
 							<div class="post-left">
@@ -38,8 +33,8 @@ $postsRecent = $block->getRecentPost();
 					<?php echo __('<div style="'.'height: 50px;line-height: 50px;text-align: center;'.'">No Posts</div>') ?>
 				<?php endif; ?>
 			</div>
-			<div id="mostrecent" class="tab-pane fade">
-				<?php if ($postsRecent->getSize()): ?>
+			<div id="mostrecent" style="display:none">
+				<?php if (count($postsRecent) > 0): ?>
 					<?php foreach ($postsRecent as $post): ?>
 						<a class="list-post-tabs" href="<?php echo $block->getUrlByPost($post) ?>">
 							<div class="post-left">
@@ -61,3 +56,21 @@ $postsRecent = $block->getRecentPost();
 			</div>
 		</div>
 </div>
+<script>
+	jQuery.noConflict();
+
+	jQuery(document).ready(function(){
+		jQuery("#popular-tab").click(function(){
+			jQuery("#tab-1").addClass('active');
+			jQuery("#tab-2").removeClass('active');
+			jQuery('#mostview').show();
+			jQuery('#mostrecent').hide();
+		});
+		jQuery("#recent-tab").click(function(){
+			jQuery("#tab-1").removeClass('active');
+			jQuery("#tab-2").addClass('active');
+			jQuery('#mostview').hide();
+			jQuery('#mostrecent').show();
+		});
+	});
+</script>

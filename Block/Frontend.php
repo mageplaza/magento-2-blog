@@ -20,29 +20,28 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Magento\Framework\ObjectManagerInterface;
-
-//use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
 
 class Frontend extends Template
 {
     protected $helperData;
     protected $objectManager;
-    //protected $storeManager;
     protected $localeDate;
+    protected $_store;
 
     public function __construct(
         Context $context,
         HelperData $helperData,
         ObjectManagerInterface $objectManager,
-        //StoreManagerInterface $storeManager,
+        TemplateContext $templateContext,
         array $data = []
     ) {
     
 
         $this->helperData    = $helperData;
         $this->objectManager = $objectManager;
-        //$this->storeManager  = $storeManager;
         $this->localeDate = $context->getLocaleDate();
+        $this->_store = $templateContext->getStoreManager();
         parent::__construct($context, $data);
     }
 
@@ -74,6 +73,29 @@ class Frontend extends Template
     public function getBlogConfig($code)
     {
         return $this->helperData->getBlogConfig($code);
+    }
+
+    /**
+     * filter post by store
+     * return true/false
+     */
+    public function filterPost($post){
+        $storeId = $this->_store->getStore()->getId();
+        $postStoreId = $post->getStoreIds() ? explode(',', $post->getStoreIds()) : '-1';
+        if (in_array($storeId, $postStoreId)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * format post created_at
+     */
+    public function formatCreatedAt($createdAt){
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
+        $dateFormat = date('Y-m-d',$object->timestamp($createdAt));
+        return $dateFormat;
     }
 
     protected function _prepareLayout()
@@ -147,7 +169,7 @@ class Frontend extends Template
                      'title' => $category->getName(),
                     ]
                 );
-                $this->applySeoCode();
+                $this->applySeoCode($category);
             } elseif ($actionName == 'blog_tag_view') {
                 $tag = $this->helperData->getTagByParam('id', $this->getRequest()->getParam('id'));
                 $breadcrumbs->addCrumb(
@@ -171,7 +193,7 @@ class Frontend extends Template
                     ['label' => ucfirst($tag->getName()),
                      'title' => $tag->getName()]
                 );
-                $this->applySeoCode();
+                $this->applySeoCode($tag);
             } elseif ($actionName == 'blog_topic_view') {
                 $topic = $this->helperData->getTopicByParam('id', $this->getRequest()->getParam('id'));
                 $breadcrumbs->addCrumb(
@@ -236,7 +258,7 @@ class Frontend extends Template
                 $pageMainTitle->setPageTitle($post->getName());
             }
         } else {
-            $title = $this->helperData->getBlogConfig('seo/meta_title');
+            $title = $this->helperData->getBlogConfig('general/name');
             if ($title) {
                 $this->pageConfig->getTitle()->set($title);
             }

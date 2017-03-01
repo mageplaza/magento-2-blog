@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -19,28 +19,28 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
 {
     /**
      * Backend session
-     *
+     * 
      * @var \Magento\Backend\Model\Session
      */
     protected $backendSession;
 
     /**
      * Page factory
-     *
+     * 
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $resultPageFactory;
 
     /**
      * Result JSON factory
-     *
+     * 
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
      * constructor
-     *
+     * 
      * @param \Magento\Backend\Model\Session $backendSession
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
@@ -50,16 +50,14 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Magento\Backend\Model\Auth\Session $backendSession,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Registry $registry,
-        //\Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
-    ) {
-    
-        $this->backendSession    = $backendSession;
+    )
+    {
+        $this->backendSession    = $context->getSession();
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         parent::__construct($categoryFactory, $registry, $context);
@@ -67,7 +65,7 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
 
 
     /**
-     * Edit Category page
+     * Edit Faqcat page
      *
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -86,7 +84,7 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
         }
 
         /**
-         * Check if we have data in session (if during Category save was exception)
+         * Check if we have data in session (if during Faqcat save was exception)
          */
         $data = $this->_getSession()->getMageplazaBlogCategoryData(true);
         if (isset($data['category'])) {
@@ -99,19 +97,19 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
          * Build response for ajax request
          */
         if ($this->getRequest()->getQuery('isAjax')) {
-            // prepare breadcrumbs of selected Category, if any
+            // prepare breadcrumbs of selected Faqcat, if any
             $breadcrumbsPath = $category->getPath();
             if (empty($breadcrumbsPath)) {
-                // but if no Category, and it is deleted - prepare breadcrumbs from path, saved in session
+                // but if no Faqcat, and it is deleted - prepare breadcrumbs from path, saved in session
                 //TODO: inject session instead of using objectManager
                 $breadcrumbsPath = $this->_objectManager->get(
                     'Magento\Backend\Model\Auth\Session'
                 )->getDeletedPath(
-                    true
-                );
+                        true
+                    );
                 if (!empty($breadcrumbsPath)) {
                     $breadcrumbsPath = explode('/', $breadcrumbsPath);
-                    // no need to get parent breadcrumbs if deleting Category level 1
+                    // no need to get parent breadcrumbs if deleting Faqcat level 1
                     if (count($breadcrumbsPath) <= 1) {
                         $breadcrumbsPath = '';
                     } else {

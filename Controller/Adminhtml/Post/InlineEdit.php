@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -19,21 +19,21 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
 {
     /**
      * JSON Factory
-     *
+     * 
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $jsonFactory;
 
     /**
      * Post Factory
-     *
+     * 
      * @var \Mageplaza\Blog\Model\PostFactory
      */
     protected $postFactory;
 
     /**
      * constructor
-     *
+     * 
      * @param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
      * @param \Mageplaza\Blog\Model\PostFactory $postFactory
      * @param \Magento\Backend\App\Action\Context $context
@@ -42,8 +42,8 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
         \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
         \Mageplaza\Blog\Model\PostFactory $postFactory,
         \Magento\Backend\App\Action\Context $context
-    ) {
-    
+    )
+    {
         $this->jsonFactory = $jsonFactory;
         $this->postFactory = $postFactory;
         parent::__construct($context);

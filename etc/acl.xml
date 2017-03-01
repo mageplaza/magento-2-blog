@@ -15,23 +15,21 @@
  *                     @license   http://opensource.org/licenses/mit-license.php MIT License
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Acl/etc/acl.xsd">
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Mageplaza_Core::menu">
-                    <resource id="Mageplaza_Blog::blog" title="Better Blog" sortOrder="25">
-                        <resource id="Mageplaza_Blog::post" title="Posts" sortOrder="10"/>
-                        <resource id="Mageplaza_Blog::tag" title="Tags" sortOrder="20"/>
-                        <resource id="Mageplaza_Blog::topic" title="Topics" sortOrder="30"/>
-                        <resource id="Mageplaza_Blog::category" title="Categories" sortOrder="40"/>
-                        <resource id="Mageplaza_Blog::settings" title="Settings" sortOrder="50"/>
-                    </resource>
+                <resource id="Mageplaza_Blog::blog" title="Better Blog" sortOrder="25">
+                    <resource id="Mageplaza_Blog::post" title="Posts" sortOrder="10"/>
+                    <resource id="Mageplaza_Blog::tag" title="Tags" sortOrder="20"/>
+                    <resource id="Mageplaza_Blog::topic" title="Topics" sortOrder="30"/>
+                    <resource id="Mageplaza_Blog::category" title="Categories" sortOrder="40"/>
+                    <resource id="Mageplaza_Blog::settings" title="Settings" sortOrder="50"/>
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Mageplaza_Blog::config_blog" title="Better Blog"/>
+                            <resource id="Mageplaza_Blog::blog_config" title="Better Blog"/>
                         </resource>
                     </resource>
                 </resource>

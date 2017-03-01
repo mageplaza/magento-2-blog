@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -19,28 +19,28 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Date model
-     *
+     * 
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $date;
 
     /**
      * Event Manager
-     *
+     * 
      * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $eventManager;
 
     /**
      * Post relation model
-     *
+     * 
      * @var string
      */
     protected $categoryPostTable;
 
     /**
      * constructor
-     *
+     * 
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -49,8 +49,8 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\ResourceModel\Db\Context $context
-    ) {
-    
+    )
+    {
         $this->date         = $date;
         $this->eventManager = $eventManager;
         parent::__construct($context);
@@ -69,7 +69,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Retrieves Category Name from DB by passed id.
+     * Retrieves Faqcat Name from DB by passed id.
      *
      * @param string $id
      * @return string|bool
@@ -192,10 +192,10 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getTable('mageplaza_blog_category'),
             'MAX(' . $positionField . ')'
         )->where(
-            $adapter->quoteIdentifier('path') . ' LIKE :c_path'
-        )->where(
-            $adapter->quoteIdentifier('level') . ' = :c_level'
-        );
+                $adapter->quoteIdentifier('path') . ' LIKE :c_path'
+            )->where(
+                $adapter->quoteIdentifier('level') . ' = :c_level'
+            );
 
         $position = $adapter->fetchOne($select, $bind);
         if (!$position) {
@@ -260,8 +260,8 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getMainTable(),
             ['category_id']
         )->where(
-            $pathField . ' LIKE :c_path'
-        );
+                $pathField . ' LIKE :c_path'
+            );
 
         $childrenIds = $adapter->fetchCol($select, ['c_path' => $object->getPath() . '/%']);
 
@@ -295,7 +295,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $pathField = $adapter->quoteIdentifier('path');
 
         /**
-         * Decrease children count for all old Category parent Categories
+         * Decrease children count for all old Faqcat parent Categories
          */
         $adapter->update(
             $table,
@@ -304,7 +304,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         /**
-         * Increase children count for new Category parents
+         * Increase children count for new Faqcat parents
          */
         $adapter->update(
             $table,
@@ -336,7 +336,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             [$pathField . ' LIKE ?' => $category->getPath() . '/%']
         );
         /**
-         * Update moved Category data
+         * Update moved Faqcat data
          */
         $data = [
             'path' => $newPath,
@@ -346,7 +346,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         ];
         $adapter->update($table, $data, ['category_id = ?' => $category->getId()]);
 
-        // Update Category object to new data
+        // Update Faqcat object to new data
         $category->addData($data);
         $category->unsetData('path_ids');
 
@@ -363,8 +363,8 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Mageplaza\Blog\Model\Category $category,
         \Mageplaza\Blog\Model\Category $newParent,
         $afterCategoryId
-    ) {
-    
+    )
+    {
         $table = $this->getMainTable();
         $adapter = $this->getConnection();
         $positionField = $adapter->quoteIdentifier('position');
@@ -382,7 +382,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($afterCategoryId) {
             $select = $adapter->select()->from($table, 'position')->where('category_id = :category_id');
             $position = $adapter->fetchOne($select, ['category_id' => $afterCategoryId]);
-            $position++;
+            $position += 1;
         } else {
             $position = 1;
         }
@@ -404,8 +404,8 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getMainTable(),
             'children_count'
         )->where(
-            'category_id = :category_id'
-        );
+                'category_id = :category_id'
+            );
         $bind = ['category_id' => $categoryId];
 
         return $this->getConnection()->fetchOne($select, $bind);
@@ -443,7 +443,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $insert = array_diff_key($posts, $oldPosts);
         $delete = array_diff_key($oldPosts, $posts);
         $update = array_intersect_key($posts, $oldPosts);
-        $_update = [];
+        $_update = array();
         foreach ($update as $key => $position) {
             if (isset($oldPosts[$key]) && $oldPosts[$key] != $position) {
                 $_update[$key] = $position;
@@ -506,9 +506,8 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         // lowercase
         $text = strtolower($text);
-        if ($count == 0) {
+        if ($count == 0)
             $count = '';
-        }
         if (empty($text)) {
             return 'n-a' . $count;
         }

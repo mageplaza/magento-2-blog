@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -19,21 +19,21 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 {
     /**
      * ID Field Name
-     *
+     * 
      * @var string
      */
     protected $_idFieldName = 'category_id';
 
     /**
      * Event prefix
-     *
+     * 
      * @var string
      */
     protected $_eventPrefix = 'mageplaza_blog_category_collection';
 
     /**
      * Event object
-     *
+     * 
      * @var string
      */
     protected $_eventObject = 'category_collection';

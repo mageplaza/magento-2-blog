@@ -15,18 +15,19 @@
  */
 namespace Mageplaza\Blog\Block\Tag;
 
+
 use Mageplaza\Blog\Block\Frontend;
 
 class Widget extends Frontend
 {
-    public function getTagList()
-    {
+	public function getTagList()
+	{
 
-        return $this->helperData->getTagList();
-    }
+		return $this->helperData->getTagList();
+	}
 
-    public function getTagUrl($tag)
-    {
-        return $this->helperData->getTagUrl($tag);
-    }
+	public function getTagUrl($tag)
+	{
+		return $this->helperData->getTagUrl($tag);
+	}
 }

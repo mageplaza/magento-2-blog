@@ -10,9 +10,6 @@
         <css src="Mageplaza_Blog::css/sidebar/style.css"/>
     </head>
     <body>
-        <referenceContainer name='root'>
-            <block class='Mageplaza\Blog\Block\Html\Init' name='Mageplaza_Blog_Block_Html_Init' template="init.phtml" />
-        </referenceContainer>
         <referenceBlock name="footer_links">
             <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_footer_link">
                 <arguments>

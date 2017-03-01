@@ -1,7 +1,7 @@
 <?php
 $posts = $block->getPostList();
 ?>
-<?php if ($posts->getSize() > 0) : ?>
+<?php if (count($posts) > 0) : ?>
 	<div class="post-list-container">
         <?php foreach ($posts as $post) : ?>
 			<div class="post-list-item">

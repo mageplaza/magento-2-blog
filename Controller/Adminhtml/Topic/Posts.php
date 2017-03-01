@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -19,14 +19,14 @@ class Posts extends \Mageplaza\Blog\Controller\Adminhtml\Topic
 {
     /**
      * Result layout factory
-     *
+     * 
      * @var \Magento\Framework\View\Result\LayoutFactory
      */
     protected $resultLayoutFactory;
 
     /**
      * constructor
-     *
+     * 
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Mageplaza\Blog\Model\TopicFactory $postFactory
      * @param \Magento\Framework\Registry $registry
@@ -37,11 +37,11 @@ class Posts extends \Mageplaza\Blog\Controller\Adminhtml\Topic
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Mageplaza\Blog\Model\TopicFactory $postFactory,
         \Magento\Framework\Registry $registry,
-        //\Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
-    ) {
-    
+    )
+    {
         $this->resultLayoutFactory = $resultLayoutFactory;
+
         parent::__construct($postFactory, $registry, $context);
     }
 

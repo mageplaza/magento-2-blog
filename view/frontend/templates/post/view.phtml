@@ -1,12 +1,12 @@
 
 <?php $_post = $block->getCurrentPost(); ?>
+<?php if($block->filterPost($_post)): ?>
 
-<?php if ($block->getBlogConfig('share/enabled')): 
-?>
-
+<?php if ($block->getBlogConfig('share/enabled')): ?>
 	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $block->getBlogConfig('share/pubid_id') ?>"
 			async="async"></script>
 <?php endif; ?>
+
 <div class="mpcss post-view">
 	<div class="row">
         <div class="post-image col-xs-12">
@@ -19,10 +19,6 @@
         <div class="post-post_content col-xs-12">
             <?php echo $_post->getPostContent(); ?>
         </div>
-
-		<div class="col-xs-12">
-			<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('mageplaza_blog_view_under_content')->toHtml();?>
-		</div>
 
 		<div class="col-xs-12">
 			<hr/>
@@ -83,57 +79,38 @@
 	</div>
 <?php endif;?>
 
-<?php $relatedPosts = $_post->getRelatedPostsCollection(); ?>
+	<?php
+		$relatedPosts = $_post->getRelatedPostsCollection();
+		$countRelated = 0;
+		$limitRelated = $block->getBlogConfig('general/related_post');
+	?>
 <?php if (count($relatedPosts)): ?>
 
-	<div class="mpcss post-same-topics topic-list">
+	<div class="post-same-topics topic-list mpcss">
 		<div class="row">
-			<div class="col-xs-12">
+			<div class="col-xs-12 row">
 				<h2><?php echo __('Related Posts'); ?></h2>
-				<div class="owl-carousel owl-theme" id="related-post">
 					<?php foreach ($relatedPosts as $relatedPost): ?>
-						<div class="relate-content item">
-							<a class="mp-relate-link" href="<?php echo $block->getUrlByPost($relatedPost) ?>"><img class="img-responsive" src="<?php echo $block->getImageUrl($relatedPost->getImage()); ?>" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
+						<?php
+							if($block->filterPost($relatedPost)):
+								$countRelated++;
+							?>
+								<?php if($countRelated > $limitRelated) break; ?>
+						<div class="relate-content item col-xs-3" style="margin-right:10px;">
+							<a class="mp-relate-link" href="<?php echo $block->getUrlByPost($relatedPost) ?>"><img class="img-responsive" src="<?php echo $block->getImageUrl($relatedPost->getImage()); ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
 								<?php echo $relatedPost->getName(); ?></a>
 						</div>
+							<?php endif; ?>
 					<?php endforeach; ?>
-				</div>
 			</div>
 		</div>
     </div>
 
-	<script>
-				jQuery.noConflict();
-				jQuery(document).ready(function () {
-					var owl = jQuery('.owl-carousel');
-					owl.owlCarousel({
-						items: 4,
-						loop: true,
-						margin: 10,
-						autoplay: true,
-						autoplayTimeout: 4000,
-						autoplayHoverPause: true,
-						nav: false,
-						dots: false,
-						lazyLoad: true
-					});
-					jQuery('.play').on('click', function () {
-						owl.trigger('play.owl.autoplay', [1000])
-					});
-					jQuery('.stop').on('click', function () {
-						owl.trigger('stop.owl.autoplay')
-					})
-				})
-			</script>
+	<?php else:?>
+		<?php echo __('No Post')?>
 <?php endif; ?>
 
-
-<div class="row">
-	<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('mageplaza_blog_view_above_comment')->toHtml();?>
-</div>
-
-
-<div class="mpcss mp-comment">
+<div class=" mp-comment">
 <?php $typeComment = $block->checkComment(); ?>
 	<?php if ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>
 		<div class="box-collateral box-reviews" id="post-reviews">
@@ -156,7 +133,7 @@
 
    	 		</div>
 	<?php elseif ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::FACEBOOK): ?>
-		<div class="mpcss box-collateral box-reviews" id="post-reviews">
+		<div class="box-collateral box-reviews" id="post-reviews">
 				<h2><?php echo __('Comments') ?></h2>
 
 				<div id="fb-root"></div>
@@ -176,4 +153,29 @@
     		</div>
 	<?php endif; ?>
 </div>
-<!--Comments-->
+<script>
+							less = {
+								env: "production",
+								logLevel: 2,
+								async: false,
+								fileAsync: false,
+								poll: 1000,
+								functions: {},
+								dumpLineNumbers: "comments",
+								relativeUrls: false,
+								useFileCache: true,
+								modifyVars: {
+									'@color': '<?php echo $block->getBlogConfig('general/font_color')?>'
+								}
+
+							};
+</script>
+<script>
+	jQuery.noConflict();
+	require([
+		'jquery',
+		'Mageplaza_Blog/js/less.min'
+	]);
+</script>
+
+<?php endif;?>

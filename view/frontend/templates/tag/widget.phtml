@@ -3,11 +3,6 @@ $tags = $block->getTagList();
 $limit = 5;
 $count = 0;
 ?>
-
-<div class="mp-sidebar mpcss row">
-	<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('mageplaza_blog_sidebar_above_tags_widget')->toHtml();?>
-</div>
-
 <div class="mp-sidebar mpcss">
 	<div class="row">
 		<div class="block-title col-xs-12 sidebar-tags">
@@ -15,7 +10,7 @@ $count = 0;
 
 		</div>
 		<div class="col-xs-12">
-			<?php if ($tags->getSize()): ?>
+			<?php if ($tags != '' && count($tags) > 0): ?>
 				<?php foreach ($tags as $tag): ?>
 					<?php
 					$count++;
@@ -31,8 +26,4 @@ $count = 0;
 				<hr/>
 		</div>
 		</div>
-</div>
-
-<div class="mp-sidebar mpcss row">
-	<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('mageplaza_blog_sidebar_under_tags_widget')->toHtml();?>
 </div>

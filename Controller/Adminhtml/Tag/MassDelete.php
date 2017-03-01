@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -19,21 +19,21 @@ class MassDelete extends \Magento\Backend\App\Action
 {
     /**
      * Mass Action Filter
-     *
+     * 
      * @var \Magento\Ui\Component\MassAction\Filter
      */
     protected $filter;
 
     /**
      * Collection Factory
-     *
+     * 
      * @var \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory
      */
     protected $collectionFactory;
 
     /**
      * constructor
-     *
+     * 
      * @param \Magento\Ui\Component\MassAction\Filter $filter
      * @param \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $collectionFactory
      * @param \Magento\Backend\App\Action\Context $context
@@ -42,8 +42,8 @@ class MassDelete extends \Magento\Backend\App\Action
         \Magento\Ui\Component\MassAction\Filter $filter,
         \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $collectionFactory,
         \Magento\Backend\App\Action\Context $context
-    ) {
-    
+    )
+    {
         $this->filter            = $filter;
         $this->collectionFactory = $collectionFactory;
         parent::__construct($context);

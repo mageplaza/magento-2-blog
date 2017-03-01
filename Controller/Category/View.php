@@ -14,34 +14,37 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 
 class View extends Action
 {
-    protected $resultPageFactory;
-    protected $helperBlog;
-    protected $accountManagement;
-    protected $customerUrl;
-    protected $session;
-    protected $helperData;
-    protected $storeManager;
+	protected $resultPageFactory;
+	protected $helperBlog;
+	protected $accountManagement;
+	protected $customerUrl;
+	protected $session;
+	protected $helperData;
+	protected $storeManager;
 
-    public function __construct(
-        Context $context,
-        StoreManagerInterface $storeManager,
-        HelperBlog $helperBlog,
-        PageFactory $resultPageFactory,
-        AccountManagementInterface $accountManagement,
-        CustomerUrl $customerUrl,
-        Session $customerSession
-    ) {
-        parent::__construct($context);
-        $this->storeManager      = $storeManager;
-        $this->helperBlog      = $helperBlog;
-        $this->resultPageFactory = $resultPageFactory;
-        $this->accountManagement = $accountManagement;
-        $this->customerUrl       = $customerUrl;
-        $this->session           = $customerSession;
-    }
+	public function __construct(
+		Context $context,
+		StoreManagerInterface $storeManager,
+		HelperBlog $helperBlog,
+		PageFactory $resultPageFactory,
+		AccountManagementInterface $accountManagement,
+		CustomerUrl $customerUrl,
+		Session $customerSession
+	) {
+		parent::__construct($context);
+		$this->storeManager      = $storeManager;
+		$this->helperBlog      = $helperBlog;
+		$this->resultPageFactory = $resultPageFactory;
+		$this->accountManagement = $accountManagement;
+		$this->customerUrl       = $customerUrl;
+		$this->session           = $customerSession;
 
-    public function execute()
-    {
-        return $this->resultPageFactory->create();
-    }
+	}
+
+	public function execute()
+	{
+		return $this->resultPageFactory->create();
+	}
+
+
 }

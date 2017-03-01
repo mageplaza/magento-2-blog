@@ -15,7 +15,10 @@
  *                     @license   http://opensource.org/licenses/mit-license.php MIT License
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Theme\Block\Html\Topmenu">
+        <plugin name="blog-topmenu" type="Mageplaza\Blog\Plugin\Topmenu" />
+    </type>
     <virtualType name="MageplazaBlogGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
         <arguments>
             <argument name="appliers" xsi:type="array">

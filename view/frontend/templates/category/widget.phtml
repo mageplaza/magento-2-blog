@@ -3,11 +3,6 @@ $categories = $block->getCategoryList();
 $limit = 5;
 $count = 0;
 ?>
-
-<div class="mp-sidebar mpcss row">
-	<?php echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('mageplaza_blog_sidebar_above_categories_widget')->toHtml();?>
-</div>
-
 <div class="mp-sidebar mpcss">
 	<div class="row">
 		<div class="block-title col-xs-12">
@@ -16,8 +11,7 @@ $count = 0;
 		</div>
 		<div class="col-xs-12">
 			<ul class="menu-categories">
-			<?php if ($categories->getSize()): ?>
-
+			<?php if ($categories != '' && count($categories) > 0): ?>
 
 			<?php foreach ($categories as $category): ?>
 			<?php

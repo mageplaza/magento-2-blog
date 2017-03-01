@@ -2,12 +2,12 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- *
+ * 
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- *
+ * 
  *                     @category  Mageplaza
  *                     @package   Mageplaza_Blog
  *                     @copyright Copyright (c) 2016
@@ -19,28 +19,30 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 {
     /**
      * Wysiwyg config
-     *
+     * 
      * @var \Magento\Cms\Model\Wysiwyg\Config
      */
     protected $wysiwygConfig;
 
     /**
      * Country options
-     *
+     * 
      * @var \Magento\Config\Model\Config\Source\Yesno
      */
     protected $booleanOptions;
 
     /**
      * Meta Robots options
-     *
+     * 
      * @var \Mageplaza\Blog\Model\Post\Source\MetaRobots
      */
     protected $metaRobotsOptions;
 
+    protected $_systemStore;
+
     /**
      * constructor
-     *
+     * 
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
      * @param \Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobotsOptions
@@ -53,15 +55,17 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Config\Model\Config\Source\Yesno $booleanOptions,
         \Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobotsOptions,
+        \Magento\Store\Model\System\Store $systemStore,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
-    ) {
-    
+    )
+    {
         $this->wysiwygConfig     = $wysiwygConfig;
         $this->booleanOptions    = $booleanOptions;
         $this->metaRobotsOptions = $metaRobotsOptions;
+        $this->_systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -122,6 +126,17 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'title' => __('Content'),
                 'note' => __('Post Content'),
                 'config'    => $this->wysiwygConfig->getConfig()
+            ]
+        );
+        $fieldset->addField(
+            'store_ids',
+            'multiselect',
+            [
+                'name'  => 'store_ids',
+                'label' => __('Store Views'),
+                'title' => __('Store Views'),
+                'note' => __('Select Store Views'),
+                'values' => $this->_systemStore->getStoreValuesForForm(false, true),
             ]
         );
         $fieldset->addField(

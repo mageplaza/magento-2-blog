@@ -6,18 +6,25 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-right" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="blog_post_head_handle" />
+    <head>
+        <css src="Mageplaza_Blog::css/index/style.css"/>
+        <css src="Mageplaza_Blog::css/index/style-color.less" rel="stylesheet/less" type="text/less"/>
+        <css src="Mageplaza_Core::css/mp.css"/>
+        <css src="Mageplaza_Core::css/font-awesome.min.css"/>
+        <script src="Mageplaza_Blog::js/jquery-1.12.4.min.js"/>
+
+    </head>
     <body>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Frontend" name="mp.blog.header" template="Mageplaza_Blog::blog/header.phtml"/>
-            <block class="Mageplaza\Blog\Block\Category\Listpost" name="mp.blog.category.listpost" template="Mageplaza_Blog::category/post/list.phtml"/>
+            <block class="Mageplaza\Blog\Block\Category\Listpost" template="Mageplaza_Blog::category/post/list.phtml"/>
         </referenceContainer>
-        <referenceContainer name="catalog-sidebar-right-top">
-            <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview" ifconfig="blog/general/sidebar_right" template="Mageplaza_Blog::sidebar/mostview.phtml"/>
-            <!--<block class="Mageplaza\Blog\Block\Sidebar\Recentpost" name="mp.blog.view.sidebar.recentpost"-->
-                   <!--template="Mageplaza_Blog::sidebar/recentpost.phtml"/>-->
-            <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category" ifconfig="blog/general/sidebar_right" template="Mageplaza_Blog::category/widget.phtml"/>
-            <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag" ifconfig="blog/general/sidebar_right" template="Mageplaza_Blog::tag/widget.phtml"/>
+        <referenceContainer name="sidebar.main">
+            <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"
+                   template="Mageplaza_Blog::sidebar/mostview.phtml"/>
+            <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category"
+                   template="Mageplaza_Blog::category/widget.phtml"/>
+            <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"
+                   template="Mageplaza_Blog::tag/widget.phtml"/>
         </referenceContainer>
     </body>
 </page>
