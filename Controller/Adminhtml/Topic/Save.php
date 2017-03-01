@@ -17,12 +17,12 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 
 class Save extends \Mageplaza\Blog\Controller\Adminhtml\Topic
 {
-    /**
-     * Backend session
-     * 
-     * @var \Magento\Backend\Model\Session
-     */
-    protected $backendSession;
+	/**
+	 * Backend session
+	 *
+	 * @var \Magento\Backend\Model\Session
+	 */
+	protected $backendSession;
 
     /**
      * JS helper
@@ -42,17 +42,15 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Topic
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Magento\Backend\Model\Session $backendSession,
         \Magento\Backend\Helper\Js $jsHelper,
         \Mageplaza\Blog\Model\TopicFactory $topicFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     )
     {
-        $this->backendSession = $backendSession;
+        $this->backendSession = $context->getSession();
         $this->jsHelper       = $jsHelper;
-        parent::__construct($topicFactory, $registry, $resultRedirectFactory, $context);
+        parent::__construct($topicFactory, $registry, $context);
     }
 
     /**

@@ -37,12 +37,11 @@ class Posts extends \Mageplaza\Blog\Controller\Adminhtml\Tag
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Mageplaza\Blog\Model\TagFactory $postFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     )
     {
         $this->resultLayoutFactory = $resultLayoutFactory;
-        parent::__construct($postFactory, $registry, $resultRedirectFactory, $context);
+        parent::__construct($postFactory, $registry, $context);
     }
 
     /**

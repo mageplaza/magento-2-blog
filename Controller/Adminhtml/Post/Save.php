@@ -18,6 +18,13 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 {
 	/**
+	 * Backend session
+	 *
+	 * @var \Magento\Backend\Model\Session
+	 */
+	protected $backendSession;
+
+	/**
 	 * Upload model
 	 *
 	 * @var \Mageplaza\Blog\Model\Upload
@@ -30,13 +37,6 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 	 * @var \Mageplaza\Blog\Model\Post\Image
 	 */
 	protected $imageModel;
-
-	/**
-	 * Backend session
-	 *
-	 * @var \Magento\Backend\Model\Session
-	 */
-	protected $backendSession;
 
 	/**
 	 * JS helper
@@ -62,20 +62,18 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 		\Mageplaza\Blog\Model\Upload $uploadModel,
 		\Mageplaza\Blog\Model\Post\Image $imageModel,
 		\Mageplaza\Blog\Model\TrafficFactory $trafficFactory,
-		\Magento\Backend\Model\Session $backendSession,
 		\Magento\Backend\Helper\Js $jsHelper,
 		\Mageplaza\Blog\Model\PostFactory $postFactory,
 		\Magento\Framework\Registry $registry,
-		\Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
 		\Magento\Backend\App\Action\Context $context
 	)
 	{
 		$this->uploadModel    = $uploadModel;
 		$this->imageModel     = $imageModel;
 		$this->trafficFactory = $trafficFactory;
-		$this->backendSession = $backendSession;
+		$this->backendSession = $context->getSession();
 		$this->jsHelper       = $jsHelper;
-		parent::__construct($postFactory, $registry, $resultRedirectFactory, $context);
+		parent::__construct($postFactory, $registry, $context);
 	}
 
 	/**

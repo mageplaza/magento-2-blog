@@ -17,12 +17,12 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 
 class Save extends \Mageplaza\Blog\Controller\Adminhtml\Tag
 {
-    /**
-     * Backend session
-     * 
-     * @var \Magento\Backend\Model\Session
-     */
-    protected $backendSession;
+	/**
+	 * Backend session
+	 *
+	 * @var \Magento\Backend\Model\Session
+	 */
+	protected $backendSession;
 
     /**
      * JS helper
@@ -42,17 +42,15 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Tag
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Magento\Backend\Model\Session $backendSession,
         \Magento\Backend\Helper\Js $jsHelper,
         \Mageplaza\Blog\Model\TagFactory $tagFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     )
     {
-        $this->backendSession = $backendSession;
+        $this->backendSession = $context->getSession();
         $this->jsHelper       = $jsHelper;
-        parent::__construct($tagFactory, $registry, $resultRedirectFactory, $context);
+        parent::__construct($tagFactory, $registry, $context);
     }
 
     /**

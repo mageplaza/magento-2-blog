@@ -50,19 +50,17 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Magento\Backend\Model\Session $backendSession,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     )
     {
-        $this->backendSession    = $backendSession;
+        $this->backendSession    = $context->getSession();
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
-        parent::__construct($categoryFactory, $registry, $resultRedirectFactory, $context);
+        parent::__construct($categoryFactory, $registry, $context);
     }
 
 

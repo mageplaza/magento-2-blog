@@ -64,7 +64,6 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
         \Magento\Backend\Helper\Js $jsHelper,
         \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     )
     {
@@ -72,7 +71,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory     = $layoutFactory;
         $this->jsHelper          = $jsHelper;
-        parent::__construct($categoryFactory, $registry, $resultRedirectFactory, $context);
+        parent::__construct($categoryFactory, $registry, $context);
     }
 
     /**

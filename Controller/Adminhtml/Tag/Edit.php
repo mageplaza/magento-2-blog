@@ -17,12 +17,12 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 
 class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Tag
 {
-    /**
-     * Backend session
-     * 
-     * @var \Magento\Backend\Model\Session
-     */
-    protected $backendSession;
+	/**
+	 * Backend session
+	 *
+	 * @var \Magento\Backend\Model\Session
+	 */
+	protected $backendSession;
 
     /**
      * Page factory
@@ -50,19 +50,17 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Tag
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Magento\Backend\Model\Session $backendSession,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Mageplaza\Blog\Model\TagFactory $tagFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     )
     {
-        $this->backendSession    = $backendSession;
+        $this->backendSession    = $context->getSession();
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
-        parent::__construct($tagFactory, $registry, $resultRedirectFactory, $context);
+        parent::__construct($tagFactory, $registry, $context);
     }
 
     /**

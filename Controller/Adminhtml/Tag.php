@@ -49,13 +49,12 @@ abstract class Tag extends \Magento\Backend\App\Action
     public function __construct(
         \Mageplaza\Blog\Model\TagFactory $tagFactory,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     )
     {
         $this->tagFactory            = $tagFactory;
         $this->coreRegistry          = $coreRegistry;
-        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->resultRedirectFactory = $context->getRedirect();
         parent::__construct($context);
     }
 

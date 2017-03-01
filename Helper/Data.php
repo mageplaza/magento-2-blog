@@ -3,10 +3,8 @@
 namespace Mageplaza\Blog\Helper;
 
 use Mageplaza\Core\Helper\AbstractData as CoreHelper;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\Helper\Context;
-use Magento\Store\Model\ScopeInterface;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\TagFactory;
@@ -27,7 +25,6 @@ class Data extends CoreHelper
     public function __construct(
         Context $context,
         ObjectManagerInterface $objectManager,
-        StoreManagerInterface $storeManager,
         PostFactory $postFactory,
         CategoryFactory $categoryFactory,
         TagFactory $tagFactory,
@@ -40,7 +37,7 @@ class Data extends CoreHelper
         $this->tagfactory      = $tagFactory;
         $this->topicfactory    = $topicFactory;
         $this->_store = $templateContext->getStoreManager();
-        parent::__construct($context, $objectManager, $storeManager);
+        parent::__construct($context, $objectManager, $templateContext->getStoreManager());
     }
 
     public function getBlogConfig($code, $storeId = null)

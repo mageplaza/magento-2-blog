@@ -17,12 +17,12 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
 class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Post
 {
-    /**
-     * Backend session
-     * 
-     * @var \Magento\Backend\Model\Session
-     */
-    protected $backendSession;
+	/**
+	 * Backend session
+	 *
+	 * @var \Magento\Backend\Model\Session
+	 */
+	protected $backendSession;
 
     /**
      * Page factory
@@ -50,19 +50,17 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Post
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Magento\Backend\Model\Session $backendSession,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Mageplaza\Blog\Model\PostFactory $postFactory,
         \Magento\Framework\Registry $registry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     )
     {
-        $this->backendSession    = $backendSession;
+        $this->backendSession    = $context->getSession();
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
-        parent::__construct($postFactory, $registry, $resultRedirectFactory, $context);
+        parent::__construct($postFactory, $registry, $context);
     }
 
     /**
