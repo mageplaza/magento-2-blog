@@ -86,31 +86,38 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         $data = $this->getRequest()->getPost('post');
         $data['store_ids'] = implode(',', $data['store_ids']);
 
-        if (isset($data['image'])) {
-            if (isset($data['image']['delete']) && $data['image']['delete'] == '1') {
-                unset($data['image']);
-            }
-        }
+        //check delete image
+		$deleteImage = false;
 
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $post = $this->initPost();
             $post->setData($data);
+			if (isset($data['image'])) {
+				if (isset($data['image']['delete']) && $data['image']['delete'] == '1') {
+					unset($data['image']);
+					$post->setImage('');
+					$deleteImage = true;
+				}
+			}
 
-            $image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
-            if (!$image) {
-                $this->messageManager->addError(__('Please choose an image to upload.'));
-                $resultRedirect->setPath(
-                    'mageplaza_blog/*/edit',
-                    [
-                        'post_id' => $post->getId(),
-                        '_current'  => true
-                    ]
-                );
-                return $resultRedirect;
-            }
+            if((!isset($data['image']) || (count($data['image']) == 1)) && !$deleteImage) {
+				$image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
+				if (!$image) {
+					$this->messageManager->addError(__('Please choose an image to upload.'));
+					$resultRedirect->setPath(
+						'mageplaza_blog/*/edit',
+						[
+							'post_id'  => $post->getId(),
+							'_current' => true
+						]
+					);
 
-            $post->setImage($image);
+					return $resultRedirect;
+				}
+
+				$post->setImage($image);
+			}
 
 
             $tags = $this->getRequest()->getPost('tags', -1);
