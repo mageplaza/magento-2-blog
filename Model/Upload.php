@@ -52,6 +52,7 @@ class Upload
                 return '';
             } else {
                 $uploader = $this->uploaderFactory->create(['fileId' => $input]);
+				$uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
                 $uploader->setAllowRenameFiles(true);
                 $uploader->setFilesDispersion(true);
                 $uploader->setAllowCreateFolders(true);
@@ -60,7 +61,7 @@ class Upload
             }
         } catch (\Exception $e) {
             if ($e->getCode() != \Magento\Framework\File\Uploader::TMP_NAME_EMPTY) {
-                throw new \Magento\Framework\Exception\LocalizedException($e->getMessage());
+				return false;
             } else {
                 if (isset($data[$input]['value'])) {
                     return $data[$input]['value'];

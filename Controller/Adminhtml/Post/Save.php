@@ -98,9 +98,8 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 			$post->setData($data);
 
 			$image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
-			$fileExt = strtoupper(strrchr($image, '.'));
-			if($fileExt != '.PNG' && $fileExt != '.JPG' && $fileExt != '.JPEG' && $fileExt != '.GIF'){
-				$this->messageManager->addError(__('File uploaded is not an image.'));
+			if(!$image){
+				$this->messageManager->addError(__('Please choose an image to upload.'));
 				$resultRedirect->setPath(
 					'mageplaza_blog/*/edit',
 					[
@@ -108,7 +107,6 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 						'_current'  => true
 					]
 				);
-
 				return $resultRedirect;
 			}
 
