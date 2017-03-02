@@ -2,16 +2,16 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- * 
+ *
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ *
+ * @category  Mageplaza
+ * @package   Mageplaza_Blog
+ * @copyright Copyright (c) 2016
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
  */
 namespace Mageplaza\Blog\Model;
 
@@ -57,56 +57,56 @@ class Category extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Root of the Faqcat tree
-     * 
+     *
      * @var string
      */
     const TREE_ROOT_ID = 1;
 
     /**
      * Cache tag
-     * 
+     *
      * @var string
      */
     const CACHE_TAG = 'mageplaza_blog_category';
 
     /**
      * Cache tag
-     * 
+     *
      * @var string
      */
     protected $_cacheTag = 'mageplaza_blog_category';
 
     /**
      * Event prefix
-     * 
+     *
      * @var string
      */
     protected $_eventPrefix = 'mageplaza_blog_category';
 
     /**
      * Post Collection
-     * 
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
     protected $postCollection;
 
     /**
      * Faqcat Factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\CategoryFactory
      */
     protected $categoryFactory;
 
     /**
      * Post Collection Factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
     protected $postCollectionFactory;
 
     /**
      * constructor
-     * 
+     *
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
      * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
      * @param \Magento\Framework\Model\Context $context
@@ -123,8 +123,8 @@ class Category extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->categoryFactory       = $categoryFactory;
         $this->postCollectionFactory = $postCollectionFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -182,7 +182,7 @@ class Category extends \Magento\Framework\Model\AbstractModel
 
     /**
      * get all parent ids
-     * 
+     *
      * @return array
      */
     public function getParentIds()
@@ -192,7 +192,7 @@ class Category extends \Magento\Framework\Model\AbstractModel
 
     /**
      * move Faqcat in tree
-     * 
+     *
      * @param $parentId
      * @param $afterCategoryId
      * @return $this
@@ -258,7 +258,7 @@ class Category extends \Magento\Framework\Model\AbstractModel
     public function getPostsPosition()
     {
         if (!$this->getId()) {
-            return array();
+            return [];
         }
         $array = $this->getData('posts_position');
         if (is_null($array)) {

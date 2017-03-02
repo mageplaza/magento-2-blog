@@ -68,7 +68,7 @@ class Data extends CoreHelper
         if ($list->getSize()) {
             $list->setOrder('created_at', 'desc')
                 ->addFieldToFilter('enabled', 1)
-				->addFieldToFilter('store_ids', ['eq' => $this->_store->getStore()->getId()]);
+                ->addFieldToFilter('store_ids', ['eq' => $this->_store->getStore()->getId()]);
             return $list;
         }
 
@@ -80,7 +80,9 @@ class Data extends CoreHelper
         $category = $this->categoryfactory->create();
         $list     = $category->getCollection()->addFieldToFilter('enabled', 1);
         $result = $this->filterItems($list);
-        if($result == '') return '';
+        if ($result == '') {
+            return '';
+        }
         return $result;
     }
 
@@ -90,7 +92,9 @@ class Data extends CoreHelper
         $list = $tag->getCollection()
             ->addFieldToFilter('enabled', 1);
         $result = $this->filterItems($list);
-        if($result == '') return '';
+        if ($result == '') {
+            return '';
+        }
         return $result;
     }
 
@@ -101,7 +105,9 @@ class Data extends CoreHelper
             ->addFieldToFilter('enabled', 1)
             ->addFieldToFilter('category_id', ['in' => $array]);
         $result = $this->filterItems($list);
-        if($result == '') return '';
+        if ($result == '') {
+            return '';
+        }
         return $result;
     }
 
@@ -149,9 +155,12 @@ class Data extends CoreHelper
     public function getPostsByTag($tag)
     {
         $posts      = $this->postfactory->create();
-        $collection = $posts->getCollection()->addFieldToFilter('enabled', 1);;
+        $collection = $posts->getCollection()->addFieldToFilter('enabled', 1);
+        ;
         $result = $this->filterItems($collection);
-        if($result == '') return '';
+        if ($result == '') {
+            return '';
+        }
         return $result;
     }
 
@@ -193,7 +202,7 @@ class Data extends CoreHelper
         $categoryHtml = [];
         if (empty($categories)) {
             return null;
-        }else {
+        } else {
             foreach ($categories as $_cat) {
                 $categoryHtml[] = '<a class="mp-info" href="' . $this->getCategoryUrl($_cat) . '">' . $_cat->getName() . '</a>';
             }
@@ -260,7 +269,8 @@ class Data extends CoreHelper
     public function getMosviewPosts()
     {
         $ob    = $this->objectManager->get('Mageplaza\Blog\Model\Traffic');
-        $posts = $ob->getCollection()->addFieldToFilter('enabled', 1);;
+        $posts = $ob->getCollection()->addFieldToFilter('enabled', 1);
+        ;
         $posts->join(
             'mageplaza_blog_post',
             'main_table.post_id=mageplaza_blog_post.post_id',
@@ -268,7 +278,9 @@ class Data extends CoreHelper
         );
         $posts->setOrder('numbers_view', 'DESC');
         $postList = $this->filterItems($posts, $this->getBlogConfig('sidebar/number_mostview_posts'));
-        if($postList == '') return '';
+        if ($postList == '') {
+            return '';
+        }
         return $postList;
     }
 
@@ -282,27 +294,34 @@ class Data extends CoreHelper
             ->addFieldToFilter('enabled', 1)
             ->setOrder('created_at', 'DESC');
         $postList = $this->filterItems($posts, $this->getBlogConfig('sidebar/number_recent_posts'));
-        if($postList == '') return '';
+        if ($postList == '') {
+            return '';
+        }
         return $postList;
     }
 
     /**
      * filter items by store
      */
-    public function filterItems($items, $limit = null){
+    public function filterItems($items, $limit = null)
+    {
         $storeId = $this->_store->getStore()->getId();
-        $list = array();
+        $list = [];
         $count = 0;
         foreach ($items as $item) {
             $itemStore = $item->getStoreIds() ? explode(',', $item->getStoreIds()) : '-1';
             if (in_array($storeId, $itemStore)) {
                 $count++;
-                if ($limit && $count > $limit) break;
+                if ($limit && $count > $limit) {
+                    break;
+                }
                 array_push($list, $item);
             }
         }
         
-        if($count == 0) return '';
+        if ($count == 0) {
+            return '';
+        }
 
         return $list;
     }

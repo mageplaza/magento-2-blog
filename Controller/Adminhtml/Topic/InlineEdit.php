@@ -2,16 +2,16 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- * 
+ *
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ *
+ * @category  Mageplaza
+ * @package   Mageplaza_Blog
+ * @copyright Copyright (c) 2016
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 
@@ -19,21 +19,21 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
 {
     /**
      * JSON Factory
-     * 
+     *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $jsonFactory;
 
     /**
      * Topic Factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\TopicFactory
      */
     protected $topicFactory;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
      * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
      * @param \Magento\Backend\App\Action\Context $context
@@ -42,8 +42,8 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
         \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
         \Mageplaza\Blog\Model\TopicFactory $topicFactory,
         \Magento\Backend\App\Action\Context $context
-    )
-    {
+    ) {
+    
         $this->jsonFactory  = $jsonFactory;
         $this->topicFactory = $topicFactory;
         parent::__construct($context);

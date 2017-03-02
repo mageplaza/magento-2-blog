@@ -2,16 +2,16 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- * 
+ *
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ *
+ * @category  Mageplaza
+ * @package   Mageplaza_Blog
+ * @copyright Copyright (c) 2016
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Tag\Edit\Tab;
 
@@ -19,14 +19,14 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
 {
     /**
      * Wysiwyg config
-     * 
+     *
      * @var \Magento\Cms\Model\Wysiwyg\Config
      */
     protected $wysiwygConfig;
 
     /**
      * Country options
-     * 
+     *
      * @var \Magento\Config\Model\Config\Source\Yesno
      */
     protected $booleanOptions;
@@ -35,7 +35,7 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
      * @param \Magento\Backend\Block\Template\Context $context
@@ -51,8 +51,8 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->wysiwygConfig  = $wysiwygConfig;
         $this->booleanOptions = $booleanOptions;
         $this->_systemStore = $systemStore;

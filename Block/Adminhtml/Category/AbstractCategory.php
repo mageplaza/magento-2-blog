@@ -2,16 +2,16 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- * 
+ *
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ *
+ * @category  Mageplaza
+ * @package   Mageplaza_Blog
+ * @copyright Copyright (c) 2016
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Category;
 
@@ -19,35 +19,35 @@ class AbstractCategory extends \Magento\Backend\Block\Template
 {
     /**
      * Core registry
-     * 
+     *
      * @var \Magento\Framework\Registry
      */
     protected $coreRegistry;
 
     /**
      * Faqcat tree model instance
-     * 
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\Tree
      */
     protected $categoryTree;
 
     /**
      * Faqcat factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\CategoryFactory
      */
     protected $categoryFactory;
 
     /**
      * Faqcat collection factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
     protected $categoryCollectionFactory;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
@@ -62,8 +62,8 @@ class AbstractCategory extends \Magento\Backend\Block\Template
         \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Magento\Backend\Block\Widget\Context $context,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->coreRegistry              = $coreRegistry;
         $this->categoryTree              = $categoryTree;
         $this->categoryFactory           = $categoryFactory;

@@ -2,16 +2,16 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- * 
+ *
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ *
+ * @category  Mageplaza
+ * @package   Mageplaza_Blog
+ * @copyright Copyright (c) 2016
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Category;
 
@@ -23,35 +23,35 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
 {
     /**
      * Tree template
-     * 
+     *
      * @var string
      */
     protected $_template = 'category/tree.phtml';
 
     /**
      * JSON Encoder instance
-     * 
+     *
      * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $jsonEncoder;
 
     /**
      * Backend Session
-     * 
+     *
      * @var \Magento\Backend\Model\Auth\Session
      */
     protected $backendSession;
 
     /**
      * Resource Helper
-     * 
+     *
      * @var \Magento\Framework\DB\Helper
      */
     protected $resourceHelper;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Model\Auth\Session $backendSession
      * @param \Magento\Framework\DB\Helper $resourceHelper
@@ -72,8 +72,8 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
         \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Magento\Backend\Block\Widget\Context $context,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->jsonEncoder    = $jsonEncoder;
         $this->backendSession = $backendSession;
         $this->resourceHelper = $resourceHelper;

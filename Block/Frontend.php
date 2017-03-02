@@ -79,7 +79,8 @@ class Frontend extends Template
      * filter post by store
      * return true/false
      */
-    public function filterPost($post){
+    public function filterPost($post)
+    {
         $storeId = $this->_store->getStore()->getId();
         $postStoreId = $post->getStoreIds() ? explode(',', $post->getStoreIds()) : '-1';
         if (in_array($storeId, $postStoreId)) {
@@ -91,10 +92,11 @@ class Frontend extends Template
     /**
      * format post created_at
      */
-    public function formatCreatedAt($createdAt){
+    public function formatCreatedAt($createdAt)
+    {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
-        $dateFormat = date('Y-m-d',$object->timestamp($createdAt));
+        $dateFormat = date('Y-m-d', $object->timestamp($createdAt));
         return $dateFormat;
     }
 

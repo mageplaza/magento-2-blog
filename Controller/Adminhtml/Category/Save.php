@@ -2,16 +2,16 @@
 /**
  * Mageplaza_Blog extension
  *                     NOTICE OF LICENSE
- * 
+ *
  *                     This source file is subject to the MIT License
  *                     that is bundled with this package in the file LICENSE.txt.
  *                     It is also available through the world-wide-web at this URL:
  *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ *
+ * @category  Mageplaza
+ * @package   Mageplaza_Blog
+ * @copyright Copyright (c) 2016
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
@@ -19,35 +19,35 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
 {
     /**
      * Result Raw Factory
-     * 
+     *
      * @var \Magento\Framework\Controller\Result\RawFactory
      */
     protected $resultRawFactory;
 
     /**
      * Result Json Factory
-     * 
+     *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
      * Layout Factory
-     * 
+     *
      * @var \Magento\Framework\View\LayoutFactory
      */
     protected $layoutFactory;
 
     /**
      * JS helper
-     * 
+     *
      * @var \Magento\Backend\Helper\Js
      */
     protected $jsHelper;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
@@ -65,8 +65,8 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
         \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Backend\App\Action\Context $context
-    )
-    {
+    ) {
+    
         $this->resultRawFactory  = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory     = $layoutFactory;
