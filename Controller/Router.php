@@ -147,7 +147,7 @@ class Router implements \Magento\Framework\App\RouterInterface
 
 						}
 					}
-					if ($type == 'post' && strpos($path, 'rss')) {
+					if ($type == 'post' && strpos($path, 'rss') != false) {
 						$path = str_replace($url_prefix, 'blog', $path);
 						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
 						$request->setPathInfo($path);
@@ -181,7 +181,7 @@ class Router implements \Magento\Framework\App\RouterInterface
 						}
 					}
 				} elseif (count($array) > 3) {
-					if (strpos($path, 'rss')) {
+					if (strpos($path, 'rss') != false) {
 						$path = str_replace($url_prefix, 'blog', $path);
 						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
 						$request->setPathInfo($path);

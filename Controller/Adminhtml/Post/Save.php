@@ -85,8 +85,9 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 	{
 		$data = $this->getRequest()->getPost('post');
 		$data['store_ids'] = implode(',', $data['store_ids']);
-		if (isset($_FILES['image']) AND ($_FILES['image']['name'] == '')) {
-			if (isset($data['image'])) {
+
+		if(isset($data['image'])){
+			if(isset($data['image']['delete']) && $data['image']['delete'] == '1'){
 				unset($data['image']);
 			}
 		}
@@ -95,12 +96,25 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 		if ($data) {
 			$post = $this->initPost();
 			$post->setData($data);
-			if (($_FILES['image']['name'] == '')) {
 
-			} else {
-				$image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
-				$post->setImage($image);
+			$image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
+			$fileExt = strtoupper(strrchr($image, '.'));
+			if($fileExt != '.PNG' && $fileExt != '.JPG' && $fileExt != '.JPEG' && $fileExt != '.GIF'){
+				$this->messageManager->addError(__('File uploaded is not an image.'));
+				$resultRedirect->setPath(
+					'mageplaza_blog/*/edit',
+					[
+						'post_id' => $post->getId(),
+						'_current'  => true
+					]
+				);
+
+				return $resultRedirect;
 			}
+
+			$post->setImage($image);
+
+
 			$tags = $this->getRequest()->getPost('tags', -1);
 			if ($tags != -1) {
 				$post->setTagsData($this->jsHelper->decodeGridSerializedInput($tags));
@@ -166,4 +180,5 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 
 		return $resultRedirect;
 	}
+
 }
