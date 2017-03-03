@@ -22,14 +22,14 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    protected $jsonFactory;
+    private $jsonFactory;
 
     /**
      * Post Factory
      *
      * @var \Mageplaza\Blog\Model\PostFactory
      */
-    protected $postFactory;
+    private $postFactory;
 
     /**
      * constructor
@@ -59,33 +59,35 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
         $error = false;
         $messages = [];
         $postItems = $this->getRequest()->getParam('items', []);
-        if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
+        if (!($this->getRequest()->getParam('isAjax') && !empty($postItems))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
                 'error' => true,
             ]);
         }
-        foreach (array_keys($postItems) as $postId) {
-            /** @var \Mageplaza\Blog\Model\Post $post */
-            $post = $this->postFactory->create()->load($postId);
-            try {
-                $postData = $postItems[$postId];//todo: handle dates
-                $post->addData($postData);
-                $post->save();
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $messages[] = $this->getErrorWithPostId($post, $e->getMessage());
-                $error = true;
-            } catch (\RuntimeException $e) {
-                $messages[] = $this->getErrorWithPostId($post, $e->getMessage());
-                $error = true;
-            } catch (\Exception $e) {
-                $messages[] = $this->getErrorWithPostId(
-                    $post,
-                    __('Something went wrong while saving the Post.')
-                );
-                $error = true;
-            }
-        }
+
+		$key = array_keys($postItems);
+		$postId = !empty($key) ? (int) $key[0] : '';
+		/** @var \Mageplaza\Blog\Model\Post $post */
+		$post = $this->postFactory->create()->load($postId);
+		try {
+			$postData = $postItems[$postId];
+			$post->addData($postData);
+			$post->save();
+		} catch (\Magento\Framework\Exception\LocalizedException $e) {
+			$messages[] = $this->getErrorWithPostId($post, $e->getMessage());
+			$error = true;
+		} catch (\RuntimeException $e) {
+			$messages[] = $this->getErrorWithPostId($post, $e->getMessage());
+			$error = true;
+		} catch (\Exception $e) {
+			$messages[] = $this->getErrorWithPostId(
+				$post,
+				__('Something went wrong while saving the Post.')
+			);
+			$error = true;
+		}
+
         return $resultJson->setData([
             'messages' => $messages,
             'error' => $error
@@ -99,7 +101,7 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      * @param string $errorText
      * @return string
      */
-    protected function getErrorWithPostId(\Mageplaza\Blog\Model\Post $post, $errorText)
+    private function getErrorWithPostId(\Mageplaza\Blog\Model\Post $post, $errorText)
     {
         return '[Post ID: ' . $post->getId() . '] ' . $errorText;
     }

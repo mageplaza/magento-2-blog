@@ -22,7 +22,7 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
      *
      * @var \Mageplaza\Blog\Setup\CategorySetupFactory
      */
-    protected $categorySetupFactory;
+    private $categorySetupFactory;
 
     /**
      * constructor
@@ -35,13 +35,14 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
     
         $this->categorySetupFactory = $categorySetupFactory;
     }
-
-
     /**
      * {@inheritdoc}
      */
-    public function install(\Magento\Framework\Setup\ModuleDataSetupInterface $setup, \Magento\Framework\Setup\ModuleContextInterface $context)
+    public function install(\Magento\Framework\Setup\ModuleDataSetupInterface $setup,
+							\Magento\Framework\Setup\ModuleContextInterface $context)
     {
+    	$contextInstall = $context;
+    	$contextInstall->getVersion();
         /** @var \Mageplaza\Blog\Setup\CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
         // Create Root Faqcat Node

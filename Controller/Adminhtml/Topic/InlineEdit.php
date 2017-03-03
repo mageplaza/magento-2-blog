@@ -22,14 +22,14 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    protected $jsonFactory;
+    private $jsonFactory;
 
     /**
      * Topic Factory
      *
      * @var \Mageplaza\Blog\Model\TopicFactory
      */
-    protected $topicFactory;
+    private $topicFactory;
 
     /**
      * constructor
@@ -59,33 +59,36 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
         $error = false;
         $messages = [];
         $postItems = $this->getRequest()->getParam('items', []);
-        if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
+
+        if (!($this->getRequest()->getParam('isAjax') && !empty($postItems))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
                 'error' => true,
             ]);
         }
-        foreach (array_keys($postItems) as $topicId) {
-            /** @var \Mageplaza\Blog\Model\Topic $topic */
-            $topic = $this->topicFactory->create()->load($topicId);
-            try {
-                $topicData = $postItems[$topicId];//todo: handle dates
-                $topic->addData($topicData);
-                $topic->save();
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $messages[] = $this->getErrorWithTopicId($topic, $e->getMessage());
-                $error = true;
-            } catch (\RuntimeException $e) {
-                $messages[] = $this->getErrorWithTopicId($topic, $e->getMessage());
-                $error = true;
-            } catch (\Exception $e) {
-                $messages[] = $this->getErrorWithTopicId(
-                    $topic,
-                    __('Something went wrong while saving the Topic.')
-                );
-                $error = true;
-            }
-        }
+
+		$key = array_keys($postItems);
+		$topicId = !empty($key) ? (int) $key[0] : '';
+		/** @var \Mageplaza\Blog\Model\Topic $topic */
+		$topic = $this->topicFactory->create()->load($topicId);
+		try {
+			$topicData = $postItems[$topicId];
+			$topic->addData($topicData);
+			$topic->save();
+		} catch (\Magento\Framework\Exception\LocalizedException $e) {
+			$messages[] = $this->getErrorWithTopicId($topic, $e->getMessage());
+			$error = true;
+		} catch (\RuntimeException $e) {
+			$messages[] = $this->getErrorWithTopicId($topic, $e->getMessage());
+			$error = true;
+		} catch (\Exception $e) {
+			$messages[] = $this->getErrorWithTopicId(
+				$topic,
+				__('Something went wrong while saving the Topic.')
+			);
+			$error = true;
+		}
+
         return $resultJson->setData([
             'messages' => $messages,
             'error' => $error
@@ -99,7 +102,7 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      * @param string $errorText
      * @return string
      */
-    protected function getErrorWithTopicId(\Mageplaza\Blog\Model\Topic $topic, $errorText)
+    private function getErrorWithTopicId(\Mageplaza\Blog\Model\Topic $topic, $errorText)
     {
         return '[Topic ID: ' . $topic->getId() . '] ' . $errorText;
     }

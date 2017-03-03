@@ -21,6 +21,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
+		$contextInstall = $context;
+		$contextInstall->getVersion();
         $installer = $setup;
         $installer->startSetup();
         if (!$installer->tableExists('mageplaza_blog_post_traffic')) {

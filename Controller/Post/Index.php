@@ -10,17 +10,15 @@ use Mageplaza\Blog\Helper\Data as HelperBlog;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Customer\Model\Session;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 class Index extends Action
 {
-    protected $resultPageFactory;
-    protected $helperBlog;
-    protected $accountManagement;
-    protected $customerUrl;
-    protected $session;
-    protected $helperData;
-    protected $storeManager;
+    private $resultPageFactory;
+	private $helperBlog;
+	private $accountManagement;
+	private $customerUrl;
+	private $session;
+	private $storeManager;
 
     public function __construct(
         Context $context,

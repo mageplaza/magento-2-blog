@@ -20,7 +20,6 @@ class Rss extends \Magento\Rss\Controller\Feed
             return;
         }
 
-
         /** @var $rss \Magento\Rss\Model\Rss */
         $rss = $this->rssFactory->create();
         $rss->setDataProvider($provider);

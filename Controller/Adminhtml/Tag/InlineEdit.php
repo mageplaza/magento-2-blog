@@ -22,14 +22,14 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    protected $jsonFactory;
+    private $jsonFactory;
 
     /**
      * Tag Factory
      *
      * @var \Mageplaza\Blog\Model\TagFactory
      */
-    protected $tagFactory;
+    private $tagFactory;
 
     /**
      * constructor
@@ -59,33 +59,35 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
         $error = false;
         $messages = [];
         $postItems = $this->getRequest()->getParam('items', []);
-        if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
+        if (!($this->getRequest()->getParam('isAjax') && !empty($postItems))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
                 'error' => true,
             ]);
         }
-        foreach (array_keys($postItems) as $tagId) {
-            /** @var \Mageplaza\Blog\Model\Tag $tag */
-            $tag = $this->tagFactory->create()->load($tagId);
-            try {
-                $tagData = $postItems[$tagId];//todo: handle dates
-                $tag->addData($tagData);
-                $tag->save();
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $messages[] = $this->getErrorWithTagId($tag, $e->getMessage());
-                $error = true;
-            } catch (\RuntimeException $e) {
-                $messages[] = $this->getErrorWithTagId($tag, $e->getMessage());
-                $error = true;
-            } catch (\Exception $e) {
-                $messages[] = $this->getErrorWithTagId(
-                    $tag,
-                    __('Something went wrong while saving the Tag.')
-                );
-                $error = true;
-            }
-        }
+
+		$key = array_keys($postItems);
+		$tagId = !empty($key) ? (int) $key[0] : '';
+		/** @var \Mageplaza\Blog\Model\Tag $tag */
+		$tag = $this->tagFactory->create()->load($tagId);
+		try {
+			$tagData = $postItems[$tagId];
+			$tag->addData($tagData);
+			$tag->save();
+		} catch (\Magento\Framework\Exception\LocalizedException $e) {
+			$messages[] = $this->getErrorWithTagId($tag, $e->getMessage());
+			$error = true;
+		} catch (\RuntimeException $e) {
+			$messages[] = $this->getErrorWithTagId($tag, $e->getMessage());
+			$error = true;
+		} catch (\Exception $e) {
+			$messages[] = $this->getErrorWithTagId(
+				$tag,
+				__('Something went wrong while saving the Tag.')
+			);
+			$error = true;
+		}
+
         return $resultJson->setData([
             'messages' => $messages,
             'error' => $error
@@ -99,7 +101,7 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      * @param string $errorText
      * @return string
      */
-    protected function getErrorWithTagId(\Mageplaza\Blog\Model\Tag $tag, $errorText)
+    private function getErrorWithTagId(\Mageplaza\Blog\Model\Tag $tag, $errorText)
     {
         return '[Tag ID: ' . $tag->getId() . '] ' . $errorText;
     }

@@ -11,17 +11,16 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Customer\Model\Session;
 use Mageplaza\Blog\Model\TrafficFactory;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 class View extends Action
 {
-    protected $trafficFactory;
-    protected $resultPageFactory;
-    protected $helperBlog;
-    protected $accountManagement;
-    protected $customerUrl;
-    protected $session;
-    protected $storeManager;
+    private $trafficFactory;
+	private $resultPageFactory;
+	private $helperBlog;
+	private $accountManagement;
+	private $customerUrl;
+	private $session;
+	private $storeManager;
 
     public function __construct(
         Context $context,

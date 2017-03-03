@@ -22,7 +22,7 @@ class Tags extends \Mageplaza\Blog\Controller\Adminhtml\Post
      *
      * @var \Magento\Framework\View\Result\LayoutFactory
      */
-    protected $resultLayoutFactory;
+    private $resultLayoutFactory;
 
     /**
      * constructor

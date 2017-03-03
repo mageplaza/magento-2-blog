@@ -31,6 +31,8 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
         \Magento\Framework\Setup\ModuleContextInterface $context
     ) {
         $installer = $setup;
+        $contextInstall = $context;
+        $contextInstall->getVersion();
         $installer->startSetup();
         if (! $installer->tableExists('mageplaza_blog_post')) {
             $table = $installer->getConnection()->newTable(

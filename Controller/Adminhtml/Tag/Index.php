@@ -22,14 +22,14 @@ class Index extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected $resultPageFactory;
+    private $resultPageFactory;
 
     /**
      * Page factory
      *
      * @var \Magento\Backend\Model\View\Result\Page
      */
-    protected $resultPage;
+    private $resultPage;
 
     /**
      * constructor
@@ -61,9 +61,9 @@ class Index extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page
      */
-    public function getResultPage()
+    private function getResultPage()
     {
-        if (is_null($this->resultPage)) {
+        if ($this->resultPage === null) {
             $this->resultPage = $this->resultPageFactory->create();
         }
         return $this->resultPage;
@@ -73,10 +73,9 @@ class Index extends \Magento\Backend\App\Action
      *
      * @return $this
      */
-    protected function setPageData()
+    private function setPageData()
     {
         $resultPage = $this->getResultPage();
-        //$resultPage->setActiveMenu('Mageplaza_Blog::tag');
         $resultPage->getConfig()->getTitle()->prepend((__('Tags')));
         return $this;
     }
