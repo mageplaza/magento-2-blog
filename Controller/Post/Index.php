@@ -13,12 +13,12 @@ use Magento\Customer\Model\Session;
 
 class Index extends Action
 {
-    private $resultPageFactory;
-	private $helperBlog;
-	private $accountManagement;
-	private $customerUrl;
-	private $session;
-	private $storeManager;
+	public $resultPageFactory;
+	public $helperBlog;
+	public $accountManagement;
+	public $customerUrl;
+	public $session;
+	public $storeManager;
 
     public function __construct(
         Context $context,

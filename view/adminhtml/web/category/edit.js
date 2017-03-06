@@ -40,11 +40,11 @@ define([
     var isCreating = categoryId == 0; // Separate variable is needed because '0' in javascript converts to TRUE
     var path = params['category[path]'].split('/');
     var parentId = path.pop();
-    if (parentId == categoryId) { // Maybe path includes Faqcat id itself
+    if (parentId == categoryId) { // Maybe path includes Blog Category id itself
         parentId = path.pop();
     }
 
-    // Make operations with Faqcat tree
+    // Make operations with Blog Category tree
     if (isCreating) {
         if (!tree.currentNodeId) {
             // First submit of form - select some node to be current

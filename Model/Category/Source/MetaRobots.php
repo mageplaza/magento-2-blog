@@ -22,7 +22,6 @@ class MetaRobots implements \Magento\Framework\Option\ArrayInterface
     const NOINDEXFOLLOW = 3;
     const INDEXNOFOLLOW = 4;
 
-
     /**
      * to option array
      *
@@ -52,6 +51,11 @@ class MetaRobots implements \Magento\Framework\Option\ArrayInterface
     }
     public function getOptionArray()
     {
-        return [self::INDEXFOLLOW => 'INDEX,FOLLOW', self::NOINDEXNOFOLLOW => 'NOINDEX,NOFOLLOW', self::NOINDEXFOLLOW => 'NOINDEX,FOLLOW', self::INDEXNOFOLLOW => 'INDEX,NOFOLLOW'];
+        return [
+        	self::INDEXFOLLOW => 'INDEX,FOLLOW',
+			self::NOINDEXNOFOLLOW => 'NOINDEX,NOFOLLOW',
+			self::NOINDEXFOLLOW => 'NOINDEX,FOLLOW',
+			self::INDEXNOFOLLOW => 'INDEX,NOFOLLOW'
+		];
     }
 }

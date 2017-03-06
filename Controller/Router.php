@@ -15,55 +15,55 @@ class Router implements \Magento\Framework\App\RouterInterface
     /**
      * @var \Magento\Framework\App\ActionFactory
      */
-    protected $actionFactory;
+	public $actionFactory;
 
     /**
      * Event manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager;
+	public $eventManager;
 
     /**
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $_storeManager;
+	public $storeManager;
 
     /**
      * Page factory
      *
      * @var \Magento\Cms\Model\PageFactory
      */
-    protected $_pageFactory;
+	public $pageFactory;
 
     /**
      * Config primary
      *
      * @var \Magento\Framework\App\State
      */
-    protected $_appState;
+	public $appState;
 
     /**
      * Url
      *
      * @var \Magento\Framework\UrlInterface
      */
-    protected $_url;
+	public $url;
 
     /**
      * Response
      *
      * @var \Magento\Framework\App\ResponseInterface
      */
-    protected $_response;
+	public $response;
     /**
      * Helper
      *
      * @var \Mageplaza\Blog\Helper\Data
      */
-    protected $_helper;
+	public $helper;
 
     /**
      * @param \Magento\Framework\App\ActionFactory $actionFactory
@@ -84,12 +84,12 @@ class Router implements \Magento\Framework\App\RouterInterface
     ) {
     
         $this->actionFactory = $actionFactory;
-        $this->_eventManager = $eventManager;
-        $this->_url          = $url;
-        $this->_pageFactory  = $pageFactory;
-        $this->_storeManager = $storeManager;
-        $this->_response     = $response;
-        $this->_helper       = $helper;
+        $this->eventManager = $eventManager;
+        $this->url          = $url;
+        $this->pageFactory  = $pageFactory;
+        $this->storeManager = $storeManager;
+        $this->response     = $response;
+        $this->helper       = $helper;
     }
 
     /**
@@ -100,7 +100,7 @@ class Router implements \Magento\Framework\App\RouterInterface
      */
     public function match(\Magento\Framework\App\RequestInterface $request)
     {
-        $helper = $this->_helper;
+        $helper = $this->helper;
         if ($helper->getBlogConfig('general/enabled')) {
             $url_prefix = $helper->getBlogConfig('general/url_prefix');
             if ($url_prefix == '') {
@@ -136,9 +136,12 @@ class Router implements \Magento\Framework\App\RouterInterface
                             return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
                         } else {
                             $url_key = $array[2];
-                            $post    = $this->_helper->getPostByUrl($url_key);
+                            $post    = $this->helper->getPostByUrl($url_key);
                             if ($post && $post->getId()) {
-                                $request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $url_key);
+                                $request->setAlias(
+                                	\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS,
+									$url_key
+								);
                                 $request->setPathInfo('/' . 'blog/post/view/id/' . $post->getId());
 
                                 return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
@@ -147,7 +150,7 @@ class Router implements \Magento\Framework\App\RouterInterface
                     }
 
                     $hasRss = is_numeric(strpos($path, 'rss'));
-                    if ($type == 'post' && $hasRss ) {
+                    if ($type == 'post' && $hasRss) {
                         $path = str_replace($url_prefix, 'blog', $path);
                         $request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
                         $request->setPathInfo($path);
@@ -156,7 +159,7 @@ class Router implements \Magento\Framework\App\RouterInterface
                     }
                     if ($type == 'topic') {
                         $topicUrlKey = $array[2];
-                        $topic       = $this->_helper->getTopicByParam('url_key', $topicUrlKey);
+                        $topic       = $this->helper->getTopicByParam('url_key', $topicUrlKey);
                         $request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
                         $request->setPathInfo('/' . 'blog/topic/view/id/' . $topic->getId());
 
@@ -164,7 +167,7 @@ class Router implements \Magento\Framework\App\RouterInterface
                     }
                     if ($type == 'tag') {
                         $tagUrlKey = $array[2];
-                        $tag       = $this->_helper->getTagByParam('url_key', $tagUrlKey);
+                        $tag       = $this->helper->getTagByParam('url_key', $tagUrlKey);
                         $request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
                         $request->setPathInfo('/' . 'blog/tag/view/id/' . $tag->getId());
 
@@ -172,7 +175,7 @@ class Router implements \Magento\Framework\App\RouterInterface
                     }
                     if ($type == 'category') {
                         $categoryName = $array[2];
-                        $category     = $this->_helper->getCategoryByParam('url_key', $categoryName);
+                        $category     = $this->helper->getCategoryByParam('url_key', $categoryName);
                         if ($category && $category->getId()) {
                             $request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
                             $request->setPathInfo('/' . 'blog/category/view/id/' . $category->getId());

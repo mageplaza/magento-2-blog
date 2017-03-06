@@ -22,7 +22,7 @@ class Index extends \Magento\Backend\App\Action
      *
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
-    protected $resultForwardFactory;
+	public $resultForwardFactory;
 
     /**
      * constructor
@@ -38,7 +38,6 @@ class Index extends \Magento\Backend\App\Action
         $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
-
 
     /**
      * execute action

@@ -33,21 +33,21 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
      *
      * @var \Magento\Framework\Json\EncoderInterface
      */
-    protected $jsonEncoder;
+    public $jsonEncoder;
 
     /**
      * Backend Session
      *
      * @var \Magento\Backend\Model\Auth\Session
      */
-    protected $backendSession;
+	public $backendSession;
 
     /**
      * Resource Helper
      *
      * @var \Magento\Framework\DB\Helper
      */
-    protected $resourceHelper;
+	public $resourceHelper;
 
     /**
      * constructor
@@ -73,7 +73,6 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
         \Magento\Backend\Block\Widget\Context $context,
         array $data = []
     ) {
-    
         $this->jsonEncoder    = $jsonEncoder;
         $this->backendSession = $backendSession;
         $this->resourceHelper = $resourceHelper;
@@ -213,7 +212,6 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
         return $this->getChildHtml('collapse_button');
     }
 
-
     /**
      * @param bool|null $expanded
      * @return string
@@ -221,7 +219,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     public function getLoadTreeUrl($expanded = null)
     {
         $params = ['_current' => true, 'id' => null, 'store' => null];
-        if (is_null($expanded) && $this->backendSession->getMageplazaBlogCategoryIsTreeWasExpanded()
+        if (($expanded === null) && $this->backendSession->getMageplazaBlogCategoryIsTreeWasExpanded()
             || $expanded == true) {
             $params['expand_all'] = true;
         }
@@ -287,7 +285,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * Get JSON of array of Categories, that are breadcrumbs for specified Faqcat path
+     * Get JSON of array of Categories, that are breadcrumbs for specified Blog Category path
      *
      * @param string $path
      * @param string $javascriptVarName
@@ -310,7 +308,8 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
             $categories
         ) .
             ';' .
-            ($this->canAddChildCategories() ? '$("add_child_category_button").show();' : '$("add_child_category_button").hide();') .
+            ($this->canAddChildCategories()
+				? '$("add_child_category_button").show();' : '$("add_child_category_button").hide();') .
             '});</script>';
     }
 
@@ -323,11 +322,11 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function getNodeJson($node, $level = 0)
+    public function getNodeJson($node, $level = 0)
     {
         // create a node from data array
         if (is_array($node)) {
-            $node = new \Magento\Framework\Data\Tree\Node($node, 'category_id', new \Magento\Framework\Data\Tree());
+        	$node = new \Magento\Framework\Data\Tree\Node($node, 'category_id', new \Magento\Framework\Data\Tree());
         }
 
         $item = [];
@@ -364,7 +363,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * Get Faqcat Name
+     * Get Blog Category Name
      *
      * @param \Magento\Framework\DataObject $node
      * @return string
@@ -379,7 +378,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
      * @param Node|array $node
      * @return bool
      */
-    protected function isCategoryMoveable($node)
+    public function isCategoryMoveable($node)
     {
         $options = new \Magento\Framework\DataObject(['is_moveable' => true, 'category' => $node]);
         $this->_eventManager->dispatch('adminhtml_mageplaza_blog_category_tree_is_moveable', ['options' => $options]);
@@ -403,7 +402,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * Check if page loaded by outside link to Faqcat edit
+     * Check if page loaded by outside link to Blog Category edit
      *
      * @return boolean
      */
@@ -413,7 +412,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * Check availability of adding root Faqcat
+     * Check availability of adding root Blog Category
      *
      * @return boolean
      */
@@ -429,7 +428,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * Check availability of adding child Faqcat
+     * Check availability of adding child Blog Category
      *
      * @return boolean
      */

@@ -50,56 +50,56 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $eventManager;
+    public $eventManager;
 
     /**
      * Collection factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
-    protected $collectionFactory;
+	public $collectionFactory;
 
     /**
-     * Faqcat Resource instance
+     * Blog Category Resource instance
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category
      */
-    protected $categoryResource;
+	public $categoryResource;
 
     /**
      * Cache instance
      *
      * @var \Magento\Framework\App\CacheInterface
      */
-    protected $cache;
+	public $cache;
 
     /**
      * Store Manager instance
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeManager;
+	public $storeManager;
 
     /**
      * App resource
      *
      * @var \Magento\Framework\App\ResourceConnection
      */
-    protected $coreResource;
+	public $coreResource;
 
     /**
-     * Faqcat Collection
+     * Blog Category Collection
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\Collection
      */
-    protected $collection;
+	public $collection;
 
     /**
-     * Inactive Faqcat Ids
+     * Inactive Blog Category Ids
      *
      * @var array
      */
-    protected $inactiveCategoryIds;
+	public $inactiveCategoryIds;
 
     /**
      * constructor
@@ -137,7 +137,6 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
             ]
         );
     }
-
 
     /**
      * Add data to collection
@@ -182,7 +181,6 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
             }
         }
 
-
         if ($toLoad) {
             $collection->load();
 
@@ -222,7 +220,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      *
      * @return $this
      */
-    protected function initInactiveCategoryIds()
+    public function initInactiveCategoryIds()
     {
         $this->inactiveCategoryIds = [];
         $this->eventManager->dispatch('mageplaza_blog_category_tree_init_inactive_category_ids', ['tree' => $this]);
@@ -244,41 +242,41 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     }
 
     /**
-     * Return disable Faqcat ids
+     * Return disable Blog Category ids
      *
      * @param Collection $collection
      * @param array $allIds
      * @return array
      */
-    protected function getDisabledIds($collection, $allIds)
+    public function getDisabledIds($collection, $allIds)
     {
-        //TODO: implement this for frontend
+    	/* implement this for frontend */
         return [];
     }
 
     /**
-     * Retrieve inactive Faqcat item ids
+     * Retrieve inactive Blog Category item ids
      *
      * @param Collection $collection
      * @param int $storeId
      * @return array
      */
-    protected function getInactiveItemIds($collection, $storeId)
+    public function getInactiveItemIds($collection, $storeId)
     {
-        //TODO: implement this for frontend
+        /* implement this for frontend */
         return [];
     }
 
     /**
-     * Check is Faqcat items active
+     * Check is Blog Category items active
      *
      * @param int $id
      * @return boolean
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    protected function getItemIsActive($id)
+    public function getItemIsActive($id)
     {
-        //TODO: implement this for frontend
+        //implement this for frontend
         return false;
     }
 
@@ -302,7 +300,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      * @param Collection|array $object
      * @return void
      */
-    protected function clean($object)
+    public function clean($object)
     {
         if (is_array($object)) {
             foreach ($object as $obj) {
@@ -333,7 +331,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      * @param boolean $sorted
      * @return Collection
      */
-    protected function getDefaultCollection($sorted = false)
+    public function getDefaultCollection($sorted = false)
     {
         $collection = $this->collectionFactory->create();
         if ($sorted) {
@@ -369,14 +367,14 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      *
      * @return $this
      */
-    protected function afterMove()
+    public function afterMove()
     {
         $this->cache->clean([\Mageplaza\Blog\Model\Category::CACHE_TAG]);
         return $this;
     }
 
     /**
-     * Load whole Faqcat tree, that will include specified Categories ids.
+     * Load whole Blog Category tree, that will include specified Categories ids.
      *
      * @param array $ids
      * @param bool $addCollectionData
@@ -414,7 +412,9 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
             $pathIds = explode('/', $item['path']);
             $level = (int)$item['level'];
             while ($level > 0) {
-                $pathIds[count($pathIds) - 1] = '%';
+            	$lastId = end($pathIds);
+            	$lastIndex = key($lastId);
+                $pathIds[$lastIndex] = '%';
                 $path = implode('/', $pathIds);
                 $where["{$levelField}={$level} AND {$pathField} LIKE '{$path}'"] = true;
                 array_pop($pathIds);
@@ -480,7 +480,6 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         return $result;
     }
 
-
     /**
      * Obtain select for Categories
      *
@@ -488,7 +487,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      * @param array $optionalAttributes
      * @return \Zend_Db_Select
      */
-    protected function createCollectionDataSelect($sorted = true, $optionalAttributes = [])
+    public function createCollectionDataSelect($sorted = true)
     {
 
         $select = $this->getDefaultCollection($sorted ? $this->_orderField : false)->getSelect();
@@ -510,7 +509,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     }
 
     /**
-     * Get real existing Faqcat ids by specified ids
+     * Get real existing Blog Category ids by specified ids
      *
      * @param array $ids
      * @return array

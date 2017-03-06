@@ -15,7 +15,8 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
 
-class Category extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Category extends \Magento\Backend\Block\Widget\Form\Generic
+	implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
 
     /**
@@ -47,7 +48,7 @@ class Category extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
             ]
         );
 
-        if (is_null($post->getCategoriesIds())) {
+        if ($post->getCategoriesIds() === null) {
             $post->setCategoriesIds($post->getCategoryIds());
         }
         $form->addValues($post->getData());

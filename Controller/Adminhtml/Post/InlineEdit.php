@@ -22,14 +22,14 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    private $jsonFactory;
+	public $jsonFactory;
 
     /**
      * Post Factory
      *
      * @var \Mageplaza\Blog\Model\PostFactory
      */
-    private $postFactory;
+	public $postFactory;
 
     /**
      * constructor
@@ -101,7 +101,7 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      * @param string $errorText
      * @return string
      */
-    private function getErrorWithPostId(\Mageplaza\Blog\Model\Post $post, $errorText)
+	public function getErrorWithPostId(\Mageplaza\Blog\Model\Post $post, $errorText)
     {
         return '[Post ID: ' . $post->getId() . '] ' . $errorText;
     }

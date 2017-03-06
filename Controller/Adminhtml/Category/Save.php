@@ -22,28 +22,28 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
      *
      * @var \Magento\Framework\Controller\Result\RawFactory
      */
-    protected $resultRawFactory;
+	public $resultRawFactory;
 
     /**
      * Result Json Factory
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    protected $resultJsonFactory;
+	public $resultJsonFactory;
 
     /**
      * Layout Factory
      *
      * @var \Magento\Framework\View\LayoutFactory
      */
-    protected $layoutFactory;
+	public $layoutFactory;
 
     /**
      * JS helper
      *
      * @var \Magento\Backend\Helper\Js
      */
-    protected $jsHelper;
+	public $jsHelper;
 
     /**
      * constructor
@@ -113,7 +113,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
 
             try {
                 $category->save();
-                $this->messageManager->addSuccess(__('You saved the Faqcat.'));
+                $this->messageManager->addSuccess(__('You saved the Blog Category.'));
                 $refreshTree = true;
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
@@ -123,7 +123,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
 
             if ($this->getRequest()->getPost('return_session_messages_only')) {
                 $category->load($category->getId());
-                // to obtain truncated Faqcat Name
+                // to obtain truncated Blog Category Name
                 /** @var $block \Magento\Framework\View\Element\Messages */
                 $block = $this->layoutFactory->create()->getMessagesBlock();
                 $block->setMessages($this->messageManager->getMessages(true));

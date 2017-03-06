@@ -22,21 +22,21 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
-    protected $date;
+    public $date;
 
     /**
      * Event Manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $eventManager;
+	public $eventManager;
 
     /**
      * Post relation model
      *
      * @var string
      */
-    protected $tagPostTable;
+	public $tagPostTable;
 
     /**
      * constructor
@@ -56,7 +56,6 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         parent::__construct($context);
         $this->tagPostTable = $this->getTable('mageplaza_blog_post_tag');
     }
-
 
     /**
      * Initialize resource model

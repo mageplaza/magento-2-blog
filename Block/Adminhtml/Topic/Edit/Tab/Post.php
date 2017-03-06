@@ -22,21 +22,21 @@ class Post extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magen
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
-    protected $postCollectionFactory;
+    public $postCollectionFactory;
 
     /**
      * Registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry;
+	public $coreRegistry;
 
     /**
      * Post factory
      *
      * @var \Mageplaza\Blog\Model\PostFactory
      */
-    protected $postFactory;
+	public $postFactory;
 
     /**
      * constructor
@@ -62,7 +62,6 @@ class Post extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magen
         $this->postFactory           = $postFactory;
         parent::__construct($context, $backendHelper, $data);
     }
-
 
     /**
      * Set grid params

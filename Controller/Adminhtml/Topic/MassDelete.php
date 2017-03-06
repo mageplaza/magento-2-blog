@@ -22,14 +22,14 @@ class MassDelete extends \Magento\Backend\App\Action
      *
      * @var \Magento\Ui\Component\MassAction\Filter
      */
-    private $filter;
+	public $filter;
 
     /**
      * Collection Factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory
      */
-    private $collectionFactory;
+	public $collectionFactory;
 
     /**
      * constructor

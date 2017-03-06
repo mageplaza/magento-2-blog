@@ -22,21 +22,21 @@ class Tag extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magent
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory
      */
-    protected $tagCollectionFactory;
+	public $tagCollectionFactory;
 
     /**
      * Registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry;
+	public $coreRegistry;
 
     /**
      * Tag factory
      *
      * @var \Mageplaza\Blog\Model\TagFactory
      */
-    protected $tagFactory;
+	public $tagFactory;
 
     /**
      * constructor
@@ -62,7 +62,6 @@ class Tag extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magent
         $this->tagFactory           = $tagFactory;
         parent::__construct($context, $backendHelper, $data);
     }
-
 
     /**
      * Set grid params

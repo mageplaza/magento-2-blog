@@ -27,7 +27,7 @@ class Category extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'adminhtml_category';
         $this->_blockGroup = 'Mageplaza_Blog';
         $this->_headerText = __('Categories');
-        $this->_addButtonLabel = __('Create New Faqcat');
+        $this->_addButtonLabel = __('Create New Blog Category');
         parent::_construct();
     }
 }

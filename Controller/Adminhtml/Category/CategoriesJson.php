@@ -22,14 +22,14 @@ class CategoriesJson extends \Mageplaza\Blog\Controller\Adminhtml\Category
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    protected $resultJsonFactory;
+	public $resultJsonFactory;
 
     /**
      * Layout Factory
      *
      * @var \Magento\Framework\View\LayoutFactory
      */
-    protected $layoutFactory;
+	public $layoutFactory;
 
     /**
      * constructor

@@ -57,20 +57,21 @@ $postsRecent = $block->getRecentPost();
 		</div>
 </div>
 <script>
-	jQuery.noConflict();
+require([
+    'jquery'
+], function ($) {
+    $("#popular-tab").click(function(){
+        $("#tab-1").addClass('active');
+        $("#tab-2").removeClass('active');
+        $('#mostview').show();
+        $('#mostrecent').hide();
+    });
 
-	jQuery(document).ready(function(){
-		jQuery("#popular-tab").click(function(){
-			jQuery("#tab-1").addClass('active');
-			jQuery("#tab-2").removeClass('active');
-			jQuery('#mostview').show();
-			jQuery('#mostrecent').hide();
-		});
-		jQuery("#recent-tab").click(function(){
-			jQuery("#tab-1").removeClass('active');
-			jQuery("#tab-2").addClass('active');
-			jQuery('#mostview').hide();
-			jQuery('#mostrecent').show();
-		});
-	});
+    $("#recent-tab").click(function(){
+        $("#tab-1").removeClass('active');
+        $("#tab-2").addClass('active');
+        $('#mostview').hide();
+        $('#mostrecent').show();
+    });
+});
 </script>

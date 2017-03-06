@@ -22,14 +22,14 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    private $jsonFactory;
+	public $jsonFactory;
 
     /**
      * Topic Factory
      *
      * @var \Mageplaza\Blog\Model\TopicFactory
      */
-    private $topicFactory;
+	public $topicFactory;
 
     /**
      * constructor
@@ -102,7 +102,7 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      * @param string $errorText
      * @return string
      */
-    private function getErrorWithTopicId(\Mageplaza\Blog\Model\Topic $topic, $errorText)
+	public function getErrorWithTopicId(\Mageplaza\Blog\Model\Topic $topic, $errorText)
     {
         return '[Topic ID: ' . $topic->getId() . '] ' . $errorText;
     }

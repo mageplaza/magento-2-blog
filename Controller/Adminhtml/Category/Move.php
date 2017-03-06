@@ -22,21 +22,21 @@ class Move extends \Mageplaza\Blog\Controller\Adminhtml\Category
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    protected $resultJsonFactory;
+	public $resultJsonFactory;
 
     /**
      * Layout Factory
      *
      * @var \Magento\Framework\View\LayoutFactory
      */
-    protected $layoutFactory;
+	public $layoutFactory;
 
     /**
      * Logger instance
      *
      * @var \Psr\Log\LoggerInterface
      */
-    protected $logger;
+	public $logger;
 
     /**
      * constructor
@@ -65,18 +65,18 @@ class Move extends \Mageplaza\Blog\Controller\Adminhtml\Category
     }
 
     /**
-     * Move Faqcat action
+     * Move Blog category action
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {
         /**
-         * New parent Faqcat identifier
+         * New parent Blog category identifier
          */
         $parentNodeId = $this->getRequest()->getPost('pid', false);
         /**
-         * Faqcat id after which we have put our Faqcat
+         * Blog category id after which we have put our Blog category
          */
         $prevNodeId = $this->getRequest()->getPost('aid', false);
 
@@ -87,23 +87,23 @@ class Move extends \Mageplaza\Blog\Controller\Adminhtml\Category
         try {
             $category = $this->initCategory();
             if ($category === false) {
-                throw new \Exception(__('Faqcat is not available.'));
+				throw new \Magento\Framework\Exception\LocalizedException(__('Blog category is not available.'));
             }
             $category->move($parentNodeId, $prevNodeId);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $error = true;
-            $this->messageManager->addError(__('There was a Faqcat move error.'));
+            $this->messageManager->addError(__('There was a Blog category move error.'));
         } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
             $error = true;
-            $this->messageManager->addError(__('There was a Faqcat move error. %1', $e->getMessage()));
+            $this->messageManager->addError(__('There was a Blog category move error. %1', $e->getMessage()));
         } catch (\Exception $e) {
             $error = true;
-            $this->messageManager->addError(__('There was a Faqcat move error.'));
+            $this->messageManager->addError(__('There was a Blog category move error.'));
             $this->logger->critical($e);
         }
 
         if (!$error) {
-            $this->messageManager->addSuccess(__('You moved the Faqcat'));
+            $this->messageManager->addSuccess(__('You moved the Blog category'));
         }
 
         $block->setMessages($this->messageManager->getMessages(true));

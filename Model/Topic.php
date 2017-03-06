@@ -57,7 +57,7 @@ class Topic extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_cacheTag = 'mageplaza_blog_topic';
+	protected $_cacheTag = 'mageplaza_blog_topic';
 
     /**
      * Event prefix
@@ -71,14 +71,14 @@ class Topic extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-    protected $postCollection;
+	public $postCollection;
 
     /**
      * Post Collection Factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
-    protected $postCollectionFactory;
+	public $postCollectionFactory;
 
     /**
      * constructor
@@ -103,13 +103,12 @@ class Topic extends \Magento\Framework\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
-
     /**
      * Initialize resource model
      *
      * @return void
      */
-    protected function _construct()
+	protected function _construct()
     {
         $this->_init('Mageplaza\Blog\Model\ResourceModel\Topic');
     }
@@ -145,7 +144,7 @@ class Topic extends \Magento\Framework\Model\AbstractModel
             return [];
         }
         $array = $this->getData('posts_position');
-        if (is_null($array)) {
+        if ($array === null) {
             $array = $this->getResource()->getPostsPosition($this);
             $this->setData('posts_position', $array);
         }
@@ -157,11 +156,12 @@ class Topic extends \Magento\Framework\Model\AbstractModel
      */
     public function getSelectedPostsCollection()
     {
-        if (is_null($this->postCollection)) {
+        if ($this->postCollection === null) {
             $collection = $this->postCollectionFactory->create();
             $collection->join(
                 'mageplaza_blog_post_topic',
-                'main_table.post_id=mageplaza_blog_post_topic.post_id AND mageplaza_blog_post_topic.topic_id='.$this->getId(),
+                'main_table.post_id=mageplaza_blog_post_topic.post_id 
+                AND mageplaza_blog_post_topic.topic_id='.$this->getId(),
                 ['position']
             );
             $this->postCollection = $collection;

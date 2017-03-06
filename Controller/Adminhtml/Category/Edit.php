@@ -22,21 +22,25 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
      *
      * @var \Magento\Backend\Model\Session
      */
-    protected $backendSession;
+    public $backendSession;
 
     /**
      * Page factory
      *
      * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected $resultPageFactory;
+    public $resultPageFactory;
 
     /**
      * Result JSON factory
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    protected $resultJsonFactory;
+    public $resultJsonFactory;
+
+    public $objectManager;
+
+    public $dataObject;
 
     /**
      * constructor
@@ -50,22 +54,23 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
+		\Magento\Framework\DataObject $dataObject,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Backend\App\Action\Context $context
     ) {
-    
+    	$this->dataObject = $dataObject;
         $this->backendSession    = $context->getSession();
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->objectManager = $context->getObjectManager();
         parent::__construct($categoryFactory, $registry, $context);
     }
-
-
+	
     /**
-     * Edit Faqcat page
+     * Edit Blog category page
      *
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -84,7 +89,7 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
         }
 
         /**
-         * Check if we have data in session (if during Faqcat save was exception)
+         * Check if we have data in session (if during Blog category save was exception)
          */
         $data = $this->_getSession()->getMageplazaBlogCategoryData(true);
         if (isset($data['category'])) {
@@ -97,19 +102,18 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
          * Build response for ajax request
          */
         if ($this->getRequest()->getQuery('isAjax')) {
-            // prepare breadcrumbs of selected Faqcat, if any
+            // prepare breadcrumbs of selected Blog category, if any
             $breadcrumbsPath = $category->getPath();
             if (empty($breadcrumbsPath)) {
-                // but if no Faqcat, and it is deleted - prepare breadcrumbs from path, saved in session
-                //TODO: inject session instead of using objectManager
-                $breadcrumbsPath = $this->_objectManager->get(
+                // but if no Blog category, and it is deleted - prepare breadcrumbs from path, saved in session
+                $breadcrumbsPath = $this->objectManager->get(
                     'Magento\Backend\Model\Auth\Session'
                 )->getDeletedPath(
                     true
                 );
                 if (!empty($breadcrumbsPath)) {
                     $breadcrumbsPath = explode('/', $breadcrumbsPath);
-                    // no need to get parent breadcrumbs if deleting Faqcat level 1
+                    // no need to get parent breadcrumbs if deleting Blog category level 1
                     if (count($breadcrumbsPath) <= 1) {
                         $breadcrumbsPath = '';
                     } else {
@@ -119,7 +123,7 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
                 }
             }
 
-            $eventResponse = new \Magento\Framework\DataObject([
+            $eventResponse = $this->dataObject->__construct([
                 'content' => $resultPage->getLayout()->getBlock('mageplaza.blog.category.edit')->getFormHtml()
                     . $resultPage->getLayout()->getBlock('mageplaza.blog.category.tree')
                         ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs'),

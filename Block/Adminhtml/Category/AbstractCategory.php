@@ -22,28 +22,28 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry;
+    public $coreRegistry;
 
     /**
-     * Faqcat tree model instance
+     * Blog Category tree model instance
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\Tree
      */
-    protected $categoryTree;
+	public $categoryTree;
 
     /**
-     * Faqcat factory
+     * Blog Category factory
      *
      * @var \Mageplaza\Blog\Model\CategoryFactory
      */
-    protected $categoryFactory;
+	public $categoryFactory;
 
     /**
-     * Faqcat collection factory
+     * Blog Category collection factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
-    protected $categoryCollectionFactory;
+	public $categoryCollectionFactory;
 
     /**
      * constructor
@@ -72,7 +72,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve current Faqcat instance
+     * Retrieve current Blog Category instance
      *
      * @return \Mageplaza\Blog\Model\Category
      */
@@ -110,7 +110,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
         }
         return \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
     }
-
 
     /**
      * @param null $parentNodeCategory

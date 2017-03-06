@@ -22,7 +22,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
      *
      * @var array
      */
-    protected $additionalButtons = [];
+	public $additionalButtons = [];
 
     /**
      * Block template
@@ -36,7 +36,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
      *
      * @var \Magento\Framework\Json\EncoderInterface
      */
-    protected $jsonEncoder;
+	public $jsonEncoder;
 
     /**
      * constructor
@@ -70,7 +70,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     {
         $category   = $this->getCategory();
         $categoryId = (int)$category->getId();
-        // 0 when we create Faqcat, otherwise some value for editing Faqcat
+        // 0 when we create Blog Category, otherwise some value for editing Blog Category
 
         $this->setChild(
             'tabs',
@@ -239,7 +239,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * Get parent Faqcat id
+     * Get parent Blog Category id
      *
      * @return int
      */
@@ -249,7 +249,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * Get Faqcat  id
+     * Get Blog Category  id
      *
      * @return int
      */
@@ -265,7 +265,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
      * @param array $data
      * @return $this
      */
-    protected function addButton($buttonId, array $data)
+    public function addButton($buttonId, array $data)
     {
         $childBlockId = $buttonId . '_button';
         $button = $this->getButtonChildBlock($childBlockId);
@@ -281,7 +281,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     /**
      * @return bool
      */
-    protected function hasToolbarBlock()
+    public function hasToolbarBlock()
     {
         return $this->getLayout()->isBlock('page.actions.toolbar');
     }
@@ -293,7 +293,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
      * @param null|string $blockClassName
      * @return \Magento\Backend\Block\Widget
      */
-    protected function getButtonChildBlock($childId, $blockClassName = null)
+    public function getButtonChildBlock($childId, $blockClassName = null)
     {
         if (null === $blockClassName) {
             $blockClassName = 'Magento\Backend\Block\Widget\Button';

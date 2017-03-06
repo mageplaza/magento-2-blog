@@ -32,7 +32,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry;
+	public $coreRegistry;
 
     /**
      * constructor
@@ -50,11 +50,9 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         \Magento\Backend\Model\Auth\Session $authSession,
         array $data = []
     ) {
-    
         $this->coreRegistry = $coreRegistry;
         parent::__construct($context, $jsonEncoder, $authSession, $data);
     }
-
 
     /**
      * Initialize Tabs
@@ -70,7 +68,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     }
 
     /**
-     * Retrieve Faqcat object
+     * Retrieve Blog Category object
      *
      * @return \Mageplaza\Blog\Model\Category
      */
@@ -78,7 +76,6 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     {
         return $this->coreRegistry->registry('mageplaza_blog_category');
     }
-
 
     /**
      * Prepare Layout Content

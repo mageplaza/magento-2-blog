@@ -16,11 +16,12 @@ class Data extends CoreHelper
     const XML_PATH_BLOG = 'blog/';
     const POST_IMG = 'mageplaza/blog/post/image';
 
-    protected $postfactory;
-    protected $categoryfactory;
-    protected $tagfactory;
-    protected $topicfactory;
-    protected $_store;
+    public $postfactory;
+	public $categoryfactory;
+	public $tagfactory;
+	public $topicfactory;
+	public $store;
+	public $modelTraffic;
 
     public function __construct(
         Context $context,
@@ -29,14 +30,16 @@ class Data extends CoreHelper
         CategoryFactory $categoryFactory,
         TagFactory $tagFactory,
         TopicFactory $topicFactory,
-        TemplateContext $templateContext
+        TemplateContext $templateContext,
+		\Mageplaza\Blog\Model\Traffic $traffic
     ) {
     
         $this->postfactory     = $postFactory;
         $this->categoryfactory = $categoryFactory;
         $this->tagfactory      = $tagFactory;
         $this->topicfactory    = $topicFactory;
-        $this->_store = $templateContext->getStoreManager();
+        $this->store = $templateContext->getStoreManager();
+        $this->modelTraffic = $traffic;
         parent::__construct($context, $objectManager, $templateContext->getStoreManager());
     }
 
@@ -67,12 +70,13 @@ class Data extends CoreHelper
 
         if ($list->getSize()) {
             $list->setOrder('created_at', 'desc')
-                ->addFieldToFilter('enabled', 1)
-                ->addFieldToFilter('store_ids', ['eq' => $this->_store->getStore()->getId()]);
-            return $list;
+                ->addFieldToFilter('enabled', 1);
+			$results = $this->filterItems($list);
+            return $results ? $results : '';
         }
 
-        return $posts;
+        $results = $this->filterItems($posts);
+        return $results ? $results : '';
     }
 
     public function getCategoryList()
@@ -152,11 +156,10 @@ class Data extends CoreHelper
         return $url;
     }
 
-    public function getPostsByTag($tag)
+    public function getPostsByTag()
     {
         $posts      = $this->postfactory->create();
         $collection = $posts->getCollection()->addFieldToFilter('enabled', 1);
-        ;
         $result = $this->filterItems($collection);
         if ($result == '') {
             return '';
@@ -164,7 +167,7 @@ class Data extends CoreHelper
         return $result;
     }
 
-    public function getPostsByCategory($category)
+    public function getPostsByCategory()
     {
         $collection = true;
 
@@ -204,7 +207,8 @@ class Data extends CoreHelper
             return null;
         } else {
             foreach ($categories as $_cat) {
-                $categoryHtml[] = '<a class="mp-info" href="' . $this->getCategoryUrl($_cat) . '">' . $_cat->getName() . '</a>';
+                $categoryHtml[] = '<a class="mp-info" href="' . $this->getCategoryUrl($_cat) . '">' . $_cat->getName()
+					. '</a>';
             }
         }
         $result = implode(', ', $categoryHtml);
@@ -257,20 +261,12 @@ class Data extends CoreHelper
         return $post->getSelectedTopicsCollection();
     }
 
-    public function getCurrentUrl()
-    {
-        $model=$this->objectManager->get('Magento\Framework\UrlInterface');
-        return $model->getCurrentUrl();
-    }
-
     /**
      * get most view post
      */
     public function getMosviewPosts()
     {
-        $ob    = $this->objectManager->get('Mageplaza\Blog\Model\Traffic');
-        $posts = $ob->getCollection()->addFieldToFilter('enabled', 1);
-        ;
+        $posts = $this->modelTraffic->getCollection()->addFieldToFilter('enabled', 1);
         $posts->join(
             'mageplaza_blog_post',
             'main_table.post_id=mageplaza_blog_post.post_id',
@@ -305,24 +301,28 @@ class Data extends CoreHelper
      */
     public function filterItems($items, $limit = null)
     {
-        $storeId = $this->_store->getStore()->getId();
-        $list = [];
+        $storeId = $this->store->getStore()->getId();
         $count = 0;
         foreach ($items as $item) {
             $itemStore = $item->getStoreIds() ? explode(',', $item->getStoreIds()) : '-1';
-            if (in_array($storeId, $itemStore)) {
-                $count++;
-                if ($limit && $count > $limit) {
-                    break;
-                }
-                array_push($list, $item);
-            }
+            $check = $count;
+			if ($limit && $count >= $limit) {
+				break;
+			}
+			for ($i = 0; $i < count($itemStore); $i++) {
+				if ($itemStore[$i] == $storeId) {
+					$count++;
+				}
+			}
+
+			if($check == $count){
+            	unset($item);
+			}
         }
-        
+
         if ($count == 0) {
             return '';
         }
-
-        return $list;
+		return $items;
     }
 }

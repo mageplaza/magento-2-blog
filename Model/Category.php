@@ -56,7 +56,7 @@ namespace Mageplaza\Blog\Model;
 class Category extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * Root of the Faqcat tree
+     * Root of the Blog Category tree
      *
      * @var string
      */
@@ -88,21 +88,21 @@ class Category extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-    protected $postCollection;
+    public $postCollection;
 
     /**
-     * Faqcat Factory
+     * Blog Category Factory
      *
      * @var \Mageplaza\Blog\Model\CategoryFactory
      */
-    protected $categoryFactory;
+	public $categoryFactory;
 
     /**
      * Post Collection Factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
-    protected $postCollectionFactory;
+	public $postCollectionFactory;
 
     /**
      * constructor
@@ -129,7 +129,6 @@ class Category extends \Magento\Framework\Model\AbstractModel
         $this->postCollectionFactory = $postCollectionFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
-
 
     /**
      * Initialize resource model
@@ -191,7 +190,7 @@ class Category extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * move Faqcat in tree
+     * move Blog Category in tree
      *
      * @param $parentId
      * @param $afterCategoryId
@@ -205,19 +204,22 @@ class Category extends \Magento\Framework\Model\AbstractModel
             $parent = $this->categoryFactory->create()->load($parentId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Sorry, but we can\'t move the Faqcat because we can\'t find the new parent Faqcat you selected.'),
+                __('Sorry, but we can\'t move the Blog Category 
+                because we can\'t find the new parent Blog Category you selected.'),
                 $e
             );
         }
 
         if (!$this->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Sorry, but we can\'t move the Faqcat because we can\'t find the new parent Faqcat you selected.')
+                __('Sorry, but we can\'t move the Blog Category 
+                 because we can\'t find the new parent Blog Category you selected.')
             );
         } elseif ($parent->getId() == $this->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'We can\'t perform this Faqcat move operation because the parent Faqcat matches the child Faqcat.'
+                    'We can\'t perform this Blog Category move operation 
+                     because the parent Blog Category matches the child Blog Category.'
                 )
             );
         }
@@ -261,7 +263,7 @@ class Category extends \Magento\Framework\Model\AbstractModel
             return [];
         }
         $array = $this->getData('posts_position');
-        if (is_null($array)) {
+        if ($array === null) {
             $array = $this->getResource()->getPostsPosition($this);
             $this->setData('posts_position', $array);
         }
@@ -273,11 +275,12 @@ class Category extends \Magento\Framework\Model\AbstractModel
      */
     public function getSelectedPostsCollection()
     {
-        if (is_null($this->postCollection)) {
+        if ($this->postCollection === null) {
             $collection = $this->postCollectionFactory->create();
             $collection->join(
                 'mageplaza_blog_post_category',
-                'main_table.post_id=mageplaza_blog_post_category.post_id AND mageplaza_blog_post_category.category_id='.$this->getId(),
+                'main_table.post_id=mageplaza_blog_post_category.post_id 
+                AND mageplaza_blog_post_category.category_id='.$this->getId(),
                 ['position']
             );
             $this->postCollection = $collection;

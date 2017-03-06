@@ -22,14 +22,14 @@ class SuggestCategories extends \Mageplaza\Blog\Controller\Adminhtml\Category
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    protected $resultJsonFactory;
+	public $resultJsonFactory;
 
     /**
      * Layout factory
      *
      * @var \Magento\Framework\View\LayoutFactory
      */
-    protected $layoutFactory;
+	public $layoutFactory;
 
     /**
      * constructor
@@ -55,7 +55,7 @@ class SuggestCategories extends \Mageplaza\Blog\Controller\Adminhtml\Category
     }
 
     /**
-     * Faqcat list suggestion based on already entered symbols
+     * Blog Category list suggestion based on already entered symbols
      *
      * @return \Magento\Framework\Controller\Result\Json
      */

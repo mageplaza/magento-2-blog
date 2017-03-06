@@ -7,7 +7,7 @@ use \Mageplaza\Blog\Helper\Data;
 
 class Footer extends \Magento\Framework\View\Element\Html\Link
 {
-    protected $helper;
+    public $helper;
 
     public function __construct(
         Context $context,

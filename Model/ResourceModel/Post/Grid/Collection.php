@@ -15,7 +15,8 @@
  */
 namespace Mageplaza\Blog\Model\ResourceModel\Post\Grid;
 
-class Collection extends \Mageplaza\Blog\Model\ResourceModel\Post\Collection implements \Magento\Framework\Api\Search\SearchResultInterface
+class Collection extends \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+	implements \Magento\Framework\Api\Search\SearchResultInterface
 {
     /**
      * Aggregations
@@ -60,7 +61,6 @@ class Collection extends \Mageplaza\Blog\Model\ResourceModel\Post\Collection imp
         $this->setMainTable($mainTable);
     }
 
-
     /**
      * @return \Magento\Framework\Search\AggregationInterface
      */
@@ -77,7 +77,6 @@ class Collection extends \Mageplaza\Blog\Model\ResourceModel\Post\Collection imp
     {
         $this->aggregations = $aggregations;
     }
-
 
     /**
      * Retrieve all ids for collection

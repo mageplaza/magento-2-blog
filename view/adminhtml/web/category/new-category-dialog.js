@@ -36,7 +36,7 @@ define([
             var widget = this;
             $('#new_category_parent').before($('<input>', {
                 id: 'new_category_parent-suggest',
-                placeholder: $.mage.__('start typing to search Faqcat')
+                placeholder: $.mage.__('start typing to search Blog Category')
             }));
 
             $('#new_category_parent-suggest').treeSuggest(this.options.suggestOptions)
@@ -48,7 +48,7 @@ define([
 
             $.validator.addMethod('validate-parent-category', function () {
                 return $('#new_category_parent').val() || $('#new_category_parent-suggest').val() === '';
-            }, $.mage.__('Choose existing Faqcat.'));
+            }, $.mage.__('Choose existing Blog Category.'));
             var newCategoryForm = $('#new_category_form');
             newCategoryForm.mage('validation', {
                 errorPlacement: function (error, element) {
@@ -71,7 +71,7 @@ define([
             this.element.modal({
                 type: 'slide',
                 modalClass: 'mage-new-category-dialog form-inline',
-                title: $.mage.__('Create Faqcat'),
+                title: $.mage.__('Create Blog Category'),
                 opened: function () {
                     var enteredName = $('#category_ids-suggest').val();
 
@@ -94,7 +94,7 @@ define([
                     $('#category_ids-suggest').focus();
                 },
                 buttons: [{
-                    text: $.mage.__('Create Faqcat'),
+                    text: $.mage.__('Create Blog Category'),
                     class: 'action-primary',
                     click: function (e) {
                         if (!newCategoryForm.valid()) {

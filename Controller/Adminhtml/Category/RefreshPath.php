@@ -22,7 +22,7 @@ class RefreshPath extends \Mageplaza\Blog\Controller\Adminhtml\Category
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    protected $resultJsonFactory;
+	public $resultJsonFactory;
 
     /**
      * constructor
@@ -43,7 +43,6 @@ class RefreshPath extends \Mageplaza\Blog\Controller\Adminhtml\Category
         $this->resultJsonFactory = $resultJsonFactory;
         parent::__construct($categoryFactory, $coreRegistry, $context);
     }
-
 
     /**
      * Build response for refresh input element 'path' in form

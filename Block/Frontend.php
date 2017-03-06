@@ -24,24 +24,23 @@ use Magento\Framework\View\Element\Template\Context as TemplateContext;
 
 class Frontend extends Template
 {
-    protected $helperData;
-    protected $objectManager;
-    protected $localeDate;
-    protected $_store;
+	public $helperData;
+	public $store;
+	public $dateTime;
+	public $mpRobots;
 
     public function __construct(
+		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+		\Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobots,
         Context $context,
         HelperData $helperData,
-        ObjectManagerInterface $objectManager,
         TemplateContext $templateContext,
         array $data = []
     ) {
-    
-
+    	$this->dateTime = $dateTime;
+    	$this->mpRobots = $metaRobots;
         $this->helperData    = $helperData;
-        $this->objectManager = $objectManager;
-        $this->localeDate = $context->getLocaleDate();
-        $this->_store = $templateContext->getStoreManager();
+        $this->store = $templateContext->getStoreManager();
         parent::__construct($context, $data);
     }
 
@@ -81,7 +80,7 @@ class Frontend extends Template
      */
     public function filterPost($post)
     {
-        $storeId = $this->_store->getStore()->getId();
+        $storeId = $this->store->getStore()->getId();
         $postStoreId = $post->getStoreIds() ? explode(',', $post->getStoreIds()) : '-1';
         if (in_array($storeId, $postStoreId)) {
             return true;
@@ -94,9 +93,7 @@ class Frontend extends Template
      */
     public function formatCreatedAt($createdAt)
     {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
-        $dateFormat = date('Y-m-d', $object->timestamp($createdAt));
+        $dateFormat = date('Y-m-d', $this->dateTime->timestamp($createdAt));
         return $dateFormat;
     }
 
@@ -134,7 +131,8 @@ class Frontend extends Template
                     $this->helperData->getBlogConfig('general/url_prefix'),
                     ['label' => $breadcrumbsLabel,
                      'title' => $this->helperData->getBlogConfig('general/url_prefix'),
-                     'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
+                     'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						 . $this->helperData->getBlogConfig('general/url_prefix')]
                 );
                 if ($category->getId()) {
                     $breadcrumbs->addCrumb(
@@ -164,7 +162,8 @@ class Frontend extends Template
                     $this->helperData->getBlogConfig('general/url_prefix'),
                     ['label' => $breadcrumbsLabel,
                      'title' => $this->helperData->getBlogConfig('general/url_prefix'),
-                     'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
+                     'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						 . $this->helperData->getBlogConfig('general/url_prefix')]
                 )->addCrumb(
                     $category->getUrlKey(),
                     ['label' => ucfirst($category->getName()),
@@ -185,7 +184,8 @@ class Frontend extends Template
                     $this->helperData->getBlogConfig('general/url_prefix'),
                     ['label' => $breadcrumbsLabel,
                      'title' => $this->helperData->getBlogConfig('general/url_prefix'),
-                     'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
+                     'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						 . $this->helperData->getBlogConfig('general/url_prefix')]
                 )->addCrumb(
                     'Tag',
                     ['label' => 'Tag',
@@ -209,7 +209,8 @@ class Frontend extends Template
                     $this->helperData->getBlogConfig('general/url_prefix'),
                     ['label' => $breadcrumbsLabel,
                      'title' => $this->helperData->getBlogConfig('general/url_prefix'),
-                     'link'  => $this->_storeManager->getStore()->getBaseUrl() . $this->helperData->getBlogConfig('general/url_prefix')]
+                     'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						 . $this->helperData->getBlogConfig('general/url_prefix')]
                 )->addCrumb(
                     'Topic',
                     ['label' => 'Topic',
@@ -236,24 +237,18 @@ class Frontend extends Template
     {
         if ($post) {
             $title = $post->getMetaTitle();
-            if ($title) {
-                $this->pageConfig->getTitle()->set($title);
-            } else {
-                $this->pageConfig->getTitle()->set($post->getName());
-            }
+			$this->setPageData($title, 1, $post->getName());
+
             $description = $post->getMetaDescription();
-            if ($description) {
-                $this->pageConfig->setDescription($description);
-            }
+            $this->setPageData($description, 2);
+
             $keywords = $post->getMetaKeywords();
-            if ($keywords) {
-                $this->pageConfig->setKeywords($keywords);
-            }
+            $this->setPageData($keywords, 3);
+
             $robot      = $post->getMetaRobots();
-            $robotModel = $this->objectManager->get('Mageplaza\Blog\Model\Post\Source\MetaRobots');
-            $array      = $robotModel->getOptionArray();
+            $array      = $this->mpRobots->getOptionArray();
             if ($keywords) {
-                $this->pageConfig->setRobots($array[$robot]);
+            	$this->setPageData($array[$robot], 4);
             }
             $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
             if ($pageMainTitle) {
@@ -261,21 +256,51 @@ class Frontend extends Template
             }
         } else {
             $title = $this->helperData->getBlogConfig('general/name');
-            if ($title) {
-                $this->pageConfig->getTitle()->set($title);
-            }
+            $this->setPageData($title, 1, __('Blog'));
+
             $description = $this->helperData->getBlogConfig('seo/meta_description');
-            if ($description) {
-                $this->pageConfig->setDescription($description);
-            }
+            $this->setPageData($description, 2);
+
             $keywords = $this->helperData->getBlogConfig('seo/meta_keywords');
-            if ($keywords) {
-                $this->pageConfig->setKeywords($keywords);
-            }
+            $this->setPageData($keywords, 3);
+
             $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
             if ($pageMainTitle) {
                 $pageMainTitle->setPageTitle($this->helperData->getBlogConfig('general/name'));
             }
         }
     }
+
+    /**
+	 * return set page data
+	 */
+    public function setPageData($data, $type, $name = null){
+    	if ($data) {
+			return $this->setDataFromType($data, $type);
+		}
+
+		return $this->setDataFromType($name, $type);
+	}
+
+	/**
+	 * set page data based on type
+	 */
+	public function setDataFromType($data, $type){
+		switch ($type) {
+			case 1:
+				return $this->pageConfig->getTitle()->set($data);
+				break;
+			case 2:
+				return $this->pageConfig->setDescription($data);
+				break;
+			case 3:
+				return $this->pageConfig->setKeywords($data);
+				break;
+			case 4:
+				return $this->pageConfig->setRobots($data);
+				break;
+		}
+
+		return '';
+	}
 }

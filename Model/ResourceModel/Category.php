@@ -22,21 +22,21 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
-    protected $date;
+	public $date;
 
     /**
      * Event Manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $eventManager;
+	public $eventManager;
 
     /**
      * Post relation model
      *
      * @var string
      */
-    protected $categoryPostTable;
+	public $categoryPostTable;
 
     /**
      * constructor
@@ -57,7 +57,6 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->categoryPostTable = $this->getTable('mageplaza_blog_post_category');
     }
 
-
     /**
      * Initialize resource model
      *
@@ -69,7 +68,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Retrieves Faqcat Name from DB by passed id.
+     * Retrieves Blog Category Name from DB by passed id.
      *
      * @param string $id
      * @return string|bool
@@ -124,7 +123,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             if (!$object->getInitialSetupFlag()) {
                 $this->getConnection()->update(
                     $this->getMainTable(),
-                    ['children_count' => new \Zend_Db_Expr('children_count+1')],
+                    ['children_count' => 'children_count+1'],
                     ['category_id IN(?)' => $toUpdateChild]
                 );
             }
@@ -210,7 +209,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Mageplaza\Blog\Model\Category $object
      * @return $this
      */
-    protected function savePath($object)
+	public function savePath($object)
     {
         if ($object->getId()) {
             $this->getConnection()->update(
@@ -222,7 +221,6 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         return $this;
     }
-
 
     /**
      * @param AbstractModel $object
@@ -239,7 +237,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($parentIds) {
             $childDecrease = $object->getChildrenCount() + 1;
             // +1 is itself
-            $data = ['children_count' => new \Zend_Db_Expr('children_count - ' . $childDecrease)];
+            $data = ['children_count' => 'children_count - ' . $childDecrease];
             $where = ['category_id IN(?)' => $parentIds];
             $this->getConnection()->update($this->getMainTable(), $data, $where);
         }
@@ -295,20 +293,20 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $pathField = $adapter->quoteIdentifier('path');
 
         /**
-         * Decrease children count for all old Faqcat parent Categories
+         * Decrease children count for all old Blog Category parent Categories
          */
         $adapter->update(
             $table,
-            ['children_count' => new \Zend_Db_Expr('children_count - ' . $childrenCount)],
+            ['children_count' => 'children_count - ' . $childrenCount],
             ['category_id IN(?)' => $category->getParentIds()]
         );
 
         /**
-         * Increase children count for new Faqcat parents
+         * Increase children count for new Blog Category parents
          */
         $adapter->update(
             $table,
-            ['children_count' => new \Zend_Db_Expr('children_count + ' . $childrenCount)],
+            ['children_count' => 'children_count + ' . $childrenCount],
             ['category_id IN(?)' => $newParent->getPathIds()]
         );
 
@@ -324,19 +322,17 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $adapter->update(
             $table,
             [
-                'path' => new \Zend_Db_Expr(
-                    'REPLACE(' . $pathField . ',' . $adapter->quote(
-                        $category->getPath() . '/'
-                    ) . ', ' . $adapter->quote(
-                        $newPath . '/'
-                    ) . ')'
-                ),
-                'level' => new \Zend_Db_Expr($levelFiled . ' + ' . $levelDisposition)
+                'path' => 'REPLACE(' . $pathField . ',' . $adapter->quote(
+                        	$category->getPath() . '/'
+                    		) . ', ' . $adapter->quote(
+                        	$newPath . '/'
+                    		) . ')',
+                'level' => $levelFiled . ' + ' . $levelDisposition
             ],
             [$pathField . ' LIKE ?' => $category->getPath() . '/%']
         );
         /**
-         * Update moved Faqcat data
+         * Update moved Blog Category data
          */
         $data = [
             'path' => $newPath,
@@ -346,7 +342,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         ];
         $adapter->update($table, $data, ['category_id = ?' => $category->getId()]);
 
-        // Update Faqcat object to new data
+        // Update Blog Category object to new data
         $category->addData($data);
         $category->unsetData('path_ids');
 
@@ -359,7 +355,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param $afterCategoryId
      * @return int
      */
-    protected function processPositions(
+    public function processPositions(
         \Mageplaza\Blog\Model\Category $category,
         \Mageplaza\Blog\Model\Category $newParent,
         $afterCategoryId
@@ -369,7 +365,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $adapter = $this->getConnection();
         $positionField = $adapter->quoteIdentifier('position');
 
-        $bind = ['position' => new \Zend_Db_Expr($positionField . ' - 1')];
+        $bind = ['position' => $positionField . ' - 1'];
         $where = [
             'parent_id = ?' => $category->getParentId(),
             $positionField . ' > ?' => $category->getPosition(),
@@ -382,12 +378,12 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($afterCategoryId) {
             $select = $adapter->select()->from($table, 'position')->where('category_id = :category_id');
             $position = $adapter->fetchOne($select, ['category_id' => $afterCategoryId]);
-            $position += 1;
+            $position++;
         } else {
             $position = 1;
         }
 
-        $bind = ['position' => new \Zend_Db_Expr($positionField . ' + 1')];
+        $bind = ['position' => $positionField . ' + 1'];
         $where = ['parent_id = ?' => $newParent->getId(), $positionField . ' >= ?' => $position];
         $adapter->update($table, $bind, $where);
 
@@ -431,7 +427,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Mageplaza\Blog\Model\Category $category
      * @return $this
      */
-    protected function savePostRelation(\Mageplaza\Blog\Model\Category $category)
+    public function savePostRelation(\Mageplaza\Blog\Model\Category $category)
     {
         $category->setIsChangedPostList(false);
         $id = $category->getId();

@@ -22,14 +22,14 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    private $jsonFactory;
+	public $jsonFactory;
 
     /**
      * Tag Factory
      *
      * @var \Mageplaza\Blog\Model\TagFactory
      */
-    private $tagFactory;
+	public $tagFactory;
 
     /**
      * constructor
@@ -101,7 +101,7 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      * @param string $errorText
      * @return string
      */
-    private function getErrorWithTagId(\Mageplaza\Blog\Model\Tag $tag, $errorText)
+	public function getErrorWithTagId(\Mageplaza\Blog\Model\Tag $tag, $errorText)
     {
         return '[Tag ID: ' . $tag->getId() . '] ' . $errorText;
     }

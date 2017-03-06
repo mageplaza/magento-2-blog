@@ -22,7 +22,7 @@ class NewAction extends \Magento\Backend\App\Action
      *
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
-    private $resultForwardFactory;
+	public $resultForwardFactory;
 
     /**
      * constructor

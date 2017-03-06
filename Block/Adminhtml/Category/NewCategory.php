@@ -26,14 +26,14 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @var \Magento\Framework\Json\EncoderInterface
      */
-    protected $jsonEncoder;
+	public $jsonEncoder;
 
     /**
-     * Faqcat collection factory
+     * Blog Category collection factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
-    protected $categoryCollectionFactory;
+	public $categoryCollectionFactory;
 
     /**
      * constructor
@@ -53,7 +53,6 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
     ) {
-    
         $this->jsonEncoder               = $jsonEncoder;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         parent::__construct($context, $registry, $formFactory, $data);
@@ -92,7 +91,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'new_category_name'
             ]
         );
-        //TODO: add all required fields here
+        // add all required fields here
         $fieldset->addField(
             'new_category_parent',
             'select',
@@ -117,11 +116,11 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Get parent Faqcat options
+     * Get parent Blog Category options
      *
      * @return array
      */
-    protected function getParentCategoryOptions()
+    public function getParentCategoryOptions()
     {
         $items = $this->categoryCollectionFactory->create()
             ->addOrder('Category_id', 'ASC')
@@ -137,7 +136,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Faqcat save action URL
+     * Blog Category save action URL
      *
      * @return string
      */
@@ -147,7 +146,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Attach new Faqcat dialog widget initialization
+     * Attach new Blog Category dialog widget initialization
      *
      * @return string
      */
@@ -165,7 +164,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
                 'saveCategoryUrl' => $this->getUrl('mageplaza_blog/category/save'),
             ]
         );
-        //TODO: JavaScript logic should be moved to separate file or reviewed
+        //JavaScript logic should be moved to separate file or reviewed
         return <<<HTML
 <script>
 require(["jquery","mage/mage"],function($) {  // waiting for dependencies at first

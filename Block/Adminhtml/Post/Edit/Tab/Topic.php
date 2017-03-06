@@ -22,21 +22,21 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Mage
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory
      */
-    protected $topicCollectionFactory;
+	public $topicCollectionFactory;
 
     /**
      * Registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry;
+	public $coreRegistry;
 
     /**
      * Topic factory
      *
      * @var \Mageplaza\Blog\Model\TopicFactory
      */
-    protected $topicFactory;
+	public $topicFactory;
 
     /**
      * constructor
@@ -62,7 +62,6 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Mage
         $this->topicFactory           = $topicFactory;
         parent::__construct($context, $backendHelper, $data);
     }
-
 
     /**
      * Set grid params

@@ -18,11 +18,11 @@ namespace Mageplaza\Blog\Setup;
 class InstallData implements \Magento\Framework\Setup\InstallDataInterface
 {
     /**
-     * Faqcat setup factory
+     * Blog Category setup factory
      *
      * @var \Mageplaza\Blog\Setup\CategorySetupFactory
      */
-    private $categorySetupFactory;
+    public $categorySetupFactory;
 
     /**
      * constructor
@@ -45,7 +45,7 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
     	$contextInstall->getVersion();
         /** @var \Mageplaza\Blog\Setup\CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
-        // Create Root Faqcat Node
+        // Create Root Blog Category Node
         $category = $categorySetup->createCategory();
         $category
             ->setPath('1')

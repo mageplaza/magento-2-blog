@@ -14,13 +14,13 @@ use Mageplaza\Blog\Model\TrafficFactory;
 
 class View extends Action
 {
-    private $trafficFactory;
-	private $resultPageFactory;
-	private $helperBlog;
-	private $accountManagement;
-	private $customerUrl;
-	private $session;
-	private $storeManager;
+	public $trafficFactory;
+	public $resultPageFactory;
+	public $helperBlog;
+	public $accountManagement;
+	public $customerUrl;
+	public $session;
+	public $storeManager;
 
     public function __construct(
         Context $context,

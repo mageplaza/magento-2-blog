@@ -22,35 +22,35 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
-    protected $date;
+	public $date;
 
     /**
      * Event Manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $eventManager;
+	public $eventManager;
 
     /**
      * Tag relation model
      *
      * @var string
      */
-    protected $postTagTable;
+	public $postTagTable;
 
     /**
      * Topic relation model
      *
      * @var string
      */
-    protected $postTopicTable;
+	public $postTopicTable;
 
     /**
-     * Faqcat relation model
+     * Blog Category relation model
      *
      * @var string
      */
-    protected $postCategoryTable;
+	public $postCategoryTable;
 
     /**
      * constructor
@@ -72,7 +72,6 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->postTopicTable    = $this->getTable('mageplaza_blog_post_topic');
         $this->postCategoryTable = $this->getTable('mageplaza_blog_post_category');
     }
-
 
     /**
      * Initialize resource model
@@ -181,7 +180,7 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Mageplaza\Blog\Model\Post $post
      * @return $this
      */
-    protected function saveTagRelation(\Mageplaza\Blog\Model\Post $post)
+	public function saveTagRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedTagList(false);
         $id   = $post->getId();
@@ -261,7 +260,7 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Mageplaza\Blog\Model\Post $post
      * @return $this
      */
-    protected function saveTopicRelation(\Mageplaza\Blog\Model\Post $post)
+	public function saveTopicRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedTopicList(false);
         $id     = $post->getId();
@@ -323,7 +322,7 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Mageplaza\Blog\Model\Post $post
      * @return array
      */
-    protected function saveCategoryRelation(\Mageplaza\Blog\Model\Post $post)
+	public function saveCategoryRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedCategoryList(false);
         $id         = $post->getId();
@@ -403,8 +402,6 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $adapter->fetchCol($select);
     }
-
-
 
     public function generateUrlKey($name, $count)
     {

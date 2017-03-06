@@ -34,7 +34,7 @@ class Delete extends \Mageplaza\Blog\Controller\Adminhtml\Category
                 $category->load($id);
                 $name = $category->getName();
                 $category->delete();
-                $this->messageManager->addSuccess(__('The Faqcat has been deleted.'));
+                $this->messageManager->addSuccess(__('The Blog Category has been deleted.'));
                 $this->_eventManager->dispatch(
                     'adminhtml_mageplaza_blog_category_on_delete',
                     ['name' => $name, 'status' => 'success']
@@ -54,7 +54,7 @@ class Delete extends \Mageplaza\Blog\Controller\Adminhtml\Category
             }
         }
         // display error message
-        $this->messageManager->addError(__('Faqcat to delete was not found.'));
+        $this->messageManager->addError(__('Blog Category to delete was not found.'));
         // go to grid
         $resultRedirect->setPath('mageplaza_blog/*/');
         return $resultRedirect;

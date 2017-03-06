@@ -61,14 +61,14 @@ class Tag extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-    protected $postCollection;
+	public $postCollection;
 
     /**
      * Post Collection Factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
-    protected $postCollectionFactory;
+	public $postCollectionFactory;
 
     /**
      * constructor
@@ -135,7 +135,7 @@ class Tag extends \Magento\Framework\Model\AbstractModel
             return [];
         }
         $array = $this->getData('posts_position');
-        if (is_null($array)) {
+        if ($array === null) {
             $array = $this->getResource()->getPostsPosition($this);
             $this->setData('posts_position', $array);
         }
@@ -147,7 +147,7 @@ class Tag extends \Magento\Framework\Model\AbstractModel
      */
     public function getSelectedPostsCollection()
     {
-        if (is_null($this->postCollection)) {
+        if ($this->postCollection === null) {
             $collection = $this->postCollectionFactory->create();
             $collection->join(
                 'mageplaza_blog_post_tag',

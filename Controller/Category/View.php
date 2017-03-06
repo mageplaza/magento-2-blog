@@ -14,13 +14,13 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 
 class View extends Action
 {
-    protected $resultPageFactory;
-    protected $helperBlog;
-    protected $accountManagement;
-    protected $customerUrl;
-    protected $session;
-    protected $helperData;
-    protected $storeManager;
+    public $resultPageFactory;
+	public $helperBlog;
+	public $accountManagement;
+	public $customerUrl;
+	public $session;
+	public $helperData;
+	public $storeManager;
 
     public function __construct(
         Context $context,

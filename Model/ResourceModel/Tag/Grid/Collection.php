@@ -15,14 +15,15 @@
  */
 namespace Mageplaza\Blog\Model\ResourceModel\Tag\Grid;
 
-class Collection extends \Mageplaza\Blog\Model\ResourceModel\Tag\Collection implements \Magento\Framework\Api\Search\SearchResultInterface
+class Collection extends \Mageplaza\Blog\Model\ResourceModel\Tag\Collection
+	implements \Magento\Framework\Api\Search\SearchResultInterface
 {
     /**
      * Aggregations
      *
      * @var \Magento\Framework\Search\AggregationInterface
      */
-    protected $aggregations;
+    public $aggregations;
 
     /**
      * constructor
@@ -77,7 +78,6 @@ class Collection extends \Mageplaza\Blog\Model\ResourceModel\Tag\Collection impl
     {
         $this->aggregations = $aggregations;
     }
-
 
     /**
      * Retrieve all ids for collection

@@ -36,7 +36,7 @@ class TopicActions extends \Magento\Ui\Component\Listing\Columns\Column
      *
      * @var \Magento\Framework\UrlInterface
      */
-    protected $urlBuilder;
+    public $urlBuilder;
 
     /**
      * constructor
@@ -58,7 +58,6 @@ class TopicActions extends \Magento\Ui\Component\Listing\Columns\Column
         $this->urlBuilder = $urlBuilder;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
-
 
     /**
      * Prepare Data Source

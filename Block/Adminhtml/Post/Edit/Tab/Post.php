@@ -22,23 +22,23 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      *
      * @var \Magento\Cms\Model\Wysiwyg\Config
      */
-    protected $wysiwygConfig;
+	public $wysiwygConfig;
 
     /**
      * Country options
      *
      * @var \Magento\Config\Model\Config\Source\Yesno
      */
-    protected $booleanOptions;
+	public $booleanOptions;
 
     /**
      * Meta Robots options
      *
      * @var \Mageplaza\Blog\Model\Post\Source\MetaRobots
      */
-    protected $metaRobotsOptions;
+	public $metaRobotsOptions;
 
-    protected $_systemStore;
+	public $systemStore;
 
     /**
      * constructor
@@ -65,7 +65,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         $this->wysiwygConfig     = $wysiwygConfig;
         $this->booleanOptions    = $booleanOptions;
         $this->metaRobotsOptions = $metaRobotsOptions;
-        $this->_systemStore = $systemStore;
+        $this->systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -136,7 +136,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Store Views'),
                 'title' => __('Store Views'),
                 'note' => __('Select Store Views'),
-                'values' => $this->_systemStore->getStoreValuesForForm(false, true),
+                'values' => $this->systemStore->getStoreValuesForForm(false, true),
             ]
         );
         $fieldset->addField(

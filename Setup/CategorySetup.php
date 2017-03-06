@@ -22,14 +22,14 @@ class CategorySetup
      *
      * @var \Magento\Framework\Setup\ModuleDataSetupInterface
      */
-    private $setup;
+    public $setup;
 
     /**
-     * Faqcat Factory
+     * Blog Category Factory
      *
      * @var \Mageplaza\Blog\Model\CategoryFactory
      */
-    private $categoryFactory;
+    public $categoryFactory;
 
     /**
      * constructor
@@ -47,7 +47,7 @@ class CategorySetup
     }
 
     /**
-     * Creates Faqcat model
+     * Creates Blog Category model
      *
      * @param array $data
      * @return \Mageplaza\Blog\Model\Category

@@ -23,7 +23,10 @@ class Display implements \Magento\Framework\Option\ArrayInterface
 
     public function toOptionArray()
     {
-        return [ ['value' => self::LIST_VIEW, 'label' => __('List View')], ['value' => self::GRID, 'label' => __('Grid View')]];
+        return [
+        	['value' => self::LIST_VIEW, 'label' => __('List View')],
+			['value' => self::GRID, 'label' => __('Grid View')]
+		];
     }
 
     /**

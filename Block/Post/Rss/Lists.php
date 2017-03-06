@@ -16,27 +16,27 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
     /**
      * @var \Mageplaza\Blog\Helper\Image
      */
-    protected $imageHelper;
+    public $imageHelper;
 
     /**
      * @var \Magento\Catalog\Model\Rss\Product\NewProducts
      */
-    protected $rssModel;
+	public $rssModel;
 
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface
      */
-    protected $rssUrlBuilder;
+	public $rssUrlBuilder;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeManager;
+	public $storeManager;
 
     /**
      * @var \Mageplaza\Blog\Helper\Data
      */
-    protected $helper;
+	public $helper;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -112,7 +112,6 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
             $item->setAllowedInRss(true);
             $item->setAllowedPriceInRss(true);
 
-
             if (!$item->getAllowedInRss()) {
                 continue;
             }
@@ -140,7 +139,7 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
     /**
      * @return int
      */
-    protected function getStoreId()
+    public function getStoreId()
     {
         $storeId = (int)$this->getRequest()->getParam('store_id');
         if ($storeId == null) {
@@ -149,7 +148,6 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
 
         return $storeId;
     }
-
 
     /**
      * {@inheritdoc}

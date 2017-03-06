@@ -18,25 +18,25 @@ namespace Mageplaza\Blog\Controller\Adminhtml;
 abstract class Category extends \Magento\Backend\App\Action
 {
     /**
-     * Faqcat Factory
+     * Blog Category Factory
      *
      * @var \Mageplaza\Blog\Model\CategoryFactory
      */
-    protected $categoryFactory;
+    public $categoryFactory;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry;
+    public $coreRegistry;
 
     /**
      * Result redirect factory
      *
      * @var \Magento\Backend\Model\View\Result\RedirectFactory
      */
-    protected $resultRedirectFactory;
+    public $resultRedirectFactory;
 
     /**
      * constructor
@@ -59,11 +59,11 @@ abstract class Category extends \Magento\Backend\App\Action
     }
 
     /**
-     * Init Faqcat
+     * Init Blog Category
      *
      * @return \Mageplaza\Blog\Model\Category
      */
-    protected function initCategory()
+	public function initCategory()
     {
         $categoryId  = (int) $this->getRequest()->getParam('category_id');
         /** @var \Mageplaza\Blog\Model\Category $category */

@@ -93,48 +93,48 @@ class Post extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Tag\Collection
      */
-    protected $tagCollection;
+    public $tagCollection;
 
     /**
      * Topic Collection
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Topic\Collection
      */
-    protected $topicCollection;
+	public $topicCollection;
 
     /**
-     * Faqcat Collection
+     * Blog Category Collection
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\Collection
      */
-    protected $categoryCollection;
+	public $categoryCollection;
 
     /**
      * Tag Collection Factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory
      */
-    protected $tagCollectionFactory;
+	public $tagCollectionFactory;
 
     /**
      * Topic Collection Factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory
      */
-    protected $topicCollectionFactory;
+	public $topicCollectionFactory;
 
     /**
-     * Faqcat Collection Factory
+     * Blog Category Collection Factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
-    protected $categoryCollectionFactory;
+	public $categoryCollectionFactory;
 
     /**
      * Post Collection Factory
      * @type \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
-    protected $postCollectionFactory;
+	public $postCollectionFactory;
 
 
     /**
@@ -142,7 +142,9 @@ class Post extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-    protected $relatedPostCollection;
+	public $relatedPostCollection;
+
+	public $dateTime;
 
     /**
      * constructor
@@ -161,20 +163,20 @@ class Post extends \Magento\Framework\Model\AbstractModel
         \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory $topicCollectionFactory,
         \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
+		\Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-    
         $this->tagCollectionFactory      = $tagCollectionFactory;
         $this->topicCollectionFactory    = $topicCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->postCollectionFactory     = $postCollectionFactory;
+        $this->dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
-
 
     /**
      * Initialize resource model
@@ -221,7 +223,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
             return [];
         }
         $array = $this->getData('tags_position');
-        if (is_null($array)) {
+        if ($array === null) {
             $array = $this->getResource()->getTagsPosition($this);
             $this->setData('tags_position', $array);
         }
@@ -234,11 +236,12 @@ class Post extends \Magento\Framework\Model\AbstractModel
      */
     public function getSelectedTagsCollection()
     {
-        if (is_null($this->tagCollection)) {
+        if ($this->tagCollection === null) {
             $collection = $this->tagCollectionFactory->create();
             $collection->join(
                 'mageplaza_blog_post_tag',
-                'main_table.tag_id=mageplaza_blog_post_tag.tag_id AND mageplaza_blog_post_tag.post_id=' . $this->getId(),
+                'main_table.tag_id=mageplaza_blog_post_tag.tag_id AND mageplaza_blog_post_tag.post_id='
+				. $this->getId(),
                 ['position']
             );
             $this->tagCollection = $collection;
@@ -256,7 +259,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
             return [];
         }
         $array = $this->getData('topics_position');
-        if (is_null($array)) {
+        if ($array === null) {
             $array = $this->getResource()->getTopicsPosition($this);
             $this->setData('topics_position', $array);
         }
@@ -269,11 +272,12 @@ class Post extends \Magento\Framework\Model\AbstractModel
      */
     public function getSelectedTopicsCollection()
     {
-        if (is_null($this->topicCollection)) {
+        if ($this->topicCollection === null) {
             $collection = $this->topicCollectionFactory->create();
             $collection->join(
                 'mageplaza_blog_post_topic',
-                'main_table.topic_id=mageplaza_blog_post_topic.topic_id AND mageplaza_blog_post_topic.post_id=' . $this->getId(),
+                'main_table.topic_id=mageplaza_blog_post_topic.topic_id AND mageplaza_blog_post_topic.post_id='
+				. $this->getId(),
                 ['position']
             );
             $this->topicCollection = $collection;
@@ -291,7 +295,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
             return [];
         }
         $array = $this->getData('categories_position');
-        if (is_null($array)) {
+        if ($array === null) {
             $array = $this->getResource()->getCategoriesPosition($this);
             $this->setData('categories_position', $array);
         }
@@ -304,11 +308,12 @@ class Post extends \Magento\Framework\Model\AbstractModel
      */
     public function getSelectedCategoriesCollection()
     {
-        if (is_null($this->categoryCollection)) {
+        if ($this->categoryCollection === null) {
             $collection = $this->categoryCollectionFactory->create();
             $collection->join(
                 'mageplaza_blog_post_category',
-                'main_table.category_id=mageplaza_blog_post_category.category_id AND mageplaza_blog_post_category.post_id="' . $this->getId().'"',
+                'main_table.category_id=mageplaza_blog_post_category.category_id 
+                AND mageplaza_blog_post_category.post_id="' . $this->getId().'"',
                 ['position']
             );
             $this->categoryCollection = $collection;
@@ -343,7 +348,6 @@ class Post extends \Magento\Framework\Model\AbstractModel
         return (array)$this->_getData('topic_ids');
     }
 
-
     /**
      * get category id string
      * @return mixed
@@ -363,13 +367,10 @@ class Post extends \Magento\Framework\Model\AbstractModel
      */
     public function getFormatCreatedAt()
     {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $object        = $objectManager->get('\Magento\Framework\Stdlib\DateTime');
-        $dateFormat    = $object->formatDate($this->getCreatedAt(), false);
+        $dateFormat    = $this->dateTime->formatDate($this->getCreatedAt(), false);
 
         return $dateFormat;
     }
-
 
     /**
      * get related posts
@@ -382,7 +383,8 @@ class Post extends \Magento\Framework\Model\AbstractModel
 
             $collection->join(
                 'mageplaza_blog_post_topic',
-                'main_table.post_id=mageplaza_blog_post_topic.post_id AND mageplaza_blog_post_topic.post_id != "' . $this->getId() . '" AND mageplaza_blog_post_topic.topic_id IN (' . $this->getTopicSting() . ')',
+                'main_table.post_id=mageplaza_blog_post_topic.post_id AND mageplaza_blog_post_topic.post_id != "'
+				. $this->getId() . '" AND mageplaza_blog_post_topic.topic_id IN (' . $this->getTopicSting() . ')',
                 ['position']
             );
             $this->relatedPostCollection = $collection;

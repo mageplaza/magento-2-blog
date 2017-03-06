@@ -22,29 +22,29 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
      *
      * @var \Magento\Backend\Model\Session
      */
-    protected $backendSession;
+	public $backendSession;
 
     /**
      * Upload model
      *
      * @var \Mageplaza\Blog\Model\Upload
      */
-    protected $uploadModel;
+	public $uploadModel;
 
     /**
      * Image model
      *
      * @var \Mageplaza\Blog\Model\Post\Image
      */
-    protected $imageModel;
+	public $imageModel;
 
     /**
      * JS helper
      *
      * @var \Magento\Backend\Helper\Js
      */
-    protected $jsHelper;
-    protected $trafficFactory;
+	public $jsHelper;
+	public $trafficFactory;
 
     /**
      * constructor
@@ -88,7 +88,6 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 
         //check delete image
 		$deleteImage = false;
-
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $post = $this->initPost();
@@ -101,9 +100,9 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 				}
 			}
 
-            if((!isset($data['image']) || (count($data['image']) == 1)) && !$deleteImage) {
+            if ((!isset($data['image']) || (count($data['image']) == 1)) && !$deleteImage) {
 				$image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
-				if (!$image) {
+				if ($image === false) {
 					$this->messageManager->addError(__('Please choose an image to upload.'));
 					$resultRedirect->setPath(
 						'mageplaza_blog/*/edit',
@@ -118,7 +117,6 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 
 				$post->setImage($image);
 			}
-
 
             $tags = $this->getRequest()->getPost('tags', -1);
             if ($tags != -1) {

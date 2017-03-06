@@ -22,7 +22,7 @@ class Upload
      *
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
      */
-    protected $uploaderFactory;
+    public $uploaderFactory;
 
     /**
      * constructor
@@ -49,7 +49,7 @@ class Upload
     {
         try {
             if (isset($data[$input]['delete'])) {
-                return '';
+                return false;
             } else {
                 $uploader = $this->uploaderFactory->create(['fileId' => $input]);
                 $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);

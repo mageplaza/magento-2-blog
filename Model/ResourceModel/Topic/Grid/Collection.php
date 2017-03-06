@@ -15,14 +15,15 @@
  */
 namespace Mageplaza\Blog\Model\ResourceModel\Topic\Grid;
 
-class Collection extends \Mageplaza\Blog\Model\ResourceModel\Topic\Collection implements \Magento\Framework\Api\Search\SearchResultInterface
+class Collection extends \Mageplaza\Blog\Model\ResourceModel\Topic\Collection
+	implements \Magento\Framework\Api\Search\SearchResultInterface
 {
     /**
      * Aggregations
      *
      * @var \Magento\Framework\Search\AggregationInterface
      */
-    protected $aggregations;
+    public $aggregations;
 
     /**
      * constructor
@@ -60,7 +61,6 @@ class Collection extends \Mageplaza\Blog\Model\ResourceModel\Topic\Collection im
         $this->setMainTable($mainTable);
     }
 
-
     /**
      * @return \Magento\Framework\Search\AggregationInterface
      */
@@ -77,7 +77,6 @@ class Collection extends \Mageplaza\Blog\Model\ResourceModel\Topic\Collection im
     {
         $this->aggregations = $aggregations;
     }
-
 
     /**
      * Retrieve all ids for collection
