@@ -303,4 +303,53 @@ class Frontend extends Template
 
 		return '';
 	}
+
+	/**
+	 * @return array|string
+	 */
+	public function getBlogPagination($type = null, $id = null)
+	{
+		$page = $this->getRequest()->getParam('p');
+		$postList = '';
+		if ($type == null) {
+			$postList = $this->helperData->getPostList();
+		} elseif ($type == 'category') {
+			$postList = $this->helperData->getPostList('category', $id);
+		} elseif ($type == 'tag') {
+			$postList = $this->helperData->getPostList('tag', $id);
+		} elseif ($type == 'topic') {
+			$postList = $this->helperData->getPostList('topic', $id);
+		}
+
+		if ($postList != '' && is_array($postList)) {
+			$limit = (int) $this->getBlogConfig('general/pagination');
+			$numOfPost = count($postList);
+			$numOfPage = 1;
+			$firstIndex = 0;
+			$lastIndex = $limit - 1;
+			if (count($postList) > $limit) {
+				$numOfPage = ($numOfPost % $limit != 0) ? ($numOfPost / $limit) + 1 : ($numOfPost / $limit);
+
+				$results = array($numOfPage);
+				if ($page) {
+					if($page > $numOfPage || $page < 1){
+						$page = 1;
+					}
+					$firstIndex = $limit * $page - $limit;
+					$lastIndex = $firstIndex + $limit - 1;
+				}
+
+				for ($i = $firstIndex; $i <= $lastIndex; $i++) {
+					array_push($results, $postList[$i]);
+				}
+
+				return $results;
+			}
+
+			array_unshift($postList, $numOfPage);
+			return $postList;
+		}
+
+		return '';
+	}
 }

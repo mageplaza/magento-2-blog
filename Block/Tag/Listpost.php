@@ -22,7 +22,7 @@ class Listpost extends Frontend
 
     public function getPostList()
     {
-        return $this->helperData->getPostList('tag', $this->getRequest()->getParam('id'));
+        return $this->getBlogPagination('tag', $this->getRequest()->getParam('id'));
     }
     public function checkRss()
     {

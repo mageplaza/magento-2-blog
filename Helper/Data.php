@@ -303,26 +303,21 @@ class Data extends CoreHelper
     {
         $storeId = $this->store->getStore()->getId();
         $count = 0;
+        $results = array();
         foreach ($items as $item) {
-            $itemStore = $item->getStoreIds() ? explode(',', $item->getStoreIds()) : '-1';
-            $check = $count;
-			if ($limit && $count >= $limit) {
-				break;
-			}
-			for ($i = 0; $i < count($itemStore); $i++) {
-				if ($itemStore[$i] == $storeId) {
-					$count++;
+            $itemStore = $item->getStoreIds() ? explode(',', $item->getStoreIds()) : '';
+			if (in_array($storeId, $itemStore)) {
+				if ($limit && $count >= $limit) {
+					break;
 				}
-			}
-
-			if($check == $count){
-            	unset($item);
+				$count++;
+				array_push($results, $item);
 			}
         }
 
         if ($count == 0) {
             return '';
         }
-		return $items;
+		return $results;
     }
 }

@@ -19,7 +19,10 @@ $count = 0;
 			if ($count > $limit)
 				break;
 			?>
-					<li class="category-item" ><i class="fa fa-angle-right"></i><a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>"><?php echo ucfirst($category->getName()) ?></a></li>
+					<li class="category-item" ><i class="fa fa-angle-right"></i>
+                        <a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>">
+                            <?php echo ucfirst($category->getName()) ?></a>
+                    </li>
 
 
 			<?php endforeach; ?>

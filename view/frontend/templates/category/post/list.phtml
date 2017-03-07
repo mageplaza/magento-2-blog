@@ -1,7 +1,8 @@
 
 <?php
 $posts=$block->getPostList();
-
+$countPage = $posts[0];
+array_shift($posts);
 ?>
 	<?php $checkRss = $block->checkRss();
 if ($checkRss):
@@ -10,7 +11,7 @@ if ($checkRss):
             <a href="<?php echo $checkRss ?>" class="bb-rss-icon"><img src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px"> </a>
         </div>
 <?php endif; ?>
-<?php if (count($posts) > 0) : ?>
+<?php if ($posts != '') : ?>
 	<div class="post-list-container mpcss">
 		<div class="row">
 			<?php foreach ($posts as $post) : ?>
@@ -62,31 +63,45 @@ if ($checkRss):
 			<?php endforeach; ?>
 		</div>
     </div>
-		<?php echo $this->getPagerHtml(); ?>
+
+	<?php if($countPage > 1): ?>
+        <ul class="items mp-blog-pages" aria-labelledby="paging-label">
+        <?php
+		for ($i = 1; $i <= $countPage; $i++):
+			?>
+            <li class="item mp-page-item">
+                <a href="<?php echo $this->getUrl('*/*/*', ['_use_rewrite' => true]) . '?p=' . $i; ?>" class="page">
+                    <span class="label"><?php echo __('Page') ?></span>
+                        <span><?php echo $i; ?></span>
+                </a>
+            </li>
+		<?php endfor; ?>
+        </ul>
+	<?php endif; ?>
+
 <?php else : ?>
 	<div class="post-list-container">
         <?php echo __('There are no posts at this moment'); ?>
     </div>
 <?php endif; ?>
 <script>
-							less = {
-								env: "production",
-								logLevel: 2,
-								async: false,
-								fileAsync: false,
-								poll: 1000,
-								functions: {},
-								dumpLineNumbers: "comments",
-								relativeUrls: false,
-								useFileCache: true,
-								modifyVars: {
-									'@color': '<?php echo $block->getBlogConfig('general/font_color')?>'
-								}
+    less = {
+        env: "production",
+        logLevel: 2,
+        async: false,
+        fileAsync: false,
+        poll: 1000,
+        functions: {},
+        dumpLineNumbers: "comments",
+        relativeUrls: false,
+        useFileCache: true,
+        modifyVars: {
+            '@color': '<?php echo $block->getBlogConfig('general/font_color')?>'
+        }
 
-							};
+    };
 </script>
 <script>
-	jQuery.noConflict();
 	require([
 		'jquery',
 		'Mageplaza_Blog/js/less.min'

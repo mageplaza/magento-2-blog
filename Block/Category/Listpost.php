@@ -21,7 +21,7 @@ class Listpost extends Frontend
 {
     public function getPostList()
     {
-        return $this->helperData->getPostList('category', $this->getRequest()->getParam('id'));
+        return $this->getBlogPagination('category', $this->getRequest()->getParam('id'));
     }
 
     public function checkRss()

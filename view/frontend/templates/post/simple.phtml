@@ -1,7 +1,9 @@
 <?php
-$posts = $block->getPostList();
+$posts = $block->getBlogPagination();
+$countPage = $posts[0];
+array_shift($posts);
 ?>
-<?php if (count($posts) > 0) : ?>
+<?php if ($posts != '') : ?>
 	<div class="post-list-container">
         <?php foreach ($posts as $post) : ?>
 			<div class="post-list-item">
@@ -29,6 +31,22 @@ $posts = $block->getPostList();
             </div>
 		<?php endforeach; ?>
     </div>
+
+	<?php if($countPage > 1): ?>
+        <ul class="items mp-blog-pages" aria-labelledby="paging-label">
+        <?php
+		for ($i = 1; $i <= $countPage; $i++):
+			?>
+            <li class="item mp-page-item">
+                <a href="<?php echo $this->getUrl('*/*/*', ['_use_rewrite' => true]) . '?p=' . $i; ?>" class="page">
+                    <span class="label"><?php echo __('Page') ?></span>
+                        <span><?php echo $i; ?></span>
+                </a>
+            </li>
+		<?php endfor; ?>
+        </ul>
+	<?php endif; ?>
+
 <?php else : ?>
 	<div class="post-list-container">
         <?php echo __('There are no posts at this moment'); ?>
