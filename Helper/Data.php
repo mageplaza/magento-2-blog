@@ -305,8 +305,9 @@ class Data extends CoreHelper
         $count = 0;
         $results = array();
         foreach ($items as $item) {
-            $itemStore = $item->getStoreIds() ? explode(',', $item->getStoreIds()) : '';
-			if (in_array($storeId, $itemStore)) {
+        	$itemStoreIds = $item->getStoreIds();
+			$itemStore = $itemStoreIds !== null ? explode(',', $itemStoreIds) : '';
+			if (in_array($storeId, $itemStore) || in_array('0', $itemStore)) {
 				if ($limit && $count >= $limit) {
 					break;
 				}

@@ -325,25 +325,11 @@ class Frontend extends Template
 			$limit = (int) $this->getBlogConfig('general/pagination');
 			$numOfPost = count($postList);
 			$numOfPage = 1;
-			$firstIndex = 0;
-			$lastIndex = $limit - 1;
-			if (count($postList) > $limit) {
+			$countPost = count($postList);
+			if ($countPost > $limit) {
 				$numOfPage = ($numOfPost % $limit != 0) ? ($numOfPost / $limit) + 1 : ($numOfPost / $limit);
 
-				$results = array($numOfPage);
-				if ($page) {
-					if($page > $numOfPage || $page < 1){
-						$page = 1;
-					}
-					$firstIndex = $limit * $page - $limit;
-					$lastIndex = $firstIndex + $limit - 1;
-				}
-
-				for ($i = $firstIndex; $i <= $lastIndex; $i++) {
-					array_push($results, $postList[$i]);
-				}
-
-				return $results;
+				return $this->getPostPerPage($page, $numOfPage, $limit, $postList);
 			}
 
 			array_unshift($postList, $numOfPage);
@@ -351,5 +337,37 @@ class Frontend extends Template
 		}
 
 		return '';
+	}
+
+	/**
+	 * get posts per page
+	 */
+	public function getPostPerPage($page = null, $numOfPage, $limit, $array = array()){
+		$results = array();
+		$firstIndex = 0;
+		$lastIndex = $limit - 1;
+		if ($page) {
+			if($page > $numOfPage || $page < 1){
+				$page = 1;
+			}
+
+			$firstIndex = $limit * $page - $limit;
+			$lastIndex = $firstIndex + $limit - 1;
+			if (!isset($array[$lastIndex])) {
+				for ($i = $lastIndex; $i >= $firstIndex; $i--) {
+					if(isset($array[$i])){
+						$lastIndex = $i;
+						break;
+					}
+				}
+			}
+		}
+
+		for ($i = $firstIndex; $i <= $lastIndex; $i++) {
+			array_push($results, $array[$i]);
+		}
+
+		array_unshift($results, $numOfPage);
+		return $results;
 	}
 }
