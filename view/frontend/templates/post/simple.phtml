@@ -1,9 +1,11 @@
 <?php
 $posts = $block->getBlogPagination();
-$countPage = $posts[0];
-array_shift($posts);
 ?>
 <?php if ($posts != '') : ?>
+	<?php
+	$countPage = $posts[0];
+	array_shift($posts);
+	?>
 	<div class="post-list-container">
         <?php foreach ($posts as $post) : ?>
 			<div class="post-list-item">

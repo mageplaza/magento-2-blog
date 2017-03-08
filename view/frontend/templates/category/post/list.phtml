@@ -1,8 +1,6 @@
 
 <?php
 $posts=$block->getPostList();
-$countPage = $posts[0];
-array_shift($posts);
 ?>
 	<?php $checkRss = $block->checkRss();
 if ($checkRss):
@@ -12,6 +10,10 @@ if ($checkRss):
         </div>
 <?php endif; ?>
 <?php if ($posts != '') : ?>
+    <?php
+    $countPage = $posts[0];
+	array_shift($posts);
+	?>
 	<div class="post-list-container mpcss">
 		<div class="row">
 			<?php foreach ($posts as $post) : ?>
