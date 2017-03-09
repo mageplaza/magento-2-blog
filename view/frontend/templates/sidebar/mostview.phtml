@@ -10,7 +10,7 @@ $postsRecent = $block->getRecentPost();
 		
 		<div class="tab-content">
 			<div id="mostview">
-				<?php if (count($posts) > 0): ?>
+				<?php if ($posts != ''): ?>
 					<?php foreach ($posts as $post): ?>
 						<a class="list-post-tabs" href="<?php echo $block->getUrlByPost($post) ?>">
 							<div class="post-left">
@@ -19,22 +19,18 @@ $postsRecent = $block->getRecentPost();
 							<div class="post-right">
 								<span><?php echo $post->getName() ?></span>
 								<span class="create-at">
-									<?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-									$object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
-									$dateFormat = date('Y-m-d',$object->timestamp($post->getCreatedAt()));
-									echo $dateFormat;
-									?>
+									<?php echo $block->formatCreatedAt($post->getCreatedAt()); ?>
 								</span>
 							</div>
 						</a>
 					<?php endforeach; ?>
 	
 				<?php else: ?>
-					<?php echo __('<div style="'.'height: 50px;line-height: 50px;text-align: center;'.'">No Posts</div>') ?>
+                    <div style="height: 50px;line-height: 50px;text-align: center;"><?php echo __('No Posts'); ?></div>
 				<?php endif; ?>
 			</div>
 			<div id="mostrecent" style="display:none">
-				<?php if (count($postsRecent) > 0): ?>
+				<?php if ($postsRecent != ''): ?>
 					<?php foreach ($postsRecent as $post): ?>
 						<a class="list-post-tabs" href="<?php echo $block->getUrlByPost($post) ?>">
 							<div class="post-left">
@@ -51,7 +47,7 @@ $postsRecent = $block->getRecentPost();
 					<?php endforeach; ?>
 	
 				<?php else: ?>
-					<?php echo __('<div style="'.'height: 50px;line-height: 50px;text-align: center;'.'">No Posts</div>') ?>
+					<div style="height: 50px;line-height: 50px;text-align: center;"><?php echo __('No Posts'); ?></div>
 				<?php endif; ?>
 			</div>
 		</div>
