@@ -1,5 +1,6 @@
 
 <?php $_post = $block->getCurrentPost(); ?>
+<?php if($block->filterPost($_post)): ?>
 
 <?php if ($block->getBlogConfig('share/enabled')): ?>
 	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $block->getBlogConfig('share/pubid_id') ?>"
@@ -175,3 +176,5 @@
 		'Mageplaza_Blog/js/less.min'
 	]);
 </script>
+
+<?php endif;?>
