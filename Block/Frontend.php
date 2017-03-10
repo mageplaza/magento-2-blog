@@ -75,20 +75,6 @@ class Frontend extends Template
     }
 
     /**
-     * filter post by store
-     * return true/false
-     */
-    public function filterPost($post)
-    {
-        $storeId = $this->store->getStore()->getId();
-        $postStoreId = $post->getStoreIds() ? explode(',', $post->getStoreIds()) : '-1';
-        if (in_array($storeId, $postStoreId)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * format post created_at
      */
     public function formatCreatedAt($createdAt)
