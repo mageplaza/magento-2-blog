@@ -82,7 +82,7 @@ class Frontend extends Template
     {
         $storeId = $this->store->getStore()->getId();
         $postStoreId = $post->getStoreIds() != null ? explode(',', $post->getStoreIds()) : '-1';
-        if (is_array($postStoreId) && in_array($storeId, $postStoreId)) {
+        if (is_array($postStoreId) && (in_array($storeId, $postStoreId) || in_array('0', $postStoreId))) {
             return true;
         }
         return false;
@@ -118,36 +118,38 @@ class Frontend extends Template
                 $this->applySeoCode();
             } elseif ($actionName == 'blog_post_view') {
                 $post     = $this->getCurrentPost();
-                $category = $post->getSelectedCategoriesCollection()->addFieldToFilter('enabled', 1)->getFirstItem();
-                $breadcrumbs->addCrumb(
-                    'home',
-                    [
-                        'label' => __('Home'),
-                        'title' => __('Go to Home Page'),
-                        'link'  => $this->_storeManager->getStore()->getBaseUrl()
-                    ]
-                );
-                $breadcrumbs->addCrumb(
-                    $this->helperData->getBlogConfig('general/url_prefix'),
-                    ['label' => $breadcrumbsLabel,
-                     'title' => $this->helperData->getBlogConfig('general/url_prefix'),
-                     'link'  => $this->_storeManager->getStore()->getBaseUrl()
-						 . $this->helperData->getBlogConfig('general/url_prefix')]
-                );
-                if ($category->getId()) {
-                    $breadcrumbs->addCrumb(
-                        $category->getUrlKey(),
-                        ['label' => ucfirst($category->getName()),
-                         'title' => $category->getName(),
-                         'link'  => $this->helperData->getCategoryUrl($category)]
-                    );
-                }
-                $breadcrumbs->addCrumb(
-                    $post->getUrlKey(),
-                    ['label' => ucfirst($post->getName()),
-                     'title' => $post->getName()]
-                );
-                $this->applySeoCode($post);
+                if($this->filterPost($post)) {
+					$category = $post->getSelectedCategoriesCollection()->addFieldToFilter('enabled', 1)->getFirstItem();
+					$breadcrumbs->addCrumb(
+						'home',
+						[
+							'label' => __('Home'),
+							'title' => __('Go to Home Page'),
+							'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						]
+					);
+					$breadcrumbs->addCrumb(
+						$this->helperData->getBlogConfig('general/url_prefix'),
+						['label' => $breadcrumbsLabel,
+						 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+						 'link'  => $this->_storeManager->getStore()->getBaseUrl()
+							 . $this->helperData->getBlogConfig('general/url_prefix')]
+					);
+					if ($category->getId()) {
+						$breadcrumbs->addCrumb(
+							$category->getUrlKey(),
+							['label' => ucfirst($category->getName()),
+							 'title' => $category->getName(),
+							 'link'  => $this->helperData->getCategoryUrl($category)]
+						);
+					}
+					$breadcrumbs->addCrumb(
+						$post->getUrlKey(),
+						['label' => ucfirst($post->getName()),
+						 'title' => $post->getName()]
+					);
+					$this->applySeoCode($post);
+				}
             } elseif ($actionName == 'blog_category_view') {
                 $category = $this->helperData->getCategoryByParam('id', $this->getRequest()->getParam('id'));
                 $breadcrumbs->addCrumb(
