@@ -1,27 +1,32 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="Mageplaza_Blog::blog" title="Better Blog" module="Mageplaza_Blog" sortOrder="25" resource="Mageplaza_Blog::blog" parent="Mageplaza_Core::menu"/>
-        <add id="Mageplaza_Blog::post" title="Posts" module="Mageplaza_Blog" sortOrder="10" action="mageplaza_blog/post" resource="Mageplaza_Blog::post" parent="Mageplaza_Blog::blog"/>
-        <add id="Mageplaza_Blog::tag" title="Tags" module="Mageplaza_Blog" sortOrder="20" action="mageplaza_blog/tag" resource="Mageplaza_Blog::tag" parent="Mageplaza_Blog::blog"/>
-        <add id="Mageplaza_Blog::topic" title="Topics" module="Mageplaza_Blog" sortOrder="30" action="mageplaza_blog/topic" resource="Mageplaza_Blog::topic" parent="Mageplaza_Blog::blog"/>
-        <add id="Mageplaza_Blog::category" title="Categories" module="Mageplaza_Blog" sortOrder="40" action="mageplaza_blog/category" resource="Mageplaza_Blog::category" parent="Mageplaza_Blog::blog"/>
-        <add id="Mageplaza_Blog::settings" title="Setting" module="Mageplaza_Blog" sortOrder="50" action="adminhtml/system_config/edit/section/blog" resource="Mageplaza_Blog::settings" parent="Mageplaza_Blog::blog"/>
+        <add id="Mageplaza_Blog::post" title="Posts" module="Mageplaza_Blog" sortOrder="10" action="mpblog/post" resource="Mageplaza_Blog::post" parent="Mageplaza_Blog::blog"/>
+        <add id="Mageplaza_Blog::tag" title="Tags" module="Mageplaza_Blog" sortOrder="20" action="mpblog/tag" resource="Mageplaza_Blog::tag" parent="Mageplaza_Blog::blog"/>
+        <add id="Mageplaza_Blog::topic" title="Topics" module="Mageplaza_Blog" sortOrder="30" action="mpblog/topic" resource="Mageplaza_Blog::topic" parent="Mageplaza_Blog::blog"/>
+        <add id="Mageplaza_Blog::category" title="Categories" module="Mageplaza_Blog" sortOrder="40" action="mpblog/category" resource="Mageplaza_Blog::category" parent="Mageplaza_Blog::blog"/>
+        <add id="Mageplaza_Blog::configuration" title="Configuration" module="Mageplaza_Blog" sortOrder="50" action="adminhtml/system_config/edit/section/blog" resource="Mageplaza_Blog::configuration" parent="Mageplaza_Blog::blog"/>
     </menu>
 </config>

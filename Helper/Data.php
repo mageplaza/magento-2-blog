@@ -1,5 +1,23 @@
 <?php
-
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
 namespace Mageplaza\Blog\Helper;
 
 use Mageplaza\Core\Helper\AbstractData as CoreHelper;
@@ -43,6 +61,19 @@ class Data extends CoreHelper
         parent::__construct($context, $objectManager, $templateContext->getStoreManager());
     }
 
+    /**
+     * Is enable module on frontend
+     *
+     * @param null $store
+     * @return bool
+     */
+    public function isEnabled($store = null)
+    {
+        $isModuleOutputEnabled = $this->isModuleOutputEnabled();
+
+        return $isModuleOutputEnabled && $this->getBlogConfig('general/enabled', $store);
+    }
+
     public function getBlogConfig($code, $storeId = null)
     {
         return $this->getConfigValue(self::XML_PATH_BLOG . $code, $storeId);
@@ -71,12 +102,12 @@ class Data extends CoreHelper
         if ($list->getSize()) {
             $list->setOrder('created_at', 'desc')
                 ->addFieldToFilter('enabled', 1);
+
 			$results = $this->filterItems($list);
             return $results ? $results : '';
         }
 
-        $results = $this->filterItems($posts);
-        return $results ? $results : '';
+        return '';
     }
 
     public function getCategoryList()
