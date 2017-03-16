@@ -1,17 +1,22 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
 
@@ -19,28 +24,28 @@ class Tag extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magent
 {
     /**
      * Tag collection factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory
      */
-    protected $tagCollectionFactory;
+	public $tagCollectionFactory;
 
     /**
      * Registry
-     * 
+     *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry;
+	public $coreRegistry;
 
     /**
      * Tag factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\TagFactory
      */
-    protected $tagFactory;
+	public $tagFactory;
 
     /**
      * constructor
-     * 
+     *
      * @param \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $tagCollectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
@@ -55,14 +60,13 @@ class Tag extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magent
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->tagCollectionFactory = $tagCollectionFactory;
         $this->coreRegistry         = $coreRegistry;
         $this->tagFactory           = $tagFactory;
         parent::__construct($context, $backendHelper, $data);
     }
-
 
     /**
      * Set grid params
@@ -94,9 +98,9 @@ class Tag extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magent
             $constraint = 'related.post_id=0';
         }
         $collection->getSelect()->joinLeft(
-            array('related' => $collection->getTable('mageplaza_blog_post_tag')),
+            ['related' => $collection->getTable('mageplaza_blog_post_tag')],
             'related.tag_id=main_table.tag_id AND '.$constraint,
-            array('position')
+            ['position']
         );
         $this->setCollection($collection);
         parent::_prepareCollection();

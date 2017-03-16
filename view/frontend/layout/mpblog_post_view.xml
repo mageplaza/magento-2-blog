@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-right"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mageplaza_Blog::css/index/style-color.less" rel="stylesheet/less" type="text/less"/>
+        <css src="Mageplaza_Core::css/mp.css"/>
+        <css src="Mageplaza_Core::css/font-awesome.min.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Mageplaza\Blog\Block\Post\View" name="mp.blog.view" template="Mageplaza_Blog::post/view.phtml"/>
+            <block class="Magento\Cms\Block\Block" name="mageplaza_blog_author_admin">
+                <arguments>
+                    <argument name="mageplaza_blog_author_admin" xsi:type="string">mageplaza_blog_author_admin</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="sidebar.main">
+            <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"
+                   template="Mageplaza_Blog::sidebar/mostview.phtml"/>
+
+            <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category"
+                   template="Mageplaza_Blog::category/widget.phtml"/>
+            <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"
+                   template="Mageplaza_Blog::tag/widget.phtml"/>
+
+        </referenceContainer>
+
+    </body>
+</page>

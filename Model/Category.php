@@ -1,17 +1,22 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Model;
 
@@ -56,57 +61,57 @@ namespace Mageplaza\Blog\Model;
 class Category extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * Root of the Faqcat tree
-     * 
+     * Root of the Blog Category tree
+     *
      * @var string
      */
     const TREE_ROOT_ID = 1;
 
     /**
      * Cache tag
-     * 
+     *
      * @var string
      */
     const CACHE_TAG = 'mageplaza_blog_category';
 
     /**
      * Cache tag
-     * 
+     *
      * @var string
      */
     protected $_cacheTag = 'mageplaza_blog_category';
 
     /**
      * Event prefix
-     * 
+     *
      * @var string
      */
     protected $_eventPrefix = 'mageplaza_blog_category';
 
     /**
      * Post Collection
-     * 
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-    protected $postCollection;
+    public $postCollection;
 
     /**
-     * Faqcat Factory
-     * 
+     * Blog Category Factory
+     *
      * @var \Mageplaza\Blog\Model\CategoryFactory
      */
-    protected $categoryFactory;
+	public $categoryFactory;
 
     /**
      * Post Collection Factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
-    protected $postCollectionFactory;
+	public $postCollectionFactory;
 
     /**
      * constructor
-     * 
+     *
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
      * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
      * @param \Magento\Framework\Model\Context $context
@@ -123,13 +128,12 @@ class Category extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->categoryFactory       = $categoryFactory;
         $this->postCollectionFactory = $postCollectionFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
-
 
     /**
      * Initialize resource model
@@ -182,7 +186,7 @@ class Category extends \Magento\Framework\Model\AbstractModel
 
     /**
      * get all parent ids
-     * 
+     *
      * @return array
      */
     public function getParentIds()
@@ -191,8 +195,8 @@ class Category extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * move Faqcat in tree
-     * 
+     * move Blog Category in tree
+     *
      * @param $parentId
      * @param $afterCategoryId
      * @return $this
@@ -205,19 +209,22 @@ class Category extends \Magento\Framework\Model\AbstractModel
             $parent = $this->categoryFactory->create()->load($parentId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Sorry, but we can\'t move the Faqcat because we can\'t find the new parent Faqcat you selected.'),
+                __('Sorry, but we can\'t move the Blog Category 
+                because we can\'t find the new parent Blog Category you selected.'),
                 $e
             );
         }
 
         if (!$this->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Sorry, but we can\'t move the Faqcat because we can\'t find the new parent Faqcat you selected.')
+                __('Sorry, but we can\'t move the Blog Category 
+                 because we can\'t find the new parent Blog Category you selected.')
             );
         } elseif ($parent->getId() == $this->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'We can\'t perform this Faqcat move operation because the parent Faqcat matches the child Faqcat.'
+                    'We can\'t perform this Blog Category move operation 
+                     because the parent Blog Category matches the child Blog Category.'
                 )
             );
         }
@@ -258,10 +265,10 @@ class Category extends \Magento\Framework\Model\AbstractModel
     public function getPostsPosition()
     {
         if (!$this->getId()) {
-            return array();
+            return [];
         }
         $array = $this->getData('posts_position');
-        if (is_null($array)) {
+        if ($array === null) {
             $array = $this->getResource()->getPostsPosition($this);
             $this->setData('posts_position', $array);
         }
@@ -273,11 +280,12 @@ class Category extends \Magento\Framework\Model\AbstractModel
      */
     public function getSelectedPostsCollection()
     {
-        if (is_null($this->postCollection)) {
+        if ($this->postCollection === null) {
             $collection = $this->postCollectionFactory->create();
             $collection->join(
                 'mageplaza_blog_post_category',
-                'main_table.post_id=mageplaza_blog_post_category.post_id AND mageplaza_blog_post_category.category_id='.$this->getId(),
+                'main_table.post_id=mageplaza_blog_post_category.post_id 
+                AND mageplaza_blog_post_category.category_id='.$this->getId(),
                 ['position']
             );
             $this->postCollection = $collection;

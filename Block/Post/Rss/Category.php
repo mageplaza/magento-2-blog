@@ -1,7 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Block\Post\Rss;
 
@@ -16,27 +31,27 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     /**
      * @var \Mageplaza\Blog\Helper\Image
      */
-    protected $imageHelper;
+	public $imageHelper;
 
     /**
      * @var \Magento\Catalog\Model\Rss\Product\NewProducts
      */
-    protected $rssModel;
+	public $rssModel;
 
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface
      */
-    protected $rssUrlBuilder;
+	public $rssUrlBuilder;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeManager;
+	public $storeManager;
 
     /**
      * @var \Mageplaza\Blog\Helper\Data
      */
-    protected $helper;
+	public $helper;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -84,7 +99,13 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     {
         $categoryId=$this->getRequest()->getParam('category_id');
         $storeModel = $this->storeManager->getStore($this->getStoreId());
-        $newUrl     = $this->rssUrlBuilder->getUrl(['store_id' => $this->getStoreId(), 'type' => 'blog_categories','category_id'=>$categoryId]);
+        $newUrl     = $this->rssUrlBuilder
+			->getUrl(
+			[
+				'store_id' => $this->getStoreId(),
+				'type' => 'blog_categories',
+				'category_id'=>$categoryId
+			]);
         $title      = __('List Posts from %1', $storeModel->getFrontendName());
         $lang       = $this->_scopeConfig->getValue(
             'general/locale/code',
@@ -114,7 +135,6 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
             $item->setAllowedInRss(true);
             $item->setAllowedPriceInRss(true);
 
-
             if (!$item->getAllowedInRss()) {
                 continue;
             }
@@ -142,7 +162,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     /**
      * @return int
      */
-    protected function getStoreId()
+	public function getStoreId()
     {
         $storeId = (int)$this->getRequest()->getParam('store_id');
         if ($storeId == null) {
@@ -151,7 +171,6 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
 
         return $storeId;
     }
-
 
     /**
      * {@inheritdoc}

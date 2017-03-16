@@ -1,17 +1,22 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab;
 
@@ -19,28 +24,28 @@ class Post extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magen
 {
     /**
      * Post collection factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
-    protected $postCollectionFactory;
+	public $postCollectionFactory;
 
     /**
      * Registry
-     * 
+     *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry;
+	public $coreRegistry;
 
     /**
      * Post factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\PostFactory
      */
-    protected $postFactory;
+	public $postFactory;
 
     /**
      * constructor
-     * 
+     *
      * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Mageplaza\Blog\Model\PostFactory $postFactory
@@ -55,14 +60,13 @@ class Post extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magen
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->postCollectionFactory = $postCollectionFactory;
         $this->coreRegistry          = $coreRegistry;
         $this->postFactory           = $postFactory;
         parent::__construct($context, $backendHelper, $data);
     }
-
 
     /**
      * Set grid params
@@ -94,9 +98,9 @@ class Post extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magen
             $constraint = 'related.category_id=0';
         }
         $collection->getSelect()->joinLeft(
-            array('related' => $collection->getTable('mageplaza_blog_post_category')),
+            ['related' => $collection->getTable('mageplaza_blog_post_category')],
             'related.post_id=main_table.post_id AND '.$constraint,
-            array('position')
+            ['position']
         );
         $this->setCollection($collection);
         parent::_prepareCollection();

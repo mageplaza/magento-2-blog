@@ -1,16 +1,21 @@
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 /*jshint browser:true jquery:true*/
@@ -36,7 +41,7 @@ define([
             var widget = this;
             $('#new_category_parent').before($('<input>', {
                 id: 'new_category_parent-suggest',
-                placeholder: $.mage.__('start typing to search Faqcat')
+                placeholder: $.mage.__('start typing to search Blog Category')
             }));
 
             $('#new_category_parent-suggest').treeSuggest(this.options.suggestOptions)
@@ -48,25 +53,30 @@ define([
 
             $.validator.addMethod('validate-parent-category', function () {
                 return $('#new_category_parent').val() || $('#new_category_parent-suggest').val() === '';
-            }, $.mage.__('Choose existing Faqcat.'));
+            }, $.mage.__('Choose existing Blog Category.'));
             var newCategoryForm = $('#new_category_form');
             newCategoryForm.mage('validation', {
                 errorPlacement: function (error, element) {
-                    error.insertAfter(element.is('#new_category_parent') ?
+                    error.insertAfter(
+                        element.is('#new_category_parent') ?
                         $('#new_category_parent-suggest').closest('.mage-suggest') :
-                        element);
+                        element
+                    );
                 }
             }).on('highlight.validate', function (e) {
                 var options = $(this).validation('option');
                 if ($(e.target).is('#new_category_parent')) {
-                    options.highlight($('#new_category_parent-suggest').get(0),
-                        options.errorClass, options.validClass || '');
+                    options.highlight(
+                        $('#new_category_parent-suggest').get(0),
+                        options.errorClass,
+                        options.validClass || ''
+                    );
                 }
             });
             this.element.modal({
                 type: 'slide',
                 modalClass: 'mage-new-category-dialog form-inline',
-                title: $.mage.__('Create Faqcat'),
+                title: $.mage.__('Create Blog Category'),
                 opened: function () {
                     var enteredName = $('#category_ids-suggest').val();
 
@@ -80,13 +90,16 @@ define([
                     var validationOptions = newCategoryForm.validation('option');
 
                     $('#new_category_name, #new_category_parent-suggest').val('');
-                    validationOptions.unhighlight($('#new_category_parent-suggest').get(0),
-                        validationOptions.errorClass, validationOptions.validClass || '');
+                    validationOptions.unhighlight(
+                        $('#new_category_parent-suggest').get(0),
+                        validationOptions.errorClass,
+                        validationOptions.validClass || ''
+                    );
                     newCategoryForm.validation('clearError');
                     $('#category_ids-suggest').focus();
                 },
                 buttons: [{
-                    text: $.mage.__('Create Faqcat'),
+                    text: $.mage.__('Create Blog Category'),
                     class: 'action-primary',
                     click: function (e) {
                         if (!newCategoryForm.valid()) {

@@ -1,17 +1,22 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Model\Post;
 
@@ -19,36 +24,36 @@ class Image
 {
     /**
      * Media sub folder
-     * 
+     *
      * @var string
      */
-    protected $subDir = 'mageplaza/blog/post';
+    public $subDir = 'mageplaza/blog/post';
 
     /**
      * URL builder
-     * 
+     *
      * @var \Magento\Framework\UrlInterface
      */
-    protected $urlBuilder;
+	public $urlBuilder;
 
     /**
      * File system model
-     * 
+     *
      * @var \Magento\Framework\Filesystem
      */
-    protected $fileSystem;
+	public $fileSystem;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Filesystem $fileSystem
      */
     public function __construct(
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Filesystem $fileSystem
-    )
-    {
+    ) {
+    
         $this->urlBuilder = $urlBuilder;
         $this->fileSystem = $fileSystem;
     }
@@ -60,7 +65,8 @@ class Image
      */
     public function getBaseUrl()
     {
-        return $this->urlBuilder->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]).$this->subDir.'/image';
+        return $this->urlBuilder->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA])
+			.$this->subDir.'/image';
     }
     /**
      * get base image dir
@@ -69,6 +75,7 @@ class Image
      */
     public function getBaseDir()
     {
-        return $this->fileSystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)->getAbsolutePath($this->subDir.'/image');
+        return $this->fileSystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
+			->getAbsolutePath($this->subDir.'/image');
     }
 }

@@ -1,17 +1,22 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
 
@@ -19,28 +24,28 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Mage
 {
     /**
      * Topic collection factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory
      */
-    protected $topicCollectionFactory;
+	public $topicCollectionFactory;
 
     /**
      * Registry
-     * 
+     *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry;
+	public $coreRegistry;
 
     /**
      * Topic factory
-     * 
+     *
      * @var \Mageplaza\Blog\Model\TopicFactory
      */
-    protected $topicFactory;
+	public $topicFactory;
 
     /**
      * constructor
-     * 
+     *
      * @param \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory $topicCollectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
@@ -55,14 +60,13 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Mage
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->topicCollectionFactory = $topicCollectionFactory;
         $this->coreRegistry           = $coreRegistry;
         $this->topicFactory           = $topicFactory;
         parent::__construct($context, $backendHelper, $data);
     }
-
 
     /**
      * Set grid params
@@ -94,9 +98,9 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Mage
             $constraint = 'related.post_id=0';
         }
         $collection->getSelect()->joinLeft(
-            array('related' => $collection->getTable('mageplaza_blog_post_topic')),
+            ['related' => $collection->getTable('mageplaza_blog_post_topic')],
             'related.topic_id=main_table.topic_id AND '.$constraint,
-            array('position')
+            ['position']
         );
         $this->setCollection($collection);
         parent::_prepareCollection();

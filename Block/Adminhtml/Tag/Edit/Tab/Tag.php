@@ -1,17 +1,22 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Tag\Edit\Tab;
 
@@ -19,23 +24,23 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
 {
     /**
      * Wysiwyg config
-     * 
+     *
      * @var \Magento\Cms\Model\Wysiwyg\Config
      */
-    protected $wysiwygConfig;
+	public $wysiwygConfig;
 
     /**
      * Country options
-     * 
+     *
      * @var \Magento\Config\Model\Config\Source\Yesno
      */
-    protected $booleanOptions;
+	public $booleanOptions;
 
-    protected $_systemStore;
+	public $systemStore;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
      * @param \Magento\Backend\Block\Template\Context $context
@@ -51,11 +56,11 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->wysiwygConfig  = $wysiwygConfig;
         $this->booleanOptions = $booleanOptions;
-        $this->_systemStore = $systemStore;
+        $this->systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -113,7 +118,7 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
                 'label' => __('Store Views'),
                 'title' => __('Store Views'),
                 'note' => __('Select Store Views'),
-                'values' => $this->_systemStore->getStoreValuesForForm(false, true),
+                'values' => $this->systemStore->getStoreValuesForForm(false, true),
             ]
         );
         $fieldset->addField(

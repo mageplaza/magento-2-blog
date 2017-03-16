@@ -1,17 +1,22 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit;
 
@@ -19,28 +24,28 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
 {
     /**
      * Additional buttons
-     * 
+     *
      * @var array
      */
-    protected $additionalButtons = [];
+	public $additionalButtons = [];
 
     /**
      * Block template
-     * 
+     *
      * @var string
      */
     protected $_template = 'category/edit/form.phtml';
 
     /**
      * JSON encoder
-     * 
+     *
      * @var \Magento\Framework\Json\EncoderInterface
      */
-    protected $jsonEncoder;
+	public $jsonEncoder;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Registry $registry
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree
@@ -57,8 +62,8 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
         \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Magento\Backend\Block\Widget\Context $context,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->jsonEncoder = $jsonEncoder;
         parent::__construct($registry, $categoryTree, $categoryFactory, $categoryCollectionFactory, $context, $data);
     }
@@ -70,7 +75,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     {
         $category   = $this->getCategory();
         $categoryId = (int)$category->getId();
-        // 0 when we create Faqcat, otherwise some value for editing Faqcat
+        // 0 when we create Blog Category, otherwise some value for editing Blog Category
 
         $this->setChild(
             'tabs',
@@ -239,7 +244,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * Get parent Faqcat id
+     * Get parent Blog Category id
      *
      * @return int
      */
@@ -249,7 +254,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * Get Faqcat  id
+     * Get Blog Category  id
      *
      * @return int
      */
@@ -265,7 +270,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
      * @param array $data
      * @return $this
      */
-    protected function addButton($buttonId, array $data)
+    public function addButton($buttonId, array $data)
     {
         $childBlockId = $buttonId . '_button';
         $button = $this->getButtonChildBlock($childBlockId);
@@ -281,7 +286,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     /**
      * @return bool
      */
-    protected function hasToolbarBlock()
+    public function hasToolbarBlock()
     {
         return $this->getLayout()->isBlock('page.actions.toolbar');
     }
@@ -293,7 +298,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
      * @param null|string $blockClassName
      * @return \Magento\Backend\Block\Widget
      */
-    protected function getButtonChildBlock($childId, $blockClassName = null)
+    public function getButtonChildBlock($childId, $blockClassName = null)
     {
         if (null === $blockClassName) {
             $blockClassName = 'Magento\Backend\Block\Widget\Button';

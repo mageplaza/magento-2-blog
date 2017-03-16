@@ -1,17 +1,22 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Category;
 
@@ -23,21 +28,21 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * JSON encoder
-     * 
+     *
      * @var \Magento\Framework\Json\EncoderInterface
      */
-    protected $jsonEncoder;
+	public $jsonEncoder;
 
     /**
-     * Faqcat collection factory
-     * 
+     * Blog Category collection factory
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
-    protected $categoryCollectionFactory;
+	public $categoryCollectionFactory;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      * @param \Magento\Backend\Block\Template\Context $context
@@ -52,8 +57,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
-    )
-    {
+    ) {
         $this->jsonEncoder               = $jsonEncoder;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         parent::__construct($context, $registry, $formFactory, $data);
@@ -92,7 +96,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'new_category_name'
             ]
         );
-        //TODO: add all required fields here
+        // add all required fields here
         $fieldset->addField(
             'new_category_parent',
             'select',
@@ -117,14 +121,14 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Get parent Faqcat options
+     * Get parent Blog Category options
      *
      * @return array
      */
-    protected function getParentCategoryOptions()
+    public function getParentCategoryOptions()
     {
         $items = $this->categoryCollectionFactory->create()
-            ->addOrder('Category_id','ASC')
+            ->addOrder('Category_id', 'ASC')
             ->setPageSize(3)->load()->getItems();
 
         $result = [];
@@ -137,7 +141,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Faqcat save action URL
+     * Blog Category save action URL
      *
      * @return string
      */
@@ -147,7 +151,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Attach new Faqcat dialog widget initialization
+     * Attach new Blog Category dialog widget initialization
      *
      * @return string
      */
@@ -165,7 +169,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
                 'saveCategoryUrl' => $this->getUrl('mageplaza_blog/category/save'),
             ]
         );
-        //TODO: JavaScript logic should be moved to separate file or reviewed
+        //JavaScript logic should be moved to separate file or reviewed
         return <<<HTML
 <script>
 require(["jquery","mage/mage"],function($) {  // waiting for dependencies at first
@@ -175,4 +179,5 @@ require(["jquery","mage/mage"],function($) {  // waiting for dependencies at fir
 });
 </script>
 HTML;
-    }}
+    }
+}

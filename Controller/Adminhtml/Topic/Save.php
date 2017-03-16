@@ -1,39 +1,44 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 
 class Save extends \Mageplaza\Blog\Controller\Adminhtml\Topic
 {
-	/**
-	 * Backend session
-	 *
-	 * @var \Magento\Backend\Model\Session
-	 */
-	protected $backendSession;
+    /**
+     * Backend session
+     *
+     * @var \Magento\Backend\Model\Session
+     */
+	public $backendSession;
 
     /**
      * JS helper
-     * 
+     *
      * @var \Magento\Backend\Helper\Js
      */
-    protected $jsHelper;
+	public $jsHelper;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Backend\Model\Session $backendSession
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
@@ -46,8 +51,8 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Topic
         \Mageplaza\Blog\Model\TopicFactory $topicFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Backend\App\Action\Context $context
-    )
-    {
+    ) {
+    
         $this->backendSession = $context->getSession();
         $this->jsHelper       = $jsHelper;
         parent::__construct($topicFactory, $registry, $context);

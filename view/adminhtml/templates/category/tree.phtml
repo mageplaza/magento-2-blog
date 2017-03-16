@@ -1,17 +1,22 @@
-<?php 
+<?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 ?>
 <?php /** @var \Mageplaza\Blog\Block\Adminhtml\Category\Tree $block */?>
@@ -213,7 +218,7 @@ function reRenderTree(switcherParams) {
         }
 
         if (tree.useAjax) {
-            // retain current selected Faqcat id
+            // retain current selected Blog Category id
             url = tree.switchTreeUrl + switcherParams.scopeParams + 'category_id/' + tree.currentNodeId + '/';
             // load from cache
             // load from ajax
@@ -258,7 +263,7 @@ function _renderNewTree(config, scopeParams) {
 
     tree.loadTree(config, true);
 
-    // try to select current Faqcat
+    // try to select current Blog Category
     var selectedNode = tree.getNodeById(config.parameters.category_id);
     if (selectedNode) {
         tree.currentNodeId = config.parameters.category_id;
@@ -275,7 +280,7 @@ function _renderNewTree(config, scopeParams) {
             url = url + 'category_id/' + config.parameters.category_id;
         }
         <?php endif;?>
-    //updateContent(url); //commented since ajax requests replaced with http ones to load a Faqcat
+    //updateContent(url); //commented since ajax requests replaced with http ones to load a Blog Category
 }
 
 jQuery(function () {

@@ -1,50 +1,56 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Setup;
 
 class InstallData implements \Magento\Framework\Setup\InstallDataInterface
 {
     /**
-     * Faqcat setup factory
-     * 
+     * Blog Category setup factory
+     *
      * @var \Mageplaza\Blog\Setup\CategorySetupFactory
      */
-    protected $categorySetupFactory;
+    public $categorySetupFactory;
 
     /**
      * constructor
-     * 
+     *
      * @param \Mageplaza\Blog\Setup\CategorySetupFactory $categorySetupFactory
      */
     public function __construct(
         \Mageplaza\Blog\Setup\CategorySetupFactory $categorySetupFactory
-    )
-    {
+    ) {
+    
         $this->categorySetupFactory = $categorySetupFactory;
     }
-
-
     /**
      * {@inheritdoc}
      */
-    public function install(\Magento\Framework\Setup\ModuleDataSetupInterface $setup, \Magento\Framework\Setup\ModuleContextInterface $context)
+    public function install(\Magento\Framework\Setup\ModuleDataSetupInterface $setup,
+							\Magento\Framework\Setup\ModuleContextInterface $context)
     {
+    	$contextInstall = $context;
+    	$contextInstall->getVersion();
         /** @var \Mageplaza\Blog\Setup\CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
-        // Create Root Faqcat Node
+        // Create Root Blog Category Node
         $category = $categorySetup->createCategory();
         $category
             ->setPath('1')
@@ -54,6 +60,5 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
             ->setName('ROOT')
             ->setInitialSetupFlag(true)
             ->save();
-
     }
 }

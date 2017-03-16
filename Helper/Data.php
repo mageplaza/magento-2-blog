@@ -1,5 +1,23 @@
 <?php
-
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
 namespace Mageplaza\Blog\Helper;
 
 use Mageplaza\Core\Helper\AbstractData as CoreHelper;
@@ -16,11 +34,12 @@ class Data extends CoreHelper
     const XML_PATH_BLOG = 'blog/';
     const POST_IMG = 'mageplaza/blog/post/image';
 
-    protected $postfactory;
-    protected $categoryfactory;
-    protected $tagfactory;
-    protected $topicfactory;
-    protected $_store;
+    public $postfactory;
+	public $categoryfactory;
+	public $tagfactory;
+	public $topicfactory;
+	public $store;
+	public $modelTraffic;
 
     public function __construct(
         Context $context,
@@ -29,15 +48,30 @@ class Data extends CoreHelper
         CategoryFactory $categoryFactory,
         TagFactory $tagFactory,
         TopicFactory $topicFactory,
-        TemplateContext $templateContext
+        TemplateContext $templateContext,
+		\Mageplaza\Blog\Model\Traffic $traffic
     ) {
     
         $this->postfactory     = $postFactory;
         $this->categoryfactory = $categoryFactory;
         $this->tagfactory      = $tagFactory;
         $this->topicfactory    = $topicFactory;
-        $this->_store = $templateContext->getStoreManager();
+        $this->store = $templateContext->getStoreManager();
+        $this->modelTraffic = $traffic;
         parent::__construct($context, $objectManager, $templateContext->getStoreManager());
+    }
+
+    /**
+     * Is enable module on frontend
+     *
+     * @param null $store
+     * @return bool
+     */
+    public function isEnabled($store = null)
+    {
+        $isModuleOutputEnabled = $this->isModuleOutputEnabled();
+
+        return $isModuleOutputEnabled && $this->getBlogConfig('general/enabled', $store);
     }
 
     public function getBlogConfig($code, $storeId = null)
@@ -67,12 +101,13 @@ class Data extends CoreHelper
 
         if ($list->getSize()) {
             $list->setOrder('created_at', 'desc')
-                ->addFieldToFilter('enabled', 1)
-				->addFieldToFilter('store_ids', ['eq' => $this->_store->getStore()->getId()]);
-            return $list;
+                ->addFieldToFilter('enabled', 1);
+
+			$results = $this->filterItems($list);
+            return $results ? $results : '';
         }
 
-        return $posts;
+        return '';
     }
 
     public function getCategoryList()
@@ -80,7 +115,9 @@ class Data extends CoreHelper
         $category = $this->categoryfactory->create();
         $list     = $category->getCollection()->addFieldToFilter('enabled', 1);
         $result = $this->filterItems($list);
-        if($result == '') return '';
+        if ($result == '') {
+            return '';
+        }
         return $result;
     }
 
@@ -90,7 +127,9 @@ class Data extends CoreHelper
         $list = $tag->getCollection()
             ->addFieldToFilter('enabled', 1);
         $result = $this->filterItems($list);
-        if($result == '') return '';
+        if ($result == '') {
+            return '';
+        }
         return $result;
     }
 
@@ -101,7 +140,9 @@ class Data extends CoreHelper
             ->addFieldToFilter('enabled', 1)
             ->addFieldToFilter('category_id', ['in' => $array]);
         $result = $this->filterItems($list);
-        if($result == '') return '';
+        if ($result == '') {
+            return '';
+        }
         return $result;
     }
 
@@ -146,16 +187,18 @@ class Data extends CoreHelper
         return $url;
     }
 
-    public function getPostsByTag($tag)
+    public function getPostsByTag()
     {
         $posts      = $this->postfactory->create();
-        $collection = $posts->getCollection()->addFieldToFilter('enabled', 1);;
+        $collection = $posts->getCollection()->addFieldToFilter('enabled', 1);
         $result = $this->filterItems($collection);
-        if($result == '') return '';
+        if ($result == '') {
+            return '';
+        }
         return $result;
     }
 
-    public function getPostsByCategory($category)
+    public function getPostsByCategory()
     {
         $collection = true;
 
@@ -193,9 +236,10 @@ class Data extends CoreHelper
         $categoryHtml = [];
         if (empty($categories)) {
             return null;
-        }else {
+        } else {
             foreach ($categories as $_cat) {
-                $categoryHtml[] = '<a class="mp-info" href="' . $this->getCategoryUrl($_cat) . '">' . $_cat->getName() . '</a>';
+                $categoryHtml[] = '<a class="mp-info" href="' . $this->getCategoryUrl($_cat) . '">' . $_cat->getName()
+					. '</a>';
             }
         }
         $result = implode(', ', $categoryHtml);
@@ -248,19 +292,12 @@ class Data extends CoreHelper
         return $post->getSelectedTopicsCollection();
     }
 
-    public function getCurrentUrl()
-    {
-        $model=$this->objectManager->get('Magento\Framework\UrlInterface');
-        return $model->getCurrentUrl();
-    }
-
     /**
      * get most view post
      */
     public function getMosviewPosts()
     {
-        $ob    = $this->objectManager->get('Mageplaza\Blog\Model\Traffic');
-        $posts = $ob->getCollection()->addFieldToFilter('enabled', 1);;
+        $posts = $this->modelTraffic->getCollection()->addFieldToFilter('enabled', 1);
         $posts->join(
             'mageplaza_blog_post',
             'main_table.post_id=mageplaza_blog_post.post_id',
@@ -268,7 +305,9 @@ class Data extends CoreHelper
         );
         $posts->setOrder('numbers_view', 'DESC');
         $postList = $this->filterItems($posts, $this->getBlogConfig('sidebar/number_mostview_posts'));
-        if($postList == '') return '';
+        if ($postList == '') {
+            return '';
+        }
         return $postList;
     }
 
@@ -282,28 +321,35 @@ class Data extends CoreHelper
             ->addFieldToFilter('enabled', 1)
             ->setOrder('created_at', 'DESC');
         $postList = $this->filterItems($posts, $this->getBlogConfig('sidebar/number_recent_posts'));
-        if($postList == '') return '';
+        if ($postList == '') {
+            return '';
+        }
         return $postList;
     }
 
     /**
      * filter items by store
      */
-    public function filterItems($items, $limit = null){
-        $storeId = $this->_store->getStore()->getId();
-        $list = array();
+    public function filterItems($items, $limit = null)
+    {
+        $storeId = $this->store->getStore()->getId();
         $count = 0;
+        $results = array();
         foreach ($items as $item) {
-            $itemStore = $item->getStoreIds() ? explode(',', $item->getStoreIds()) : '-1';
-            if (in_array($storeId, $itemStore)) {
-                $count++;
-                if ($limit && $count > $limit) break;
-                array_push($list, $item);
-            }
+        	$itemStoreIds = $item->getStoreIds();
+			$itemStore = $itemStoreIds !== null ? explode(',', $itemStoreIds) : '';
+			if (is_array($itemStore) && (in_array($storeId, $itemStore) || in_array('0', $itemStore))) {
+				if ($limit && $count >= $limit) {
+					break;
+				}
+				$count++;
+				array_push($results, $item);
+			}
         }
-        
-        if($count == 0) return '';
 
-        return $list;
+        if ($count == 0) {
+            return '';
+        }
+		return $results;
     }
 }

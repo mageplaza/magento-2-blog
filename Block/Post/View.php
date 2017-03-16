@@ -1,17 +1,22 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
+ * Mageplaza
  *
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
+ * NOTICE OF LICENSE
  *
- * @category  Mageplaza
- * @package   Mageplaza_Blog
- * @copyright Copyright (c) 2016
- * @license   http://opensource.org/licenses/mit-license.php MIT License
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Block\Post;
 
@@ -59,7 +64,7 @@ class View extends Frontend
     {
         $tagCollection = $post->getSelectedTagsCollection();
         $result        = '';
-        if (count($tagCollection)) :
+        if (!empty($tagCollection)) :
             $listTags = [];
             foreach ($tagCollection as $tag) {
                 $listTags[] = '<a class="mp-info" href="' . $this->getTagUrl($tag) . '">' . $tag->getName() . '</a>';

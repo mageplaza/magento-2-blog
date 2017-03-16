@@ -1,17 +1,22 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Model\Topic\Source;
 
@@ -21,7 +26,6 @@ class MetaRobots implements \Magento\Framework\Option\ArrayInterface
     const NOINDEXNOFOLLOW = 2;
     const NOINDEXFOLLOW = 3;
     const INDEXNOFOLLOW = 4;
-
 
     /**
      * to option array
@@ -49,10 +53,14 @@ class MetaRobots implements \Magento\Framework\Option\ArrayInterface
             ],
         ];
         return $options;
-
     }
     public function getOptionArray()
     {
-        return array(self::INDEXFOLLOW => 'INDEX,FOLLOW', self::NOINDEXNOFOLLOW => 'NOINDEX,NOFOLLOW', self::NOINDEXFOLLOW => 'NOINDEX,FOLLOW', self::INDEXNOFOLLOW => 'INDEX,NOFOLLOW');
+        return [
+        	self::INDEXFOLLOW => 'INDEX,FOLLOW',
+			self::NOINDEXNOFOLLOW => 'NOINDEX,NOFOLLOW',
+			self::NOINDEXFOLLOW => 'NOINDEX,FOLLOW',
+			self::INDEXNOFOLLOW => 'INDEX,NOFOLLOW'
+		];
     }
 }

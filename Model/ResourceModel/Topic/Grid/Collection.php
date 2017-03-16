@@ -1,32 +1,38 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Model\ResourceModel\Topic\Grid;
 
-class Collection extends \Mageplaza\Blog\Model\ResourceModel\Topic\Collection implements \Magento\Framework\Api\Search\SearchResultInterface
+class Collection extends \Mageplaza\Blog\Model\ResourceModel\Topic\Collection
+	implements \Magento\Framework\Api\Search\SearchResultInterface
 {
     /**
      * Aggregations
-     * 
+     *
      * @var \Magento\Framework\Search\AggregationInterface
      */
-    protected $aggregations;
+    public $aggregations;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -51,15 +57,14 @@ class Collection extends \Mageplaza\Blog\Model\ResourceModel\Topic\Collection im
         $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
         $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
-    )
-    {
+    ) {
+    
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
         $this->_init($model, $resourceModel);
         $this->setMainTable($mainTable);
     }
-
 
     /**
      * @return \Magento\Framework\Search\AggregationInterface
@@ -77,7 +82,6 @@ class Collection extends \Mageplaza\Blog\Model\ResourceModel\Topic\Collection im
     {
         $this->aggregations = $aggregations;
     }
-
 
     /**
      * Retrieve all ids for collection

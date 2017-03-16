@@ -1,95 +1,74 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Controller;
 
 /**
- * Cms Controller Router
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Class Router
+ * @package Mageplaza\Blog\Controller
  */
 class Router implements \Magento\Framework\App\RouterInterface
 {
 	/**
 	 * @var \Magento\Framework\App\ActionFactory
 	 */
-	protected $actionFactory;
+	public $actionFactory;
 
 	/**
-	 * Event manager
-	 *
-	 * @var \Magento\Framework\Event\ManagerInterface
-	 */
-	protected $_eventManager;
-
-	/**
-	 * Store manager
-	 *
-	 * @var \Magento\Store\Model\StoreManagerInterface
-	 */
-	protected $_storeManager;
-
-	/**
-	 * Page factory
-	 *
-	 * @var \Magento\Cms\Model\PageFactory
-	 */
-	protected $_pageFactory;
-
-	/**
-	 * Config primary
-	 *
-	 * @var \Magento\Framework\App\State
-	 */
-	protected $_appState;
-
-	/**
-	 * Url
-	 *
-	 * @var \Magento\Framework\UrlInterface
-	 */
-	protected $_url;
-
-	/**
-	 * Response
-	 *
-	 * @var \Magento\Framework\App\ResponseInterface
-	 */
-	protected $_response;
-	/**
-	 * Helper
-	 *
 	 * @var \Mageplaza\Blog\Helper\Data
 	 */
-	protected $_helper;
+	public $helper;
+
+	protected $_request;
 
 	/**
 	 * @param \Magento\Framework\App\ActionFactory $actionFactory
-	 * @param \Magento\Framework\Event\ManagerInterface $eventManager
-	 * @param \Magento\Framework\UrlInterface $url
-	 * @param \Magento\Cms\Model\PageFactory $pageFactory
-	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-	 * @param \Magento\Framework\App\ResponseInterface $response
+	 * @param \Mageplaza\Blog\Helper\Data $helper
 	 */
 	public function __construct(
 		\Magento\Framework\App\ActionFactory $actionFactory,
-		\Magento\Framework\Event\ManagerInterface $eventManager,
-		\Magento\Framework\UrlInterface $url,
-		\Magento\Cms\Model\PageFactory $pageFactory,
-		\Magento\Store\Model\StoreManagerInterface $storeManager,
-		\Magento\Framework\App\ResponseInterface $response,
 		\Mageplaza\Blog\Helper\Data $helper
 	)
 	{
+
 		$this->actionFactory = $actionFactory;
-		$this->_eventManager = $eventManager;
-		$this->_url          = $url;
-		$this->_pageFactory  = $pageFactory;
-		$this->_storeManager = $storeManager;
-		$this->_response     = $response;
-		$this->_helper       = $helper;
+		$this->helper        = $helper;
+	}
+
+	/**
+	 * @param $controller
+	 * @param $action
+	 * @param array $params
+	 * @return \Magento\Framework\App\ActionInterface
+	 */
+	public function _forward($controller, $action, $params = [])
+	{
+		$this->_request->setControllerName($controller)
+			->setActionName($action)
+			->setPathInfo('/mpblog/' . $controller . '/' . $action);
+
+		foreach ($params as $key => $value) {
+			$this->_request->setParam($key, $value);
+		}
+
+		return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
 	}
 
 	/**
@@ -100,100 +79,76 @@ class Router implements \Magento\Framework\App\RouterInterface
 	 */
 	public function match(\Magento\Framework\App\RequestInterface $request)
 	{
-		$helper = $this->_helper;
-		if ($helper->getBlogConfig('general/enabled')) {
-			$url_prefix = $helper->getBlogConfig('general/url_prefix');
-			if ($url_prefix == '') {
-				return $this;
-			}
-			$path = trim($request->getPathInfo(), '/');
-
-			if (strpos($path, $url_prefix) !== false) {
-				$array = explode('/', $path);
-
-				if (count($array) == 1) {
-					$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
-					$request->setPathInfo('/' . 'blog/post/index');
-
-					return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
-				} elseif (count($array) == 2) {
-					$url_key = $array[1];
-					$post    = $this->_helper->getPostByUrl($url_key);
-					if ($post && $post->getId()) {
-						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $url_key);
-						$request->setPathInfo('/' . 'blog/post/view/id/' . $post->getId());
-
-						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
-					}
-
-				} elseif (count($array) == 3) {
-					$type = $array[1];
-
-					if ($type == 'post') {
-						if ($array[2] == 'index') {
-							$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
-							$request->setPathInfo('/' . 'blog/post/index');
-
-							return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
-						} else {
-							$url_key = $array[2];
-							$post    = $this->_helper->getPostByUrl($url_key);
-							if ($post && $post->getId()) {
-								$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $url_key);
-								$request->setPathInfo('/' . 'blog/post/view/id/' . $post->getId());
-
-								return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
-							}
-
-						}
-					}
-					if ($type == 'post' && strpos($path, 'rss')) {
-						$path = str_replace($url_prefix, 'blog', $path);
-						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
-						$request->setPathInfo($path);
-
-						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
-					}
-					if ($type == 'topic') {
-						$topicUrlKey = $array[2];
-						$topic       = $this->_helper->getTopicByParam('url_key', $topicUrlKey);
-						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
-						$request->setPathInfo('/' . 'blog/topic/view/id/' . $topic->getId());
-
-						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
-					}
-					if ($type == 'tag') {
-						$tagUrlKey = $array[2];
-						$tag       = $this->_helper->getTagByParam('url_key', $tagUrlKey);
-						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
-						$request->setPathInfo('/' . 'blog/tag/view/id/' . $tag->getId());
-
-						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
-					}
-					if ($type == 'category') {
-						$categoryName = $array[2];
-						$category     = $this->_helper->getCategoryByParam('url_key', $categoryName);
-						if ($category && $category->getId()) {
-							$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
-							$request->setPathInfo('/' . 'blog/category/view/id/' . $category->getId());
-
-							return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
-						}
-					}
-				} elseif (count($array) > 3) {
-					if (strpos($path, 'rss')) {
-						$path = str_replace($url_prefix, 'blog', $path);
-						$request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $path);
-						$request->setPathInfo($path);
-
-						return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
-					}
-				}
-
-			}
-
-
+		$identifier = trim($request->getPathInfo(), '/');
+		$routePath  = explode('/', $identifier);
+		$routeSize  = sizeof($routePath);
+		if (!$this->helper->isEnabled() ||
+			!$routeSize || ($routeSize > 3) ||
+			(array_shift($routePath) != $this->helper->getBlogConfig('general/url_prefix'))
+		) {
+			return null;
 		}
 
+		$request->setModuleName('mpblog')
+			->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
+
+		$this->_request = $request;
+		$params     = [];
+		$controller = array_shift($routePath);
+
+		if (!$controller) {
+			return $this->_forward('post', 'index');
+		}
+
+		switch ($controller) {
+			case 'post':
+				$path = array_shift($routePath);
+				$action = $path ?: 'index';
+
+				if (!in_array($action, ['index', 'rss'])) {
+					$post = $this->helper->getPostByUrl($action);
+
+					$action = 'view';
+					$params = ['id' => $post->getId()];
+				}
+
+				break;
+			case 'category':
+				$path = array_shift($routePath);
+				$action = $path ?: 'index';
+
+				if (!in_array($action, ['index', 'rss'])) {
+					$category = $this->helper->getCategoryByParam('url_key', $action);
+
+					$action = 'view';
+					$params = ['id' => $category->getId()];
+				}
+
+				break;
+			case 'tag':
+				$path = array_shift($routePath);
+				$tag    = $this->helper->getTagByParam('url_key', $path);
+
+				$action = 'view';
+				$params = ['id' => $tag->getId()];
+
+				break;
+			case 'topic':
+				$path = array_shift($routePath);
+				$topic  = $this->helper->getTopicByParam('url_key', $path);
+
+				$action = 'view';
+				$params = ['id' => $topic->getId()];
+
+				break;
+			default:
+				$post = $this->helper->getPostByUrl($controller);
+
+				$controller = 'post';
+				$action     = 'view';
+				$params     = ['id' => $post->getId()];
+		}
+
+		return $this->_forward($controller, $action, $params);
 	}
 }

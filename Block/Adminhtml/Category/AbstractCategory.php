@@ -1,17 +1,22 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Category;
 
@@ -19,35 +24,35 @@ class AbstractCategory extends \Magento\Backend\Block\Template
 {
     /**
      * Core registry
-     * 
+     *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry;
+    public $coreRegistry;
 
     /**
-     * Faqcat tree model instance
-     * 
+     * Blog Category tree model instance
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\Tree
      */
-    protected $categoryTree;
+	public $categoryTree;
 
     /**
-     * Faqcat factory
-     * 
+     * Blog Category factory
+     *
      * @var \Mageplaza\Blog\Model\CategoryFactory
      */
-    protected $categoryFactory;
+	public $categoryFactory;
 
     /**
-     * Faqcat collection factory
-     * 
+     * Blog Category collection factory
+     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
-    protected $categoryCollectionFactory;
+	public $categoryCollectionFactory;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
@@ -62,8 +67,8 @@ class AbstractCategory extends \Magento\Backend\Block\Template
         \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Magento\Backend\Block\Widget\Context $context,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->coreRegistry              = $coreRegistry;
         $this->categoryTree              = $categoryTree;
         $this->categoryFactory           = $categoryFactory;
@@ -72,7 +77,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve current Faqcat instance
+     * Retrieve current Blog Category instance
      *
      * @return \Mageplaza\Blog\Model\Category
      */
@@ -110,7 +115,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
         }
         return \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
     }
-
 
     /**
      * @param null $parentNodeCategory

@@ -1,17 +1,22 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 
@@ -19,22 +24,22 @@ class NewAction extends \Magento\Backend\App\Action
 {
     /**
      * Redirect result factory
-     * 
+     *
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
-    protected $resultForwardFactory;
+	public $resultForwardFactory;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Backend\App\Action\Context $context
-    )
-    {
+    ) {
+    
         $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }

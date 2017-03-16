@@ -1,17 +1,22 @@
 <?php
 /**
- * Mageplaza_Blog extension
- *                     NOTICE OF LICENSE
- * 
- *                     This source file is subject to the MIT License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     http://opensource.org/licenses/mit-license.php
- * 
- *                     @category  Mageplaza
- *                     @package   Mageplaza_Blog
- *                     @copyright Copyright (c) 2016
- *                     @license   http://opensource.org/licenses/mit-license.php MIT License
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Blog\Ui\Component\Listing\Column;
 
@@ -19,28 +24,28 @@ class TopicActions extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**
      * Url path  to edit
-     * 
+     *
      * @var string
      */
     const URL_PATH_EDIT = 'mageplaza_blog/topic/edit';
 
     /**
      * Url path  to delete
-     * 
+     *
      * @var string
      */
     const URL_PATH_DELETE = 'mageplaza_blog/topic/delete';
 
     /**
      * URL builder
-     * 
+     *
      * @var \Magento\Framework\UrlInterface
      */
-    protected $urlBuilder;
+    public $urlBuilder;
 
     /**
      * constructor
-     * 
+     *
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Framework\View\Element\UiComponentFactory $uiComponentFactory
@@ -53,12 +58,11 @@ class TopicActions extends \Magento\Ui\Component\Listing\Columns\Column
         \Magento\Framework\View\Element\UiComponentFactory $uiComponentFactory,
         array $components = [],
         array $data = []
-    )
-    {
+    ) {
+    
         $this->urlBuilder = $urlBuilder;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
-
 
     /**
      * Prepare Data Source
