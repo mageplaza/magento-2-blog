@@ -5,7 +5,7 @@ Magento 2 Blog extension is integrated right into the Magento backend so you can
 
 - User guide: https://docs.mageplaza.com/blog-m2/
 - Contribute on Github: https://github.com/mageplaza/magento-2-blog-extension/
-- Get premium support from Mageplaza: Purchase Support package https://www.mageplaza.com/magento-2-extension-support-package/
+- Get help: https://github.com/mageplaza/magento-2-blog-extension/issues
 
 ## How to install?
 
