@@ -1,0 +1,141 @@
+
+h2.mp-post-title a:hover:focus {
+    text-decoration: none;
+}
+.mp-blog-rss{
+    text-align: right;
+}
+.mp-post-info{
+    color: #999999;
+    font-size: 10px;
+    line-height: 18px;
+}
+.post-image img.img-responsive {
+    height: 400px;
+    width: 100%;
+}
+.post-item-wraper {
+    border: 1px solid #eee;
+}
+.post-item-wraper:hover {
+    border: 1px solid #eee;
+    box-shadow: 3px 3px 4px 0 rgba(0,0,0,0.3);
+}
+.post-info-wraper {
+    padding: 20px 15px 10px 15px;
+}
+
+.post-list-item {
+    margin-bottom: 40px;
+}
+.post-short-description {
+    max-width: 100%;
+}
+.post-short-description p {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 20px;
+}
+
+
+
+.mp-post-info span {
+    color: #6f6f6f;;
+}
+
+.post-post_content{
+    margin: 10px 0 10px 0;
+}
+.mp-post-info{
+    margin: 0px;
+}
+
+
+@media (min-width: 768px) {
+    .post-sharing-button {
+        text-align: center;
+    }
+}
+#sharing{
+    padding: 20px 30px;
+    background: #f6f6f6;
+    margin-top: 40px;
+}
+@media (min-width: 768px){
+    #sharing .share-col-left {
+        float: left;
+        width: 50%;
+    }
+}
+.about-admin {
+    margin-top: 40px;
+}
+.about-admin h4.admin-title{
+    width: 215px;
+    float: left;
+}
+
+.about-admin h4.admin-title a:hover{
+    text-decoration: none;
+}
+.author-des {
+    margin-top: 30px;
+}
+.author-des .admin-avatar {
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+.author-des .img-responsive {
+    width: 80px;
+}
+.about-admin #admin-border {
+    height: 6px;
+    border-top: 1px solid #e0dede;
+    border-bottom: 1px solid #e0dede;
+    margin-top: 20px;
+    float:left;
+    width: calc(100% - 215px);
+}
+.mpcss .relate-content{
+    text-align: center;
+    margin-top: 15px;
+}
+.post-same-topics.topic-list {
+    margin-top: 50px;
+}
+#post-reviews {
+    margin-top: 50px;
+}
+.mp-post-info a.mp-info:focus {
+    text-decoration: none;
+}
+#related-post a.mp-relate-link {
+    background: #f55567;
+}
+a.mp-relate-link img.img-responsive{
+    margin:0 auto;
+    height: 200px;
+    display: block;
+}
+
+.nav-tabs a{
+    cursor: pointer;
+    color: #555 !important;
+}
+
+.tab-content{
+    border: 1px solid #ddd;
+    border-top: none;
+}
+.share-col-right{
+    display: inline-block;
+    width: 50%;
+}
+.pager {
+    text-align: center;
+}
+.pager span.toolbar-number {
+    display: none;
+}

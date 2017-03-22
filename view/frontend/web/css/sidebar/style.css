@@ -1,0 +1,128 @@
+
+.block-title p{
+    font-size: 18px;
+    font-weight: 300;
+}
+.mp-sidebar{
+    margin-bottom: 50px;
+}
+.sidebar-tags{
+    margin-bottom: 15px;
+}
+a.label.label-default.tags-list {
+    background: #fff;
+    border: 1px solid #bbb;
+    color: inherit;
+    font-weight: normal;
+    font-size: 100%;
+    border-radius: 1px;
+    display: inline-block;
+    margin-bottom: 5px;
+    padding: 10px;
+    margin-right: 5px
+}
+ul.menu-categories{
+    padding: 0px;
+}
+ul.menu-categories li.category-item{
+    list-style: none;
+    padding: 10px 0px;
+    border-bottom: 1px solid #ddd;
+}
+
+ul.menu-categories a.list-categories {
+    color: inherit;
+    margin-left: 8px;
+}
+ul.menu-categories a.list-categories:focus{
+    text-decoration: none;
+}
+h2.list-title{
+    margin-bottom: 30px;
+}
+#mostview {
+    margin: 0px;
+}
+#mostrecent {
+    margin: 0px;
+}
+#mostrecent a.list-post-tabs {
+    padding: 20px 10px;
+    display: inline-flex;
+    border-bottom: 1px solid #ddd;
+    color: inherit;
+    width: 100%;
+}
+#mostview a.list-post-tabs {
+    padding: 20px 10px;
+    display: inline-flex;
+    border-bottom: 1px solid #ddd;
+    color: inherit;
+    width: 100%;
+}
+#mostview a.list-post-tabs:focus{
+    text-decoration: none;
+}
+#mostrecent a.list-post-tabs:focus{
+    text-decoration: none;
+}
+.list-post-tabs .post-left {
+    float: left;
+    width: 25%;
+    margin-right: 4px;
+}
+.list-post-tabs .post-right {
+    float: left;
+    width: 73%;
+}
+.list-post-tabs .post-right span {
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+.list-post-tabs .post-right span.create-at {
+    font-size: 12px;
+}
+.tab-pane.fade {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+.mpcss {
+    width: 100%;
+}
+ul.nav-tabs{
+    width:100%;
+}
+ul.nav-tabs li{
+    width: 50%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-top-style: solid;
+    border-top-color: #eee;
+    font-size: 16px;
+}
+@media(width: 768px){
+    ul.nav-tabs li{
+        font-size: 12px;
+    }
+}
+.mp-sidebar ul.nav-tabs li a{
+    text-align: center;
+    margin-right: 0px;
+    border-radius: 0px;
+    background: #eee;
+}
+#mostrecent .list-post-tabs:last-child {
+    border-bottom: none;
+}
+#mostview .list-post-tabs:last-child {
+    border-bottom: none;
+}
+.fa.fa-angle-right {
+    font-size: larger;
+}
