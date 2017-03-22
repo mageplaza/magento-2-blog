@@ -40,8 +40,8 @@ $count = 0;
 			if ($count > $limit)
 				break;
 			?>
-					<li class="category-item" ><i class="fa fa-angle-right"></i>
-                        <a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>">
+					<li class="category-item" ><i class="fa fa-square-o"></i>
+                        <a class="list-categories sadas" href="<?php echo $block->getCategoryUrl($category) ?>">
                             <?php echo ucfirst($category->getName()) ?></a>
                     </li>
 
@@ -55,3 +55,23 @@ $count = 0;
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+require([
+    'jquery'
+], function ($) {
+
+    $('ul.menu-categories a').hover(
+    	function(){
+	      	var parent = $(this).parent();
+	        parent.find('i').removeClass( "fa-square-o" );
+	        parent.find('i').addClass( "fa-square" );
+	        parent.find('i').css("color","#1abc9c");
+   		},
+	   function(){
+	      	var parent = $(this).parent();
+	        parent.find('i').removeClass( "fa-square" );
+	        parent.find('i').addClass( "fa-square-o" );
+	        parent.find('i').css("color","#000");
+	   });
+});
+</script>
