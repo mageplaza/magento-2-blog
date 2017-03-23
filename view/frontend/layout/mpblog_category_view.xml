@@ -22,6 +22,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-right" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
+        <css src="Mageplaza_Blog::css/sidebar/style.css"/>
         <css src="Mageplaza_Blog::css/index/style.css"/>
         <css src="Mageplaza_Blog::css/index/style-color.less" rel="stylesheet/less" type="text/less"/>
         <css src="Mageplaza_Core::css/mp.css"/>

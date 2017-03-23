@@ -29,9 +29,12 @@
 
 <div class="mpcss post-view">
 	<div class="row">
+        <div style=" margin-bottom: 10px;" class="post-name col-xs-12"><?php echo $_post->getName(); ?></div>
         <div class="post-image col-xs-12">
            <?php if ($_post->getImage()) : ?>
-			   <a href="<?php echo $block->getUrlByPost($_post) ?>"><img src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/></a>
+			   <a href="<?php echo $block->getUrlByPost($_post) ?>">
+                   <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
+               </a>
 		   <?php endif; ?>
         </div>
 

@@ -56,14 +56,7 @@
                     <label>Show Blog Link in Footer links</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="sidebar_right" translate="label comment" type="select" sortOrder="30" showInDefault="20" showInWebsite="1" showInStore="1">
-                    <label>Show Sidebar Right</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="sidebar_left" translate="label comment" type="select" sortOrder="30" showInDefault="20" showInWebsite="1" showInStore="1">
-                    <label>Show Sidebar Left</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
+
                 <field id="related_post" translate="label comment" type="text" sortOrder="35" showInDefault="1" showInStore="1" showInWebsite="1">
                     <label>Limit related post</label>
                     <comment>Number of related post in post view page</comment>
@@ -83,7 +76,15 @@
                 </field>
             </group>
             <group id="sidebar" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Sidebar</label>
+                <label>Show Sidebar</label>
+                <field id="sidebar_right" translate="label comment" type="select" sortOrder="30" showInDefault="20" showInWebsite="1" showInStore="1">
+                    <label>Show Sidebar Right</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sidebar_left" translate="label comment" type="select" sortOrder="30" showInDefault="20" showInWebsite="1" showInStore="1">
+                    <label>Show Sidebar Left</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="number_recent_posts" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Number of recent posts</label>
                 </field>
