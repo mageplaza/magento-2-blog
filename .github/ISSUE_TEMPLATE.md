@@ -4,7 +4,7 @@
 <!--- Provide a more detailed information of environment you use -->
 <!--- Magento version, tag, HEAD, etc., PHP & MySQL version, etc.. -->
 1. Magento: 
-2. PHP:
+2. PHP: 
 3. MySQL: 
 4. 
 
