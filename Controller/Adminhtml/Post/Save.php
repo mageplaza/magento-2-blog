@@ -89,6 +89,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
     public function execute()
     {
         $data = $this->getRequest()->getPost('post');
+        //var_dump($data);die();
         $data['store_ids'] = implode(',', $data['store_ids']);
 
         //check delete image
@@ -131,9 +132,20 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
             if ($topics != -1) {
                 $post->setTopicsData($this->jsHelper->decodeGridSerializedInput($topics));
             }
+
+//            $categoryIds = $this->getRequest()->getPost('categories_ids',-1);
+//
+
+
+
             if (!isset($data['categories_ids'])) {
                 $post->setCategoriesIds([]);
             }
+//            else{
+//
+//
+//                $post->setCategoriesIds($this->jsHelper->decodeGridSerializedInput($categoryIds));
+//            }
             $this->_eventManager->dispatch(
                 'mageplaza_blog_post_prepare_save',
                 [

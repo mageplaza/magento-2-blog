@@ -29,7 +29,7 @@
 
 <div class="mpcss post-view">
 	<div class="row">
-        <div style=" margin-bottom: 10px;" class="post-name col-xs-12"><?php echo $_post->getName(); ?></div>
+        <div style=" margin-bottom: 10px;" class="post-name col-xs-12"><span style="font-size: 2.6rem;"><?php echo $_post->getName(); ?></span></div>
         <div class="post-image col-xs-12">
            <?php if ($_post->getImage()) : ?>
 			   <a href="<?php echo $block->getUrlByPost($_post) ?>">

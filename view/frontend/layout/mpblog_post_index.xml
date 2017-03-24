@@ -30,6 +30,8 @@
         <script src="Mageplaza_Blog::js/jquery-1.12.4.min.js"/>
     </head>
     <body>
+        <referenceBlock name="header.links">
+        </referenceBlock>
         <referenceContainer name="content">
             <block class="Mageplaza\Blog\Block\Post\Listpost" template="Mageplaza_Blog::post/index.phtml"/>
         </referenceContainer>
