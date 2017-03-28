@@ -26,13 +26,12 @@
 	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $block->getBlogConfig('share/pubid_id') ?>"
 			async="async"></script>
 <?php endif; ?>
-
 <div class="mpcss post-view">
 	<div class="row">
         <div style=" margin-bottom: 10px;" class="post-name col-xs-12"><span style="font-size: 2.6rem;"><?php echo $_post->getName(); ?></span></div>
         <div class="post-image col-xs-12">
            <?php if ($_post->getImage()) : ?>
-			   <a href="<?php echo $block->getUrlByPost($_post) ?>">
+			   <a class="fancybox" href="<?php echo $block->getImageUrl($_post->getImage()); ?>">
                    <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
                </a>
 		   <?php endif; ?>
@@ -201,3 +200,26 @@
     <div><?php echo __('This store has no post with name: ').$_post->getName() ?></div>
 
 <?php endif;?>
+<script type="text/javascript">
+    require([
+        'jquery',
+        'fancybox',
+        'migrate'
+    ], function($){
+        var addToAll = false;
+        var gallery = true;
+        var titlePosition = 'inside';
+        $(addToAll ? 'img' : 'img.fancybox').each(function(){
+            var $this = $(this);
+            var title = $this.attr('title');
+            var src = $this.attr('data-big') || $this.attr('src');
+            var a = $('<a href="#" class="fancybox"></a>').attr('href', src).attr('title', title);
+            $this.wrap(a);
+        });
+        if (gallery)
+            $('a.fancybox').attr('rel', 'fancyboxgallery');
+        $('a.fancybox').fancybox({
+            titlePosition: titlePosition
+        });
+    });
+</script>
