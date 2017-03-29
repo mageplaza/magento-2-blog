@@ -40,7 +40,7 @@ if ($checkRss):
             <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1){
 				?>
 
-                <div class="col-md-9 col-sm-7">
+                <div class="col-md-9 col-sm-6">
                 <?php foreach ($posts as $post) : ?>
                     <div class="post-list-item <?php if ($block->getBlogConfig('general/display_style') == 2) {
 						echo ' col-sm-6';}else echo ' col-sm-12';?>">
@@ -88,7 +88,7 @@ if ($checkRss):
 				<?php endforeach; ?>
             </div>
 
-                <div class="mp-sidebar col-md-3 col-sm-5">
+                <div class="mp-sidebar col-md-3 col-sm-6">
 
                 <?php echo $this->getChildHtml();?>
 
@@ -96,11 +96,11 @@ if ($checkRss):
 				<?php
 			}else{ ?>
 
-                <div class="mp-sidebar col-md-3 col-sm-5">
+                <div class="mp-sidebar col-md-3 col-sm-6">
                     <?php echo $this->getChildHtml();?>
                 </div>
 
-                <div class="col-md-9 col-sm-7">
+                <div class="col-md-9 col-sm-6">
                 <?php foreach ($posts as $post) : ?>
                     <div class="post-list-item <?php if ($block->getBlogConfig('general/display_style') == 2) {
 						echo ' col-sm-6';}else echo ' col-sm-12';?>">
@@ -169,9 +169,30 @@ if ($checkRss):
 	<?php endif; ?>
 
 <?php else : ?>
-    <div class="post-list-container">
-        <?php echo __('There are no posts at this moment'); ?>
+
+    <div class="post-list-container mpcss">
+        <div class="row">
+              <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1){
+			  ?>
+            <div class="col-md-9 col-sm-6">
+                  <?php echo __('There are no posts at this moment'); ?>
+            </div>
+            <div class="mp-sidebar col-md-3 col-sm-6">
+                <?php echo $this->getChildHtml();?>
+            </div>
+            <?php }else{?>
+                    <div class="mp-sidebar col-md-3 col-sm-6">
+                        <?php echo $this->getChildHtml();?>
+                    </div>
+
+                    <div class="col-md-9 col-sm-6">
+                        <?php echo __('There are no posts at this moment'); ?>
+                    </div>
+            <?php }?>
+        </div>
+
     </div>
+
 <?php endif; ?>
 <script>
 	less = {
