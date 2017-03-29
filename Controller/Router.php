@@ -88,8 +88,9 @@ class Router implements \Magento\Framework\App\RouterInterface
 		$count=$posts[0];
 		$pageParams=$request->getParams();
 		$pageParam=$request->getParam('p');
-		if($pageParam) {
-			if (count($pageParams) > 1 || ((string)((int)$pageParam)) != $pageParam || (int)$pageParam > $count || (int)$pageParam < 0)
+//		die(var_dump($pageParam));
+		if($pageParams) {
+			if (count($pageParams) > 1 || $pageParam > $count || $pageParam <= 0 )
 			{
 				return null;
 			}
