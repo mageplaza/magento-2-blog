@@ -51,7 +51,6 @@ class Router implements \Magento\Framework\App\RouterInterface
 		\Mageplaza\Blog\Helper\Data $helper
 	)
 	{
-
 		$this->actionFactory = $actionFactory;
 		$this->block=$block;
 		$this->helper        = $helper;
@@ -88,7 +87,6 @@ class Router implements \Magento\Framework\App\RouterInterface
 		$count=$posts[0];
 		$pageParams=$request->getParams();
 		$pageParam=$request->getParam('p');
-//		die(var_dump($pageParam));
 		if($pageParams) {
 			if (count($pageParams) > 1 || $pageParam > $count || $pageParam <= 0 )
 			{
