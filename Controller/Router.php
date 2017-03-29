@@ -20,6 +20,7 @@
  */
 namespace Mageplaza\Blog\Controller;
 
+
 /**
  * Class Router
  * @package Mageplaza\Blog\Controller
@@ -38,17 +39,21 @@ class Router implements \Magento\Framework\App\RouterInterface
 
 	protected $_request;
 
+	protected $block;
+
 	/**
 	 * @param \Magento\Framework\App\ActionFactory $actionFactory
 	 * @param \Mageplaza\Blog\Helper\Data $helper
 	 */
 	public function __construct(
 		\Magento\Framework\App\ActionFactory $actionFactory,
+		\Mageplaza\Blog\Block\Frontend $block,
 		\Mageplaza\Blog\Helper\Data $helper
 	)
 	{
 
 		$this->actionFactory = $actionFactory;
+		$this->block=$block;
 		$this->helper        = $helper;
 	}
 
@@ -79,6 +84,16 @@ class Router implements \Magento\Framework\App\RouterInterface
 	 */
 	public function match(\Magento\Framework\App\RequestInterface $request)
 	{
+		$posts=$this->block->getBlogPagination();
+		$count=$posts[0];
+		$pageParams=$request->getParams();
+		$pageParam=$request->getParam('p');
+		if($pageParam) {
+			if (count($pageParams) > 1 || ((string)((int)$pageParam)) != $pageParam || (int)$pageParam > $count || (int)$pageParam < 0)
+			{
+				return null;
+			}
+		}
 		$identifier = trim($request->getPathInfo(), '/');
 		$routePath  = explode('/', $identifier);
 		$routeSize  = sizeof($routePath);
