@@ -26,38 +26,86 @@
 	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $block->getBlogConfig('share/pubid_id') ?>"
 			async="async"></script>
 <?php endif; ?>
-<div class="mpcss post-view">
-	<div class="row">
-        <div style=" margin-bottom: 10px;" class="post-name col-xs-12"><span style="font-size: 2.6rem;"><?php echo $_post->getName(); ?></span></div>
-        <div class="post-image col-xs-12">
-           <?php if ($_post->getImage()) : ?>
-			   <a class="fancybox" href="<?php echo $block->getImageUrl($_post->getImage()); ?>">
-                   <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
-               </a>
-		   <?php endif; ?>
+        <div class="mpcss post-view">
+            <div class="row">
+                <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1){
+				?>
+                <div class="col-md-9 col-sm-6">
+
+                    <div class="post-image col-xs-12">
+                       <?php if ($_post->getImage()) : ?>
+                           <a class="fancybox" href="<?php echo $block->getImageUrl($_post->getImage()); ?>">
+                               <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
+                           </a>
+                       <?php endif; ?>
+                    </div>
+
+
+                    <div class="post-post_content col-xs-12">
+                        <?php echo $_post->getPostContent(); ?>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <hr/>
+                        <div class="mp-post-info">
+                            <?php if($block->getBlogConfig('general/display_author')):?>
+                            <span><?php echo __('By ');?></span>
+                                            <a class="mp-info"><?php echo $block->getBlogConfig('general/author_name')?></a>&nbsp;|&nbsp;
+                            <?php endif;?>
+                            <span><i class="fa fa-calendar-times-o"></i> <?php echo $_post->getFormatCreatedAt(); ?></span> |
+                            <span><i class="fa fa-folder-open-o"></i> <?php echo __('Categories:'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> </span> |
+                            <span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span>
+
+                        </div>
+                        <hr/>
+                    </div>
+                </div>
+
+                <div class="mp-sidebar-view col-md-3 col-sm-6">
+                        <?php echo $this->getChildHtml(); ?>
+                </div>
+					<?php
+				}else{ ?>
+
+                    <div class="mp-sidebar-view col-md-3 col-sm-6">
+                        <?php echo $this->getChildHtml(); ?>
+                    </div>
+
+                    <div class="col-md-9 col-sm-6">
+
+                        <div class="post-image col-xs-12">
+                           <?php if ($_post->getImage()) : ?>
+                               <a class="fancybox" href="<?php echo $block->getImageUrl($_post->getImage()); ?>">
+                                   <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
+                               </a>
+                           <?php endif; ?>
+                        </div>
+
+
+                        <div class="post-post_content col-xs-12">
+                            <?php echo $_post->getPostContent(); ?>
+                        </div>
+
+                        <div class="col-xs-12">
+                            <hr/>
+                            <div class="mp-post-info">
+                                <?php if($block->getBlogConfig('general/display_author')):?>
+                                    <span><?php echo __('By ');?></span>
+                                    <a class="mp-info"><?php echo $block->getBlogConfig('general/author_name')?></a>&nbsp;|&nbsp;
+                                <?php endif;?>
+                                <span><i class="fa fa-calendar-times-o"></i> <?php echo $_post->getFormatCreatedAt(); ?></span> |
+                                <span><i class="fa fa-folder-open-o"></i> <?php echo __('Categories:'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> </span> |
+                                <span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span>
+
+                            </div>
+                            <hr/>
+                        </div>
+                    </div>
+
+				<?php }?>
+            </div>
         </div>
 
-
-        <div class="post-post_content col-xs-12">
-            <?php echo $_post->getPostContent(); ?>
-        </div>
-
-		<div class="col-xs-12">
-			<hr/>
-			<div class="mp-post-info">
-				<?php if($block->getBlogConfig('general/display_author')):?>
-				<span><?php echo __('By ');?></span>
-								<a class="mp-info"><?php echo $block->getBlogConfig('general/author_name')?></a>&nbsp;|&nbsp;
-				<?php endif;?>
-				<span><i class="fa fa-calendar-times-o"></i> <?php echo $_post->getFormatCreatedAt(); ?></span> |
-				<span><i class="fa fa-folder-open-o"></i> <?php echo __('Categories:'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> </span> |
-				<span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span>
-
-			</div>
-			<hr/>
-        </div>
-	</div>
-</div>
 
 <?php if ($block->getBlogConfig('share/enabled')): ?>
 	<div class="mpcss">

@@ -28,7 +28,7 @@
                 <name>Blog</name>
                 <url_prefix>blog</url_prefix>
                 <url_suffix>.html</url_suffix>
-                <sidebar_right>1</sidebar_right>
+                <sidebar_left_right>1</sidebar_left_right>
                 <font_color>#1abc9c</font_color>
                 <pagination>10</pagination>
                 <related_post>5</related_post>
