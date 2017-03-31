@@ -458,4 +458,5 @@ class Frontend extends Template
 
 		return $results;
 	}
+
 }

@@ -1,0 +1,133 @@
+<?php
+    $helper = $this->helper('Mageplaza\Blog\Helper\Data');
+?>
+<div class="block block-search">
+    <div class="block block-title"><strong><?php echo __('Search'); ?></strong></div>
+    <div class="block block-content">
+        <div class="field search">
+            <label class="label" for="search" data-role="minisearch-label">
+                <span><?php echo __('Search'); ?></span>
+            </label>
+            <div class="control">
+                <input id="mpblog-search-box"
+                       type="text"
+                       name="query"
+                       value="<?php echo $this->getRequest()->getParam('query') ?>"
+                       placeholder="<?php echo __('Search blogs here...'); ?>"
+                       class="input-text"
+                       role="combobox"
+                       aria-haspopup="false"
+                       aria-autocomplete="both"
+                       />
+            </div>
+        </div>
+        <div class="actions">
+            <button type="submit"
+                    title="<?php echo __('Search') ?>"
+                    class="action search">
+                <span><?php /* @escapeNotVerified */ echo __('Search'); ?></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    require([
+        'jquery',
+        'autocomplete'
+    ], function ($) {
+        var visibleImage = <?php echo $helper->getSidebarConfig('search/show_image'); ?>;
+        $('#mpblog-search-box').autocomplete({
+            lookup: <?php echo $helper->getSearchBlogData();?>,
+            lookupLimit: <?php echo $helper->getSidebarConfig('search/search_limit'); ?>,
+            maxHeight: 2000,
+            minChars: <?php echo $helper->getSidebarConfig('search/min_chars'); ?>,
+            onSelect: function (suggestion) {
+                window.location.href = suggestion.url;
+            },
+            formatResult: function (suggestion, currentValue) {
+                var html = "<a class='mpblog-suggestion' href='" + suggestion.url + "'>";
+
+                if (visibleImage) {
+                    html += "<div class='mpblog-suggestion-left'><img class='mpblog-img-responsive' src='" + suggestion.image + "' /></div>"
+                }
+                html += "<div class='mpblog-suggestion-right'>" +
+                    "<div class='mpblog-product-line mpblog-product-name'>" + suggestion.value + "</div>" +
+                    "<div class='mpblog-product-des'><p class='mpblog-short-des'>" + suggestion.desc + "</p></div></div></a>";
+
+                return html;
+            }
+        });
+    });
+</script>
+        <style>
+            a.mpblog-suggestion:hover {
+                text-decoration: none !important;
+            }
+            .autocomplete-suggestions {
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                border: 1px solid #ddd;
+                background: #FFF;
+                cursor: default;
+                overflow: auto;
+                -webkit-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
+                -moz-box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
+                box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
+                border-top: 0;
+                padding: 10px 0;
+            }
+
+            .autocomplete-suggestion {
+                padding: 2px 5px;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+
+            .autocomplete-no-suggestion {
+                padding: 2px 5px;
+            }
+
+            .autocomplete-selected {
+                background: #F0F0F0;
+            }
+
+            .autocomplete-suggestions strong {
+                font-weight: bold;
+                color: #000;
+            }
+
+            .autocomplete-group {
+                padding: 2px 5px;
+                font-weight: bold;
+                font-size: 16px;
+                color: #000;
+                display: block;
+                border-bottom: 1px solid #000;
+            }
+
+            .autocomplete-suggestion a.shopbybrand-suggestion:after {
+                content: ".";
+                display: block;
+                clear: both;
+                visibility: hidden;
+                line-height: 0;
+                height: 0;
+            }
+
+            .autocomplete-suggestion a.shopbybrand-suggestion .shopbybrand-suggestion-left,
+            .autocomplete-suggestion a.shopbybrand-suggestion .shopbybrand-suggestion-right {
+                float: left;
+                padding: 5px 10px;
+            }
+
+            .mpblog-product-name {
+                font-size: 18px;
+                color: #333333;
+            }
+
+            .mpblog-product-des {
+                color: #333333;
+            }
+        </style>
