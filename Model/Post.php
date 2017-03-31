@@ -243,12 +243,12 @@ class Post extends \Magento\Framework\Model\AbstractModel
     {
         if ($this->tagCollection === null) {
             $collection = $this->tagCollectionFactory->create();
-            $collection->join(
+            $collection->getSelect()->join(
                 'mageplaza_blog_post_tag',
                 'main_table.tag_id=mageplaza_blog_post_tag.tag_id AND mageplaza_blog_post_tag.post_id='
 				. $this->getId(),
                 ['position']
-            );
+            )->where("main_table.enabled='1'");
             $this->tagCollection = $collection;
         }
 
@@ -386,12 +386,12 @@ class Post extends \Magento\Framework\Model\AbstractModel
         if ($this->getTopicSting()) {
             $collection = $this->postCollectionFactory->create();
 
-            $collection->join(
+            $collection->getSelect()->join(
                 'mageplaza_blog_post_topic',
                 'main_table.post_id=mageplaza_blog_post_topic.post_id AND mageplaza_blog_post_topic.post_id != "'
 				. $this->getId() . '" AND mageplaza_blog_post_topic.topic_id IN (' . $this->getTopicSting() . ')',
                 ['position']
-            );
+            )->group('main_table.post_id');
             $this->relatedPostCollection = $collection;
         }
         return $this->relatedPostCollection;

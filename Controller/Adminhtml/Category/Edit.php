@@ -128,7 +128,7 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
                 }
             }
 
-            $eventResponse = $this->dataObject->__construct([
+            $eventResponse = $this->dataObject->addData([
                 'content' => $resultPage->getLayout()->getBlock('mageplaza.blog.category.edit')->getFormHtml()
                     . $resultPage->getLayout()->getBlock('mageplaza.blog.category.tree')
                         ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs'),
