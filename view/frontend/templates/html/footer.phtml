@@ -1,0 +1,10 @@
+<li>
+<a <?php echo $block->getLinkAttributes() ?>>
+    <?php
+        if ($this->helper->getBlogConfig('general/footer')==1){
+			echo $block->escapeHtml($block->getLabel());
+        }
+    ?>
+	<?php echo($block->getCounter()) ? '<span>' . $block->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
+</a>
+</li>
