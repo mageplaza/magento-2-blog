@@ -32,14 +32,25 @@ class Topmenu
 
     public function afterGetHtml(\Magento\Theme\Block\Html\Topmenu $topmenu, $html)
     {
-    	$blogMenu = $topmenu;
-    	$blogMenu->getBaseUrl();
-        $html .= "<li class=\"level0 level-top ui-menu-item\">";
-        $html .= "<a href=\"" . $this->helper->getBlogUrl('')
-            . "\" class=\"level-top ui-corner-all\" aria-haspopup=\"true\" tabindex=\"-1\" role=\"menuitem\">
+    	if ($this->helper->getBlogConfig('general/toplinks')==1){
+			$blogMenu = $topmenu;
+			$blogMenu->getBaseUrl();
+			if ($this->helper->getBlogConfig('general/name')==""){
+				$html .= "<li class=\"level0 level-top ui-menu-item\">";
+				$html .= "<a href=\"" . $this->helper->getBlogUrl('')
+					. "\" class=\"level-top ui-corner-all\" aria-haspopup=\"true\" tabindex=\"-1\" role=\"menuitem\">
 			<span class=\"ui-menu-icon ui-icon ui-icon-carat-1-e\"></span><span>"
-            . $this->helper->getBlogConfig('general/name') . "</span></a>";
-        $html .= "</li>";
-        return $html;
+					.'Blog' . "</span></a>";
+				$html .= "</li>";
+			}else{
+				$html .= "<li class=\"level0 level-top ui-menu-item\">";
+				$html .= "<a href=\"" . $this->helper->getBlogUrl('')
+					. "\" class=\"level-top ui-corner-all\" aria-haspopup=\"true\" tabindex=\"-1\" role=\"menuitem\">
+			<span class=\"ui-menu-icon ui-icon ui-icon-carat-1-e\"></span><span>"
+					. $this->helper->getBlogConfig('general/name') . "</span></a>";
+				$html .= "</li>";
+			}
+		}
+		return $html;
     }
 }

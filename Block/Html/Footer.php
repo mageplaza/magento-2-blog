@@ -26,6 +26,7 @@ use \Mageplaza\Blog\Helper\Data;
 class Footer extends \Magento\Framework\View\Element\Html\Link
 {
     public $helper;
+//	protected $_template = 'Mageplaza_Blog::html\footer.phtml';
 
     public function __construct(
         Context $context,
@@ -41,4 +42,8 @@ class Footer extends \Magento\Framework\View\Element\Html\Link
     {
         return $this->helper->getBlogUrl('');
     }
+	public function getLabel()
+	{
+		return $this->helper->getBlogConfig('general/name');
+	}
 }
