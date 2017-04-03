@@ -396,8 +396,8 @@ class Data extends CoreHelper
 						($type == self::SEARCH_DATA_TYPE[1] ? $this->getTagUrl($item) : $this->getCategoryUrl($item)),
 					'image'	=> $type == self::SEARCH_DATA_TYPE[0] ? $this->getImageUrl($item->getImage()) : '',
 					'desc'	=> $type == self::SEARCH_DATA_TYPE[0]
-						? $item->getShortDescription()
-						: ($type == self::SEARCH_DATA_TYPE[1] ? $item->getDescription()
+						? ($item->getShortDescription() ?: 'No description')
+						: ($type == self::SEARCH_DATA_TYPE[1] ? ($item->getDescription() ?: 'No description')
 							: '')
 				);
 				array_push($data, $tmp);
@@ -406,23 +406,4 @@ class Data extends CoreHelper
 
 		return $data;
 	}
-
-	/**
-	 * limit description words
-	 */
-//	public function limitDescriptionWords($description)
-//	{
-//		$limit = $this->getSidebarConfig('search/description');
-//		$str = str_word_count($description, 1);
-//		if (count($str) > $limit) {
-//			$arrDescription = array_slice($str, 0, $limit - 1);
-//			return implode(' ', $arrDescription);
-//		}
-//
-//		return implode(' ', $str);
-//		$description = preg_replace(' +', ' ', $description);
-//
-//		preg_match_all('/[\pL\pN\pPd]+/u', $description, $matches);
-//		return count($matches[0]);
-//	}
 }

@@ -401,7 +401,7 @@ ul.nav-tabs li{
   font-size: larger;
 }
 
-.mp-sidebar .block-search {
+.mp-sidebar .mpblog-search {
   float: none !important;
   padding: 0 !important;
   margin-bottom: 15px !important;
@@ -421,12 +421,17 @@ ul.nav-tabs li{
   box-shadow: 1px 4px 3px rgba(50, 50, 50, 0.64);
   border-top: 0;
   padding: 10px 0;
+  overflow-x: hidden;
 }
 
 .autocomplete-suggestion {
   padding: 2px 5px;
   white-space: nowrap;
   overflow: hidden;
+  border-bottom: 1px solid #eee;
+}
+.autocomplete-suggestion:last-child {
+  border-bottom: none;
 }
 
 .autocomplete-no-suggestion {
@@ -460,15 +465,29 @@ ul.nav-tabs li{
   height: 0;
 }
 
+a.mpblog-suggestion {
+  display: block;
+}
 .autocomplete-suggestion a.mpblog-suggestion .mpblog-suggestion-left,
 .autocomplete-suggestion a.mpblog-suggestion .mpblog-suggestion-right {
   float: left;
   padding: 5px 10px;
 }
+.autocomplete-suggestion a.mpblog-suggestion .mpblog-suggestion-left {
+  max-width: 25%;
+}
+.autocomplete-suggestion a.mpblog-suggestion .mpblog-suggestion-right {
+  max-width: calc(100% - 40%);
+}
+@media (max-width: 767px) {
+  .autocomplete-suggestion a.mpblog-suggestion .mpblog-suggestion-right {
+    max-width: calc(100% - 31%);
+  }
+}
 
 .mpblog-product-name {
   font-size: 18px;
-  color: #333333;
+  color: @color !important;
 }
 
 .mpblog-product-des {
@@ -477,5 +496,55 @@ ul.nav-tabs li{
 
 a.mpblog-suggestion:hover {
   text-decoration: none !important;
+}
+.mpblog-product-des p {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+.mpblog-search button.action.search {
+  display: inline-block;
+  background-image: none;
+  background: none;
+  -moz-box-sizing: content-box;
+  border: 0;
+  box-shadow: none;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  text-shadow: none;
+  font-weight: 400;
+  position: absolute;
+  right: 25px;
+  top: 19px;
+  z-index: 1;
+}
+.mpblog-search button.action.search:before {
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  line-height: 32px;
+  color: #8f8f8f;
+  content: '\e615';
+  font-family: 'luma-icons';
+  margin: 0;
+  vertical-align: top;
+  display: inline-block;
+  font-weight: normal;
+  overflow: hidden;
+  speak: none;
+  text-align: center;
+}
+.mpblog-search .action.search span {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 /* mageplaza end blog style */
