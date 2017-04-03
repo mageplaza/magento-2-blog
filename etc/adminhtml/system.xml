@@ -77,17 +77,15 @@
             </group>
             <group id="sidebar" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Sidebar</label>
-
-                <field id="sidebar_left_right" translate="label comment" type="select" sortOrder="30" showInDefault="20" showInWebsite="1" showInStore="1">
-                    <label>Sidebar Location</label>
-                    <source_model>Mageplaza\Blog\Model\Config\Source\SideBarLR</source_model>
-                </field>
-
                 <field id="number_recent_posts" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Number of recent posts</label>
                 </field>
                 <field id="number_mostview_posts" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Number of most view posts</label>
+                </field>
+                <field id="sidebar_left_right" translate="label comment" type="select" sortOrder="40" showInDefault="20" showInWebsite="1" showInStore="1">
+                    <label>Sidebar Location</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\SideBarLR</source_model>
                 </field>
                 <group id="search" translate="label" showInDefault="1" sortOrder="100" showInWebsite="1" showInStore="1">
                     <label>Search</label>

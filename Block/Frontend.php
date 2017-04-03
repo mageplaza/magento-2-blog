@@ -459,4 +459,27 @@ class Frontend extends Template
 		return $results;
 	}
 
+	/**
+	 * get sidebar config
+	 * @param $code
+	 * @param $storeId
+	 * @return mixed
+	 */
+	public function getSidebarConfig($code, $storeId = null)
+	{
+		return $this->helperData->getSidebarConfig($code, $storeId);
+	}
+
+	/**
+	 * get html sitemap url
+	 */
+	public function getHtmlSiteMapUrl()
+	{
+		$moduleRoute = $this->helperData->getBlogConfig('general/url_prefix');
+		if ($moduleRoute) {
+			return $this->getBaseUrl() . $moduleRoute .'/sitemap/';
+		}
+
+		return $this->getBaseUrl() .'/mpblog/sitemap/';
+	}
 }

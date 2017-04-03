@@ -35,12 +35,12 @@
         'jquery',
         'autocomplete'
     ], function ($) {
-        var visibleImage = <?php echo $helper->getSidebarConfig('search/show_image'); ?>;
+        var visibleImage = <?php echo $block->getSidebarConfig('search/show_image'); ?>;
         $('#mpblog-search-box').autocomplete({
             lookup: <?php echo $helper->getSearchBlogData();?>,
-            lookupLimit: <?php echo $helper->getSidebarConfig('search/search_limit'); ?>,
+            lookupLimit: <?php echo $block->getSidebarConfig('search/search_limit'); ?>,
             maxHeight: 2000,
-            minChars: <?php echo $helper->getSidebarConfig('search/min_chars'); ?>,
+            minChars: <?php echo $block->getSidebarConfig('search/min_chars'); ?>,
             onSelect: function (suggestion) {
                 window.location.href = suggestion.url;
             },

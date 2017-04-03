@@ -21,8 +21,6 @@
 ?>
 <?php
 $categories = $block->getCategoryList();
-$limit = 5;
-$count = 0;
 ?>
 <div class="mp-sidebar mpcss">
 	<div class="row">
@@ -35,16 +33,10 @@ $count = 0;
 			<?php if ($categories != '' && count($categories) > 0): ?>
 
 			<?php foreach ($categories as $category): ?>
-			<?php
-			$count++;
-			if ($count > $limit)
-				break;
-			?>
-					<li class="category-item" ><i class="fa fa-folder-open-o"></i>
-                        <a class="list-categories sadas" href="<?php echo $block->getCategoryUrl($category) ?>">
-                            <?php echo ucfirst($category->getName()) ?></a>
-                    </li>
-
+                <li class="category-item" >
+                    <a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>">
+                        <i class="fa fa-folder-open-o">&nbsp;&nbsp;</i><?php echo ucfirst($category->getName()) ?></a>
+                </li>
 
 			<?php endforeach; ?>
 
@@ -55,23 +47,3 @@ $count = 0;
 		</div>
 	</div>
 </div>
-<script type="text/javascript">
-require([
-    'jquery'
-], function ($) {
-
-    $('ul.menu-categories a').hover(
-    	function(){
-	      	var parent = $(this).parent();
-//	        parent.find('i').removeClass( "fa-square-o" );
-//	        parent.find('i').addClass( "fa-square" );
-	        parent.find('i').css("color","#1abc9c");
-   		},
-	   function(){
-	      	var parent = $(this).parent();
-//	        parent.find('i').removeClass( "fa-square" );
-//	        parent.find('i').addClass( "fa-square-o" );
-	        parent.find('i').css("color","#000");
-	   });
-});
-</script>

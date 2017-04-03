@@ -95,6 +95,9 @@ ul.menu-categories a.list-categories:hover {
   text-decoration: none;
   color: @color;
 }
+ul.menu-categories a.list-categories:hover i {
+  color: @color;
+}
 #mostview a.list-post-tabs:hover {
   text-decoration: none;
   background: #fbfbfb;
@@ -519,7 +522,7 @@ a.mpblog-suggestion:hover {
   font-weight: 400;
   position: absolute;
   right: 25px;
-  top: 19px;
+  top: 0px;
   z-index: 1;
 }
 .mpblog-search button.action.search:before {
@@ -546,5 +549,15 @@ a.mpblog-suggestion:hover {
   padding: 0;
   position: absolute;
   width: 1px;
+}
+.mpblog-search label[for="mpblog-search-box"] {
+  display: none;
+}
+.mp-sidebar a.sitemap-link {
+  color: @color !important;
+}
+.mp-sidebar a.sitemap-link:hover {
+  text-decoration: none !important;
+  color: @color !important;
 }
 /* mageplaza end blog style */
