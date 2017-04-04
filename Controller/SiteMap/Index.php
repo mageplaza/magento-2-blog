@@ -18,19 +18,26 @@
  * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
-namespace Mageplaza\Blog\Block\Post;
+namespace Mageplaza\Blog\Controller\SiteMap;
 
-use Mageplaza\Blog\Block\Frontend;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
 
-class Listpost extends Frontend
+class Index extends Action
 {
+	public $resultPageFactory;
 
-    public function checkRss()
-    {
-        return $this->helperData->getBlogUrl('post/rss');
-    }
-    public function getMonthParam()
+	public function __construct(
+		Context $context,
+		PageFactory $resultPageFactory
+	) {
+		parent::__construct($context);
+		$this->resultPageFactory = $resultPageFactory;
+	}
+
+	public function execute()
 	{
-		return $this->getRequest()->getParam('month');
+		return $this->resultPageFactory->create();
 	}
 }

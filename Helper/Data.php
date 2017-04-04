@@ -34,6 +34,8 @@ class Data extends CoreHelper
     const XML_PATH_BLOG = 'blog/';
     const POST_IMG = 'mageplaza/blog/post/image';
 
+    const SEARCH_DATA_TYPE = ['Post', 'Tag', 'Category'];
+
     public $postfactory;
 	public $categoryfactory;
 	public $tagfactory;
@@ -78,6 +80,14 @@ class Data extends CoreHelper
     {
         return $this->getConfigValue(self::XML_PATH_BLOG . $code, $storeId);
     }
+
+	/**
+	 * get sidebar config
+	 */
+	public function getSidebarConfig($code, $storeId = null)
+	{
+		return $this->getBlogConfig('sidebar/'.$code, $storeId);
+	}
 
     public function getPostList($type = null, $id = null)
     {
@@ -372,4 +382,48 @@ class Data extends CoreHelper
         }
 		return $results;
     }
+
+    /**
+	 * get search blog's data
+	 */
+    public function getSearchBlogData()
+	{
+		$result = [];
+		$posts = $this->getPostList();
+		$categories = $this->getCategoryList();
+		$tags = $this->getTagList();
+
+		$postsData = $this->getSearchItemsData($posts, self::SEARCH_DATA_TYPE[0]);
+		$tagsData = $this->getSearchItemsData($tags, self::SEARCH_DATA_TYPE[1]);
+		$categoriesData = $this->getSearchItemsData($categories, self::SEARCH_DATA_TYPE[2]);
+
+		$result = array_merge($result, $postsData, $tagsData, $categoriesData);
+		return json_encode($result);
+	}
+
+	/**
+	 * get search items data
+	 * @return array
+	 */
+	public function getSearchItemsData($items, $type)
+	{
+		$data = array();
+		if ($items) {
+			foreach ($items as $item) {
+				$tmp = array(
+					'value' => $item->getName(),
+					'url'	=> $type == self::SEARCH_DATA_TYPE[0] ? $this->getUrlByPost($item) :
+						($type == self::SEARCH_DATA_TYPE[1] ? $this->getTagUrl($item) : $this->getCategoryUrl($item)),
+					'image'	=> $type == self::SEARCH_DATA_TYPE[0] ? $this->getImageUrl($item->getImage()) : '',
+					'desc'	=> $type == self::SEARCH_DATA_TYPE[0]
+						? ($item->getShortDescription() ?: 'No description')
+						: ($type == self::SEARCH_DATA_TYPE[1] ? ($item->getDescription() ?: 'No description')
+							: '')
+				);
+				array_push($data, $tmp);
+			}
+		}
+
+		return $data;
+	}
 }

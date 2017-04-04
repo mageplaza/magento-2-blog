@@ -24,17 +24,15 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="Mageplaza_Blog::css/index/jquery.fancybox-1.3.4.css"/>
-        <css src="Mageplaza_Blog::css/sidebar/style.css"/>
-        <css src="Mageplaza_Blog::css/index/style.css"/>
-        <css src="Mageplaza_Blog::css/index/style-color.less" rel="stylesheet/less" type="text/less"/>
         <css src="Mageplaza_Core::css/mp.css"/>
         <css src="Mageplaza_Core::css/font-awesome.min.css"/>
-        <!--<script src="Mageplaza_Blog::js/jquery-1.12.4.min.js"/>-->
+        <css src="Mageplaza_Blog::css/source/_module.less" rel="stylesheet/less" type="text/less"/>
 
     </head>
     <body>
         <referenceContainer name="content">
             <block class="Mageplaza\Blog\Block\Post\View" name="mp.blog.view" template="Mageplaza_Blog::post/view.phtml">
+                <block class="Mageplaza\Blog\Block\Frontend" template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search" />
                 <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"
                        template="Mageplaza_Blog::sidebar/mostview.phtml"/>
                 <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category"
