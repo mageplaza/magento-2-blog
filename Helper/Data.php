@@ -35,6 +35,7 @@ class Data extends CoreHelper
     const POST_IMG = 'mageplaza/blog/post/image';
 
     const SEARCH_DATA_TYPE = ['Post', 'Tag', 'Category'];
+    const DEFAULT_URL_PREFIX = 'blog';
 
     public $postfactory;
 	public $categoryfactory;
@@ -179,7 +180,7 @@ class Data extends CoreHelper
     public function getUrlByPost($post)
     {
         if ($post->getUrlKey()) {
-            $url_prefix = $this->getBlogConfig('general/url_prefix');
+            $url_prefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
             $url_suffix = $this->getBlogConfig('general/url_suffix');
 
             $urlKey = '';
@@ -197,7 +198,8 @@ class Data extends CoreHelper
 
     public function getBlogUrl($code)
     {
-        return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/' . $code);
+    	$blogUrl = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
+        return $this->_getUrl($blogUrl . '/' . $code);
     }
 
     public function getPostByUrl($url)
@@ -247,12 +249,14 @@ class Data extends CoreHelper
 
     public function getCategoryUrl($category)
     {
-        return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/category/' . $category->getUrlKey());
+        return $this->_getUrl($this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX
+			. '/category/' . $category->getUrlKey());
     }
 
     public function getTagUrl($tag)
     {
-        return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/tag/' . $tag->getUrlKey());
+        return $this->_getUrl($this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX
+			. '/tag/' . $tag->getUrlKey());
     }
 
     public function getTopicUrl($topic)
@@ -409,6 +413,7 @@ class Data extends CoreHelper
 	{
 		$data = array();
 		if ($items) {
+			$limitDesc = $this->getSidebarConfig('search/description') ?: 100;
 			foreach ($items as $item) {
 				$tmp = array(
 					'value' => $item->getName(),
@@ -416,9 +421,9 @@ class Data extends CoreHelper
 						($type == self::SEARCH_DATA_TYPE[1] ? $this->getTagUrl($item) : $this->getCategoryUrl($item)),
 					'image'	=> $type == self::SEARCH_DATA_TYPE[0] ? $this->getImageUrl($item->getImage()) : '',
 					'desc'	=> $type == self::SEARCH_DATA_TYPE[0]
-						? ($item->getShortDescription() ?: 'No description')
-						: ($type == self::SEARCH_DATA_TYPE[1] ? ($item->getDescription() ?: 'No description')
-							: '')
+						? (substr($item->getShortDescription(),0, $limitDesc) ?: 'No description')
+						: ($type == self::SEARCH_DATA_TYPE[1] ? (substr($item->getDescription(), 0, $limitDesc)
+							?: 'No description') : '')
 				);
 				array_push($data, $tmp);
 			}
