@@ -44,6 +44,9 @@ class Footer extends \Magento\Framework\View\Element\Html\Link
     }
 	public function getLabel()
 	{
+		if ($this->helper->getBlogConfig('general/name')==""){
+			return __("Blog");
+		}
 		return $this->helper->getBlogConfig('general/name');
 	}
 }

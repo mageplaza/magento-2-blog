@@ -167,7 +167,16 @@ if ($checkRss):
 		for ($i = 1; $i <= $countPage; $i++):
 			?>
             <li class="item mp-page-item">
-                <a href="<?php echo $this->getUrl('*/*/*', ['_use_rewrite' => true]) . '?p=' . $i; ?>" class="page">
+                <a href="<?php
+                if ($block->getMonthParam())
+                {
+					echo $this->getUrl('*/*/*', ['_use_rewrite' => true]) .'?month='.$block->getMonthParam().'&p=' . $i;
+                }
+                else
+                {
+					echo $this->getUrl('*/*/*', ['_use_rewrite' => true]) . '?p=' . $i;
+                }
+                ?>" class="page">
                     <span class="label"><?php echo __('Page') ?></span>
                         <span><?php echo $i; ?></span>
                 </a>

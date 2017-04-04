@@ -28,7 +28,10 @@ class Listpost extends Frontend
     {
         return $this->getBlogPagination('category', $this->getRequest()->getParam('id'));
     }
-
+	public function getMonthParam()
+	{
+		return $this->getRequest()->getParam('month');
+	}
     public function checkRss()
     {
         $categoryId = $this->getRequest()->getParam('id');
