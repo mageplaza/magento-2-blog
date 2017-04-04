@@ -164,7 +164,7 @@ class Frontend extends Template
 	{
 		$actionName       = $this->getRequest()->getFullActionName();
 		$breadcrumbs      = $this->getLayout()->getBlock('breadcrumbs');
-		$breadcrumbsLabel = ucfirst($this->helperData->getBlogConfig('general/url_prefix'));
+		$breadcrumbsLabel = ucfirst($this->helperData->getBlogConfig('general/name'));
 		if ($breadcrumbs) {
 			if ($actionName == 'mpblog_post_index') {
 				$breadcrumbs->addCrumb(

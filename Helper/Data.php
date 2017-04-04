@@ -91,19 +91,39 @@ class Data extends CoreHelper
 
     public function getPostList($type = null, $id = null)
     {
+		$month = $this->_getRequest()->getParam('month');
         $list          = '';
         $posts         = $this->postfactory->create();
         $categoryModel = $this->categoryfactory->create();
         $tagModel      = $this->tagfactory->create();
         $topicModel    = $this->topicfactory->create();
         if ($type == null) {
-            $list = $posts->getCollection();
+        	if ($month)
+			{
+				$list = $posts->getCollection()->addFieldToFilter('created_at',['like'=>$month . '%']);
+			}else{
+				$list = $posts->getCollection();
+			}
         } elseif ($type == 'category') {
             $category = $categoryModel->load($id);
-            $list     = $category->getSelectedPostsCollection();
+            if ($month)
+			{
+				$list = $category->getSelectedPostsCollection()->addFieldToFilter('created_at',['like'=>$month . '%']);
+			}
+			else
+			{
+				$list = $category->getSelectedPostsCollection();
+			}
         } elseif ($type == 'tag') {
             $tag  = $tagModel->load($id);
-            $list = $tag->getSelectedPostsCollection();
+            if ($month)
+			{
+				$list = $tag->getSelectedPostsCollection()->addFieldToFilter('created_at',['like'=>$month . '%']);
+			}
+			else
+			{
+				$list = $tag->getSelectedPostsCollection();
+			}
         } elseif ($type == 'topic') {
             $topic = $topicModel->load($id);
             $list  = $topic->getSelectedPostsCollection();

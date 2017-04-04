@@ -49,7 +49,7 @@
                 </field>
                 <field id="toplinks" translate="label comment" type="select" sortOrder="20" showInDefault="20"
                        showInWebsite="1" showInStore="1">
-                    <label>Show Blog Link in Top links</label>
+                    <label>Show Blog Link in Top Menu</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="footer" translate="label comment" type="select" sortOrder="25" showInDefault="20" showInWebsite="1" showInStore="1">
