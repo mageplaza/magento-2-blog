@@ -26,7 +26,7 @@ $count = 0;
 ?>
 <div class="mp-sidebar mpcss">
 	<div class="row">
-		<div class="block-title col-xs-12">
+		<div class="block-title col-xs-12 sidebar-categories">
 				<p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Categories') ?></p>
 
 		</div>
@@ -41,7 +41,7 @@ $count = 0;
 				break;
 			?>
 					<li class="category-item" ><i class="fa fa-cube"></i>
-                        <a class="list-categories sadas" href="<?php echo $block->getCategoryUrl($category) ?>">
+                        <a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>">
                             <?php echo ucfirst($category->getName()) ?></a>
                     </li>
 

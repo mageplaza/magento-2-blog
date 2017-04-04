@@ -9,6 +9,12 @@
 .sidebar-tags{
     margin-bottom: 15px;
 }
+.sidebar-archives{
+    margin-bottom: 15px;
+}
+.sidebar-categories{
+    margin-bottom: 15px;
+}
 a.label.label-default.tags-list {
     background: #fff;
     border: 1px solid #bbb;
@@ -34,6 +40,23 @@ ul.menu-categories a.list-categories {
     margin-left: 8px;
 }
 ul.menu-categories a.list-categories:focus{
+    text-decoration: none;
+}
+
+
+ul.menu-archives{
+    padding: 0px;
+}
+ul.menu-archives li.archive-item{
+    list-style: none;
+    padding: 10px 0px;
+    border-bottom: 1px solid #ddd;
+}
+ul.menu-archives a.list-archives {
+    color: inherit;
+    margin-left: 8px;
+}
+ul.menu-archives a.list-archives:focus{
     text-decoration: none;
 }
 h2.list-title{
