@@ -28,7 +28,7 @@
                 <name>Blog</name>
                 <url_prefix>blog</url_prefix>
                 <url_suffix>.html</url_suffix>
-                <sidebar_right>1</sidebar_right>
+                <sidebar_left_right>1</sidebar_left_right>
                 <font_color>#1abc9c</font_color>
                 <pagination>10</pagination>
                 <related_post>5</related_post>
@@ -36,6 +36,13 @@
             <sidebar>
                 <number_recent_posts>5</number_recent_posts>
                 <number_mostview_posts>5</number_mostview_posts>
+                <search>
+                    <enable_search>1</enable_search>
+                    <search_limit>10</search_limit>
+                    <min_chars>1</min_chars>
+                    <show_image>1</show_image>
+                    <description>100</description>
+                </search>
             </sidebar>
             <comment>
                 <type>4</type>

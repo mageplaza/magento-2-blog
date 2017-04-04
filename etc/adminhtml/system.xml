@@ -56,14 +56,7 @@
                     <label>Show Blog Link in Footer links</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="sidebar_right" translate="label comment" type="select" sortOrder="30" showInDefault="20" showInWebsite="1" showInStore="1">
-                    <label>Show Sidebar Right</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="sidebar_left" translate="label comment" type="select" sortOrder="30" showInDefault="20" showInWebsite="1" showInStore="1">
-                    <label>Show Sidebar Left</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
+
                 <field id="related_post" translate="label comment" type="text" sortOrder="35" showInDefault="1" showInStore="1" showInWebsite="1">
                     <label>Limit related post</label>
                     <comment>Number of related post in post view page</comment>
@@ -90,6 +83,30 @@
                 <field id="number_mostview_posts" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Number of most view posts</label>
                 </field>
+                <field id="sidebar_left_right" translate="label comment" type="select" sortOrder="40" showInDefault="20" showInWebsite="1" showInStore="1">
+                    <label>Sidebar Location</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\SideBarLR</source_model>
+                </field>
+                <group id="search" translate="label" showInDefault="1" sortOrder="100" showInWebsite="1" showInStore="1">
+                    <label>Search</label>
+                    <field id="enable_search" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable Search Box</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="search_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Maximum Query Result</label>
+                    </field>
+                    <field id="min_chars" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Min Chars</label>
+                    </field>
+                    <field id="show_image" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Visible Image</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="description" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Description length</label>
+                    </field>
+                </group>
             </group>
             <group id="comment" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Comments</label>

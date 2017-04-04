@@ -165,129 +165,129 @@ class Frontend extends Template
 		$actionName       = $this->getRequest()->getFullActionName();
 		$breadcrumbs      = $this->getLayout()->getBlock('breadcrumbs');
 		$breadcrumbsLabel = ucfirst($this->helperData->getBlogConfig('general/url_prefix'));
-//		if ($breadcrumbs) {
-//			if ($actionName == 'blog_post_index') {
-//				$breadcrumbs->addCrumb(
-//					'home',
-//					[
-//						'label' => __('Home'),
-//						'title' => __('Go to Home Page'),
-//						'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//					]
-//				)->addCrumb(
-//					$this->helperData->getBlogConfig('general/url_prefix'),
-//					['label' => $breadcrumbsLabel, 'title' => $this->helperData->getBlogConfig('general/url_prefix')]
-//				);
-//				$this->applySeoCode();
-//			} elseif ($actionName == 'blog_post_view') {
-//				$post = $this->getCurrentPost();
-//				if ($this->filterPost($post)) {
-//					$category = $post->getSelectedCategoriesCollection()->addFieldToFilter('enabled', 1)->getFirstItem();
-//					$breadcrumbs->addCrumb(
-//						'home',
-//						[
-//							'label' => __('Home'),
-//							'title' => __('Go to Home Page'),
-//							'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//						]
-//					);
-//					$breadcrumbs->addCrumb(
-//						$this->helperData->getBlogConfig('general/url_prefix'),
-//						['label' => $breadcrumbsLabel,
-//						 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
-//						 'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//							 . $this->helperData->getBlogConfig('general/url_prefix')]
-//					);
-//					if ($category->getId()) {
-//						$breadcrumbs->addCrumb(
-//							$category->getUrlKey(),
-//							['label' => ucfirst($category->getName()),
-//							 'title' => $category->getName(),
-//							 'link'  => $this->helperData->getCategoryUrl($category)]
-//						);
-//					}
-//					$breadcrumbs->addCrumb(
-//						$post->getUrlKey(),
-//						['label' => ucfirst($post->getName()),
-//						 'title' => $post->getName()]
-//					);
-//					$this->applySeoCode($post);
-//				}
-//			} elseif ($actionName == 'blog_category_view') {
-//				$category = $this->helperData->getCategoryByParam('id', $this->getRequest()->getParam('id'));
-//				$breadcrumbs->addCrumb(
-//					'home',
-//					[
-//						'label' => __('Home'),
-//						'title' => __('Go to Home Page'),
-//						'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//					]
-//				);
-//				$breadcrumbs->addCrumb(
-//					$this->helperData->getBlogConfig('general/url_prefix'),
-//					['label' => $breadcrumbsLabel,
-//					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
-//					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//						 . $this->helperData->getBlogConfig('general/url_prefix')]
-//				)->addCrumb(
-//					$category->getUrlKey(),
-//					['label' => ucfirst($category->getName()),
-//					 'title' => $category->getName(),
-//					]
-//				);
-//				$this->applySeoCode($category);
-//			} elseif ($actionName == 'blog_tag_view') {
-//				$tag = $this->helperData->getTagByParam('id', $this->getRequest()->getParam('id'));
-//				$breadcrumbs->addCrumb(
-//					'home',
-//					[
-//						'label' => __('Home'),
-//						'title' => __('Go to Home Page'),
-//						'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//					]
-//				)->addCrumb(
-//					$this->helperData->getBlogConfig('general/url_prefix'),
-//					['label' => $breadcrumbsLabel,
-//					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
-//					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//						 . $this->helperData->getBlogConfig('general/url_prefix')]
-//				)->addCrumb(
-//					'Tag',
-//					['label' => 'Tag',
-//					 'title' => 'Tag']
-//				)->addCrumb(
-//					'Tag' . $tag->getId(),
-//					['label' => ucfirst($tag->getName()),
-//					 'title' => $tag->getName()]
-//				);
-//				$this->applySeoCode($tag);
-//			} elseif ($actionName == 'blog_topic_view') {
-//				$topic = $this->helperData->getTopicByParam('id', $this->getRequest()->getParam('id'));
-//				$breadcrumbs->addCrumb(
-//					'home',
-//					[
-//						'label' => __('Home'),
-//						'title' => __('Go to Home Page'),
-//						'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//					]
-//				)->addCrumb(
-//					$this->helperData->getBlogConfig('general/url_prefix'),
-//					['label' => $breadcrumbsLabel,
-//					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
-//					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//						 . $this->helperData->getBlogConfig('general/url_prefix')]
-//				)->addCrumb(
-//					'Topic',
-//					['label' => 'Topic',
-//					 'title' => 'Topic']
-//				)->addCrumb(
-//					'topic' . $topic->getId(),
-//					['label' => ucfirst($topic->getName()),
-//					 'title' => $topic->getName()]
-//				);
-//				$this->applySeoCode($topic);
-//			}
-//		}
+		if ($breadcrumbs) {
+			if ($actionName == 'mpblog_post_index') {
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				)->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel, 'title' => $this->helperData->getBlogConfig('general/url_prefix')]
+				);
+				$this->applySeoCode();
+			} elseif ($actionName == 'mpblog_post_view') {
+				$post = $this->getCurrentPost();
+				if ($this->filterPost($post)) {
+					$category = $post->getSelectedCategoriesCollection()->addFieldToFilter('enabled', 1)->getFirstItem();
+					$breadcrumbs->addCrumb(
+						'home',
+						[
+							'label' => __('Home'),
+							'title' => __('Go to Home Page'),
+							'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						]
+					);
+					$breadcrumbs->addCrumb(
+						$this->helperData->getBlogConfig('general/url_prefix'),
+						['label' => $breadcrumbsLabel,
+						 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+						 'link'  => $this->_storeManager->getStore()->getBaseUrl()
+							 . $this->helperData->getBlogConfig('general/url_prefix')]
+					);
+					if ($category->getId()) {
+						$breadcrumbs->addCrumb(
+							$category->getUrlKey(),
+							['label' => ucfirst($category->getName()),
+							 'title' => $category->getName(),
+							 'link'  => $this->helperData->getCategoryUrl($category)]
+						);
+					}
+					$breadcrumbs->addCrumb(
+						$post->getUrlKey(),
+						['label' => ucfirst($post->getName()),
+						 'title' => $post->getName()]
+					);
+					$this->applySeoCode($post);
+				}
+			} elseif ($actionName == 'mpblog_category_view') {
+				$category = $this->helperData->getCategoryByParam('id', $this->getRequest()->getParam('id'));
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				);
+				$breadcrumbs->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
+					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						 . $this->helperData->getBlogConfig('general/url_prefix')]
+				)->addCrumb(
+					$category->getUrlKey(),
+					['label' => ucfirst($category->getName()),
+					 'title' => $category->getName(),
+					]
+				);
+				$this->applySeoCode($category);
+			} elseif ($actionName == 'mpblog_tag_view') {
+				$tag = $this->helperData->getTagByParam('id', $this->getRequest()->getParam('id'));
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				)->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
+					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						 . $this->helperData->getBlogConfig('general/url_prefix')]
+				)->addCrumb(
+					'Tag',
+					['label' => 'Tag',
+					 'title' => 'Tag']
+				)->addCrumb(
+					'Tag' . $tag->getId(),
+					['label' => ucfirst($tag->getName()),
+					 'title' => $tag->getName()]
+				);
+				$this->applySeoCode($tag);
+			} elseif ($actionName == 'mpblog_topic_view') {
+				$topic = $this->helperData->getTopicByParam('id', $this->getRequest()->getParam('id'));
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				)->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
+					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						 . $this->helperData->getBlogConfig('general/url_prefix')]
+				)->addCrumb(
+					'Topic',
+					['label' => 'Topic',
+					 'title' => 'Topic']
+				)->addCrumb(
+					'topic' . $topic->getId(),
+					['label' => ucfirst($topic->getName()),
+					 'title' => $topic->getName()]
+				);
+				$this->applySeoCode($topic);
+			}
+		}
 
 
 		return parent::_prepareLayout();
@@ -457,5 +457,29 @@ class Frontend extends Template
 		array_unshift($results, $numOfPage);
 
 		return $results;
+	}
+
+	/**
+	 * get sidebar config
+	 * @param $code
+	 * @param $storeId
+	 * @return mixed
+	 */
+	public function getSidebarConfig($code, $storeId = null)
+	{
+		return $this->helperData->getSidebarConfig($code, $storeId);
+	}
+
+	/**
+	 * get html sitemap url
+	 */
+	public function getHtmlSiteMapUrl()
+	{
+		$moduleRoute = $this->helperData->getBlogConfig('general/url_prefix');
+		if ($moduleRoute) {
+			return $this->getBaseUrl() . $moduleRoute .'/sitemap/';
+		}
+
+		return $this->getBaseUrl() .'/mpblog/sitemap/';
 	}
 }

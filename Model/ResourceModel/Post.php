@@ -336,9 +336,12 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             return $this;
         }
         $oldCategoryIds = $post->getCategoryIds();
-        $insert         = array_diff_key($categories, $oldCategoryIds);
-        $delete         = array_diff_key($oldCategoryIds, $categories);
+        $insert         = array_diff($categories, $oldCategoryIds);
+        $delete         = array_diff($oldCategoryIds, $categories);
         $adapter        = $this->getConnection();
+
+        //\Zend_Debug::dump($delete);die();
+
         if (!empty($delete)) {
             $condition = ['category_id IN(?)' => $delete, 'post_id=?' => $id];
             $adapter->delete($this->postCategoryTable, $condition);

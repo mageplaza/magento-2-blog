@@ -21,8 +21,6 @@
 ?>
 <?php
 $categories = $block->getCategoryList();
-$limit = 5;
-$count = 0;
 ?>
 <div class="mp-sidebar mpcss">
 	<div class="row">
@@ -35,16 +33,10 @@ $count = 0;
 			<?php if ($categories != '' && count($categories) > 0): ?>
 
 			<?php foreach ($categories as $category): ?>
-			<?php
-			$count++;
-			if ($count > $limit)
-				break;
-			?>
-					<li class="category-item" ><i class="fa fa-angle-right"></i>
-                        <a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>">
-                            <?php echo ucfirst($category->getName()) ?></a>
-                    </li>
-
+                <li class="category-item" >
+                    <a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>">
+                        <i class="fa fa-folder-open-o">&nbsp;&nbsp;</i><?php echo ucfirst($category->getName()) ?></a>
+                </li>
 
 			<?php endforeach; ?>
 

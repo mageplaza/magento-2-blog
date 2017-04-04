@@ -141,6 +141,10 @@ class Router implements \Magento\Framework\App\RouterInterface
 				$params = ['id' => $topic->getId()];
 
 				break;
+			case 'sitemap':
+				$action = 'index';
+
+				break;
 			default:
 				$post = $this->helper->getPostByUrl($controller);
 

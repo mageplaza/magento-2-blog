@@ -1,0 +1,48 @@
+<?php
+	$helper = $this->helper('Mageplaza\Blog\Helper\Data');
+	$posts = $helper->getPostList();
+	$categories = $helper->getCategoryList();
+	$tags = $helper->getTagList();
+?>
+<h1><?php echo __('SiteMap') ?></h1>
+<?php
+/**
+ * show posts list
+ */
+	if (!empty($posts)):
+?>
+	<h2><?php echo count($posts) == 1 ? __('Post') : __('Posts') ?></h2>
+	<ul>
+		<?php foreach ($posts as $post): ?>
+			<li><a href="<?php echo $helper->getUrlByPost($post) ?>"><?php echo $post->getName(); ?></a> </li>
+		<?php endforeach; ?>
+	</ul>
+<?php endif; ?>
+
+<?php
+/**
+ * show categories list
+ */
+if (!empty($categories)):
+	?>
+	<h2><?php echo count($categories) == 1 ? __('Category') : __('Categories') ?></h2>
+	<ul>
+		<?php foreach ($categories as $category): ?>
+			<li><a href="<?php echo $helper->getCategoryUrl($category) ?>"><?php echo $category->getName(); ?></a> </li>
+		<?php endforeach; ?>
+	</ul>
+<?php endif; ?>
+
+<?php
+/**
+ * show tags list
+ */
+if (!empty($tags)):
+	?>
+	<h2><?php echo count($tags) == 1 ? __('Tag') : __('Tags') ?></h2>
+	<ul>
+		<?php foreach ($tags as $tag): ?>
+			<li><a href="<?php echo $helper->getTagUrl($tag) ?>"><?php echo $tag->getName(); ?></a> </li>
+		<?php endforeach; ?>
+	</ul>
+<?php endif; ?>
