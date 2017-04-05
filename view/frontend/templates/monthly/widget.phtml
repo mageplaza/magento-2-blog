@@ -37,9 +37,10 @@ $dateArrayUnique = $block->getDateArrayUnique();
                  <?php
                     for ($i=0;$i<$block->getDateCount();$i++) {
 				 ?>
-                <li class="archive-item" ><i class="fa fa-cube"></i>
+                <li class="archive-item" >
                         <a class="list-archives" href="<?php echo $block->getCurrentUrl("month=" .  date("Y-m",$this->dateTime->timestamp($dateArrayUnique[$i]))) ?>">
-							 <?php
+							 <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;
+                            <?php
                              if ($dateArrayCount[$i]>1){
 								 echo $dateArrayUnique[$i].'   ('.$dateArrayCount[$i].')';
                              }else{
@@ -50,6 +51,7 @@ $dateArrayUnique = $block->getDateArrayUnique();
                 </li>
               <?php } ?>
             </ul>
+            <hr>
         </div>
     </div>
 </div>

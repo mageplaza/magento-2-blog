@@ -789,6 +789,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ->setComment('Category To Post Link Table');
             $installer->getConnection()->createTable($table);
         }
+
         $installer->endSetup();
     }
 }
