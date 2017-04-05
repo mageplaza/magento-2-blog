@@ -81,10 +81,11 @@ class Router implements \Magento\Framework\App\RouterInterface
 	{
 		$identifier = trim($request->getPathInfo(), '/');
 		$routePath  = explode('/', $identifier);
+		$urlPrefix = $this->helper->getBlogConfig('general/url_prefix') ?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX;
 		$routeSize  = sizeof($routePath);
 		if (!$this->helper->isEnabled() ||
 			!$routeSize || ($routeSize > 3) ||
-			(array_shift($routePath) != $this->helper->getBlogConfig('general/url_prefix'))
+			(array_shift($routePath) != $urlPrefix)
 		) {
 			return null;
 		}

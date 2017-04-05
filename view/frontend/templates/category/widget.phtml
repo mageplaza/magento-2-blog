@@ -33,23 +33,10 @@ $categories = $block->getCategoryList();
 			<?php if ($categories != '' && count($categories) > 0): ?>
 
 			<?php foreach ($categories as $category): ?>
-<<<<<<< HEAD
                 <li class="category-item" >
                     <a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>">
                         <i class="fa fa-folder-open-o">&nbsp;&nbsp;</i><?php echo ucfirst($category->getName()) ?></a>
                 </li>
-=======
-			<?php
-			$count++;
-			if ($count > $limit)
-				break;
-			?>
-					<li class="category-item" ><i class="fa fa-cube"></i>
-                        <a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>">
-                            <?php echo ucfirst($category->getName()) ?></a>
-                    </li>
-
->>>>>>> 4e08c43ec8a6735990e0ce3c398bb37ed1fb41f4
 
 			<?php endforeach; ?>
 

@@ -164,7 +164,8 @@ class Frontend extends Template
 	{
 		$actionName       = $this->getRequest()->getFullActionName();
 		$breadcrumbs      = $this->getLayout()->getBlock('breadcrumbs');
-		$breadcrumbsLabel = ucfirst($this->helperData->getBlogConfig('general/name'));
+		$breadcrumbsLabel = ucfirst($this->helperData->getBlogConfig('general/name')
+			?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX);
 		if ($breadcrumbs) {
 			if ($actionName == 'mpblog_post_index') {
 				$breadcrumbs->addCrumb(
@@ -327,7 +328,8 @@ class Frontend extends Template
 				$pageMainTitle->setPageTitle($post->getName());
 			}
 		} else {
-			$title = $this->helperData->getBlogConfig('general/name');
+			$title = $this->helperData->getBlogConfig('seo/meta_title')
+				?: $this->helperData->getBlogConfig('general/name');
 			$this->setPageData($title, 1, __('Blog'));
 
 			$description = $this->helperData->getBlogConfig('seo/meta_description');
@@ -403,7 +405,7 @@ class Frontend extends Template
 		}
 
 		if ($postList != '' && is_array($postList)) {
-			$limit     = (int)$this->getBlogConfig('general/pagination');
+			$limit     = (int)$this->getBlogConfig('general/pagination') ?: 1;
 			$numOfPost = count($postList);
 			$numOfPage = 1;
 			$countPost = count($postList);
