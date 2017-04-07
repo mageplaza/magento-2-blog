@@ -159,7 +159,7 @@
 	<div class="post-same-topics topic-list mpcss">
 		<div class="row">
 			<div class="col-xs-12 row">
-				<h2><?php echo __('Related Posts'); ?></h2>
+					<h2><?php echo ($limitRelated) ? __('Related Posts') : __(''); ?></h2>
 					<?php foreach ($relatedPosts as $relatedPost): ?>
 						<?php
 							if($block->filterPost($relatedPost)):
@@ -167,8 +167,14 @@
 							?>
 								<?php if($countRelated > $limitRelated) break; ?>
 						<div class="relate-content item col-xs-3" style="margin-right:10px;">
-							<a class="mp-relate-link" href="<?php echo $block->getUrlByPost($relatedPost) ?>"><img class="img-responsive" src="<?php echo $block->getImageUrl($relatedPost->getImage()); ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
-								<?php echo $relatedPost->getName(); ?></a>
+							<a class="mp-relate-link" href="<?php echo $block->getUrlByPost($relatedPost) ?>">
+                                <?php if ($relatedPost->getImage()){ ?>
+                                <img class="img-responsive" src="<?php echo $block->getImageUrl($relatedPost->getImage()); ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
+                                <?php } else {?>
+                                    <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/Mageplaza-logo.png') ?>"align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
+                                <?php }?>
+								<?php echo $relatedPost->getName(); ?>
+                            </a>
 						</div>
 							<?php endif; ?>
 					<?php endforeach; ?>

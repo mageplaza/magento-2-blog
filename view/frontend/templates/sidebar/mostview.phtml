@@ -26,7 +26,7 @@ $postsRecent = $block->getRecentPost();
 <div class="mp-sidebar mpcss">
 		<ul class="nav nav-tabs">
 			<li id="tab-1" class="active"><a id="popular-tab"><?php echo __('Popular') ?></a></li>
-			<li id="tab-2"><a id="recent-tab"><?php echo __('Recent') ?></a></li>
+			<li id="tab-2"><a id="recent-tab"><?php echo __('Newest') ?></a></li>
 		</ul>
 		
 		<div class="tab-content">
@@ -37,7 +37,9 @@ $postsRecent = $block->getRecentPost();
 							<div class="post-left">
 								<?php if ($post->getImage()) : ?>
 									<img class="img-responsive" src="<?php echo $block->getImageUrl($post->getImage())?>">
-								<?php endif;?>
+								<?php else:?>
+                                    <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/Mageplaza-logo.png') ?>">
+								<?php endif; ?>
 							</div>
 							<div class="post-right">
 								<span><?php echo $post->getName() ?></span>
@@ -59,7 +61,9 @@ $postsRecent = $block->getRecentPost();
 							<div class="post-left">
 								<?php if ($post->getImage()) : ?>							
 									<img class="img-responsive" src="<?php echo $block->getImageUrl($post->getImage())?>">
-								<?php endif;?>
+								<?php else:?>
+                                    <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/Mageplaza-logo.png') ?>">
+								<?php endif; ?>
 							</div>
 							<div class="post-right">
 								<span><?php echo $post->getName() ?></span>

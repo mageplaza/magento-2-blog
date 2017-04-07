@@ -89,7 +89,11 @@ class Data extends CoreHelper
 	{
 		return $this->getBlogConfig('sidebar/'.$code, $storeId);
 	}
-
+	public function getSelectedPostByMonth($type = null)
+	{
+		$month = $this->_getRequest()->getParam('month');
+		return $list = ($month) ? $type->getSelectedPostsCollection()->addFieldToFilter('created_at',['like'=>$month . '%']) : $type->getSelectedPostsCollection();
+	}
     public function getPostList($type = null, $id = null)
     {
 		$month = $this->_getRequest()->getParam('month');
@@ -99,35 +103,16 @@ class Data extends CoreHelper
         $tagModel      = $this->tagfactory->create();
         $topicModel    = $this->topicfactory->create();
         if ($type == null) {
-        	if ($month)
-			{
-				$list = $posts->getCollection()->addFieldToFilter('created_at',['like'=>$month . '%']);
-			}else{
-				$list = $posts->getCollection();
-			}
+			$list = ($month) ? $posts->getCollection()->addFieldToFilter('created_at',['like'=>$month . '%']) : $posts->getCollection();
         } elseif ($type == 'category') {
             $category = $categoryModel->load($id);
-            if ($month)
-			{
-				$list = $category->getSelectedPostsCollection()->addFieldToFilter('created_at',['like'=>$month . '%']);
-			}
-			else
-			{
-				$list = $category->getSelectedPostsCollection();
-			}
+			$list = $this->getSelectedPostByMonth($category);
         } elseif ($type == 'tag') {
             $tag  = $tagModel->load($id);
-            if ($month)
-			{
-				$list = $tag->getSelectedPostsCollection()->addFieldToFilter('created_at',['like'=>$month . '%']);
-			}
-			else
-			{
-				$list = $tag->getSelectedPostsCollection();
-			}
+			$list = $this->getSelectedPostByMonth($tag);
         } elseif ($type == 'topic') {
             $topic = $topicModel->load($id);
-            $list  = $topic->getSelectedPostsCollection();
+			$list = $this->getSelectedPostByMonth($topic);
         }
 
         if ($list->getSize()) {
@@ -163,7 +148,17 @@ class Data extends CoreHelper
         }
         return $result;
     }
-
+	public function getTopicList()
+	{
+		$topic  = $this->topicfactory->create();
+		$list = $topic->getCollection()
+			->addFieldToFilter('enabled', 1);
+		$result = $this->filterItems($list);
+		if ($result == '') {
+			return '';
+		}
+		return $result;
+	}
     public function getCategoryCollection($array)
     {
         $category = $this->categoryfactory->create();
@@ -249,14 +244,12 @@ class Data extends CoreHelper
 
     public function getCategoryUrl($category)
     {
-        return $this->_getUrl($this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX
-			. '/category/' . $category->getUrlKey());
+        return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/category/' . $category->getUrlKey());
     }
 
     public function getTagUrl($tag)
     {
-        return $this->_getUrl($this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX
-			. '/tag/' . $tag->getUrlKey());
+        return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/tag/' . $tag->getUrlKey());
     }
 
     public function getTopicUrl($topic)
