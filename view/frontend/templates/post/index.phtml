@@ -64,8 +64,10 @@ if ($checkRss):
 
 
                                 <div class="mp-post-info">
-                                    <?php echo __('Posted on') . $block->formatCreatedAt($post->getCreatedAt()); ?> |
-									<?php echo __('Posted in') . $block->getPostCategoryHtml($post); ?>
+                                    <?php echo __('Posted on ') . $block->formatCreatedAt($post->getCreatedAt()); ?>
+									<?php
+									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
+                                    ?>
                                 </div>
 
 
@@ -124,8 +126,10 @@ if ($checkRss):
 
 
                                 <div class="mp-post-info">
-                                    <?php echo __('Posted on') . $block->formatCreatedAt($post->getCreatedAt()); ?> |
-									<?php echo __('Posted in') . $block->getPostCategoryHtml($post); ?>
+                                    <?php echo __('Posted on ') . $block->formatCreatedAt($post->getCreatedAt()); ?>
+									<?php
+									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
+                                    ?>
                                 </div>
 
 

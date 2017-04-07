@@ -35,7 +35,7 @@ $categories = $block->getCategoryList();
 			<?php foreach ($categories as $category): ?>
                 <li class="category-item" >
                     <a class="list-categories" href="<?php echo $block->getCategoryUrl($category) ?>">
-                        <i class="fa fa-folder-open-o">&nbsp;&nbsp;</i><?php echo ucfirst($category->getName()) ?></a>
+                        <i class="fa fa-folder-open-o">&nbsp;&nbsp;</i><?php echo ucfirst($category->getName())?></a>
                 </li>
 
 			<?php endforeach; ?>

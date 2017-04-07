@@ -32,7 +32,7 @@ class Topmenu
 
     public function afterGetHtml(\Magento\Theme\Block\Html\Topmenu $topmenu, $html)
     {
-    	if ($this->helper->getBlogConfig('general/toplinks')==1){
+    	if ($this->helper->getBlogConfig('general/toplinks') && $this->helper->getBlogConfig('general/enabled')){
 			$blogMenu = $topmenu;
 			$blogMenu->getBaseUrl();
 			if ($this->helper->getBlogConfig('general/name')==""){
