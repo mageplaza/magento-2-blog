@@ -20,6 +20,7 @@ Magento 2 Blog extension is integrated right into the Magento backend so you can
 Run the following command in Magento 2 root folder
 
 ```
+composer require mageplaza/core-m2
 composer require mageplaza/magento-2-blog-extension
 php bin/magento setup:upgrade
 php bin/magento setup:static-content:deploy
