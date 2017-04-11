@@ -20,6 +20,14 @@
  */
 ?>
 <?php $_post = $block->getCurrentPost(); ?>
+<?php $checkRss = $block->checkRss();
+if ($checkRss):
+	?>
+    <div class="mp-blog-rss">
+            <a href="<?php echo $checkRss ?>" class="bb-rss-icon"><img src="
+                <?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px"> </a>
+        </div>
+<?php endif; ?>
 <?php if($block->filterPost($_post)): ?>
 
 <?php if ($block->getBlogConfig('share/enabled')): ?>
