@@ -170,6 +170,24 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     [],
                     'Post Updated At'
                 )
+				->addColumn(
+					'author_id',
+					\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+					null,
+					[
+						'unsigned' => true,
+					],
+					'Author ID'
+				)
+				->addColumn(
+					'modifier_id',
+					\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+					null,
+					[
+						'unsigned' => true,
+					],
+					'Modifier ID'
+				)
                 ->setComment('Post Table');
             $installer->getConnection()->createTable($table);
 
@@ -789,6 +807,58 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ->setComment('Category To Post Link Table');
             $installer->getConnection()->createTable($table);
         }
+		if (! $installer->tableExists('mageplaza_blog_author')) {
+			$table = $installer->getConnection()
+				->newTable($installer->getTable('mageplaza_blog_author'));
+			$table->addColumn(
+				'user_id',
+				\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+				null,
+				[
+					'unsigned' => true,
+					'nullable' => false,
+					'primary'  => true,
+				],
+				'User ID'
+			)
+				->addColumn(
+					'display_name',
+					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+					255,
+					[],
+					'Display Name'
+				)
+				->addForeignKey(
+					$installer->getFkName(
+						'mageplaza_blog_author',
+						'user_id',
+						'admin_user',
+						'user_id'
+					),
+					'user_id',
+					$installer->getTable('admin_user'),
+					'user_id',
+					\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+					\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+				)
+				->addIndex(
+					$installer->getIdxName(
+						'mageplaza_blog_author',
+						[
+							'user_id'
+						],
+						\Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+					),
+					[
+						'user_id'
+					],
+					[
+						'type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+					]
+				)
+				->setComment('Author Table');
+			$installer->getConnection()->createTable($table);
+		}
 
         $installer->endSetup();
     }

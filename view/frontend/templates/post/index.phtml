@@ -68,6 +68,7 @@ if ($checkRss):
 									<?php
 									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
                                     ?>
+                                    <?php echo __('| Author : '. $block->getAuthorByPost($post->getAuthorId()));?>
                                 </div>
 
 
@@ -130,6 +131,7 @@ if ($checkRss):
 									<?php
 									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
                                     ?>
+									<?php echo __('| Author : '. $block->getAuthorByPost($post->getAuthorId()));?>
                                 </div>
 
 

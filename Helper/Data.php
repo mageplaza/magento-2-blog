@@ -27,6 +27,7 @@ use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\TagFactory;
 use Mageplaza\Blog\Model\TopicFactory;
+use Mageplaza\Blog\Model\AuthorFactory;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
 
 class Data extends CoreHelper
@@ -43,6 +44,7 @@ class Data extends CoreHelper
 	public $topicfactory;
 	public $store;
 	public $modelTraffic;
+	public $authorfactory;
 
     public function __construct(
         Context $context,
@@ -51,6 +53,7 @@ class Data extends CoreHelper
         CategoryFactory $categoryFactory,
         TagFactory $tagFactory,
         TopicFactory $topicFactory,
+		AuthorFactory $authorFactory,
         TemplateContext $templateContext,
 		\Mageplaza\Blog\Model\Traffic $traffic
     ) {
@@ -59,6 +62,7 @@ class Data extends CoreHelper
         $this->categoryfactory = $categoryFactory;
         $this->tagfactory      = $tagFactory;
         $this->topicfactory    = $topicFactory;
+		$this->authorfactory    = $authorFactory;
         $this->store = $templateContext->getStoreManager();
         $this->modelTraffic = $traffic;
         parent::__construct($context, $objectManager, $templateContext->getStoreManager());
@@ -190,7 +194,13 @@ class Data extends CoreHelper
 
         return $this->_getUrl($urlKey);
     }
-
+	public function getAuthorByPost($authorId)
+	{
+		$author = $this->authorfactory->create();
+		$list = $author->load($authorId);
+			$result = $list->getDisplayName();
+		return $result;
+	}
     public function getBlogUrl($code)
     {
     	$blogUrl = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;

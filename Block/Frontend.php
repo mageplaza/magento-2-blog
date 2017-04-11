@@ -476,4 +476,8 @@ class Frontend extends Template
 
 		return $this->getBaseUrl() .'/mpblog/sitemap/';
 	}
+	public function getAuthorByPost($authorId)
+	{
+		return $this->helperData->getAuthorByPost($authorId);
+	}
 }

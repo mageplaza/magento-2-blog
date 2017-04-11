@@ -54,8 +54,8 @@
                             <?php endif;?>
                             <span><i class="fa fa-calendar-times-o"></i> <?php echo $_post->getFormatCreatedAt(); ?></span> |
                             <span><i class="fa fa-folder-open-o"></i> <?php echo __('Categories:'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> </span> |
-                            <span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span>
-
+                            <span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span> |
+                            <span><i class="fa fa-user"></i> <?php echo __('Author:'); ?>  <?php echo $block->getAuthorByPost($_post->getAuthorId()); ?></span>
                         </div>
                         <hr/>
                     </div>
