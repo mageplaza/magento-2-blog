@@ -68,7 +68,11 @@ if ($checkRss):
 									<?php
 									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
                                     ?>
-                                    <?php echo __('| Author : '. $block->getAuthorByPost($post->getAuthorId()));?>
+                                    <?php
+                                    if ($block->getAuthorByPost($post->getAuthorId()) && $block->getBlogConfig('general/display_author')){
+										echo __('| By : '. $block->getAuthorByPost($post->getAuthorId()));
+                                    }
+                                    ?>
                                 </div>
 
 
@@ -125,13 +129,16 @@ if ($checkRss):
                                     </a>
                                 </h2>
 
-
                                 <div class="mp-post-info">
                                     <?php echo __('Posted on ') . $block->formatCreatedAt($post->getCreatedAt()); ?>
 									<?php
 									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
                                     ?>
-									<?php echo __('| Author : '. $block->getAuthorByPost($post->getAuthorId()));?>
+									<?php
+									if ($block->getAuthorByPost($post->getAuthorId()) && $block->getBlogConfig('general/display_author')){
+										echo __('| By : '. $block->getAuthorByPost($post->getAuthorId()));
+									}
+                                    ?>
                                 </div>
 
 
@@ -140,7 +147,6 @@ if ($checkRss):
                                 </div>
 
                                 <div class="mp-clearfix"></div>
-
 
                                 <div class="mp-post-meta-info mp-alignright">
                                         <div class="actions">
