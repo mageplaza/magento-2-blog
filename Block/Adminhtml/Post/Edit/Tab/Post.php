@@ -124,6 +124,17 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'note' => __('Post name'),
             ]
         );
+		$fieldset->addField(
+			'url_key',
+			'text',
+			[
+				'name'  => 'url_key',
+				'label' => __('URL Key'),
+				'title' => __('URL Key'),
+				'required' => true,
+				'note' => __('URL Key'),
+			]
+		);
         $fieldset->addField(
             'short_description',
             'textarea',
@@ -174,17 +185,6 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Enabled'),
                 'title' => __('Enabled'),
                 'values' => $this->booleanOptions->toOptionArray(),
-            ]
-        );
-        $fieldset->addField(
-            'url_key',
-            'text',
-            [
-                'name'  => 'url_key',
-                'label' => __('URL Key'),
-                'title' => __('URL Key'),
-				'required' => true,
-				'note' => __('URL Key'),
             ]
         );
         $fieldset->addField(

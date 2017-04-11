@@ -29,6 +29,7 @@
                 <url_prefix>blog</url_prefix>
                 <url_suffix>.html</url_suffix>
                 <sidebar_left_right>1</sidebar_left_right>
+                <display_author>1</display_author>
                 <font_color>#1abc9c</font_color>
                 <pagination>10</pagination>
                 <related_post>5</related_post>

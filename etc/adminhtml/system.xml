@@ -66,6 +66,11 @@
                     <source_model>Mageplaza\Blog\Model\Config\Source\Blogview\Display</source_model>
                     <comment>Grid view style is better</comment>
                 </field>
+                <field id="display_author" translate="label comment" type="select" sortOrder="50" showInDefault="20"
+                       showInWebsite="1" showInStore="1">
+                    <label>Display author</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="font_color" translate="label comment" type="text" sortOrder="60" showInWebsite="1" showInStore="1" showInDefault="1">
                     <label>Choose blog's color</label>
                     <validate>jscolor {hash:true,refine:false}</validate>
