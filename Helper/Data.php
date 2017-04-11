@@ -422,7 +422,7 @@ class Data extends CoreHelper
 					'value' => $item->getName(),
 					'url'	=> $type == self::SEARCH_DATA_TYPE[0] ? $this->getUrlByPost($item) :
 						($type == self::SEARCH_DATA_TYPE[1] ? $this->getTagUrl($item) : $this->getCategoryUrl($item)),
-					'image'	=> $type == self::SEARCH_DATA_TYPE[0] ? $this->getImageUrl($item->getImage()) : '',
+					'image'	=> $type == self::SEARCH_DATA_TYPE[0] ? ($item->getImage() ? $this->getImageUrl($item->getImage()) : $this->getDefaultImageUrl()) : '',
 					'desc'	=> $type == self::SEARCH_DATA_TYPE[0]
 						? (substr($item->getShortDescription(),0, $limitDesc) ?: 'No description')
 						: ($type == self::SEARCH_DATA_TYPE[1] ? (substr($item->getDescription(), 0, $limitDesc)
@@ -433,5 +433,8 @@ class Data extends CoreHelper
 		}
 
 		return $data;
+	}
+	public function getDefaultImageUrl(){
+		return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_STATIC).'frontend/Magento/luma/en_US/Mageplaza_Blog/media/images/Mageplaza-logo.png';
 	}
 }

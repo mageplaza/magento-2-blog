@@ -20,6 +20,14 @@
  */
 ?>
 <?php $_post = $block->getCurrentPost(); ?>
+<?php $checkRss = $block->checkRss();
+if ($checkRss):
+	?>
+    <div class="mp-blog-rss">
+            <a href="<?php echo $checkRss ?>" class="bb-rss-icon"><img src="
+                <?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px"> </a>
+        </div>
+<?php endif; ?>
 <?php if($block->filterPost($_post)): ?>
 
 <?php if ($block->getBlogConfig('share/enabled')): ?>
@@ -67,13 +75,13 @@
                     </div>
                 </div>
 
-                <div class="mp-sidebar-view col-md-3 col-sm-6">
+                <div class="mp-sidebar col-md-3 col-sm-6">
                         <?php echo $this->getChildHtml(); ?>
                 </div>
 					<?php
 				}else{ ?>
 
-                    <div class="mp-sidebar-view col-md-3 col-sm-6">
+                    <div class="mp-sidebar col-md-3 col-sm-6">
                         <?php echo $this->getChildHtml(); ?>
                     </div>
 
@@ -260,7 +268,7 @@
 <script>
 	require([
 		'jquery',
-		'Mageplaza_Blog/js/less.min'
+		'Mageplaza_Blog/js/lib/less.min'
 	]);
 </script>
 
