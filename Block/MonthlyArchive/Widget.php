@@ -33,8 +33,10 @@ class Widget extends Frontend
 	{
 		$posts = $this->helperData->getPostList();
 		$postDates = array();
-		foreach ($posts as $post ){
-			$postDates[] = $post->getCreatedAt();
+		if($posts) {
+			foreach ($posts as $post) {
+				$postDates[] = $post->getCreatedAt();
+			}
 		}
 		return $postDates;
 	}

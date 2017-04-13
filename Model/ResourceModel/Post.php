@@ -56,7 +56,7 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var string
      */
 	public $postCategoryTable;
-
+	public $translitUrl;
     /**
      * constructor
      *
@@ -65,11 +65,12 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      */
     public function __construct(
+		\Magento\Framework\Filter\TranslitUrl $translitUrl,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\ResourceModel\Db\Context $context
     ) {
-    
+    	$this->translitUrl=$translitUrl;
         $this->date         = $date;
         $this->eventManager = $eventManager;
         parent::__construct($context);
@@ -413,31 +414,14 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     public function generateUrlKey($name, $count)
     {
-        // replace non letter or digits by -
-        $text = preg_replace('~[^\pL\d]+~u', '-', $name);
-
-        // transliterate
-        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-
-        // remove unwanted characters
-        $text = preg_replace('~[^-\w]+~', '', $text);
-
-        // trim
-        $text = trim($text, '-');
-
-        // remove duplicate -
-        $text = preg_replace('~-+~', '-', $text);
-
-        // lowercase
-        $text = strtolower($text);
-        if ($count == 0) {
-            $count = '';
-        }
-        if (empty($text)) {
-            return 'n-a' . $count;
-        }
-
-        return $text . $count;
+		$text = $this->translitUrl->filter($name);
+		if ($count == 0) {
+			$count = '';
+		}
+		if (empty($text)) {
+			return 'n-a' . $count;
+		}
+		return $text . $count;
     }
 
     public function checkUrlKey($url, $id = null)
