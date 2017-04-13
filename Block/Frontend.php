@@ -26,6 +26,7 @@ use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Cms\Model\Template\FilterProvider;
 
 /**
  * Class Frontend
@@ -52,7 +53,7 @@ class Frontend extends Template
 	 * @type \Mageplaza\Blog\Model\Post\Source\MetaRobots
 	 */
 	public $mpRobots;
-
+	public $filterProvider;
 	/**
 	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
 	 * @param \Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobots
@@ -67,6 +68,7 @@ class Frontend extends Template
 		Context $context,
 		HelperData $helperData,
 		TemplateContext $templateContext,
+		FilterProvider $filterProvider,
 		array $data = []
 	)
 	{
@@ -74,7 +76,7 @@ class Frontend extends Template
 		$this->mpRobots   = $metaRobots;
 		$this->helperData = $helperData;
 		$this->store      = $templateContext->getStoreManager();
-
+		$this->filterProvider = $filterProvider;
 		parent::__construct($context, $data);
 	}
 
@@ -209,8 +211,8 @@ class Frontend extends Template
 					}
 					$breadcrumbs->addCrumb(
 						$post->getUrlKey(),
-						['label' => ucfirst($post->getName()),
-						 'title' => $post->getName()]
+						['label' => __('Post'),
+						 'title' => __('Post')]
 					);
 					$this->applySeoCode($post);
 				}

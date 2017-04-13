@@ -341,7 +341,7 @@ class Data extends CoreHelper
             '*'
         );
         $posts->setOrder('numbers_view', 'DESC');
-        $postList = $this->filterItems($posts, $this->getBlogConfig('sidebar/number_mostview_posts'));
+        $postList = $this->filterPost($posts, $this->getBlogConfig('sidebar/number_mostview_posts'));
         if ($postList == '') {
             return '';
         }
@@ -357,7 +357,7 @@ class Data extends CoreHelper
             ->getCollection()
             ->addFieldToFilter('enabled', 1)
             ->setOrder('created_at', 'DESC');
-        $postList = $this->filterItems($posts, $this->getBlogConfig('sidebar/number_recent_posts'));
+        $postList = $this->filterPost($posts, $this->getBlogConfig('sidebar/number_recent_posts'));
         if ($postList == '') {
             return '';
         }
@@ -389,6 +389,29 @@ class Data extends CoreHelper
         }
 		return $results;
     }
+
+	public function filterPost($items, $limit )
+	{
+		$storeId = $this->store->getStore()->getId();
+		$count = 0;
+		$results = array();
+		foreach ($items as $item) {
+			$itemStoreIds = $item->getStoreIds();
+			$itemStore = $itemStoreIds !== null ? explode(',', $itemStoreIds) : '';
+			if (is_array($itemStore) && (in_array($storeId, $itemStore) || in_array('0', $itemStore))) {
+				if ($limit && $count >= $limit) {
+					break;
+				}
+				$count++;
+				array_push($results, $item);
+			}
+		}
+
+		if ($count == 0 || $limit == 0) {
+			return '';
+		}
+		return $results;
+	}
 
     /**
 	 * get search blog's data
