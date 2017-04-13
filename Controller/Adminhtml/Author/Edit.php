@@ -88,13 +88,10 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Author
 	{
 		$user = $this->authSession->getUser();
 		$userFullname = $user->getFirstName(). ' ' . $user->getLastName();
-
 		$id = $user->getId();
-		$authors = $this->initAuthor();
-		foreach ($authors->getCollection() as $author){
-			if ($author->getId()!=$id){
-				$authors->setData(['user_id'=>$id])->save();
-			}
+		$authors = $this->initAuthor()->load($id);
+		if(!$authors->getId()) {
+			$authors->setData(['user_id' => $id])->save();
 		}
 		/** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
 		$resultPage = $this->resultPageFactory->create();
