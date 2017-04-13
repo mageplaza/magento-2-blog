@@ -24,7 +24,10 @@ use Mageplaza\Blog\Block\Frontend;
 
 class View extends Frontend
 {
-
+	public function checkRss()
+	{
+		return $this->helperData->getBlogUrl('post/rss');
+	}
     public function getTopicUrl($topic)
     {
         return $this->helperData->getTopicUrl($topic);

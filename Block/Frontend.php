@@ -253,10 +253,6 @@ class Frontend extends Template
 					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
 						 . $this->helperData->getBlogConfig('general/url_prefix')]
 				)->addCrumb(
-					'Tag',
-					['label' => 'Tag',
-					 'title' => 'Tag']
-				)->addCrumb(
 					'Tag' . $tag->getId(),
 					['label' => ucfirst($tag->getName()),
 					 'title' => $tag->getName()]
@@ -277,10 +273,6 @@ class Frontend extends Template
 					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
 						 . $this->helperData->getBlogConfig('general/url_prefix')]
-				)->addCrumb(
-					'Topic',
-					['label' => 'Topic',
-					 'title' => 'Topic']
 				)->addCrumb(
 					'topic' . $topic->getId(),
 					['label' => ucfirst($topic->getName()),
@@ -483,5 +475,9 @@ class Frontend extends Template
 		}
 
 		return $this->getBaseUrl() .'/mpblog/sitemap/';
+	}
+	public function getAuthorByPost($authorId)
+	{
+		return $this->helperData->getAuthorByPost($authorId);
 	}
 }

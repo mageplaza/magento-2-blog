@@ -44,7 +44,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 	public $metaRobotsOptions;
 
 	public $systemStore;
-
+	protected $authSession;
     /**
      * constructor
      *
@@ -63,6 +63,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
+		\Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
     ) {
@@ -71,6 +72,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         $this->booleanOptions    = $booleanOptions;
         $this->metaRobotsOptions = $metaRobotsOptions;
         $this->systemStore = $systemStore;
+		$this->authSession = $authSession;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -86,6 +88,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('post_');
         $form->setFieldNameSuffix('post');
+        $user = $this->authSession->getUser();
         $fieldset = $form->addFieldset(
             'base_fieldset',
             [
@@ -100,8 +103,17 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'hidden',
                 ['name' => 'post_id']
             );
-        }
-        $fieldset->addField(
+
+		}
+		$fieldset->addField(
+			'author_id',
+			'hidden',
+			[
+				'name' => 'author_id',
+				'value' => $user->getId()
+			]
+		);
+		$fieldset->addField(
             'name',
             'text',
             [
@@ -112,6 +124,17 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'note' => __('Post name'),
             ]
         );
+		$fieldset->addField(
+			'url_key',
+			'text',
+			[
+				'name'  => 'url_key',
+				'label' => __('URL Key'),
+				'title' => __('URL Key'),
+				'required' => true,
+				'note' => __('URL Key'),
+			]
+		);
         $fieldset->addField(
             'short_description',
             'textarea',
@@ -162,15 +185,6 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Enabled'),
                 'title' => __('Enabled'),
                 'values' => $this->booleanOptions->toOptionArray(),
-            ]
-        );
-        $fieldset->addField(
-            'url_key',
-            'text',
-            [
-                'name'  => 'url_key',
-                'label' => __('URL Key'),
-                'title' => __('URL Key'),
             ]
         );
         $fieldset->addField(

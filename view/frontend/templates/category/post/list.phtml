@@ -67,8 +67,8 @@ if ($checkRss):
                                     $object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
                                     $dateFormat = date('Y-m-d',$object->timestamp($post->getCreatedAt()));
                                     echo $dateFormat;
-                                    ?> |
-                                    <?php echo __('Posted in'); ?> <?php echo $block->getPostCategoryHtml($post); ?>
+                                    ?>
+                                    <?php 	echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):(''); ?>
                                 </div>
 
 
@@ -130,8 +130,8 @@ if ($checkRss):
                                             $object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
                                             $dateFormat = date('Y-m-d',$object->timestamp($post->getCreatedAt()));
                                             echo $dateFormat;
-                                            ?> |
-                                            <?php echo __('Posted in'); ?> <?php echo $block->getPostCategoryHtml($post); ?>
+                                            ?>
+                                            <?php 	echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):(''); ?>
                                         </div>
 
 
@@ -230,6 +230,6 @@ if ($checkRss):
 <script>
 	require([
 		'jquery',
-		'Mageplaza_Blog/js/less.min'
+		'Mageplaza_Blog/js/lib/less.min'
 	]);
 </script>

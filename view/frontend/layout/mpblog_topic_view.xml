@@ -29,18 +29,19 @@
     </head>
     <body>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Topic\Listpost" template="Mageplaza_Blog::category/post/list.phtml"/>
-        </referenceContainer>
-        <referenceContainer name="sidebar.main">
-            <block class="Mageplaza\Blog\Block\Frontend" template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search" />
-            <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"
-                   template="Mageplaza_Blog::sidebar/mostview.phtml"/>
-            <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category"
-                   template="Mageplaza_Blog::category/widget.phtml"/>
-            <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"
-                   template="Mageplaza_Blog::tag/widget.phtml"/>
-
-
+            <block class="Mageplaza\Blog\Block\Topic\Listpost" template="Mageplaza_Blog::category/post/list.phtml">
+                <block class="Mageplaza\Blog\Block\Frontend" template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search" />
+                <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"
+                       template="Mageplaza_Blog::sidebar/mostview.phtml"/>
+                <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category"
+                       template="Mageplaza_Blog::category/widget.phtml"/>
+                <block class="Mageplaza\Blog\Block\MonthlyArchive\Widget" name="mp.blog.view.sidebar.monthly"
+                       template="Mageplaza_Blog::monthly/widget.phtml"/>
+                <block class="Mageplaza\Blog\Block\Topic\Widget" name="mp.blog.view.sidebar.topic"
+                       template="Mageplaza_Blog::topic/widget.phtml"/>
+                <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"
+                       template="Mageplaza_Blog::tag/widget.phtml"/>
+            </block>
         </referenceContainer>
     </body>
 </page>

@@ -20,22 +20,11 @@
  */
 ?>
 <?php
-$posts = $block->getBlogPagination();
+$posts = $block->getCollection();
 ?>
-<?php $checkRss = $block->checkRss();
-if ($checkRss):
-	?>
-    <div class="mp-blog-rss">
-            <a href="<?php echo $checkRss ?>" class="bb-rss-icon"><img src="
-                <?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px"> </a>
-        </div>
-<?php endif; ?>
-<?php if ($posts != '') : ?>
-	<?php
-	$countPage = $posts[0];
-	array_shift($posts);
-	?>
-    <div class="post-list-container mpcss" id="mpblog-list-container">
+
+
+    <div class="post-list-container mpcss">
         <div class="row">
             <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1){
 				?>
@@ -64,15 +53,8 @@ if ($checkRss):
 
 
                                 <div class="mp-post-info">
-                                    <?php echo __('Posted on ') . $block->formatCreatedAt($post->getCreatedAt()); ?>
-									<?php
-									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
-                                    ?>
-                                    <?php
-                                    if ($block->getAuthorByPost($post->getAuthorId()) && $block->getBlogConfig('general/display_author')){
-										echo __('| By : '. $block->getAuthorByPost($post->getAuthorId()));
-                                    }
-                                    ?>
+                                    <?php echo __('Posted on') . $block->formatCreatedAt($post->getCreatedAt()); ?> |
+									<?php echo __('Posted in') . $block->getPostCategoryHtml($post); ?>
                                 </div>
 
 
@@ -129,16 +111,10 @@ if ($checkRss):
                                     </a>
                                 </h2>
 
+
                                 <div class="mp-post-info">
-                                    <?php echo __('Posted on ') . $block->formatCreatedAt($post->getCreatedAt()); ?>
-									<?php
-									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
-                                    ?>
-									<?php
-									if ($block->getAuthorByPost($post->getAuthorId()) && $block->getBlogConfig('general/display_author')){
-										echo __('| By : '. $block->getAuthorByPost($post->getAuthorId()));
-									}
-                                    ?>
+                                    <?php echo __('Posted on') . $block->formatCreatedAt($post->getCreatedAt()); ?> |
+									<?php echo __('Posted in') . $block->getPostCategoryHtml($post); ?>
                                 </div>
 
 
@@ -147,6 +123,7 @@ if ($checkRss):
                                 </div>
 
                                 <div class="mp-clearfix"></div>
+
 
                                 <div class="mp-post-meta-info mp-alignright">
                                         <div class="actions">
@@ -165,56 +142,9 @@ if ($checkRss):
     </div>
 
 
-	<?php if($countPage > 1): ?>
-        <ul class="items mp-blog-pages" aria-labelledby="paging-label">
-        <?php
-            for ($i = 1; $i <= $countPage; $i++):
-        ?>
-            <li class="item mp-page-item">
-                <a href="<?php
-                if ($block->getMonthParam())
-                {
-					echo $this->getUrl('*/*/*', ['_use_rewrite' => true]) .'?month='.$block->getMonthParam().'&p=' . $i;
-                }
-                else
-                {
-					echo $this->getUrl('*/*/*', ['_use_rewrite' => true]) . '?p=' . $i;
-                }
-                ?>" class="page">
-                    <span class="label"><?php echo __('Page') ?></span>
-                        <span><?php echo $i; ?></span>
-                </a>
-            </li>
-        <?php endfor; ?>
-        </ul>
-	<?php endif; ?>
 
-<?php else : ?>
 
-    <div class="post-list-container mpcss">
-        <div class="row">
-              <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1){
-			  ?>
-            <div class="col-md-9 col-sm-6">
-                  <?php echo __('There are no posts at this moment'); ?>
-            </div>
-            <div class="mp-sidebar col-md-3 col-sm-6">
-                <?php echo $this->getChildHtml();?>
-            </div>
-            <?php }else{?>
-                    <div class="mp-sidebar col-md-3 col-sm-6">
-                        <?php echo $this->getChildHtml();?>
-                    </div>
 
-                    <div class="col-md-9 col-sm-6">
-                        <?php echo __('There are no posts at this moment'); ?>
-                    </div>
-            <?php }?>
-        </div>
-
-    </div>
-
-<?php endif; ?>
 <script>
 	less = {
         env: "production",
@@ -235,7 +165,6 @@ if ($checkRss):
 <script>
     require([
         'jquery',
-        'mpblog',
         'Mageplaza_Blog/js/lib/less.min'
     ],function ($) {
         $(document).ready(function () {

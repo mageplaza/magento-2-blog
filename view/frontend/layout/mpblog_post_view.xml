@@ -37,15 +37,10 @@
                        template="Mageplaza_Blog::sidebar/mostview.phtml"/>
                 <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category"
                        template="Mageplaza_Blog::category/widget.phtml"/>
-                <block class="Mageplaza\Blog\Block\MonthlyArchive\Widget" name="mp.blog.view.sidebar.monthly"
-                       template="Mageplaza_Blog::monthly/widget.phtml"/>
+                <block class="Mageplaza\Blog\Block\Topic\Widget" name="mp.blog.view.sidebar.topic"
+                       template="Mageplaza_Blog::topic/widget.phtml"/>
                 <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"
                        template="Mageplaza_Blog::tag/widget.phtml"/>
-            </block>
-            <block class="Magento\Cms\Block\Block" name="mageplaza_blog_author_admin">
-                <arguments>
-                    <argument name="mageplaza_blog_author_admin" xsi:type="string">mageplaza_blog_author_admin</argument>
-                </arguments>
             </block>
         </referenceContainer>
 
