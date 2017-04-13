@@ -22,9 +22,8 @@
 
 $dateArrayCount = $block->getDateArrayCount();
 $dateArrayUnique = $block->getDateArrayUnique();
-
+if ($block->getBlogConfig('monthly_archive/enable_monthly') ) {
 ?>
-
 <div class="mp-sidebar mpcss">
 	<div class="row">
 		<div class="block-title col-xs-12 sidebar-archives">
@@ -32,8 +31,8 @@ $dateArrayUnique = $block->getDateArrayUnique();
 
 		</div>
         <div class="col-xs-12">
+            <?php if ($dateArrayUnique) { ?>
             <ul class="menu-archives">
-
                  <?php
                     for ($i=0;$i<$block->getDateCount();$i++) {
 				 ?>
@@ -45,11 +44,15 @@ $dateArrayUnique = $block->getDateArrayUnique();
                              ?>
                         </a>
                 </li>
-              <?php } ?>
+              <?php     } ?>
             </ul>
             <hr>
+			<?php }else { echo __('No Records found'); ?>
+            <hr>
+            <?php } ?>
         </div>
+
     </div>
 </div>
 
-
+<?php } ?>

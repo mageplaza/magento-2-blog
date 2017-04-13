@@ -77,4 +77,8 @@ class View extends Frontend
 
         return $result;
     }
+    public function getPageFilter($content)
+	{
+		return $this->filterProvider->getPageFilter()->filter($content);
+	}
 }

@@ -19,7 +19,8 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 ?>
-<?php $_post = $block->getCurrentPost(); ?>
+<?php $_post = $block->getCurrentPost();
+?>
 <?php $checkRss = $block->checkRss();
 if ($checkRss):
 	?>
@@ -50,7 +51,7 @@ if ($checkRss):
 
 
                     <div class="post-post_content col-xs-12">
-                        <?php echo $_post->getPostContent(); ?>
+                        <?php echo $block->getPageFilter($_post->getPostContent()); ?>
                     </div>
 
                     <div class="col-xs-12">
@@ -97,7 +98,7 @@ if ($checkRss):
 
 
                         <div class="post-post_content col-xs-12">
-                            <?php echo $_post->getPostContent(); ?>
+                           <?php echo $block->getPageFilter($_post->getPostContent()); ?>
                         </div>
 
                         <div class="col-xs-12">
