@@ -20,39 +20,34 @@
  */
 namespace Mageplaza\Blog\Model;
 
-class Comment extends \Magento\Framework\Model\AbstractModel
+class Like extends \Magento\Framework\Model\AbstractModel
 {
 	/**
 	 * Cache tag
 	 *
 	 * @var string
 	 */
-	const CACHE_TAG = 'mageplaza_blog_comment';
+	const CACHE_TAG = 'mageplaza_blog_comment_like';
 
 	/**
 	 * Cache tag
 	 *
 	 * @var string
 	 */
-	protected $_cacheTag = 'mageplaza_blog_comment';
+	protected $_cacheTag = 'mageplaza_blog_comment_like';
 
 	/**
 	 * Event prefix
 	 *
 	 * @var string
 	 */
-	protected $_eventPrefix = 'mageplaza_blog_comment';
+	protected $_eventPrefix = 'mageplaza_blog_comment_like';
 
-	protected $_idFieldName = 'comment_id';
+	protected $_idFieldName = 'like_id';
 
-	/**
-	 * Post Collection Factory
-	 * @type \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
-	 */
 	public $postCollectionFactory;
 
 	public function __construct(
-		\Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
 		\Magento\Framework\Model\Context $context,
 		\Magento\Framework\Registry $registry,
 		\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -60,7 +55,6 @@ class Comment extends \Magento\Framework\Model\AbstractModel
 		array $data = []
 	)
 	{
-		$this->postCollectionFactory     = $postCollectionFactory;
 		parent::__construct($context, $registry, $resource, $resourceCollection, $data);
 	}
 
@@ -71,7 +65,7 @@ class Comment extends \Magento\Framework\Model\AbstractModel
 	 */
 	protected function _construct()
 	{
-		$this->_init('Mageplaza\Blog\Model\ResourceModel\Comment');
+		$this->_init('Mageplaza\Blog\Model\ResourceModel\Like');
 	}
 
 	public function getIdentities()

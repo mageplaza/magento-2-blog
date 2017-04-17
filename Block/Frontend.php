@@ -26,6 +26,7 @@ use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Mageplaza\Blog\Model\Comment;
 
 /**
  * Class Frontend
@@ -156,6 +157,11 @@ class Frontend extends Template
 		return $dateFormat;
 	}
 
+	public function getSeoConfig($code, $storeId = null)
+	{
+		return $this->helperData->getSeoConfig($code, $storeId);
+	}
+
 	/**
 	 * @return $this
 	 * @throws \Magento\Framework\Exception\LocalizedException
@@ -166,6 +172,8 @@ class Frontend extends Template
 		$breadcrumbs      = $this->getLayout()->getBlock('breadcrumbs');
 		$breadcrumbsLabel = ucfirst($this->helperData->getBlogConfig('general/name')
 			?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX);
+		$breadcrumbsLink = $this->helperData->getBlogConfig('general/name')
+			?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX;
 		if ($breadcrumbs) {
 			if ($actionName == 'mpblog_post_index') {
 				$breadcrumbs->addCrumb(
@@ -197,7 +205,7 @@ class Frontend extends Template
 						['label' => $breadcrumbsLabel,
 						 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 						 'link'  => $this->_storeManager->getStore()->getBaseUrl()
-							 . $this->helperData->getBlogConfig('general/url_prefix')]
+							 . $breadcrumbsLink]
 					);
 					if ($category->getId()) {
 						$breadcrumbs->addCrumb(
@@ -229,7 +237,7 @@ class Frontend extends Template
 					['label' => $breadcrumbsLabel,
 					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
-						 . $this->helperData->getBlogConfig('general/url_prefix')]
+						 . $breadcrumbsLink]
 				)->addCrumb(
 					$category->getUrlKey(),
 					['label' => ucfirst($category->getName()),
@@ -251,7 +259,7 @@ class Frontend extends Template
 					['label' => $breadcrumbsLabel,
 					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
-						 . $this->helperData->getBlogConfig('general/url_prefix')]
+						 . $breadcrumbsLink]
 				)->addCrumb(
 					'Tag' . $tag->getId(),
 					['label' => ucfirst($tag->getName()),
@@ -272,7 +280,7 @@ class Frontend extends Template
 					['label' => $breadcrumbsLabel,
 					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
 					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
-						 . $this->helperData->getBlogConfig('general/url_prefix')]
+						 . $breadcrumbsLink]
 				)->addCrumb(
 					'topic' . $topic->getId(),
 					['label' => ucfirst($topic->getName()),
@@ -287,28 +295,23 @@ class Frontend extends Template
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getPagerHtml()
-	{
-		return $this->getChildHtml('pager');
-	}
-
-	/**
 	 * @param null $post
 	 * @throws \Magento\Framework\Exception\LocalizedException
 	 */
 	public function applySeoCode($post = null)
 	{
+		$description = $this->getSeoConfig('meta_description');
+		$keywords = $this->getSeoConfig('meta_keywords');
+
 		if ($post) {
 			$title = $post->getMetaTitle();
 			$this->setPageData($title, 1, $post->getName());
 
 			$description = $post->getMetaDescription();
-			$this->setPageData($description, 2);
+			$this->setPageData($description, 2, $description);
 
 			$keywords = $post->getMetaKeywords();
-			$this->setPageData($keywords, 3);
+			$this->setPageData($keywords, 3, $keywords);
 
 			$robot = $post->getMetaRobots();
 			$array = $this->mpRobots->getOptionArray();
@@ -320,14 +323,12 @@ class Frontend extends Template
 				$pageMainTitle->setPageTitle($post->getName());
 			}
 		} else {
-			$title = $this->helperData->getBlogConfig('seo/meta_title')
+			$title = $this->getSeoConfig('meta_title')
 				?: $this->helperData->getBlogConfig('general/name');
 			$this->setPageData($title, 1, __('Blog'));
 
-			$description = $this->helperData->getBlogConfig('seo/meta_description');
 			$this->setPageData($description, 2);
 
-			$keywords = $this->helperData->getBlogConfig('seo/meta_keywords');
 			$this->setPageData($keywords, 3);
 
 			$pageMainTitle = $this->getLayout()->getBlock('page.main.title');

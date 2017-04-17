@@ -377,6 +377,17 @@ class Post extends \Magento\Framework\Model\AbstractModel
         return $dateFormat;
     }
 
+	/**
+	 * get format modified date
+	 * @return mixed
+	 */
+	public function getFormatUpdatedAt()
+	{
+		$dateFormat    = $this->dateTime->formatDate($this->getUpdatedAt(), false);
+
+		return $dateFormat;
+	}
+
     /**
      * get related posts
      * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection

@@ -271,6 +271,34 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     [],
                     'Tag URL Key'
                 )
+				->addColumn(
+					'meta_title',
+					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+					255,
+					[],
+					'Post Meta Title'
+				)
+				->addColumn(
+					'meta_description',
+					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+					'64k',
+					[],
+					'Post Meta Description'
+				)
+				->addColumn(
+					'meta_keywords',
+					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+					'64k',
+					[],
+					'Post Meta Keywords'
+				)
+				->addColumn(
+					'meta_robots',
+					\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+					null,
+					[],
+					'Post Meta Robots'
+				)
                 ->setComment('Tag Table');
             $installer->getConnection()->createTable($table);
 
@@ -868,6 +896,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 				\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
 				null,
 				[
+					'identity' => true,
 					'unsigned' => true,
 					'nullable' => false,
 					'primary'  => true,
@@ -907,7 +936,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 				null,
 				[
 					'unsigned' => true,
-					'nullable' => false,
+					'nullable' => true,
 				],
 				'Reply ID'
 			)->addColumn(
@@ -968,74 +997,6 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 			$installer->getConnection()->createTable($table);
 		}
 
-		if (! $installer->tableExists('mageplaza_blog_comment_reply')) {
-			$table = $installer->getConnection()
-				->newTable($installer->getTable('mageplaza_blog_comment_reply'));
-			$table->addColumn(
-				'reply_id',
-				\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-				null,
-				[
-					'unsigned' => true,
-					'nullable' => false,
-					'primary'  => true,
-				],
-				'Reply ID'
-			)->addColumn(
-				'comment_id',
-				\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-				null,
-				[
-					'unsigned' => true,
-					'nullable' => false,
-				],
-				'Comment ID'
-			)->addColumn(
-				'entity_id',
-				\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-				null,
-				[
-					'unsigned' => true,
-					'nullable' => false,
-				],
-				'User Comment ID'
-			)->addIndex(
-				$installer->getIdxName('mageplaza_blog_comment_reply', ['reply_id']),
-				['reply_id']
-			)->addIndex(
-				$installer->getIdxName('mageplaza_blog_comment_reply', ['comment_id']),
-				['comment_id']
-			)->addIndex(
-				$installer->getIdxName('mageplaza_blog_comment_reply', ['entity_id']),
-				['entity_id']
-			)->addForeignKey(
-				$installer->getFkName(
-					'mageplaza_blog_comment_reply',
-					'entity_id',
-					'customer_entity',
-					'entity_id'
-				),
-				'entity_id',
-				$installer->getTable('customer_entity'),
-				'entity_id',
-				\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-				\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-			)->addForeignKey(
-				$installer->getFkName(
-					'mageplaza_blog_comment_reply',
-					'comment_id',
-					'mageplaza_blog_comment',
-					'comment_id'
-				),
-				'comment_id',
-				$installer->getTable('mageplaza_blog_comment'),
-				'comment_id',
-				\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-				\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-			);
-			$installer->getConnection()->createTable($table);
-		}
-
 		if (! $installer->tableExists('mageplaza_blog_comment_like')) {
 			$table = $installer->getConnection()
 				->newTable($installer->getTable('mageplaza_blog_comment_like'));
@@ -1044,6 +1005,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 				\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
 				null,
 				[
+					'identity' => true,
 					'unsigned' => true,
 					'nullable' => false,
 					'primary'  => true,

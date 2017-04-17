@@ -93,11 +93,22 @@ class Data extends CoreHelper
 	{
 		return $this->getBlogConfig('sidebar/'.$code, $storeId);
 	}
+
+	/**
+	 * @param $code, $storeId = null
+	 * @return mixed
+	 */
+	public function getSeoConfig($code, $storeId = null)
+	{
+		return $this->getBlogConfig('seo/'.$code, $storeId);
+	}
+
 	public function getSelectedPostByMonth($type = null)
 	{
 		$month = $this->_getRequest()->getParam('month');
 		return $list = ($month) ? $type->getSelectedPostsCollection()->addFieldToFilter('created_at',['like'=>$month . '%']) : $type->getSelectedPostsCollection();
 	}
+
     public function getPostList($type = null, $id = null)
     {
 		$month = $this->_getRequest()->getParam('month');
