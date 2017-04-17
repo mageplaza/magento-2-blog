@@ -38,6 +38,8 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
 
 	public $systemStore;
 
+	public $metaRobots;
+
     /**
      * constructor
      *
@@ -52,6 +54,7 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Config\Model\Config\Source\Yesno $booleanOptions,
         \Magento\Store\Model\System\Store $systemStore,
+		\Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobotsOptions,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -61,6 +64,7 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
         $this->wysiwygConfig  = $wysiwygConfig;
         $this->booleanOptions = $booleanOptions;
         $this->systemStore = $systemStore;
+        $this->metaRobots = $metaRobotsOptions;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -140,6 +144,44 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
                 'title' => __('URL Key'),
             ]
         );
+		$fieldset->addField(
+			'meta_title',
+			'text',
+			[
+				'name'  => 'meta_title',
+				'label' => __('Meta Title'),
+				'title' => __('Meta Title'),
+			]
+		);
+		$fieldset->addField(
+			'meta_description',
+			'textarea',
+			[
+				'name'  => 'meta_description',
+				'label' => __('Meta Description'),
+				'title' => __('Meta Description'),
+			]
+		);
+		$fieldset->addField(
+			'meta_keywords',
+			'textarea',
+			[
+				'name'  => 'meta_keywords',
+				'label' => __('Meta Keywords'),
+				'title' => __('Meta Keywords'),
+			]
+		);
+		$fieldset->addField(
+			'meta_robots',
+			'select',
+			[
+				'name'  => 'meta_robots',
+				'label' => __('Meta Robots'),
+				'title' => __('Meta Robots'),
+				'values' => array_merge(['' => ''], $this->metaRobots->toOptionArray()),
+			]
+		);
+
         $tagData = $this->_session->getData('mageplaza_blog_tag_data', true);
         if ($tagData) {
             $tag->addData($tagData);

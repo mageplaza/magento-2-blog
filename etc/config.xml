@@ -57,6 +57,11 @@
                 <enabled>1</enabled>
                 <pubid_id>ra-568cdc40e9eab41d</pubid_id>
             </share>
+            <seo>
+                <snippet>
+                    <enabled>1</enabled>
+                </snippet>
+            </seo>
         </blog>
     </default>
 </config>

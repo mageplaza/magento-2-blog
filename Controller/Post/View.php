@@ -63,13 +63,16 @@ class View extends Action
 
     public function execute()
     {
-        $id=$this->getRequest()->getParams();
+        $id=$this->getRequest()->getParam('id');
         if ($id) {
             $trafficModel=$this->trafficFactory->create()->load($id, 'post_id');
             if ($trafficModel->getId()) {
                 $trafficModel->setNumbersView($trafficModel->getNumbersView()+1);
                 $trafficModel->save();
-            }
+            } else {
+            	$traffic = $this->trafficFactory->create();
+				$traffic->addData(['post_id' => $id, 'numbers_view' => 1])->save();
+			}
         }
 
         return $this->resultPageFactory->create();

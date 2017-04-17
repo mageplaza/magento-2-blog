@@ -24,6 +24,8 @@ use Mageplaza\Blog\Block\Frontend;
 
 class View extends Frontend
 {
+	const LOGO = 'mageplaza/blog/logo/';
+
 	public function checkRss()
 	{
 		return $this->helperData->getBlogUrl('post/rss');
@@ -77,4 +79,13 @@ class View extends Frontend
 
         return $result;
     }
+
+	/**
+	 * @param $image
+	 * get Logo for seo article snippet
+	 */
+    public function getLogoImage($image)
+	{
+		return $this->helperData->getBaseMediaUrl() . self::LOGO . $image;
+	}
 }
