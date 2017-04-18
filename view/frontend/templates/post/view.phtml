@@ -22,7 +22,9 @@
 <?php
 $_post = $block->getCurrentPost();
 $author = $block->getAuthorByPost($_post->getAuthorId());
+$authorName = $author !== null ? $author->getDisplayName() : '';
 $modifier = $block->getAuthorByPost($_post->getModifierId());
+$modifierName = $modifier !== null ? $modifier->getDisplayName() : '';
 ?>
 <?php $checkRss = $block->checkRss();
 if ($checkRss):
@@ -67,10 +69,10 @@ if ($checkRss):
                             <?php if ($block->getTagList($_post)) {?>
                                 | <span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span>
                             <?php } ?>
-							<?php if ($author->getDisplayName() && $block->getBlogConfig('general/display_author')){ ?>
-                                | <span><i class="fa fa-user"></i> By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($author) ?>"><?php echo $author->getDisplayName(); ?></a></span>
-                                <?php if ($author->getDisplayName() != $modifier->getDisplayName() && $modifier->getDisplayName()){ ?>
-                                    | <span><i class="fa fa-edit"></i> Modify By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($modifier) ?>"><?php echo $modifier->getDisplayName();?></a><?php echo ' at : '.$_post->getUpdatedAt(); ?></span>
+							<?php if ($authorName && $block->getBlogConfig('general/display_author')){ ?>
+                                | <span><i class="fa fa-user"></i> By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($author) ?>"><?php echo $authorName; ?></a></span>
+                                <?php if ($authorName != $modifierName && $modifierName){ ?>
+                                    | <span><i class="fa fa-edit"></i> Modify By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($modifier) ?>"><?php echo $modifierName;?></a><?php echo ' at : '.$_post->getUpdatedAt(); ?></span>
 								<?php } ?>
 							<?php } ?>
 
@@ -114,10 +116,10 @@ if ($checkRss):
 								<?php if ($block->getTagList($_post)) {?>
                                     | <span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span>
 								<?php } ?>
-								<?php if ($author->getDisplayName() && $block->getBlogConfig('general/display_author')){ ?>
-                                    | <span><i class="fa fa-user"></i> By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($author) ?>"><?php echo $author->getDisplayName(); ?></a></span>
-                                <?php if ($author->getDisplayName() != $modifier->getDisplayName() && $modifier->getDisplayName()){ ?>
-                                        | <span><i class="fa fa-edit"></i> Modify By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($modifier) ?>"><?php echo $modifier->getDisplayName();?></a><?php echo ' at : '.$_post->getUpdatedAt(); ?></span>
+								<?php if ($authorName && $block->getBlogConfig('general/display_author')){ ?>
+                                    | <span><i class="fa fa-user"></i> By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($author) ?>"><?php echo $authorName; ?></a></span>
+                                <?php if ($authorName != $modifierName && $modifierName){ ?>
+                                        | <span><i class="fa fa-edit"></i> Modify By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($modifier) ?>"><?php echo $modifierName;?></a><?php echo ' at : '.$_post->getUpdatedAt(); ?></span>
 									<?php } ?>
 								<?php } ?>
 
@@ -255,7 +257,7 @@ if ($checkRss):
                 <div class="row">
                     <div class="col-xs-10"> <h2><?php echo __('Comments'); ?></h2></div>
                     <div class="col-xs-2">
-                        <div class="default-cmt__cmt-login">
+                        <div class="default-cmt__cmt-login" <?php if ($block->isLoggedIn()) {echo 'style="display:none;"';} ?>>
                             <button class="btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
                         </div>
                     </div>
@@ -329,6 +331,17 @@ if ($checkRss):
                 </div>
             </div>
 
+            <script>
+                require([
+                    'jquery'
+                ], function ($) {
+                    var loginUrl = '<?php echo $block->getLoginUrl(); ?>';
+
+                    $('.default-cmt__cmt-login__btn-login').click(function () {
+                        window.location.href = loginUrl;
+                    });
+                });
+            </script>
 		<?php endif;
 	}?>
 </div>
@@ -387,7 +400,7 @@ if ($checkRss):
   "dateModified": "<?php echo $_post->getFormatUpdatedAt(); ?>",
   "author": {
     "@type": "Person",
-    "name": "<?php echo $author->getDisplayName(); ?>"
+    "name": "<?php echo $authorName; ?>"
   },
    "publisher": {
     "@type": "Organization",

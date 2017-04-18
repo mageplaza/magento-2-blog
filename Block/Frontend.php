@@ -55,6 +55,8 @@ class Frontend extends Template
 	 */
 	public $mpRobots;
 	public $filterProvider;
+	public $customerSession;
+	public $loginUrl;
 
 	/**
 	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
@@ -68,6 +70,8 @@ class Frontend extends Template
 	public function __construct(
 		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
 		\Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobots,
+		\Magento\Customer\Model\Session $session,
+		\Magento\Customer\Model\Url $url,
 		Context $context,
 		HelperData $helperData,
 		TemplateContext $templateContext,
@@ -77,6 +81,8 @@ class Frontend extends Template
 	{
 		$this->dateTime   = $dateTime;
 		$this->mpRobots   = $metaRobots;
+		$this->customerSession = $session;
+		$this->loginUrl = $url;
 		$this->helperData = $helperData;
 		$this->store      = $templateContext->getStoreManager();
 		$this->filterProvider = $filterProvider;
@@ -483,12 +489,30 @@ class Frontend extends Template
 
 		return $this->getBaseUrl() .'/mpblog/sitemap/';
 	}
+
 	public function getAuthorByPost($authorId)
 	{
 		return $this->helperData->getAuthorByPost($authorId);
 	}
+
 	public function getAuthorUrl($author)
 	{
 		return $this->helperData->getAuthorUrl($author);
+	}
+
+	/**
+	 * check customer is logged in or not
+	 */
+	public function isLoggedIn()
+	{
+		return $this->customerSession->isLoggedIn();
+	}
+
+	/**
+	 * get login url
+	 */
+	public function getLoginUrl()
+	{
+		return $this->loginUrl->getLoginUrl();
 	}
 }
