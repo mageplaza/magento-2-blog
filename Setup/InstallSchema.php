@@ -856,6 +856,31 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 					[],
 					'Display Name'
 				)
+				->addColumn(
+					'url_key',
+					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+					255,
+					[],
+					'Author URL Key'
+				)
+				->addColumn(
+					'created_at',
+					\Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+					null,
+					[
+						'default'=>	\Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT
+					],
+					'Author Created At'
+				)
+				->addColumn(
+					'updated_at',
+					\Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+					null,
+					[
+						'default'=>	\Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT
+					],
+					'Author Updated At'
+				)
 				->addForeignKey(
 					$installer->getFkName(
 						'mageplaza_blog_author',

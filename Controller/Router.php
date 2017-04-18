@@ -146,6 +146,14 @@ class Router implements \Magento\Framework\App\RouterInterface
 				$action = 'index';
 
 				break;
+			case 'author':
+				$path = array_shift($routePath);
+				$author  = $this->helper->getAuthorByParam('url_key', $path);
+
+				$action = 'view';
+				$params = ['id' => $author->getId()];
+
+				break;
 			default:
 				$post = $this->helper->getPostByUrl($controller);
 
