@@ -170,24 +170,6 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     [],
                     'Post Updated At'
                 )
-				->addColumn(
-					'author_id',
-					\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-					null,
-					[
-						'unsigned' => true,
-					],
-					'Author ID'
-				)
-				->addColumn(
-					'modifier_id',
-					\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-					null,
-					[
-						'unsigned' => true,
-					],
-					'Modifier ID'
-				)
                 ->setComment('Post Table');
             $installer->getConnection()->createTable($table);
 
