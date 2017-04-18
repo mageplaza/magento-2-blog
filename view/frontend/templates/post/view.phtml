@@ -203,7 +203,7 @@ if ($checkRss):
     </div>
 
 <?php endif; ?>
-<div class=" mp-comment">
+<div class="mpcss mp-comment">
     <?php if( $_post->getAllowComment()==1) { ?>
 		<?php $typeComment = $block->checkComment(); ?>
 		<?php if ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>
@@ -242,13 +242,87 @@ if ($checkRss):
 
 
 				<div class="fb-comments" data-href="<?php echo $block->getUrlByPost($_post); ?>" data-numposts="<?php echo $block->helperComment('facebook_number_comment'); ?>"
-                     data-width="100%" data-colorscheme="<?php echo $block->helperComment('facebook_colorscheme') ?>" ddata-order-by="<?php echo $block->helperComment('facebook_order_by') ?>"></div>
+                     data-width="100%" data-colorscheme="<?php echo $block->helperComment('facebook_colorscheme') ?>" data-order-by="<?php echo $block->helperComment('facebook_order_by') ?>"></div>
 
     		</div>
 
         <?php elseif ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DEFAULT_COMMENT): ?>
-            <div class="mpblog-default-comment">
-                <h2><?php echo __('Comments'); ?></h2>
+            <div class="container default-cmt">
+                <div class="row">
+                    <div class="col-xs-10"> <h2><?php echo __('Comments'); ?></h2></div>
+                    <div class="col-xs-2">
+                        <div class="default-cmt__cmt-login">
+                            <button class="btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="default-cmt__content">
+                            <?php
+							/**
+							 * Comment box
+							 */
+                             ?>
+                            <div class="default-cmt__content__cmt-block">
+                                <div class="default-cmt__content__cmt-block__cmt-box">
+                                    <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input" placeholder="<?php echo __('Type comments here...') ?>"></textarea>
+                                    <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
+                                        <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit btn-primary"><?php echo __('Comment') ?></button>
+                                        <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-cancel"><?php echo __('Cancel') ?></button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <?php
+							/**
+							 * Comment rows
+							 */
+                            ?>
+                            <div class="default-cmt__content__show-cmt show-cmt row">
+                                <div class="show-cmt__cmt-row col-xs-12" data-cmt-id="<?php /*comment id*/ echo 1; ?>">
+                                    <div class="show-cmt__cmt-row__cmt-username">
+                                        <span class="show-cmt__cmt-row__cmt-username username"><?php echo __('User name') ?></span>
+                                    </div>
+                                    <div class="show-cmt__cmt-row__cmt-content">
+                                        <p>This is comment. This is comment. This is comment. This is comment. This is comment.</p>
+                                    </div>
+                                    <div class="show-cmt__cmt-row__cmt-interactions interactions">
+                                        <div class="interactions__btn-actions">
+                                            <a class="interactions__btn-actions btn-like" href="#"><?php echo __('Like') ?></a>
+                                            <a class="interactions__btn-actions btn-reply" href="#"><?php echo __('Reply') ?></a>
+                                            <a class="interactions__btn-actions count-like" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                                        </div>
+                                        <div class="interactions__cmt-createdat">
+                                            <span>April 18, 2017 3:00pm</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <?php /*Reply*/ ?>
+                                <div class="show-cmt__cmt-row col-xs-12 <?php if ($isReply = 1) {echo ' is-reply';} ?>" data-cmt-id="<?php /*comment id*/ echo 2; ?>" data-reply="<?php /*reply id*/ echo 1; ?>">
+                                    <div class="show-cmt__cmt-row__cmt-username">
+                                        <span class="show-cmt__cmt-row__cmt-username username"><?php echo __('User reply') ?></span>
+                                    </div>
+                                    <div class="show-cmt__cmt-row__cmt-content">
+                                        <p>This is comment. This is comment. This is comment. This is comment. This is comment.</p>
+                                    </div>
+                                    <div class="show-cmt__cmt-row__cmt-interactions interactions">
+                                        <div class="interactions__btn-actions">
+                                            <a class="interactions__btn-actions btn-like" href="#"><?php echo __('Like') ?></a>
+                                            <a class="interactions__btn-actions btn-reply" href="#"><?php echo __('Reply') ?></a>
+                                            <a class="interactions__btn-actions count-like" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                                        </div>
+                                        <div class="interactions__cmt-createdat">
+                                            <span>April 18, 2017 3:00pm</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 		<?php endif;
