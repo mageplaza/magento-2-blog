@@ -45,6 +45,10 @@
                     <description>100</description>
                 </search>
             </sidebar>
+            <monthly_archive>
+                <enable_monthly>1</enable_monthly>
+                <number_records>5</number_records>
+            </monthly_archive>
             <comment>
                 <type>4</type>
                 <disqus>mageplazablog</disqus>

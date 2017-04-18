@@ -61,16 +61,17 @@ class Widget extends Frontend
 	public function getDateCount()
 	{
 		$count=0;
+		$limit = $this->getBlogConfig('monthly_archive/number_records');
 		$dateArrayCount = $this->getDateArrayCount();
 		foreach ($dateArrayCount as $dateCount){
 			$count++;
 		}
-		return $count;
+		$result = ($count < $limit) ? $count : $limit ;
+		return $result;
 	}
 
 	public function getCurrentUrl($query)
 	{
-
 		return $this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true, '_query' => $query]);
 	}
 

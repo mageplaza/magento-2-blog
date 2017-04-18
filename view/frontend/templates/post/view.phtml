@@ -19,7 +19,11 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 ?>
-<?php $_post = $block->getCurrentPost(); ?>
+<?php
+$_post = $block->getCurrentPost();
+$author = $block->getAuthorByPost($_post->getAuthorId());
+$modifier = $block->getAuthorByPost($_post->getModifierId());
+?>
 <?php $checkRss = $block->checkRss();
 if ($checkRss):
 	?>
@@ -50,7 +54,7 @@ if ($checkRss):
 
 
                     <div class="post-post_content col-xs-12">
-                        <?php echo $_post->getPostContent(); ?>
+                         <?php echo $block->getPageFilter($_post->getPostContent()); ?>
                     </div>
 
                     <div class="col-xs-12">
@@ -63,10 +67,10 @@ if ($checkRss):
                             <?php if ($block->getTagList($_post)) {?>
                                 | <span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span>
                             <?php } ?>
-							<?php if ($block->getAuthorByPost($_post->getAuthorId()) && $block->getBlogConfig('general/display_author')){ ?>
-                                | <span><i class="fa fa-user"></i><?php echo __(' By: '). $block->getAuthorByPost($_post->getAuthorId()); ?></span>
-                                <?php if ($block->getAuthorByPost($_post->getAuthorId()) != $block->getAuthorByPost($_post->getModifierId())){ ?>
-                                    | <span><i class="fa fa-edit"></i><?php echo __(' Modify By: '). $block->getAuthorByPost($_post->getModifierId()).' at : '.$_post->getUpdatedAt(); ?></span>
+							<?php if ($author->getDisplayName() && $block->getBlogConfig('general/display_author')){ ?>
+                                | <span><i class="fa fa-user"></i> By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($author) ?>"><?php echo $author->getDisplayName(); ?></a></span>
+                                <?php if ($author->getDisplayName() != $modifier->getDisplayName() && $modifier->getDisplayName()){ ?>
+                                    | <span><i class="fa fa-edit"></i> Modify By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($modifier) ?>"><?php echo $modifier->getDisplayName();?></a><?php echo ' at : '.$_post->getUpdatedAt(); ?></span>
 								<?php } ?>
 							<?php } ?>
 
@@ -97,7 +101,7 @@ if ($checkRss):
 
 
                         <div class="post-post_content col-xs-12">
-                            <?php echo $_post->getPostContent(); ?>
+                            <?php echo $block->getPageFilter($_post->getPostContent()); ?>
                         </div>
 
                         <div class="col-xs-12">
@@ -110,10 +114,10 @@ if ($checkRss):
 								<?php if ($block->getTagList($_post)) {?>
                                     | <span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span>
 								<?php } ?>
-								<?php if ($block->getAuthorByPost($_post->getAuthorId()) && $block->getBlogConfig('general/display_author')){ ?>
-                                    | <span><i class="fa fa-user"></i><?php echo __(' By: '). $block->getAuthorByPost($_post->getAuthorId()); ?></span>
-                                    <?php if ($block->getAuthorByPost($_post->getAuthorId()) != $block->getAuthorByPost($_post->getModifierId())){ ?>
-                                        | <span><i class="fa fa-edit"></i><?php echo __(' Modify By: '). $block->getAuthorByPost($_post->getModifierId().' at : '.$_post->getUpdatedAt()); ?></span>
+								<?php if ($author->getDisplayName() && $block->getBlogConfig('general/display_author')){ ?>
+                                    | <span><i class="fa fa-user"></i> By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($author) ?>"><?php echo $author->getDisplayName(); ?></a></span>
+                                <?php if ($author->getDisplayName() != $modifier->getDisplayName() && $modifier->getDisplayName()){ ?>
+                                        | <span><i class="fa fa-edit"></i> Modify By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($modifier) ?>"><?php echo $modifier->getDisplayName();?></a><?php echo ' at : '.$_post->getUpdatedAt(); ?></span>
 									<?php } ?>
 								<?php } ?>
 
@@ -383,7 +387,7 @@ if ($checkRss):
   "dateModified": "<?php echo $_post->getFormatUpdatedAt(); ?>",
   "author": {
     "@type": "Person",
-    "name": "<?php echo $block->getAuthorByPost($_post->getAuthorId()); ?>"
+    "name": "<?php echo $author->getDisplayName(); ?>"
   },
    "publisher": {
     "@type": "Organization",
