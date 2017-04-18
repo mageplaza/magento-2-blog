@@ -35,7 +35,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Author
 	 * @var \Magento\Backend\Helper\Js
 	 */
 	public $jsHelper;
-
+	public $date;
 	/**
 	 * constructor
 	 *
@@ -49,12 +49,14 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Author
 	public function __construct(
 		\Magento\Backend\Helper\Js $jsHelper,
 		\Mageplaza\Blog\Model\AuthorFactory $authorFactory,
+		\Magento\Framework\Stdlib\DateTime\DateTime $date,
 		\Magento\Framework\Registry $registry,
 		\Magento\Backend\App\Action\Context $context
 	) {
 
 		$this->backendSession = $context->getSession();
 		$this->jsHelper       = $jsHelper;
+		$this->date         = $date;
 		parent::__construct($authorFactory, $registry, $context);
 	}
 
@@ -66,6 +68,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Author
 	public function execute()
 	{
 		$data = $this->getRequest()->getPost('author');
+		$data['updated_at'] = $this->date->date();
 		$resultRedirect = $this->resultRedirectFactory->create();
 		if ($data) {
 			$author = $this->initAuthor();
