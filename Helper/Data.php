@@ -128,7 +128,9 @@ class Data extends CoreHelper
         } elseif ($type == 'topic') {
             $topic = $topicModel->load($id);
 			$list = $this->getSelectedPostByMonth($topic);
-        }
+        } elseif ($type == 'author') {
+			$list = $posts->getCollection()->addFieldToFilter('author_id',$id);
+		}
 
         if ($list->getSize()) {
             $list->setOrder('created_at', 'desc')
@@ -209,8 +211,7 @@ class Data extends CoreHelper
 	{
 		$author = $this->authorfactory->create();
 		$list = $author->load($authorId);
-			$result = $list->getDisplayName();
-		return $result;
+		return $list;
 	}
     public function getBlogUrl($code)
     {
@@ -273,6 +274,11 @@ class Data extends CoreHelper
         return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/tag/' . $tag->getUrlKey());
     }
 
+	public function getAuthorUrl($author)
+	{
+		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/author/' . $author->getUrlKey());
+	}
+
     public function getTopicUrl($topic)
     {
         return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/topic/' . $topic->getUrlKey());
@@ -316,6 +322,14 @@ class Data extends CoreHelper
             return $this->tagfactory->create()->load($param, $code);
         }
     }
+	public function getAuthorByParam($code, $param)
+	{
+		if ($code == 'id') {
+			return $this->authorfactory->create()->load($param);
+		} else {
+			return $this->authorfactory->create()->load($param, $code);
+		}
+	}
     public function getTopicByParam($code, $param)
     {
         if ($code == 'id') {
@@ -352,7 +366,7 @@ class Data extends CoreHelper
             '*'
         );
         $posts->setOrder('numbers_view', 'DESC');
-        $postList = $this->filterItems($posts, $this->getBlogConfig('sidebar/number_mostview_posts'));
+        $postList = $this->filterPost($posts, $this->getBlogConfig('sidebar/number_mostview_posts'));
         if ($postList == '') {
             return '';
         }
@@ -368,7 +382,7 @@ class Data extends CoreHelper
             ->getCollection()
             ->addFieldToFilter('enabled', 1)
             ->setOrder('created_at', 'DESC');
-        $postList = $this->filterItems($posts, $this->getBlogConfig('sidebar/number_recent_posts'));
+        $postList = $this->filterPost($posts, $this->getBlogConfig('sidebar/number_recent_posts'));
         if ($postList == '') {
             return '';
         }
@@ -401,6 +415,28 @@ class Data extends CoreHelper
 		return $results;
     }
 
+	public function filterPost($items, $limit )
+	{
+		$storeId = $this->store->getStore()->getId();
+		$count = 0;
+		$results = array();
+		foreach ($items as $item) {
+			$itemStoreIds = $item->getStoreIds();
+			$itemStore = $itemStoreIds !== null ? explode(',', $itemStoreIds) : '';
+			if (is_array($itemStore) && (in_array($storeId, $itemStore) || in_array('0', $itemStore))) {
+				if ($limit && $count >= $limit) {
+					break;
+				}
+				$count++;
+				array_push($results, $item);
+			}
+		}
+
+		if ($count == 0 || $limit == 0) {
+			return '';
+		}
+		return $results;
+	}
     /**
 	 * get search blog's data
 	 */

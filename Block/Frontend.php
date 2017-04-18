@@ -27,6 +27,7 @@ use Mageplaza\Blog\Helper\Data as HelperData;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Mageplaza\Blog\Model\Comment;
+use Magento\Cms\Model\Template\FilterProvider;
 
 /**
  * Class Frontend
@@ -53,6 +54,7 @@ class Frontend extends Template
 	 * @type \Mageplaza\Blog\Model\Post\Source\MetaRobots
 	 */
 	public $mpRobots;
+	public $filterProvider;
 
 	/**
 	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
@@ -60,6 +62,7 @@ class Frontend extends Template
 	 * @param \Magento\Framework\View\Element\Template\Context $context
 	 * @param \Mageplaza\Blog\Helper\Data $helperData
 	 * @param \Magento\Framework\View\Element\Template\Context $templateContext
+	 * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
 	 * @param array $data
 	 */
 	public function __construct(
@@ -68,6 +71,7 @@ class Frontend extends Template
 		Context $context,
 		HelperData $helperData,
 		TemplateContext $templateContext,
+		FilterProvider $filterProvider,
 		array $data = []
 	)
 	{
@@ -75,7 +79,7 @@ class Frontend extends Template
 		$this->mpRobots   = $metaRobots;
 		$this->helperData = $helperData;
 		$this->store      = $templateContext->getStoreManager();
-
+		$this->filterProvider = $filterProvider;
 		parent::__construct($context, $data);
 	}
 
@@ -172,7 +176,7 @@ class Frontend extends Template
 		$breadcrumbs      = $this->getLayout()->getBlock('breadcrumbs');
 		$breadcrumbsLabel = ucfirst($this->helperData->getBlogConfig('general/name')
 			?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX);
-		$breadcrumbsLink = $this->helperData->getBlogConfig('general/name')
+		$breadcrumbsLink = $this->helperData->getBlogConfig('general/url_prefix')
 			?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX;
 		if ($breadcrumbs) {
 			if ($actionName == 'mpblog_post_index') {
@@ -395,6 +399,8 @@ class Frontend extends Template
 			$postList = $this->helperData->getPostList('tag', $id);
 		} elseif ($type == 'topic') {
 			$postList = $this->helperData->getPostList('topic', $id);
+		} elseif ($type == 'author') {
+			$postList = $this->helperData->getPostList('author', $id);
 		}
 
 		if ($postList != '' && is_array($postList)) {
@@ -480,5 +486,9 @@ class Frontend extends Template
 	public function getAuthorByPost($authorId)
 	{
 		return $this->helperData->getAuthorByPost($authorId);
+	}
+	public function getAuthorUrl($author)
+	{
+		return $this->helperData->getAuthorUrl($author);
 	}
 }
