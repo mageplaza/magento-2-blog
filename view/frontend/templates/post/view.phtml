@@ -67,10 +67,10 @@ if ($checkRss):
                             <?php if ($block->getTagList($_post)) {?>
                                 | <span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span>
                             <?php } ?>
-							<?php if ($author->getDisplayName() && $block->getBlogConfig('general/display_author')){ ?>
-                                | <span><i class="fa fa-user"></i> By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($author) ?>"><?php echo $author->getDisplayName(); ?></a></span>
-                                <?php if ($author->getDisplayName() != $modifier->getDisplayName() && $modifier->getDisplayName()){ ?>
-                                    | <span><i class="fa fa-edit"></i> Modify By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($modifier) ?>"><?php echo $modifier->getDisplayName();?></a><?php echo ' at : '.$_post->getUpdatedAt(); ?></span>
+							<?php if ($author->getName() && $block->getBlogConfig('general/display_author')){ ?>
+                                | <span><i class="fa fa-user"></i> By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($author) ?>"><?php echo $author->getName(); ?></a></span>
+                                <?php if ($author->getName() != $modifier->getName() && $modifier->getName()){ ?>
+                                    | <span><i class="fa fa-edit"></i> Modify By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($modifier) ?>"><?php echo $modifier->getName();?></a><?php echo ' at : '.$_post->getUpdatedAt(); ?></span>
 								<?php } ?>
 							<?php } ?>
 
@@ -114,10 +114,10 @@ if ($checkRss):
 								<?php if ($block->getTagList($_post)) {?>
                                     | <span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span>
 								<?php } ?>
-								<?php if ($author->getDisplayName() && $block->getBlogConfig('general/display_author')){ ?>
-                                    | <span><i class="fa fa-user"></i> By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($author) ?>"><?php echo $author->getDisplayName(); ?></a></span>
-                                <?php if ($author->getDisplayName() != $modifier->getDisplayName() && $modifier->getDisplayName()){ ?>
-                                        | <span><i class="fa fa-edit"></i> Modify By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($modifier) ?>"><?php echo $modifier->getDisplayName();?></a><?php echo ' at : '.$_post->getUpdatedAt(); ?></span>
+								<?php if ($author->getName() && $block->getBlogConfig('general/display_author')){ ?>
+                                    | <span><i class="fa fa-user"></i> By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($author) ?>"><?php echo $author->getName(); ?></a></span>
+                                <?php if ($author->getName() != $modifier->getName() && $modifier->getName()){ ?>
+                                        | <span><i class="fa fa-edit"></i> Modify By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($modifier) ?>"><?php echo $modifier->getName();?></a><?php echo ' at : '.$_post->getUpdatedAt(); ?></span>
 									<?php } ?>
 								<?php } ?>
 
@@ -313,7 +313,7 @@ if ($checkRss):
   "dateModified": "<?php echo $_post->getFormatUpdatedAt(); ?>",
   "author": {
     "@type": "Person",
-    "name": "<?php echo $author->getDisplayName(); ?>"
+    "name": "<?php echo $author->getName(); ?>"
   },
    "publisher": {
     "@type": "Organization",

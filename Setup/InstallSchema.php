@@ -817,84 +817,6 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ->setComment('Category To Post Link Table');
             $installer->getConnection()->createTable($table);
         }
-		if (! $installer->tableExists('mageplaza_blog_author')) {
-			$table = $installer->getConnection()
-				->newTable($installer->getTable('mageplaza_blog_author'));
-			$table->addColumn(
-				'user_id',
-				\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-				null,
-				[
-					'unsigned' => true,
-					'nullable' => false,
-					'primary'  => true,
-				],
-				'User ID'
-			)
-				->addColumn(
-					'display_name',
-					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-					255,
-					[],
-					'Display Name'
-				)
-				->addColumn(
-					'url_key',
-					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-					255,
-					[],
-					'Author URL Key'
-				)
-				->addColumn(
-					'created_at',
-					\Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
-					null,
-					[
-						'default'=>	\Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT
-					],
-					'Author Created At'
-				)
-				->addColumn(
-					'updated_at',
-					\Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
-					null,
-					[
-						'default'=>	\Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT
-					],
-					'Author Updated At'
-				)
-				->addForeignKey(
-					$installer->getFkName(
-						'mageplaza_blog_author',
-						'user_id',
-						'admin_user',
-						'user_id'
-					),
-					'user_id',
-					$installer->getTable('admin_user'),
-					'user_id',
-					\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-					\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-				)
-				->addIndex(
-					$installer->getIdxName(
-						'mageplaza_blog_author',
-						[
-							'user_id'
-						],
-						\Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-					),
-					[
-						'user_id'
-					],
-					[
-						'type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-					]
-				)
-				->setComment('Author Table');
-			$installer->getConnection()->createTable($table);
-		}
-
 		if (! $installer->tableExists('mageplaza_blog_comment')) {
 			$table = $installer->getConnection()
 				->newTable($installer->getTable('mageplaza_blog_comment'));
@@ -977,33 +899,32 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 				\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
 				\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 			)->addForeignKey(
-					$installer->getFkName(
-						'mageplaza_blog_comment',
-						'post_id',
-						'mageplaza_blog_post',
-						'post_id'
-					),
+				$installer->getFkName(
+					'mageplaza_blog_comment',
 					'post_id',
-					$installer->getTable('mageplaza_blog_post'),
-					'post_id',
-					\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-					\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+					'mageplaza_blog_post',
+					'post_id'
+				),
+				'post_id',
+				$installer->getTable('mageplaza_blog_post'),
+				'post_id',
+				\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+				\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 			)->addForeignKey(
-					$installer->getFkName(
-						'mageplaza_blog_comment',
-						'reply_id',
-						'mageplaza_blog_comment_reply',
-						'reply_id'
-					),
+				$installer->getFkName(
+					'mageplaza_blog_comment',
 					'reply_id',
-					$installer->getTable('mageplaza_blog_comment_reply'),
-					'reply_id',
-					\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-					\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-				);
+					'mageplaza_blog_comment_reply',
+					'reply_id'
+				),
+				'reply_id',
+				$installer->getTable('mageplaza_blog_comment_reply'),
+				'reply_id',
+				\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+				\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+			);
 			$installer->getConnection()->createTable($table);
 		}
-
 		if (! $installer->tableExists('mageplaza_blog_comment_like')) {
 			$table = $installer->getConnection()
 				->newTable($installer->getTable('mageplaza_blog_comment_like'));
@@ -1066,7 +987,6 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 			);
 			$installer->getConnection()->createTable($table);
 		}
-
         $installer->endSetup();
     }
 }

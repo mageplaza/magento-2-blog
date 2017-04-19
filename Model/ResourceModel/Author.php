@@ -31,7 +31,7 @@ class Author extends AbstractDb
 	{
 		if ($object->isObjectNew()) {
 			$count   = 0;
-			$objName = $object->getDisplayName();
+			$objName = $object->getName();
 			if ($object->getUrlKey()) {
 				$urlKey = $object->getUrlKey();
 			} else {
@@ -45,7 +45,7 @@ class Author extends AbstractDb
 		} else {
 			$objectId = $object->getId();
 			$count    = 0;
-			$objName  = $object->getDisplayName();
+			$objName  = $object->getName();
 			if ($object->getUrlKey()) {
 				$urlKey = $object->getUrlKey();
 			} else {
