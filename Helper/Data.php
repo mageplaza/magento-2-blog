@@ -45,9 +45,13 @@ class Data extends CoreHelper
 	public $store;
 	public $modelTraffic;
 	public $authorfactory;
+	public $customerSession;
+	public $loginUrl;
 
-    public function __construct(
-        Context $context,
+	public function __construct(
+		\Magento\Customer\Model\Session $session,
+		\Magento\Customer\Model\Url $url,
+		Context $context,
         ObjectManagerInterface $objectManager,
         PostFactory $postFactory,
         CategoryFactory $categoryFactory,
@@ -57,8 +61,9 @@ class Data extends CoreHelper
         TemplateContext $templateContext,
 		\Mageplaza\Blog\Model\Traffic $traffic
     ) {
-    
-        $this->postfactory     = $postFactory;
+    	$this->customerSession = $session;
+		$this->loginUrl = $url;
+		$this->postfactory     = $postFactory;
         $this->categoryfactory = $categoryFactory;
         $this->tagfactory      = $tagFactory;
         $this->topicfactory    = $topicFactory;
@@ -481,7 +486,36 @@ class Data extends CoreHelper
 
 		return $data;
 	}
+
+	/**
+	 * @return string
+	 * get default image url
+	 */
 	public function getDefaultImageUrl(){
 		return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_STATIC).'frontend/Magento/luma/en_US/Mageplaza_Blog/media/images/Mageplaza-logo.png';
+	}
+
+	/**
+	 * check customer is logged in or not
+	 */
+	public function isLoggedIn()
+	{
+		return $this->customerSession->isLoggedIn();
+	}
+
+	/**
+	 * get login url
+	 */
+	public function getLoginUrl()
+	{
+		return $this->loginUrl->getLoginUrl();
+	}
+
+	/**
+	 * get customer data
+	 */
+	public function getCustomerData()
+	{
+		return $this->customerSession->getCustomerData();
 	}
 }

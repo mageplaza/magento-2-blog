@@ -272,9 +272,9 @@ if ($checkRss):
                              ?>
                             <div class="default-cmt__content__cmt-block">
                                 <div class="default-cmt__content__cmt-block__cmt-box">
-                                    <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input" placeholder="<?php echo __('Type comments here...') ?>"></textarea>
+                                    <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input" name="cmt_text" placeholder="<?php echo __('Type comments here...') ?>"></textarea>
                                     <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
-                                        <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit btn-primary"><?php echo __('Comment') ?></button>
+                                        <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit btn-primary" <?php if (!$block->isLoggedIn()) {echo ' disabled';} ?>><?php echo __('Comment') ?></button>
                                         <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-cancel"><?php echo __('Cancel') ?></button>
                                     </div>
                                 </div>
@@ -286,46 +286,46 @@ if ($checkRss):
 							 * Comment rows
 							 */
                             ?>
-                            <div class="default-cmt__content__show-cmt show-cmt row">
-                                <div class="show-cmt__cmt-row col-xs-12" data-cmt-id="<?php /*comment id*/ echo 1; ?>">
-                                    <div class="show-cmt__cmt-row__cmt-username">
-                                        <span class="show-cmt__cmt-row__cmt-username username"><?php echo __('User name') ?></span>
-                                    </div>
-                                    <div class="show-cmt__cmt-row__cmt-content">
-                                        <p>This is comment. This is comment. This is comment. This is comment. This is comment.</p>
-                                    </div>
-                                    <div class="show-cmt__cmt-row__cmt-interactions interactions">
-                                        <div class="interactions__btn-actions">
-                                            <a class="interactions__btn-actions btn-like" href="#"><?php echo __('Like') ?></a>
-                                            <a class="interactions__btn-actions btn-reply" href="#"><?php echo __('Reply') ?></a>
-                                            <a class="interactions__btn-actions count-like" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
-                                        </div>
-                                        <div class="interactions__cmt-createdat">
-                                            <span>April 18, 2017 3:00pm</span>
-                                        </div>
-                                    </div>
-                                </div>
+<!--                            <div class="default-cmt__content__show-cmt show-cmt row">-->
+<!--                                <div class="show-cmt__cmt-row col-xs-12" data-cmt-id="--><?php ///*comment id*/ echo 1; ?><!--">-->
+<!--                                    <div class="show-cmt__cmt-row__cmt-username">-->
+<!--                                        <span class="show-cmt__cmt-row__cmt-username username">--><?php //echo __('User name') ?><!--</span>-->
+<!--                                    </div>-->
+<!--                                    <div class="show-cmt__cmt-row__cmt-content">-->
+<!--                                        <p>This is comment. This is comment. This is comment. This is comment. This is comment.</p>-->
+<!--                                    </div>-->
+<!--                                    <div class="show-cmt__cmt-row__cmt-interactions interactions">-->
+<!--                                        <div class="interactions__btn-actions">-->
+<!--                                            <a class="interactions__btn-actions btn-like" href="#">--><?php //echo __('Like') ?><!--</a>-->
+<!--                                            <a class="interactions__btn-actions btn-reply" href="#">--><?php //echo __('Reply') ?><!--</a>-->
+<!--                                            <a class="interactions__btn-actions count-like" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>-->
+<!--                                        </div>-->
+<!--                                        <div class="interactions__cmt-createdat">-->
+<!--                                            <span>April 18, 2017 3:00pm</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
 
                                 <?php /*Reply*/ ?>
-                                <div class="show-cmt__cmt-row col-xs-12 <?php if ($isReply = 1) {echo ' is-reply';} ?>" data-cmt-id="<?php /*comment id*/ echo 2; ?>" data-reply="<?php /*reply id*/ echo 1; ?>">
-                                    <div class="show-cmt__cmt-row__cmt-username">
-                                        <span class="show-cmt__cmt-row__cmt-username username"><?php echo __('User reply') ?></span>
-                                    </div>
-                                    <div class="show-cmt__cmt-row__cmt-content">
-                                        <p>This is comment. This is comment. This is comment. This is comment. This is comment.</p>
-                                    </div>
-                                    <div class="show-cmt__cmt-row__cmt-interactions interactions">
-                                        <div class="interactions__btn-actions">
-                                            <a class="interactions__btn-actions btn-like" href="#"><?php echo __('Like') ?></a>
-                                            <a class="interactions__btn-actions btn-reply" href="#"><?php echo __('Reply') ?></a>
-                                            <a class="interactions__btn-actions count-like" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
-                                        </div>
-                                        <div class="interactions__cmt-createdat">
-                                            <span>April 18, 2017 3:00pm</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+<!--                                <div class="show-cmt__cmt-row col-xs-12 --><?php //if ($isReply = 1) {echo ' is-reply';} ?><!--" data-cmt-id="--><?php ///*comment id*/ echo 2; ?><!--" data-reply="--><?php ///*reply id*/ echo 1; ?><!--">-->
+<!--                                    <div class="show-cmt__cmt-row__cmt-username">-->
+<!--                                        <span class="show-cmt__cmt-row__cmt-username username">--><?php //echo __('User reply') ?><!--</span>-->
+<!--                                    </div>-->
+<!--                                    <div class="show-cmt__cmt-row__cmt-content">-->
+<!--                                        <p>This is comment. This is comment. This is comment. This is comment. This is comment.</p>-->
+<!--                                    </div>-->
+<!--                                    <div class="show-cmt__cmt-row__cmt-interactions interactions">-->
+<!--                                        <div class="interactions__btn-actions">-->
+<!--                                            <a class="interactions__btn-actions btn-like" href="#">--><?php //echo __('Like') ?><!--</a>-->
+<!--                                            <a class="interactions__btn-actions btn-reply" href="#">--><?php //echo __('Reply') ?><!--</a>-->
+<!--                                            <a class="interactions__btn-actions count-like" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>-->
+<!--                                        </div>-->
+<!--                                        <div class="interactions__cmt-createdat">-->
+<!--                                            <span>April 18, 2017 3:00pm</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -336,10 +336,44 @@ if ($checkRss):
                     'jquery'
                 ], function ($) {
                     var loginUrl = '<?php echo $block->getLoginUrl(); ?>';
+                    var cmtBox = $('.default-cmt__content__cmt-block__cmt-box__cmt-input'),
+                        submitCmt = $('.default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit');
+                    var like = '<?php echo __('Like') ?>',
+                        reply = '<?php echo __('Reply') ?>',
+                        defaultCmt = $('.default-cmt__content');
+
+                    submitComment();
 
                     $('.default-cmt__cmt-login__btn-login').click(function () {
                         window.location.href = loginUrl;
                     });
+
+                    function submitComment() {
+                        submitCmt.click(function () {
+                            var cmtText = cmtBox.val();
+
+                            $.ajax({
+                                type: 'POST',
+                                url: window.location.href,
+                                data: {cmt_text: cmtText},
+                                success: function (response) {
+                                    if (response.status == 'ok') {
+                                        displayComment(response);
+                                        cmtBox.val('');
+                                    } else if (response.status == 'error' && response.hasOwnProperty(error)){
+                                        defaultCmt.append(response.error);
+                                    }
+                                }
+                            })
+                        });
+                    }
+
+                    // display comment
+                    function displayComment(cmt) {
+                        var cmtRow = '<div class="default-cmt__content__show-cmt show-cmt row"><div class="show-cmt__cmt-row col-xs-12" data-cmt-id="'+ cmt.cmt_id +'"> <div class="show-cmt__cmt-row__cmt-username"> <span class="show-cmt__cmt-row__cmt-username username">'+ cmt.user_cmt +'</span> </div> <div class="show-cmt__cmt-row__cmt-content"> <p>'+ cmt.cmt_text +'</p> </div> <div class="show-cmt__cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> <a class="interactions__btn-actions btn-like" href="#">'+ like +'</a> <a class="interactions__btn-actions btn-reply" href="#">'+ reply +'</a> <a class="interactions__btn-actions count-like" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a> </div> <div class="interactions__cmt-createdat"> <span>'+ cmt.created_at +'</span> </div> </div> </div>';
+
+                        defaultCmt.append(cmtRow);
+                    }
                 });
             </script>
 		<?php endif;

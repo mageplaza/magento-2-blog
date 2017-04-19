@@ -39,8 +39,16 @@ class View extends Action
 	public $customerUrl;
 	public $session;
 	public $storeManager;
+	public $jsonHelper;
+	public $cmtFactory;
+	public $likeFactory;
+	public $dateTime;
 
     public function __construct(
+		\Magento\Framework\Json\Helper\Data $jsonHelper,
+		\Mageplaza\Blog\Model\CommentFactory $commentFactory,
+		\Mageplaza\Blog\Model\LikeFactory $likeFactory,
+		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         Context $context,
         StoreManagerInterface $storeManager,
         HelperBlog $helperBlog,
@@ -59,6 +67,10 @@ class View extends Action
         $this->customerUrl       = $customerUrl;
         $this->session           = $customerSession;
         $this->trafficFactory    = $trafficFactory;
+        $this->jsonHelper = $jsonHelper;
+        $this->cmtFactory = $commentFactory;
+        $this->likeFactory = $likeFactory;
+        $this->dateTime = $dateTime;
     }
 
     public function execute()
@@ -74,6 +86,36 @@ class View extends Action
 				$traffic->addData(['post_id' => $id, 'numbers_view' => 1])->save();
 			}
         }
+
+        if ($this->getRequest()->isAjax()) {
+			$cmtText = $this->getRequest()->getParam('cmt_text');
+			$customerData = $this->helperBlog->getCustomerData();
+			$commentData = [
+				'post_id'	=> $id, '',
+				'entity_id'	=> $customerData->getId(),
+				'content'	=> $cmtText,
+				'created_at'=> $this->dateTime->date()
+			];
+
+			$comment = $this->cmtFactory->create();
+
+			try {
+				$comment->addData($commentData)->save();
+				$lastCmt = $comment->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
+				$lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
+				$result = [
+					'cmt_id'	=> $lastCmtId,
+					'cmt_text' 	=> $cmtText,
+					'user_cmt'	=> $customerData->getFirstname() .' '. $customerData->getLastname(),
+					'created_at'=> __('Just now'),
+					'status' 	=> 'ok'
+				];
+			} catch (\Exception $e) {
+				$result = ['status' => 'error', 'error' => $e->getMessage()];
+			}
+
+			return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
+		}
 
         return $this->resultPageFactory->create();
     }
