@@ -291,6 +291,27 @@ class Frontend extends Template
 					 'title' => $topic->getName()]
 				);
 				$this->applySeoCode($topic);
+			} elseif ($actionName == 'mpblog_author_view') {
+				$author = $this->helperData->getAuthorByParam('id', $this->getRequest()->getParam('id'));
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				)->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
+					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						 . $breadcrumbsLink]
+				)->addCrumb(
+					'author' . $author->getId(),
+					['label' => ucfirst($author->getName()),
+					 'title' => $author->getName()]
+				);
+				$this->applySeoCode($author);
 			}
 		}
 

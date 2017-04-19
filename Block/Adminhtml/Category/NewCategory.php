@@ -39,7 +39,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
 	public $categoryCollectionFactory;
-
+	public $systemStore;
     /**
      * constructor
      *
@@ -55,11 +55,13 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
         \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
+		\Magento\Store\Model\System\Store $systemStore,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
     ) {
         $this->jsonEncoder               = $jsonEncoder;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
+		$this->systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
         $this->setUseContainer(true);
     }
@@ -72,6 +74,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareForm()
     {
         /** @var \Magento\Framework\Data\Form $form */
+
         $form = $this->_formFactory->create(
             [
                 'data' => [
@@ -96,6 +99,17 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'new_category_name'
             ]
         );
+		$fieldset->addField(
+			'store_ids',
+			'multiselect',
+			[
+				'name'  => 'store_ids',
+				'label' => __('Store Views'),
+				'title' => __('Store Views'),
+				'note' => __('Select Store Views'),
+				'values' => $this->systemStore->getStoreValuesForForm(false, true),
+			]
+		);
         // add all required fields here
         $fieldset->addField(
             'new_category_parent',
@@ -116,8 +130,8 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
                 // @codingStandardsIgnoreEnd
             ]
         );
-
         $this->setForm($form);
+        return parent::_prepareForm();
     }
 
     /**

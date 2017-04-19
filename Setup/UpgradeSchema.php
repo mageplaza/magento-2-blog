@@ -62,7 +62,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 				}
 			}
 
-			if (!$installer->tableExists('mageplaza_blog_post_traffic')) {
+			if (! $installer->tableExists('mageplaza_blog_post_traffic')) {
 				$table = $installer->getConnection()
 					->newTable($installer->getTable('mageplaza_blog_post_traffic'));
 				$table->addColumn(
@@ -136,6 +136,84 @@ class UpgradeSchema implements UpgradeSchemaInterface
 					->setComment('Traffic Post Table');
 				$installer->getConnection()->createTable($table);
 			}
+			if (! $installer->tableExists('mageplaza_blog_author')) {
+				$table = $installer->getConnection()
+					->newTable($installer->getTable('mageplaza_blog_author'));
+				$table->addColumn(
+					'user_id',
+					\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+					null,
+					[
+						'unsigned' => true,
+						'nullable' => false,
+						'primary'  => true,
+					],
+					'User ID'
+				)
+					->addColumn(
+						'name',
+						\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+						255,
+						[],
+						'Display Name'
+					)
+					->addColumn(
+						'url_key',
+						\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+						255,
+						[],
+						'Author URL Key'
+					)
+					->addColumn(
+						'created_at',
+						\Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+						null,
+						[
+							'default'=>	\Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT
+						],
+						'Author Created At'
+					)
+					->addColumn(
+						'updated_at',
+						\Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+						null,
+						[
+							'default'=>	\Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT
+						],
+						'Author Updated At'
+					)
+					->addForeignKey(
+						$installer->getFkName(
+							'mageplaza_blog_author',
+							'user_id',
+							'admin_user',
+							'user_id'
+						),
+						'user_id',
+						$installer->getTable('admin_user'),
+						'user_id',
+						\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+						\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+					)
+					->addIndex(
+						$installer->getIdxName(
+							'mageplaza_blog_author',
+							[
+								'user_id'
+							],
+							\Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+						),
+						[
+							'user_id'
+						],
+						[
+							'type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+						]
+					)
+					->setComment('Author Table');
+				$installer->getConnection()->createTable($table);
+			}
+
 			$installer->endSetup();
 		}
 
