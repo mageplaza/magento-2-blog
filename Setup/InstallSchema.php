@@ -972,7 +972,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 				'Comment content'
 			)->addColumn(
 				'created_at',
-				\Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+				\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
 				null,
 				[],
 				'Comment Created At'

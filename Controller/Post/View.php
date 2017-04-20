@@ -88,30 +88,32 @@ class View extends Action
         }
 
         if ($this->getRequest()->isAjax()) {
-			$cmtText = $this->getRequest()->getParam('cmt_text');
+        	$params = $this->getRequest()->getParams();
 			$customerData = $this->helperBlog->getCustomerData();
-			$commentData = [
-				'post_id'	=> $id, '',
-				'entity_id'	=> $customerData->getId(),
-				'content'	=> $cmtText,
-				'created_at'=> $this->dateTime->date()
-			];
+			$result = [];
 
-			$comment = $this->cmtFactory->create();
-
-			try {
-				$comment->addData($commentData)->save();
-				$lastCmt = $comment->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
-				$lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
-				$result = [
-					'cmt_id'	=> $lastCmtId,
-					'cmt_text' 	=> $cmtText,
-					'user_cmt'	=> $customerData->getFirstname() .' '. $customerData->getLastname(),
-					'created_at'=> __('Just now'),
-					'status' 	=> 'ok'
+        	if (isset($params['cmt_text'])) {
+				$cmtText = $params['cmt_text'];
+				$commentData = [
+					'post_id'	=> $id, '',
+					'entity_id'	=> $customerData->getId(),
+					'content'	=> $cmtText,
+					'created_at'=> $this->dateTime->date('M d Y') .' at '. $this->dateTime->date('H:i')
 				];
-			} catch (\Exception $e) {
-				$result = ['status' => 'error', 'error' => $e->getMessage()];
+
+				$commentModel = $this->cmtFactory->create();
+				$result = $this->commentActions(1, $customerData, $commentData, $commentModel);
+			}
+
+			if (isset($params['cmtId'])) {
+        		$cmtId = $params['cmtId'];
+        		$likeData = [
+        			'comment_id'	=> $cmtId,
+					'entity_id'		=> $customerData->getId()
+				];
+
+        		$likeModel = $this->likeFactory->create();
+        		$result = $this->commentActions(2, $customerData, $likeData, $likeModel, $cmtId);
 			}
 
 			return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
@@ -119,4 +121,65 @@ class View extends Action
 
         return $this->resultPageFactory->create();
     }
+
+    /**
+	 * like comment action
+	 */
+    public function commentActions($action, $user, $data, $model, $cmtId = null)
+	{
+		try {
+			switch ($action) {
+				//comment action
+				case 1:
+					$model->addData($data)->save();
+					$lastCmt = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
+					$lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
+					$result = [
+						'cmt_id'	=> $lastCmtId,
+						'cmt_text' 	=> $data['content'],
+						'user_cmt'	=> $user->getFirstname() .' '. $user->getLastname(),
+						'created_at'=> __('Just now'),
+						'status' 	=> 'ok'
+					];
+					break;
+				//like action
+				case 2:
+					$model->addData($data)->save();
+					$likes      = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
+					$countLikes = $likes->getSize();
+					$result     = [
+						'comment_id' => $cmtId,
+						'count_like' => $countLikes,
+						'status'     => 'ok'
+					];
+					break;
+				default:
+					$result = ['status' => 'error', 'error' => __('Action not found.')];
+					break;
+			}
+		} catch (\Exception $e) {
+			$result = ['status' => 'error', 'error' => $e->getMessage()];
+		}
+
+		return $result;
+	}
+
+	/**
+	 * check if user liked a comment
+	 * @param $userId
+	 * @param $model
+	 */
+//	public function isLikedComment($userId, $model)
+//	{
+//		$liked = $model->load($userId, 'entity_id');
+//		if ($liked) {
+//			$liked->delete();
+//			return $result     = [
+//				'status'     => 'error'
+//			];
+//		}
+//		return $result     = [
+//			'status'     => 'ok'
+//		];
+//	}
 }

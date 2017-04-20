@@ -272,10 +272,9 @@ if ($checkRss):
                              ?>
                             <div class="default-cmt__content__cmt-block">
                                 <div class="default-cmt__content__cmt-block__cmt-box">
-                                    <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input" name="cmt_text" placeholder="<?php echo __('Type comments here...') ?>"></textarea>
+                                    <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input" placeholder="<?php echo __('Type comments here...') ?>"></textarea>
                                     <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
                                         <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit btn-primary" <?php if (!$block->isLoggedIn()) {echo ' disabled';} ?>><?php echo __('Comment') ?></button>
-                                        <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-cancel"><?php echo __('Cancel') ?></button>
                                     </div>
                                 </div>
                             </div>
@@ -285,47 +284,42 @@ if ($checkRss):
 							/**
 							 * Comment rows
 							 */
+                                $comments = $block->getPostComments($_post->getId());
+                                if ($comments->getSize()) :
                             ?>
-<!--                            <div class="default-cmt__content__show-cmt show-cmt row">-->
-<!--                                <div class="show-cmt__cmt-row col-xs-12" data-cmt-id="--><?php ///*comment id*/ echo 1; ?><!--">-->
-<!--                                    <div class="show-cmt__cmt-row__cmt-username">-->
-<!--                                        <span class="show-cmt__cmt-row__cmt-username username">--><?php //echo __('User name') ?><!--</span>-->
-<!--                                    </div>-->
-<!--                                    <div class="show-cmt__cmt-row__cmt-content">-->
-<!--                                        <p>This is comment. This is comment. This is comment. This is comment. This is comment.</p>-->
-<!--                                    </div>-->
-<!--                                    <div class="show-cmt__cmt-row__cmt-interactions interactions">-->
-<!--                                        <div class="interactions__btn-actions">-->
-<!--                                            <a class="interactions__btn-actions btn-like" href="#">--><?php //echo __('Like') ?><!--</a>-->
-<!--                                            <a class="interactions__btn-actions btn-reply" href="#">--><?php //echo __('Reply') ?><!--</a>-->
-<!--                                            <a class="interactions__btn-actions count-like" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>-->
-<!--                                        </div>-->
-<!--                                        <div class="interactions__cmt-createdat">-->
-<!--                                            <span>April 18, 2017 3:00pm</span>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-
-                                <?php /*Reply*/ ?>
-<!--                                <div class="show-cmt__cmt-row col-xs-12 --><?php //if ($isReply = 1) {echo ' is-reply';} ?><!--" data-cmt-id="--><?php ///*comment id*/ echo 2; ?><!--" data-reply="--><?php ///*reply id*/ echo 1; ?><!--">-->
-<!--                                    <div class="show-cmt__cmt-row__cmt-username">-->
-<!--                                        <span class="show-cmt__cmt-row__cmt-username username">--><?php //echo __('User reply') ?><!--</span>-->
-<!--                                    </div>-->
-<!--                                    <div class="show-cmt__cmt-row__cmt-content">-->
-<!--                                        <p>This is comment. This is comment. This is comment. This is comment. This is comment.</p>-->
-<!--                                    </div>-->
-<!--                                    <div class="show-cmt__cmt-row__cmt-interactions interactions">-->
-<!--                                        <div class="interactions__btn-actions">-->
-<!--                                            <a class="interactions__btn-actions btn-like" href="#">--><?php //echo __('Like') ?><!--</a>-->
-<!--                                            <a class="interactions__btn-actions btn-reply" href="#">--><?php //echo __('Reply') ?><!--</a>-->
-<!--                                            <a class="interactions__btn-actions count-like" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>-->
-<!--                                        </div>-->
-<!--                                        <div class="interactions__cmt-createdat">-->
-<!--                                            <span>April 18, 2017 3:00pm</span>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <?php foreach ($comments as $comment): ?>
+                            <?php
+                                $isReply = (bool) $comment->getIsReply();
+                                $replyId = $isReply ? $comment->getReplyId() : '';
+                                $userCmt = $block->getUserComment($comment->getEntityId());
+                                $userName = $userCmt->getFirstName() .' '. $userCmt->getLastName();
+                            ?>
+                            <div class="default-cmt__content__show-cmt show-cmt row"
+                                 data-cmt-id="<?php /*comment id*/ echo $comment->getId(); ?>"
+                                 <?php if ($replyId) { echo 'data-reply-id="'. $replyId .'"';}?>
+                            >
+                                <div class="show-cmt__cmt-row col-xs-12">
+                                    <div class="show-cmt__cmt-row__cmt-username">
+                                        <span class="show-cmt__cmt-row__cmt-username username"><?php echo $userName ?></span>
+                                    </div>
+                                    <div class="show-cmt__cmt-row__cmt-content">
+                                        <p><?php echo $comment->getContent(); ?></p>
+                                    </div>
+                                    <div class="show-cmt__cmt-row__cmt-interactions interactions">
+                                        <div class="interactions__btn-actions">
+                                            <a class="interactions__btn-actions action btn-like" data-cmt-id="<?php echo $comment->getId() ?>"><?php echo __('Like') ?></a>
+                                            <a class="interactions__btn-actions action btn-reply" data-cmt-id="<?php echo $comment->getId() ?>" ><?php echo __('Reply') ?></a>
+                                            <a class="interactions__btn-actions count-like"><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                                <span class="count-like__like-text"><?php echo $block->getCommentLikes($comment->getId()) ?></span> </a>
+                                        </div>
+                                        <div class="interactions__cmt-createdat">
+                                            <span><?php echo $comment->getCreatedAt(); ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                <?php endforeach;?>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -341,8 +335,11 @@ if ($checkRss):
                     var like = '<?php echo __('Like') ?>',
                         reply = '<?php echo __('Reply') ?>',
                         defaultCmt = $('.default-cmt__content');
+                    var likeBtn = defaultCmt.find('a.btn-like'),
+                        replyBtn = defaultCmt.find('a.btn-reply');
 
                     submitComment();
+                    likeComment();
 
                     $('.default-cmt__cmt-login__btn-login').click(function () {
                         window.location.href = loginUrl;
@@ -373,6 +370,25 @@ if ($checkRss):
                         var cmtRow = '<div class="default-cmt__content__show-cmt show-cmt row"><div class="show-cmt__cmt-row col-xs-12" data-cmt-id="'+ cmt.cmt_id +'"> <div class="show-cmt__cmt-row__cmt-username"> <span class="show-cmt__cmt-row__cmt-username username">'+ cmt.user_cmt +'</span> </div> <div class="show-cmt__cmt-row__cmt-content"> <p>'+ cmt.cmt_text +'</p> </div> <div class="show-cmt__cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> <a class="interactions__btn-actions btn-like" href="#">'+ like +'</a> <a class="interactions__btn-actions btn-reply" href="#">'+ reply +'</a> <a class="interactions__btn-actions count-like" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a> </div> <div class="interactions__cmt-createdat"> <span>'+ cmt.created_at +'</span> </div> </div> </div>';
 
                         defaultCmt.append(cmtRow);
+                    }
+
+                    //like action
+                    function likeComment() {
+                        likeBtn.each(function () {
+                            var likeEl = $(this);
+                            likeEl.click(function () {
+                                var cmtId = $(this).attr('data-cmt-id');
+
+                                $.ajax({
+                                    type: "POST",
+                                    url: window.location.href,
+                                    data: {cmtId: cmtId},
+                                    success: function (response) {
+                                        likeEl.parent().find('.count-like__like-text').text(response.count_like);
+                                    }
+                                });
+                            });
+                        });
                     }
                 });
             </script>

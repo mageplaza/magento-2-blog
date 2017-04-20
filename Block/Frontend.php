@@ -55,6 +55,9 @@ class Frontend extends Template
 	 */
 	public $mpRobots;
 	public $filterProvider;
+	public $cmtFactory;
+	public $likeFactory;
+	public $customerRepository;
 
 	/**
 	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
@@ -68,6 +71,9 @@ class Frontend extends Template
 	public function __construct(
 		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
 		\Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobots,
+		\Mageplaza\Blog\Model\CommentFactory $commentFactory,
+		\Mageplaza\Blog\Model\LikeFactory $likeFactory,
+		\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
 		Context $context,
 		HelperData $helperData,
 		TemplateContext $templateContext,
@@ -77,6 +83,9 @@ class Frontend extends Template
 	{
 		$this->dateTime   = $dateTime;
 		$this->mpRobots   = $metaRobots;
+		$this->cmtFactory = $commentFactory;
+		$this->likeFactory = $likeFactory;
+		$this->customerRepository = $customerRepository;
 		$this->helperData = $helperData;
 		$this->store      = $templateContext->getStoreManager();
 		$this->filterProvider = $filterProvider;
@@ -508,5 +517,39 @@ class Frontend extends Template
 	public function getLoginUrl()
 	{
 		return $this->helperData->getLoginUrl();
+	}
+
+	/**
+	 * get comments
+	 * @param $postId
+	 */
+	public function getPostComments($postId)
+	{
+		$comments = $this->cmtFactory->create()->getCollection()->addFieldToFilter('post_id', $postId);
+		return $comments;
+	}
+
+	/**
+	 * get comment user
+	 * @param $userId
+	 */
+	public function getUserComment($userId)
+	{
+		$user = $this->customerRepository->getById($userId);
+		return $user;
+	}
+
+	/**
+	 * get comment likes
+	 * @param $cmtId
+	 */
+	public function getCommentLikes($cmtId)
+	{
+		$likes = $this->likeFactory->create()->getCollection()->addFieldToFilter('comment_id', $cmtId)->getSize();
+		if ($likes) {
+			return $likes;
+		}
+
+		return '';
 	}
 }
