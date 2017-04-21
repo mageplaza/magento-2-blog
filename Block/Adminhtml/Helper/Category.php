@@ -163,8 +163,8 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
             });
         </script>
 HTML;
-//        return $return . $button->toHtml();
-		return $return;
+        return $return . $button->toHtml();
+//		return $return;
     }
 
     /**

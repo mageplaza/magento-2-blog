@@ -40,28 +40,34 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
      */
 	public $categoryCollectionFactory;
 	public $systemStore;
-    /**
-     * constructor
-     *
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param array $data
-     */
+	public $booleanOptions;
+
+	/**
+	 * constructor
+	 *
+	 * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+	 * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+	 * @param \Magento\Backend\Block\Template\Context $context
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Store\Model\System\Store $systemStore
+	 * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
+	 * @param \Magento\Framework\Data\FormFactory $formFactory
+	 * @param array $data
+	 */
     public function __construct(
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
 		\Magento\Store\Model\System\Store $systemStore,
+		\Magento\Config\Model\Config\Source\Yesno $booleanOptions,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
     ) {
         $this->jsonEncoder               = $jsonEncoder;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
 		$this->systemStore = $systemStore;
+		$this->booleanOptions    = $booleanOptions;
         parent::__construct($context, $registry, $formFactory, $data);
         $this->setUseContainer(true);
     }
@@ -99,17 +105,27 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'new_category_name'
             ]
         );
-		$fieldset->addField(
-			'store_ids',
-			'multiselect',
-			[
-				'name'  => 'store_ids',
-				'label' => __('Store Views'),
-				'title' => __('Store Views'),
-				'note' => __('Select Store Views'),
-				'values' => $this->systemStore->getStoreValuesForForm(false, true),
-			]
-		);
+//		$fieldset->addField(
+//			'new_store_ids',
+//			'multiselect',
+//			[
+//				'name'  => 'new_store_ids',
+//				'label' => __('Store Views'),
+//				'title' => __('Store Views'),
+//				'note' => __('Select Store Views'),
+//				'values' => $this->systemStore->getStoreValuesForForm(false, true),
+//			]
+//		);
+//		$fieldset->addField(
+//			'new_enabled',
+//			'select',
+//			[
+//				'name'  => 'new_enabled',
+//				'label' => __('Enabled'),
+//				'title' => __('Enabled'),
+//				'values' => $this->booleanOptions->toOptionArray(),
+//			]
+//		);
         // add all required fields here
         $fieldset->addField(
             'new_category_parent',

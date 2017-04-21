@@ -31,6 +31,7 @@
                 <toplinks>1</toplinks>
                 <footer>1</footer>
                 <display_author>1</display_author>
+                <display_sitemap>1</display_sitemap>
                 <font_color>#1abc9c</font_color>
                 <pagination>10</pagination>
                 <related_post>5</related_post>
