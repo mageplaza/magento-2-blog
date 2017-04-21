@@ -308,8 +308,8 @@ class Frontend extends Template
 						 . $breadcrumbsLink]
 				)->addCrumb(
 					'author' . $author->getId(),
-					['label' => ucfirst($author->getName()),
-					 'title' => $author->getName()]
+					['label' => __('Author'),
+					 'title' => __('Author')]
 				);
 				$this->applySeoCode($author);
 			}
@@ -495,15 +495,6 @@ class Frontend extends Template
 	/**
 	 * get html sitemap url
 	 */
-	public function getHtmlSiteMapUrl()
-	{
-		$moduleRoute = $this->helperData->getBlogConfig('general/url_prefix');
-		if ($moduleRoute) {
-			return $this->getBaseUrl() . $moduleRoute .'/sitemap/';
-		}
-
-		return $this->getBaseUrl() .'/mpblog/sitemap/';
-	}
 	public function getAuthorByPost($authorId)
 	{
 		return $this->helperData->getAuthorByPost($authorId);

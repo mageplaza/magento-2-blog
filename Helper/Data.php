@@ -45,6 +45,7 @@ class Data extends CoreHelper
 	public $store;
 	public $modelTraffic;
 	public $authorfactory;
+	public $translitUrl;
 
     public function __construct(
         Context $context,
@@ -55,6 +56,7 @@ class Data extends CoreHelper
         TopicFactory $topicFactory,
 		AuthorFactory $authorFactory,
         TemplateContext $templateContext,
+		\Magento\Framework\Filter\TranslitUrl $translitUrl,
 		\Mageplaza\Blog\Model\Traffic $traffic
     ) {
     
@@ -65,6 +67,7 @@ class Data extends CoreHelper
 		$this->authorfactory    = $authorFactory;
         $this->store = $templateContext->getStoreManager();
         $this->modelTraffic = $traffic;
+        $this->translitUrl = $translitUrl;
         parent::__construct($context, $objectManager, $templateContext->getStoreManager());
     }
 
@@ -483,5 +486,32 @@ class Data extends CoreHelper
 	}
 	public function getDefaultImageUrl(){
 		return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_STATIC).'frontend/Magento/luma/en_US/Mageplaza_Blog/media/images/Mageplaza-logo.png';
+	}
+	public function generateUrlKey($name, $count)
+	{
+		$name = $this->strReplace($name);
+		$text = $this->translitUrl->filter($name);
+		if ($count == 0) {
+			$count = '';
+		}
+		if (empty($text)) {
+			return 'n-a' . $count;
+		}
+		return $text . $count;
+	}
+
+	public function strReplace($str){
+
+		$str = trim(mb_strtolower($str));
+		$str = preg_replace('/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/', 'a', $str);
+		$str = preg_replace('/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/', 'e', $str);
+		$str = preg_replace('/(ì|í|ị|ỉ|ĩ)/', 'i', $str);
+		$str = preg_replace('/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/', 'o', $str);
+		$str = preg_replace('/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/', 'u', $str);
+		$str = preg_replace('/(ỳ|ý|ỵ|ỷ|ỹ)/', 'y', $str);
+		$str = preg_replace('/(đ)/', 'd', $str);
+//			$str = preg_replace('/[^a-z0-9-\s]/', '', $str);
+//			$str = preg_replace('/([\s]+)/', '-', $str);
+		return $str;
 	}
 }

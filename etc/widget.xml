@@ -27,7 +27,7 @@
                 <label translate="true">Template</label>
                 <options>
                     <option name="posts" value="Mageplaza_Blog::widget/posts.phtml" selected="true">
-                        <label translate="true">Products Grid Template</label>
+                        <label translate="true">Default Posts Template</label>
                     </option>
                 </options>
             </parameter>

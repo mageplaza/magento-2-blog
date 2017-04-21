@@ -71,6 +71,11 @@
                     <label>Display author</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="display_sitemap" translate="label comment" type="select" sortOrder="55" showInDefault="20"
+                       showInWebsite="1" showInStore="1">
+                    <label>Display sitemap</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="font_color" translate="label comment" type="text" sortOrder="60" showInWebsite="1" showInStore="1" showInDefault="1">
                     <label>Choose blog's color</label>
                     <validate>jscolor {hash:true,refine:false}</validate>
