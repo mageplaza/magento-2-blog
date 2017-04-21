@@ -150,7 +150,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
 	public $relatedPostCollection;
 
 	public $dateTime;
-
+	public $helperData;
     /**
      * constructor
      *
@@ -171,6 +171,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
 		\Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+		\Mageplaza\Blog\Helper\Data $helperData,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -179,6 +180,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
         $this->topicCollectionFactory    = $topicCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->postCollectionFactory     = $postCollectionFactory;
+		$this->helperData = $helperData;
         $this->dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -372,9 +374,24 @@ class Post extends \Magento\Framework\Model\AbstractModel
      */
     public function getFormatCreatedAt()
     {
-        $dateFormat    = $this->dateTime->formatDate($this->getCreatedAt(), false);
-
-        return $dateFormat;
+    	$dateType = $this->helperData->getBlogConfig('general/date_type');
+    	switch ($dateType) {
+			case 1:
+				$dateFormat    = $this->dateTime->formatDate($this->getCreatedAt(), false);
+				break;
+			case 2:
+				$dateFormat = date_format(date_create($this->getCreatedAt()),"Y M d");
+				break;
+			case 3:
+				$dateFormat = date_format(date_create($this->getCreatedAt()),"d/m/Y");
+				break;
+			case 4:
+				$dateFormat = date_format(date_create($this->getCreatedAt()),"Y/m/d h:m:s");
+				break;
+		}
+//		$dateFormat = date_format(date_create($this->getCreatedAt()),"Y/m/d h:m:s");
+//		$dateFormat    = $this->dateTime->formatDate($this->getCreatedAt(), false);
+		return $dateFormat;
     }
 
 	/**
@@ -383,8 +400,23 @@ class Post extends \Magento\Framework\Model\AbstractModel
 	 */
 	public function getFormatUpdatedAt()
 	{
-		$dateFormat    = $this->dateTime->formatDate($this->getUpdatedAt(), false);
-
+		$dateType = $this->helperData->getBlogConfig('general/date_type');
+		switch ($dateType) {
+			case 1:
+				$dateFormat    = $this->dateTime->formatDate($this->getUpdatedAt(), false);
+				break;
+			case 2:
+				$dateFormat = date_format(date_create($this->getUpdatedAt()),"Y M d");
+				break;
+			case 3:
+				$dateFormat = date_format(date_create($this->getUpdatedAt()),"d/m/Y");
+				break;
+			case 4:
+				$dateFormat = date_format(date_create($this->getUpdatedAt()),"Y/m/d h:m:s");
+				break;
+		}
+//		$dateFormat = date_format(date_create($this->getCreatedAt()),"Y/m/d h:m:s");
+//		$dateFormat    = $this->dateTime->formatDate($this->getCreatedAt(), false);
 		return $dateFormat;
 	}
 
