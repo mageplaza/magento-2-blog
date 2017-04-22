@@ -580,9 +580,7 @@ textarea.default-cmt__content__cmt-block__cmt-box__cmt-input {
   min-height: 80px;
   border-radius: 4px;
 }
-.show-cmt__cmt-row {
-  margin-bottom: 15px;
-}
+
 .show-cmt__cmt-row.is-reply {
   padding-left: 50px !important;
 }
@@ -603,20 +601,23 @@ button.default-cmt__cmt-login__btn-login {
   background: @color !important;
   border-color: #999 !important;
 }
-.default-cmt__content__show-cmt.show-cmt {
-  margin-top: 10px;
+div.default-cmt__content__cmt-content {
+  margin-top: 50px;
 }
-span.show-cmt__cmt-row__cmt-username {
+span.cmt-row__cmt-username {
   font-weight: 600;
   color: @color;
 }
-.show-cmt__cmt-row__cmt-content {
+ul.default-cmt__content__cmt-content {
+  list-style: none !important;
+}
+.cmt-row__cmt-content {
   font-size: 13px;
 }
-.show-cmt__cmt-row__cmt-interactions {
+.cmt-row__cmt-interactions {
   font-size: 13px;
 }
-.show-cmt__cmt-row__cmt-content p {
+.cmt-row__cmt-content p {
   margin: 3px 0 !important;
 }
 .interactions__btn-actions {
@@ -635,6 +636,25 @@ a.interactions__btn-actions:hover {
 .interactions__cmt-createdat {
   display: inline-block;
   color: #999;
+  font-size: 13px;
+}
+.cmt-row.reply-row {
+  margin-bottom: 0 !important;
+}
+.reply-form__form-input {
+  margin-bottom: 0 !important;
+}
+.default-cmt__content__cmt-row.reply-row {
+  margin-top: 0 !important;
+}
+li.default-cmt__content__cmt-content__cmt-row.cmt-row:last-child {
+  margin-bottom: 20px !important;
+}
+.default-cmt__content__cmt-content ul:first-child {
+  padding-left: 5px !important;
+}
+li.default-cmt__content__cmt-content__cmt-row.cmt-row {
+  margin-top: 5px;
 }
 /* end style comment */
 

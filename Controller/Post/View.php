@@ -32,6 +32,9 @@ use Mageplaza\Blog\Model\TrafficFactory;
 
 class View extends Action
 {
+	const COMMENT = 1;
+	const LIKE = 2;
+
 	public $trafficFactory;
 	public $resultPageFactory;
 	public $helperBlog;
@@ -87,22 +90,26 @@ class View extends Action
 			}
         }
 
-        if ($this->getRequest()->isAjax()) {
+        if ($this->getRequest()->isAjax() && $this->helperBlog->isLoggedIn()) {
         	$params = $this->getRequest()->getParams();
 			$customerData = $this->helperBlog->getCustomerData();
 			$result = [];
 
         	if (isset($params['cmt_text'])) {
 				$cmtText = $params['cmt_text'];
+				$isReply = isset($params['isReply']) ? $params['isReply'] : 0;
+				$replyId = isset($params['replyId']) ? $params['replyId'] : 0;
 				$commentData = [
 					'post_id'	=> $id, '',
 					'entity_id'	=> $customerData->getId(),
+					'is_reply'	=> $isReply,
+					'reply_id'	=> $replyId,
 					'content'	=> $cmtText,
 					'created_at'=> $this->dateTime->date('M d Y') .' at '. $this->dateTime->date('H:i')
 				];
 
 				$commentModel = $this->cmtFactory->create();
-				$result = $this->commentActions(1, $customerData, $commentData, $commentModel);
+				$result = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
 			}
 
 			if (isset($params['cmtId'])) {
@@ -113,7 +120,7 @@ class View extends Action
 				];
 
         		$likeModel = $this->likeFactory->create();
-        		$result = $this->commentActions(2, $customerData, $likeData, $likeModel, $cmtId);
+        		$result = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
 			}
 
 			return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
@@ -130,21 +137,33 @@ class View extends Action
 		try {
 			switch ($action) {
 				//comment action
-				case 1:
+				case self::COMMENT:
 					$model->addData($data)->save();
+					$cmtHasReply = $model->getCollection()
+						->addFieldToFilter('comment_id', $data['reply_id'])
+						->getFirstItem();
+					if ($cmtHasReply->getId()) {
+						$cmtHasReply->setHasReply(1)->save();
+					}
+
 					$lastCmt = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
 					$lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
 					$result = [
 						'cmt_id'	=> $lastCmtId,
 						'cmt_text' 	=> $data['content'],
 						'user_cmt'	=> $user->getFirstname() .' '. $user->getLastname(),
+						'is_reply'	=> $data['is_reply'],
+						'reply_cmt'	=> $data['reply_id'],
 						'created_at'=> __('Just now'),
 						'status' 	=> 'ok'
 					];
 					break;
 				//like action
-				case 2:
-					$model->addData($data)->save();
+				case self::LIKE:
+					$checkLike = $this->isLikedComment($cmtId, $user->getId(), $model);
+					if (!$checkLike) {
+						$model->addData($data)->save();
+					}
 					$likes      = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
 					$countLikes = $likes->getSize();
 					$result     = [
@@ -166,20 +185,22 @@ class View extends Action
 
 	/**
 	 * check if user liked a comment
+	 * @param $cmtId
 	 * @param $userId
 	 * @param $model
 	 */
-//	public function isLikedComment($userId, $model)
-//	{
-//		$liked = $model->load($userId, 'entity_id');
-//		if ($liked) {
-//			$liked->delete();
-//			return $result     = [
-//				'status'     => 'error'
-//			];
-//		}
-//		return $result     = [
-//			'status'     => 'ok'
-//		];
-//	}
+	public function isLikedComment($cmtId, $userId, $model)
+	{
+		$liked = $model->load($cmtId, 'comment_id');
+		if ($liked->getEntityId() == $userId) {
+			try {
+				$liked->delete();
+				return true;
+			} catch (\Exception $e) {
+				return false;
+			}
+		}
+
+		return false;
+	}
 }
