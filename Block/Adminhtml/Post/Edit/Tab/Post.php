@@ -240,7 +240,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name'  => 'meta_robots',
                 'label' => __('Meta Robots'),
                 'title' => __('Meta Robots'),
-                'values' => array_merge(['' => ''], $this->metaRobotsOptions->toOptionArray()),
+                'values' => $this->metaRobotsOptions->toOptionArray(),
             ]
         );
 
