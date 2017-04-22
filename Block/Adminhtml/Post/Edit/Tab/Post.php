@@ -59,7 +59,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     public function __construct(
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Config\Model\Config\Source\Yesno $booleanOptions,
-        \Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobotsOptions,
+        \Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobotsOptions,
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,

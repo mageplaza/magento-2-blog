@@ -54,7 +54,7 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Config\Model\Config\Source\Yesno $booleanOptions,
         \Magento\Store\Model\System\Store $systemStore,
-		\Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobotsOptions,
+		\Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobotsOptions,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -178,7 +178,7 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
 				'name'  => 'meta_robots',
 				'label' => __('Meta Robots'),
 				'title' => __('Meta Robots'),
-				'values' => array_merge(['' => ''], $this->metaRobots->toOptionArray()),
+				'values' => $this->metaRobots->toOptionArray(),
 			]
 		);
 

@@ -59,7 +59,7 @@ class Category extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
     public function __construct(
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Config\Model\Config\Source\Yesno $booleanOptions,
-        \Mageplaza\Blog\Model\Category\Source\MetaRobots $metaRobotsOptions,
+        \Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobotsOptions,
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
@@ -200,7 +200,7 @@ class Category extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
                 'name'  => 'meta_robots',
                 'label' => __('Meta Robots'),
                 'title' => __('Meta Robots'),
-                'values' => array_merge(['' => ''], $this->metaRobotsOptions->toOptionArray()),
+                'values' => $this->metaRobotsOptions->toOptionArray(),
             ]
         );
 
