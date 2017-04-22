@@ -22,6 +22,7 @@
 
 $dateArrayCount = $block->getDateArrayCount();
 $dateArrayUnique = $block->getDateArrayUnique();
+$dateLabel = $block->getDateLabel();
 if ($block->getBlogConfig('monthly_archive/enable_monthly') ) {
 ?>
 <div class="mp-sidebar mpcss">
@@ -38,10 +39,10 @@ if ($block->getBlogConfig('monthly_archive/enable_monthly') ) {
                     for ($i=0;$i<$block->getDateCount();$i++) {
 				 ?>
                 <li class="archive-item" >
-                        <a class="list-archives" href="<?php echo $block->getCurrentUrl("month=" .  date("Y-m",$this->dateTime->timestamp($dateArrayUnique[$i]))) ?>">
+                        <a class="list-archives" href="<?php echo $block->getMonthlyUrl(date("Y-m",$this->dateTime->timestamp($dateArrayUnique[$i]))) ?>">
 							 <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;
                             <?php
-								 echo $dateArrayUnique[$i].'   ('.$dateArrayCount[$i].')';
+								 echo $dateLabel[$i].'   ('.$dateArrayCount[$i].')';
                              ?>
                         </a>
                 </li>

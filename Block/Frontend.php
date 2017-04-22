@@ -179,7 +179,7 @@ class Frontend extends Template
 		$breadcrumbsLink = $this->helperData->getBlogConfig('general/url_prefix')
 			?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX;
 		if ($breadcrumbs) {
-			if ($actionName == 'mpblog_post_index') {
+			if ($actionName == 'mpblog_post_index' || 'mpblog_month_view') {
 				$breadcrumbs->addCrumb(
 					'home',
 					[
@@ -422,6 +422,8 @@ class Frontend extends Template
 			$postList = $this->helperData->getPostList('topic', $id);
 		} elseif ($type == 'author') {
 			$postList = $this->helperData->getPostList('author', $id);
+		} elseif ($type == 'month') {
+			$postList = $this->helperData->getPostList('month', $id);
 		}
 
 		if ($postList != '' && is_array($postList)) {

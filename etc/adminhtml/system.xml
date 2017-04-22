@@ -131,6 +131,10 @@
                 <field id="number_records" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Number of records</label>
                 </field>
+                <field id="date_type_monthly" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Type of Datetime</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\DateFormat\TypeMonth</source_model>
+                </field>
             </group>
             <group id="comment" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Comments</label>

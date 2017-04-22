@@ -375,6 +375,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
     public function getFormatCreatedAt()
     {
     	$dateType = $this->helperData->getBlogConfig('general/date_type');
+
     	switch ($dateType) {
 			case 1:
 				$dateFormat    = $this->dateTime->formatDate($this->getCreatedAt(), false);
@@ -388,11 +389,31 @@ class Post extends \Magento\Framework\Model\AbstractModel
 			case 4:
 				$dateFormat = date_format(date_create($this->getCreatedAt()),"Y/m/d h:m:s");
 				break;
+
 		}
 //		$dateFormat = date_format(date_create($this->getCreatedAt()),"Y/m/d h:m:s");
 //		$dateFormat    = $this->dateTime->formatDate($this->getCreatedAt(), false);
 		return $dateFormat;
     }
+
+	public function getMonthlyCreatedAt()
+	{
+		$dateTypeMonthly = $this->helperData->getBlogConfig('monthly_archive/date_type_monthly');
+		switch ($dateTypeMonthly) {
+			case 1:
+				$dateFormat = date_format(date_create($this->getCreatedAt()),"m - Y");
+				break;
+			case 2:
+				$dateFormat = date_format(date_create($this->getCreatedAt()),"Y - m");
+				break;
+			case 3:
+				$dateFormat = date_format(date_create($this->getCreatedAt()),"F Y");
+				break;
+		}
+//		$dateFormat = date_format(date_create($this->getCreatedAt()),"Y/m/d h:m:s");
+//		$dateFormat    = $this->dateTime->formatDate($this->getCreatedAt(), false);
+		return $dateFormat;
+	}
 
 	/**
 	 * get format modified date
