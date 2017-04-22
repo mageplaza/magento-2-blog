@@ -52,6 +52,7 @@
             <monthly_archive>
                 <enable_monthly>1</enable_monthly>
                 <number_records>5</number_records>
+                <date_type_monthly>1</date_type_monthly>
             </monthly_archive>
             <comment>
                 <type>4</type>

@@ -22,32 +22,24 @@ namespace Mageplaza\Blog\Block\MonthlyArchive;
 
 use Mageplaza\Blog\Block\Frontend;
 
-class Widget extends Frontend
+class Listpost extends Frontend
 {
-
-	public function getDateArrayCount()
+	public function getPostList()
 	{
-		return $this->helperData->getDateArrayCount();
+		return $this->getBlogPagination('month', $this->getCurrentUrl());
 	}
-
-	public function getDateArrayUnique()
+	public function checkRss()
 	{
-		return $this->helperData->getDateArrayUnique();
+		return $this->helperData->getBlogUrl('post/rss');
 	}
-
-	public function getDateCount()
-	{
-		return $this->helperData->getDateCount();
+	public function getCurrentUrl(){
+		$currentUrl = $this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+		$arr = explode('/',$currentUrl);
+		$result = end($arr);
+		if (strpos($result,'?')){
+			$arr = explode('?',$result);
+			$result = reset($arr);
+		}
+		return $result;
 	}
-
-	public function getMonthlyUrl($month)
-	{
-		return $this->helperData->getMonthlyUrl($month);
-	}
-
-	public function getDateLabel()
-	{
-		return $this->helperData->getDateLabel();
-	}
-
 }

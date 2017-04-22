@@ -46,6 +46,7 @@ class Data extends CoreHelper
 	public $modelTraffic;
 	public $authorfactory;
 	public $translitUrl;
+	public $dateTime;
 
     public function __construct(
         Context $context,
@@ -56,6 +57,7 @@ class Data extends CoreHelper
         TopicFactory $topicFactory,
 		AuthorFactory $authorFactory,
         TemplateContext $templateContext,
+		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
 		\Magento\Framework\Filter\TranslitUrl $translitUrl,
 		\Mageplaza\Blog\Model\Traffic $traffic
     ) {
@@ -65,6 +67,7 @@ class Data extends CoreHelper
         $this->tagfactory      = $tagFactory;
         $this->topicfactory    = $topicFactory;
 		$this->authorfactory    = $authorFactory;
+		$this->dateTime   = $dateTime;
         $this->store = $templateContext->getStoreManager();
         $this->modelTraffic = $traffic;
         $this->translitUrl = $translitUrl;
@@ -114,25 +117,31 @@ class Data extends CoreHelper
 
     public function getPostList($type = null, $id = null)
     {
-		$month = $this->_getRequest()->getParam('month');
+//		$month = $this->_getRequest()->getParam('month');
         $list          = '';
         $posts         = $this->postfactory->create();
         $categoryModel = $this->categoryfactory->create();
         $tagModel      = $this->tagfactory->create();
         $topicModel    = $this->topicfactory->create();
         if ($type == null) {
-			$list = ($month) ? $posts->getCollection()->addFieldToFilter('created_at',['like'=>$month . '%']) : $posts->getCollection();
+//			$list = ($month) ? $posts->getCollection()->addFieldToFilter('created_at',['like'=>$month . '%']) : $posts->getCollection();
+			$list = $posts->getCollection();
         } elseif ($type == 'category') {
             $category = $categoryModel->load($id);
-			$list = $this->getSelectedPostByMonth($category);
+//			$list = $this->getSelectedPostByMonth($category);
+			$list     = $category->getSelectedPostsCollection();
         } elseif ($type == 'tag') {
             $tag  = $tagModel->load($id);
-			$list = $this->getSelectedPostByMonth($tag);
+//			$list = $this->getSelectedPostByMonth($tag);
+			$list = $tag->getSelectedPostsCollection();
         } elseif ($type == 'topic') {
             $topic = $topicModel->load($id);
-			$list = $this->getSelectedPostByMonth($topic);
+//			$list = $this->getSelectedPostByMonth($topic);
+			$list  = $topic->getSelectedPostsCollection();
         } elseif ($type == 'author') {
 			$list = $posts->getCollection()->addFieldToFilter('author_id',$id);
+		} elseif ($type == 'month') {
+			$list = $posts->getCollection()->addFieldToFilter('created_at',['like'=>$id . '%']);
 		}
 
         if ($list->getSize()) {
@@ -286,7 +295,10 @@ class Data extends CoreHelper
     {
         return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/topic/' . $topic->getUrlKey());
     }
-
+	public function getMonthlyUrl($month)
+	{
+		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/month/' . $month);
+	}
     public function getPostCategoryHtml($post)
     {
         $categories = $this->getCategoryCollection($post->getCategoryIds());
@@ -513,5 +525,55 @@ class Data extends CoreHelper
 //			$str = preg_replace('/[^a-z0-9-\s]/', '', $str);
 //			$str = preg_replace('/([\s]+)/', '-', $str);
 		return $str;
+	}
+	public function getPostDate()
+	{
+		$posts = $this->getPostList();
+		$postDates = array();
+		if($posts) {
+			foreach ($posts as $post) {
+				$postDates[] = $post->getCreatedAt();
+			}
+		}
+		return $postDates;
+	}
+	public function getDateLabel(){
+		$posts = $this->getPostList();
+		$postDates = array();
+
+		if($posts) {
+			foreach ($posts as $post) {
+				$postDates[] = $post->getMonthlyCreatedAt();
+			}
+		}
+		$result = array_values(array_unique($postDates));
+		return $result;
+	}
+	public function getDateArray(){
+		$dateArray = array();
+		foreach ($this->getPostDate() as $postDate){
+			$dateArray[] = date("F Y",$this->dateTime->timestamp($postDate));
+		}
+
+		return $dateArray;
+	}
+	public function getDateArrayCount()
+	{
+		return $dateArrayCount = array_values(array_count_values($this->getDateArray()));
+	}
+	public function getDateArrayUnique()
+	{
+		return $dateArrayUnique = array_values(array_unique($this->getDateArray()));
+	}
+	public function getDateCount()
+	{
+		$count=0;
+		$limit = $this->getBlogConfig('monthly_archive/number_records');
+		$dateArrayCount = $this->getDateArrayCount();
+		foreach ($dateArrayCount as $dateCount){
+			$count++;
+		}
+		$result = ($count < $limit) ? $count : $limit ;
+		return $result;
 	}
 }
