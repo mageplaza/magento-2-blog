@@ -29,7 +29,7 @@ class Mostview extends Frontend
 		$dateType = $this->helperData->getBlogConfig('general/date_type');
 		switch ($dateType) {
 			case 1:
-				$dateFormat    = $this->dateTime->formatDate($date, false);
+				$dateFormat = date_format(date_create($date),"Y-m-d");
 				break;
 			case 2:
 				$dateFormat = date_format(date_create($date),"Y M d");

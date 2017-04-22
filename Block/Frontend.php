@@ -179,7 +179,7 @@ class Frontend extends Template
 		$breadcrumbsLink = $this->helperData->getBlogConfig('general/url_prefix')
 			?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX;
 		if ($breadcrumbs) {
-			if ($actionName == 'mpblog_post_index' || 'mpblog_month_view') {
+			if ($actionName == 'mpblog_post_index' || $actionName =='mpblog_month_view') {
 				$breadcrumbs->addCrumb(
 					'home',
 					[
