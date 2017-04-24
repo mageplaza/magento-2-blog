@@ -63,7 +63,7 @@ class View extends Action
 
     public function execute()
     {
-        $id=$this->getRequest()->getParams();
+        $id = $this->getRequest()->getParam('id');
         if ($id) {
             $trafficModel=$this->trafficFactory->create()->load($id, 'post_id');
             if ($trafficModel->getId()) {
