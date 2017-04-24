@@ -88,6 +88,7 @@ class View extends Frontend
 	{
 		return $this->helperData->getBaseMediaUrl() . self::LOGO . $image;
 	}
+
 	public function getPageFilter($content)
 	{
 		return $this->filterProvider->getPageFilter()->filter($content);

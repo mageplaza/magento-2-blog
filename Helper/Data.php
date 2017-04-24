@@ -35,7 +35,6 @@ class Data extends CoreHelper
     const XML_PATH_BLOG = 'blog/';
     const POST_IMG = 'mageplaza/blog/post/image';
 
-    const SEARCH_DATA_TYPE = ['Post', 'Tag', 'Category'];
     const DEFAULT_URL_PREFIX = 'blog';
 
     public $postfactory;
@@ -45,11 +44,15 @@ class Data extends CoreHelper
 	public $store;
 	public $modelTraffic;
 	public $authorfactory;
+	public $customerSession;
+	public $loginUrl;
 	public $translitUrl;
 	public $dateTime;
 
-    public function __construct(
-        Context $context,
+	public function __construct(
+		\Magento\Customer\Model\Session $session,
+		\Magento\Customer\Model\Url $url,
+		Context $context,
         ObjectManagerInterface $objectManager,
         PostFactory $postFactory,
         CategoryFactory $categoryFactory,
@@ -61,8 +64,9 @@ class Data extends CoreHelper
 		\Magento\Framework\Filter\TranslitUrl $translitUrl,
 		\Mageplaza\Blog\Model\Traffic $traffic
     ) {
-    
-        $this->postfactory     = $postFactory;
+    	$this->customerSession = $session;
+		$this->loginUrl = $url;
+		$this->postfactory     = $postFactory;
         $this->categoryfactory = $categoryFactory;
         $this->tagfactory      = $tagFactory;
         $this->topicfactory    = $topicFactory;
@@ -117,26 +121,21 @@ class Data extends CoreHelper
 
     public function getPostList($type = null, $id = null)
     {
-//		$month = $this->_getRequest()->getParam('month');
         $list          = '';
         $posts         = $this->postfactory->create();
         $categoryModel = $this->categoryfactory->create();
         $tagModel      = $this->tagfactory->create();
         $topicModel    = $this->topicfactory->create();
         if ($type == null) {
-//			$list = ($month) ? $posts->getCollection()->addFieldToFilter('created_at',['like'=>$month . '%']) : $posts->getCollection();
 			$list = $posts->getCollection();
         } elseif ($type == 'category') {
             $category = $categoryModel->load($id);
-//			$list = $this->getSelectedPostByMonth($category);
 			$list     = $category->getSelectedPostsCollection();
         } elseif ($type == 'tag') {
             $tag  = $tagModel->load($id);
-//			$list = $this->getSelectedPostByMonth($tag);
 			$list = $tag->getSelectedPostsCollection();
         } elseif ($type == 'topic') {
             $topic = $topicModel->load($id);
-//			$list = $this->getSelectedPostByMonth($topic);
 			$list  = $topic->getSelectedPostsCollection();
         } elseif ($type == 'author') {
 			$list = $posts->getCollection()->addFieldToFilter('author_id',$id);
@@ -496,9 +495,39 @@ class Data extends CoreHelper
 
 		return $data;
 	}
+
+	/**
+	 * @return string
+	 * get default image url
+	 */
 	public function getDefaultImageUrl(){
 		return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_STATIC).'frontend/Magento/luma/en_US/Mageplaza_Blog/media/images/Mageplaza-logo.png';
 	}
+
+	/**
+	 * check customer is logged in or not
+	 */
+	public function isLoggedIn()
+	{
+		return $this->customerSession->isLoggedIn();
+	}
+
+	/**
+	 * get login url
+	 */
+	public function getLoginUrl()
+	{
+		return $this->loginUrl->getLoginUrl();
+	}
+
+	/**
+	 * get customer data
+	 */
+	public function getCustomerData()
+	{
+		return $this->customerSession->getCustomerData();
+  }
+  
 	public function generateUrlKey($name, $count)
 	{
 		$name = $this->strReplace($name);

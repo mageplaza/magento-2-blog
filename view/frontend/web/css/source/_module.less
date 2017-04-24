@@ -492,6 +492,8 @@ a.mpblog-suggestion {
 .mpblog-product-name {
   font-size: 18px;
   color: @color !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mpblog-product-des {
@@ -572,6 +574,99 @@ a.mpblog-suggestion:hover {
   color: @color;
   text-decoration: none;
 }
+
+/* style comment */
+textarea.default-cmt__content__cmt-block__cmt-box__cmt-input {
+  overflow: hidden !important;
+  resize: none;
+  min-height: 80px;
+  border-radius: 4px;
+}
+
+.show-cmt__cmt-row.is-reply {
+  padding-left: 50px !important;
+}
+.default-cmt__content__cmt-block__cmt-box__cmt-btn {
+  float: right;
+}
+button.default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit {
+  background: @color !important;
+  color: #fff;
+  border-color: #999 !important;
+}
+.default-cmt__cmt-login {
+  float: right;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+button.default-cmt__cmt-login__btn-login {
+  background: @color !important;
+  border-color: #999 !important;
+}
+div.default-cmt__content__cmt-content {
+  margin-top: 50px;
+}
+span.cmt-row__cmt-username {
+  font-weight: 600;
+  color: @color;
+}
+ul.default-cmt__content__cmt-content {
+  list-style: none !important;
+}
+.cmt-row__cmt-content {
+  font-size: 13px;
+}
+.cmt-row__cmt-interactions {
+  font-size: 13px;
+}
+.cmt-row__cmt-content p {
+  margin: 3px 0 !important;
+}
+.interactions__btn-actions {
+  display: inline-block;
+  margin-right: 10px;
+}
+a.interactions__btn-actions{
+  color: @color !important;
+}
+a.interactions__btn-actions.action {
+  cursor: pointer;
+}
+a.interactions__btn-actions:hover {
+  text-decoration: none !important;
+}
+.interactions__cmt-createdat {
+  display: inline-block;
+  color: #999;
+  font-size: 13px;
+}
+.cmt-row.reply-row {
+  margin-bottom: 0 !important;
+}
+.reply-form__form-input {
+  margin-bottom: 0 !important;
+}
+.default-cmt__content__cmt-row.reply-row {
+  margin-top: 0 !important;
+}
+li.default-cmt__content__cmt-content__cmt-row.cmt-row.reply-row {
+  margin-top: 5px;
+  padding-bottom: 0;
+}
+li.default-cmt__content__cmt-content__cmt-row.cmt-row {
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+  border-top: 1px solid #f5f5f5;
+}
+.default-cmt__content__cmt-content ul:first-child {
+  padding-left: 5px !important;
+}
+li.default-cmt__content__cmt-content__cmt-row.cmt-row {
+  margin-top: 5px;
+}
+/* end style comment */
+
+/* mageplaza end blog style */
 .widget-title a{
   color: @color;
   font-size: 26px;

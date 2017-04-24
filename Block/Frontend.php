@@ -55,6 +55,10 @@ class Frontend extends Template
 	 */
 	public $mpRobots;
 	public $filterProvider;
+	public $cmtFactory;
+	public $likeFactory;
+	public $customerRepository;
+	public $commentTree;
 
 	/**
 	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
@@ -67,6 +71,9 @@ class Frontend extends Template
 	 */
 	public function __construct(
 		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+		\Mageplaza\Blog\Model\CommentFactory $commentFactory,
+		\Mageplaza\Blog\Model\LikeFactory $likeFactory,
+		\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
 		\Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobots,
 		Context $context,
 		HelperData $helperData,
@@ -77,6 +84,9 @@ class Frontend extends Template
 	{
 		$this->dateTime   = $dateTime;
 		$this->mpRobots   = $metaRobots;
+		$this->cmtFactory = $commentFactory;
+		$this->likeFactory = $likeFactory;
+		$this->customerRepository = $customerRepository;
 		$this->helperData = $helperData;
 		$this->store      = $templateContext->getStoreManager();
 		$this->filterProvider = $filterProvider;
@@ -497,12 +507,126 @@ class Frontend extends Template
 	/**
 	 * get html sitemap url
 	 */
+	public function getHtmlSiteMapUrl()
+	{
+		$moduleRoute = $this->helperData->getBlogConfig('general/url_prefix');
+		if ($moduleRoute) {
+			return $this->getBaseUrl() . $moduleRoute .'/sitemap/';
+		}
+
+		return $this->getBaseUrl() .'/mpblog/sitemap/';
+	}
+
 	public function getAuthorByPost($authorId)
 	{
 		return $this->helperData->getAuthorByPost($authorId);
 	}
+
 	public function getAuthorUrl($author)
 	{
 		return $this->helperData->getAuthorUrl($author);
+	}
+
+	/**
+	 * check customer is logged in or not
+	 */
+	public function isLoggedIn()
+	{
+		return $this->helperData->isLoggedIn();
+	}
+
+	/**
+	 * get login url
+	 */
+	public function getLoginUrl()
+	{
+		return $this->helperData->getLoginUrl();
+	}
+
+	/**
+	 * get comments
+	 * @param $postId
+	 */
+	public function getPostComments($postId)
+	{
+		$result = [];
+		$comments = $this->cmtFactory->create()->getCollection()->addFieldToFilter('post_id', $postId);
+		foreach ($comments as $comment) {
+			array_push($result, $comment->getData());
+		}
+		return $result;
+	}
+
+	public function getCommentsTree($comments, $cmtId)
+	{
+		$this->commentTree .= '<ul class="default-cmt__content__cmt-content row">';
+		foreach ($comments as $comment) {
+			if ($comment['reply_id'] == $cmtId) {
+				$isReply = (bool) $comment['is_reply'];
+				$replyId = $isReply ? $comment['reply_id'] : '';
+				$userCmt = $this->getUserComment($comment['entity_id']);
+				$userName = $userCmt->getFirstName() .' '. $userCmt->getLastName();
+				$countLikes = $this->getCommentLikes($comment['comment_id']);
+				$this->commentTree .=
+					'<li class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12'
+					. ($isReply ? ' reply-row' : '') . '" data-cmt-id="'
+					. $comment['comment_id'] .'" '. ($replyId ? 'data-reply-id="'. $replyId .'"' : '') .'>
+							<div class="cmt-row__cmt-username">
+								<span class="cmt-row__cmt-username username">'. $userName .'</span>
+							</div>
+							<div class="cmt-row__cmt-content">
+								<p>'. $comment['content'] .'</p>
+							</div>
+							<div class="cmt-row__cmt-interactions interactions">
+								<div class="interactions__btn-actions">
+									<a class="interactions__btn-actions action btn-like" data-cmt-id="'
+									. $comment['comment_id'] .'">'. __('Like') .'</a>
+									<a class="interactions__btn-actions action btn-reply" data-cmt-id="'
+									. $comment['comment_id'] .'">'. __('Reply') .'</a>
+									<a class="interactions__btn-actions count-like">
+										<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+										<span class="count-like__like-text">'. $countLikes .'</span>
+									</a>
+								</div>
+								<div class="interactions__cmt-createdat">
+									<span>'. $comment['created_at'] .'</span>
+								</div>
+							</div>';
+				if ($comment['has_reply']) {
+					$this->commentTree .= $this->getCommentsTree($comments, $comment['comment_id']);
+				}
+				$this->commentTree .= '</li>';
+			}
+		}
+		$this->commentTree .= '</ul>';
+	}
+
+	public function getCommentsHtml()
+	{
+		return $this->commentTree;
+	}
+
+	/**
+	 * get comment user
+	 * @param $userId
+	 */
+	public function getUserComment($userId)
+	{
+		$user = $this->customerRepository->getById($userId);
+		return $user;
+	}
+
+	/**
+	 * get comment likes
+	 * @param $cmtId
+	 */
+	public function getCommentLikes($cmtId)
+	{
+		$likes = $this->likeFactory->create()->getCollection()->addFieldToFilter('comment_id', $cmtId)->getSize();
+		if ($likes) {
+			return $likes;
+		}
+
+		return '';
 	}
 }

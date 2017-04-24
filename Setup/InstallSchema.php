@@ -850,6 +850,16 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 				],
 				'User Comment ID'
 			)->addColumn(
+				'has_reply',
+				\Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+				2,
+				[
+					'unsigned' 	=> true,
+					'nullable' 	=> false,
+					'default'	=> 0
+				],
+				'Comment has reply'
+			)->addColumn(
 				'is_reply',
 				\Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
 				2,
@@ -866,6 +876,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 				[
 					'unsigned' => true,
 					'nullable' => true,
+					'default'  => 0
 				],
 				'Reply ID'
 			)->addColumn(
@@ -876,7 +887,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 				'Comment content'
 			)->addColumn(
 				'created_at',
-				\Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+				\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
 				null,
 				[],
 				'Comment Created At'
@@ -902,24 +913,14 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 				$installer->getFkName(
 					'mageplaza_blog_comment',
 					'post_id',
+					\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+					\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 					'mageplaza_blog_post',
 					'post_id'
 				),
 				'post_id',
 				$installer->getTable('mageplaza_blog_post'),
 				'post_id',
-				\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-				\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-			)->addForeignKey(
-				$installer->getFkName(
-					'mageplaza_blog_comment',
-					'reply_id',
-					'mageplaza_blog_comment_reply',
-					'reply_id'
-				),
-				'reply_id',
-				$installer->getTable('mageplaza_blog_comment_reply'),
-				'reply_id',
 				\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
 				\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 			);

@@ -134,6 +134,7 @@ if ($checkRss):
 									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
                                     ?>
 									<?php
+
 									if ($block->getAuthorByPost($post->getAuthorId())->getName() && $block->getBlogConfig('general/display_author')){ ?>
                                         | By : <a class="mp-info" href="<?php echo $block->getAuthorUrl($block->getAuthorByPost($post->getAuthorId())) ?>"><?php echo  $block->getAuthorByPost($post->getAuthorId())->getName(); ?></a>
 									<?php } ?>
@@ -233,7 +234,6 @@ if ($checkRss):
 <script>
     require([
         'jquery',
-        'mpblog',
         'Mageplaza_Blog/js/lib/less.min'
     ],function ($) {
         $(document).ready(function () {
