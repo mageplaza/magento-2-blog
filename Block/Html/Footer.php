@@ -49,4 +49,12 @@ class Footer extends \Magento\Framework\View\Element\Html\Link
 		}
 		return $this->helper->getBlogConfig('general/name');
 	}
+	public function getHtmlSiteMapUrl()
+	{
+		$moduleRoute = $this->helper->getBlogConfig('general/url_prefix');
+		if ($moduleRoute) {
+			return $this->getBaseUrl() . $moduleRoute .'/sitemap/';
+		}
+		return $this->getBaseUrl() .'/mpblog/sitemap/';
+	}
 }

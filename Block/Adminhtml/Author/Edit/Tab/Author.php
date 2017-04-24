@@ -62,10 +62,10 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
 		}
 
 		$fieldset->addField(
-			'display_name',
+			'name',
 			'text',
 			[
-				'name'  => 'display_name',
+				'name'  => 'name',
 				'label' => __('Display Name'),
 				'title' => __('Display Name'),
 				'note' => __('This name will displayed into frontend'),

@@ -26,7 +26,7 @@ $postsRecent = $block->getRecentPost();
 <div class="mp-sidebar mpcss">
 		<ul class="nav nav-tabs">
 			<li id="tab-1" class="active"><a id="popular-tab"><?php echo __('Popular') ?></a></li>
-			<li id="tab-2"><a id="recent-tab"><?php echo __('Newest') ?></a></li>
+			<li id="tab-2"><a id="recent-tab"><?php echo __('Latest') ?></a></li>
 		</ul>
 		
 		<div class="tab-content">
@@ -44,7 +44,7 @@ $postsRecent = $block->getRecentPost();
 							<div class="post-right">
 								<span><?php echo $post->getName() ?></span>
 								<span class="create-at">
-									<?php echo $block->formatCreatedAt($post->getCreatedAt()); ?>
+									<?php echo $block->getFormatCreatedAt($post->getCreatedAt()); ?>
 								</span>
 							</div>
 						</a>

@@ -71,10 +71,10 @@ class Frontend extends Template
 	 */
 	public function __construct(
 		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-		\Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobots,
 		\Mageplaza\Blog\Model\CommentFactory $commentFactory,
 		\Mageplaza\Blog\Model\LikeFactory $likeFactory,
 		\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+		\Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobots,
 		Context $context,
 		HelperData $helperData,
 		TemplateContext $templateContext,
@@ -189,7 +189,7 @@ class Frontend extends Template
 		$breadcrumbsLink = $this->helperData->getBlogConfig('general/url_prefix')
 			?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX;
 		if ($breadcrumbs) {
-			if ($actionName == 'mpblog_post_index') {
+			if ($actionName == 'mpblog_post_index' || $actionName =='mpblog_month_view') {
 				$breadcrumbs->addCrumb(
 					'home',
 					[
@@ -301,6 +301,27 @@ class Frontend extends Template
 					 'title' => $topic->getName()]
 				);
 				$this->applySeoCode($topic);
+			} elseif ($actionName == 'mpblog_author_view') {
+				$author = $this->helperData->getAuthorByParam('id', $this->getRequest()->getParam('id'));
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				)->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
+					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						 . $breadcrumbsLink]
+				)->addCrumb(
+					'author' . $author->getId(),
+					['label' => __('Author'),
+					 'title' => __('Author')]
+				);
+				$this->applySeoCode($author);
 			}
 		}
 
@@ -411,6 +432,8 @@ class Frontend extends Template
 			$postList = $this->helperData->getPostList('topic', $id);
 		} elseif ($type == 'author') {
 			$postList = $this->helperData->getPostList('author', $id);
+		} elseif ($type == 'month') {
+			$postList = $this->helperData->getPostList('month', $id);
 		}
 
 		if ($postList != '' && is_array($postList)) {

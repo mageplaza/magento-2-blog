@@ -42,7 +42,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var string
      */
 	public $categoryPostTable;
-	public $translitUrl;
+	public $helperData;
     /**
      * constructor
      *
@@ -51,12 +51,12 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      */
     public function __construct(
-		\Magento\Framework\Filter\TranslitUrl $translitUrl,
+		\Mageplaza\Blog\Helper\Data $helperData,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\ResourceModel\Db\Context $context
     ) {
-    	$this->translitUrl=$translitUrl;
+		$this->helperData = $helperData;
         $this->date         = $date;
         $this->eventManager = $eventManager;
         parent::__construct($context);
@@ -491,14 +491,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
     public function generateUrlKey($name, $count)
     {
-		$text = $this->translitUrl->filter($name);
-		if ($count == 0) {
-			$count = '';
-		}
-		if (empty($text)) {
-			return 'n-a' . $count;
-		}
-		return $text . $count;
+		return $this->helperData->generateUrlKey($name,$count);
     }
 
     public function checkUrlKey($url, $id = null)

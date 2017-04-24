@@ -71,6 +71,15 @@
                     <label>Display author</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="display_sitemap" translate="label comment" type="select" sortOrder="55" showInDefault="20"
+                       showInWebsite="1" showInStore="1">
+                    <label>Display sitemap</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="date_type" translate="label" type="select" sortOrder="57" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Type of Datetime</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\DateFormat\Type</source_model>
+                </field>
                 <field id="font_color" translate="label comment" type="text" sortOrder="60" showInWebsite="1" showInStore="1" showInDefault="1">
                     <label>Choose blog's color</label>
                     <validate>jscolor {hash:true,refine:false}</validate>
@@ -121,6 +130,10 @@
                 </field>
                 <field id="number_records" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Number of records</label>
+                </field>
+                <field id="date_type_monthly" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Type of Datetime</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\DateFormat\TypeMonth</source_model>
                 </field>
             </group>
             <group id="comment" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">

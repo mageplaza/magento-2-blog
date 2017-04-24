@@ -47,7 +47,7 @@ if ($checkRss):
                         <div class="post-item-wraper">
                             <div class="post-image">
                                 <?php if ($post->getImage()) : ?>
-                                    <a href="<?php echo $block->getUrlByPost($post) ?>">
+                                    <a href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
                                         <img class="img-responsive"
                                              src="<?php echo $block->getImageUrl($post->getImage()); ?>"
                                              alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
@@ -57,20 +57,20 @@ if ($checkRss):
                             <div class="post-info-wraper">
                                 <h2 class="mp-post-title">
                                     <a class="post-link-title" title="<?php echo $post->getName(); ?>"
-                                       href="<?php echo $block->getUrlByPost($post) ?>">
+                                       href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
                                         <?php echo $post->getName();?>
                                     </a>
                                 </h2>
 
 
                                 <div class="mp-post-info">
-                                    <?php echo __('Posted on ') . $block->formatCreatedAt($post->getCreatedAt()); ?>
+                                    <?php echo __('Posted on ') . $post->getFormatCreatedAt(); ?>
 									<?php
 									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
                                     ?>
                                     <?php
-                                    if ($block->getAuthorByPost($post->getAuthorId())->getDisplayName() && $block->getBlogConfig('general/display_author')){ ?>
-                                        | By : <a class="mp-info" href="<?php echo $block->getAuthorUrl($block->getAuthorByPost($post->getAuthorId())) ?>"><?php echo  $block->getAuthorByPost($post->getAuthorId())->getDisplayName(); ?></a>
+                                    if ($block->getAuthorByPost($post->getAuthorId())->getName() && $block->getBlogConfig('general/display_author')){ ?>
+                                        | By : <a class="mp-info" href="<?php echo $block->getAuthorUrl($block->getAuthorByPost($post->getAuthorId())) ?>"><?php echo  $block->getAuthorByPost($post->getAuthorId())->getName(); ?></a>
                                    <?php } ?>
                                 </div>
 
@@ -84,7 +84,7 @@ if ($checkRss):
 
                                 <div class="mp-post-meta-info mp-alignright">
                                         <div class="actions">
-                                            <a class="mp-read-more" href="<?php echo $block->getUrlByPost($post); ?>"
+                                            <a class="mp-read-more" href="<?php echo substr($block->getUrlByPost($post),0,-1); ?>"
                                                title="<?php echo __('Read More'); ?>"><?php echo __('Read more'); ?></a>
                                         </div>
                                 </div>
@@ -113,7 +113,7 @@ if ($checkRss):
                         <div class="post-item-wraper">
                             <div class="post-image">
                                 <?php if ($post->getImage()) : ?>
-                                    <a href="<?php echo $block->getUrlByPost($post) ?>">
+                                    <a href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
                                         <img class="img-responsive"
                                              src="<?php echo $block->getImageUrl($post->getImage()); ?>"
                                              alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
@@ -123,19 +123,20 @@ if ($checkRss):
                             <div class="post-info-wraper">
                                 <h2 class="mp-post-title">
                                     <a class="post-link-title" title="<?php echo $post->getName(); ?>"
-                                       href="<?php echo $block->getUrlByPost($post) ?>">
+                                       href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
                                         <?php echo $post->getName();?>
                                     </a>
                                 </h2>
 
                                 <div class="mp-post-info">
-                                    <?php echo __('Posted on ') . $block->formatCreatedAt($post->getCreatedAt()); ?>
+                                    <?php echo __('Posted on ') . $post->getFormatCreatedAt(); ?>
 									<?php
 									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
                                     ?>
 									<?php
-                                    if ($block->getAuthorByPost($post->getAuthorId())->getDisplayName() && $block->getBlogConfig('general/display_author')){ ?>
-                                        | By : <a class="mp-info" href="<?php echo $block->getAuthorUrl($block->getAuthorByPost($post->getAuthorId())) ?>"><?php echo  $block->getAuthorByPost($post->getAuthorId())->getDisplayName(); ?></a>
+
+									if ($block->getAuthorByPost($post->getAuthorId())->getName() && $block->getBlogConfig('general/display_author')){ ?>
+                                        | By : <a class="mp-info" href="<?php echo $block->getAuthorUrl($block->getAuthorByPost($post->getAuthorId())) ?>"><?php echo  $block->getAuthorByPost($post->getAuthorId())->getName(); ?></a>
 									<?php } ?>
                                 </div>
 
@@ -148,7 +149,7 @@ if ($checkRss):
 
                                 <div class="mp-post-meta-info mp-alignright">
                                         <div class="actions">
-                                            <a class="mp-read-more" href="<?php echo $block->getUrlByPost($post); ?>"
+                                            <a class="mp-read-more" href="<?php echo substr($block->getUrlByPost($post),0,-1); ?>"
                                                title="<?php echo __('Read More'); ?>"><?php echo __('Read more'); ?></a>
                                         </div>
                                 </div>

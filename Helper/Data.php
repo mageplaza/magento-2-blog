@@ -35,7 +35,6 @@ class Data extends CoreHelper
     const XML_PATH_BLOG = 'blog/';
     const POST_IMG = 'mageplaza/blog/post/image';
 
-    const SEARCH_DATA_TYPE = ['Post', 'Tag', 'Category'];
     const DEFAULT_URL_PREFIX = 'blog';
 
     public $postfactory;
@@ -47,6 +46,8 @@ class Data extends CoreHelper
 	public $authorfactory;
 	public $customerSession;
 	public $loginUrl;
+	public $translitUrl;
+	public $dateTime;
 
 	public function __construct(
 		\Magento\Customer\Model\Session $session,
@@ -59,6 +60,8 @@ class Data extends CoreHelper
         TopicFactory $topicFactory,
 		AuthorFactory $authorFactory,
         TemplateContext $templateContext,
+		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+		\Magento\Framework\Filter\TranslitUrl $translitUrl,
 		\Mageplaza\Blog\Model\Traffic $traffic
     ) {
     	$this->customerSession = $session;
@@ -68,8 +71,10 @@ class Data extends CoreHelper
         $this->tagfactory      = $tagFactory;
         $this->topicfactory    = $topicFactory;
 		$this->authorfactory    = $authorFactory;
+		$this->dateTime   = $dateTime;
         $this->store = $templateContext->getStoreManager();
         $this->modelTraffic = $traffic;
+        $this->translitUrl = $translitUrl;
         parent::__construct($context, $objectManager, $templateContext->getStoreManager());
     }
 
@@ -116,25 +121,26 @@ class Data extends CoreHelper
 
     public function getPostList($type = null, $id = null)
     {
-		$month = $this->_getRequest()->getParam('month');
         $list          = '';
         $posts         = $this->postfactory->create();
         $categoryModel = $this->categoryfactory->create();
         $tagModel      = $this->tagfactory->create();
         $topicModel    = $this->topicfactory->create();
         if ($type == null) {
-			$list = ($month) ? $posts->getCollection()->addFieldToFilter('created_at',['like'=>$month . '%']) : $posts->getCollection();
+			$list = $posts->getCollection();
         } elseif ($type == 'category') {
             $category = $categoryModel->load($id);
-			$list = $this->getSelectedPostByMonth($category);
+			$list     = $category->getSelectedPostsCollection();
         } elseif ($type == 'tag') {
             $tag  = $tagModel->load($id);
-			$list = $this->getSelectedPostByMonth($tag);
+			$list = $tag->getSelectedPostsCollection();
         } elseif ($type == 'topic') {
             $topic = $topicModel->load($id);
-			$list = $this->getSelectedPostByMonth($topic);
+			$list  = $topic->getSelectedPostsCollection();
         } elseif ($type == 'author') {
 			$list = $posts->getCollection()->addFieldToFilter('author_id',$id);
+		} elseif ($type == 'month') {
+			$list = $posts->getCollection()->addFieldToFilter('created_at',['like'=>$id . '%']);
 		}
 
         if ($list->getSize()) {
@@ -288,7 +294,10 @@ class Data extends CoreHelper
     {
         return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/topic/' . $topic->getUrlKey());
     }
-
+	public function getMonthlyUrl($month)
+	{
+		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/month/' . $month);
+	}
     public function getPostCategoryHtml($post)
     {
         $categories = $this->getCategoryCollection($post->getCategoryIds());
@@ -517,5 +526,83 @@ class Data extends CoreHelper
 	public function getCustomerData()
 	{
 		return $this->customerSession->getCustomerData();
+  }
+  
+	public function generateUrlKey($name, $count)
+	{
+		$name = $this->strReplace($name);
+		$text = $this->translitUrl->filter($name);
+		if ($count == 0) {
+			$count = '';
+		}
+		if (empty($text)) {
+			return 'n-a' . $count;
+		}
+		return $text . $count;
+	}
+
+	public function strReplace($str){
+
+		$str = trim(mb_strtolower($str));
+		$str = preg_replace('/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/', 'a', $str);
+		$str = preg_replace('/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/', 'e', $str);
+		$str = preg_replace('/(ì|í|ị|ỉ|ĩ)/', 'i', $str);
+		$str = preg_replace('/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/', 'o', $str);
+		$str = preg_replace('/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/', 'u', $str);
+		$str = preg_replace('/(ỳ|ý|ỵ|ỷ|ỹ)/', 'y', $str);
+		$str = preg_replace('/(đ)/', 'd', $str);
+//			$str = preg_replace('/[^a-z0-9-\s]/', '', $str);
+//			$str = preg_replace('/([\s]+)/', '-', $str);
+		return $str;
+	}
+	public function getPostDate()
+	{
+		$posts = $this->getPostList();
+		$postDates = array();
+		if($posts) {
+			foreach ($posts as $post) {
+				$postDates[] = $post->getCreatedAt();
+			}
+		}
+		return $postDates;
+	}
+	public function getDateLabel(){
+		$posts = $this->getPostList();
+		$postDates = array();
+
+		if($posts) {
+			foreach ($posts as $post) {
+				$postDates[] = $post->getMonthlyCreatedAt();
+			}
+		}
+		$result = array_values(array_unique($postDates));
+		return $result;
+	}
+	public function getDateArray(){
+		$dateArray = array();
+		foreach ($this->getPostDate() as $postDate){
+			$dateArray[] = date("F Y",$this->dateTime->timestamp($postDate));
+		}
+
+		return $dateArray;
+	}
+	public function getDateArrayCount()
+	{
+		return $dateArrayCount = array_values(array_count_values($this->getDateArray()));
+	}
+	public function getDateArrayUnique()
+	{
+		return $dateArrayUnique = array_values(array_unique($this->getDateArray()));
+	}
+	public function getDateCount()
+	{
+		$count=0;
+		$limit = $this->getBlogConfig('monthly_archive/number_records');
+		$dateArrayCount = $this->getDateArrayCount();
+		foreach ($dateArrayCount as $dateCount){
+			$count++;
+		}
+		$result = ($count < $limit) ? $count : $limit ;
+		return $result;
 	}
 }

@@ -38,4 +38,13 @@ class Posts extends Frontend implements BlockInterface{
 		$postsCollection->addOrder('created_at')->setPageSize($this->getData('post_count'));
 		return $postsCollection;
 	}
+	public function getTitle(){
+
+		return $this->getData('title');
+	}
+
+	public function getBlogUrl($code){
+
+		return $this->helperData->getBlogUrl($code);
+	}
 }

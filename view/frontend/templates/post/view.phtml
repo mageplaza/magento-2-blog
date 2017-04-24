@@ -116,10 +116,12 @@ if ($checkRss):
 								<?php if ($block->getTagList($_post)) {?>
                                     | <span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span>
 								<?php } ?>
+
 								<?php if ($authorName && $block->getBlogConfig('general/display_author')){ ?>
                                     | <span><i class="fa fa-user"></i> By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($author) ?>"><?php echo $authorName; ?></a></span>
                                 <?php if ($authorName != $modifierName && $modifierName){ ?>
                                         | <span><i class="fa fa-edit"></i> Modify By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($modifier) ?>"><?php echo $modifierName;?></a><?php echo ' at : '.$_post->getUpdatedAt(); ?></span>
+
 									<?php } ?>
 								<?php } ?>
 

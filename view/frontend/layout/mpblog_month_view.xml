@@ -22,8 +22,9 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Topic\Listpost" template="Mageplaza_Blog::category/post/list.phtml">
+            <block class="Mageplaza\Blog\Block\MonthlyArchive\Listpost" template="Mageplaza_Blog::category/post/list.phtml">
                 <block class="Mageplaza\Blog\Block\Frontend" template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search" />
                 <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"
                        template="Mageplaza_Blog::sidebar/mostview.phtml"/>
@@ -35,6 +36,7 @@
                        template="Mageplaza_Blog::topic/widget.phtml"/>
                 <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"
                        template="Mageplaza_Blog::tag/widget.phtml"/>
+
             </block>
         </referenceContainer>
     </body>

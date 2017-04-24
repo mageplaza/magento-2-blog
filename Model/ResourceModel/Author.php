@@ -11,14 +11,14 @@ use \Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class Author extends AbstractDb
 {
-	public $translitUrl;
+	public $helperData;
 	protected $_isPkAutoIncrement = false;
 
 	public function __construct(
-		\Magento\Framework\Filter\TranslitUrl $translitUrl,
+		\Mageplaza\Blog\Helper\Data $helperData,
 		\Magento\Framework\Model\ResourceModel\Db\Context $context
 	) {
-		$this->translitUrl = $translitUrl;
+		$this->helperData = $helperData;
 		parent::__construct($context);
 	}
 
@@ -31,7 +31,7 @@ class Author extends AbstractDb
 	{
 		if ($object->isObjectNew()) {
 			$count   = 0;
-			$objName = $object->getDisplayName();
+			$objName = $object->getName();
 			if ($object->getUrlKey()) {
 				$urlKey = $object->getUrlKey();
 			} else {
@@ -45,7 +45,7 @@ class Author extends AbstractDb
 		} else {
 			$objectId = $object->getId();
 			$count    = 0;
-			$objName  = $object->getDisplayName();
+			$objName  = $object->getName();
 			if ($object->getUrlKey()) {
 				$urlKey = $object->getUrlKey();
 			} else {
@@ -62,14 +62,7 @@ class Author extends AbstractDb
 
 	public function generateUrlKey($name, $count)
 	{
-		$text = $this->translitUrl->filter($name);
-		if ($count == 0) {
-			$count = '';
-		}
-		if (empty($text)) {
-			return 'n-a' . $count;
-		}
-		return $text . $count;
+		return $this->helperData->generateUrlKey($name,$count);
 	}
 
 	public function checkUrlKey($url, $id = null)

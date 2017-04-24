@@ -87,7 +87,9 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
     public function execute()
     {
         $data = $this->getRequest()->getPost('category');
-        $data['store_ids'] = implode(',', $data['store_ids']);
+        if (isset($data['store_ids'])){
+			$data['store_ids'] = implode(',', $data['store_ids']);
+		}
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $category = $this->initCategory();

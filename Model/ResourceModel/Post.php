@@ -56,7 +56,7 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var string
      */
 	public $postCategoryTable;
-	public $translitUrl;
+	public $helperData;
     /**
      * constructor
      *
@@ -65,14 +65,14 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      */
     public function __construct(
-		\Magento\Framework\Filter\TranslitUrl $translitUrl,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Event\ManagerInterface $eventManager,
+		\Mageplaza\Blog\Helper\Data $helperData,
         \Magento\Framework\Model\ResourceModel\Db\Context $context
     ) {
-    	$this->translitUrl=$translitUrl;
         $this->date         = $date;
         $this->eventManager = $eventManager;
+		$this->helperData = $helperData;
         parent::__construct($context);
         $this->postTagTable      = $this->getTable('mageplaza_blog_post_tag');
         $this->postTopicTable    = $this->getTable('mageplaza_blog_post_topic');
@@ -412,18 +412,6 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $adapter->fetchCol($select);
     }
 
-    public function generateUrlKey($name, $count)
-    {
-		$text = $this->translitUrl->filter($name);
-		if ($count == 0) {
-			$count = '';
-		}
-		if (empty($text)) {
-			return 'n-a' . $count;
-		}
-		return $text . $count;
-    }
-
     public function checkUrlKey($url, $id = null)
     {
         $adapter = $this->getConnection();
@@ -444,4 +432,8 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $result;
     }
+	public function generateUrlKey($name, $count){
+    	$result = $this->helperData->generateUrlKey($name,$count);
+    	return $result;
+	}
 }
