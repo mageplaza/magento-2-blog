@@ -216,6 +216,23 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
 			$installer->endSetup();
 		}
-
+		if (version_compare($context->getVersion(), '1.1.2', '<')) {
+			if ($installer->getConnection()->isTableExists('mageplaza_blog_post') == true) {
+				$connection = $installer->getConnection();
+				$connection->modifyColumn('mageplaza_blog_post','meta_robots',['type' =>\Magento\Framework\DB\Ddl\Table::TYPE_TEXT]);
+			}
+			if ($installer->getConnection()->isTableExists('mageplaza_blog_tag') == true) {
+				$connection = $installer->getConnection();
+				$connection->modifyColumn('mageplaza_blog_tag','meta_robots',['type' =>\Magento\Framework\DB\Ddl\Table::TYPE_TEXT]);
+			}
+			if ($installer->getConnection()->isTableExists('mageplaza_blog_category') == true) {
+				$connection = $installer->getConnection();
+				$connection->modifyColumn('mageplaza_blog_category','meta_robots',['type' =>\Magento\Framework\DB\Ddl\Table::TYPE_TEXT]);
+			}
+			if ($installer->getConnection()->isTableExists('mageplaza_blog_category') == true) {
+				$connection = $installer->getConnection();
+				$connection->modifyColumn('mageplaza_blog_topic','meta_robots',['type' =>\Magento\Framework\DB\Ddl\Table::TYPE_TEXT]);
+			}
+		}
     }
 }
