@@ -67,7 +67,7 @@ class Frontend extends Template
 	 */
 	public function __construct(
 		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-		\Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobots,
+		\Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobots,
 		Context $context,
 		HelperData $helperData,
 		TemplateContext $templateContext,
