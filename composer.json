@@ -2,10 +2,10 @@
   "name": "mageplaza/magento-2-blog-extension",
   "description": "Magento 2 Blog extension",
   "require": {
-    "mageplaza/core-m2": "^1.3|dev-master"
+    "mageplaza/module-core": "*"
   },
   "type": "magento2-module",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "license": [
     "OSL-3.0",
     "AFL-3.0"
