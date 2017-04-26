@@ -34,8 +34,12 @@ class Data extends CoreHelper
 {
     const XML_PATH_BLOG = 'blog/';
     const POST_IMG = 'mageplaza/blog/post/image';
-
-    const DEFAULT_URL_PREFIX = 'blog';
+	const DEFAULT_URL_PREFIX = 'blog';
+	const CATEGORY = 'category';
+    const TAG = 'tag';
+    const TOPIC = 'topic';
+    const AUTHOR = 'author';
+    const MONTHLY = 'month';
 
     public $postfactory;
 	public $categoryfactory;
@@ -113,12 +117,25 @@ class Data extends CoreHelper
 		return $this->getBlogConfig('seo/'.$code, $storeId);
 	}
 
+	/**
+	 * get post list by month
+	 * @param null $type
+	 * @return mixed
+	 */
 	public function getSelectedPostByMonth($type = null)
 	{
 		$month = $this->_getRequest()->getParam('month');
-		return $list = ($month) ? $type->getSelectedPostsCollection()->addFieldToFilter('created_at',['like'=>$month . '%']) : $type->getSelectedPostsCollection();
+		return $list = ($month) ? $type->getSelectedPostsCollection()
+			->addFieldToFilter('created_at',['like'=>$month . '%'])
+			: $type->getSelectedPostsCollection();
 	}
 
+	/**
+	 * get post list
+	 * @param null $type
+	 * @param null $id
+	 * @return array|string
+	 */
     public function getPostList($type = null, $id = null)
     {
         $list          = '';
@@ -128,18 +145,18 @@ class Data extends CoreHelper
         $topicModel    = $this->topicfactory->create();
         if ($type == null) {
 			$list = $posts->getCollection();
-        } elseif ($type == 'category') {
+        } elseif ($type == self::CATEGORY) {
             $category = $categoryModel->load($id);
 			$list     = $category->getSelectedPostsCollection();
-        } elseif ($type == 'tag') {
+        } elseif ($type == self::TAG) {
             $tag  = $tagModel->load($id);
 			$list = $tag->getSelectedPostsCollection();
-        } elseif ($type == 'topic') {
+        } elseif ($type == self::TOPIC) {
             $topic = $topicModel->load($id);
 			$list  = $topic->getSelectedPostsCollection();
-        } elseif ($type == 'author') {
+        } elseif ($type == self::AUTHOR) {
 			$list = $posts->getCollection()->addFieldToFilter('author_id',$id);
-		} elseif ($type == 'month') {
+		} elseif ($type == self::MONTHLY) {
 			$list = $posts->getCollection()->addFieldToFilter('created_at',['like'=>$id . '%']);
 		}
 
@@ -154,6 +171,10 @@ class Data extends CoreHelper
         return '';
     }
 
+	/**
+	 * get category list
+	 * @return array|string
+	 */
     public function getCategoryList()
     {
         $category = $this->categoryfactory->create();
@@ -165,6 +186,10 @@ class Data extends CoreHelper
         return $result;
     }
 
+	/**
+	 * get tag list
+	 * @return array|string
+	 */
     public function getTagList()
     {
         $tag  = $this->tagfactory->create();
@@ -176,6 +201,11 @@ class Data extends CoreHelper
         }
         return $result;
     }
+
+	/**
+	 * get topic list
+	 * @return array|string
+	 */
 	public function getTopicList()
 	{
 		$topic  = $this->topicfactory->create();
@@ -187,6 +217,12 @@ class Data extends CoreHelper
 		}
 		return $result;
 	}
+
+	/**
+	 * get category collection
+	 * @param $array
+	 * @return array|string
+	 */
     public function getCategoryCollection($array)
     {
         $category = $this->categoryfactory->create();
@@ -200,13 +236,18 @@ class Data extends CoreHelper
         return $result;
     }
 
+	/**
+	 * get url by post
+	 * @param $post
+	 * @return string
+	 */
     public function getUrlByPost($post)
     {
-        if ($post->getUrlKey()) {
+		$urlKey = '';
+		if ($post->getUrlKey()) {
             $url_prefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
             $url_suffix = $this->getBlogConfig('general/url_suffix');
 
-            $urlKey = '';
             if ($url_prefix) {
                 $urlKey .= $url_prefix . '/post/';
             }
@@ -218,18 +259,35 @@ class Data extends CoreHelper
 
         return $this->_getUrl($urlKey);
     }
+
+	/**
+	 * get author by post'authorId
+	 * @param $authorId
+	 * @return \Mageplaza\Blog\Model\Author | null
+	 */
 	public function getAuthorByPost($authorId)
 	{
 		$author = $this->authorfactory->create();
 		$list = $author->load($authorId);
 		return $list;
 	}
+
+	/**
+	 * get blog url
+	 * @param $code
+	 * @return string
+	 */
     public function getBlogUrl($code)
     {
     	$blogUrl = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
         return $this->_getUrl($blogUrl . '/' . $code);
     }
 
+	/**
+	 * get post by url
+	 * @param $url
+	 * @return \Mageplaza\Blog\Model\Post | null
+	 */
     public function getPostByUrl($url)
     {
         $url   = $this->checkSuffix($url);
@@ -237,6 +295,10 @@ class Data extends CoreHelper
         return $posts;
     }
 
+	/**
+	 * @param $url
+	 * @return mixed
+	 */
     public function checkSuffix($url)
     {
         $url_suffix = $this->getBlogConfig('general/url_suffix');
@@ -247,57 +309,103 @@ class Data extends CoreHelper
         return $url;
     }
 
-    public function getPostsByTag()
-    {
-        $posts      = $this->postfactory->create();
-        $collection = $posts->getCollection()->addFieldToFilter('enabled', 1);
-        $result = $this->filterItems($collection);
-        if ($result == '') {
-            return '';
-        }
-        return $result;
-    }
+//    public function getPostsByTag()
+//    {
+//        $posts      = $this->postfactory->create();
+//        $collection = $posts->getCollection()->addFieldToFilter('enabled', 1);
+//        $result = $this->filterItems($collection);
+//        if ($result == '') {
+//            return '';
+//        }
+//        return $result;
+//    }
 
-    public function getPostsByCategory()
-    {
-        $collection = true;
+//    public function getPostsByCategory()
+//    {
+//        $collection = true;
+//
+//        return $collection;
+//    }
 
-        return $collection;
-    }
-
+	/**
+	 * get image url by image file name
+	 * @param $image
+	 * @return string
+	 */
     public function getImageUrl($image)
     {
         return $this->getBaseMediaUrl(). self::POST_IMG . $image;
     }
 
+	/**
+	 * get media url
+	 * @return mixed
+	 */
     public function getBaseMediaUrl()
     {
         return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
     }
 
+	/**
+	 * get category url
+	 * @param $category
+	 * @return string
+	 */
     public function getCategoryUrl($category)
     {
-        return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/category/' . $category->getUrlKey());
+    	$urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
+        return $this->_getUrl($urlPrefix .'/'. self::CATEGORY .'/'. $category->getUrlKey());
     }
 
+	/**
+	 * get tag url
+	 * @param $tag
+	 * @return string
+	 */
     public function getTagUrl($tag)
     {
-        return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/tag/' . $tag->getUrlKey());
+		$urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
+        return $this->_getUrl($urlPrefix .'/'. self::TAG .'/'. $tag->getUrlKey());
     }
 
+	/**
+	 * get author url
+	 * @param $author
+	 * @return string
+	 */
 	public function getAuthorUrl($author)
 	{
-		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/author/' . $author->getUrlKey());
+		$urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
+		return $this->_getUrl($urlPrefix .'/'. self::AUTHOR .'/'. $author->getUrlKey());
 	}
 
+	/**
+	 * get topic url
+	 * @param $topic
+	 * @return string
+	 */
     public function getTopicUrl($topic)
     {
-        return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/topic/' . $topic->getUrlKey());
+		$urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
+		return $this->_getUrl($urlPrefix .'/'. self::TOPIC .'/'. $topic->getUrlKey());
     }
+
+	/**
+	 * get monthly archive url
+	 * @param $month
+	 * @return string
+	 */
 	public function getMonthlyUrl($month)
 	{
-		return $this->_getUrl($this->getBlogConfig('general/url_prefix') . '/month/' . $month);
+		$urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
+		return $this->_getUrl($urlPrefix .'/'. self::MONTHLY .'/'. $month);
 	}
+
+	/**
+	 * get list category html of post
+	 * @param $post
+	 * @return null|string
+	 */
     public function getPostCategoryHtml($post)
     {
         $categories = $this->getCategoryCollection($post->getCategoryIds());
@@ -315,11 +423,23 @@ class Data extends CoreHelper
         return $result;
     }
 
+	/**
+	 * get post by id
+	 * @param $id
+	 * @return \Mageplaza\Blog\Model\Post | null
+	 */
     public function getPost($id)
     {
         $post = $this->postfactory->create()->load($id);
         return $post;
     }
+
+	/**
+	 * get category by param
+	 * @param $code
+	 * @param $param
+	 * @return \Mageplaza\Blog\Model\Category | null
+	 */
     public function getCategoryByParam($code, $param)
     {
         if ($code == 'id') {
@@ -328,6 +448,13 @@ class Data extends CoreHelper
             return $this->categoryfactory->create()->load($param, $code);
         }
     }
+
+	/**
+	 * get tag by param
+	 * @param $code
+	 * @param $param
+	 * @return \Mageplaza\Blog\Model\Tag | null
+	 */
     public function getTagByParam($code, $param)
     {
         if ($code == 'id') {
@@ -336,6 +463,13 @@ class Data extends CoreHelper
             return $this->tagfactory->create()->load($param, $code);
         }
     }
+
+	/**
+	 * get author by param
+	 * @param $code
+	 * @param $param
+	 * @return \Mageplaza\Blog\Model\Author | null
+	 */
 	public function getAuthorByParam($code, $param)
 	{
 		if ($code == 'id') {
@@ -344,6 +478,13 @@ class Data extends CoreHelper
 			return $this->authorfactory->create()->load($param, $code);
 		}
 	}
+
+	/**
+	 * get topic by param
+	 * @param $code
+	 * @param $param
+	 * @return \Mageplaza\Blog\Model\Topic | null
+	 */
     public function getTopicByParam($code, $param)
     {
         if ($code == 'id') {
@@ -352,25 +493,30 @@ class Data extends CoreHelper
             return $this->topicfactory->create()->load($param, $code);
         }
     }
-    public function getCategoryByPost($postId)
-    {
-        $post = $this->postfactory->create()->load($postId);
-        return $post->getSelectedCategoriesCollection();
-    }
-    public function getTagsByPost($postId)
-    {
-        $post = $this->postfactory->create()->load($postId);
-        return $post->getSelectedTagsCollection();
-    }
-    public function getTopicByPost($postId)
-    {
-        $post = $this->postfactory->create()->load($postId);
-        return $post->getSelectedTopicsCollection();
-    }
 
-    /**
-     * get most view post
-     */
+
+//    public function getCategoryByPost($postId)
+//    {
+//        $post = $this->postfactory->create()->load($postId);
+//        return $post->getSelectedCategoriesCollection();
+//    }
+
+//    public function getTagsByPost($postId)
+//    {
+//        $post = $this->postfactory->create()->load($postId);
+//        return $post->getSelectedTagsCollection();
+//    }
+
+//    public function getTopicByPost($postId)
+//    {
+//        $post = $this->postfactory->create()->load($postId);
+//        return $post->getSelectedTopicsCollection();
+//    }
+
+	/**
+	 * get most view post
+	 * @return array|string
+	 */
     public function getMosviewPosts()
     {
         $posts = $this->modelTraffic->getCollection()->addFieldToFilter('enabled', 1);
@@ -380,7 +526,8 @@ class Data extends CoreHelper
             '*'
         );
         $posts->setOrder('numbers_view', 'DESC');
-        $postList = $this->filterPost($posts, $this->getBlogConfig('sidebar/number_mostview_posts'));
+        $limitMostView = $this->getBlogConfig('sidebar/number_mostview_posts') ?: 5;
+        $postList = $this->filterItems($posts, $limitMostView);
         if ($postList == '') {
             return '';
         }
@@ -389,6 +536,7 @@ class Data extends CoreHelper
 
     /**
      * get recent post
+	 * @return array|string
      */
     public function getRecentPost()
     {
@@ -396,16 +544,21 @@ class Data extends CoreHelper
             ->getCollection()
             ->addFieldToFilter('enabled', 1)
             ->setOrder('created_at', 'DESC');
-        $postList = $this->filterPost($posts, $this->getBlogConfig('sidebar/number_recent_posts'));
+
+        $limitRecent = $this->getBlogConfig('sidebar/number_recent_posts') ?: 5;
+        $postList = $this->filterItems($posts, $limitRecent);
         if ($postList == '') {
             return '';
         }
         return $postList;
     }
 
-    /**
-     * filter items by store
-     */
+	/**
+	 * filter items by store
+	 * @param $items
+	 * @param null $limit
+	 * @return array|string
+	 */
     public function filterItems($items, $limit = null)
     {
         $storeId = $this->store->getStore()->getId();
@@ -429,83 +582,9 @@ class Data extends CoreHelper
 		return $results;
     }
 
-	public function filterPost($items, $limit )
-	{
-		$storeId = $this->store->getStore()->getId();
-		$count = 0;
-		$results = array();
-		foreach ($items as $item) {
-			$itemStoreIds = $item->getStoreIds();
-			$itemStore = $itemStoreIds !== null ? explode(',', $itemStoreIds) : '';
-			if (is_array($itemStore) && (in_array($storeId, $itemStore) || in_array('0', $itemStore))) {
-				if ($limit && $count >= $limit) {
-					break;
-				}
-				$count++;
-				array_push($results, $item);
-			}
-		}
-
-		if ($count == 0 || $limit == 0) {
-			return '';
-		}
-		return $results;
-	}
-    /**
-	 * get search blog's data
-	 */
-    public function getSearchBlogData()
-	{
-		$result = [];
-		$posts = $this->getPostList();
-		$categories = $this->getCategoryList();
-		$tags = $this->getTagList();
-
-		$postsData = $this->getSearchItemsData($posts, self::SEARCH_DATA_TYPE[0]);
-		$tagsData = $this->getSearchItemsData($tags, self::SEARCH_DATA_TYPE[1]);
-		$categoriesData = $this->getSearchItemsData($categories, self::SEARCH_DATA_TYPE[2]);
-
-		$result = array_merge($result, $postsData, $tagsData, $categoriesData);
-		return json_encode($result);
-	}
-
-	/**
-	 * get search items data
-	 * @return array
-	 */
-	public function getSearchItemsData($items, $type)
-	{
-		$data = array();
-		if ($items) {
-			$limitDesc = $this->getSidebarConfig('search/description') ?: 100;
-			foreach ($items as $item) {
-				$tmp = array(
-					'value' => $item->getName(),
-					'url'	=> $type == self::SEARCH_DATA_TYPE[0] ? $this->getUrlByPost($item) :
-						($type == self::SEARCH_DATA_TYPE[1] ? $this->getTagUrl($item) : $this->getCategoryUrl($item)),
-					'image'	=> $type == self::SEARCH_DATA_TYPE[0] ? ($item->getImage() ? $this->getImageUrl($item->getImage()) : $this->getDefaultImageUrl()) : '',
-					'desc'	=> $type == self::SEARCH_DATA_TYPE[0]
-						? (substr($item->getShortDescription(),0, $limitDesc) ?: 'No description')
-						: ($type == self::SEARCH_DATA_TYPE[1] ? (substr($item->getDescription(), 0, $limitDesc)
-							?: 'No description') : '')
-				);
-				array_push($data, $tmp);
-			}
-		}
-
-		return $data;
-	}
-
-	/**
-	 * @return string
-	 * get default image url
-	 */
-	public function getDefaultImageUrl(){
-		return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_STATIC).'frontend/Magento/luma/en_US/Mageplaza_Blog/media/images/Mageplaza-logo.png';
-	}
-
 	/**
 	 * check customer is logged in or not
+	 * @return bool
 	 */
 	public function isLoggedIn()
 	{
@@ -514,6 +593,7 @@ class Data extends CoreHelper
 
 	/**
 	 * get login url
+	 * @return string
 	 */
 	public function getLoginUrl()
 	{
@@ -522,12 +602,19 @@ class Data extends CoreHelper
 
 	/**
 	 * get customer data
+	 * @return \Magento\Customer\Api\Data\CustomerInterface
 	 */
 	public function getCustomerData()
 	{
 		return $this->customerSession->getCustomerData();
-  }
-  
+  	}
+
+	/**
+	 * generate url_key for post, tag, topic, category, author
+	 * @param $name
+	 * @param $count
+	 * @return string
+	 */
 	public function generateUrlKey($name, $count)
 	{
 		$name = $this->strReplace($name);
@@ -541,6 +628,11 @@ class Data extends CoreHelper
 		return $text . $count;
 	}
 
+	/**
+	 * replace vietnamese characters to english characters
+	 * @param $str
+	 * @return mixed|string
+	 */
 	public function strReplace($str){
 
 		$str = trim(mb_strtolower($str));
@@ -555,6 +647,11 @@ class Data extends CoreHelper
 //			$str = preg_replace('/([\s]+)/', '-', $str);
 		return $str;
 	}
+
+	/**
+	 * get posts created_at
+	 * @return array
+	 */
 	public function getPostDate()
 	{
 		$posts = $this->getPostList();
@@ -566,18 +663,28 @@ class Data extends CoreHelper
 		}
 		return $postDates;
 	}
+
+	/**
+	 * get date label
+	 * @return array
+	 */
 	public function getDateLabel(){
 		$posts = $this->getPostList();
 		$postDates = array();
 
 		if($posts) {
 			foreach ($posts as $post) {
-				$postDates[] = $post->getMonthlyCreatedAt();
+				$postDates[] = $this->getDateFormat($post->getCreatedAt(), true);
 			}
 		}
 		$result = array_values(array_unique($postDates));
 		return $result;
 	}
+
+	/**
+	 * get array of posts's date formated
+	 * @return array
+	 */
 	public function getDateArray(){
 		$dateArray = array();
 		foreach ($this->getPostDate() as $postDate){
@@ -586,23 +693,79 @@ class Data extends CoreHelper
 
 		return $dateArray;
 	}
+
+	/**
+	 * get count of posts's date
+	 * @return array
+	 */
 	public function getDateArrayCount()
 	{
 		return $dateArrayCount = array_values(array_count_values($this->getDateArray()));
 	}
+
+	/**
+	 * @return array
+	 */
 	public function getDateArrayUnique()
 	{
 		return $dateArrayUnique = array_values(array_unique($this->getDateArray()));
 	}
+
+	/**
+	 * get date count
+	 * @return int|mixed
+	 */
 	public function getDateCount()
 	{
-		$count=0;
-		$limit = $this->getBlogConfig('monthly_archive/number_records');
+		$limit = $this->getBlogConfig('monthly_archive/number_records') ?: 5;
 		$dateArrayCount = $this->getDateArrayCount();
-		foreach ($dateArrayCount as $dateCount){
-			$count++;
-		}
+		$count = count($dateArrayCount);
 		$result = ($count < $limit) ? $count : $limit ;
 		return $result;
+	}
+
+	/**
+	 * get date formatted
+	 * @param $date
+	 * @return false|string
+	 */
+	public function getDateFormat($date, $monthly = false)
+	{
+		if ($monthly) {
+			$dateType = $this->getBlogConfig('monthly_archive/date_type_monthly');
+			switch ($dateType) {
+				case 1:
+					$dateFormat = $this->dateTime->gmtDate("m - Y", $date);
+					break;
+				case 2:
+					$dateFormat = $this->dateTime->gmtDate("Y - m", $date);
+					break;
+				case 3:
+					$dateFormat = $this->dateTime->gmtDate("F Y", $date);
+					break;
+				default:
+					$dateFormat = $this->dateTime->gmtDate('Y-m-d', $date);
+					break;
+			}
+			return $dateFormat;
+		}
+
+		$dateType = $this->getBlogConfig('general/date_type');
+		switch ($dateType) {
+			case 2:
+				$dateFormat = $this->dateTime->gmtDate("Y M d", $date);
+				break;
+			case 3:
+				$dateFormat = $this->dateTime->gmtDate("d/m/Y", $date);
+				break;
+			case 4:
+				$dateFormat = $this->dateTime->gmtDate("Y/m/d h:m:s", $date);
+				break;
+			default:
+				$dateFormat = $this->dateTime->gmtDate('Y-m-d', $date);
+				break;
+		}
+
+		return $dateFormat;
 	}
 }

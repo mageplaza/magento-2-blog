@@ -62,7 +62,7 @@ if ($checkRss):
                     <div class="col-xs-12">
                         <hr/>
                         <div class="mp-post-info">
-                            <span><i class="fa fa-calendar-times-o"></i> <?php echo $_post->getFormatCreatedAt(); ?></span>
+                            <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getCreatedAt()); ?></span>
                             <?php if ($block->getPostCategoryHtml($_post)) {?>
                                 | <span><i class="fa fa-folder-open-o"></i> <?php echo __('Categories:'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> </span>
                             <?php } ?>
@@ -109,7 +109,7 @@ if ($checkRss):
                         <div class="col-xs-12">
                             <hr/>
                             <div class="mp-post-info">
-                                <span><i class="fa fa-calendar-times-o"></i> <?php echo $_post->getFormatCreatedAt(); ?></span>
+                                <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getCreatedAt()); ?></span>
 								<?php if ($block->getPostCategoryHtml($_post)) {?>
                                     | <span><i class="fa fa-folder-open-o"></i> <?php echo __('Categories:'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> </span>
 								<?php } ?>
@@ -199,7 +199,7 @@ if ($checkRss):
                                 <?php if ($relatedPost->getImage()){ ?>
                                 <img class="img-responsive" src="<?php echo $block->getImageUrl($relatedPost->getImage()); ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
                                 <?php } else {?>
-                                    <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/Mageplaza-logo.png') ?>"align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
+                                    <img class="img-responsive" src="<?php echo $block->getDefaultImageUrl() ?>"align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
                                 <?php }?>
 								<?php echo $relatedPost->getName(); ?>
                             </a>
@@ -342,7 +342,7 @@ if ($checkRss):
 	$enableSnippet = $block->getSeoConfig('snippet/enabled');
 	$orgName = $block->getSeoConfig('snippet/organize_name');
 	$logo = $block->getSeoConfig('snippet/upload_image_id') ? $block->getLogoImage($block->getSeoConfig('snippet/upload_image_id'))
-        : $this->getViewFileUrl('Mageplaza_Blog::media/images/Mageplaza-logo.png');
+        : $block->getDefaultImageUrl();
 
 	if ($enableSnippet):
 ?>
@@ -358,12 +358,12 @@ if ($checkRss):
   "image": {
     "@type": "ImageObject",
     "url": "<?php echo $_post->getImage() ? $block->getImageUrl($_post->getImage())
-        : $this->getViewFileUrl('Mageplaza_Blog::media/images/Mageplaza-logo.png'); ?>",
+        : $block->getDefaultImageUrl(); ?>",
     "height": 800,
     "width": 800
   },
-  "datePublished": "<?php echo $_post->getFormatCreatedAt(); ?>",
-  "dateModified": "<?php echo $_post->getFormatUpdatedAt(); ?>",
+  "datePublished": "<?php echo $block->getDateFormat($_post->getCreatedAt()); ?>",
+  "dateModified": "<?php echo $block->getDateFormat($_post->getUpdatedAt()); ?>",
   "author": {
     "@type": "Person",
     "name": "<?php echo $authorName; ?>"

@@ -29,8 +29,4 @@ class Listpost extends Frontend
     {
         return $this->helperData->getBlogUrl('post/rss');
     }
-    public function getMonthParam()
-	{
-		return $this->getRequest()->getParam('month');
-	}
 }

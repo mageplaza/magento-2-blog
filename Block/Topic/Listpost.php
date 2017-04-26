@@ -27,7 +27,7 @@ class Listpost extends Frontend
 
     public function getPostList()
     {
-        return $this->getBlogPagination('topic', $this->getRequest()->getParam('id'));
+        return $this->getBlogPagination(\Mageplaza\Blog\Helper\Data::TOPIC, $this->getRequest()->getParam('id'));
     }
     public function checkRss()
     {

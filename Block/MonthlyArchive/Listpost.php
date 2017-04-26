@@ -26,12 +26,14 @@ class Listpost extends Frontend
 {
 	public function getPostList()
 	{
-		return $this->getBlogPagination('month', $this->getCurrentUrl());
+		return $this->getBlogPagination(\Mageplaza\Blog\Helper\Data::MONTHLY, $this->getCurrentUrl());
 	}
+
 	public function checkRss()
 	{
 		return $this->helperData->getBlogUrl('post/rss');
 	}
+
 	public function getCurrentUrl(){
 		$currentUrl = $this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
 		$arr = explode('/',$currentUrl);

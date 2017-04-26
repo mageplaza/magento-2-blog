@@ -38,13 +38,13 @@ $postsRecent = $block->getRecentPost();
 								<?php if ($post->getImage()) : ?>
 									<img class="img-responsive" src="<?php echo $block->getImageUrl($post->getImage())?>">
 								<?php else:?>
-                                    <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/Mageplaza-logo.png') ?>">
+                                    <img class="img-responsive" src="<?php echo $block->getDefaultImageUrl(); ?>">
 								<?php endif; ?>
 							</div>
 							<div class="post-right">
 								<span><?php echo $post->getName() ?></span>
 								<span class="create-at">
-									<?php echo $block->getFormatCreatedAt($post->getCreatedAt()); ?>
+									<?php echo $block->getDateFormat($post->getCreatedAt()); ?>
 								</span>
 							</div>
 						</a>
@@ -62,13 +62,13 @@ $postsRecent = $block->getRecentPost();
 								<?php if ($post->getImage()) : ?>							
 									<img class="img-responsive" src="<?php echo $block->getImageUrl($post->getImage())?>">
 								<?php else:?>
-                                    <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/Mageplaza-logo.png') ?>">
+                                    <img class="img-responsive" src="<?php echo $block->getDefaultImageUrl() ?>">
 								<?php endif; ?>
 							</div>
 							<div class="post-right">
 								<span><?php echo $post->getName() ?></span>
 								<span class="create-at">
-									<?php echo $post->getFormatCreatedAt(); ?>
+									<?php echo $block->getDateFormat($post->getCreatedAt()); ?>
 								</span>
 							</div>
 						</a>

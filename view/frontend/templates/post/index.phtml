@@ -64,7 +64,7 @@ if ($checkRss):
 
 
                                 <div class="mp-post-info">
-                                    <?php echo __('Posted on ') . $post->getFormatCreatedAt(); ?>
+                                    <?php echo __('Posted on ') . $block->getDateFormat($post->getCreatedAt()); ?>
 									<?php
 									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
                                     ?>
@@ -129,7 +129,7 @@ if ($checkRss):
                                 </h2>
 
                                 <div class="mp-post-info">
-                                    <?php echo __('Posted on ') . $post->getFormatCreatedAt(); ?>
+                                    <?php echo __('Posted on ') . $block->getDateFormat($post->getCreatedAt()); ?>
 									<?php
 									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
                                     ?>

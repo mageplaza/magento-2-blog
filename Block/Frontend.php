@@ -50,9 +50,6 @@ class Frontend extends Template
 	 */
 	public $dateTime;
 
-	/**
-	 * @type \Mageplaza\Blog\Model\Post\Source\MetaRobots
-	 */
 	public $mpRobots;
 	public $filterProvider;
 	public $cmtFactory;
@@ -62,7 +59,6 @@ class Frontend extends Template
 
 	/**
 	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
-	 * @param \Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobots
 	 * @param \Magento\Framework\View\Element\Template\Context $context
 	 * @param \Mageplaza\Blog\Helper\Data $helperData
 	 * @param \Magento\Framework\View\Element\Template\Context $templateContext
@@ -159,16 +155,6 @@ class Frontend extends Template
 		}
 
 		return false;
-	}
-
-	/**
-	 * format post created_at
-	 */
-	public function formatCreatedAt($createdAt)
-	{
-		$dateFormat = date('Y-m-d', $this->dateTime->timestamp($createdAt));
-
-		return $dateFormat;
 	}
 
 	public function getSeoConfig($code, $storeId = null)
@@ -424,16 +410,16 @@ class Frontend extends Template
 		$postList = '';
 		if ($type == null) {
 			$postList = $this->helperData->getPostList();
-		} elseif ($type == 'category') {
-			$postList = $this->helperData->getPostList('category', $id);
-		} elseif ($type == 'tag') {
-			$postList = $this->helperData->getPostList('tag', $id);
-		} elseif ($type == 'topic') {
-			$postList = $this->helperData->getPostList('topic', $id);
-		} elseif ($type == 'author') {
-			$postList = $this->helperData->getPostList('author', $id);
-		} elseif ($type == 'month') {
-			$postList = $this->helperData->getPostList('month', $id);
+		} elseif ($type == \Mageplaza\Blog\Helper\Data::CATEGORY) {
+			$postList = $this->helperData->getPostList(\Mageplaza\Blog\Helper\Data::CATEGORY, $id);
+		} elseif ($type == \Mageplaza\Blog\Helper\Data::TAG) {
+			$postList = $this->helperData->getPostList(\Mageplaza\Blog\Helper\Data::TAG, $id);
+		} elseif ($type == \Mageplaza\Blog\Helper\Data::TOPIC) {
+			$postList = $this->helperData->getPostList(\Mageplaza\Blog\Helper\Data::TOPIC, $id);
+		} elseif ($type == \Mageplaza\Blog\Helper\Data::AUTHOR) {
+			$postList = $this->helperData->getPostList(\Mageplaza\Blog\Helper\Data::AUTHOR, $id);
+		} elseif ($type == \Mageplaza\Blog\Helper\Data::MONTHLY) {
+			$postList = $this->helperData->getPostList(\Mageplaza\Blog\Helper\Data::MONTHLY, $id);
 		}
 
 		if ($postList != '' && is_array($postList)) {
@@ -504,19 +490,6 @@ class Frontend extends Template
 		return $this->helperData->getSidebarConfig($code, $storeId);
 	}
 
-	/**
-	 * get html sitemap url
-	 */
-	public function getHtmlSiteMapUrl()
-	{
-		$moduleRoute = $this->helperData->getBlogConfig('general/url_prefix');
-		if ($moduleRoute) {
-			return $this->getBaseUrl() . $moduleRoute .'/sitemap/';
-		}
-
-		return $this->getBaseUrl() .'/mpblog/sitemap/';
-	}
-
 	public function getAuthorByPost($authorId)
 	{
 		return $this->helperData->getAuthorByPost($authorId);
@@ -557,6 +530,11 @@ class Frontend extends Template
 		return $result;
 	}
 
+	/**
+	 * get comments tree
+	 * @param $comments
+	 * @param $cmtId
+	 */
 	public function getCommentsTree($comments, $cmtId)
 	{
 		$this->commentTree .= '<ul class="default-cmt__content__cmt-content row">';
@@ -601,6 +579,10 @@ class Frontend extends Template
 		$this->commentTree .= '</ul>';
 	}
 
+	/**
+	 * get comments tree html
+	 * @return mixed
+	 */
 	public function getCommentsHtml()
 	{
 		return $this->commentTree;
@@ -628,5 +610,27 @@ class Frontend extends Template
 		}
 
 		return '';
+	}
+
+	/**
+	 * get default image url
+	 */
+	public function getDefaultImageUrl()
+	{
+		return $this->getViewFileUrl('Mageplaza_Blog::media/images/Mageplaza-logo.png');
+	}
+
+	/**
+	 * get date formatted
+	 * @param $date
+	 */
+	public function getDateFormat($date, $monthly = false)
+	{
+		return $this->helperData->getDateFormat($date, $monthly);
+	}
+
+	public function getMonthParam()
+	{
+		return $this->getRequest()->getParam('month');
 	}
 }

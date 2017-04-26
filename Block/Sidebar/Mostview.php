@@ -24,27 +24,7 @@ use Mageplaza\Blog\Block\Frontend;
 
 class Mostview extends Frontend
 {
-	public function getFormatCreatedAt($date)
-	{
-		$dateType = $this->helperData->getBlogConfig('general/date_type');
-		switch ($dateType) {
-			case 1:
-				$dateFormat = date_format(date_create($date),"Y-m-d");
-				break;
-			case 2:
-				$dateFormat = date_format(date_create($date),"Y M d");
-				break;
-			case 3:
-				$dateFormat = date_format(date_create($date),"d/m/Y");
-				break;
-			case 4:
-				$dateFormat = date_format(date_create($date),"Y/m/d h:m:s");
-				break;
-		}
-//		$dateFormat = date_format(date_create($this->getCreatedAt()),"Y/m/d h:m:s");
-//		$dateFormat    = $this->dateTime->formatDate($this->getCreatedAt(), false);
-		return $dateFormat;
-	}
+
     public function getMosviewPosts()
     {
         return $this->helperData->getMosviewPosts();

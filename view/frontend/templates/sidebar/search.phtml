@@ -1,6 +1,4 @@
-<?php
-    $helper = $this->helper('Mageplaza\Blog\Helper\Data');
-?>
+
 <div class="mpblog-search">
     <div class="block block-content">
         <div class="field search">
@@ -37,7 +35,7 @@
     ], function ($) {
         var visibleImage = <?php echo $block->getSidebarConfig('search/show_image'); ?>;
         $('#mpblog-search-box').autocomplete({
-            lookup: <?php echo $helper->getSearchBlogData();?>,
+            lookup: <?php echo $block->getSearchBlogData();?>,
             lookupLimit: <?php echo $block->getSidebarConfig('search/search_limit') ?: 10; ?>,
             maxHeight: 2000,
             minChars: <?php echo $block->getSidebarConfig('search/min_chars') ?: 1; ?>,

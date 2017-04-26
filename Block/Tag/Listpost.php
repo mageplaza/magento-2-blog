@@ -27,12 +27,9 @@ class Listpost extends Frontend
 
     public function getPostList()
     {
-        return $this->getBlogPagination('tag', $this->getRequest()->getParam('id'));
+        return $this->getBlogPagination(\Mageplaza\Blog\Helper\Data::TAG, $this->getRequest()->getParam('id'));
     }
-	public function getMonthParam()
-	{
-		return $this->getRequest()->getParam('month');
-	}
+
     public function checkRss()
     {
         return $this->helperData->getBlogUrl('post/rss');
