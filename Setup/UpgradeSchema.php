@@ -62,6 +62,45 @@ class UpgradeSchema implements UpgradeSchemaInterface
 				}
 			}
 
+			$tagTable = $installer->getTable('mageplaza_blog_tag');
+			if ($installer->getConnection()->isTableExists($tagTable)) {
+				$columns = [
+					[
+						'meta_title',
+						\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+						255,
+						[],
+						'Post Meta Title'
+					],
+					[
+						'meta_description',
+						\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+						'64k',
+						[],
+						'Post Meta Description'
+					],
+					[
+						'meta_keywords',
+						\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+						'64k',
+						[],
+						'Post Meta Keywords'
+					],
+					[
+						'meta_robots',
+						\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+						null,
+						[],
+						'Post Meta Robots'
+					]
+				];
+
+				$connection = $installer->getConnection();
+				foreach ($columns as $name => $definition) {
+					$connection->addColumn($tagTable,$name,$definition);
+				}
+			}
+
 			if (! $installer->tableExists('mageplaza_blog_post_traffic')) {
 				$table = $installer->getConnection()
 					->newTable($installer->getTable('mageplaza_blog_post_traffic'));

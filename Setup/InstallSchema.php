@@ -253,34 +253,6 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     [],
                     'Tag URL Key'
                 )
-				->addColumn(
-					'meta_title',
-					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-					255,
-					[],
-					'Post Meta Title'
-				)
-				->addColumn(
-					'meta_description',
-					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-					'64k',
-					[],
-					'Post Meta Description'
-				)
-				->addColumn(
-					'meta_keywords',
-					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-					'64k',
-					[],
-					'Post Meta Keywords'
-				)
-				->addColumn(
-					'meta_robots',
-					\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-					null,
-					[],
-					'Post Meta Robots'
-				)
                 ->setComment('Tag Table');
             $installer->getConnection()->createTable($table);
 
