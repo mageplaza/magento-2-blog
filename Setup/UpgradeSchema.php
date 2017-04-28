@@ -434,6 +434,42 @@ class UpgradeSchema implements UpgradeSchemaInterface
 				);
 				$installer->getConnection()->createTable($table);
 			}
+
+		}
+		if (version_compare($context->getVersion(), '1.1.3', '<')) {
+			if ($installer->getConnection()->isTableExists('mageplaza_blog_author') == true) {
+				$columns = [
+					'image' => [
+						'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+						'length' => 255,
+						'comment' => 'Author Image',
+						'unsigned' => true,
+					],
+					'short_description' => [
+						'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+						'length' => '64k',
+						'comment' => 'Author Short Description',
+						'unsigned' => true,
+					],
+					'facebook_link' => [
+						'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+						'length' => 255,
+						'comment' => 'Facebook Link',
+						'unsigned' => true,
+					],
+					'twitter_link' => [
+						'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+						'length' => 255,
+						'comment' => 'Twitter Link',
+						'unsigned' => true,
+					],
+				];
+
+				$connection = $installer->getConnection();
+				foreach ($columns as $name => $definition) {
+					$connection->addColumn('mageplaza_blog_author',$name,$definition);
+				}
+			}
 		}
     }
 }

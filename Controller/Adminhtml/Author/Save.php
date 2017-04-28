@@ -30,6 +30,20 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Author
 	public $backendSession;
 
 	/**
+	 * Upload model
+	 *
+	 * @var \Mageplaza\Blog\Model\Upload
+	 */
+	public $uploadModel;
+
+	/**
+	 * Image model
+	 *
+	 * @var \Mageplaza\Blog\Model\Post\Image
+	 */
+	public $imageModel;
+
+	/**
 	 * JS helper
 	 *
 	 * @var \Magento\Backend\Helper\Js
@@ -47,13 +61,16 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Author
 	 * @param \Magento\Backend\App\Action\Context $context
 	 */
 	public function __construct(
+		\Mageplaza\Blog\Model\Upload $uploadModel,
+		\Mageplaza\Blog\Model\Author\Image $imageModel,
 		\Magento\Backend\Helper\Js $jsHelper,
 		\Mageplaza\Blog\Model\AuthorFactory $authorFactory,
 		\Magento\Framework\Stdlib\DateTime\DateTime $date,
 		\Magento\Framework\Registry $registry,
 		\Magento\Backend\App\Action\Context $context
 	) {
-
+		$this->uploadModel    = $uploadModel;
+		$this->imageModel     = $imageModel;
 		$this->backendSession = $context->getSession();
 		$this->jsHelper       = $jsHelper;
 		$this->date         = $date;
@@ -70,9 +87,36 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Author
 		$data = $this->getRequest()->getPost('author');
 		$data['updated_at'] = $this->date->date();
 		$resultRedirect = $this->resultRedirectFactory->create();
+		//check delete image
+		$deleteImage = false;
 		if ($data) {
 			$author = $this->initAuthor();
 			$author->setData($data);
+			if (isset($data['image'])) {
+				if (isset($data['image']['delete']) && $data['image']['delete'] == '1') {
+					unset($data['image']);
+					$author->setImage('');
+					$deleteImage = true;
+				}
+			}
+
+			if ((!isset($data['image']) || (count($data['image']) == 1)) && !$deleteImage) {
+				$image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
+				if ($image === false) {
+					$this->messageManager->addError(__('Please choose an image to upload.'));
+					$resultRedirect->setPath(
+						'mageplaza_blog/*/edit',
+						[
+							'post_id'  => $author->getId(),
+							'_current' => true
+						]
+					);
+
+					return $resultRedirect;
+				}
+
+				$author->setImage($image);
+			}
 			$this->_eventManager->dispatch(
 				'mageplaza_blog_author_prepare_save',
 				[

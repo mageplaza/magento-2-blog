@@ -1,0 +1,65 @@
+<?php
+//$block->getAuthorByPost($block->getCurrentAuthor());
+//?>
+<div class="mp-sidebar mpcss">
+	<div class="row">
+        <div class="author-name col-xs-12">
+            <h3><?php echo $block->getAuthorByPost($block->getCurrentAuthor())->getName()?></h3>
+        </div>
+        <div class="author-image col-xs-12">
+            <?php if ($block->getAuthorByPost($block->getCurrentAuthor())->getImage()) : ?>
+<!--                <a class="fancybox" href="--><?php //echo $block->getAuthorImageUrl($block->getAuthorByPost($_post->getAuthorId())->getImage()); ?><!--">-->
+                     <img class="img-responsive" src="<?php echo $block->getAuthorImageUrl($block->getAuthorByPost($block->getCurrentAuthor())->getImage()); ?>" alt="<?php echo $block->escapeHtml($block->getAuthorByPost($block->getCurrentAuthor())->getName()); ?>"/>
+<!--                </a>-->
+            <?php else: ?>
+                <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/default-user.png') ?>" align="middle" alt="<?php echo $block->escapeHtml($block->getAuthorByPost($block->getCurrentAuthor())->getName()); ?>">
+            <?php endif; ?>
+        </div>
+
+        <div class="author-content col-xs-12">
+            <?php
+                echo ($block->getAuthorByPost($block->getCurrentAuthor())->getShortDescription()) ? ($block->getAuthorByPost($block->getCurrentAuthor())->getShortDescription()) : 'No info';
+            ?>
+        </div>
+
+        <div class="author-social col-xs-12">
+
+            <?php if ($block->getAuthorByPost($block->getCurrentAuthor())->getFacebookLink()) : ?>
+            <a href="<?php echo $block->getAuthorByPost($block->getCurrentAuthor())->getFacebookLink()?>" target="_blank">
+                <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/facebook.png') ?>" align="middle" alt="<?php echo $block->escapeHtml($block->getAuthorByPost($block->getCurrentAuthor())->getName()); ?>"/>
+            </a>
+                <a href="<?php echo $block->getAuthorByPost($block->getCurrentAuthor())->getTwitterLink()?>" target="_blank">
+                    <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/twitter.png') ?>" align="middle" alt="<?php echo $block->escapeHtml($block->getAuthorByPost($block->getCurrentAuthor())->getName()); ?>"/>
+                </a>
+			<?php else : ?>
+                <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/facebookoff.png') ?>" align="middle" alt="<?php echo $block->escapeHtml($block->getAuthorByPost($block->getCurrentAuthor())->getName()); ?>"/>
+                <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/twitter-off.png') ?>" align="middle" alt="<?php echo $block->escapeHtml($block->getAuthorByPost($block->getCurrentAuthor())->getName()); ?>"/>
+			<?php endif; ?>
+        </div>
+        <div class="author-border col-xs-12"><hr></div>
+	</div>
+</div>
+
+<!--<script type="text/javascript">-->
+<!--    require([-->
+<!--        'jquery',-->
+<!--        'fancybox',-->
+<!--        'migrate'-->
+<!--    ], function($){-->
+<!--        var addToAll = true;-->
+<!--        var gallery = false;-->
+<!--        var titlePosition = 'inside';-->
+<!--        $(addToAll ? 'img' : 'img.fancybox').each(function(){-->
+<!--            var $this = $(this);-->
+<!--            var title = $this.attr('title');-->
+<!--            var src = $this.attr('data-big') || $this.attr('src');-->
+<!--            var a = $('<a href="#" class="fancybox"></a>').attr('href', src).attr('title', title);-->
+<!--            $this.wrap(a);-->
+<!--        });-->
+<!--        if (gallery)-->
+<!--            $('a.fancybox').attr('rel', 'fancyboxgallery');-->
+<!--        $('a.fancybox').fancybox({-->
+<!--            titlePosition: titlePosition-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->

@@ -307,7 +307,8 @@ class Frontend extends Template
 					['label' => __('Author'),
 					 'title' => __('Author')]
 				);
-				$this->applySeoCode($author);
+				$pageMainTitle = $this->getLayout()->getBlock('page.main.title');
+				$pageMainTitle->setPageTitle('About Author');
 			}
 		}
 
@@ -498,6 +499,11 @@ class Frontend extends Template
 	public function getAuthorUrl($author)
 	{
 		return $this->helperData->getAuthorUrl($author);
+	}
+
+	public function getAuthorImageUrl($image)
+	{
+		return $this->helperData->getAuthorImageUrl($image);
 	}
 
 	/**

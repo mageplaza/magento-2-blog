@@ -53,6 +53,7 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
 				'class'  => 'fieldset-wide'
 			]
 		);
+		$fieldset->addType('image', 'Mageplaza\Blog\Block\Adminhtml\Author\Helper\Image');
 		if ($author->getId()){
 			$fieldset->addField(
 				'user_id',
@@ -71,7 +72,48 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
 				'note' => __('This name will displayed into frontend'),
 			]
 		);
+		
+		$fieldset->addField(
+			'short_description',
+			'textarea',
+			[
+				'name'  => 'short_description',
+				'label' => __('Short Description'),
+				'title' => __('Short Description'),
+				'note' => __('Short Description'),
+			]
+		);
 
+		$fieldset->addField(
+			'image',
+			'image',
+			[
+				'name'  => 'image',
+				'label' => __('Image'),
+				'title' => __('Image'),
+				'note' => __('Featured image'),
+			]
+		);
+		$fieldset->addField(
+			'facebook_link',
+			'text',
+			[
+				'name'  => 'facebook_link',
+				'label' => __('Facebook'),
+				'title' => __('Facebook'),
+				'note' => __('Facebook Link'),
+			]
+		);
+		$fieldset->addField(
+			'twitter_link',
+			'text',
+			[
+				'name'  => 'twitter_link',
+				'label' => __('Twitter'),
+				'title' => __('Twitter'),
+				'note' => __('Twitter Link'),
+			]
+		);
 		$authorData = $this->_session->getData('mageplaza_blog_author_data', true);
 		if ($authorData) {
 			$author->addData($authorData);

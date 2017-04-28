@@ -34,6 +34,7 @@ class Data extends CoreHelper
 {
     const XML_PATH_BLOG = 'blog/';
     const POST_IMG = 'mageplaza/blog/post/image';
+    const AUTHOR_IMG = 'mageplaza/blog/author/image';
 	const DEFAULT_URL_PREFIX = 'blog';
 	const CATEGORY = 'category';
     const TAG = 'tag';
@@ -722,6 +723,14 @@ class Data extends CoreHelper
 		$count = count($dateArrayCount);
 		$result = ($count < $limit) ? $count : $limit ;
 		return $result;
+	}
+	/**
+	 * get author image link
+	 * @return string
+	 */
+	public function getAuthorImageUrl($image)
+	{
+		return $this->getBaseMediaUrl(). self::AUTHOR_IMG . $image;
 	}
 
 	/**
