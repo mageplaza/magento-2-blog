@@ -22,7 +22,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <mpblog>
+        <blog>
             <general>
                 <enabled>1</enabled>
                 <name>Blog</name>
@@ -71,6 +71,6 @@
                     <enabled>1</enabled>
                 </snippet>
             </seo>
-        </mpblog>
+        </blog>
     </default>
 </config>

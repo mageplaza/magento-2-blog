@@ -63,35 +63,27 @@ class UpgradeSchema implements UpgradeSchemaInterface
 			}
 
 			$tagTable = $installer->getTable('mageplaza_blog_tag');
-			if ($installer->getConnection()->isTableExists($tagTable)) {
+			if ($installer->getConnection()->isTableExists($tagTable) == true) {
 				$columns = [
-					[
-						'meta_title',
-						\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-						255,
-						[],
-						'Post Meta Title'
+					'meta_title' => [
+						'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+						'length' => 255,
+						'comment' => 'Post Meta Title',
 					],
-					[
-						'meta_description',
-						\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-						'64k',
-						[],
-						'Post Meta Description'
+					'meta_description' => [
+						'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+						'length' => '64k',
+						'comment' => 'Post Meta Description',
 					],
-					[
-						'meta_keywords',
-						\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-						'64k',
-						[],
-						'Post Meta Keywords'
+					'meta_keywords' => [
+						'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+						'length' => '64k',
+						'comment' => 'Post Meta Keywords',
 					],
-					[
-						'meta_robots',
-						\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-						null,
-						[],
-						'Post Meta Robots'
+					'meta_robots' => [
+						'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+						'length' => '64k',
+						'comment' => 'Post Meta Robots',
 					]
 				];
 
