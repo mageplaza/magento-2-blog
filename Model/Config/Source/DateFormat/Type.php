@@ -35,10 +35,10 @@ class Type implements \Magento\Framework\Option\ArrayInterface
 	public function toOptionArray()
 	{
 		return [
-			['value' => self::DEFAULT_DATE, 'label' => __('yyyy/mm/dd')],
+			['value' => self::DEFAULT_DATE, 'label' => __('yyyy - mm - dd')],
 			['value' => self::LONG_DATE, 'label' => __('yyyy month dd')],
-			['value' => self::DATE, 'label' => __('dd/mm/yyyy')],
-			['value' => self::FULL_DATE, 'label' => __('yyyy/mm/dd hh:mm:ss')]
+			['value' => self::DATE, 'label' => __('dd - mm - yyyy')],
+			['value' => self::FULL_DATE, 'label' => __('yyyy - mm - dd hh:mm:ss')]
 		];
 	}
 
@@ -50,9 +50,9 @@ class Type implements \Magento\Framework\Option\ArrayInterface
 	public function toArray()
 	{
 		return [
-			self::FULL_DATE => __('yyyy/mm/dd hh:mm:ss'),
-			self::DEFAULT_DATE => __('yyyy/mm/dd'),
-			self::DATE => __('dd/mm/yyyy'),
+			self::FULL_DATE => __('yyyy - mm - dd hh:mm:ss'),
+			self::DEFAULT_DATE => __('yyyy - mm - dd'),
+			self::DATE => __('dd - mm - yyyy'),
 			self::LONG_DATE=> __('yyyy month dd')
 		];
 	}

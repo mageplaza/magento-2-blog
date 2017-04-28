@@ -526,7 +526,7 @@ class Data extends CoreHelper
             '*'
         );
         $posts->setOrder('numbers_view', 'DESC');
-        $limitMostView = $this->getBlogConfig('sidebar/number_mostview_posts') ?: 5;
+        $limitMostView = $this->getBlogConfig('sidebar/number_mostview_posts') ?: 1;
         $postList = $this->filterItems($posts, $limitMostView);
         if ($postList == '') {
             return '';
@@ -545,7 +545,7 @@ class Data extends CoreHelper
             ->addFieldToFilter('enabled', 1)
             ->setOrder('created_at', 'DESC');
 
-        $limitRecent = $this->getBlogConfig('sidebar/number_recent_posts') ?: 5;
+        $limitRecent = $this->getBlogConfig('sidebar/number_recent_posts') ?: 1;
         $postList = $this->filterItems($posts, $limitRecent);
         if ($postList == '') {
             return '';

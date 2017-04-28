@@ -22,9 +22,9 @@
 <?php
 $_post = $block->getCurrentPost();
 $author = $block->getAuthorByPost($_post->getAuthorId());
-$authorName = $author !== null ? $author->getDisplayName() : '';
+$authorName = $author !== null ? $author->getName() : '';
 $modifier = $block->getAuthorByPost($_post->getModifierId());
-$modifierName = $modifier !== null ? $modifier->getDisplayName() : '';
+$modifierName = $modifier !== null ? $modifier->getName() : '';
 ?>
 <?php $checkRss = $block->checkRss();
 if ($checkRss):
