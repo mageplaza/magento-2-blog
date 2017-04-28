@@ -49,21 +49,14 @@
                 </field>
                 <field id="toplinks" translate="label comment" type="select" sortOrder="20" showInDefault="20"
                        showInWebsite="1" showInStore="1">
-                    <label>Show Blog Link in Top links</label>
+                    <label>Show Blog Link in Top Menu</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="footer" translate="label comment" type="select" sortOrder="25" showInDefault="20" showInWebsite="1" showInStore="1">
                     <label>Show Blog Link in Footer links</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="sidebar_right" translate="label comment" type="select" sortOrder="30" showInDefault="20" showInWebsite="1" showInStore="1">
-                    <label>Show Sidebar Right</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="sidebar_left" translate="label comment" type="select" sortOrder="30" showInDefault="20" showInWebsite="1" showInStore="1">
-                    <label>Show Sidebar Left</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
+
                 <field id="related_post" translate="label comment" type="text" sortOrder="35" showInDefault="1" showInStore="1" showInWebsite="1">
                     <label>Limit related post</label>
                     <comment>Number of related post in post view page</comment>
@@ -72,6 +65,20 @@
                     <label>Display blogs style</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\Blogview\Display</source_model>
                     <comment>Grid view style is better</comment>
+                </field>
+                <field id="display_author" translate="label comment" type="select" sortOrder="50" showInDefault="20"
+                       showInWebsite="1" showInStore="1">
+                    <label>Display author</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="display_sitemap" translate="label comment" type="select" sortOrder="55" showInDefault="20"
+                       showInWebsite="1" showInStore="1">
+                    <label>Display sitemap</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="date_type" translate="label" type="select" sortOrder="57" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Type of Datetime</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\DateFormat\Type</source_model>
                 </field>
                 <field id="font_color" translate="label comment" type="text" sortOrder="60" showInWebsite="1" showInStore="1" showInDefault="1">
                     <label>Choose blog's color</label>
@@ -90,11 +97,49 @@
                 <field id="number_mostview_posts" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Number of most view posts</label>
                 </field>
+                <field id="sidebar_left_right" translate="label comment" type="select" sortOrder="40" showInDefault="20" showInWebsite="1" showInStore="1">
+                    <label>Sidebar Location</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\SideBarLR</source_model>
+                </field>
+                <group id="search" translate="label" showInDefault="1" sortOrder="100" showInWebsite="1" showInStore="1">
+                    <label>Search</label>
+                    <field id="enable_search" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable Search Box</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="search_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Maximum Query Result</label>
+                    </field>
+                    <field id="min_chars" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Min Chars</label>
+                    </field>
+                    <field id="show_image" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Visible Image</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="description" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Description length</label>
+                    </field>
+                </group>
+            </group>
+            <group id="monthly_archive" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Monthly Archive</label>
+                <field id="enable_monthly" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Monthly Archive</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="number_records" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Number of records</label>
+                </field>
+                <field id="date_type_monthly" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Type of Datetime</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\DateFormat\TypeMonth</source_model>
+                </field>
             </group>
             <group id="comment" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Comments</label>
                 <field id="type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Number of recent posts</label>
+                    <label>Type of comment</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Type</source_model>
                 </field>
                 <field id="disqus" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -136,6 +181,22 @@
                 <field id="meta_keywords" translate="label" type="textarea" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Meta keywords for posts list page</label>
                 </field>
+                <group id="snippet" translate="label" showInStore="1" showInWebsite="1" sortOrder="100" showInDefault="1">
+                    <label>Article Snippet</label>
+                    <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="organize_name" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Organize or Website name</label>
+                    </field>
+                    <field id="upload_image_id" translate="label comment" type="image" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Logo</label>
+                        <comment>Choose your website or organize logo.</comment>
+                        <backend_model>Mageplaza\Blog\Model\Config\Source\Backend\Image</backend_model>
+                        <base_url type="media" scope_info="1">mageplaza/blog/logo</base_url>
+                    </field>
+                </group>
             </group>
             <group id="share" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Social Sharing</label>

@@ -1,0 +1,35 @@
+<?php
+$topics = $block->getTopicList();
+$limit = 5;
+$count = 0;
+?>
+<div class="mp-sidebar mpcss">
+	<div class="row">
+		<div class="block-title col-xs-12 sidebar-categories">
+				<p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Topics') ?></p>
+
+		</div>
+        <div class="col-xs-12">
+            <ul class="menu-categories">
+                <?php if ($topics != '' && count($topics) > 0): ?>
+
+					<?php foreach ($topics as $topic): ?>
+						<?php
+						$count++;
+						if ($count > $limit)
+							break;
+						?>
+						<li class="category-item" >
+                        <a class="list-categories" href="<?php echo $block->getTopicUrl($topic) ?>"><i class="fa fa-folder-o" aria-hidden="true"></i>
+                            <?php echo ucfirst($topic->getName())?>
+                        </a>
+                </li>
+					<?php endforeach; ?>
+
+				<?php else: ?>
+					<?php echo __('No Topics') ?>
+				<?php endif; ?>
+            </ul>
+        </div>
+    </div>
+</div>

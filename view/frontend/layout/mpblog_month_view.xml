@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+
+        <referenceContainer name="content">
+            <block class="Mageplaza\Blog\Block\MonthlyArchive\Listpost" template="Mageplaza_Blog::category/post/list.phtml">
+                <block class="Mageplaza\Blog\Block\Sidebar\Search" template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search" />
+                <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"
+                       template="Mageplaza_Blog::sidebar/mostview.phtml"/>
+                <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category"
+                       template="Mageplaza_Blog::category/widget.phtml"/>
+                <block class="Mageplaza\Blog\Block\MonthlyArchive\Widget" name="mp.blog.view.sidebar.monthly"
+                       template="Mageplaza_Blog::monthly/widget.phtml"/>
+                <block class="Mageplaza\Blog\Block\Topic\Widget" name="mp.blog.view.sidebar.topic"
+                       template="Mageplaza_Blog::topic/widget.phtml"/>
+                <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"
+                       template="Mageplaza_Blog::tag/widget.phtml"/>
+
+            </block>
+        </referenceContainer>
+    </body>
+</page>

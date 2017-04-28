@@ -26,7 +26,7 @@ $postsRecent = $block->getRecentPost();
 <div class="mp-sidebar mpcss">
 		<ul class="nav nav-tabs">
 			<li id="tab-1" class="active"><a id="popular-tab"><?php echo __('Popular') ?></a></li>
-			<li id="tab-2"><a id="recent-tab"><?php echo __('Recent') ?></a></li>
+			<li id="tab-2"><a id="recent-tab"><?php echo __('Latest') ?></a></li>
 		</ul>
 		
 		<div class="tab-content">
@@ -35,12 +35,16 @@ $postsRecent = $block->getRecentPost();
 					<?php foreach ($posts as $post): ?>
 						<a class="list-post-tabs" href="<?php echo $block->getUrlByPost($post) ?>">
 							<div class="post-left">
-								<img class="img-responsive" src="<?php echo $block->getImageUrl($post->getImage())?>">
+								<?php if ($post->getImage()) : ?>
+									<img class="img-responsive" src="<?php echo $block->getImageUrl($post->getImage())?>">
+								<?php else:?>
+                                    <img class="img-responsive" src="<?php echo $block->getDefaultImageUrl(); ?>">
+								<?php endif; ?>
 							</div>
 							<div class="post-right">
 								<span><?php echo $post->getName() ?></span>
 								<span class="create-at">
-									<?php echo $block->formatCreatedAt($post->getCreatedAt()); ?>
+									<?php echo $block->getDateFormat($post->getCreatedAt()); ?>
 								</span>
 							</div>
 						</a>
@@ -55,12 +59,16 @@ $postsRecent = $block->getRecentPost();
 					<?php foreach ($postsRecent as $post): ?>
 						<a class="list-post-tabs" href="<?php echo $block->getUrlByPost($post) ?>">
 							<div class="post-left">
-								<img class="img-responsive" src="<?php echo $block->getImageUrl($post->getImage())?>">
+								<?php if ($post->getImage()) : ?>							
+									<img class="img-responsive" src="<?php echo $block->getImageUrl($post->getImage())?>">
+								<?php else:?>
+                                    <img class="img-responsive" src="<?php echo $block->getDefaultImageUrl() ?>">
+								<?php endif; ?>
 							</div>
 							<div class="post-right">
 								<span><?php echo $post->getName() ?></span>
 								<span class="create-at">
-									<?php echo $post->getFormatCreatedAt(); ?>
+									<?php echo $block->getDateFormat($post->getCreatedAt()); ?>
 								</span>
 							</div>
 						</a>

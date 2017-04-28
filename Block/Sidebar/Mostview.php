@@ -24,6 +24,7 @@ use Mageplaza\Blog\Block\Frontend;
 
 class Mostview extends Frontend
 {
+
     public function getMosviewPosts()
     {
         return $this->helperData->getMosviewPosts();

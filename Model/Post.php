@@ -150,7 +150,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
 	public $relatedPostCollection;
 
 	public $dateTime;
-
+	public $helperData;
     /**
      * constructor
      *
@@ -171,6 +171,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
 		\Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+		\Mageplaza\Blog\Helper\Data $helperData,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -179,6 +180,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
         $this->topicCollectionFactory    = $topicCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->postCollectionFactory     = $postCollectionFactory;
+		$this->helperData = $helperData;
         $this->dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -243,12 +245,12 @@ class Post extends \Magento\Framework\Model\AbstractModel
     {
         if ($this->tagCollection === null) {
             $collection = $this->tagCollectionFactory->create();
-            $collection->join(
+            $collection->getSelect()->join(
                 'mageplaza_blog_post_tag',
                 'main_table.tag_id=mageplaza_blog_post_tag.tag_id AND mageplaza_blog_post_tag.post_id='
 				. $this->getId(),
                 ['position']
-            );
+            )->where("main_table.enabled='1'");
             $this->tagCollection = $collection;
         }
 
@@ -367,17 +369,6 @@ class Post extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * get format date
-     * @return mixed
-     */
-    public function getFormatCreatedAt()
-    {
-        $dateFormat    = $this->dateTime->formatDate($this->getCreatedAt(), false);
-
-        return $dateFormat;
-    }
-
-    /**
      * get related posts
      * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
@@ -386,12 +377,12 @@ class Post extends \Magento\Framework\Model\AbstractModel
         if ($this->getTopicSting()) {
             $collection = $this->postCollectionFactory->create();
 
-            $collection->join(
+            $collection->getSelect()->join(
                 'mageplaza_blog_post_topic',
                 'main_table.post_id=mageplaza_blog_post_topic.post_id AND mageplaza_blog_post_topic.post_id != "'
 				. $this->getId() . '" AND mageplaza_blog_post_topic.topic_id IN (' . $this->getTopicSting() . ')',
                 ['position']
-            );
+            )->group('main_table.post_id');
             $this->relatedPostCollection = $collection;
         }
         return $this->relatedPostCollection;

@@ -29,6 +29,7 @@
                     <resource id="Mageplaza_Blog::tag" title="Tags" sortOrder="20"/>
                     <resource id="Mageplaza_Blog::topic" title="Topics" sortOrder="30"/>
                     <resource id="Mageplaza_Blog::category" title="Categories" sortOrder="40"/>
+                    <resource id="Mageplaza_Blog::author" title="Author Management" sortOrder="50"/>
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">

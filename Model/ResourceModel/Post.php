@@ -56,7 +56,7 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var string
      */
 	public $postCategoryTable;
-
+	public $helperData;
     /**
      * constructor
      *
@@ -67,11 +67,12 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Event\ManagerInterface $eventManager,
+		\Mageplaza\Blog\Helper\Data $helperData,
         \Magento\Framework\Model\ResourceModel\Db\Context $context
     ) {
-    
         $this->date         = $date;
         $this->eventManager = $eventManager;
+		$this->helperData = $helperData;
         parent::__construct($context);
         $this->postTagTable      = $this->getTable('mageplaza_blog_post_tag');
         $this->postTopicTable    = $this->getTable('mageplaza_blog_post_topic');
@@ -336,9 +337,12 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             return $this;
         }
         $oldCategoryIds = $post->getCategoryIds();
-        $insert         = array_diff_key($categories, $oldCategoryIds);
-        $delete         = array_diff_key($oldCategoryIds, $categories);
+        $insert         = array_diff($categories, $oldCategoryIds);
+        $delete         = array_diff($oldCategoryIds, $categories);
         $adapter        = $this->getConnection();
+
+        //\Zend_Debug::dump($delete);die();
+
         if (!empty($delete)) {
             $condition = ['category_id IN(?)' => $delete, 'post_id=?' => $id];
             $adapter->delete($this->postCategoryTable, $condition);
@@ -408,35 +412,6 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $adapter->fetchCol($select);
     }
 
-    public function generateUrlKey($name, $count)
-    {
-        // replace non letter or digits by -
-        $text = preg_replace('~[^\pL\d]+~u', '-', $name);
-
-        // transliterate
-        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-
-        // remove unwanted characters
-        $text = preg_replace('~[^-\w]+~', '', $text);
-
-        // trim
-        $text = trim($text, '-');
-
-        // remove duplicate -
-        $text = preg_replace('~-+~', '-', $text);
-
-        // lowercase
-        $text = strtolower($text);
-        if ($count == 0) {
-            $count = '';
-        }
-        if (empty($text)) {
-            return 'n-a' . $count;
-        }
-
-        return $text . $count;
-    }
-
     public function checkUrlKey($url, $id = null)
     {
         $adapter = $this->getConnection();
@@ -457,4 +432,8 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $result;
     }
+	public function generateUrlKey($name, $count){
+    	$result = $this->helperData->generateUrlKey($name,$count);
+    	return $result;
+	}
 }

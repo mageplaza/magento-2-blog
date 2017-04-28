@@ -21,24 +21,20 @@
 ?>
 <?php
 $tags = $block->getTagList();
-$limit = 5;
-$count = 0;
 ?>
 <div class="mp-sidebar mpcss">
 	<div class="row">
 		<div class="block-title col-xs-12 sidebar-tags">
-				<p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Tags') ?></p>
-
+            <p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Tags') ?></p>
 		</div>
 		<div class="col-xs-12">
-			<?php if ($tags != '' && count($tags) > 0): ?>
+			<?php if ($tags != '' && !empty($tags)): ?>
 				<?php foreach ($tags as $tag): ?>
-					<?php
-					$count++;
-					if ($count > $limit)
-						break;
-					?>
-					<a class="label label-default tags-list" href="<?php echo $block->getTagUrl($tag) ?>"><?php echo $tag->getName(); ?></a>
+					<a class="label label-default tags-list" style="font-size:
+                        <?php $size = $block->getTagSize($tag);
+                            echo ($size > 8) ? ($size .'px') : '8px';
+                        ?>
+                    " href="<?php echo $block->getTagUrl($tag) ?>"><?php echo $tag->getName(); ?></a>
 				<?php endforeach; ?>
 				
 				<?php else: ?>
@@ -46,5 +42,5 @@ $count = 0;
 				<?php endif; ?>
 				<hr/>
 		</div>
-		</div>
+    </div>
 </div>

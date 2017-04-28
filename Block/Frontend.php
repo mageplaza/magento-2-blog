@@ -26,6 +26,8 @@ use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Mageplaza\Blog\Model\Comment;
+use Magento\Cms\Model\Template\FilterProvider;
 
 /**
  * Class Frontend
@@ -48,33 +50,42 @@ class Frontend extends Template
 	 */
 	public $dateTime;
 
-	/**
-	 * @type \Mageplaza\Blog\Model\Post\Source\MetaRobots
-	 */
 	public $mpRobots;
+	public $filterProvider;
+	public $cmtFactory;
+	public $likeFactory;
+	public $customerRepository;
+	public $commentTree;
 
 	/**
 	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
-	 * @param \Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobots
 	 * @param \Magento\Framework\View\Element\Template\Context $context
 	 * @param \Mageplaza\Blog\Helper\Data $helperData
 	 * @param \Magento\Framework\View\Element\Template\Context $templateContext
+	 * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
 	 * @param array $data
 	 */
 	public function __construct(
 		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-		\Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobots,
+		\Mageplaza\Blog\Model\CommentFactory $commentFactory,
+		\Mageplaza\Blog\Model\LikeFactory $likeFactory,
+		\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+		\Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobots,
 		Context $context,
 		HelperData $helperData,
 		TemplateContext $templateContext,
+		FilterProvider $filterProvider,
 		array $data = []
 	)
 	{
 		$this->dateTime   = $dateTime;
 		$this->mpRobots   = $metaRobots;
+		$this->cmtFactory = $commentFactory;
+		$this->likeFactory = $likeFactory;
+		$this->customerRepository = $customerRepository;
 		$this->helperData = $helperData;
 		$this->store      = $templateContext->getStoreManager();
-
+		$this->filterProvider = $filterProvider;
 		parent::__construct($context, $data);
 	}
 
@@ -146,14 +157,9 @@ class Frontend extends Template
 		return false;
 	}
 
-	/**
-	 * format post created_at
-	 */
-	public function formatCreatedAt($createdAt)
+	public function getSeoConfig($code, $storeId = null)
 	{
-		$dateFormat = date('Y-m-d', $this->dateTime->timestamp($createdAt));
-
-		return $dateFormat;
+		return $this->helperData->getSeoConfig($code, $storeId);
 	}
 
 	/**
@@ -164,141 +170,150 @@ class Frontend extends Template
 	{
 		$actionName       = $this->getRequest()->getFullActionName();
 		$breadcrumbs      = $this->getLayout()->getBlock('breadcrumbs');
-		$breadcrumbsLabel = ucfirst($this->helperData->getBlogConfig('general/url_prefix'));
-//		if ($breadcrumbs) {
-//			if ($actionName == 'blog_post_index') {
-//				$breadcrumbs->addCrumb(
-//					'home',
-//					[
-//						'label' => __('Home'),
-//						'title' => __('Go to Home Page'),
-//						'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//					]
-//				)->addCrumb(
-//					$this->helperData->getBlogConfig('general/url_prefix'),
-//					['label' => $breadcrumbsLabel, 'title' => $this->helperData->getBlogConfig('general/url_prefix')]
-//				);
-//				$this->applySeoCode();
-//			} elseif ($actionName == 'blog_post_view') {
-//				$post = $this->getCurrentPost();
-//				if ($this->filterPost($post)) {
-//					$category = $post->getSelectedCategoriesCollection()->addFieldToFilter('enabled', 1)->getFirstItem();
-//					$breadcrumbs->addCrumb(
-//						'home',
-//						[
-//							'label' => __('Home'),
-//							'title' => __('Go to Home Page'),
-//							'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//						]
-//					);
-//					$breadcrumbs->addCrumb(
-//						$this->helperData->getBlogConfig('general/url_prefix'),
-//						['label' => $breadcrumbsLabel,
-//						 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
-//						 'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//							 . $this->helperData->getBlogConfig('general/url_prefix')]
-//					);
-//					if ($category->getId()) {
-//						$breadcrumbs->addCrumb(
-//							$category->getUrlKey(),
-//							['label' => ucfirst($category->getName()),
-//							 'title' => $category->getName(),
-//							 'link'  => $this->helperData->getCategoryUrl($category)]
-//						);
-//					}
-//					$breadcrumbs->addCrumb(
-//						$post->getUrlKey(),
-//						['label' => ucfirst($post->getName()),
-//						 'title' => $post->getName()]
-//					);
-//					$this->applySeoCode($post);
-//				}
-//			} elseif ($actionName == 'blog_category_view') {
-//				$category = $this->helperData->getCategoryByParam('id', $this->getRequest()->getParam('id'));
-//				$breadcrumbs->addCrumb(
-//					'home',
-//					[
-//						'label' => __('Home'),
-//						'title' => __('Go to Home Page'),
-//						'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//					]
-//				);
-//				$breadcrumbs->addCrumb(
-//					$this->helperData->getBlogConfig('general/url_prefix'),
-//					['label' => $breadcrumbsLabel,
-//					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
-//					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//						 . $this->helperData->getBlogConfig('general/url_prefix')]
-//				)->addCrumb(
-//					$category->getUrlKey(),
-//					['label' => ucfirst($category->getName()),
-//					 'title' => $category->getName(),
-//					]
-//				);
-//				$this->applySeoCode($category);
-//			} elseif ($actionName == 'blog_tag_view') {
-//				$tag = $this->helperData->getTagByParam('id', $this->getRequest()->getParam('id'));
-//				$breadcrumbs->addCrumb(
-//					'home',
-//					[
-//						'label' => __('Home'),
-//						'title' => __('Go to Home Page'),
-//						'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//					]
-//				)->addCrumb(
-//					$this->helperData->getBlogConfig('general/url_prefix'),
-//					['label' => $breadcrumbsLabel,
-//					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
-//					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//						 . $this->helperData->getBlogConfig('general/url_prefix')]
-//				)->addCrumb(
-//					'Tag',
-//					['label' => 'Tag',
-//					 'title' => 'Tag']
-//				)->addCrumb(
-//					'Tag' . $tag->getId(),
-//					['label' => ucfirst($tag->getName()),
-//					 'title' => $tag->getName()]
-//				);
-//				$this->applySeoCode($tag);
-//			} elseif ($actionName == 'blog_topic_view') {
-//				$topic = $this->helperData->getTopicByParam('id', $this->getRequest()->getParam('id'));
-//				$breadcrumbs->addCrumb(
-//					'home',
-//					[
-//						'label' => __('Home'),
-//						'title' => __('Go to Home Page'),
-//						'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//					]
-//				)->addCrumb(
-//					$this->helperData->getBlogConfig('general/url_prefix'),
-//					['label' => $breadcrumbsLabel,
-//					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
-//					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
-//						 . $this->helperData->getBlogConfig('general/url_prefix')]
-//				)->addCrumb(
-//					'Topic',
-//					['label' => 'Topic',
-//					 'title' => 'Topic']
-//				)->addCrumb(
-//					'topic' . $topic->getId(),
-//					['label' => ucfirst($topic->getName()),
-//					 'title' => $topic->getName()]
-//				);
-//				$this->applySeoCode($topic);
-//			}
-//		}
+		$breadcrumbsLabel = ucfirst($this->helperData->getBlogConfig('general/name')
+			?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX);
+		$breadcrumbsLink = $this->helperData->getBlogConfig('general/url_prefix')
+			?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX;
+		if ($breadcrumbs) {
+			if ($actionName == 'mpblog_post_index' || $actionName =='mpblog_month_view') {
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				)->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel, 'title' => $this->helperData->getBlogConfig('general/url_prefix')]
+				);
+				$this->applySeoCode();
+			} elseif ($actionName == 'mpblog_post_view') {
+				$post = $this->getCurrentPost();
+				if ($this->filterPost($post)) {
+					$category = $post->getSelectedCategoriesCollection()->addFieldToFilter('enabled', 1)->getFirstItem();
+					$breadcrumbs->addCrumb(
+						'home',
+						[
+							'label' => __('Home'),
+							'title' => __('Go to Home Page'),
+							'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						]
+					);
+					$breadcrumbs->addCrumb(
+						$this->helperData->getBlogConfig('general/url_prefix'),
+						['label' => $breadcrumbsLabel,
+						 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+						 'link'  => $this->_storeManager->getStore()->getBaseUrl()
+							 . $breadcrumbsLink]
+					);
+					if ($category->getId()) {
+						$breadcrumbs->addCrumb(
+							$category->getUrlKey(),
+							['label' => ucfirst($category->getName()),
+							 'title' => $category->getName(),
+							 'link'  => $this->helperData->getCategoryUrl($category)]
+						);
+					}
+					$breadcrumbs->addCrumb(
+						$post->getUrlKey(),
+						['label' => ucfirst($post->getName()),
+						 'title' => $post->getName()]
+					);
+					$this->applySeoCode($post);
+				}
+			} elseif ($actionName == 'mpblog_category_view') {
+				$category = $this->helperData->getCategoryByParam('id', $this->getRequest()->getParam('id'));
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				);
+				$breadcrumbs->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
+					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						 . $breadcrumbsLink]
+				)->addCrumb(
+					$category->getUrlKey(),
+					['label' => ucfirst($category->getName()),
+					 'title' => $category->getName(),
+					]
+				);
+				$this->applySeoCode($category);
+			} elseif ($actionName == 'mpblog_tag_view') {
+				$tag = $this->helperData->getTagByParam('id', $this->getRequest()->getParam('id'));
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				)->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
+					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						 . $breadcrumbsLink]
+				)->addCrumb(
+					'Tag' . $tag->getId(),
+					['label' => ucfirst($tag->getName()),
+					 'title' => $tag->getName()]
+				);
+				$this->applySeoCode($tag);
+			} elseif ($actionName == 'mpblog_topic_view') {
+				$topic = $this->helperData->getTopicByParam('id', $this->getRequest()->getParam('id'));
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				)->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
+					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						 . $breadcrumbsLink]
+				)->addCrumb(
+					'topic' . $topic->getId(),
+					['label' => ucfirst($topic->getName()),
+					 'title' => $topic->getName()]
+				);
+				$this->applySeoCode($topic);
+			} elseif ($actionName == 'mpblog_author_view') {
+				$author = $this->helperData->getAuthorByParam('id', $this->getRequest()->getParam('id'));
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				)->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
+					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						 . $breadcrumbsLink]
+				)->addCrumb(
+					'author' . $author->getId(),
+					['label' => __('Author'),
+					 'title' => __('Author')]
+				);
+				$pageMainTitle = $this->getLayout()->getBlock('page.main.title');
+				$pageMainTitle->setPageTitle('About Author');
+			}
+		}
 
 
 		return parent::_prepareLayout();
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getPagerHtml()
-	{
-		return $this->getChildHtml('pager');
 	}
 
 	/**
@@ -307,15 +322,18 @@ class Frontend extends Template
 	 */
 	public function applySeoCode($post = null)
 	{
+		$description = $this->getSeoConfig('meta_description');
+		$keywords = $this->getSeoConfig('meta_keywords');
+
 		if ($post) {
 			$title = $post->getMetaTitle();
 			$this->setPageData($title, 1, $post->getName());
 
 			$description = $post->getMetaDescription();
-			$this->setPageData($description, 2);
+			$this->setPageData($description, 2, $description);
 
 			$keywords = $post->getMetaKeywords();
-			$this->setPageData($keywords, 3);
+			$this->setPageData($keywords, 3, $keywords);
 
 			$robot = $post->getMetaRobots();
 			$array = $this->mpRobots->getOptionArray();
@@ -327,13 +345,12 @@ class Frontend extends Template
 				$pageMainTitle->setPageTitle($post->getName());
 			}
 		} else {
-			$title = $this->helperData->getBlogConfig('general/name');
+			$title = $this->getSeoConfig('meta_title')
+				?: $this->helperData->getBlogConfig('general/name');
 			$this->setPageData($title, 1, __('Blog'));
 
-			$description = $this->helperData->getBlogConfig('seo/meta_description');
 			$this->setPageData($description, 2);
 
-			$keywords = $this->helperData->getBlogConfig('seo/meta_keywords');
 			$this->setPageData($keywords, 3);
 
 			$pageMainTitle = $this->getLayout()->getBlock('page.main.title');
@@ -394,16 +411,20 @@ class Frontend extends Template
 		$postList = '';
 		if ($type == null) {
 			$postList = $this->helperData->getPostList();
-		} elseif ($type == 'category') {
-			$postList = $this->helperData->getPostList('category', $id);
-		} elseif ($type == 'tag') {
-			$postList = $this->helperData->getPostList('tag', $id);
-		} elseif ($type == 'topic') {
-			$postList = $this->helperData->getPostList('topic', $id);
+		} elseif ($type == \Mageplaza\Blog\Helper\Data::CATEGORY) {
+			$postList = $this->helperData->getPostList(\Mageplaza\Blog\Helper\Data::CATEGORY, $id);
+		} elseif ($type == \Mageplaza\Blog\Helper\Data::TAG) {
+			$postList = $this->helperData->getPostList(\Mageplaza\Blog\Helper\Data::TAG, $id);
+		} elseif ($type == \Mageplaza\Blog\Helper\Data::TOPIC) {
+			$postList = $this->helperData->getPostList(\Mageplaza\Blog\Helper\Data::TOPIC, $id);
+		} elseif ($type == \Mageplaza\Blog\Helper\Data::AUTHOR) {
+			$postList = $this->helperData->getPostList(\Mageplaza\Blog\Helper\Data::AUTHOR, $id);
+		} elseif ($type == \Mageplaza\Blog\Helper\Data::MONTHLY) {
+			$postList = $this->helperData->getPostList(\Mageplaza\Blog\Helper\Data::MONTHLY, $id);
 		}
 
 		if ($postList != '' && is_array($postList)) {
-			$limit     = (int)$this->getBlogConfig('general/pagination');
+			$limit     = (int)$this->getBlogConfig('general/pagination') ?: 1;
 			$numOfPost = count($postList);
 			$numOfPage = 1;
 			$countPost = count($postList);
@@ -457,5 +478,165 @@ class Frontend extends Template
 		array_unshift($results, $numOfPage);
 
 		return $results;
+	}
+
+	/**
+	 * get sidebar config
+	 * @param $code
+	 * @param $storeId
+	 * @return mixed
+	 */
+	public function getSidebarConfig($code, $storeId = null)
+	{
+		return $this->helperData->getSidebarConfig($code, $storeId);
+	}
+
+	public function getAuthorByPost($authorId)
+	{
+		return $this->helperData->getAuthorByPost($authorId);
+	}
+
+	public function getAuthorUrl($author)
+	{
+		return $this->helperData->getAuthorUrl($author);
+	}
+
+	public function getAuthorImageUrl($image)
+	{
+		return $this->helperData->getAuthorImageUrl($image);
+	}
+
+	/**
+	 * check customer is logged in or not
+	 */
+	public function isLoggedIn()
+	{
+		return $this->helperData->isLoggedIn();
+	}
+
+	/**
+	 * get login url
+	 */
+	public function getLoginUrl()
+	{
+		return $this->helperData->getLoginUrl();
+	}
+
+	/**
+	 * get comments
+	 * @param $postId
+	 */
+	public function getPostComments($postId)
+	{
+		$result = [];
+		$comments = $this->cmtFactory->create()->getCollection()->addFieldToFilter('post_id', $postId);
+		foreach ($comments as $comment) {
+			array_push($result, $comment->getData());
+		}
+		return $result;
+	}
+
+	/**
+	 * get comments tree
+	 * @param $comments
+	 * @param $cmtId
+	 */
+	public function getCommentsTree($comments, $cmtId)
+	{
+		$this->commentTree .= '<ul class="default-cmt__content__cmt-content row">';
+		foreach ($comments as $comment) {
+			if ($comment['reply_id'] == $cmtId) {
+				$isReply = (bool) $comment['is_reply'];
+				$replyId = $isReply ? $comment['reply_id'] : '';
+				$userCmt = $this->getUserComment($comment['entity_id']);
+				$userName = $userCmt->getFirstName() .' '. $userCmt->getLastName();
+				$countLikes = $this->getCommentLikes($comment['comment_id']);
+				$this->commentTree .=
+					'<li class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12'
+					. ($isReply ? ' reply-row' : '') . '" data-cmt-id="'
+					. $comment['comment_id'] .'" '. ($replyId ? 'data-reply-id="'. $replyId .'"' : '') .'>
+							<div class="cmt-row__cmt-username">
+								<span class="cmt-row__cmt-username username">'. $userName .'</span>
+							</div>
+							<div class="cmt-row__cmt-content">
+								<p>'. $comment['content'] .'</p>
+							</div>
+							<div class="cmt-row__cmt-interactions interactions">
+								<div class="interactions__btn-actions">
+									<a class="interactions__btn-actions action btn-like" data-cmt-id="'
+									. $comment['comment_id'] .'">'. __('Like') .'</a>
+									<a class="interactions__btn-actions action btn-reply" data-cmt-id="'
+									. $comment['comment_id'] .'">'. __('Reply') .'</a>
+									<a class="interactions__btn-actions count-like">
+										<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+										<span class="count-like__like-text">'. $countLikes .'</span>
+									</a>
+								</div>
+								<div class="interactions__cmt-createdat">
+									<span>'. $comment['created_at'] .'</span>
+								</div>
+							</div>';
+				if ($comment['has_reply']) {
+					$this->commentTree .= $this->getCommentsTree($comments, $comment['comment_id']);
+				}
+				$this->commentTree .= '</li>';
+			}
+		}
+		$this->commentTree .= '</ul>';
+	}
+
+	/**
+	 * get comments tree html
+	 * @return mixed
+	 */
+	public function getCommentsHtml()
+	{
+		return $this->commentTree;
+	}
+
+	/**
+	 * get comment user
+	 * @param $userId
+	 */
+	public function getUserComment($userId)
+	{
+		$user = $this->customerRepository->getById($userId);
+		return $user;
+	}
+
+	/**
+	 * get comment likes
+	 * @param $cmtId
+	 */
+	public function getCommentLikes($cmtId)
+	{
+		$likes = $this->likeFactory->create()->getCollection()->addFieldToFilter('comment_id', $cmtId)->getSize();
+		if ($likes) {
+			return $likes;
+		}
+
+		return '';
+	}
+
+	/**
+	 * get default image url
+	 */
+	public function getDefaultImageUrl()
+	{
+		return $this->getViewFileUrl('Mageplaza_Blog::media/images/Mageplaza-logo.png');
+	}
+
+	/**
+	 * get date formatted
+	 * @param $date
+	 */
+	public function getDateFormat($date, $monthly = false)
+	{
+		return $this->helperData->getDateFormat($date, $monthly);
+	}
+
+	public function getMonthParam()
+	{
+		return $this->getRequest()->getParam('month');
 	}
 }

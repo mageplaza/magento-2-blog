@@ -50,6 +50,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
      */
 	public $jsHelper;
 	public $trafficFactory;
+	protected $authSession;
 
     /**
      * constructor
@@ -70,6 +71,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         \Magento\Backend\Helper\Js $jsHelper,
         \Mageplaza\Blog\Model\PostFactory $postFactory,
         \Magento\Framework\Registry $registry,
+		\Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Backend\App\Action\Context $context
     ) {
     
@@ -78,6 +80,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         $this->trafficFactory = $trafficFactory;
         $this->backendSession = $context->getSession();
         $this->jsHelper       = $jsHelper;
+		$this->authSession = $authSession;
         parent::__construct($postFactory, $registry, $context);
     }
 
@@ -88,9 +91,11 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
      */
     public function execute()
     {
+		$user = $this->authSession->getUser();
         $data = $this->getRequest()->getPost('post');
+        //var_dump($data);die();
         $data['store_ids'] = implode(',', $data['store_ids']);
-
+		$data['modifier_id'] = $user->getId();
         //check delete image
 		$deleteImage = false;
         $resultRedirect = $this->resultRedirectFactory->create();
@@ -131,9 +136,20 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
             if ($topics != -1) {
                 $post->setTopicsData($this->jsHelper->decodeGridSerializedInput($topics));
             }
+
+//            $categoryIds = $this->getRequest()->getPost('categories_ids',-1);
+//
+
+
+
             if (!isset($data['categories_ids'])) {
                 $post->setCategoriesIds([]);
             }
+//            else{
+//
+//
+//                $post->setCategoriesIds($this->jsHelper->decodeGridSerializedInput($categoryIds));
+//            }
             $this->_eventManager->dispatch(
                 'mageplaza_blog_post_prepare_save',
                 [

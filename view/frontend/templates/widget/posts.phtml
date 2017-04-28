@@ -1,0 +1,114 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+<?php
+$posts = $block->getCollection();
+?>
+<div class="blog-widget-title"><a ></a></div>
+<div class="post-list-container mpcss" id="mpblog-list-container">
+        <div class="widget-title"><a href="<?php echo $block->getBlogUrl(''); ?>"><?php echo $block->getTitle(); ?></a></div>
+        <div class="row">
+                <div>
+                <?php foreach ($posts as $post) : ?>
+                    <div class="post-list-item col-sm-4">
+                        <div class="post-item-wraper">
+                            <div class="post-image">
+                                <?php if ($post->getImage()) : ?>
+                                    <a href="<?php echo $block->getUrlByPost($post) ?>">
+                                        <img class="img-responsive" style="height: 220px"
+                                             src="<?php echo $block->getImageUrl($post->getImage()); ?>"
+                                             alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
+                                    </a>
+								<?php endif; ?>
+                            </div>
+                            <div class="post-info-wraper">
+                                <h2 class="mp-post-title" style="font-size: 22px">
+                                    <a class="post-link-title" title="<?php echo $post->getName(); ?>"
+                                       href="<?php echo $block->getUrlByPost($post) ?>">
+                                        <?php echo $post->getName();?>
+                                    </a>
+                                </h2>
+
+
+                                <div class="mp-post-info">
+                                    <?php echo __('Posted on ') . $block->formatCreatedAt($post->getCreatedAt()); ?>
+									<?php
+									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
+									?>
+									<?php
+									if ($block->getAuthorByPost($post->getAuthorId())->getName() && $block->getBlogConfig('general/display_author')){ ?>
+                                        | By : <a class="mp-info" href="<?php echo $block->getAuthorUrl($block->getAuthorByPost($post->getAuthorId())) ?>"><?php echo  $block->getAuthorByPost($post->getAuthorId())->getName(); ?></a>
+									<?php } ?>
+                                </div>
+
+
+                                <div class="post-short-description">
+                                    <p><?php echo $post->getShortDescription(); ?></p>[...]
+                                </div>
+
+                                <div class="mp-clearfix"></div>
+
+
+                                <div class="mp-post-meta-info mp-alignright">
+                                        <div class="actions">
+                                            <a class="mp-read-more" href="<?php echo $block->getUrlByPost($post); ?>"
+                                               title="<?php echo __('Read More'); ?>"><?php echo __('Read more'); ?></a>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				<?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+<script>
+	less = {
+        env: "production",
+        logLevel: 2,
+        async: false,
+        fileAsync: false,
+        poll: 1000,
+        functions: {},
+        dumpLineNumbers: "comments",
+        relativeUrls: false,
+        useFileCache: true,
+        modifyVars: {
+            '@color': '<?php echo $block->getBlogConfig('general/font_color')?>'
+        }
+
+    };
+</script>
+<script>
+    require([
+        'jquery',
+        'Mageplaza_Blog/js/lib/less.min'
+    ],function ($) {
+        $(document).ready(function () {
+            $("#popular-tab").click(function () {
+                $("#recent-tab").css("display", "block");
+            });
+            $("#recent-tab").click(function () {
+                $("#popular-tab").css("display", "block");
+            });
+        });
+    });
+</script>

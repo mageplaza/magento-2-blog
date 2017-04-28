@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="mageplaza_blog_posts" class="Mageplaza\Blog\Block\Widget\Posts">
+        <label translate="true">Mageplaza Blog</label>
+        <description>Mageplaza </description>
+        <parameters>
+            <parameter name="title" xsi:type="text" required="false" visible="true">
+                <label translate="true">Title</label>
+            </parameter>
+            <parameter name="post_count" xsi:type="text" required="true" visible="true">
+                <label translate="true">Numbers of Posts Display</label>
+                <value>5</value>
+            </parameter>
+            <parameter name="show_type" xsi:type="select" required="false" visible="true"
+                       source_model="Mageplaza\Blog\Model\Config\Source\Widget\ShowType">
+                <label translate="true">Show Type</label>
+            </parameter>
+            <parameter name="category_id" xsi:type="text" required="true" visible="true">
+                <label translate="true">Category ID</label>
+                <depends>
+                    <parameter name="show_type" value="category" />
+                </depends>
+                <value>2</value>
+            </parameter>
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="posts" value="Mageplaza_Blog::widget/posts.phtml" selected="true">
+                        <label translate="true">Default Posts Template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+        <containers>
+            <container name="content">
+                <template name="posts" value="posts" />
+            </container>
+        </containers>
+    </widget>
+</widgets>

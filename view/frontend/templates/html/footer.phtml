@@ -1,0 +1,20 @@
+<li>
+<a <?php echo $block->getLinkAttributes() ?>>
+    <?php
+        if ($this->helper->getBlogConfig('general/footer')&& $this->helper->getBlogConfig('general/enabled')){
+			echo $block->escapeHtml($block->getLabel());
+        }
+    ?>
+	<?php echo($block->getCounter()) ? '<span>' . $block->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
+</a>
+</li>
+<li>
+<a href="<?php echo $block->getHtmlSiteMapUrl() ?>">
+    <?php
+	if ($this->helper->getBlogConfig('general/display_sitemap')&& $this->helper->getBlogConfig('general/enabled')){
+		echo __('SiteMap');
+	}
+	?>
+	<?php echo($block->getCounter()) ? '<span>' . $block->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
+</a>
+</li>

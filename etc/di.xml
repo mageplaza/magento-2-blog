@@ -91,4 +91,5 @@
             </argument>
         </arguments>
     </type>
+	<preference for="Magento\Sitemap\Model\Sitemap" type="Mageplaza\Blog\Model\Sitemap"/>
 </config>

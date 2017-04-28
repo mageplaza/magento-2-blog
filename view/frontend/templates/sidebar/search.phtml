@@ -1,0 +1,59 @@
+
+<div class="mpblog-search">
+    <div class="block block-content">
+        <div class="field search">
+            <label class="label" for="mpblog-search-box" data-role="minisearch-label">
+                <span><?php echo __('Search'); ?></span>
+            </label>
+            <div class="control">
+                <input id="mpblog-search-box"
+                       type="text"
+                       name="query"
+                       value="<?php echo $this->getRequest()->getParam('query') ?>"
+                       placeholder="<?php echo __('Search blogs here...'); ?>"
+                       class="input-text"
+                       role="combobox"
+                       aria-haspopup="false"
+                       aria-autocomplete="both"
+                       />
+            </div>
+        </div>
+        <div class="actions">
+            <button type="submit"
+                    title="<?php echo __('Search') ?>"
+                    class="action search">
+                <span><?php /* @escapeNotVerified */ echo __('Search'); ?></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    require([
+        'jquery',
+        'autocomplete'
+    ], function ($) {
+        var visibleImage = <?php echo $block->getSidebarConfig('search/show_image'); ?>;
+        $('#mpblog-search-box').autocomplete({
+            lookup: <?php echo $block->getSearchBlogData();?>,
+            lookupLimit: <?php echo $block->getSidebarConfig('search/search_limit') ?: 10; ?>,
+            maxHeight: 2000,
+            minChars: <?php echo $block->getSidebarConfig('search/min_chars') ?: 1; ?>,
+            onSelect: function (suggestion) {
+                window.location.href = suggestion.url;
+            },
+            formatResult: function (suggestion, currentValue) {
+                var html = "<a class='mpblog-suggestion' href='" + suggestion.url + "'>";
+
+                if (visibleImage) {
+                    html += "<div class='mpblog-suggestion-left'><img class='img-responsive' src='" + suggestion.image + "' /></div>"
+                }
+                html += "<div class='mpblog-suggestion-right'>" +
+                    "<div class='mpblog-product-line mpblog-product-name'>" + suggestion.value + "</div>" +
+                    "<div class='mpblog-product-des'><p class='mpblog-short-des'>" + suggestion.desc + "</p></div></div></a>";
+
+                return html;
+            }
+        });
+    });
+</script>
