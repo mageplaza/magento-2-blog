@@ -51,7 +51,9 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap{
 	public function getBlogPostsSiteMapCollection(){
 		$postCollection=$this->blogDataHelper->postfactory->create()->getCollection();
 		$postSiteMapCollection=[];
-
+		if (!$this->router) {
+			$this->router = 'blog';
+		}
 		foreach ($postCollection as $item){
 			if ($item->getEnabled()!=null) :
 				$images = null;
