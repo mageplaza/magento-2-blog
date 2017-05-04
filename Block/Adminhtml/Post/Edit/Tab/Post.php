@@ -163,7 +163,20 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'name'  => 'image',
                 'label' => __('Image'),
                 'title' => __('Image'),
-                'note' => __('Featured image'),
+                'backend_model' => 'Magento\Config\Model\Config\Backend\Image',
+                'upload_dir' =>
+                [
+                    'config' => 'system/filesystem/media',
+                    'scope_info' => '1',
+                    'value' => 'mageplaza/blog/post/image'
+                ],
+                'base_url' =>
+                [
+                    'type' => 'media',
+                    'scope_info' => '1',
+                    'value' => 'mageplaza/blog/post/image'
+                ],
+                'note' => __('Featured image')
             ]
         );
         $fieldset->addField(
