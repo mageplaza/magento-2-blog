@@ -1,5 +1,6 @@
 **Magento 2 Blog by Mageplaza** is integrated right into the Magento backend so you can manage your blog and your e-commerce store all in the one place. It is the perfect marketing tool for your bussiness that not only provides update information to your existing customers but also drive more visitors to your online store.
 
+Demo: http://blog.demo.mageplaza.com/blog/
 
 ## Documentations
 
@@ -12,7 +13,7 @@
 
 ### Install Package from Mageplaza
 
-- Download the latest version at [Mageplaza Blog for Magento 2](https://www.mageplaza.com/magento-2-blog-extension/)
+- Download the latest version at [Mageplaza Blog for Magento 2](https://www.mageplaza.com/magento-2-blog/)
 -  [Installation guide](https://docs.mageplaza.com/kb/installation.html)
 
 ### Install via composer
