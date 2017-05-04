@@ -46,18 +46,22 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
      * @var \Magento\Backend\Helper\Js
      */
     protected $jsHelper;
+
+    /**
+     * @var \Mageplaza\Blog\Model\TrafficFactory
+     */
     protected $trafficFactory;
 
     /**
-     * constructor
+     * Save constructor.
      *
      * @param \Mageplaza\Blog\Model\Upload $uploadModel
      * @param \Mageplaza\Blog\Model\Post\Image $imageModel
-     * @param \Magento\Backend\Model\Session $backendSession
+     * @param \Mageplaza\Blog\Model\TrafficFactory $trafficFactory
+     * @param \Magento\Backend\Model\Auth\Session $backendSession
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Mageplaza\Blog\Model\PostFactory $postFactory
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
@@ -68,7 +72,6 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         \Magento\Backend\Helper\Js $jsHelper,
         \Mageplaza\Blog\Model\PostFactory $postFactory,
         \Magento\Framework\Registry $registry,
-        //\Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\Action\Context $context
     ) {
 
@@ -81,7 +84,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
     }
 
     /**
-     * run the action
+     * Run the action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
@@ -92,12 +95,9 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $post = $this->initPost();
-            //$post->setData($data);
 
             $image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
             if(!empty($image) && strpos($image, self::IMAGE_UPLOAD_PATH) === false) {
-                //$post->setImage('mageplaza/blog/post/image' . $image);
-                //$post->setImage($image);
                 $data = array_merge(
                     $data,
                     [
@@ -177,7 +177,8 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
     }
 
     /**
-     * Workaround to prevent saving this data in category model and it has to be refactored in future
+     * Workaround to prevent saving this data in category model and it has to be refactored in future.
+     * Taken from magento source code:
      * @see Magento\Catalog\Controller\Adminhtml\Category\Save;
      *
      * @param array $rawData
