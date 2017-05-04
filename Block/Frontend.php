@@ -309,6 +309,29 @@ class Frontend extends Template
 				);
 				$pageMainTitle = $this->getLayout()->getBlock('page.main.title');
 				$pageMainTitle->setPageTitle('About Author');
+				$this->pageConfig->getTitle()->set($author->getName());
+			} elseif ($actionName == 'mpblog_sitemap_index') {
+				$breadcrumbs->addCrumb(
+					'home',
+					[
+						'label' => __('Home'),
+						'title' => __('Go to Home Page'),
+						'link'  => $this->_storeManager->getStore()->getBaseUrl()
+					]
+				)->addCrumb(
+					$this->helperData->getBlogConfig('general/url_prefix'),
+					['label' => $breadcrumbsLabel,
+					 'title' => $this->helperData->getBlogConfig('general/url_prefix'),
+					 'link'  => $this->_storeManager->getStore()->getBaseUrl()
+						 . $breadcrumbsLink]
+				)->addCrumb(
+					'SiteMap',
+					['label' => __('Sitemap'),
+					 'title' => __('Sitemap')]
+				);
+				$pageMainTitle = $this->getLayout()->getBlock('page.main.title');
+				$pageMainTitle->setPageTitle('Site Map');
+				$this->pageConfig->getTitle()->set('Site Map');
 			}
 		}
 

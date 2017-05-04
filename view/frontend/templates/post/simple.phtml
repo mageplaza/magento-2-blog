@@ -32,7 +32,7 @@ $posts = $block->getBlogPagination();
 			<div class="post-list-item">
                 <div class="post-image">
                     <?php if ($post->getImage()) : ?>
-						<a href="<?php echo $block->getUrlByPost($post) ?>">
+						<a href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
                             <img
 								src="<?php echo $block->getImageUrl($post->getImage()); ?>"
 								alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
@@ -41,7 +41,7 @@ $posts = $block->getBlogPagination();
                 </div>
 
                 <h2 class="mp-post-title">
-                    <a href="<?php echo $block->getUrlByPost($post) ?>">
+                    <a href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
                         <?php echo $post->getName(); ?>
                     </a>
                 </h2>

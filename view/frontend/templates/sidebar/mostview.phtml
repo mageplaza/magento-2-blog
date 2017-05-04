@@ -33,7 +33,7 @@ $postsRecent = $block->getRecentPost();
 			<div id="mostview">
 				<?php if ($posts != ''): ?>
 					<?php foreach ($posts as $post): ?>
-						<a class="list-post-tabs" href="<?php echo $block->getUrlByPost($post) ?>">
+						<a class="list-post-tabs" href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
 							<div class="post-left">
 								<?php if ($post->getImage()) : ?>
 									<img class="img-responsive" src="<?php echo $block->getImageUrl($post->getImage())?>">
@@ -57,7 +57,7 @@ $postsRecent = $block->getRecentPost();
 			<div id="mostrecent" style="display:none">
 				<?php if ($postsRecent != ''): ?>
 					<?php foreach ($postsRecent as $post): ?>
-						<a class="list-post-tabs" href="<?php echo $block->getUrlByPost($post) ?>">
+						<a class="list-post-tabs" href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
 							<div class="post-left">
 								<?php if ($post->getImage()) : ?>							
 									<img class="img-responsive" src="<?php echo $block->getImageUrl($post->getImage())?>">

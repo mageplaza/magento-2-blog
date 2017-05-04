@@ -23,7 +23,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Framework\View\Element\Template" name="mpblog_html_sitemap" template="Mageplaza_Blog::sitemap/sitemap.phtml" />
+            <block class="Mageplaza\Blog\Block\Frontend" name="mpblog_html_sitemap" template="Mageplaza_Blog::sitemap/sitemap.phtml" />
         </referenceContainer>
     </body>
 </page>

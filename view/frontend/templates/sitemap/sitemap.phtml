@@ -5,7 +5,6 @@
 	$tags = $helper->getTagList();
 	$topics = $helper->getTopicList();
 ?>
-<h1><?php echo __('SiteMap') ?></h1>
 <?php
 /**
  * show posts list
@@ -15,7 +14,7 @@
 	<h2><?php echo count($posts) == 1 ? __('Post') : __('Posts') ?></h2>
 	<ul>
 		<?php foreach ($posts as $post): ?>
-			<li><a href="<?php echo $helper->getUrlByPost($post) ?>"><?php echo $post->getName(); ?></a> </li>
+			<li><a href="<?php echo substr($helper->getUrlByPost($post),0,-1) ?>"><?php echo $post->getName(); ?></a> </li>
 		<?php endforeach; ?>
 	</ul>
 <?php endif; ?>

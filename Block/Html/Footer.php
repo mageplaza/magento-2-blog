@@ -26,14 +26,14 @@ use \Mageplaza\Blog\Helper\Data;
 class Footer extends \Magento\Framework\View\Element\Html\Link
 {
     public $helper;
-//	protected $_template = 'Mageplaza_Blog::html\footer.phtml';
+	protected $_template = 'Mageplaza_Blog::html\footer.phtml';
 
     public function __construct(
         Context $context,
         Data $helper,
         array $data = []
     ) {
-    
+
         $this->helper = $helper;
         parent::__construct($context, $data);
     }
@@ -55,6 +55,6 @@ class Footer extends \Magento\Framework\View\Element\Html\Link
 		if ($moduleRoute) {
 			return $this->getBaseUrl() . $moduleRoute .'/sitemap/';
 		}
-		return $this->getBaseUrl() .'/mpblog/sitemap/';
+		return $this->getBaseUrl() .'blog/sitemap/';
 	}
 }
