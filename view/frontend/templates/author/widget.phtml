@@ -18,7 +18,7 @@
 
         <div class="author-content col-xs-12">
             <?php
-                echo ($block->getAuthorByPost($block->getCurrentAuthor())->getShortDescription()) ? ($block->getAuthorByPost($block->getCurrentAuthor())->getShortDescription()) : 'No info';
+                echo $block->getPageFilter(($block->getAuthorByPost($block->getCurrentAuthor())->getShortDescription())) ? $block->getPageFilter(($block->getAuthorByPost($block->getCurrentAuthor())->getShortDescription())) : 'No info';
             ?>
         </div>
 
