@@ -22,22 +22,54 @@ namespace Mageplaza\Blog\Model\Config\Source\DateFormat;
 
 class TypeMonth implements \Magento\Framework\Option\ArrayInterface
 {
+
+	/**
+	 * Get config TimeZone ( general/locale/timezone )
+	 * @return mixed
+	 */
+	public function getTimezone()
+	{
+		$om = \Magento\Framework\App\ObjectManager::getInstance();
+		$context = $om->get('\Magento\Framework\View\Element\Template\Context');
+		$storeModel = $context->getStoreManager()->getStore()->getId();
+		$timeZone       = $context->getScopeConfig()->getValue(
+			'general/locale/timezone',
+			\Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+			$storeModel
+		);
+		return $timeZone;
+	}
+
+	/**
+	 * Set Datetime Option Array
+	 * @return array
+	 */
+	public function setOptionArray()
+	{
+		$dateArray = array(
+			'F , Y',
+			'Y - m',
+			'm / Y',
+			'm / Y'
+		);
+		$result = array();
+		for ($i = 0; $i < 4 ; $i++)
+		{
+			$result[$i] = __($dateArray[$i].' ('.date ($dateArray[$i], time()).')');
+		}
+
+		return $result ;
+	}
+
 	/**
 	 * Options getter
 	 *
 	 * @return array
 	 */
-	const DATE = 3;
-	const LONG_DATE = 2;
-	const DEFAULT_DATE = 1;
-
 	public function toOptionArray()
 	{
-		return [
-			['value' => self::DEFAULT_DATE, 'label' => __('mm - yyyy')],
-			['value' => self::LONG_DATE, 'label' => __('yyyy - mm')],
-			['value' => self::DATE, 'label' => __('month yyyy')]
-		];
+		date_default_timezone_set($this->getTimezone());
+		return $this->setOptionArray();
 	}
 
 	/**
@@ -47,10 +79,7 @@ class TypeMonth implements \Magento\Framework\Option\ArrayInterface
 	 */
 	public function toArray()
 	{
-		return [
-			self::LONG_DATE => __('yyyy - mm'),
-			self::DEFAULT_DATE => __('mm - yyyy'),
-			self::DATE => __('month yyyy')
-		];
+		date_default_timezone_set($this->getTimezone());
+		return $this->setOptionArray();
 	}
 }

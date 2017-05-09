@@ -13,6 +13,7 @@ class Search extends Frontend
 		$result = [];
 		$posts = $this->helperData->getPostList();
 		$limitDesc = $this->getSidebarConfig('search/description') ?: 100;
+		if (!empty($posts)) {
 
 		foreach ($posts as $item) {
 			$tmp = array(
@@ -23,8 +24,8 @@ class Search extends Frontend
 					: 'No description'
 			);
 			array_push($result, $tmp);
+			}
 		}
-
 		return json_encode($result);
 	}
 }

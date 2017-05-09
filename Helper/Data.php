@@ -53,6 +53,7 @@ class Data extends CoreHelper
 	public $loginUrl;
 	public $translitUrl;
 	public $dateTime;
+	public $dateTimeFormat;
 
 	public function __construct(
 		\Magento\Customer\Model\Session $session,
@@ -66,6 +67,7 @@ class Data extends CoreHelper
 		AuthorFactory $authorFactory,
         TemplateContext $templateContext,
 		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+		\Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTimeFormat,
 		\Magento\Framework\Filter\TranslitUrl $translitUrl,
 		\Mageplaza\Blog\Model\Traffic $traffic
     ) {
@@ -80,6 +82,7 @@ class Data extends CoreHelper
         $this->store = $templateContext->getStoreManager();
         $this->modelTraffic = $traffic;
         $this->translitUrl = $translitUrl;
+        $this->dateTimeFormat = $dateTimeFormat;
         parent::__construct($context, $objectManager, $templateContext->getStoreManager());
     }
 
@@ -740,41 +743,116 @@ class Data extends CoreHelper
 	 */
 	public function getDateFormat($date, $monthly = false)
 	{
+		$dateArray = array(
+			'F j, Y',
+			'Y-m-d',
+			'm/d/Y',
+			'd/m/Y',
+			'F j, Y g:i a',
+			'F j, Y g:i A',
+			'Y-m-d g:i a',
+			'Y-m-d g:i A',
+			'd/m/Y g:i a',
+			'd/m/Y g:i A',
+			'm/d/Y H:i',
+			'd/m/Y H:i'
+		);
+
+		$result = array();
+
+		for ( $i = 0 ; $i < 12 ; $i ++)
+		{
+			$result[$i] = $this->dateTimeFormat->date($date)->format($dateArray[$i]);
+		}
 		if ($monthly) {
+			$monthlyArray = array(
+				'F , Y',
+				'Y - m',
+				'm / Y',
+				'm / Y'
+			);
+			$resultMonthly = array();
+			for ( $i = 0 ; $i < 4 ; $i ++)
+			{
+				$resultMonthly[$i] = $this->dateTimeFormat->date($date)->format($monthlyArray[$i]);
+			}
 			$dateType = $this->getBlogConfig('monthly_archive/date_type_monthly');
 			switch ($dateType) {
+				case 0:
+					$dateFormat = $resultMonthly[0];
+					break;
 				case 1:
-					$dateFormat = $this->dateTime->gmtDate("m - Y", $date);
+					$dateFormat = $resultMonthly[1];
 					break;
 				case 2:
-					$dateFormat = $this->dateTime->gmtDate("Y - m", $date);
+					$dateFormat = $resultMonthly[2];
 					break;
 				case 3:
-					$dateFormat = $this->dateTime->gmtDate("F Y", $date);
+					$dateFormat = $resultMonthly[3];
 					break;
 				default:
-					$dateFormat = $this->dateTime->gmtDate('Y-m-d', $date);
+					$dateFormat = $resultMonthly[0];
 					break;
 			}
 			return $dateFormat;
 		}
 
 		$dateType = $this->getBlogConfig('general/date_type');
+
 		switch ($dateType) {
+			case 0:
+				$dateFormat = $result[0];
+				break;
+			case 1:
+				$dateFormat = $result[1];
+				break;
 			case 2:
-				$dateFormat = $this->dateTime->gmtDate("Y M d", $date);
+				$dateFormat = $result[2];
 				break;
 			case 3:
-				$dateFormat = $this->dateTime->gmtDate("d/m/Y", $date);
+				$dateFormat = $result[3];
 				break;
 			case 4:
-				$dateFormat = $this->dateTime->gmtDate("Y/m/d h:m:s", $date);
+				$dateFormat = $result[4];
+				break;
+			case 5:
+				$dateFormat = $result[5];
+				break;
+			case 6:
+				$dateFormat = $result[6];
+				break;
+			case 7:
+				$dateFormat = $result[7];
+				break;
+			case 8:
+				$dateFormat = $result[8];
+				break;
+			case 9:
+				$dateFormat = $result[9];
+				break;
+			case 10:
+				$dateFormat = $result[10];
+				break;
+			case 11:
+				$dateFormat = $result[11];
 				break;
 			default:
-				$dateFormat = $this->dateTime->gmtDate('Y-m-d', $date);
+				$dateFormat = $result[0];
 				break;
 		}
 
 		return $dateFormat;
+	}
+	public function getTimezone()
+	{
+		$om = \Magento\Framework\App\ObjectManager::getInstance();
+		$context = $om->get('\Magento\Framework\View\Element\Template\Context');
+		$storeModel = $context->getStoreManager()->getStore()->getId();
+		$timeZone       = $context->getScopeConfig()->getValue(
+			'general/locale/timezone',
+			\Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+			$storeModel
+		);
+		return $timeZone;
 	}
 }
