@@ -63,10 +63,7 @@ if ($checkRss):
 
 
                                 <div class="mp-post-info">
-                                    <?php echo __('Posted on'); ?> <?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-                                    $object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
-                                    $dateFormat = date('Y-m-d',$object->timestamp($post->getCreatedAt()));
-                                    echo $dateFormat;
+                                    <?php echo __('Posted on'); ?> <?php echo $block->getDateFormat($post->getCreatedAt());
                                     ?>
                                     <?php 	echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):(''); ?>
                                 </div>
@@ -126,10 +123,7 @@ if ($checkRss):
 
 
                                         <div class="mp-post-info">
-                                            <?php echo __('Posted on'); ?> <?php $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-                                            $object = $objectManager->get('\Magento\Framework\Stdlib\DateTime\DateTime');
-                                            $dateFormat = date('Y-m-d',$object->timestamp($post->getCreatedAt()));
-                                            echo $dateFormat;
+                                            <?php echo __('Posted on'); ?> <?php echo $block->getDateFormat($post->getCreatedAt());
                                             ?>
                                             <?php 	echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):(''); ?>
                                         </div>

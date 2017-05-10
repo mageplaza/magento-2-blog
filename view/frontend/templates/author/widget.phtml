@@ -28,11 +28,14 @@
             <a href="<?php echo $block->getAuthorByPost($block->getCurrentAuthor())->getFacebookLink()?>" target="_blank">
                 <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/facebook.png') ?>" align="middle" alt="<?php echo $block->escapeHtml($block->getAuthorByPost($block->getCurrentAuthor())->getName()); ?>"/>
             </a>
+            <?php else : ?>
+                <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/facebookoff.png') ?>" align="middle" alt="<?php echo $block->escapeHtml($block->getAuthorByPost($block->getCurrentAuthor())->getName()); ?>"/>
+			<?php endif; ?>
+			<?php if ($block->getAuthorByPost($block->getCurrentAuthor())->getTwitterLink()) : ?>
                 <a href="<?php echo $block->getAuthorByPost($block->getCurrentAuthor())->getTwitterLink()?>" target="_blank">
                     <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/twitter.png') ?>" align="middle" alt="<?php echo $block->escapeHtml($block->getAuthorByPost($block->getCurrentAuthor())->getName()); ?>"/>
                 </a>
 			<?php else : ?>
-                <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/facebookoff.png') ?>" align="middle" alt="<?php echo $block->escapeHtml($block->getAuthorByPost($block->getCurrentAuthor())->getName()); ?>"/>
                 <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/twitter-off.png') ?>" align="middle" alt="<?php echo $block->escapeHtml($block->getAuthorByPost($block->getCurrentAuthor())->getName()); ?>"/>
 			<?php endif; ?>
         </div>

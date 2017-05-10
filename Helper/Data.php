@@ -42,6 +42,7 @@ class Data extends CoreHelper
     const AUTHOR = 'author';
     const MONTHLY = 'month';
 
+    public $postCollectionFactory;
     public $postfactory;
 	public $categoryfactory;
 	public $tagfactory;
@@ -69,6 +70,7 @@ class Data extends CoreHelper
 		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
 		\Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTimeFormat,
 		\Magento\Framework\Filter\TranslitUrl $translitUrl,
+		\Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
 		\Mageplaza\Blog\Model\Traffic $traffic
     ) {
     	$this->customerSession = $session;
@@ -83,6 +85,7 @@ class Data extends CoreHelper
         $this->modelTraffic = $traffic;
         $this->translitUrl = $translitUrl;
         $this->dateTimeFormat = $dateTimeFormat;
+        $this->postCollectionFactory = $postCollectionFactory;
         parent::__construct($context, $objectManager, $templateContext->getStoreManager());
     }
 
@@ -854,5 +857,12 @@ class Data extends CoreHelper
 			$storeModel
 		);
 		return $timeZone;
+	}
+	public function getRelatedPostList($id){
+		$collection = $this->postCollectionFactory->create();
+		$collection->getSelect()->join(['related' => $collection->getTable('mageplaza_blog_post_product')],'related.post_id=main_table.post_id 
+		AND related.entity_id='.$id .' AND main_table.enabled=1');
+		$collection->setOrder('created_at', 'DESC');
+		return $collection;
 	}
 }

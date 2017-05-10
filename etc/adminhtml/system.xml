@@ -89,6 +89,18 @@
                     <comment>Number of post per page</comment>
                 </field>
             </group>
+            <group id="product_post" translate="label" showInDefault="1" sortOrder="5" showInWebsite="1" showInStore="1">
+                <label>Product Post</label>
+                <field id="enable_post" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Product Post</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Show/Hide related posts tab in product page</comment>
+                </field>
+                <field id="post_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Limit Product Post</label>
+                    <comment>Limit number of related posts in product page tab</comment>
+                </field>
+            </group>
             <group id="sidebar" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Sidebar</label>
                 <field id="number_recent_posts" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">

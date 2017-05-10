@@ -136,7 +136,10 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
             if ($topics != -1) {
                 $post->setTopicsData($this->jsHelper->decodeGridSerializedInput($topics));
             }
-
+			$products = $this->getRequest()->getPost('products', -1);
+			if ($products != -1) {
+				$post->setProductsData($this->jsHelper->decodeGridSerializedInput($products));
+			}
 //            $categoryIds = $this->getRequest()->getPost('categories_ids',-1);
 //
 
