@@ -50,7 +50,7 @@ class TypeMonth implements \Magento\Framework\Option\ArrayInterface
 			'F , Y',
 			'Y - m',
 			'm / Y',
-			'm / Y'
+			'M  Y'
 		);
 		$result = array();
 		for ($i = 0; $i < 4 ; $i++)
