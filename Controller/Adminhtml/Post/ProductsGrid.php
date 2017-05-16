@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * Mageplaza
  *
@@ -19,11 +18,12 @@
  * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Mageplaza_Blog" setup_version="1.1.4">
-        <sequence>
-            <module name="Magento_Backend"/>
-        </sequence>
-    </module>
-</config>
+namespace Mageplaza\Blog\Controller\Adminhtml\Post;
+
+class ProductsGrid extends \Mageplaza\Blog\Controller\Adminhtml\Post\Products
+{
+	public function getBlogPost()
+	{
+		return null;
+	}
+}

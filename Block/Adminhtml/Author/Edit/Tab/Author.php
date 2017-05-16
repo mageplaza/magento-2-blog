@@ -24,13 +24,26 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
 {
 	public $systemStore;
 
+	public $wysiwygConfig;
+
+	/**
+	 * Author constructor.
+	 * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
+	 * @param \Magento\Store\Model\System\Store $systemStore
+	 * @param \Magento\Backend\Block\Template\Context $context
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Framework\Data\FormFactory $formFactory
+	 * @param array $data
+	 */
 	public function __construct(
+		\Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
 		\Magento\Store\Model\System\Store $systemStore,
 		\Magento\Backend\Block\Template\Context $context,
 		\Magento\Framework\Registry $registry,
 		\Magento\Framework\Data\FormFactory $formFactory,
 		array $data = []
 	) {
+		$this->wysiwygConfig     = $wysiwygConfig;
 		$this->systemStore = $systemStore;
 		parent::__construct($context, $registry, $formFactory, $data);
 	}
@@ -75,12 +88,13 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
 		
 		$fieldset->addField(
 			'short_description',
-			'textarea',
+			'editor',
 			[
 				'name'  => 'short_description',
 				'label' => __('Short Description'),
 				'title' => __('Short Description'),
 				'note' => __('Short Description'),
+				'config'    => $this->wysiwygConfig->getConfig()
 			]
 		);
 

@@ -40,11 +40,12 @@
             maxHeight: 2000,
             minChars: <?php echo $block->getSidebarConfig('search/min_chars') ?: 1; ?>,
             onSelect: function (suggestion) {
-                window.location.href = suggestion.url;
+                var urlString = suggestion.url;
+                window.location.href = urlString.substring(0,urlString.length - 1);
             },
             formatResult: function (suggestion, currentValue) {
-                var html = "<a class='mpblog-suggestion' href='" + suggestion.url + "'>";
-
+                var urlString = suggestion.url;
+                var html = "<a class='mpblog-suggestion' href='" + urlString.substring(0,urlString.length - 1) + "'>";
                 if (visibleImage) {
                     html += "<div class='mpblog-suggestion-left'><img class='img-responsive' src='" + suggestion.image + "' /></div>"
                 }

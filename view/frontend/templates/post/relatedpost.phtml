@@ -1,0 +1,27 @@
+<?php
+$helper = $this->helper('Mageplaza\Blog\Helper\Data');
+$posts = $block->getRelatedPostList($block->getCurrentProduct());
+$postCount = count($posts);
+$limitCount = $block->getLimitPosts();
+$countRelated = 0;
+?>
+<?php
+/**
+ * show posts list
+ */
+if ($posts){
+	?>
+    <h2><?php echo $postCount ? __('Related Posts') : __('No Related Posts') ?></h2>
+    <ul>
+		<?php
+        foreach ($posts as $post):
+            if ($post){
+				$countRelated ++;
+            }
+            ?>
+			<?php if($countRelated > $limitCount) break; ?>
+
+            <li><a href="<?php echo substr($helper->getUrlByPost($post),0,-1) ?>"><?php echo $post->getName(); ?></a> </li>
+		<?php endforeach; ?>
+	</ul>
+<?php } ?>

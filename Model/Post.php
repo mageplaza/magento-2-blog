@@ -53,15 +53,19 @@ namespace Mageplaza\Blog\Model;
  * @method string getUpdatedAt()
  * @method Post setTagsData(array $data)
  * @method Post setTopicsData(array $data)
+ * @method Post setProductsData(array $data)
  * @method array getTagsData()
+ * @method array getProductsData()
  * @method array getTopicsData()
  * @method Post setIsChangedTagList(\bool $flag)
+ * @method Post setIsChangedProductList(\bool $flag)
  * @method Post setIsChangedTopicList(\bool $flag)
  * @method Post setIsChangedCategoryList(\bool $flag)
  * @method bool getIsChangedTagList()
  * @method bool getIsChangedTopicList()
  * @method bool getIsChangedCategoryList()
  * @method Post setAffectedTagIds(array $ids)
+ * @method Post setAffectedEntityIds(array $ids)
  * @method Post setAffectedTopicIds(array $ids)
  * @method Post setAffectedCategoryIds(array $ids)
  * @method bool getAffectedTagIds()
@@ -151,6 +155,8 @@ class Post extends \Magento\Framework\Model\AbstractModel
 
 	public $dateTime;
 	public $helperData;
+	public $productCollectionFactory;
+	public $productCollection;
     /**
      * constructor
      *
@@ -168,6 +174,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
         \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory $topicCollectionFactory,
         \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
+		\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
 		\Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
@@ -180,6 +187,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
         $this->topicCollectionFactory    = $topicCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->postCollectionFactory     = $postCollectionFactory;
+		$this->productCollectionFactory = $productCollectionFactory;
 		$this->helperData = $helperData;
         $this->dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -387,4 +395,33 @@ class Post extends \Magento\Framework\Model\AbstractModel
         }
         return $this->relatedPostCollection;
     }
+
+	public function getSelectedProductsCollection()
+	{
+		if ($this->productCollectionFactory === null) {
+			$collection = $this->productCollectionFactory->create();
+			$collection->getSelect()->join(
+				'mageplaza_blog_post_product',
+				'main_table.entity_id=mageplaza_blog_post_product.entity_id AND mageplaza_blog_post_product.post_id='
+				. $this->getId(),
+				['position']
+			)->where("main_table.enabled='1'");
+			$this->productCollection = $collection;
+		}
+
+		return $this->productCollection;
+	}
+	public function getProductsPosition()
+	{
+		if (!$this->getId()) {
+			return [];
+		}
+		$array = $this->getData('products_position');
+		if ($array === null) {
+			$array = $this->getResource()->getProductsPosition($this);
+			$this->setData('products_position', $array);
+		}
+
+		return $array;
+	}
 }

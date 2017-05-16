@@ -28,4 +28,8 @@ class Widget extends Frontend
 	{
 		return $this->getRequest()->getParam('id');
 	}
+	public function getPageFilter($content)
+	{
+		return $this->filterProvider->getPageFilter()->filter($content);
+	}
 }

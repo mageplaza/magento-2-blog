@@ -37,6 +37,10 @@
                 <pagination>10</pagination>
                 <related_post>5</related_post>
             </general>
+            <product_post>
+                <enable_post>1</enable_post>
+                <post_limit>10</post_limit>
+            </product_post>
             <sidebar>
                 <number_recent_posts>5</number_recent_posts>
                 <number_mostview_posts>5</number_mostview_posts>

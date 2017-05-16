@@ -471,5 +471,97 @@ class UpgradeSchema implements UpgradeSchemaInterface
 				}
 			}
 		}
+		if (version_compare($context->getVersion(), '1.1.4', '<')) {
+
+			if (! $installer->tableExists('mageplaza_blog_post_product')) {
+				$table = $installer->getConnection()
+					->newTable($installer->getTable('mageplaza_blog_post_product'));
+				$table->addColumn(
+					'post_id',
+					\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+					null,
+					[
+						'unsigned' => true,
+						'nullable' => false,
+						'primary'  => true,
+					],
+					'Post ID'
+				)
+					->addColumn(
+						'entity_id',
+						\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+						null,
+						[
+							'unsigned' => true,
+							'nullable' => false,
+							'primary'  => true,
+						],
+						'Entity ID'
+					)
+					->addColumn(
+						'position',
+						\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+						null,
+						[
+							'nullable' => false,
+							'default'  => '0'
+						],
+						'Position'
+					)
+					->addIndex(
+						$installer->getIdxName('mageplaza_blog_post_product', ['post_id']),
+						['post_id']
+					)
+					->addIndex(
+						$installer->getIdxName('mageplaza_blog_post_product', ['entity_id']),
+						['entity_id']
+					)
+					->addForeignKey(
+						$installer->getFkName(
+							'mageplaza_blog_post_product',
+							'post_id',
+							'mageplaza_blog_post',
+							'post_id'
+						),
+						'post_id',
+						$installer->getTable('mageplaza_blog_post'),
+						'post_id',
+						\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+						\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+					)
+					->addForeignKey(
+						$installer->getFkName(
+							'mageplaza_blog_post_product',
+							'entity_id',
+							'catalog_product_entity',
+							'entity_id'
+						),
+						'entity_id',
+						$installer->getTable('catalog_product_entity'),
+						'entity_id',
+						\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+						\Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+					)
+					->addIndex(
+						$installer->getIdxName(
+							'mageplaza_blog_post_product',
+							[
+								'post_id',
+								'entity_id'
+							],
+							\Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+						),
+						[
+							'post_id',
+							'entity_id'
+						],
+						[
+							'type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+						]
+					)
+					->setComment('Post To Product Link Table');
+				$installer->getConnection()->createTable($table);
+			}
+		}
     }
 }

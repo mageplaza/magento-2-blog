@@ -360,9 +360,10 @@ class Frontend extends Template
 
 			$robot = $post->getMetaRobots();
 			$array = $this->mpRobots->getOptionArray();
-			if ($keywords) {
+//			\Zend_Debug::dump($array[$robot]);
+//			if ($keywords) {
 				$this->setPageData($array[$robot], 4);
-			}
+//			}
 			$pageMainTitle = $this->getLayout()->getBlock('page.main.title');
 			if ($pageMainTitle) {
 				$pageMainTitle->setPageTitle($post->getName());

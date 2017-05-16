@@ -191,14 +191,16 @@ class View extends Action
 	 */
 	public function isLikedComment($cmtId, $userId, $model)
 	{
-		$liked = $model->load($cmtId, 'comment_id');
-		if ($liked->getEntityId() == $userId) {
+		$liked = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
+		foreach ($liked as $item) {
+		    if ($item->getEntityId() == $userId) {
 			try {
-				$liked->delete();
-				return true;
+			    $item->delete();
+			    return true;
 			} catch (\Exception $e) {
-				return false;
+			    return false;
 			}
+		    }
 		}
 
 		return false;
