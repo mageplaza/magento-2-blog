@@ -38,7 +38,7 @@ class Listpost extends Frontend
 		$currentUrl = $this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
 		$arr = explode('/',$currentUrl);
 		$result = end($arr);
-		if (strpos($result,'?')){
+		if (strpos($result,'?') !== false){
 			$arr = explode('?',$result);
 			$result = reset($arr);
 		}
