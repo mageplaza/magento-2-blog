@@ -54,7 +54,6 @@ class Data extends CoreHelper
 	public $loginUrl;
 	public $translitUrl;
 	public $dateTime;
-	public $dateTimeFormat;
 
 	public function __construct(
 		\Magento\Customer\Model\Session $session,
@@ -67,9 +66,8 @@ class Data extends CoreHelper
         TopicFactory $topicFactory,
 		AuthorFactory $authorFactory,
         TemplateContext $templateContext,
-		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-		\Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTimeFormat,
 		\Magento\Framework\Filter\TranslitUrl $translitUrl,
+		\Magento\Framework\Stdlib\DateTime $dateTime,
 		\Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
 		\Mageplaza\Blog\Model\Traffic $traffic
     ) {
@@ -80,11 +78,11 @@ class Data extends CoreHelper
         $this->tagfactory      = $tagFactory;
         $this->topicfactory    = $topicFactory;
 		$this->authorfactory    = $authorFactory;
-		$this->dateTime   = $dateTime;
         $this->store = $templateContext->getStoreManager();
         $this->modelTraffic = $traffic;
+		$this->dateTime   = $dateTime;
         $this->translitUrl = $translitUrl;
-        $this->dateTimeFormat = $dateTimeFormat;
+        $this->dateTimeFormat = $templateContext->getLocaleDate();
         $this->postCollectionFactory = $postCollectionFactory;
         parent::__construct($context, $objectManager, $templateContext->getStoreManager());
     }
