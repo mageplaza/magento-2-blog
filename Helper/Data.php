@@ -693,7 +693,7 @@ class Data extends CoreHelper
 	public function getDateArray(){
 		$dateArray = array();
 		foreach ($this->getPostDate() as $postDate){
-			$dateArray[] = date("F Y",$this->dateTime->timestamp($postDate));
+			$dateArray[] = date("F Y",$this->dateTime->strToTime($postDate));
 		}
 
 		return $dateArray;
