@@ -92,9 +92,166 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
 
 
 
-## License
+## CHANGELOG 
 
-Mageplaza License
-https://www.mageplaza.com/LICENSE.txt
 
-Website: https://www.mageplaza.com/
+### SEO v1.4.1
+Released on  2017-06-12
+Release notes: 
+
+- Optimize Structured Data ld-json
+- Optimize Social share Open graph (Google+ and Pinterest) and twitter card
+- Fixed Breadcrumbs issue
+- Fixed canonical link issue
+
+
+
+### SEO v1.4.0
+Released on  2017-05-23
+Release notes: 
+
+- Released Seo Crosslinks
+- Fixed minor bugs
+
+
+
+### SEO v1.3.1
+Released on  2017-05-23
+Release notes: 
+
+- Fixed issue on bundle products
+- Fixed Remove inject object in Search/Catalog block
+- Optimize config object
+- Optimize Search Nofollow
+
+
+
+### SEO v1.3.0
+Released on  2017-04-24
+Release notes: 
+
+**SEO Core , Sitemap**
+
+* Exclude CMS pages in HTML Sitemap
++ Include custom links in HTML Sitemap
+* Opt to exclude out-of-stock in HTML, XML Sitemap
+* Optimize canonical tag, rich snippet, hrefLang, alternate
+
+**Rule templates**
+
++ Compatible with Layered Navigation
++ Add Mageplaza_Blog posts meta data template
++ Optimize template rule products, categories, CMS pages.
++ Preview rule template
+
+
+
+
+### SEO v1.2.2
+Released on  2017-04-24
+Release notes: 
+
+- Edit composer.json to require mageplaza/module-core instead of mageplaza/core-m2
+
+
+
+### SEO v1.2.1
+Released on  2017-04-09
+Release notes: 
+
+- Fix composer issue
+
+
+
+### SEO v1.2.0
+Released on  2017-04-09
+Release notes: 
+
+**Features**
+
++ Add Verification configuration
++ Add Stop words feature
++ Hreflang tags feature
+
+**Bug fixes**
+
+- Performance optimization
+- Group SEO menu
+- Optimize Configuration options
+
+
+
+
+### SEO v1.1.4
+Released on  2016-11-23
+Release notes: 
+
+- Fix Upgrade issue
+
+
+
+
+### SEO v1.1.2
+Released on  2016-11-22
+Release notes: 
+
+- Improve Robots meta tags categories, products, cms pages
+
+
+
+
+### SEO v1.1.1
+Released on  2016-10-20
+Release notes: 
+
+- add HTML Sitemap features
+
+
+
+
+### SEO v1.1.0
+Released on  2016-10-20
+Release notes: 
+
+## Improvement
+- Optimize code and performance
+- Comment code
+
+## Features
+- Add config Disable URL parameter in canonical URL
+
+## Bug fixing
+- Fix bug canonical url
+
+
+
+
+### SEO v1.0.2
+Released on  2016-08-09
+Release notes: 
+
+- Compatible Magento 2.1
+- Fix bug Dependency 
+- Fix JSONLD broken tags
+- Optimize Review rating value
+
+
+
+
+### SEO v1.0.1
+Released on  2016-07-20
+Release notes: 
+
+- Add composer and packagist.org
+
+
+
+### SEO v1.0.0-beta
+Released on  2016-04-23
+Release notes: 
+
+- Release first version
+
+
+
+
