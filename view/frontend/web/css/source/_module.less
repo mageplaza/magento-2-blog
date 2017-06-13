@@ -149,11 +149,6 @@ h2.mp-post-title a:hover:focus {
   font-size: 10px;
   line-height: 18px;
 }
-.post-image img.img-responsive {
-  height: 400px;
-  width: 100%;
-  border: none;
-}
 .post-item-wraper {
   border: 1px solid #eee;
 }
@@ -684,10 +679,6 @@ li.default-cmt__content__cmt-content__cmt-row.cmt-row {
 .widget-title {
   margin-bottom: 20px;
 }
-.post-view img.img-responsive {
-  height: 500px !important ;
-  width: 100%;
-}
 .author-name h3{
   color: @color;
   text-align: center;
@@ -708,6 +699,11 @@ li.default-cmt__content__cmt-content__cmt-row.cmt-row {
   height: 25px;
   width: 25px;
 }
+.post-image img.img-responsive {
+  height: 175px;
+  width: 100%;
+  border: none;
+}
 #mostview img.img-responsive{
   height: 40px !important;
   width: 100%;
@@ -716,4 +712,51 @@ li.default-cmt__content__cmt-content__cmt-row.cmt-row {
   height: 40px !important;
   width: 100%;
 }
+.post-view img.img-responsive {
+  height: 275px !important ;
+  width: 100%;
+}
+@media only screen and (min-width: 600px) {
+  .post-image img.img-responsive {
+    height: 260px;
+    width: 100%;
+    border: none;
+  }
+  .post-view img.img-responsive {
+    height: 360px !important ;
+    width: 100%;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .post-image img.img-responsive {
+    height: 250px;
+    width: 100%;
+    border: none;
+  }
+  .post-view img.img-responsive {
+    height: 350px !important ;
+    width: 100%;
+  }
+}
+@media only screen and (min-width: 1024px) {
+  .post-image img.img-responsive {
+    height: 400px;
+    width: 100%;
+    border: none;
+  }
+  .post-view img.img-responsive {
+    height: 450px !important ;
+    width: 100%;
+  }
+}
+@media only screen and (min-width: 450px) and (max-width: 767px){
+  #mostview img.img-responsive{
+    height: 65px !important;
+    width: 100%;
+  }
+  #mostrecent img.img-responsive{
+    height: 65px !important;
+    width: 100%;
+  }
+  }
 /* mageplaza end blog style */

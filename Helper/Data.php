@@ -67,7 +67,7 @@ class Data extends CoreHelper
 		AuthorFactory $authorFactory,
         TemplateContext $templateContext,
 		\Magento\Framework\Filter\TranslitUrl $translitUrl,
-		\Magento\Framework\Stdlib\DateTime $dateTime,
+		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
 		\Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
 		\Mageplaza\Blog\Model\Traffic $traffic
     ) {

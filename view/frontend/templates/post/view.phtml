@@ -44,7 +44,7 @@ if ($checkRss):
             <div class="row">
                 <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1){
 				?>
-                <div class="col-md-9 col-sm-6">
+                <div class="col-md-9 col-sm-8">
 
                     <div class="post-image col-xs-12">
                        <?php if ($_post->getImage()) : ?>
@@ -81,17 +81,17 @@ if ($checkRss):
                     </div>
                 </div>
 
-                <div class="mp-sidebar col-md-3 col-sm-6">
+                <div class="mp-sidebar col-md-3 col-sm-4">
                         <?php echo $this->getChildHtml(); ?>
                 </div>
 					<?php
 				}else{ ?>
 
-                    <div class="mp-sidebar col-md-3 col-sm-6">
+                    <div class="mp-sidebar col-md-3 col-sm-4">
                         <?php echo $this->getChildHtml(); ?>
                     </div>
 
-                    <div class="col-md-9 col-sm-6">
+                    <div class="col-md-9 col-sm-8">
 
                         <div class="post-image col-xs-12">
                            <?php if ($_post->getImage()) : ?>
