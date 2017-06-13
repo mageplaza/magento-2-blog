@@ -1,3 +1,5 @@
+# Magento 2 SEO Free solution by Mageplaza
+
 **Magento 2 Blog by Mageplaza** is integrated right into the Magento backend so you can manage your blog and your e-commerce store all in the one place. It is the perfect marketing tool for your bussiness that not only provides update information to your existing customers but also drive more visitors to your online store.
 
 Demo: http://blog.demo.mageplaza.com/blog/
