@@ -3,7 +3,7 @@
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
     <widget id="mageplaza_blog_posts" class="Mageplaza\Blog\Block\Widget\Posts">
         <label translate="true">Mageplaza Blog</label>
-        <description>Mageplaza </description>
+        <description>Mageplaza Blog Widget </description>
         <parameters>
             <parameter name="title" xsi:type="text" required="false" visible="true">
                 <label translate="true">Title</label>
