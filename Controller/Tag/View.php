@@ -28,6 +28,7 @@ use Mageplaza\Blog\Helper\Data as HelperBlog;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Controller\Result\ForwardFactory;
 
 class View extends Action
 {
@@ -37,6 +38,10 @@ class View extends Action
 	public $customerUrl;
 	public $session;
 	public $storeManager;
+	/**
+	 * @type \Magento\Framework\Controller\Result\ForwardFactory
+	 */
+	protected $resultForwardFactory;
 
     public function __construct(
         Context $context,
@@ -44,6 +49,7 @@ class View extends Action
         HelperBlog $helperBlog,
         PageFactory $resultPageFactory,
         AccountManagementInterface $accountManagement,
+		ForwardFactory $resultForwardFactory,
         CustomerUrl $customerUrl,
         Session $customerSession
     ) {
@@ -54,10 +60,12 @@ class View extends Action
         $this->accountManagement = $accountManagement;
         $this->customerUrl       = $customerUrl;
         $this->session           = $customerSession;
+		$this->resultForwardFactory = $resultForwardFactory;
     }
 
     public function execute()
     {
-        return $this->resultPageFactory->create();
+		$id = $this->getRequest()->getParam('id');
+		return ($id) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
     }
 }
