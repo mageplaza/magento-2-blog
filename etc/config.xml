@@ -36,6 +36,10 @@
                 <font_color>#1abc9c</font_color>
                 <pagination>10</pagination>
                 <related_post>5</related_post>
+                <resize_image>
+                    <resize_width>900</resize_width>
+                    <resize_height>500</resize_height>
+                </resize_image>
             </general>
             <product_post>
                 <enable_post>1</enable_post>
