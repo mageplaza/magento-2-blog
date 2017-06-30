@@ -1,17 +1,26 @@
-# Magento 2 Blog extension (FREE)
+# Magento 2 Blog extension FREE
 
 **Magento 2 Blog by Mageplaza** is integrated right into the Magento backend so you can manage your blog and your e-commerce store all in the one place. It is the perfect marketing tool for your bussiness that not only provides update information to your existing customers but also drive more visitors to your online store.
 
 Demo: http://blog.demo.mageplaza.com/blog/
 
-## Documentations
+## Documentation
 
-- User guide: https://docs.mageplaza.com/blog-m2/
+- Installation guide: https://docs.mageplaza.com/kb/installation.html
+- User guide: https://docs.mageplaza.com/blog-m2/index.html
+- Download from our Live site: https://www.mageplaza.com/magento-2-blog-extension/
+- Get Support: https://github.com/mageplaza/magento-2-blog-extension/issues
 - Contribute on Github: https://github.com/mageplaza/magento-2-blog/
-- Get help: https://github.com/mageplaza/magento-2-blog-extension/issues
+- Changelog: https://www.mageplaza.com/changelog/m2-blog.txt
 - License https://www.mageplaza.com/LICENSE.txt
 
-## How to install?
+## FAQs
+
+#### Q: I got error: `Mageplaza_Core has been already defined`
+A: Read solution: https://github.com/mageplaza/module-core/issues/3
+
+
+## How to install
 
 ### Install Package from Mageplaza
 
@@ -37,6 +46,8 @@ Feel free to **Fork** and contrinute to this module and create a pull request so
 ## Blog benefits
 
 Magento 2 blog extension can give you a greate opportunity to communicate with your potential and existing customers. Blog posts can help you to create a 2-way communication platform to publish new information such as news, promotions, comming products. Read more benefits of Blog.
+
+![Magento 2 blog extension by Mageplaza](https://www.mageplaza.com/assets/img/extensions-images/magento-2-blog/mobile-mockup.jpg)
 
 ## Blog benefits
 
