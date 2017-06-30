@@ -6,6 +6,7 @@
   },
   "type": "magento2-module",
   "version": "2.4.2",
+  "license": "https://www.mageplaza.com/LICENSE.txt"
   "authors": [
     {
       "name": "Mageplaza",
