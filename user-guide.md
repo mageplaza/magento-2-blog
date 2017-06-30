@@ -19,7 +19,7 @@ A: Read solution: https://github.com/mageplaza/module-core/issues/3
 
 
 
-## How to install?
+## How to install
 
 ### Method 1. Install ready-to-paste package
 
