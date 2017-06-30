@@ -7,6 +7,12 @@
   "type": "magento2-module",
   "version": "2.4.2",
   "license": "Mageplaza License",
+  "keywords": [
+      "magento 2",
+      "mageplaza",
+      "blog",
+      "magento 2 blog"
+  ],
   "authors": [
     {
       "name": "Mageplaza",
