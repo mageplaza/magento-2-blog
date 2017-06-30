@@ -51,20 +51,29 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 	public $jsHelper;
 	public $trafficFactory;
 	protected $authSession;
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    public $date;
 
     /**
      * constructor
      *
-     * @param \Mageplaza\Blog\Model\Upload $uploadModel
-     * @param \Mageplaza\Blog\Model\Post\Image $imageModel
-     * @param \Magento\Backend\Model\Session $backendSession
-     * @param \Magento\Backend\Helper\Js $jsHelper
-     * @param \Mageplaza\Blog\Model\PostFactory $postFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param \Mageplaza\Blog\Model\Upload                $uploadModel
+     * @param \Mageplaza\Blog\Model\Post\Image            $imageModel
+     * @param \Mageplaza\Blog\Model\TrafficFactory        $trafficFactory
+     * @param \Magento\Backend\Helper\Js                  $jsHelper
+     * @param \Mageplaza\Blog\Model\PostFactory           $postFactory
+     * @param \Magento\Framework\Registry                 $registry
+     * @param \Magento\Backend\Model\Auth\Session         $authSession
+     * @param \Magento\Backend\App\Action\Context         $context
+     *
+     * @internal param \Magento\Backend\Model\Session $backendSession
+     * @internal param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
+        \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Mageplaza\Blog\Model\Upload $uploadModel,
         \Mageplaza\Blog\Model\Post\Image $imageModel,
         \Mageplaza\Blog\Model\TrafficFactory $trafficFactory,
@@ -74,7 +83,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 		\Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Backend\App\Action\Context $context
     ) {
-    
+        $this->date         = $date;
         $this->uploadModel    = $uploadModel;
         $this->imageModel     = $imageModel;
         $this->trafficFactory = $trafficFactory;
@@ -91,9 +100,21 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
      */
     public function execute()
     {
+        // Magento Timezone Interface
+        $timezone =$this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
 		$user = $this->authSession->getUser();
         $data = $this->getRequest()->getPost('post');
-        //var_dump($data);die();
+        if (empty($data['publish_date'])){
+            $data['publish_date'] = $this->date->date();
+        }else{
+            $data['publish_date'] = $this->converToTz(
+                $data['publish_date'],
+                // get default timezone of system (UTC)
+                $timezone->getDefaultTimezone(),
+                // get Config Timezone of current user
+                $timezone->getConfigTimezone()
+            );
+        }
         $data['store_ids'] = implode(',', $data['store_ids']);
 		$data['modifier_id'] = $user->getId();
         //check delete image
@@ -206,5 +227,19 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         $resultRedirect->setPath('mageplaza_blog/*/');
 
         return $resultRedirect;
+    }
+    /**
+     * converToTz convert Datetime from one zone to another
+     * @param string $dateTime which we want to convert
+     * @param string $toTz timezone in which we want to convert
+     * @param string $fromTz timezone from which we want to convert
+     */
+    protected function converToTz($dateTime="", $toTz='', $fromTz='')
+    {
+        // timezone by php friendly values
+        $date = new \DateTime($dateTime, new \DateTimeZone($fromTz));
+        $date->setTimezone(new \DateTimeZone($toTz));
+        $dateTime = $date->format('m/d/Y H:i:s');
+        return $dateTime;
     }
 }

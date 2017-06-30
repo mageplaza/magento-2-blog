@@ -39,7 +39,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     /**
      * Meta Robots options
      *
-     * @var \Mageplaza\Blog\Model\Post\Source\MetaRobots
+     * @var \Mageplaza\Blog\Model\Config\Source\MetaRobots
      */
 	public $metaRobotsOptions;
 
@@ -50,7 +50,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      *
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
-     * @param \Mageplaza\Blog\Model\Post\Source\MetaRobots $metaRobotsOptions
+     * @param \Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobotsOptions
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -196,6 +196,14 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'values' => $this->booleanOptions->toOptionArray(),
             ]
         );
+		$fieldset->addField('publish_date', 'date', array(
+				'name' => 'publish_date',
+				'label' => __('Publish Date'),
+				'title' => __('Publish Date'),
+				'date_format' => $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT),
+				'time_format' => $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT),
+			)
+		);
 		$fieldset->addField(
 			'url_key',
 			'text',

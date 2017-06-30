@@ -44,7 +44,7 @@ $postsRecent = $block->getRecentPost();
 							<div class="post-right">
 								<span><?php echo $post->getName() ?></span>
 								<span class="create-at">
-									<?php echo $block->getDateFormat($post->getCreatedAt()); ?>
+									<?php echo $block->getDateFormat($post->getPublishDate()); ?>
 								</span>
 							</div>
 						</a>
@@ -68,7 +68,7 @@ $postsRecent = $block->getRecentPost();
 							<div class="post-right">
 								<span><?php echo $post->getName() ?></span>
 								<span class="create-at">
-									<?php echo $block->getDateFormat($post->getCreatedAt()); ?>
+									<?php echo $block->getDateFormat($post->getPublishDate()); ?>
 								</span>
 							</div>
 						</a>

@@ -563,5 +563,24 @@ class UpgradeSchema implements UpgradeSchemaInterface
 				$installer->getConnection()->createTable($table);
 			}
 		}
+		if (version_compare($context->getVersion(), '2.4.2', '<')) {
+
+			$table =$installer->getTable('mageplaza_blog_post');
+			if ($installer->getConnection()->isTableExists($table) == true) {
+				$columns = [
+					'publish_date' => [
+						'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,null,
+						'comment' => 'Post Publish Date',
+					],
+				];
+
+				$connection = $installer->getConnection();
+				foreach ($columns as $name => $definition) {
+					$connection->addColumn($table,$name,$definition);
+				}
+			}
+
+			$installer->endSetup();
+		}
     }
 }

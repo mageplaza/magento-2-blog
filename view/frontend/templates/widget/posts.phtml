@@ -49,7 +49,7 @@ $posts = $block->getCollection();
 
 
                                 <div class="mp-post-info">
-                                    <?php echo __('Posted on ') . $block->getDateFormat($post->getCreatedAt()); ?>
+                                    <?php echo __('Posted on ') . $block->getDateFormat($post->getPublishDate()); ?>
 									<?php
 									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
 									?>
