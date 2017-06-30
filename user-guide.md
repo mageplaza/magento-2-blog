@@ -21,12 +21,12 @@ A: Read solution: https://github.com/mageplaza/module-core/issues/3
 
 ## How to install
 
-### Method 1. Install ready-to-paste package
+### Method 1: Install ready-to-paste package
 
 - Download the latest version at [Mageplaza Blog for Magento 2](https://www.mageplaza.com/magento-2-blog/)
 -  [Installation guide](https://docs.mageplaza.com/kb/installation.html)
 
-### Method 2. Install via composer
+### Method 2: Install via composer
 
 Run the following command in Magento 2 root folder
 
@@ -36,7 +36,7 @@ php bin/magento setup:upgrade
 php bin/magento setup:static-content:deploy
 ```
 
-### Method 3. Manually install via composer
+### Method 3: Manually install via composer
 
 1. Access to your server via SSH
 2. Create a folder (Not Magento root directory) in called: `mageplaza`, then upload the zip package to mageplaza folder.
