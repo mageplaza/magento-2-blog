@@ -67,7 +67,6 @@ class Data extends CoreHelper
 		AuthorFactory $authorFactory,
         TemplateContext $templateContext,
 		\Magento\Framework\Filter\TranslitUrl $translitUrl,
-		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
 		\Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
 		\Mageplaza\Blog\Model\Traffic $traffic
     ) {
@@ -80,7 +79,6 @@ class Data extends CoreHelper
 		$this->authorfactory    = $authorFactory;
         $this->store = $templateContext->getStoreManager();
         $this->modelTraffic = $traffic;
-		$this->dateTime   = $dateTime;
         $this->translitUrl = $translitUrl;
         $this->dateTimeFormat = $templateContext->getLocaleDate();
         $this->postCollectionFactory = $postCollectionFactory;
@@ -167,7 +165,7 @@ class Data extends CoreHelper
 
         if ($list->getSize()) {
             $list->setOrder('publish_date', 'desc')
-                ->addFieldToFilter('publish_date',["lt" => $this->dateTime->date()]);
+                ->addFieldToFilter('publish_date',["lt" => $this->_dateTime->date()]);
             $list->addFieldToFilter('enabled',1);
 			$results = $this->filterItems($list);
             return $results ? $results : '';
@@ -656,7 +654,7 @@ class Data extends CoreHelper
 	public function getDateArray(){
 		$dateArray = array();
 		foreach ($this->getPostDate() as $postDate){
-			$dateArray[] = date("F Y",$this->dateTime->timestamp($postDate));
+			$dateArray[] = date("F Y",$this->_dateTime->timestamp($postDate));
 		}
 
 		return $dateArray;
@@ -807,6 +805,11 @@ class Data extends CoreHelper
 
 		return $dateFormat;
 	}
+
+	/**
+	 * get configuration zone
+	 * @return mixed
+	 */
 	public function getTimezone()
 	{
 		$om = \Magento\Framework\App\ObjectManager::getInstance();
@@ -819,6 +822,12 @@ class Data extends CoreHelper
 		);
 		return $timeZone;
 	}
+
+	/**
+	 * get related posts
+	 * @param $id
+	 * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+	 */
 	public function getRelatedPostList($id){
 		$collection = $this->postCollectionFactory->create();
 		$collection->getSelect()->join(['related' => $collection->getTable('mageplaza_blog_post_product')],'related.post_id=main_table.post_id 

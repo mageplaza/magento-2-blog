@@ -95,8 +95,7 @@ class Frontend extends Template
         Context $context, HelperData $helperData,
         TemplateContext $templateContext,
         FilterProvider $filterProvider,
-        //resizeImage funtion
-        \Magento\Framework\Filesystem $filesystem,
+        //resizeImage function
         \Magento\Framework\Image\AdapterFactory $imageFactory,
         array $data = []
     ) {
@@ -108,7 +107,7 @@ class Frontend extends Template
         $this->helperData = $helperData;
         $this->store = $templateContext->getStoreManager();
         $this->filterProvider = $filterProvider;
-        $this->_filesystem = $filesystem;
+        $this->_filesystem = $context->getFilesystem();
         $this->_imageFactory = $imageFactory;
         parent::__construct($context, $data);
     }
