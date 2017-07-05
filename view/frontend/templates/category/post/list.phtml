@@ -21,6 +21,8 @@
 ?>
 <?php
 $posts=$block->getPostList();
+$resizeWidth = $block->getBlogConfig('general/resize_image/resize_width');
+$resizeHeight = $block->getBlogConfig('general/resize_image/resize_height');
 ?>
 	<?php $checkRss = $block->checkRss();
 if ($checkRss):
@@ -49,7 +51,7 @@ if ($checkRss):
                                 <?php if ($post->getImage()) : ?>
                                     <a href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
                                         <img class="img-responsive"
-                                             src="<?php echo $block->getImageUrl($post->getImage()); ?>"
+                                             src="<?php echo $block->resizeImage($post->getImage(),$resizeWidth,$resizeHeight); ?>"
                                              alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
                                     </a>
                                 <?php endif; ?>
@@ -63,7 +65,7 @@ if ($checkRss):
 
 
                                 <div class="mp-post-info">
-                                    <?php echo __('Posted on'); ?> <?php echo $block->getDateFormat($post->getCreatedAt());
+                                    <?php echo __('Posted on'); ?> <?php echo $block->getDateFormat($post->getPublishDate());
                                     ?>
                                     <?php 	echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):(''); ?>
                                 </div>
@@ -109,7 +111,7 @@ if ($checkRss):
                                         <?php if ($post->getImage()) : ?>
                                             <a href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
                                                 <img class="img-responsive"
-                                                     src="<?php echo $block->getImageUrl($post->getImage()); ?>"
+                                                     src="<?php echo $block->resizeImage($post->getImage(),$resizeWidth,$resizeHeight); ?>"
                                                      alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
                                             </a>
                                         <?php endif; ?>
@@ -123,7 +125,7 @@ if ($checkRss):
 
 
                                         <div class="mp-post-info">
-                                            <?php echo __('Posted on'); ?> <?php echo $block->getDateFormat($post->getCreatedAt());
+                                            <?php echo __('Posted on'); ?> <?php echo $block->getDateFormat($post->getPublishDate());
                                             ?>
                                             <?php 	echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):(''); ?>
                                         </div>

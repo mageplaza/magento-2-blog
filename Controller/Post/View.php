@@ -29,6 +29,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Customer\Model\Session;
 use Mageplaza\Blog\Model\TrafficFactory;
+use Magento\Framework\Controller\Result\ForwardFactory;
 
 class View extends Action
 {
@@ -46,6 +47,10 @@ class View extends Action
 	public $cmtFactory;
 	public $likeFactory;
 	public $dateTime;
+	/**
+	 * @type \Magento\Framework\Controller\Result\ForwardFactory
+	 */
+	protected $resultForwardFactory;
 
     public function __construct(
 		\Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -53,6 +58,7 @@ class View extends Action
 		\Mageplaza\Blog\Model\LikeFactory $likeFactory,
 		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         Context $context,
+		ForwardFactory $resultForwardFactory,
         StoreManagerInterface $storeManager,
         HelperBlog $helperBlog,
         PageFactory $resultPageFactory,
@@ -70,6 +76,7 @@ class View extends Action
         $this->customerUrl       = $customerUrl;
         $this->session           = $customerSession;
         $this->trafficFactory    = $trafficFactory;
+		$this->resultForwardFactory = $resultForwardFactory;
         $this->jsonHelper = $jsonHelper;
         $this->cmtFactory = $commentFactory;
         $this->likeFactory = $likeFactory;
@@ -126,7 +133,8 @@ class View extends Action
 			return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
 		}
 
-        return $this->resultPageFactory->create();
+			return ($id) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
+
     }
 
     /**

@@ -116,10 +116,12 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
+        //set default Update At and Create At time post
         $object->setUpdatedAt($this->date->date());
         if ($object->isObjectNew()) {
             $object->setCreatedAt($this->date->date());
         }
+        //set URl Key post and check the duplication URL
         if ($object->isObjectNew()) {
             $count   = 0;
             $objName = $object->getName();

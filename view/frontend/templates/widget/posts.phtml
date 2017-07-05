@@ -21,6 +21,8 @@
 ?>
 <?php
 $posts = $block->getCollection();
+$resizeWidth = $block->getBlogConfig('general/resize_image/resize_width');
+$resizeHeight = $block->getBlogConfig('general/resize_image/resize_height');
 ?>
 <div class="blog-widget-title"><a ></a></div>
 <div class="post-list-container mpcss" id="mpblog-list-container">
@@ -34,7 +36,7 @@ $posts = $block->getCollection();
                                 <?php if ($post->getImage()) : ?>
                                     <a href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
                                         <img class="img-responsive" style="height: 220px"
-                                             src="<?php echo $block->getImageUrl($post->getImage()); ?>"
+                                             src="<?php echo $block->resizeImage($post->getImage(),$resizeWidth,$resizeHeight); ?>"
                                              alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
                                     </a>
 								<?php endif; ?>
@@ -49,7 +51,7 @@ $posts = $block->getCollection();
 
 
                                 <div class="mp-post-info">
-                                    <?php echo __('Posted on ') . $block->getDateFormat($post->getCreatedAt()); ?>
+                                    <?php echo __('Posted on ') . $block->getDateFormat($post->getPublishDate()); ?>
 									<?php
 									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
 									?>

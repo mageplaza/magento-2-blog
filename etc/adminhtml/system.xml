@@ -88,6 +88,17 @@
                     <label>Pagination</label>
                     <comment>Number of post per page</comment>
                 </field>
+                <group id="resize_image" translate="label" showInDefault="1" sortOrder="80" showInWebsite="1" showInStore="1">
+                    <label>Resize Content Image</label>
+                    <field id="resize_width" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInStore="1" showInWebsite="1">
+                        <label>Resize Width</label>
+                        <comment>Resize Image Width (px)</comment>
+                    </field>
+                    <field id="resize_height" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInStore="1" showInWebsite="1">
+                        <label>Resize Height</label>
+                        <comment>Resize Image Height (px)</comment>
+                    </field>
+                </group>
             </group>
             <group id="product_post" translate="label" showInDefault="1" sortOrder="5" showInWebsite="1" showInStore="1">
                 <label>Product Post</label>

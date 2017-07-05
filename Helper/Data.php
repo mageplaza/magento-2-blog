@@ -166,9 +166,9 @@ class Data extends CoreHelper
 		}
 
         if ($list->getSize()) {
-            $list->setOrder('created_at', 'desc')
-                ->addFieldToFilter('enabled', 1);
-
+            $list->setOrder('publish_date', 'desc')
+                ->addFieldToFilter('publish_date',["lt" => $this->dateTime->date()]);
+            $list->addFieldToFilter('enabled',1);
 			$results = $this->filterItems($list);
             return $results ? $results : '';
         }
@@ -313,24 +313,6 @@ class Data extends CoreHelper
 
         return $url;
     }
-
-//    public function getPostsByTag()
-//    {
-//        $posts      = $this->postfactory->create();
-//        $collection = $posts->getCollection()->addFieldToFilter('enabled', 1);
-//        $result = $this->filterItems($collection);
-//        if ($result == '') {
-//            return '';
-//        }
-//        return $result;
-//    }
-
-//    public function getPostsByCategory()
-//    {
-//        $collection = true;
-//
-//        return $collection;
-//    }
 
 	/**
 	 * get image url by image file name
@@ -498,25 +480,6 @@ class Data extends CoreHelper
             return $this->topicfactory->create()->load($param, $code);
         }
     }
-
-
-//    public function getCategoryByPost($postId)
-//    {
-//        $post = $this->postfactory->create()->load($postId);
-//        return $post->getSelectedCategoriesCollection();
-//    }
-
-//    public function getTagsByPost($postId)
-//    {
-//        $post = $this->postfactory->create()->load($postId);
-//        return $post->getSelectedTagsCollection();
-//    }
-
-//    public function getTopicByPost($postId)
-//    {
-//        $post = $this->postfactory->create()->load($postId);
-//        return $post->getSelectedTopicsCollection();
-//    }
 
 	/**
 	 * get most view post
