@@ -9,6 +9,7 @@ Demo: http://blog.demo.mageplaza.com/blog/
 - Installation guide: https://docs.mageplaza.com/kb/installation.html
 - User guide: https://docs.mageplaza.com/blog-m2/index.html
 - Download from our Live site: https://www.mageplaza.com/magento-2-blog-extension/
+- Marketplace: https://marketplace.magento.com/mageplaza-magento-2-blog-extension.html
 - Get Support: https://github.com/mageplaza/magento-2-blog-extension/issues
 - Contribute on Github: https://github.com/mageplaza/magento-2-blog/
 - Changelog: https://www.mageplaza.com/changelog/m2-blog.txt
