@@ -164,9 +164,9 @@ class Topic extends \Magento\Framework\Model\AbstractModel
         if ($this->postCollection === null) {
             $collection = $this->postCollectionFactory->create();
             $collection->join(
-                'mageplaza_blog_post_topic',
-                'main_table.post_id=mageplaza_blog_post_topic.post_id 
-                AND mageplaza_blog_post_topic.topic_id='.$this->getId(),
+                $this->getResource()->getTable('mageplaza_blog_post_topic'),
+                'main_table.post_id='.$this->getResource()->getTable('mageplaza_blog_post_topic').'.post_id 
+                AND '.$this->getResource()->getTable('mageplaza_blog_post_topic').'.topic_id='.$this->getId(),
                 ['position']
             );
             $this->postCollection = $collection;
