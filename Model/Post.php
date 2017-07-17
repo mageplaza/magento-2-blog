@@ -254,8 +254,8 @@ class Post extends \Magento\Framework\Model\AbstractModel
         if ($this->tagCollection === null) {
             $collection = $this->tagCollectionFactory->create();
             $collection->getSelect()->join(
-                'mageplaza_blog_post_tag',
-                'main_table.tag_id=mageplaza_blog_post_tag.tag_id AND mageplaza_blog_post_tag.post_id='
+                $this->getResource()->getTable('mageplaza_blog_post_tag'),
+                'main_table.tag_id='.$this->getResource()->getTable('mageplaza_blog_post_tag').'.tag_id AND '.$this->getResource()->getTable('mageplaza_blog_post_tag').'.post_id='
 				. $this->getId(),
                 ['position']
             )->where("main_table.enabled='1'");
@@ -290,8 +290,8 @@ class Post extends \Magento\Framework\Model\AbstractModel
         if ($this->topicCollection === null) {
             $collection = $this->topicCollectionFactory->create();
             $collection->join(
-                'mageplaza_blog_post_topic',
-                'main_table.topic_id=mageplaza_blog_post_topic.topic_id AND mageplaza_blog_post_topic.post_id='
+                $this->getResource()->getTable('mageplaza_blog_post_topic'),
+                'main_table.topic_id='.$this->getResource()->getTable('mageplaza_blog_post_topic').'.topic_id AND '.$this->getResource()->getTable('mageplaza_blog_post_topic').'.post_id='
 				. $this->getId(),
                 ['position']
             );
@@ -326,9 +326,9 @@ class Post extends \Magento\Framework\Model\AbstractModel
         if ($this->categoryCollection === null) {
             $collection = $this->categoryCollectionFactory->create();
             $collection->join(
-                'mageplaza_blog_post_category',
-                'main_table.category_id=mageplaza_blog_post_category.category_id 
-                AND mageplaza_blog_post_category.post_id="' . $this->getId().'"',
+                $this->getResource()->getTable('mageplaza_blog_post_category'),
+                'main_table.category_id='.$this->getResource()->getTable('mageplaza_blog_post_category').'.category_id 
+                AND '.$this->getResource()->getTable('mageplaza_blog_post_category').'.post_id="' . $this->getId().'"',
                 ['position']
             );
             $this->categoryCollection = $collection;
@@ -386,9 +386,9 @@ class Post extends \Magento\Framework\Model\AbstractModel
             $collection = $this->postCollectionFactory->create();
 
             $collection->getSelect()->join(
-                'mageplaza_blog_post_topic',
-                'main_table.post_id=mageplaza_blog_post_topic.post_id AND mageplaza_blog_post_topic.post_id != "'
-				. $this->getId() . '" AND mageplaza_blog_post_topic.topic_id IN (' . $this->getTopicSting() . ')',
+                $this->getResource()->getTable('mageplaza_blog_post_topic'),
+                'main_table.post_id='.$this->getResource()->getTable('mageplaza_blog_post_topic').'.post_id AND '.$this->getResource()->getTable('mageplaza_blog_post_topic').'.post_id != "'
+				. $this->getId() . '" AND '.$this->getResource()->getTable('mageplaza_blog_post_topic').'.topic_id IN (' . $this->getTopicSting() . ')',
                 ['position']
             )->group('main_table.post_id');
             $this->relatedPostCollection = $collection;
@@ -401,8 +401,8 @@ class Post extends \Magento\Framework\Model\AbstractModel
 		if ($this->productCollectionFactory === null) {
 			$collection = $this->productCollectionFactory->create();
 			$collection->getSelect()->join(
-				'mageplaza_blog_post_product',
-				'main_table.entity_id=mageplaza_blog_post_product.entity_id AND mageplaza_blog_post_product.post_id='
+                $this->getResource()->getTable('mageplaza_blog_post_product'),
+				'main_table.entity_id='.$this->getResource()->getTable('mageplaza_blog_post_product').'.entity_id AND '.$this->getResource()->getTable('mageplaza_blog_post_product').'.post_id='
 				. $this->getId(),
 				['position']
 			)->where("main_table.enabled='1'");
