@@ -32,6 +32,10 @@
                 <field id="head" translate="label" type="button" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <frontend_model>Mageplaza\Blog\Block\Adminhtml\System\Config\Head</frontend_model>
                 </field>
+                <!--<field id="version" translate="label" type="button" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">-->
+                    <!--<frontend_model>Mageplaza\Core\Block\Adminhtml\System\Config\Version</frontend_model>-->
+                <!--</field>-->
+
                 <field id="enabled" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
