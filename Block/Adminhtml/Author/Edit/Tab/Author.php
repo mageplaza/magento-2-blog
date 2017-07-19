@@ -62,7 +62,7 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
 		$fieldset = $form->addFieldset(
 			'base_fieldset',
 			[
-				'legend' => __('Author Info'),
+				'legend' => __('Author Information'),
 				'class'  => 'fieldset-wide'
 			]
 		);
@@ -82,7 +82,7 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
 				'name'  => 'name',
 				'label' => __('Display Name'),
 				'title' => __('Display Name'),
-				'note' => __('This name will displayed into frontend'),
+				'note' => __('This name will be displayed on frontend'),
 			]
 		);
 		
@@ -103,9 +103,9 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
 			'image',
 			[
 				'name'  => 'image',
-				'label' => __('Image'),
-				'title' => __('Image'),
-				'note' => __('Featured image'),
+				'label' => __('Avatar'),
+				'title' => __('Avatar'),
+				'note' => __(''),
 			]
 		);
 		$fieldset->addField(
@@ -115,7 +115,7 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
 				'name'  => 'facebook_link',
 				'label' => __('Facebook'),
 				'title' => __('Facebook'),
-				'note' => __('Facebook Link'),
+				'note' => __('Facebook URL'),
 			]
 		);
 		$fieldset->addField(
@@ -125,7 +125,7 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
 				'name'  => 'twitter_link',
 				'label' => __('Twitter'),
 				'title' => __('Twitter'),
-				'note' => __('Twitter Link'),
+				'note' => __('Twitter URL'),
 			]
 		);
 		$authorData = $this->_session->getData('mageplaza_blog_author_data', true);
