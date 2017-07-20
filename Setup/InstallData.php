@@ -35,10 +35,8 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
      * @param \Mageplaza\Blog\Setup\CategorySetupFactory $categorySetupFactory
      */
     public function __construct(
-		\Magento\Framework\App\State $appState,
         \Mageplaza\Blog\Setup\CategorySetupFactory $categorySetupFactory
     ) {
-		$appState->setAreaCode('frontend');
         $this->categorySetupFactory = $categorySetupFactory;
     }
     /**
