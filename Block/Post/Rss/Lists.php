@@ -143,9 +143,10 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
                 );
 
                 $data['entries'][] = ['title'          => $item->getName(),
-                                      'link'           => $this->helper->getUrlByPost(
-                                          $item
-                                      ), 'description' => $description,];
+                                      'link'           => $this->helper->getUrlByPost($item),
+                                      'description' => $description,
+                                      'lastUpdate' => strtotime($item->getPublishDate())
+                ];
             }
         }
         return $data;
