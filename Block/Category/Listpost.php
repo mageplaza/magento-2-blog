@@ -31,11 +31,12 @@ class Listpost extends Frontend
 
     public function checkRss()
     {
-        $categoryId = $this->getRequest()->getParam('id');
-        if (!$categoryId) {
-            return false;
-        }
-
-        return $this->helperData->getBlogUrl('category/rss/category_id/' . $categoryId);
+//        $categoryId = $this->getRequest()->getParam('id');
+//        if (!$categoryId) {
+//            return false;
+//        }
+//
+//        return $this->helperData->getBlogUrl('category/rss/category_id/' . $categoryId);
+        return $this->helperData->getBlogUrl('post/rss');
     }
 }

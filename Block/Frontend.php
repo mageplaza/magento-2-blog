@@ -747,7 +747,11 @@ class Frontend extends Template
      */
     public function resizeImage($image, $width = null, $height = null)
     {
+
         $absolutePath = $this->getImageUrl($image);
+        if ($width == null && $height == null){
+            return $absolutePath;
+        }
 
         $imageResized = $this->_filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)->getAbsolutePath('mageplaza/resized/'.$width.'/').$image;
         //create image factory...
