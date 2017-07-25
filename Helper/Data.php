@@ -708,6 +708,8 @@ class Data extends CoreHelper
 	 */
 	public function getDateFormat($date, $monthly = false)
 	{
+        $dateTime =(new \DateTime($date, new \DateTimeZone('UTC')));
+        $dateTime->setTimezone(new \DateTimeZone($this->getTimezone()));
 		$dateArray = array(
 			'F j, Y',
 			'Y-m-d',
@@ -727,7 +729,7 @@ class Data extends CoreHelper
 
 		for ( $i = 0 ; $i < 12 ; $i ++)
 		{
-			$result[$i] = $this->dateTimeFormat->date($date)->format($dateArray[$i]);
+			$result[$i] = $dateTime->format($dateArray[$i]);
 		}
 		if ($monthly) {
 			$monthlyArray = array(
@@ -739,7 +741,7 @@ class Data extends CoreHelper
 			$resultMonthly = array();
 			for ( $i = 0 ; $i < 4 ; $i ++)
 			{
-				$resultMonthly[$i] = $this->dateTimeFormat->date($date)->format($monthlyArray[$i]);
+				$resultMonthly[$i] = $dateTime->format($monthlyArray[$i]);
 			}
 			$dateType = $this->getBlogConfig('monthly_archive/date_type_monthly');
 			switch ($dateType) {
@@ -838,4 +840,8 @@ class Data extends CoreHelper
 		$collection->setOrder('created_at', 'DESC');
 		return $collection;
 	}
+    public function getCurrentDate()
+    {
+        return $this->dateTime->date();
+    }
 }

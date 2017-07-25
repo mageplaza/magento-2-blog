@@ -120,34 +120,35 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
             ->addFieldToFilter('in_rss', 1)
             ->setOrder('post_id', 'DESC');
         foreach ($posts as $item) {
-            $count++;
-            if ($count > $limit) {
-                break;
-            }
-            $item->setAllowedInRss(true);
-            $item->setAllowedPriceInRss(true);
+            if ($item->getPublishDate() < $this->helper->getCurrentDate()) {
+                $count++;
+                if ($count > $limit) {
+                    break;
+                }
+                $item->setAllowedInRss(true);
+                $item->setAllowedPriceInRss(true);
 
-            if (!$item->getAllowedInRss()) {
-                continue;
-            }
+                if (!$item->getAllowedInRss()) {
+                    continue;
+                }
 
-            $description = '
+                $description
+                    = '
                 <table><tr>
                 <td style="text-decoration:none;"> %s</td>
                 </tr></table>
             ';
-            $description = sprintf(
-                $description,
-                $item->getShortDescription()
-            );
+                $description = sprintf(
+                    $description, $item->getShortDescription()
+                );
 
-            $data['entries'][] = [
-                'title'       => $item->getName(),
-                'link'        => $this->helper->getUrlByPost($item),
-                'description' => $description,
-            ];
+                $data['entries'][] = ['title'          => $item->getName(),
+                                      'link'           => $this->helper->getUrlByPost($item),
+                                      'description' => $description,
+                                      'lastUpdate' => strtotime($item->getPublishDate())
+                ];
+            }
         }
-
         return $data;
     }
 
