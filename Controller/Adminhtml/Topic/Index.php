@@ -27,14 +27,14 @@ class Index extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\View\Result\PageFactory
      */
-	public $resultPageFactory;
+    public $resultPageFactory;
 
     /**
      * Page factory
      *
      * @var \Magento\Backend\Model\View\Result\Page
      */
-	public $resultPage;
+    public $resultPage;
 
     /**
      * constructor

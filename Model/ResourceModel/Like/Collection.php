@@ -24,14 +24,14 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 class Collection extends AbstractCollection
 {
-	/**
-	 * Define model & resource model
-	 */
-	protected function _construct()
-	{
-		$this->_init(
-			'Mageplaza\Blog\Model\Like',
-			'Mageplaza\Blog\Model\ResourceModel\Like'
-		);
-	}
+    /**
+     * Define model & resource model
+     */
+    protected function _construct()
+    {
+        $this->_init(
+            'Mageplaza\Blog\Model\Like',
+            'Mageplaza\Blog\Model\ResourceModel\Like'
+        );
+    }
 }

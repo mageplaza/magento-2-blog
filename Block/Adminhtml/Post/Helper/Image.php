@@ -30,7 +30,7 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
      *
      * @var \Mageplaza\Blog\Model\Post\Image
      */
-	public $imageModel;
+    public $imageModel;
 
     /**
      * constructor

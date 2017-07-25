@@ -32,13 +32,13 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 
 class Index extends Action
 {
-	public $resultPageFactory;
-	public $helperBlog;
-	public $accountManagement;
-	public $customerUrl;
-	public $session;
-	public $helperData;
-	public $storeManager;
+    public $resultPageFactory;
+    public $helperBlog;
+    public $accountManagement;
+    public $customerUrl;
+    public $session;
+    public $helperData;
+    public $storeManager;
 
     public function __construct(
         Context $context,

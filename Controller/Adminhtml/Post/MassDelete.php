@@ -27,14 +27,14 @@ class MassDelete extends \Magento\Backend\App\Action
      *
      * @var \Magento\Ui\Component\MassAction\Filter
      */
-	public $filter;
+    public $filter;
 
     /**
      * Collection Factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
-	public $collectionFactory;
+    public $collectionFactory;
 
     /**
      * constructor
@@ -63,14 +63,14 @@ class MassDelete extends \Magento\Backend\App\Action
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
 
-		try {
-			$collection->walk('delete');
-		} catch (\Exception $e){
-			$this->messageManager->addSuccess(__('Something wrong when delete Posts.'));
-			/** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-			$resultRedirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
-			return $resultRedirect->setPath('*/*/');
-		}
+        try {
+            $collection->walk('delete');
+        } catch (\Exception $e) {
+            $this->messageManager->addSuccess(__('Something wrong when delete Posts.'));
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
+            return $resultRedirect->setPath('*/*/');
+        }
 
         $this->messageManager->addSuccess(__('Posts has been deleted.'));
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

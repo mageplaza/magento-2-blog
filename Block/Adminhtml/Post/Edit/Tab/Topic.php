@@ -27,21 +27,21 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Mage
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory
      */
-	public $topicCollectionFactory;
+    public $topicCollectionFactory;
 
     /**
      * Registry
      *
      * @var \Magento\Framework\Registry
      */
-	public $coreRegistry;
+    public $coreRegistry;
 
     /**
      * Topic factory
      *
      * @var \Mageplaza\Blog\Model\TopicFactory
      */
-	public $topicFactory;
+    public $topicFactory;
 
     /**
      * constructor

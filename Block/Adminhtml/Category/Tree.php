@@ -45,14 +45,14 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
      *
      * @var \Magento\Backend\Model\Auth\Session
      */
-	public $backendSession;
+    public $backendSession;
 
     /**
      * Resource Helper
      *
      * @var \Magento\Framework\DB\Helper
      */
-	public $resourceHelper;
+    public $resourceHelper;
 
     /**
      * constructor
@@ -314,7 +314,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
         ) .
             ';' .
             ($this->canAddChildCategories()
-				? '$("add_child_category_button").show();' : '$("add_child_category_button").hide();') .
+                ? '$("add_child_category_button").show();' : '$("add_child_category_button").hide();') .
             '});</script>';
     }
 
@@ -331,7 +331,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     {
         // create a node from data array
         if (is_array($node)) {
-        	$node = new \Magento\Framework\Data\Tree\Node($node, 'category_id', new \Magento\Framework\Data\Tree());
+            $node = new \Magento\Framework\Data\Tree\Node($node, 'category_id', new \Magento\Framework\Data\Tree());
         }
 
         $item = [];

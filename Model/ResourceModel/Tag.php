@@ -34,15 +34,15 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-	public $eventManager;
+    public $eventManager;
 
     /**
      * Post relation model
      *
      * @var string
      */
-	public $tagPostTable;
-	public $helperData;
+    public $tagPostTable;
+    public $helperData;
     /**
      * constructor
      *
@@ -51,12 +51,12 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      */
     public function __construct(
-		\Mageplaza\Blog\Helper\Data $helperData,
+        \Mageplaza\Blog\Helper\Data $helperData,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\ResourceModel\Db\Context $context
     ) {
-		$this->helperData = $helperData;
+        $this->helperData = $helperData;
         $this->date         = $date;
         $this->eventManager = $eventManager;
         parent::__construct($context);
@@ -224,7 +224,7 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
     public function generateUrlKey($name, $count)
     {
-		return $this->helperData->generateUrlKey($name,$count);
+        return $this->helperData->generateUrlKey($name, $count);
     }
 
     public function checkUrlKey($url, $id = null)

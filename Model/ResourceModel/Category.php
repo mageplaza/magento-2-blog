@@ -27,22 +27,22 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
-	public $date;
+    public $date;
 
     /**
      * Event Manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-	public $eventManager;
+    public $eventManager;
 
     /**
      * Post relation model
      *
      * @var string
      */
-	public $categoryPostTable;
-	public $helperData;
+    public $categoryPostTable;
+    public $helperData;
     /**
      * constructor
      *
@@ -51,12 +51,12 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      */
     public function __construct(
-		\Mageplaza\Blog\Helper\Data $helperData,
+        \Mageplaza\Blog\Helper\Data $helperData,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\ResourceModel\Db\Context $context
     ) {
-		$this->helperData = $helperData;
+        $this->helperData = $helperData;
         $this->date         = $date;
         $this->eventManager = $eventManager;
         parent::__construct($context);
@@ -215,7 +215,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Mageplaza\Blog\Model\Category $object
      * @return $this
      */
-	public function savePath($object)
+    public function savePath($object)
     {
         if ($object->getId()) {
             $this->getConnection()->update(
@@ -329,10 +329,10 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $table,
             [
                 'path' => 'REPLACE(' . $pathField . ',' . $adapter->quote(
-                        	$category->getPath() . '/'
-                    		) . ', ' . $adapter->quote(
-                        	$newPath . '/'
-                    		) . ')',
+                    $category->getPath() . '/'
+                ) . ', ' . $adapter->quote(
+                    $newPath . '/'
+                ) . ')',
                 'level' => $levelFiled . ' + ' . $levelDisposition
             ],
             [$pathField . ' LIKE ?' => $category->getPath() . '/%']
@@ -491,7 +491,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
     public function generateUrlKey($name, $count)
     {
-		return $this->helperData->generateUrlKey($name,$count);
+        return $this->helperData->generateUrlKey($name, $count);
     }
 
     public function checkUrlKey($url, $id = null)

@@ -26,26 +26,25 @@ class Topmenu
 
     public function __construct(
         \Mageplaza\Blog\Helper\Data $helper
-    )
-	{
+    ) {
+    
         $this->helper = $helper;
     }
 
     public function afterGetHtml(\Magento\Theme\Block\Html\Topmenu $topmenu, $html)
     {
-    	if ($this->helper->getBlogConfig('general/toplinks') && $this->helper->getBlogConfig('general/enabled')){
-			$blogMenu = $topmenu;
-			$blogMenu->getBaseUrl();
-			$blogName = $this->helper->getBlogConfig('general/name') ?: __('Blog');
+        if ($this->helper->getBlogConfig('general/toplinks') && $this->helper->getBlogConfig('general/enabled')) {
+            $blogMenu = $topmenu;
+            $blogMenu->getBaseUrl();
+            $blogName = $this->helper->getBlogConfig('general/name') ?: __('Blog');
 
-			$html .= "<li class=\"level0 level-top ui-menu-item\">";
-			$html .= "<a href=\"" . $this->helper->getBlogUrl('')
-				. "\" class=\"level-top ui-corner-all\" aria-haspopup=\"true\" tabindex=\"-1\" role=\"menuitem\">
+            $html .= "<li class=\"level0 level-top ui-menu-item\">";
+            $html .= "<a href=\"" . $this->helper->getBlogUrl('')
+                . "\" class=\"level-top ui-corner-all\" aria-haspopup=\"true\" tabindex=\"-1\" role=\"menuitem\">
 			<span class=\"ui-menu-icon ui-icon ui-icon-carat-1-e\"></span><span>"
-				. $blogName . "</span></a>";
-			$html .= "</li>";
-
-		}
-		return $html;
+                . $blogName . "</span></a>";
+            $html .= "</li>";
+        }
+        return $html;
     }
 }

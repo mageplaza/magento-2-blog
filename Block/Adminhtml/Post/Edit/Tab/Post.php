@@ -27,24 +27,24 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      *
      * @var \Magento\Cms\Model\Wysiwyg\Config
      */
-	public $wysiwygConfig;
+    public $wysiwygConfig;
 
     /**
      * Country options
      *
      * @var \Magento\Config\Model\Config\Source\Yesno
      */
-	public $booleanOptions;
+    public $booleanOptions;
 
     /**
      * Meta Robots options
      *
      * @var \Mageplaza\Blog\Model\Config\Source\MetaRobots
      */
-	public $metaRobotsOptions;
+    public $metaRobotsOptions;
 
-	public $systemStore;
-	protected $authSession;
+    public $systemStore;
+    protected $authSession;
     /**
      * constructor
      *
@@ -63,7 +63,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
-		\Magento\Backend\Model\Auth\Session $authSession,
+        \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
     ) {
@@ -72,7 +72,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         $this->booleanOptions    = $booleanOptions;
         $this->metaRobotsOptions = $metaRobotsOptions;
         $this->systemStore = $systemStore;
-		$this->authSession = $authSession;
+        $this->authSession = $authSession;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -103,17 +103,16 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'hidden',
                 ['name' => 'post_id']
             );
-
-		}
-		$fieldset->addField(
-			'author_id',
-			'hidden',
-			[
-				'name' => 'author_id',
-				'value' => $user->getId()
-			]
-		);
-		$fieldset->addField(
+        }
+        $fieldset->addField(
+            'author_id',
+            'hidden',
+            [
+                'name' => 'author_id',
+                'value' => $user->getId()
+            ]
+        );
+        $fieldset->addField(
             'name',
             'text',
             [
@@ -196,24 +195,23 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'values' => $this->booleanOptions->toOptionArray(),
             ]
         );
-		$fieldset->addField('publish_date', 'date', array(
-				'name' => 'publish_date',
-				'label' => __('Publish Date'),
-				'title' => __('Publish Date'),
-				'date_format' => $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT),
-				'time_format' => $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT),
-			)
-		);
-		$fieldset->addField(
-			'url_key',
-			'text',
-			[
-				'name'  => 'url_key',
-				'label' => __('URL Key'),
-				'title' => __('URL Key'),
-				'note' => __('URL Key'),
-			]
-		);
+        $fieldset->addField('publish_date', 'date', [
+                'name' => 'publish_date',
+                'label' => __('Publish Date'),
+                'title' => __('Publish Date'),
+                'date_format' => $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT),
+                'time_format' => $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT),
+            ]);
+        $fieldset->addField(
+            'url_key',
+            'text',
+            [
+                'name'  => 'url_key',
+                'label' => __('URL Key'),
+                'title' => __('URL Key'),
+                'note' => __('URL Key'),
+            ]
+        );
         $fieldset->addField(
             'meta_title',
             'text',

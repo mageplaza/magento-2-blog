@@ -31,43 +31,43 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @var \Magento\Framework\Json\EncoderInterface
      */
-	public $jsonEncoder;
+    public $jsonEncoder;
 
     /**
      * Blog Category collection factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
-	public $categoryCollectionFactory;
-	public $systemStore;
-	public $booleanOptions;
+    public $categoryCollectionFactory;
+    public $systemStore;
+    public $booleanOptions;
 
-	/**
-	 * constructor
-	 *
-	 * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-	 * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
-	 * @param \Magento\Backend\Block\Template\Context $context
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Store\Model\System\Store $systemStore
-	 * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
-	 * @param \Magento\Framework\Data\FormFactory $formFactory
-	 * @param array $data
-	 */
+    /**
+     * constructor
+     *
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Store\Model\System\Store $systemStore
+     * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param array $data
+     */
     public function __construct(
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
-		\Magento\Store\Model\System\Store $systemStore,
-		\Magento\Config\Model\Config\Source\Yesno $booleanOptions,
+        \Magento\Store\Model\System\Store $systemStore,
+        \Magento\Config\Model\Config\Source\Yesno $booleanOptions,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
     ) {
         $this->jsonEncoder               = $jsonEncoder;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
-		$this->systemStore = $systemStore;
-		$this->booleanOptions    = $booleanOptions;
+        $this->systemStore = $systemStore;
+        $this->booleanOptions    = $booleanOptions;
         parent::__construct($context, $registry, $formFactory, $data);
         $this->setUseContainer(true);
     }

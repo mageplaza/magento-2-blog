@@ -68,7 +68,7 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @return \Mageplaza\Blog\Model\Category
      */
-	public function initCategory()
+    public function initCategory()
     {
         $categoryId  = (int) $this->getRequest()->getParam('category_id');
         /** @var \Mageplaza\Blog\Model\Category $category */

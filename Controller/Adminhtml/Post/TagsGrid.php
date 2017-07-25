@@ -22,8 +22,8 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
 class TagsGrid extends \Mageplaza\Blog\Controller\Adminhtml\Post\Tags
 {
-	public function getBlogPost()
-	{
-		return null;
-	}
+    public function getBlogPost()
+    {
+        return null;
+    }
 }

@@ -34,14 +34,14 @@ class Image
      *
      * @var \Magento\Framework\UrlInterface
      */
-	public $urlBuilder;
+    public $urlBuilder;
 
     /**
      * File system model
      *
      * @var \Magento\Framework\Filesystem
      */
-	public $fileSystem;
+    public $fileSystem;
 
     /**
      * constructor
@@ -66,7 +66,7 @@ class Image
     public function getBaseUrl()
     {
         return $this->urlBuilder->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA])
-			.$this->subDir.'/image';
+            .$this->subDir.'/image';
     }
     /**
      * get base image dir
@@ -76,6 +76,6 @@ class Image
     public function getBaseDir()
     {
         return $this->fileSystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
-			->getAbsolutePath($this->subDir.'/image');
+            ->getAbsolutePath($this->subDir.'/image');
     }
 }

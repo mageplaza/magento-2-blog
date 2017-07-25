@@ -18,7 +18,8 @@ require([
     });
 
     //submit comment
-    function submitComment() {
+    function submitComment()
+    {
         submitCmt.click(function () {
             var cmtText = cmtBox.val();
             if (cmtText.trim().length) {
@@ -28,7 +29,8 @@ require([
     }
 
     // display comment
-    function displayComment(cmt, isReply) {
+    function displayComment(cmt, isReply)
+    {
         var cmtRow = '<li class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12 ' + (isReply ? ('reply-row') : '') +'" data-cmt-id="' + cmt.cmt_id + '"' + (isReply ? ('data-reply-id="' + cmt.reply_cmt + '"') : '') +'> <div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username">' + cmt.user_cmt + '</span> </div> <div class="cmt-row__cmt-content"> <p>' + cmt.cmt_text + '</p> </div> <div class="cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> <a class="interactions__btn-actions action btn-like-new" data-cmt-id="' + cmt.cmt_id + '">' + like + '</a> <a class="interactions__btn-actions action btn-reply-new" data-cmt-id="' + cmt.cmt_id + '">' + reply + '</a> <a class="interactions__btn-actions count-like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> <span class="count-like__like-text"></span></a> </div> <div class="interactions__cmt-createdat"> <span>' + cmt.created_at + '</span> </div> </div> </li>';
 
         if (isReply) {
@@ -52,7 +54,8 @@ require([
     }
 
     //like action
-    function likeComment(btn) {
+    function likeComment(btn)
+    {
         btn.each(function () {
             var likeEl = $(this);
             likeEl.click(function () {
@@ -75,7 +78,8 @@ require([
     }
 
     //show reply
-    function showReply(btn) {
+    function showReply(btn)
+    {
         btn.each(function () {
             var replyEl = $(this);
             replyEl.click(function () {
@@ -96,8 +100,9 @@ require([
     }
 
     //submit reply
-    function submitReply(input, replyId, parentComment) {
-        input.keypress(function(e) {
+    function submitReply(input, replyId, parentComment)
+    {
+        input.keypress(function (e) {
             var text = input.val();
             if (text != '') {
                 if (e.keyCode == 13) {
@@ -108,7 +113,8 @@ require([
     }
 
     //submit comment actions
-    function ajaxCommentActions(cmtText, inputEl, checkReply, cmtId, parentComment) {
+    function ajaxCommentActions(cmtText, inputEl, checkReply, cmtId, parentComment)
+    {
         var isReply = (typeof checkReply != 'undefined') ? 1 : 0;
         var replyId = (typeof cmtId != 'undefined') ? cmtId : 0;
         var displayReply = (typeof checkReply == 'undefined') ? false : true;

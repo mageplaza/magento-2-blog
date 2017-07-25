@@ -27,35 +27,35 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
-	public $collectionFactory;
+    public $collectionFactory;
 
     /**
      * Backend helper
      *
      * @var \Magento\Backend\Helper\Data
      */
-	public $backendData;
+    public $backendData;
 
     /**
      * Layout instance
      *
      * @var \Magento\Framework\View\LayoutInterface
      */
-	public $layout;
+    public $layout;
 
     /**
      * Json encoder instance
      *
      * @var \Magento\Framework\Json\EncoderInterface
      */
-	public $jsonEncoder;
+    public $jsonEncoder;
 
     /**
      * Authorization
      *
      * @var \Magento\Framework\AuthorizationInterface
      */
-	public $authorization;
+    public $authorization;
 
     /**
      * constructor
@@ -127,7 +127,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
      *
      * @return \Mageplaza\Blog\Model\ResourceModel\Category\Collection
      */
-	public function getCategoriesCollection()
+    public function getCategoriesCollection()
     {
         return $this->collectionFactory->create();
     }
@@ -172,7 +172,7 @@ HTML;
      *
      * @return array
      */
-	public function getSelectorOptions()
+    public function getSelectorOptions()
     {
         return [
             'source' => $this->backendData->getUrl('mageplaza_blog/category/suggestCategories'),

@@ -27,28 +27,28 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
      *
      * @var \Magento\Framework\Controller\Result\RawFactory
      */
-	public $resultRawFactory;
+    public $resultRawFactory;
 
     /**
      * Result Json Factory
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-	public $resultJsonFactory;
+    public $resultJsonFactory;
 
     /**
      * Layout Factory
      *
      * @var \Magento\Framework\View\LayoutFactory
      */
-	public $layoutFactory;
+    public $layoutFactory;
 
     /**
      * JS helper
      *
      * @var \Magento\Backend\Helper\Js
      */
-	public $jsHelper;
+    public $jsHelper;
 
     /**
      * constructor
@@ -87,9 +87,9 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
     public function execute()
     {
         $data = $this->getRequest()->getPost('category');
-        if (isset($data['store_ids'])){
-			$data['store_ids'] = implode(',', $data['store_ids']);
-		}
+        if (isset($data['store_ids'])) {
+            $data['store_ids'] = implode(',', $data['store_ids']);
+        }
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $category = $this->initCategory();

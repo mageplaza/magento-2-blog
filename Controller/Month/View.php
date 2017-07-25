@@ -31,33 +31,33 @@ use Magento\Customer\Model\Session;
 
 class View extends Action
 {
-	public $resultPageFactory;
-	public $helperBlog;
-	public $accountManagement;
-	public $customerUrl;
-	public $session;
-	public $storeManager;
+    public $resultPageFactory;
+    public $helperBlog;
+    public $accountManagement;
+    public $customerUrl;
+    public $session;
+    public $storeManager;
 
-	public function __construct(
-		Context $context,
-		StoreManagerInterface $storeManager,
-		HelperBlog $helperBlog,
-		PageFactory $resultPageFactory,
-		AccountManagementInterface $accountManagement,
-		CustomerUrl $customerUrl,
-		Session $customerSession
-	) {
-		parent::__construct($context);
-		$this->storeManager      = $storeManager;
-		$this->helperBlog      = $helperBlog;
-		$this->resultPageFactory = $resultPageFactory;
-		$this->accountManagement = $accountManagement;
-		$this->customerUrl       = $customerUrl;
-		$this->session           = $customerSession;
-	}
+    public function __construct(
+        Context $context,
+        StoreManagerInterface $storeManager,
+        HelperBlog $helperBlog,
+        PageFactory $resultPageFactory,
+        AccountManagementInterface $accountManagement,
+        CustomerUrl $customerUrl,
+        Session $customerSession
+    ) {
+        parent::__construct($context);
+        $this->storeManager      = $storeManager;
+        $this->helperBlog      = $helperBlog;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->accountManagement = $accountManagement;
+        $this->customerUrl       = $customerUrl;
+        $this->session           = $customerSession;
+    }
 
-	public function execute()
-	{
-		return $this->resultPageFactory->create();
-	}
+    public function execute()
+    {
+        return $this->resultPageFactory->create();
+    }
 }

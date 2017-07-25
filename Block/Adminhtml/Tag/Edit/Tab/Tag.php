@@ -27,18 +27,18 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
      *
      * @var \Magento\Cms\Model\Wysiwyg\Config
      */
-	public $wysiwygConfig;
+    public $wysiwygConfig;
 
     /**
      * Country options
      *
      * @var \Magento\Config\Model\Config\Source\Yesno
      */
-	public $booleanOptions;
+    public $booleanOptions;
 
-	public $systemStore;
+    public $systemStore;
 
-	public $metaRobots;
+    public $metaRobots;
 
     /**
      * constructor
@@ -54,7 +54,7 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Config\Model\Config\Source\Yesno $booleanOptions,
         \Magento\Store\Model\System\Store $systemStore,
-		\Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobotsOptions,
+        \Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobotsOptions,
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -144,43 +144,43 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
                 'title' => __('URL Key'),
             ]
         );
-		$fieldset->addField(
-			'meta_title',
-			'text',
-			[
-				'name'  => 'meta_title',
-				'label' => __('Meta Title'),
-				'title' => __('Meta Title'),
-			]
-		);
-		$fieldset->addField(
-			'meta_description',
-			'textarea',
-			[
-				'name'  => 'meta_description',
-				'label' => __('Meta Description'),
-				'title' => __('Meta Description'),
-			]
-		);
-		$fieldset->addField(
-			'meta_keywords',
-			'textarea',
-			[
-				'name'  => 'meta_keywords',
-				'label' => __('Meta Keywords'),
-				'title' => __('Meta Keywords'),
-			]
-		);
-		$fieldset->addField(
-			'meta_robots',
-			'select',
-			[
-				'name'  => 'meta_robots',
-				'label' => __('Meta Robots'),
-				'title' => __('Meta Robots'),
-				'values' => $this->metaRobots->toOptionArray(),
-			]
-		);
+        $fieldset->addField(
+            'meta_title',
+            'text',
+            [
+                'name'  => 'meta_title',
+                'label' => __('Meta Title'),
+                'title' => __('Meta Title'),
+            ]
+        );
+        $fieldset->addField(
+            'meta_description',
+            'textarea',
+            [
+                'name'  => 'meta_description',
+                'label' => __('Meta Description'),
+                'title' => __('Meta Description'),
+            ]
+        );
+        $fieldset->addField(
+            'meta_keywords',
+            'textarea',
+            [
+                'name'  => 'meta_keywords',
+                'label' => __('Meta Keywords'),
+                'title' => __('Meta Keywords'),
+            ]
+        );
+        $fieldset->addField(
+            'meta_robots',
+            'select',
+            [
+                'name'  => 'meta_robots',
+                'label' => __('Meta Robots'),
+                'title' => __('Meta Robots'),
+                'values' => $this->metaRobots->toOptionArray(),
+            ]
+        );
 
         $tagData = $this->_session->getData('mageplaza_blog_tag_data', true);
         if ($tagData) {

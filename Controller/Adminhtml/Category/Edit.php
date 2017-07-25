@@ -59,21 +59,21 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-		\Magento\Framework\DataObject $dataObject,
+        \Magento\Framework\DataObject $dataObject,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Backend\App\Action\Context $context
     ) {
-    	$this->dataObject = $dataObject;
+        $this->dataObject = $dataObject;
         $this->backendSession    = $context->getSession();
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->objectManager = $context->getObjectManager();
         parent::__construct($categoryFactory, $registry, $context);
     }
-	
+    
     /**
      * Edit Blog category page
      *

@@ -36,22 +36,22 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
     /**
      * @var \Magento\Catalog\Model\Rss\Product\NewProducts
      */
-	public $rssModel;
+    public $rssModel;
 
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface
      */
-	public $rssUrlBuilder;
+    public $rssUrlBuilder;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-	public $storeManager;
+    public $storeManager;
 
     /**
      * @var \Mageplaza\Blog\Helper\Data
      */
-	public $helper;
+    public $helper;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -139,7 +139,8 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
                 </tr></table>
             ';
                 $description = sprintf(
-                    $description, $item->getShortDescription()
+                    $description,
+                    $item->getShortDescription()
                 );
 
                 $data['entries'][] = ['title'          => $item->getName(),
