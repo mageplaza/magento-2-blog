@@ -153,6 +153,20 @@ class Post extends \Magento\Framework\Model\AbstractModel
      */
 	public $relatedPostCollection;
 
+    /**
+     * Previous Post Collection
+     *
+     * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     */
+    public $prevPostCollection;
+
+    /**
+     * Next Post Collection
+     *
+     * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     */
+    public $nextPostCollection;
+
 	public $dateTime;
 	public $helperData;
 	public $productCollectionFactory;
@@ -424,4 +438,32 @@ class Post extends \Magento\Framework\Model\AbstractModel
 
 		return $array;
 	}
+
+    /**
+     * get previous post
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     */
+    public function getPrevPost()
+    {
+        if ($this->prevPostCollection === null) {
+            $collection = $this->postCollectionFactory->create();
+            $collection->addFieldToFilter('post_id', array('lt' => $this->getId()))->setOrder('post_id', 'DESC')->setPageSize(1)->setCurPage(1);
+            $this->prevPostCollection = $collection;
+        }
+        return $this->prevPostCollection;
+    }
+
+    /**
+     * get next post
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     */
+    public function getNextPost()
+    {
+        if ($this->nextPostCollection === null) {
+            $collection = $this->postCollectionFactory->create();
+            $collection->addFieldToFilter('post_id', array('gt' => $this->getId()))->setOrder('post_id', 'ASC')->setPageSize(1)->setCurPage(1);
+            $this->nextPostCollection = $collection;
+        }
+        return $this->nextPostCollection;
+    }
 }
