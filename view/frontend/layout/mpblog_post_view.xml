@@ -22,29 +22,43 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="catalog_category_view" />
+    <update handle="catalog_category_view_type_layered" />
     <head>
         <css src="Mageplaza_Blog::css/index/jquery.fancybox-1.3.4.css"/>
-        <css src="Mageplaza_Core::css/mp.css"/>
+        <!--<css src="Mageplaza_Core::css/mp.css"/>-->
         <css src="Mageplaza_Core::css/font-awesome.min.css"/>
-        <css src="Mageplaza_Blog::css/source/_module.less" rel="stylesheet/less" type="text/less"/>
+        <!--<css src="Mageplaza_Blog::css/source/_module.less" rel="stylesheet/less" type="text/less"/>-->
 
     </head>
     <body>
+        <referenceBlock name="head.additional">
+            <block class="Mageplaza\Blog\Block\Frontend" template="Mageplaza_Blog::design.phtml"/>
+        </referenceBlock>
         <referenceContainer name="content">
             <block class="Mageplaza\Blog\Block\Post\View" name="mp.blog.view" template="Mageplaza_Blog::post/view.phtml">
-                <block class="Mageplaza\Blog\Block\Sidebar\Search" template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search" />
-                <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"
+                <block class="Mageplaza\Blog\Block\Sidebar\Search" name="mp.blog.view.sidebar.search" as="sidebar_search"
+                       template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search" />
+                <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview" as="sidebar_mostview"
                        template="Mageplaza_Blog::sidebar/mostview.phtml"/>
-                <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category"
+                <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category" as="sidebar_category"
                        template="Mageplaza_Blog::category/widget.phtml"/>
-                <block class="Mageplaza\Blog\Block\MonthlyArchive\Widget" name="mp.blog.view.sidebar.monthly"
+                <block class="Mageplaza\Blog\Block\MonthlyArchive\Widget" name="mp.blog.view.sidebar.monthly" as="sidebar_monthly"
                        template="Mageplaza_Blog::monthly/widget.phtml"/>
-                <block class="Mageplaza\Blog\Block\Topic\Widget" name="mp.blog.view.sidebar.topic"
+                <block class="Mageplaza\Blog\Block\Topic\Widget" name="mp.blog.view.sidebar.topic" as="sidebar_topic"
                        template="Mageplaza_Blog::topic/widget.phtml"/>
-                <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"
+                <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag" as="sidebar_tag"
                        template="Mageplaza_Blog::tag/widget.phtml"/>
+
+                <block class="Mageplaza\Blog\Block\Post\Relatedproduct" name="related.category.products" as="related_products"
+                       template="Magento_Catalog::product/list.phtml" />
+
             </block>
         </referenceContainer>
-
+        <move element="category.products.list" destination="related.category.products"/>
+        <referenceBlock name="category.products" remove="true" />
+        <referenceBlock name="layer.category.products" remove="true" />
+        <referenceContainer name="category.view.container" remove="true" />
+        <referenceBlock name="catalog.leftnav" remove="true"/>
     </body>
 </page>

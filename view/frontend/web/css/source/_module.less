@@ -379,9 +379,14 @@ ul.nav-tabs li{
   border-top-color: #eee;
   font-size: 16px;
 }
-@media(width: 768px){
+@media(max-width: 768px){
   ul.nav-tabs li{
-    font-size: 12px;
+    width: 100%;
+  }
+  ul.nav-tabs li.active{
+    width: 100%;
+    background: @color;
+    color: #ffffff;
   }
 }
 .mp-sidebar ul.nav-tabs li a{
@@ -528,8 +533,6 @@ a.mpblog-suggestion:hover {
   font-size: 16px;
   line-height: 32px;
   color: #8f8f8f;
-  content: '\e615';
-  font-family: 'luma-icons';
   margin: 0;
   vertical-align: top;
   display: inline-block;

@@ -202,6 +202,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 				'title' => __('Publish Date'),
 				'date_format' => $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT),
 				'time_format' => $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT),
+                'note' => __('GTM 0 Time Zone'),
 			)
 		);
 		$fieldset->addField(

@@ -40,7 +40,10 @@ class Relatedpost extends Frontend
 	}
 	public function getLimitPosts()
 	{
-		$limitRelated = ($this->getBlogConfig('product_post/post_limit')=='' || $this->getBlogConfig('product_post/post_limit')==0) ? 1 : $this->getBlogConfig('product_post/post_limit');
+		$limitRelated = ($this->getBlogConfig('product_post/product_detail/post_limit')==''
+            || $this->getBlogConfig('product_post/product_detail/post_limit')==0)
+            ? 1
+            : $this->getBlogConfig('product_post/product_detail/post_limit');
 		return $limitRelated;
 	}
 	public function setTabTitle()

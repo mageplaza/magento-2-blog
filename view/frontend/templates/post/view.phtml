@@ -44,7 +44,7 @@ if ($checkRss):
             <div class="row">
                 <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1){
 				?>
-                <div class="col-md-9 col-sm-8">
+                <div class="post-list-content col-md-9 col-sm-8">
 
                     <div class="post-image col-xs-12">
                        <?php if ($_post->getImage()) : ?>
@@ -82,16 +82,30 @@ if ($checkRss):
                 </div>
 
                 <div class="mp-sidebar col-md-3 col-sm-4">
-                        <?php echo $this->getChildHtml(); ?>
+                        <?php
+                        echo $this->getChildHtml('sidebar_search');
+                        echo $this->getChildHtml('sidebar_mostview');
+                        echo $this->getChildHtml('sidebar_category');
+                        echo $this->getChildHtml('sidebar_monthly');
+                        echo $this->getChildHtml('sidebar_topic');
+                        echo $this->getChildHtml('sidebar_tag');
+                        ?>
                 </div>
 					<?php
 				}else{ ?>
 
                     <div class="mp-sidebar col-md-3 col-sm-4">
-                        <?php echo $this->getChildHtml(); ?>
+                        <?php
+                        echo $this->getChildHtml('sidebar_search');
+                        echo $this->getChildHtml('sidebar_mostview');
+                        echo $this->getChildHtml('sidebar_category');
+                        echo $this->getChildHtml('sidebar_monthly');
+                        echo $this->getChildHtml('sidebar_topic');
+                        echo $this->getChildHtml('sidebar_tag');
+                        ?>
                     </div>
 
-                    <div class="col-md-9 col-sm-8">
+                    <div class="post-list-content col-md-9 col-sm-8">
 
                         <div class="post-image col-xs-12">
                            <?php if ($_post->getImage()) : ?>
@@ -143,7 +157,8 @@ if ($checkRss):
 			</div>
 			<div class="share-col-right">
 				<div class="post-sharing-button">
-						<div class="addthis_sharing_toolbox"></div>
+						<div class="addthis_inline_share_toolbox"></div>
+<!--                        <div class="addthis_sharing_toolbox"></div>-->
 				</div>
 			</div>
 		</div>
@@ -178,6 +193,7 @@ if ($checkRss):
 <?php endif;?>
 
 	<?php
+    //************************* Related post from the same topic ***************************
 		$relatedPosts = $_post->getRelatedPostsCollection();
 		$countRelated = 0;
 		$limitRelated = $block->getBlogConfig('general/related_post');
@@ -194,7 +210,7 @@ if ($checkRss):
 								$countRelated++;
 							?>
 								<?php if($countRelated > $limitRelated) break; ?>
-						<div class="relate-content item col-xs-3" style="margin-right:10px;">
+						<div class="relate-content item col-xs-3">
 							<a class="mp-relate-link" href="<?php echo $block->getUrlByPost($relatedPost) ?>">
                                 <?php if ($relatedPost->getImage()){ ?>
                                 <img class="img-responsive" src="<?php echo $block->getImageUrl($relatedPost->getImage()); ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
@@ -209,6 +225,19 @@ if ($checkRss):
 			</div>
 		</div>
     </div>
+    <?php
+        //************************* Related products from the same post ***************************
+        if ($block->getBlogConfig('product_post/post_detail/enable_product')) :
+    ?>
+    <div class="products-same-post mpcss">
+        <div class="row">
+            <div class="col-xs-12 row">
+            <h2><?php echo ($block->getBlogConfig('product_post/post_detail/title')) ? __($block->getBlogConfig('product_post/post_detail/title')): __('Related Products')?></h2>
+                <?php echo $this->getChildHtml('related_products');?>
+            </div>
+        </div>
+    </div>
+    <?php endif;?>
 
 <?php endif; ?>
 <div class="mpcss mp-comment">
