@@ -78,7 +78,7 @@ class Frontend extends Template
      * @var \Magento\Framework\Image\AdapterFactory
      */
     protected $_imageFactory;
-
+    protected $_themeProvider;
     /**
      * @param \Magento\Framework\Stdlib\DateTime\DateTime      $dateTime
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -97,6 +97,7 @@ class Frontend extends Template
         FilterProvider $filterProvider,
         //resizeImage function
         \Magento\Framework\Image\AdapterFactory $imageFactory,
+        \Magento\Framework\View\Design\Theme\ThemeProviderInterface $_themeProvider,
         array $data = []
     ) {
         $this->dateTime = $dateTime;
@@ -109,6 +110,7 @@ class Frontend extends Template
         $this->filterProvider = $filterProvider;
         $this->_filesystem = $context->getFilesystem();
         $this->_imageFactory = $imageFactory;
+        $this->_themeProvider = $_themeProvider;
         parent::__construct($context, $data);
     }
 
@@ -769,5 +771,22 @@ class Frontend extends Template
 
         $resizedURL = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA).'mageplaza/resized/'.$width.'/'.$image;
         return $resizedURL;
+    }
+    //************************* Get Current Theme Name ***************************
+    /**
+     * @return string
+     */
+    public function getCurrentTheme()
+    {
+        $themeId = $this->_scopeConfig->getValue(
+            \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->_storeManager->getStore()->getId()
+        );
+
+        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        $theme = $this->_themeProvider->getThemeById($themeId);
+
+        return $theme->getCode();
     }
 }

@@ -294,6 +294,16 @@
                 </item>
             </argument>
         </column>
+        <column name="publish_date" class="Magento\Ui\Component\Listing\Columns\Date">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">dateRange</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                    <item name="dataType" xsi:type="string">date</item>
+                    <item name="label" xsi:type="string" translate="true">Published</item>
+                </item>
+            </argument>
+        </column>
         <actionsColumn name="actions" class="Mageplaza\Blog\Ui\Component\Listing\Column\PostActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

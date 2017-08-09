@@ -31,6 +31,10 @@
             <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_footer_link" as="mp_footer_link"
                    template="Mageplaza_Blog::html/footer.phtml">
             </block>
+
+
+            <!--...-->
+
         </referenceBlock>
     </body>
 </page>

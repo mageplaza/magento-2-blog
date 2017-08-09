@@ -77,7 +77,6 @@ class Relatedproduct extends ListProduct
             $collection->getSelect()->joinLeft(['product_post' => $collection->getTable('mageplaza_blog_post_product')]
                 ,"e.entity_id = product_post.entity_id")->where('product_post.post_id = '.$postId);
             $collection
-                ->setVisibility($this->visibleProduts->getVisibleInCatalogIds())
                 ->addAttributeToSelect('*');
             if ($limit > $collection->getSize()){
                 return $collection;

@@ -22,11 +22,11 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="catalog_category_view" />
-    <update handle="catalog_category_view_type_layered" />
+    <!--<update handle="catalog_category_view" />-->
+    <!--<update handle="catalog_category_view_type_layered" />-->
     <head>
         <css src="Mageplaza_Blog::css/index/jquery.fancybox-1.3.4.css"/>
-        <!--<css src="Mageplaza_Core::css/mp.css"/>-->
+        <css src="Mageplaza_Core::css/mp.css"/>
         <css src="Mageplaza_Core::css/font-awesome.min.css"/>
         <!--<css src="Mageplaza_Blog::css/source/_module.less" rel="stylesheet/less" type="text/less"/>-->
 
@@ -38,7 +38,7 @@
         <referenceContainer name="content">
             <block class="Mageplaza\Blog\Block\Post\View" name="mp.blog.view" template="Mageplaza_Blog::post/view.phtml">
                 <block class="Mageplaza\Blog\Block\Sidebar\Search" name="mp.blog.view.sidebar.search" as="sidebar_search"
-                       template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search" />
+                       template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search" ifvalue="" />
                 <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview" as="sidebar_mostview"
                        template="Mageplaza_Blog::sidebar/mostview.phtml"/>
                 <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category" as="sidebar_category"
@@ -50,7 +50,7 @@
                 <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag" as="sidebar_tag"
                        template="Mageplaza_Blog::tag/widget.phtml"/>
 
-                <block class="Mageplaza\Blog\Block\Post\Relatedproduct" name="related.category.products" as="related_products"
+                <block class="Mageplaza\Blog\Block\Post\RelatedProduct" name="related.category.products" as="related_products"
                        template="Magento_Catalog::product/list.phtml" />
 
             </block>

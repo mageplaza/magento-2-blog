@@ -19,7 +19,64 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 ?>
-<style>
+<?php
+/*===================================================================
+|                       Compatible Themes        				    |
+====================================================================*/
 
+/**
+ * Compatible with YourStore Theme
+ * URL: https://themeforest.net/item/yourstore-premium-multipurpose-magento-theme/17782705
+ */
+if ($block->getCurrentTheme() == "Etheme/yourstore") :
+?>
+<style>
+    @media (min-width: 768px) {
+    <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1) { ?>
+        .post-list-content{
+            border-right: solid 1px #dfdfdf;
+        }
+    <?php } else {?>
+        .post-list-content{
+            border-left: solid 1px #dfdfdf;
+        }
+    <?php } ?>
+    }
+    .post-list-container{
+        width: 85%;
+        margin: auto;
+    }
+    .mp-blog-rss{
+        width: 85%;
+        margin: auto;
+    }
+    .post-view{
+        width: 85%;
+        margin: auto;
+    }
+    .mp-blog-rss{
+        width: 85%;
+        margin: auto;
+    }
+    @media (min-width: 1024px) {
+        .products-same-post li{
+            height: 400px;
+            width: 24.5% !important;
+        }
+    }
+    @media (min-width: 1440px) {
+        .products-same-post li{
+            height: 500px;
+            width: 16.67% !important;
+        }
+    }
+    .products-same-post{
+        border-bottom: solid 1px #dfdfdf;
+    }
+    .post-same-topics{
+        border-bottom: solid 1px #dfdfdf;
+    }
 </style>
+<?php endif;?>
+
 

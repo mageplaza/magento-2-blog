@@ -81,7 +81,7 @@ if ($checkRss):
                     </div>
                 </div>
 
-                <div class="mp-sidebar col-md-3 col-sm-4">
+                <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
                         <?php
                         echo $this->getChildHtml('sidebar_search');
                         echo $this->getChildHtml('sidebar_mostview');
@@ -94,7 +94,7 @@ if ($checkRss):
 					<?php
 				}else{ ?>
 
-                    <div class="mp-sidebar col-md-3 col-sm-4">
+                    <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
                         <?php
                         echo $this->getChildHtml('sidebar_search');
                         echo $this->getChildHtml('sidebar_mostview');
@@ -202,15 +202,16 @@ if ($checkRss):
 
 	<div class="post-same-topics topic-list mpcss">
 		<div class="row">
-			<div class="col-xs-12 row">
+
 					<h2><?php echo ($limitRelated) ? __('Related Posts') : __(''); ?></h2>
+                <div class="relate-content-container">
 					<?php foreach ($relatedPosts as $relatedPost): ?>
 						<?php
 							if($block->filterPost($relatedPost)):
 								$countRelated++;
 							?>
 								<?php if($countRelated > $limitRelated) break; ?>
-						<div class="relate-content item col-xs-3">
+						<div class="relate-content item col-md-3 col-sm-6 col-xs-12" style="height: 300px">
 							<a class="mp-relate-link" href="<?php echo $block->getUrlByPost($relatedPost) ?>">
                                 <?php if ($relatedPost->getImage()){ ?>
                                 <img class="img-responsive" src="<?php echo $block->getImageUrl($relatedPost->getImage()); ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
@@ -222,123 +223,126 @@ if ($checkRss):
 						</div>
 							<?php endif; ?>
 					<?php endforeach; ?>
-			</div>
+                </div>
+
 		</div>
     </div>
+<?php endif; ?>
     <?php
         //************************* Related products from the same post ***************************
         if ($block->getBlogConfig('product_post/post_detail/enable_product')) :
     ?>
     <div class="products-same-post mpcss">
         <div class="row">
-            <div class="col-xs-12 row">
+
             <h2><?php echo ($block->getBlogConfig('product_post/post_detail/title')) ? __($block->getBlogConfig('product_post/post_detail/title')): __('Related Products')?></h2>
                 <?php echo $this->getChildHtml('related_products');?>
-            </div>
+
         </div>
     </div>
     <?php endif;?>
 
-<?php endif; ?>
 <div class="mpcss mp-comment">
-    <?php if( $_post->getAllowComment()==1) { ?>
-		<?php $typeComment = $block->checkComment(); ?>
-		<?php if ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>
-            <div class="box-collateral box-reviews" id="post-reviews">
-				<h2><?php echo __('Comments') ?></h2>
 
-				<div id="disqus_thread"></div>
-				<script type="text/javascript">
-					var disqus_shortname = '<?php echo $block->helperComment('disqus');?>';
+        <?php if( $_post->getAllowComment()==1) { ?>
+            <?php $typeComment = $block->checkComment(); ?>
+            <?php if ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>
+                <div class="box-collateral box-reviews" id="post-reviews">
+                    <h2><?php echo __('Comments') ?></h2>
 
-                    /* * * DON'T EDIT BELOW THIS LINE * * */
-                    (function () {
-                        var dsq = document.createElement('script');
-                        dsq.type = 'text/javascript';
-                        dsq.async = true;
-                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-                    })();
-				</script>
+                    <div id="disqus_thread"></div>
+                    <script type="text/javascript">
+                        var disqus_shortname = '<?php echo $block->helperComment('disqus');?>';
 
-
-   	 		</div>
-		<?php elseif ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::FACEBOOK): ?>
-            <div class="box-collateral box-reviews" id="post-reviews">
-				<h2><?php echo __('Comments') ?></h2>
-
-				<div id="fb-root"></div>
-				<script>(function (d, s, id) {
-                        var js, fjs = d.getElementsByTagName(s)[0];
-                        if (d.getElementById(id)) return;
-                        js = d.createElement(s);
-                        js.id = id;
-                        js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId=<?php echo $this->getAppId()?>";
-                        fjs.parentNode.insertBefore(js, fjs);
-                    }(document, 'script', 'facebook-jssdk'));</script>
+                        /* * * DON'T EDIT BELOW THIS LINE * * */
+                        (function () {
+                            var dsq = document.createElement('script');
+                            dsq.type = 'text/javascript';
+                            dsq.async = true;
+                            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                        })();
+                    </script>
 
 
-				<div class="fb-comments" data-href="<?php echo $block->getUrlByPost($_post); ?>" data-numposts="<?php echo $block->helperComment('facebook_number_comment'); ?>"
-                     data-width="100%" data-colorscheme="<?php echo $block->helperComment('facebook_colorscheme') ?>" data-order-by="<?php echo $block->helperComment('facebook_order_by') ?>"></div>
+                </div>
+            <?php elseif ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::FACEBOOK): ?>
+                <div class="box-collateral box-reviews" id="post-reviews">
+                    <h2><?php echo __('Comments') ?></h2>
 
-    		</div>
+                    <div id="fb-root"></div>
+                    <script>(function (d, s, id) {
+                            var js, fjs = d.getElementsByTagName(s)[0];
+                            if (d.getElementById(id)) return;
+                            js = d.createElement(s);
+                            js.id = id;
+                            js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId=<?php echo $this->getAppId()?>";
+                            fjs.parentNode.insertBefore(js, fjs);
+                        }(document, 'script', 'facebook-jssdk'));</script>
 
-        <?php elseif ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DEFAULT_COMMENT): ?>
-            <div class="container default-cmt">
-                <div class="row">
-                    <div class="col-xs-10"> <h2><?php echo __('Comments'); ?></h2></div>
-                    <div class="col-xs-2">
-                        <div class="default-cmt__cmt-login" <?php if ($block->isLoggedIn()) {echo 'style="display:none;"';} ?>>
-                            <button class="btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
+
+                    <div class="fb-comments" data-href="<?php echo $block->getUrlByPost($_post); ?>" data-numposts="<?php echo $block->helperComment('facebook_number_comment'); ?>"
+                         data-width="100%" data-colorscheme="<?php echo $block->helperComment('facebook_colorscheme') ?>" data-order-by="<?php echo $block->helperComment('facebook_order_by') ?>"></div>
+
+                </div>
+
+            <?php elseif ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DEFAULT_COMMENT): ?>
+                <div class="container default-cmt">
+                    <div class="row">
+                        <div class="col-xs-10"> <h2><?php echo __('Comments'); ?></h2></div>
+                        <div class="col-xs-2">
+                            <div class="default-cmt__cmt-login" <?php if ($block->isLoggedIn()) {echo 'style="display:none;"';} ?>>
+                                <button class="btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="default-cmt__content">
-                            <?php
-							/**
-							 * Comment box
-							 */
-                             ?>
-                            <div class="default-cmt__content__cmt-block">
-                                <div class="default-cmt__content__cmt-block__cmt-box">
-                                    <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input" maxlength="255" placeholder="<?php echo __('Type comments here...') ?>"></textarea>
-                                    <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
-                                        <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit btn-primary" <?php if (!$block->isLoggedIn()) {echo ' disabled';} ?>><?php echo __('Comment') ?></button>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="default-cmt__content">
+                                <?php
+                                /**
+                                 * Comment box
+                                 */
+                                 ?>
+                                <div class="default-cmt__content__cmt-block">
+                                    <div class="default-cmt__content__cmt-block__cmt-box">
+                                        <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input" maxlength="255" placeholder="<?php echo __('Type comments here...') ?>"></textarea>
+                                        <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
+                                            <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit btn-primary" <?php if (!$block->isLoggedIn()) {echo ' disabled';} ?>><?php echo __('Comment') ?></button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="default-cmt__content__cmt-content">
-                            <?php
-							/**
-							 * Comment rows
-							 */
-							$comments = $block->getPostComments($_post->getId());
-							$block->getCommentsTree($comments, 0);
-							$html = $block->getCommentsHtml();
-							echo $html;
-                            ?>
+                                <div class="default-cmt__content__cmt-content">
+                                <?php
+                                /**
+                                 * Comment rows
+                                 */
+                                $comments = $block->getPostComments($_post->getId());
+                                $block->getCommentsTree($comments, 0);
+                                $html = $block->getCommentsHtml();
+                                echo $html;
+                                ?>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <script>
-                //get login url, text of button like, reply
-                var loginUrl = '<?php echo $block->getLoginUrl(); ?>';
-                var like = '<?php echo __('Like') ?>',
-                    reply = '<?php echo __('Reply') ?>';
-                    
-                require([
-                    'comment'
-                ]);
-            </script>
+                <script>
+                    //get login url, text of button like, reply
+                    var loginUrl = '<?php echo $block->getLoginUrl(); ?>';
+                    var like = '<?php echo __('Like') ?>',
+                        reply = '<?php echo __('Reply') ?>';
 
-		<?php endif;
-	}?>
+                    require([
+                        'comment'
+                    ]);
+                </script>
+
+            <?php endif;
+        }?>
+
 </div>
 <script>
     less = {
@@ -441,3 +445,4 @@ if ($checkRss):
         });
     });
 </script>
+
