@@ -38,7 +38,7 @@
         <referenceContainer name="content">
             <block class="Mageplaza\Blog\Block\Post\View" name="mp.blog.view" template="Mageplaza_Blog::post/view.phtml">
                 <block class="Mageplaza\Blog\Block\Sidebar\Search" name="mp.blog.view.sidebar.search" as="sidebar_search"
-                       template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search" ifvalue="" />
+                       template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search"/>
                 <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview" as="sidebar_mostview"
                        template="Mageplaza_Blog::sidebar/mostview.phtml"/>
                 <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category" as="sidebar_category"
