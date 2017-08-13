@@ -24,12 +24,12 @@ use Mageplaza\Blog\Block\Frontend;
 
 class Widget extends Frontend
 {
-	public function getCurrentAuthor()
-	{
-		return $this->getRequest()->getParam('id');
-	}
-	public function getPageFilter($content)
-	{
-		return $this->filterProvider->getPageFilter()->filter($content);
-	}
+    public function getCurrentAuthor()
+    {
+        return $this->getRequest()->getParam('id');
+    }
+    public function getPageFilter($content)
+    {
+        return $this->filterProvider->getPageFilter()->filter($content);
+    }
 }

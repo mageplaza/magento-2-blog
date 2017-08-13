@@ -27,21 +27,21 @@ class Move extends \Mageplaza\Blog\Controller\Adminhtml\Category
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-	public $resultJsonFactory;
+    public $resultJsonFactory;
 
     /**
      * Layout Factory
      *
      * @var \Magento\Framework\View\LayoutFactory
      */
-	public $layoutFactory;
+    public $layoutFactory;
 
     /**
      * Logger instance
      *
      * @var \Psr\Log\LoggerInterface
      */
-	public $logger;
+    public $logger;
 
     /**
      * constructor
@@ -92,7 +92,7 @@ class Move extends \Mageplaza\Blog\Controller\Adminhtml\Category
         try {
             $category = $this->initCategory();
             if ($category === false) {
-				throw new \Magento\Framework\Exception\LocalizedException(__('Blog category is not available.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Blog category is not available.'));
             }
             $category->move($parentNodeId, $prevNodeId);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {

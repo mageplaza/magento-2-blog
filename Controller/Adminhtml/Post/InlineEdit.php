@@ -27,14 +27,14 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-	public $jsonFactory;
+    public $jsonFactory;
 
     /**
      * Post Factory
      *
      * @var \Mageplaza\Blog\Model\PostFactory
      */
-	public $postFactory;
+    public $postFactory;
 
     /**
      * constructor
@@ -71,27 +71,27 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
             ]);
         }
 
-		$key = array_keys($postItems);
-		$postId = !empty($key) ? (int) $key[0] : '';
-		/** @var \Mageplaza\Blog\Model\Post $post */
-		$post = $this->postFactory->create()->load($postId);
-		try {
-			$postData = $postItems[$postId];
-			$post->addData($postData);
-			$post->save();
-		} catch (\Magento\Framework\Exception\LocalizedException $e) {
-			$messages[] = $this->getErrorWithPostId($post, $e->getMessage());
-			$error = true;
-		} catch (\RuntimeException $e) {
-			$messages[] = $this->getErrorWithPostId($post, $e->getMessage());
-			$error = true;
-		} catch (\Exception $e) {
-			$messages[] = $this->getErrorWithPostId(
-				$post,
-				__('Something went wrong while saving the Post.')
-			);
-			$error = true;
-		}
+        $key = array_keys($postItems);
+        $postId = !empty($key) ? (int) $key[0] : '';
+        /** @var \Mageplaza\Blog\Model\Post $post */
+        $post = $this->postFactory->create()->load($postId);
+        try {
+            $postData = $postItems[$postId];
+            $post->addData($postData);
+            $post->save();
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $messages[] = $this->getErrorWithPostId($post, $e->getMessage());
+            $error = true;
+        } catch (\RuntimeException $e) {
+            $messages[] = $this->getErrorWithPostId($post, $e->getMessage());
+            $error = true;
+        } catch (\Exception $e) {
+            $messages[] = $this->getErrorWithPostId(
+                $post,
+                __('Something went wrong while saving the Post.')
+            );
+            $error = true;
+        }
 
         return $resultJson->setData([
             'messages' => $messages,
@@ -106,7 +106,7 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
      * @param string $errorText
      * @return string
      */
-	public function getErrorWithPostId(\Mageplaza\Blog\Model\Post $post, $errorText)
+    public function getErrorWithPostId(\Mageplaza\Blog\Model\Post $post, $errorText)
     {
         return '[Post ID: ' . $post->getId() . '] ' . $errorText;
     }

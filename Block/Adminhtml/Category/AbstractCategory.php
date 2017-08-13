@@ -34,21 +34,21 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\Tree
      */
-	public $categoryTree;
+    public $categoryTree;
 
     /**
      * Blog Category factory
      *
      * @var \Mageplaza\Blog\Model\CategoryFactory
      */
-	public $categoryFactory;
+    public $categoryFactory;
 
     /**
      * Blog Category collection factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
-	public $categoryCollectionFactory;
+    public $categoryCollectionFactory;
 
     /**
      * constructor

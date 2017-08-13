@@ -24,12 +24,11 @@ class ShowType implements \Magento\Framework\Option\ArrayInterface
 {
 
 
-	public function toOptionArray()
-	{
-		return [
-			['value' => 'new', 'label' => __('New')],
-			['value' => 'category', 'label' => __('Category')]
-		];
-	}
-
+    public function toOptionArray()
+    {
+        return [
+            ['value' => 'new', 'label' => __('New')],
+            ['value' => 'category', 'label' => __('Category')]
+        ];
+    }
 }

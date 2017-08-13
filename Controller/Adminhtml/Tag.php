@@ -27,21 +27,21 @@ abstract class Tag extends \Magento\Backend\App\Action
      *
      * @var \Mageplaza\Blog\Model\TagFactory
      */
-	public $tagFactory;
+    public $tagFactory;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-	public $coreRegistry;
+    public $coreRegistry;
 
     /**
      * Result redirect factory
      *
      * @var \Magento\Backend\Model\View\Result\RedirectFactory
      */
-	public $resultRedirectFactory;
+    public $resultRedirectFactory;
 
     /**
      * constructor
@@ -68,7 +68,7 @@ abstract class Tag extends \Magento\Backend\App\Action
      *
      * @return \Mageplaza\Blog\Model\Tag
      */
-	public function initTag()
+    public function initTag()
     {
         $tagId  = (int) $this->getRequest()->getParam('tag_id');
         /** @var \Mageplaza\Blog\Model\Tag $tag */

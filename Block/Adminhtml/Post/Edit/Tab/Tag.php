@@ -27,21 +27,21 @@ class Tag extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magent
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory
      */
-	public $tagCollectionFactory;
+    public $tagCollectionFactory;
 
     /**
      * Registry
      *
      * @var \Magento\Framework\Registry
      */
-	public $coreRegistry;
+    public $coreRegistry;
 
     /**
      * Tag factory
      *
      * @var \Mageplaza\Blog\Model\TagFactory
      */
-	public $tagFactory;
+    public $tagFactory;
 
     /**
      * constructor

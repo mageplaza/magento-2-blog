@@ -22,7 +22,8 @@ namespace Mageplaza\Blog\Block\Adminhtml\Tag;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
-	public function getTagGrid(){
-		return null;
-	}
+    public function getTagGrid()
+    {
+        return null;
+    }
 }

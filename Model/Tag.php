@@ -66,14 +66,14 @@ class Tag extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-	public $postCollection;
+    public $postCollection;
 
     /**
      * Post Collection Factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
-	public $postCollectionFactory;
+    public $postCollectionFactory;
 
     /**
      * constructor

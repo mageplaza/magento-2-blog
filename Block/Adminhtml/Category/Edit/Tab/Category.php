@@ -27,23 +27,23 @@ class Category extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
      *
      * @var \Magento\Cms\Model\Wysiwyg\Config
      */
-	public $wysiwygConfig;
+    public $wysiwygConfig;
 
     /**
      * Country options
      *
      * @var \Magento\Config\Model\Config\Source\Yesno
      */
-	public $booleanOptions;
+    public $booleanOptions;
 
     /**
      * Meta Robots options
      *
      * @var \Mageplaza\Blog\Model\Category\Source\MetaRobots
      */
-	public $metaRobotsOptions;
+    public $metaRobotsOptions;
 
-	public $systemStore;
+    public $systemStore;
 
     /**
      * constructor

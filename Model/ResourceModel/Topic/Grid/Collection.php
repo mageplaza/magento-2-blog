@@ -20,8 +20,7 @@
  */
 namespace Mageplaza\Blog\Model\ResourceModel\Topic\Grid;
 
-class Collection extends \Mageplaza\Blog\Model\ResourceModel\Topic\Collection
-	implements \Magento\Framework\Api\Search\SearchResultInterface
+class Collection extends \Mageplaza\Blog\Model\ResourceModel\Topic\Collection implements \Magento\Framework\Api\Search\SearchResultInterface
 {
     /**
      * Aggregations

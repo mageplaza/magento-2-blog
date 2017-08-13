@@ -29,10 +29,10 @@ class Orderby implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         return [
-        	['value' => self::SOCIAL, 'label' => __('Social')],
-			['value' => self::REVERSE_TIME, 'label' => __('Reverse time')],
-			['value' => self::TIME, 'label' => __('Time')]
-		];
+            ['value' => self::SOCIAL, 'label' => __('Social')],
+            ['value' => self::REVERSE_TIME, 'label' => __('Reverse time')],
+            ['value' => self::TIME, 'label' => __('Time')]
+        ];
     }
 
     /**

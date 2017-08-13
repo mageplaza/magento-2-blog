@@ -26,8 +26,8 @@ class Topmenu
 
     public function __construct(
         \Mageplaza\Blog\Helper\Data $helper
-    )
-	{
+    ) {
+    
         $this->helper = $helper;
     }
 
@@ -38,6 +38,7 @@ class Topmenu
 
             $blogHtml = $topmenu->getLayout()->createBlock('Mageplaza\Blog\Block\Html\CategoryMenu')->toHtml();
 		}
-		return $html.$blogHtml;
+		return $html . $blogHtml;
+
     }
 }

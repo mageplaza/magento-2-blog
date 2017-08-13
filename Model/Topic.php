@@ -62,7 +62,7 @@ class Topic extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-	protected $_cacheTag = 'mageplaza_blog_topic';
+    protected $_cacheTag = 'mageplaza_blog_topic';
 
     /**
      * Event prefix
@@ -76,14 +76,14 @@ class Topic extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-	public $postCollection;
+    public $postCollection;
 
     /**
      * Post Collection Factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
-	public $postCollectionFactory;
+    public $postCollectionFactory;
 
     /**
      * constructor
@@ -113,7 +113,7 @@ class Topic extends \Magento\Framework\Model\AbstractModel
      *
      * @return void
      */
-	protected function _construct()
+    protected function _construct()
     {
         $this->_init('Mageplaza\Blog\Model\ResourceModel\Topic');
     }

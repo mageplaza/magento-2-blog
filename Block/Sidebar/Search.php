@@ -5,27 +5,26 @@ use Mageplaza\Blog\Block\Frontend;
 
 class Search extends Frontend
 {
-	/**
-	 * get search blog's data
-	 */
-	public function getSearchBlogData()
-	{
-		$result = [];
-		$posts = $this->helperData->getPostList();
-		$limitDesc = $this->getSidebarConfig('search/description') ?: 100;
-		if (!empty($posts)) {
-
-		foreach ($posts as $item) {
-			$tmp = array(
-				'value' => $item->getName(),
-				'url'	=> $this->getUrlByPost($item),
-				'image'	=> $item->getImage() ? $this->getImageUrl($item->getImage()) : $this->getDefaultImageUrl(),
-				'desc'	=> $item->getShortDescription() ? substr($item->getShortDescription(),0, $limitDesc)
-					: 'No description'
-			);
-			array_push($result, $tmp);
-			}
-		}
-		return json_encode($result);
-	}
+    /**
+     * get search blog's data
+     */
+    public function getSearchBlogData()
+    {
+        $result = [];
+        $posts = $this->helperData->getPostList();
+        $limitDesc = $this->getSidebarConfig('search/description') ?: 100;
+        if (!empty($posts)) {
+            foreach ($posts as $item) {
+                $tmp = [
+                'value' => $item->getName(),
+                'url'   => $this->getUrlByPost($item),
+                'image'     => $item->getImage() ? $this->getImageUrl($item->getImage()) : $this->getDefaultImageUrl(),
+                'desc'  => $item->getShortDescription() ? substr($item->getShortDescription(), 0, $limitDesc)
+                    : 'No description'
+                    ];
+                    array_push($result, $tmp);
+            }
+        }
+        return json_encode($result);
+    }
 }

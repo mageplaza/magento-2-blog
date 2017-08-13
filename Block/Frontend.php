@@ -87,12 +87,14 @@ class Frontend extends Template
      * @param \Magento\Cms\Model\Template\FilterProvider       $filterProvider
      * @param array                                            $data
      */
-    public function __construct(\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+    public function __construct(
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Mageplaza\Blog\Model\CommentFactory $commentFactory,
         \Mageplaza\Blog\Model\LikeFactory $likeFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobots,
-        Context $context, HelperData $helperData,
+        Context $context,
+        HelperData $helperData,
         TemplateContext $templateContext,
         FilterProvider $filterProvider,
         //resizeImage function
@@ -150,7 +152,9 @@ class Frontend extends Template
     public function getCreatedAtStoreDate($createdAt)
     {
         return $this->_localeDate->scopeDate(
-            $this->_storeManager->getStore(), $createdAt, true
+            $this->_storeManager->getStore(),
+            $createdAt,
+            true
         );
     }
 
@@ -182,7 +186,8 @@ class Frontend extends Template
     {
         $storeId = $this->store->getStore()->getId();
         $postStoreId = $post->getStoreIds() != null ? explode(
-            ',', $post->getStoreIds()
+            ',',
+            $post->getStoreIds()
         ) : '-1';
         if (is_array($postStoreId)
             && (in_array($storeId, $postStoreId)
@@ -236,7 +241,8 @@ class Frontend extends Template
                     $category = $post->getSelectedCategoriesCollection()
                         ->addFieldToFilter('enabled', 1)->getFirstItem();
                     $breadcrumbs->addCrumb(
-                        'home', ['label' => __('Home'),
+                        'home',
+                        ['label' => __('Home'),
                                  'title' => __('Go to Home Page'),
                                  'link'  => $this->_storeManager->getStore()
                                      ->getBaseUrl()]
@@ -268,7 +274,8 @@ class Frontend extends Template
                 }
             } elseif ($actionName == 'mpblog_category_view') {
                 $category = $this->helperData->getCategoryByParam(
-                    'id', $this->getRequest()->getParam('id')
+                    'id',
+                    $this->getRequest()->getParam('id')
                 );
                 $breadcrumbs->addCrumb(
                     'home',
@@ -290,7 +297,8 @@ class Frontend extends Template
                 $this->applySeoCode($category);
             } elseif ($actionName == 'mpblog_tag_view') {
                 $tag = $this->helperData->getTagByParam(
-                    'id', $this->getRequest()->getParam('id')
+                    'id',
+                    $this->getRequest()->getParam('id')
                 );
                 $breadcrumbs->addCrumb(
                     'home',
@@ -304,13 +312,15 @@ class Frontend extends Template
                      ), 'link' => $this->_storeManager->getStore()->getBaseUrl()
                         . $breadcrumbsLink]
                 )->addCrumb(
-                    'Tag' . $tag->getId(), ['label' => ucfirst($tag->getName()),
+                    'Tag' . $tag->getId(),
+                    ['label' => ucfirst($tag->getName()),
                                             'title' => $tag->getName()]
                 );
                 $this->applySeoCode($tag);
             } elseif ($actionName == 'mpblog_topic_view') {
                 $topic = $this->helperData->getTopicByParam(
-                    'id', $this->getRequest()->getParam('id')
+                    'id',
+                    $this->getRequest()->getParam('id')
                 );
                 $breadcrumbs->addCrumb(
                     'home',
@@ -331,7 +341,8 @@ class Frontend extends Template
                 $this->applySeoCode($topic);
             } elseif ($actionName == 'mpblog_author_view') {
                 $author = $this->helperData->getAuthorByParam(
-                    'id', $this->getRequest()->getParam('id')
+                    'id',
+                    $this->getRequest()->getParam('id')
                 );
                 $breadcrumbs->addCrumb(
                     'home',
@@ -485,23 +496,28 @@ class Frontend extends Template
             $postList = $this->helperData->getPostList();
         } elseif ($type == \Mageplaza\Blog\Helper\Data::CATEGORY) {
             $postList = $this->helperData->getPostList(
-                \Mageplaza\Blog\Helper\Data::CATEGORY, $id
+                \Mageplaza\Blog\Helper\Data::CATEGORY,
+                $id
             );
         } elseif ($type == \Mageplaza\Blog\Helper\Data::TAG) {
             $postList = $this->helperData->getPostList(
-                \Mageplaza\Blog\Helper\Data::TAG, $id
+                \Mageplaza\Blog\Helper\Data::TAG,
+                $id
             );
         } elseif ($type == \Mageplaza\Blog\Helper\Data::TOPIC) {
             $postList = $this->helperData->getPostList(
-                \Mageplaza\Blog\Helper\Data::TOPIC, $id
+                \Mageplaza\Blog\Helper\Data::TOPIC,
+                $id
             );
         } elseif ($type == \Mageplaza\Blog\Helper\Data::AUTHOR) {
             $postList = $this->helperData->getPostList(
-                \Mageplaza\Blog\Helper\Data::AUTHOR, $id
+                \Mageplaza\Blog\Helper\Data::AUTHOR,
+                $id
             );
         } elseif ($type == \Mageplaza\Blog\Helper\Data::MONTHLY) {
             $postList = $this->helperData->getPostList(
-                \Mageplaza\Blog\Helper\Data::MONTHLY, $id
+                \Mageplaza\Blog\Helper\Data::MONTHLY,
+                $id
             );
         }
 
@@ -515,7 +531,10 @@ class Frontend extends Template
                     + 1 : ($numOfPost / $limit);
 
                 return $this->getPostPerPage(
-                    $page, $numOfPage, $limit, $postList
+                    $page,
+                    $numOfPage,
+                    $limit,
+                    $postList
                 );
             }
 
@@ -535,10 +554,13 @@ class Frontend extends Template
      *
      * @return array
      */
-    public function getPostPerPage($page = null, $numOfPage, $limit,
-        $array = array()
+    public function getPostPerPage(
+        $page = null,
+        $numOfPage,
+        $limit,
+        $array = []
     ) {
-        $results = array();
+        $results = [];
         $firstIndex = 0;
         $lastIndex = $limit - 1;
         if ($page) {
@@ -673,7 +695,8 @@ class Frontend extends Template
 							</div>';
                 if ($comment['has_reply']) {
                     $this->commentTree .= $this->getCommentsTree(
-                        $comments, $comment['comment_id']
+                        $comments,
+                        $comment['comment_id']
                     );
                 }
                 $this->commentTree .= '</li>';
@@ -751,7 +774,7 @@ class Frontend extends Template
     {
 
         $absolutePath = $this->getImageUrl($image);
-        if ($width == null && $height == null){
+        if ($width == null && $height == null) {
             return $absolutePath;
         }
 
@@ -759,11 +782,11 @@ class Frontend extends Template
         //create image factory...
         $imageResize = $this->_imageFactory->create();
         $imageResize->open($absolutePath);
-        $imageResize->constrainOnly(TRUE);
-        $imageResize->keepTransparency(TRUE);
-        $imageResize->keepFrame(FALSE);
-        $imageResize->keepAspectRatio(TRUE);
-        $imageResize->resize($width,$height);
+        $imageResize->constrainOnly(true);
+        $imageResize->keepTransparency(true);
+        $imageResize->keepFrame(false);
+        $imageResize->keepAspectRatio(true);
+        $imageResize->resize($width, $height);
         //destination folder
         $destination = $imageResized ;
         //save image

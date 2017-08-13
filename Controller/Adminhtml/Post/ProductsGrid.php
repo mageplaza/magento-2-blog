@@ -22,8 +22,8 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
 class ProductsGrid extends \Mageplaza\Blog\Controller\Adminhtml\Post\Products
 {
-	public function getBlogPost()
-	{
-		return null;
-	}
+    public function getBlogPost()
+    {
+        return null;
+    }
 }

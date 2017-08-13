@@ -34,16 +34,16 @@ use Magento\Framework\Controller\Result\ForwardFactory;
 class View extends Action
 {
     public $resultPageFactory;
-	public $helperBlog;
-	public $accountManagement;
-	public $customerUrl;
-	public $session;
-	public $helperData;
-	public $storeManager;
-	/**
-	 * @type \Magento\Framework\Controller\Result\ForwardFactory
-	 */
-	protected $resultForwardFactory;
+    public $helperBlog;
+    public $accountManagement;
+    public $customerUrl;
+    public $session;
+    public $helperData;
+    public $storeManager;
+    /**
+     * @type \Magento\Framework\Controller\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
 
     public function __construct(
         Context $context,
@@ -51,7 +51,7 @@ class View extends Action
         HelperBlog $helperBlog,
         PageFactory $resultPageFactory,
         AccountManagementInterface $accountManagement,
-		ForwardFactory $resultForwardFactory,
+        ForwardFactory $resultForwardFactory,
         CustomerUrl $customerUrl,
         Session $customerSession
     ) {
@@ -62,12 +62,12 @@ class View extends Action
         $this->accountManagement = $accountManagement;
         $this->customerUrl       = $customerUrl;
         $this->session           = $customerSession;
-		$this->resultForwardFactory = $resultForwardFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
     }
 
     public function execute()
     {
-		$id = $this->getRequest()->getParam('id');
-		return ($id) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
+        $id = $this->getRequest()->getParam('id');
+        return ($id) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
     }
 }

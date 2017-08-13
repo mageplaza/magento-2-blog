@@ -22,54 +22,54 @@ namespace Mageplaza\Blog\Model;
 
 class Like extends \Magento\Framework\Model\AbstractModel
 {
-	/**
-	 * Cache tag
-	 *
-	 * @var string
-	 */
-	const CACHE_TAG = 'mageplaza_blog_comment_like';
+    /**
+     * Cache tag
+     *
+     * @var string
+     */
+    const CACHE_TAG = 'mageplaza_blog_comment_like';
 
-	/**
-	 * Cache tag
-	 *
-	 * @var string
-	 */
-	protected $_cacheTag = 'mageplaza_blog_comment_like';
+    /**
+     * Cache tag
+     *
+     * @var string
+     */
+    protected $_cacheTag = 'mageplaza_blog_comment_like';
 
-	/**
-	 * Event prefix
-	 *
-	 * @var string
-	 */
-	protected $_eventPrefix = 'mageplaza_blog_comment_like';
+    /**
+     * Event prefix
+     *
+     * @var string
+     */
+    protected $_eventPrefix = 'mageplaza_blog_comment_like';
 
-	protected $_idFieldName = 'like_id';
+    protected $_idFieldName = 'like_id';
 
-	public $postCollectionFactory;
+    public $postCollectionFactory;
 
-	public function __construct(
-		\Magento\Framework\Model\Context $context,
-		\Magento\Framework\Registry $registry,
-		\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-		\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-		array $data = []
-	)
-	{
-		parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-	}
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+    
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+    }
 
-	/**
-	 * Initialize resource model
-	 *
-	 * @return void
-	 */
-	protected function _construct()
-	{
-		$this->_init('Mageplaza\Blog\Model\ResourceModel\Like');
-	}
+    /**
+     * Initialize resource model
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init('Mageplaza\Blog\Model\ResourceModel\Like');
+    }
 
-	public function getIdentities()
-	{
-		return [self::CACHE_TAG . '_' . $this->getId()];
-	}
+    public function getIdentities()
+    {
+        return [self::CACHE_TAG . '_' . $this->getId()];
+    }
 }

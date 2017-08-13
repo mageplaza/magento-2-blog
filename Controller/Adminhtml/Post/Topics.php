@@ -27,7 +27,7 @@ class Topics extends \Mageplaza\Blog\Controller\Adminhtml\Post
      *
      * @var \Magento\Framework\View\Result\LayoutFactory
      */
-	public $resultLayoutFactory;
+    public $resultLayoutFactory;
 
     /**
      * constructor

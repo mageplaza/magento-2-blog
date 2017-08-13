@@ -22,8 +22,8 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
 class TopicsGrid extends \Mageplaza\Blog\Controller\Adminhtml\Post\Topics
 {
-	public function getBlogPost()
-	{
-		return null;
-	}
+    public function getBlogPost()
+    {
+        return null;
+    }
 }

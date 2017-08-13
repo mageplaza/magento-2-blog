@@ -27,37 +27,37 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
-	public $date;
+    public $date;
 
     /**
      * Event Manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-	public $eventManager;
+    public $eventManager;
 
     /**
      * Tag relation model
      *
      * @var string
      */
-	public $postTagTable;
+    public $postTagTable;
 
     /**
      * Topic relation model
      *
      * @var string
      */
-	public $postTopicTable;
+    public $postTopicTable;
 
     /**
      * Blog Category relation model
      *
      * @var string
      */
-	public $postCategoryTable;
-	public $postProductTable;
-	public $helperData;
+    public $postCategoryTable;
+    public $postProductTable;
+    public $helperData;
     /**
      * constructor
      *
@@ -68,12 +68,12 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-		\Mageplaza\Blog\Helper\Data $helperData,
+        \Mageplaza\Blog\Helper\Data $helperData,
         \Magento\Framework\Model\ResourceModel\Db\Context $context
     ) {
         $this->date         = $date;
         $this->eventManager = $eventManager;
-		$this->helperData = $helperData;
+        $this->helperData = $helperData;
         parent::__construct($context);
         $this->postTagTable      = $this->getTable('mageplaza_blog_post_tag');
         $this->postTopicTable    = $this->getTable('mageplaza_blog_post_topic');
@@ -191,7 +191,7 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Mageplaza\Blog\Model\Post $post
      * @return $this
      */
-	public function saveTagRelation(\Mageplaza\Blog\Model\Post $post)
+    public function saveTagRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedTagList(false);
         $id   = $post->getId();
@@ -271,7 +271,7 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Mageplaza\Blog\Model\Post $post
      * @return $this
      */
-	public function saveTopicRelation(\Mageplaza\Blog\Model\Post $post)
+    public function saveTopicRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedTopicList(false);
         $id     = $post->getId();
@@ -333,7 +333,7 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Mageplaza\Blog\Model\Post $post
      * @return array
      */
-	public function saveCategoryRelation(\Mageplaza\Blog\Model\Post $post)
+    public function saveCategoryRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedCategoryList(false);
         $id         = $post->getId();
@@ -437,79 +437,80 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $result;
     }
-	public function generateUrlKey($name, $count){
-    	$result = $this->helperData->generateUrlKey($name,$count);
-    	return $result;
-	}
+    public function generateUrlKey($name, $count)
+    {
+        $result = $this->helperData->generateUrlKey($name, $count);
+        return $result;
+    }
 
-	public function saveProductRelation(\Mageplaza\Blog\Model\Post $post)
-	{
-		$post->setIsChangedProductList(false);
-		$id   = $post->getId();
-		$products = $post->getProductsData();
-		if ($products === null) {
-			return $this;
-		}
-		$oldProducts = $post->getProductsPosition();
-		$insert  = array_diff_key($products, $oldProducts);
-		$delete  = array_diff_key($oldProducts, $products);
-		$update  = array_intersect_key($products, $oldProducts);
-		$_update = [];
-		foreach ($update as $key => $settings) {
-			if (isset($oldProducts[$key]) && $oldProducts[$key] != $settings['position']) {
-				$_update[$key] = $settings;
-			}
-		}
-		$update  = $_update;
-		$adapter = $this->getConnection();
-		if (!empty($delete)) {
-			$condition = ['entity_id IN(?)' => array_keys($delete), 'post_id=?' => $id];
-			$adapter->delete($this->postProductTable, $condition);
-		}
-		if (!empty($insert)) {
-			$data = [];
-			foreach ($insert as $entityId => $position) {
-				$data[] = [
-					'post_id'  => (int)$id,
-					'entity_id'   => (int)$entityId,
-					'position' => (int)$position['position']
-				];
-			}
-			$adapter->insertMultiple($this->postProductTable, $data);
-		}
-		if (!empty($update)) {
-			foreach ($update as $entityId => $position) {
-				$where = ['post_id = ?' => (int)$id, 'entity_id = ?' => (int)$entityId];
-				$bind  = ['position' => (int)$position['position']];
-				$adapter->update($this->postProductTable, $bind, $where);
-			}
-		}
-		if (!empty($insert) || !empty($delete)) {
-			$entityIds = array_unique(array_merge(array_keys($insert), array_keys($delete)));
-			$this->eventManager->dispatch(
-				'mageplaza_blog_post_change_products',
-				['post' => $post, 'entity_ids' => $entityIds]
-			);
-		}
-		if (!empty($insert) || !empty($update) || !empty($delete)) {
-			$post->setIsChangedProductList(true);
-			$entityIds = array_keys($insert + $delete + $update);
-			$post->setAffectedEntityIds($entityIds);
-		}
+    public function saveProductRelation(\Mageplaza\Blog\Model\Post $post)
+    {
+        $post->setIsChangedProductList(false);
+        $id   = $post->getId();
+        $products = $post->getProductsData();
+        if ($products === null) {
+            return $this;
+        }
+        $oldProducts = $post->getProductsPosition();
+        $insert  = array_diff_key($products, $oldProducts);
+        $delete  = array_diff_key($oldProducts, $products);
+        $update  = array_intersect_key($products, $oldProducts);
+        $_update = [];
+        foreach ($update as $key => $settings) {
+            if (isset($oldProducts[$key]) && $oldProducts[$key] != $settings['position']) {
+                $_update[$key] = $settings;
+            }
+        }
+        $update  = $_update;
+        $adapter = $this->getConnection();
+        if (!empty($delete)) {
+            $condition = ['entity_id IN(?)' => array_keys($delete), 'post_id=?' => $id];
+            $adapter->delete($this->postProductTable, $condition);
+        }
+        if (!empty($insert)) {
+            $data = [];
+            foreach ($insert as $entityId => $position) {
+                $data[] = [
+                    'post_id'  => (int)$id,
+                    'entity_id'   => (int)$entityId,
+                    'position' => (int)$position['position']
+                ];
+            }
+            $adapter->insertMultiple($this->postProductTable, $data);
+        }
+        if (!empty($update)) {
+            foreach ($update as $entityId => $position) {
+                $where = ['post_id = ?' => (int)$id, 'entity_id = ?' => (int)$entityId];
+                $bind  = ['position' => (int)$position['position']];
+                $adapter->update($this->postProductTable, $bind, $where);
+            }
+        }
+        if (!empty($insert) || !empty($delete)) {
+            $entityIds = array_unique(array_merge(array_keys($insert), array_keys($delete)));
+            $this->eventManager->dispatch(
+                'mageplaza_blog_post_change_products',
+                ['post' => $post, 'entity_ids' => $entityIds]
+            );
+        }
+        if (!empty($insert) || !empty($update) || !empty($delete)) {
+            $post->setIsChangedProductList(true);
+            $entityIds = array_keys($insert + $delete + $update);
+            $post->setAffectedEntityIds($entityIds);
+        }
 
-		return $this;
-	}
-	public function getProductsPosition(\Mageplaza\Blog\Model\Post $post)
-	{
-		$select = $this->getConnection()->select()->from(
-			$this->postProductTable,
-			['entity_id', 'position']
-		)
-			->where(
-				'post_id = :post_id'
-			);
-		$bind   = ['post_id' => (int)$post->getId()];
+        return $this;
+    }
+    public function getProductsPosition(\Mageplaza\Blog\Model\Post $post)
+    {
+        $select = $this->getConnection()->select()->from(
+            $this->postProductTable,
+            ['entity_id', 'position']
+        )
+            ->where(
+                'post_id = :post_id'
+            );
+        $bind   = ['post_id' => (int)$post->getId()];
 
-		return $this->getConnection()->fetchPairs($select, $bind);
-	}
+        return $this->getConnection()->fetchPairs($select, $bind);
+    }
 }

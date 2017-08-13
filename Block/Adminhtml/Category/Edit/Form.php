@@ -27,7 +27,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
      *
      * @var array
      */
-	public $additionalButtons = [];
+    public $additionalButtons = [];
 
     /**
      * Block template
@@ -41,7 +41,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
      *
      * @var \Magento\Framework\Json\EncoderInterface
      */
-	public $jsonEncoder;
+    public $jsonEncoder;
 
     /**
      * constructor

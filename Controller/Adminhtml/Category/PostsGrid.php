@@ -22,8 +22,8 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
 class PostsGrid extends \Mageplaza\Blog\Controller\Adminhtml\Category\Posts
 {
-	public function getBlogCategory()
-	{
-		return null;
-	}
+    public function getBlogCategory()
+    {
+        return null;
+    }
 }

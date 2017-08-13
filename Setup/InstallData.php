@@ -34,21 +34,23 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
      *
      * @param \Mageplaza\Blog\Setup\CategorySetupFactory $categorySetupFactory
      */
-     public function __construct(
-	\Magento\Framework\App\State $appState,
+    public function __construct(
+        \Magento\Framework\App\State $appState,
         \Mageplaza\Blog\Setup\CategorySetupFactory $categorySetupFactory
     ) {
-	$appState->setAreaCode('frontend');
+        $appState->setAreaCode('frontend');
         $this->categorySetupFactory = $categorySetupFactory;
     }
     /**
      * {@inheritdoc}
      */
-    public function install(\Magento\Framework\Setup\ModuleDataSetupInterface $setup,
-							\Magento\Framework\Setup\ModuleContextInterface $context)
-    {
-    	$contextInstall = $context;
-    	$contextInstall->getVersion();
+    public function install(
+        \Magento\Framework\Setup\ModuleDataSetupInterface $setup,
+        \Magento\Framework\Setup\ModuleContextInterface $context
+    ) {
+    
+        $contextInstall = $context;
+        $contextInstall->getVersion();
         /** @var \Mageplaza\Blog\Setup\CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
         // Create Root Blog Category Node
