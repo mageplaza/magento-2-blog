@@ -195,23 +195,26 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'values' => $this->booleanOptions->toOptionArray(),
             ]
         );
-        $fieldset->addField('publish_date', 'date', [
-                'name' => 'publish_date',
-                'label' => __('Publish Date'),
-                'title' => __('Publish Date'),
-                'date_format' => $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT),
-                'time_format' => $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT),
-            ]);
-        $fieldset->addField(
-            'url_key',
-            'text',
-            [
-                'name'  => 'url_key',
-                'label' => __('URL Key'),
-                'title' => __('URL Key'),
-                'note' => __('URL Key'),
-            ]
-        );
+		$fieldset->addField('publish_date', 'date', array(
+				'name' => 'publish_date',
+				'label' => __('Publish Date'),
+				'title' => __('Publish Date'),
+				'date_format' => $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT),
+				'time_format' => $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT),
+                'note' => __('GTM 0 Time Zone'),
+			)
+		);
+		$fieldset->addField(
+			'url_key',
+			'text',
+			[
+				'name'  => 'url_key',
+				'label' => __('URL Key'),
+				'title' => __('URL Key'),
+				'note' => __('URL Key'),
+			]
+		);
+
         $fieldset->addField(
             'meta_title',
             'text',

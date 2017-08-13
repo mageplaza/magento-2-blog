@@ -36,20 +36,24 @@ class Relatedpost extends Frontend
         return $this->getRequest()->getParam('id');
     }
 
-    public function getRelatedPostList($id)
-    {
-        return $this->helperData->getRelatedPostList($id);
-    }
-    public function getLimitPosts()
-    {
-        $limitRelated = ($this->getBlogConfig('product_post/post_limit')=='' || $this->getBlogConfig('product_post/post_limit')==0) ? 1 : $this->getBlogConfig('product_post/post_limit');
-        return $limitRelated;
-    }
-    public function setTabTitle()
-    {
-        $posts = $this->getRelatedPostList($this->getCurrentProduct());
-        $countPost = count($posts);
-        $title = ($this->getLimitPosts()>$countPost) ?  __('Related Posts ('.$countPost.')') : __('Related Posts ('.$this->getLimitPosts().')');
-        $this->setTitle($title);
-    }
+	public function getRelatedPostList($id)
+	{
+		return $this->helperData->getRelatedPostList($id);
+	}
+	public function getLimitPosts()
+	{
+		$limitRelated = ($this->getBlogConfig('product_post/product_detail/post_limit')==''
+            || $this->getBlogConfig('product_post/product_detail/post_limit')==0)
+            ? 1
+            : $this->getBlogConfig('product_post/product_detail/post_limit');
+		return $limitRelated;
+	}
+	public function setTabTitle()
+	{
+		$posts = $this->getRelatedPostList($this->getCurrentProduct());
+		$countPost = count($posts);
+		$title = ($this->getLimitPosts()>$countPost) ?  __('Related Posts ('.$countPost.')') : __('Related Posts ('.$this->getLimitPosts().')');
+		$this->setTitle($title);
+	}
+
 }

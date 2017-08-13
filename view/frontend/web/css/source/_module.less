@@ -68,7 +68,11 @@ h2.mp-post-title a:focus {
   color: @color;
 }
 .relate-content a.mp-relate-link{
+  color: #0a0a0a;
+}
+.relate-content a.mp-relate-link:hover{
   color: @color;
+  text-decoration: none;
 }
 .owl-item a.mp-relate-link:hover{
   color: @color;
@@ -379,9 +383,14 @@ ul.nav-tabs li{
   border-top-color: #eee;
   font-size: 16px;
 }
-@media(width: 768px){
+@media(max-width: 768px){
   ul.nav-tabs li{
-    font-size: 12px;
+    width: 100%;
+  }
+  ul.nav-tabs li.active{
+    width: 100%;
+    background: @color;
+    color: #ffffff;
   }
 }
 .mp-sidebar ul.nav-tabs li a{
@@ -528,8 +537,6 @@ a.mpblog-suggestion:hover {
   font-size: 16px;
   line-height: 32px;
   color: #8f8f8f;
-  content: '\e615';
-  font-family: 'luma-icons';
   margin: 0;
   vertical-align: top;
   display: inline-block;
@@ -759,4 +766,35 @@ li.default-cmt__content__cmt-content__cmt-row.cmt-row {
     width: 100%;
   }
   }
+/*===================================================================
+|                  	      Post View CSS                  	        |
+====================================================================*/
+
+.page-layout-1column .column.main {
+  width: 100% !important;
+}
+.products-same-post a.product-item-link {
+  color: #0a0a0a;
+}
+.products-same-post a.product-item-link:hover {
+  color:@color;
+  text-decoration: none;
+}
+.post-same-topics .row{
+  margin: 0 ;
+}
+.products-same-post .row{
+  margin: 0 ;
+}
+.products-same-post{
+  margin-top: 25px;
+  padding-left: 15px;
+}
+.post-same-topics{
+  padding-left: 15px;
+}
+.mp-comment{
+  padding-left: 15px;
+}
+
 /* mageplaza end blog style */

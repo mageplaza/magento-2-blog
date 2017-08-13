@@ -22,7 +22,9 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-
+        <referenceBlock name="head.additional">
+            <block class="Mageplaza\Blog\Block\Frontend" template="Mageplaza_Blog::design.phtml"/>
+        </referenceBlock>
         <referenceContainer name="content">
             <block class="Mageplaza\Blog\Block\Author\Listpost" template="Mageplaza_Blog::category/post/list.phtml">
                 <block class="Mageplaza\Blog\Block\Author\Widget" name="mp.blog.view.sidebar.author"

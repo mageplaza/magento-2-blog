@@ -42,8 +42,15 @@
                 </resize_image>
             </general>
             <product_post>
-                <enable_post>1</enable_post>
-                <post_limit>10</post_limit>
+                <product_detail>
+                    <enable_post>1</enable_post>
+                    <post_limit>10</post_limit>
+                </product_detail>
+                <post_detail>
+                    <enable_product>1</enable_product>
+                    <product_limit>12</product_limit>
+                    <title>Related Products</title>
+                </post_detail>
             </product_post>
             <sidebar>
                 <number_recent_posts>5</number_recent_posts>
@@ -72,7 +79,7 @@
             </comment>
             <share>
                 <enabled>1</enabled>
-                <pubid_id>ra-568cdc40e9eab41d</pubid_id>
+                <pubid_id>ra-5983d393d9a9b2c9</pubid_id>
             </share>
             <seo>
                 <snippet>

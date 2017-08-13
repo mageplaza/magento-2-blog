@@ -42,7 +42,7 @@ if ($checkRss):
 
               <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1){
 			  ?>
-            <div class="col-md-9 col-sm-8">
+            <div class="post-list-content col-md-9 col-sm-8">
 
                 <?php foreach ($posts as $post) : ?>
                     <div class="post-list-item <?php if($block->getBlogConfig('general/display_style') == 2){echo ' col-sm-6';}else echo ' col-sm-12';?>">
@@ -102,7 +102,7 @@ if ($checkRss):
                         <?php echo $this->getChildHtml();?>
                   </div>
 
-                  <div class="col-md-9 col-sm-8">
+                  <div class="post-list-content col-md-9 col-sm-8">
 
                         <?php foreach ($posts as $post) : ?>
                             <div class="post-list-item <?php if($block->getBlogConfig('general/display_style') == 2){echo ' col-sm-6';}else echo ' col-sm-12';?>">
@@ -187,7 +187,7 @@ if ($checkRss):
         <div class="row">
             <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1){
 			?>
-            <div class="col-md-9 col-sm-8">
+            <div class="post-list-content col-md-9 col-sm-8">
                  <?php echo __('There are no posts at this moment'); ?>
             </div>
             <div class="mp-sidebar col-md-3 col-sm-4">
@@ -197,7 +197,7 @@ if ($checkRss):
                 <div class="mp-sidebar col-md-3 col-sm-4">
                     <?php echo $this->getChildHtml();?>
                 </div>
-                <div class="col-md-9 col-sm-8">
+                <div class="post-list-content col-md-9 col-sm-8">
                     <?php echo __('There are no posts at this moment'); ?>
                 </div>
             <?php } ?>
