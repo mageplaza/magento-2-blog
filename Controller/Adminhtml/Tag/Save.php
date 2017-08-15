@@ -27,14 +27,14 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Tag
      *
      * @var \Magento\Backend\Model\Session
      */
-	public $backendSession;
+    public $backendSession;
 
     /**
      * JS helper
      *
      * @var \Magento\Backend\Helper\Js
      */
-	public $jsHelper;
+    public $jsHelper;
 
     /**
      * constructor

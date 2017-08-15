@@ -23,28 +23,30 @@ namespace Mageplaza\Blog\Block\Widget;
 use Magento\Widget\Block\BlockInterface;
 use Mageplaza\Blog\Block\Frontend;
 
-class Posts extends Frontend implements BlockInterface{
+class Posts extends Frontend implements BlockInterface
+{
 
-	protected $_template = "widget/posts.phtml";
+    protected $_template = "widget/posts.phtml";
 
-	public function getCollection(){
-		if ($this->hasData('show_type') && $this->getData('show_type')==='category')
-		{
-			$postsCollection=$this->helperData->categoryfactory->create()->load($this->getData('category_id'))->getSelectedPostsCollection();
-		}
-		else {
-			$postsCollection = $this->helperData->postfactory->create()->getCollection();
-		}
-		$postsCollection->addOrder('created_at')->setPageSize($this->getData('post_count'));
-		return $postsCollection;
-	}
-	public function getTitle(){
+    public function getCollection()
+    {
+        if ($this->hasData('show_type') && $this->getData('show_type')==='category') {
+            $postsCollection=$this->helperData->categoryfactory->create()->load($this->getData('category_id'))->getSelectedPostsCollection();
+        } else {
+            $postsCollection = $this->helperData->postfactory->create()->getCollection();
+        }
+        $postsCollection->addOrder('created_at')->setPageSize($this->getData('post_count'));
+        return $postsCollection;
+    }
+    public function getTitle()
+    {
 
-		return $this->getData('title');
-	}
+        return $this->getData('title');
+    }
 
-	public function getBlogUrl($code){
+    public function getBlogUrl($code)
+    {
 
-		return $this->helperData->getBlogUrl($code);
-	}
+        return $this->helperData->getBlogUrl($code);
+    }
 }

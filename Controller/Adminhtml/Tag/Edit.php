@@ -27,21 +27,21 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Tag
      *
      * @var \Magento\Backend\Model\Session
      */
-	public $backendSession;
+    public $backendSession;
 
     /**
      * Page factory
      *
      * @var \Magento\Framework\View\Result\PageFactory
      */
-	public $resultPageFactory;
+    public $resultPageFactory;
 
     /**
      * Result JSON factory
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-	public $resultJsonFactory;
+    public $resultJsonFactory;
 
     /**
      * constructor

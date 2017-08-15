@@ -27,7 +27,7 @@ class Posts extends \Mageplaza\Blog\Controller\Adminhtml\Tag
      *
      * @var \Magento\Framework\View\Result\LayoutFactory
      */
-	public $resultLayoutFactory;
+    public $resultLayoutFactory;
 
     /**
      * constructor

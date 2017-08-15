@@ -100,14 +100,14 @@ class Category extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Mageplaza\Blog\Model\CategoryFactory
      */
-	public $categoryFactory;
+    public $categoryFactory;
 
     /**
      * Post Collection Factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
-	public $postCollectionFactory;
+    public $postCollectionFactory;
 
     /**
      * constructor

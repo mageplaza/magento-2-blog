@@ -36,28 +36,28 @@ class Widget extends Frontend
     }
 
     /**
-	 * get tags size based on num of post
-	 * size = (maxSize * (currentItem - min))/(max - min)
-	 */
+     * get tags size based on num of post
+     * size = (maxSize * (currentItem - min))/(max - min)
+     */
     public function getTagSize($tag)
-	{
-		$postList = $this->helperData->getPostList();
-		if ($postList && is_array($postList)) {
-			$max = count($postList);
-			$min = 1;
-			$maxSize = 30;
-			$tagPost = $this->helperData->getPostList('tag', $tag->getId());
-			if ($tagPost && is_array($tagPost)) {
-				$countTagPost = count($tagPost);
-				if ($countTagPost <= 1) {
-					return '';
-				}
+    {
+        $postList = $this->helperData->getPostList();
+        if ($postList && is_array($postList)) {
+            $max = count($postList);
+            $min = 1;
+            $maxSize = 30;
+            $tagPost = $this->helperData->getPostList('tag', $tag->getId());
+            if ($tagPost && is_array($tagPost)) {
+                $countTagPost = count($tagPost);
+                if ($countTagPost <= 1) {
+                    return '';
+                }
 
-				$size = ($maxSize * ($countTagPost - $min)) / ($max - $min);
-				return round($size);
-			}
-		}
+                $size = ($maxSize * ($countTagPost - $min)) / ($max - $min);
+                return round($size);
+            }
+        }
 
-		return '';
-	}
+        return '';
+    }
 }

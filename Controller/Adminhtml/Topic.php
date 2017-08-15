@@ -27,21 +27,21 @@ abstract class Topic extends \Magento\Backend\App\Action
      *
      * @var \Mageplaza\Blog\Model\TopicFactory
      */
-	public $topicFactory;
+    public $topicFactory;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-	public $coreRegistry;
+    public $coreRegistry;
 
     /**
      * Result redirect factory
      *
      * @var \Magento\Backend\Model\View\Result\RedirectFactory
      */
-	public $resultRedirectFactory;
+    public $resultRedirectFactory;
 
     /**
      * constructor
@@ -68,7 +68,7 @@ abstract class Topic extends \Magento\Backend\App\Action
      *
      * @return \Mageplaza\Blog\Model\Topic
      */
-	public function initTopic()
+    public function initTopic()
     {
         $topicId  = (int) $this->getRequest()->getParam('topic_id');
         /** @var \Mageplaza\Blog\Model\Topic $topic */

@@ -34,14 +34,14 @@ class Post extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magen
      *
      * @var \Magento\Framework\Registry
      */
-	public $coreRegistry;
+    public $coreRegistry;
 
     /**
      * Post factory
      *
      * @var \Mageplaza\Blog\Model\PostFactory
      */
-	public $postFactory;
+    public $postFactory;
 
     /**
      * constructor

@@ -27,30 +27,30 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
      *
      * @var \Magento\Backend\Model\Session
      */
-	public $backendSession;
+    public $backendSession;
 
     /**
      * Upload model
      *
      * @var \Mageplaza\Blog\Model\Upload
      */
-	public $uploadModel;
+    public $uploadModel;
 
     /**
      * Image model
      *
      * @var \Mageplaza\Blog\Model\Post\Image
      */
-	public $imageModel;
+    public $imageModel;
 
     /**
      * JS helper
      *
      * @var \Magento\Backend\Helper\Js
      */
-	public $jsHelper;
-	public $trafficFactory;
-	protected $authSession;
+    public $jsHelper;
+    public $trafficFactory;
+    protected $authSession;
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
@@ -80,7 +80,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         \Magento\Backend\Helper\Js $jsHelper,
         \Mageplaza\Blog\Model\PostFactory $postFactory,
         \Magento\Framework\Registry $registry,
-		\Magento\Backend\Model\Auth\Session $authSession,
+        \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Backend\App\Action\Context $context
     ) {
         $this->date         = $date;
@@ -89,7 +89,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         $this->trafficFactory = $trafficFactory;
         $this->backendSession = $context->getSession();
         $this->jsHelper       = $jsHelper;
-		$this->authSession = $authSession;
+        $this->authSession = $authSession;
         parent::__construct($postFactory, $registry, $context);
     }
 
@@ -102,11 +102,11 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
     {
         // Magento Timezone Interface
         $timezone =$this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-		$user = $this->authSession->getUser();
+        $user = $this->authSession->getUser();
         $data = $this->getRequest()->getPost('post');
-        if (empty($data['publish_date'])){
+        if (empty($data['publish_date'])) {
             $data['publish_date'] = $this->date->date();
-        }else{
+        } else {
             $data['publish_date'] = $this->converToTz(
                 $data['publish_date'],
                 // get default timezone of system (UTC)
@@ -116,38 +116,38 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
             );
         }
         $data['store_ids'] = implode(',', $data['store_ids']);
-		$data['modifier_id'] = $user->getId();
+        $data['modifier_id'] = $user->getId();
         //check delete image
-		$deleteImage = false;
+        $deleteImage = false;
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $post = $this->initPost();
             $post->setData($data);
-			if (isset($data['image'])) {
-				if (isset($data['image']['delete']) && $data['image']['delete'] == '1') {
-					unset($data['image']);
-					$post->setImage('');
-					$deleteImage = true;
-				}
-			}
+            if (isset($data['image'])) {
+                if (isset($data['image']['delete']) && $data['image']['delete'] == '1') {
+                    unset($data['image']);
+                    $post->setImage('');
+                    $deleteImage = true;
+                }
+            }
 
             if ((!isset($data['image']) || (count($data['image']) == 1)) && !$deleteImage) {
-				$image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
-				if ($image === false) {
-					$this->messageManager->addError(__('Please choose an image to upload.'));
-					$resultRedirect->setPath(
-						'mageplaza_blog/*/edit',
-						[
-							'post_id'  => $post->getId(),
-							'_current' => true
-						]
-					);
+                $image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
+                if ($image === false) {
+                    $this->messageManager->addError(__('Please choose an image to upload.'));
+                    $resultRedirect->setPath(
+                        'mageplaza_blog/*/edit',
+                        [
+                            'post_id'  => $post->getId(),
+                            '_current' => true
+                        ]
+                    );
 
-					return $resultRedirect;
-				}
+                    return $resultRedirect;
+                }
 
-				$post->setImage($image);
-			}
+                $post->setImage($image);
+            }
 
             $tags = $this->getRequest()->getPost('tags', -1);
             if ($tags != -1) {
@@ -157,10 +157,10 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
             if ($topics != -1) {
                 $post->setTopicsData($this->jsHelper->decodeGridSerializedInput($topics));
             }
-			$products = $this->getRequest()->getPost('products', -1);
-			if ($products != -1) {
-				$post->setProductsData($this->jsHelper->decodeGridSerializedInput($products));
-			}
+            $products = $this->getRequest()->getPost('products', -1);
+            if ($products != -1) {
+                $post->setProductsData($this->jsHelper->decodeGridSerializedInput($products));
+            }
 //            $categoryIds = $this->getRequest()->getPost('categories_ids',-1);
 //
 
@@ -234,7 +234,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
      * @param string $toTz timezone in which we want to convert
      * @param string $fromTz timezone from which we want to convert
      */
-    protected function converToTz($dateTime="", $toTz='', $fromTz='')
+    protected function converToTz($dateTime = "", $toTz = '', $fromTz = '')
     {
         // timezone by php friendly values
         $date = new \DateTime($dateTime, new \DateTimeZone($fromTz));

@@ -109,41 +109,41 @@ class Post extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Topic\Collection
      */
-	public $topicCollection;
+    public $topicCollection;
 
     /**
      * Blog Category Collection
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\Collection
      */
-	public $categoryCollection;
+    public $categoryCollection;
 
     /**
      * Tag Collection Factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory
      */
-	public $tagCollectionFactory;
+    public $tagCollectionFactory;
 
     /**
      * Topic Collection Factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory
      */
-	public $topicCollectionFactory;
+    public $topicCollectionFactory;
 
     /**
      * Blog Category Collection Factory
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
-	public $categoryCollectionFactory;
+    public $categoryCollectionFactory;
 
     /**
      * Post Collection Factory
      * @type \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
-	public $postCollectionFactory;
+    public $postCollectionFactory;
 
 
     /**
@@ -151,7 +151,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-	public $relatedPostCollection;
+    public $relatedPostCollection;
 
     /**
      * Previous Post Collection
@@ -167,10 +167,10 @@ class Post extends \Magento\Framework\Model\AbstractModel
      */
     public $nextPostCollection;
 
-	public $dateTime;
-	public $helperData;
-	public $productCollectionFactory;
-	public $productCollection;
+    public $dateTime;
+    public $helperData;
+    public $productCollectionFactory;
+    public $productCollection;
     /**
      * constructor
      *
@@ -188,11 +188,11 @@ class Post extends \Magento\Framework\Model\AbstractModel
         \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory $topicCollectionFactory,
         \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
-		\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-		\Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-		\Mageplaza\Blog\Helper\Data $helperData,
+        \Mageplaza\Blog\Helper\Data $helperData,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -201,8 +201,8 @@ class Post extends \Magento\Framework\Model\AbstractModel
         $this->topicCollectionFactory    = $topicCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->postCollectionFactory     = $postCollectionFactory;
-		$this->productCollectionFactory = $productCollectionFactory;
-		$this->helperData = $helperData;
+        $this->productCollectionFactory = $productCollectionFactory;
+        $this->helperData = $helperData;
         $this->dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -270,7 +270,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
             $collection->getSelect()->join(
                 $this->getResource()->getTable('mageplaza_blog_post_tag'),
                 'main_table.tag_id='.$this->getResource()->getTable('mageplaza_blog_post_tag').'.tag_id AND '.$this->getResource()->getTable('mageplaza_blog_post_tag').'.post_id='
-				. $this->getId(),
+                . $this->getId(),
                 ['position']
             )->where("main_table.enabled='1'");
             $this->tagCollection = $collection;
@@ -306,7 +306,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
             $collection->join(
                 $this->getResource()->getTable('mageplaza_blog_post_topic'),
                 'main_table.topic_id='.$this->getResource()->getTable('mageplaza_blog_post_topic').'.topic_id AND '.$this->getResource()->getTable('mageplaza_blog_post_topic').'.post_id='
-				. $this->getId(),
+                . $this->getId(),
                 ['position']
             );
             $this->topicCollection = $collection;
@@ -402,7 +402,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
             $collection->getSelect()->join(
                 $this->getResource()->getTable('mageplaza_blog_post_topic'),
                 'main_table.post_id='.$this->getResource()->getTable('mageplaza_blog_post_topic').'.post_id AND '.$this->getResource()->getTable('mageplaza_blog_post_topic').'.post_id != "'
-				. $this->getId() . '" AND '.$this->getResource()->getTable('mageplaza_blog_post_topic').'.topic_id IN (' . $this->getTopicSting() . ')',
+                . $this->getId() . '" AND '.$this->getResource()->getTable('mageplaza_blog_post_topic').'.topic_id IN (' . $this->getTopicSting() . ')',
                 ['position']
             )->group('main_table.post_id');
             $this->relatedPostCollection = $collection;
@@ -410,34 +410,34 @@ class Post extends \Magento\Framework\Model\AbstractModel
         return $this->relatedPostCollection;
     }
 
-	public function getSelectedProductsCollection()
-	{
-		if ($this->productCollectionFactory === null) {
-			$collection = $this->productCollectionFactory->create();
-			$collection->getSelect()->join(
+    public function getSelectedProductsCollection()
+    {
+        if ($this->productCollectionFactory === null) {
+            $collection = $this->productCollectionFactory->create();
+            $collection->getSelect()->join(
                 $this->getResource()->getTable('mageplaza_blog_post_product'),
-				'main_table.entity_id='.$this->getResource()->getTable('mageplaza_blog_post_product').'.entity_id AND '.$this->getResource()->getTable('mageplaza_blog_post_product').'.post_id='
-				. $this->getId(),
-				['position']
-			)->where("main_table.enabled='1'");
-			$this->productCollection = $collection;
-		}
+                'main_table.entity_id='.$this->getResource()->getTable('mageplaza_blog_post_product').'.entity_id AND '.$this->getResource()->getTable('mageplaza_blog_post_product').'.post_id='
+                . $this->getId(),
+                ['position']
+            )->where("main_table.enabled='1'");
+            $this->productCollection = $collection;
+        }
 
-		return $this->productCollection;
-	}
-	public function getProductsPosition()
-	{
-		if (!$this->getId()) {
-			return [];
-		}
-		$array = $this->getData('products_position');
-		if ($array === null) {
-			$array = $this->getResource()->getProductsPosition($this);
-			$this->setData('products_position', $array);
-		}
+        return $this->productCollection;
+    }
+    public function getProductsPosition()
+    {
+        if (!$this->getId()) {
+            return [];
+        }
+        $array = $this->getData('products_position');
+        if ($array === null) {
+            $array = $this->getResource()->getProductsPosition($this);
+            $this->setData('products_position', $array);
+        }
 
-		return $array;
-	}
+        return $array;
+    }
 
     /**
      * get previous post
@@ -447,7 +447,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
     {
         if ($this->prevPostCollection === null) {
             $collection = $this->postCollectionFactory->create();
-            $collection->addFieldToFilter('post_id', array('lt' => $this->getId()))->setOrder('post_id', 'DESC')->setPageSize(1)->setCurPage(1);
+            $collection->addFieldToFilter('post_id', ['lt' => $this->getId()])->setOrder('post_id', 'DESC')->setPageSize(1)->setCurPage(1);
             $this->prevPostCollection = $collection;
         }
         return $this->prevPostCollection;
@@ -461,7 +461,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
     {
         if ($this->nextPostCollection === null) {
             $collection = $this->postCollectionFactory->create();
-            $collection->addFieldToFilter('post_id', array('gt' => $this->getId()))->setOrder('post_id', 'ASC')->setPageSize(1)->setCurPage(1);
+            $collection->addFieldToFilter('post_id', ['gt' => $this->getId()])->setOrder('post_id', 'ASC')->setPageSize(1)->setCurPage(1);
             $this->nextPostCollection = $collection;
         }
         return $this->nextPostCollection;

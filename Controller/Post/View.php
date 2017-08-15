@@ -33,32 +33,32 @@ use Magento\Framework\Controller\Result\ForwardFactory;
 
 class View extends Action
 {
-	const COMMENT = 1;
-	const LIKE = 2;
+    const COMMENT = 1;
+    const LIKE = 2;
 
-	public $trafficFactory;
-	public $resultPageFactory;
-	public $helperBlog;
-	public $accountManagement;
-	public $customerUrl;
-	public $session;
-	public $storeManager;
-	public $jsonHelper;
-	public $cmtFactory;
-	public $likeFactory;
-	public $dateTime;
-	/**
-	 * @type \Magento\Framework\Controller\Result\ForwardFactory
-	 */
-	protected $resultForwardFactory;
+    public $trafficFactory;
+    public $resultPageFactory;
+    public $helperBlog;
+    public $accountManagement;
+    public $customerUrl;
+    public $session;
+    public $storeManager;
+    public $jsonHelper;
+    public $cmtFactory;
+    public $likeFactory;
+    public $dateTime;
+    /**
+     * @type \Magento\Framework\Controller\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
 
     public function __construct(
-		\Magento\Framework\Json\Helper\Data $jsonHelper,
-		\Mageplaza\Blog\Model\CommentFactory $commentFactory,
-		\Mageplaza\Blog\Model\LikeFactory $likeFactory,
-		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        \Mageplaza\Blog\Model\CommentFactory $commentFactory,
+        \Mageplaza\Blog\Model\LikeFactory $likeFactory,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         Context $context,
-		ForwardFactory $resultForwardFactory,
+        ForwardFactory $resultForwardFactory,
         StoreManagerInterface $storeManager,
         HelperBlog $helperBlog,
         PageFactory $resultPageFactory,
@@ -76,7 +76,7 @@ class View extends Action
         $this->customerUrl       = $customerUrl;
         $this->session           = $customerSession;
         $this->trafficFactory    = $trafficFactory;
-		$this->resultForwardFactory = $resultForwardFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
         $this->jsonHelper = $jsonHelper;
         $this->cmtFactory = $commentFactory;
         $this->likeFactory = $likeFactory;
@@ -92,125 +92,124 @@ class View extends Action
                 $trafficModel->setNumbersView($trafficModel->getNumbersView()+1);
                 $trafficModel->save();
             } else {
-            	$traffic = $this->trafficFactory->create();
-				$traffic->addData(['post_id' => $id, 'numbers_view' => 1])->save();
-			}
+                $traffic = $this->trafficFactory->create();
+                $traffic->addData(['post_id' => $id, 'numbers_view' => 1])->save();
+            }
         }
 
         if ($this->getRequest()->isAjax() && $this->helperBlog->isLoggedIn()) {
-        	$params = $this->getRequest()->getParams();
-			$customerData = $this->helperBlog->getCustomerData();
-			$result = [];
+            $params = $this->getRequest()->getParams();
+            $customerData = $this->helperBlog->getCustomerData();
+            $result = [];
 
-        	if (isset($params['cmt_text'])) {
-				$cmtText = $params['cmt_text'];
-				$isReply = isset($params['isReply']) ? $params['isReply'] : 0;
-				$replyId = isset($params['replyId']) ? $params['replyId'] : 0;
-				$commentData = [
-					'post_id'	=> $id, '',
-					'entity_id'	=> $customerData->getId(),
-					'is_reply'	=> $isReply,
-					'reply_id'	=> $replyId,
-					'content'	=> $cmtText,
-					'created_at'=> $this->dateTime->date('M d Y') .' at '. $this->dateTime->date('H:i')
-				];
+            if (isset($params['cmt_text'])) {
+                $cmtText = $params['cmt_text'];
+                $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
+                $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
+                $commentData = [
+                    'post_id'   => $id, '',
+                    'entity_id'     => $customerData->getId(),
+                    'is_reply'  => $isReply,
+                    'reply_id'  => $replyId,
+                    'content'   => $cmtText,
+                    'created_at'=> $this->dateTime->date('M d Y') .' at '. $this->dateTime->date('H:i')
+                ];
 
-				$commentModel = $this->cmtFactory->create();
-				$result = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
-			}
+                $commentModel = $this->cmtFactory->create();
+                $result = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
+            }
 
-			if (isset($params['cmtId'])) {
-        		$cmtId = $params['cmtId'];
-        		$likeData = [
-        			'comment_id'	=> $cmtId,
-					'entity_id'		=> $customerData->getId()
-				];
+            if (isset($params['cmtId'])) {
+                $cmtId = $params['cmtId'];
+                $likeData = [
+                    'comment_id'    => $cmtId,
+                    'entity_id'         => $customerData->getId()
+                ];
 
-        		$likeModel = $this->likeFactory->create();
-        		$result = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
-			}
+                $likeModel = $this->likeFactory->create();
+                $result = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
+            }
 
-			return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
-		}
+            return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
+        }
 
-			return ($id) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
-
+            return ($id) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
     }
 
     /**
-	 * like comment action
-	 */
+     * like comment action
+     */
     public function commentActions($action, $user, $data, $model, $cmtId = null)
-	{
-		try {
-			switch ($action) {
-				//comment action
-				case self::COMMENT:
-					$model->addData($data)->save();
-					$cmtHasReply = $model->getCollection()
-						->addFieldToFilter('comment_id', $data['reply_id'])
-						->getFirstItem();
-					if ($cmtHasReply->getId()) {
-						$cmtHasReply->setHasReply(1)->save();
-					}
+    {
+        try {
+            switch ($action) {
+                //comment action
+                case self::COMMENT:
+                    $model->addData($data)->save();
+                    $cmtHasReply = $model->getCollection()
+                        ->addFieldToFilter('comment_id', $data['reply_id'])
+                        ->getFirstItem();
+                    if ($cmtHasReply->getId()) {
+                        $cmtHasReply->setHasReply(1)->save();
+                    }
 
-					$lastCmt = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
-					$lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
-					$result = [
-						'cmt_id'	=> $lastCmtId,
-						'cmt_text' 	=> $data['content'],
-						'user_cmt'	=> $user->getFirstname() .' '. $user->getLastname(),
-						'is_reply'	=> $data['is_reply'],
-						'reply_cmt'	=> $data['reply_id'],
-						'created_at'=> __('Just now'),
-						'status' 	=> 'ok'
-					];
-					break;
-				//like action
-				case self::LIKE:
-					$checkLike = $this->isLikedComment($cmtId, $user->getId(), $model);
-					if (!$checkLike) {
-						$model->addData($data)->save();
-					}
-					$likes      = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
-					$countLikes = $likes->getSize();
-					$result     = [
-						'comment_id' => $cmtId,
-						'count_like' => $countLikes,
-						'status'     => 'ok'
-					];
-					break;
-				default:
-					$result = ['status' => 'error', 'error' => __('Action not found.')];
-					break;
-			}
-		} catch (\Exception $e) {
-			$result = ['status' => 'error', 'error' => $e->getMessage()];
-		}
+                    $lastCmt = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
+                    $lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
+                    $result = [
+                        'cmt_id'    => $lastCmtId,
+                        'cmt_text'  => $data['content'],
+                        'user_cmt'  => $user->getFirstname() .' '. $user->getLastname(),
+                        'is_reply'  => $data['is_reply'],
+                        'reply_cmt'     => $data['reply_id'],
+                        'created_at'=> __('Just now'),
+                        'status'    => 'ok'
+                    ];
+                    break;
+                //like action
+                case self::LIKE:
+                    $checkLike = $this->isLikedComment($cmtId, $user->getId(), $model);
+                    if (!$checkLike) {
+                        $model->addData($data)->save();
+                    }
+                    $likes      = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
+                    $countLikes = $likes->getSize();
+                    $result     = [
+                        'comment_id' => $cmtId,
+                        'count_like' => $countLikes,
+                        'status'     => 'ok'
+                    ];
+                    break;
+                default:
+                    $result = ['status' => 'error', 'error' => __('Action not found.')];
+                    break;
+            }
+        } catch (\Exception $e) {
+            $result = ['status' => 'error', 'error' => $e->getMessage()];
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * check if user liked a comment
-	 * @param $cmtId
-	 * @param $userId
-	 * @param $model
-	 */
-	public function isLikedComment($cmtId, $userId, $model)
-	{
-		$liked = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
-		foreach ($liked as $item) {
-		    if ($item->getEntityId() == $userId) {
-			try {
-			    $item->delete();
-			    return true;
-			} catch (\Exception $e) {
-			    return false;
-			}
-		    }
-		}
+    /**
+     * check if user liked a comment
+     * @param $cmtId
+     * @param $userId
+     * @param $model
+     */
+    public function isLikedComment($cmtId, $userId, $model)
+    {
+        $liked = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
+        foreach ($liked as $item) {
+            if ($item->getEntityId() == $userId) {
+                try {
+                    $item->delete();
+                    return true;
+                } catch (\Exception $e) {
+                    return false;
+                }
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

@@ -27,14 +27,14 @@ class SuggestCategories extends \Mageplaza\Blog\Controller\Adminhtml\Category
      *
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-	public $resultJsonFactory;
+    public $resultJsonFactory;
 
     /**
      * Layout factory
      *
      * @var \Magento\Framework\View\LayoutFactory
      */
-	public $layoutFactory;
+    public $layoutFactory;
 
     /**
      * constructor

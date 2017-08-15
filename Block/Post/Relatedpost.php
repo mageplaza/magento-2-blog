@@ -21,18 +21,20 @@
 namespace Mageplaza\Blog\Block\Post;
 
 use Mageplaza\Blog\Block\Frontend;
+
 //use Magento\Framework\DataObject\IdentityInterface;
 
 class Relatedpost extends Frontend
 {
-	public function _construct() {
+    public function _construct()
+    {
 
-		$this->setTabTitle();
-	}
-	public function getCurrentProduct()
-	{
-		return $this->getRequest()->getParam('id');
-	}
+        $this->setTabTitle();
+    }
+    public function getCurrentProduct()
+    {
+        return $this->getRequest()->getParam('id');
+    }
 
 	public function getRelatedPostList($id)
 	{
@@ -53,4 +55,5 @@ class Relatedpost extends Frontend
 		$title = ($this->getLimitPosts()>$countPost) ?  __('Related Posts ('.$countPost.')') : __('Related Posts ('.$this->getLimitPosts().')');
 		$this->setTitle($title);
 	}
+
 }

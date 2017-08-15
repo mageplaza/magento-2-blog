@@ -22,7 +22,8 @@ namespace Mageplaza\Blog\Block\Adminhtml\Topic;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
-	public function getTopicGrid(){
-		return null;
-	}
+    public function getTopicGrid()
+    {
+        return null;
+    }
 }

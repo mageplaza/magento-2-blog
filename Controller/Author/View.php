@@ -32,40 +32,40 @@ use Magento\Framework\Controller\Result\ForwardFactory;
 
 class View extends Action
 {
-	public $resultPageFactory;
-	public $helperBlog;
-	public $accountManagement;
-	public $customerUrl;
-	public $session;
-	public $storeManager;
-	/**
-	 * @type \Magento\Framework\Controller\Result\ForwardFactory
-	 */
-	protected $resultForwardFactory;
+    public $resultPageFactory;
+    public $helperBlog;
+    public $accountManagement;
+    public $customerUrl;
+    public $session;
+    public $storeManager;
+    /**
+     * @type \Magento\Framework\Controller\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
 
-	public function __construct(
-		Context $context,
-		StoreManagerInterface $storeManager,
-		HelperBlog $helperBlog,
-		PageFactory $resultPageFactory,
-		AccountManagementInterface $accountManagement,
-		ForwardFactory $resultForwardFactory,
-		CustomerUrl $customerUrl,
-		Session $customerSession
-	) {
-		parent::__construct($context);
-		$this->storeManager      = $storeManager;
-		$this->helperBlog      = $helperBlog;
-		$this->resultPageFactory = $resultPageFactory;
-		$this->accountManagement = $accountManagement;
-		$this->customerUrl       = $customerUrl;
-		$this->session           = $customerSession;
-		$this->resultForwardFactory = $resultForwardFactory;
-	}
+    public function __construct(
+        Context $context,
+        StoreManagerInterface $storeManager,
+        HelperBlog $helperBlog,
+        PageFactory $resultPageFactory,
+        AccountManagementInterface $accountManagement,
+        ForwardFactory $resultForwardFactory,
+        CustomerUrl $customerUrl,
+        Session $customerSession
+    ) {
+        parent::__construct($context);
+        $this->storeManager      = $storeManager;
+        $this->helperBlog      = $helperBlog;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->accountManagement = $accountManagement;
+        $this->customerUrl       = $customerUrl;
+        $this->session           = $customerSession;
+        $this->resultForwardFactory = $resultForwardFactory;
+    }
 
-	public function execute()
-	{
-		$id = $this->getRequest()->getParam('id');
-		return ($id) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
-	}
+    public function execute()
+    {
+        $id = $this->getRequest()->getParam('id');
+        return ($id) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
+    }
 }

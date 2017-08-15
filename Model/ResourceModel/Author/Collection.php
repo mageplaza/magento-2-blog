@@ -12,9 +12,9 @@ use \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 class Collection extends AbstractCollection
 {
-	protected $_idFieldName = 'user_id';
-	protected function _construct()
-	{
-		$this->_init('Mageplaza\Blog\Model\Author','Mageplaza\Blog\Model\ResourceModel\Author');
-	}
+    protected $_idFieldName = 'user_id';
+    protected function _construct()
+    {
+        $this->_init('Mageplaza\Blog\Model\Author', 'Mageplaza\Blog\Model\ResourceModel\Author');
+    }
 }

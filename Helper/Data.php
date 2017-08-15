@@ -35,8 +35,8 @@ class Data extends CoreHelper
     const XML_PATH_BLOG = 'blog/';
     const POST_IMG = 'mageplaza/blog/post/image';
     const AUTHOR_IMG = 'mageplaza/blog/author/image';
-	const DEFAULT_URL_PREFIX = 'blog';
-	const CATEGORY = 'category';
+    const DEFAULT_URL_PREFIX = 'blog';
+    const CATEGORY = 'category';
     const TAG = 'tag';
     const TOPIC = 'topic';
     const AUTHOR = 'author';
@@ -44,45 +44,45 @@ class Data extends CoreHelper
 
     public $postCollectionFactory;
     public $postfactory;
-	public $categoryfactory;
-	public $tagfactory;
-	public $topicfactory;
-	public $store;
-	public $modelTraffic;
-	public $authorfactory;
-	public $customerSession;
-	public $loginUrl;
-	public $translitUrl;
-	public $dateTime;
-	public $dateTimeFormat;
+    public $categoryfactory;
+    public $tagfactory;
+    public $topicfactory;
+    public $store;
+    public $modelTraffic;
+    public $authorfactory;
+    public $customerSession;
+    public $loginUrl;
+    public $translitUrl;
+    public $dateTime;
+    public $dateTimeFormat;
 
-	public function __construct(
-		\Magento\Customer\Model\Session $session,
-		\Magento\Customer\Model\Url $url,
-		Context $context,
+    public function __construct(
+        \Magento\Customer\Model\Session $session,
+        \Magento\Customer\Model\Url $url,
+        Context $context,
         ObjectManagerInterface $objectManager,
         PostFactory $postFactory,
         CategoryFactory $categoryFactory,
         TagFactory $tagFactory,
         TopicFactory $topicFactory,
-		AuthorFactory $authorFactory,
+        AuthorFactory $authorFactory,
         TemplateContext $templateContext,
-		\Magento\Framework\Filter\TranslitUrl $translitUrl,
-		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-		\Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
-		\Mageplaza\Blog\Model\Traffic $traffic
+        \Magento\Framework\Filter\TranslitUrl $translitUrl,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+        \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
+        \Mageplaza\Blog\Model\Traffic $traffic
     ) {
-    	$this->customerSession = $session;
-		$this->loginUrl = $url;
-		$this->postfactory     = $postFactory;
+        $this->customerSession = $session;
+        $this->loginUrl = $url;
+        $this->postfactory     = $postFactory;
         $this->categoryfactory = $categoryFactory;
         $this->tagfactory      = $tagFactory;
         $this->topicfactory    = $topicFactory;
-		$this->authorfactory    = $authorFactory;
+        $this->authorfactory    = $authorFactory;
         $this->store = $templateContext->getStoreManager();
         $this->modelTraffic = $traffic;
         $this->translitUrl = $translitUrl;
-		$this->dateTime   = $dateTime;
+        $this->dateTime   = $dateTime;
         $this->dateTimeFormat = $templateContext->getLocaleDate();
         $this->postCollectionFactory = $postCollectionFactory;
         parent::__construct($context, $objectManager, $templateContext->getStoreManager());
@@ -106,42 +106,42 @@ class Data extends CoreHelper
         return $this->getConfigValue(self::XML_PATH_BLOG . $code, $storeId);
     }
 
-	/**
-	 * get sidebar config
-	 */
-	public function getSidebarConfig($code, $storeId = null)
-	{
-		return $this->getBlogConfig('sidebar/'.$code, $storeId);
-	}
+    /**
+     * get sidebar config
+     */
+    public function getSidebarConfig($code, $storeId = null)
+    {
+        return $this->getBlogConfig('sidebar/'.$code, $storeId);
+    }
 
-	/**
-	 * @param $code, $storeId = null
-	 * @return mixed
-	 */
-	public function getSeoConfig($code, $storeId = null)
-	{
-		return $this->getBlogConfig('seo/'.$code, $storeId);
-	}
+    /**
+     * @param $code, $storeId = null
+     * @return mixed
+     */
+    public function getSeoConfig($code, $storeId = null)
+    {
+        return $this->getBlogConfig('seo/'.$code, $storeId);
+    }
 
-	/**
-	 * get post list by month
-	 * @param null $type
-	 * @return mixed
-	 */
-	public function getSelectedPostByMonth($type = null)
-	{
-		$month = $this->_getRequest()->getParam('month');
-		return $list = ($month) ? $type->getSelectedPostsCollection()
-			->addFieldToFilter('created_at',['like'=>$month . '%'])
-			: $type->getSelectedPostsCollection();
-	}
+    /**
+     * get post list by month
+     * @param null $type
+     * @return mixed
+     */
+    public function getSelectedPostByMonth($type = null)
+    {
+        $month = $this->_getRequest()->getParam('month');
+        return $list = ($month) ? $type->getSelectedPostsCollection()
+            ->addFieldToFilter('created_at', ['like'=>$month . '%'])
+            : $type->getSelectedPostsCollection();
+    }
 
-	/**
-	 * get post list
-	 * @param null $type
-	 * @param null $id
-	 * @return array|string
-	 */
+    /**
+     * get post list
+     * @param null $type
+     * @param null $id
+     * @return array|string
+     */
     public function getPostList($type = null, $id = null)
     {
         $list          = '';
@@ -150,37 +150,37 @@ class Data extends CoreHelper
         $tagModel      = $this->tagfactory->create();
         $topicModel    = $this->topicfactory->create();
         if ($type == null) {
-			$list = $posts->getCollection();
+            $list = $posts->getCollection();
         } elseif ($type == self::CATEGORY) {
             $category = $categoryModel->load($id);
-			$list     = $category->getSelectedPostsCollection();
+            $list     = $category->getSelectedPostsCollection();
         } elseif ($type == self::TAG) {
             $tag  = $tagModel->load($id);
-			$list = $tag->getSelectedPostsCollection();
+            $list = $tag->getSelectedPostsCollection();
         } elseif ($type == self::TOPIC) {
             $topic = $topicModel->load($id);
-			$list  = $topic->getSelectedPostsCollection();
+            $list  = $topic->getSelectedPostsCollection();
         } elseif ($type == self::AUTHOR) {
-			$list = $posts->getCollection()->addFieldToFilter('author_id',$id);
-		} elseif ($type == self::MONTHLY) {
-			$list = $posts->getCollection()->addFieldToFilter('created_at',['like'=>$id . '%']);
-		}
+            $list = $posts->getCollection()->addFieldToFilter('author_id', $id);
+        } elseif ($type == self::MONTHLY) {
+            $list = $posts->getCollection()->addFieldToFilter('created_at', ['like'=>$id . '%']);
+        }
 
         if ($list->getSize()) {
             $list->setOrder('publish_date', 'desc')
-                ->addFieldToFilter('publish_date',["lt" => $this->dateTime->date()]);
-            $list->addFieldToFilter('enabled',1);
-			$results = $this->filterItems($list);
+                ->addFieldToFilter('publish_date', ["lt" => $this->dateTime->date()]);
+            $list->addFieldToFilter('enabled', 1);
+            $results = $this->filterItems($list);
             return $results ? $results : '';
         }
 
         return '';
     }
 
-	/**
-	 * get category list
-	 * @return array|string
-	 */
+    /**
+     * get category list
+     * @return array|string
+     */
     public function getCategoryList()
     {
         $category = $this->categoryfactory->create();
@@ -192,10 +192,10 @@ class Data extends CoreHelper
         return $result;
     }
 
-	/**
-	 * get tag list
-	 * @return array|string
-	 */
+    /**
+     * get tag list
+     * @return array|string
+     */
     public function getTagList()
     {
         $tag  = $this->tagfactory->create();
@@ -208,27 +208,27 @@ class Data extends CoreHelper
         return $result;
     }
 
-	/**
-	 * get topic list
-	 * @return array|string
-	 */
-	public function getTopicList()
-	{
-		$topic  = $this->topicfactory->create();
-		$list = $topic->getCollection()
-			->addFieldToFilter('enabled', 1);
-		$result = $this->filterItems($list);
-		if ($result == '') {
-			return '';
-		}
-		return $result;
-	}
+    /**
+     * get topic list
+     * @return array|string
+     */
+    public function getTopicList()
+    {
+        $topic  = $this->topicfactory->create();
+        $list = $topic->getCollection()
+            ->addFieldToFilter('enabled', 1);
+        $result = $this->filterItems($list);
+        if ($result == '') {
+            return '';
+        }
+        return $result;
+    }
 
-	/**
-	 * get category collection
-	 * @param $array
-	 * @return array|string
-	 */
+    /**
+     * get category collection
+     * @param $array
+     * @return array|string
+     */
     public function getCategoryCollection($array)
     {
         $category = $this->categoryfactory->create();
@@ -242,15 +242,15 @@ class Data extends CoreHelper
         return $result;
     }
 
-	/**
-	 * get url by post
-	 * @param $post
-	 * @return string
-	 */
+    /**
+     * get url by post
+     * @param $post
+     * @return string
+     */
     public function getUrlByPost($post)
     {
-		$urlKey = '';
-		if ($post->getUrlKey()) {
+        $urlKey = '';
+        if ($post->getUrlKey()) {
             $url_prefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
             $url_suffix = $this->getBlogConfig('general/url_suffix');
 
@@ -266,34 +266,34 @@ class Data extends CoreHelper
         return $this->_getUrl($urlKey);
     }
 
-	/**
-	 * get author by post'authorId
-	 * @param $authorId
-	 * @return \Mageplaza\Blog\Model\Author | null
-	 */
-	public function getAuthorByPost($authorId)
-	{
-		$author = $this->authorfactory->create();
-		$list = $author->load($authorId);
-		return $list;
-	}
+    /**
+     * get author by post'authorId
+     * @param $authorId
+     * @return \Mageplaza\Blog\Model\Author | null
+     */
+    public function getAuthorByPost($authorId)
+    {
+        $author = $this->authorfactory->create();
+        $list = $author->load($authorId);
+        return $list;
+    }
 
-	/**
-	 * get blog url
-	 * @param $code
-	 * @return string
-	 */
+    /**
+     * get blog url
+     * @param $code
+     * @return string
+     */
     public function getBlogUrl($code)
     {
-    	$blogUrl = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
+        $blogUrl = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
         return $this->_getUrl($blogUrl . '/' . $code);
     }
 
-	/**
-	 * get post by url
-	 * @param $url
-	 * @return \Mageplaza\Blog\Model\Post | null
-	 */
+    /**
+     * get post by url
+     * @param $url
+     * @return \Mageplaza\Blog\Model\Post | null
+     */
     public function getPostByUrl($url)
     {
         $url   = $this->checkSuffix($url);
@@ -301,10 +301,10 @@ class Data extends CoreHelper
         return $posts;
     }
 
-	/**
-	 * @param $url
-	 * @return mixed
-	 */
+    /**
+     * @param $url
+     * @return mixed
+     */
     public function checkSuffix($url)
     {
         $url_suffix = $this->getBlogConfig('general/url_suffix');
@@ -315,85 +315,85 @@ class Data extends CoreHelper
         return $url;
     }
 
-	/**
-	 * get image url by image file name
-	 * @param $image
-	 * @return string
-	 */
+    /**
+     * get image url by image file name
+     * @param $image
+     * @return string
+     */
     public function getImageUrl($image)
     {
         return $this->getBaseMediaUrl(). self::POST_IMG . $image;
     }
 
-	/**
-	 * get media url
-	 * @return mixed
-	 */
+    /**
+     * get media url
+     * @return mixed
+     */
     public function getBaseMediaUrl()
     {
         return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
     }
 
-	/**
-	 * get category url
-	 * @param $category
-	 * @return string
-	 */
+    /**
+     * get category url
+     * @param $category
+     * @return string
+     */
     public function getCategoryUrl($category)
     {
-    	$urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
+        $urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
         return $this->_getUrl($urlPrefix .'/'. self::CATEGORY .'/'. $category->getUrlKey());
     }
 
-	/**
-	 * get tag url
-	 * @param $tag
-	 * @return string
-	 */
+    /**
+     * get tag url
+     * @param $tag
+     * @return string
+     */
     public function getTagUrl($tag)
     {
-		$urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
+        $urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
         return $this->_getUrl($urlPrefix .'/'. self::TAG .'/'. $tag->getUrlKey());
     }
 
-	/**
-	 * get author url
-	 * @param $author
-	 * @return string
-	 */
-	public function getAuthorUrl($author)
-	{
-		$urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
-		return $this->_getUrl($urlPrefix .'/'. self::AUTHOR .'/'. $author->getUrlKey());
-	}
-
-	/**
-	 * get topic url
-	 * @param $topic
-	 * @return string
-	 */
-    public function getTopicUrl($topic)
+    /**
+     * get author url
+     * @param $author
+     * @return string
+     */
+    public function getAuthorUrl($author)
     {
-		$urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
-		return $this->_getUrl($urlPrefix .'/'. self::TOPIC .'/'. $topic->getUrlKey());
+        $urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
+        return $this->_getUrl($urlPrefix .'/'. self::AUTHOR .'/'. $author->getUrlKey());
     }
 
-	/**
-	 * get monthly archive url
-	 * @param $month
-	 * @return string
-	 */
-	public function getMonthlyUrl($month)
-	{
-		$urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
-		return $this->_getUrl($urlPrefix .'/'. self::MONTHLY .'/'. $month);
-	}
+    /**
+     * get topic url
+     * @param $topic
+     * @return string
+     */
+    public function getTopicUrl($topic)
+    {
+        $urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
+        return $this->_getUrl($urlPrefix .'/'. self::TOPIC .'/'. $topic->getUrlKey());
+    }
 
-	/**
-	 * get list category html of post
-	 * @param $post
-	 * @return null|string
-	 */
+    /**
+     * get monthly archive url
+     * @param $month
+     * @return string
+     */
+    public function getMonthlyUrl($month)
+    {
+        $urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
+        return $this->_getUrl($urlPrefix .'/'. self::MONTHLY .'/'. $month);
+    }
+
+    /**
+     * get list category html of post
+     * @param $post
+     * @return null|string
+     */
     public function getPostCategoryHtml($post)
     {
         $categories = $this->getCategoryCollection($post->getCategoryIds());
@@ -403,7 +403,7 @@ class Data extends CoreHelper
         } else {
             foreach ($categories as $_cat) {
                 $categoryHtml[] = '<a class="mp-info" href="' . $this->getCategoryUrl($_cat) . '">' . $_cat->getName()
-					. '</a>';
+                    . '</a>';
             }
         }
         $result = implode(', ', $categoryHtml);
@@ -411,23 +411,23 @@ class Data extends CoreHelper
         return $result;
     }
 
-	/**
-	 * get post by id
-	 * @param $id
-	 * @return \Mageplaza\Blog\Model\Post | null
-	 */
+    /**
+     * get post by id
+     * @param $id
+     * @return \Mageplaza\Blog\Model\Post | null
+     */
     public function getPost($id)
     {
         $post = $this->postfactory->create()->load($id);
         return $post;
     }
 
-	/**
-	 * get category by param
-	 * @param $code
-	 * @param $param
-	 * @return \Mageplaza\Blog\Model\Category | null
-	 */
+    /**
+     * get category by param
+     * @param $code
+     * @param $param
+     * @return \Mageplaza\Blog\Model\Category | null
+     */
     public function getCategoryByParam($code, $param)
     {
         if ($code == 'id') {
@@ -437,12 +437,12 @@ class Data extends CoreHelper
         }
     }
 
-	/**
-	 * get tag by param
-	 * @param $code
-	 * @param $param
-	 * @return \Mageplaza\Blog\Model\Tag | null
-	 */
+    /**
+     * get tag by param
+     * @param $code
+     * @param $param
+     * @return \Mageplaza\Blog\Model\Tag | null
+     */
     public function getTagByParam($code, $param)
     {
         if ($code == 'id') {
@@ -452,27 +452,27 @@ class Data extends CoreHelper
         }
     }
 
-	/**
-	 * get author by param
-	 * @param $code
-	 * @param $param
-	 * @return \Mageplaza\Blog\Model\Author | null
-	 */
-	public function getAuthorByParam($code, $param)
-	{
-		if ($code == 'id') {
-			return $this->authorfactory->create()->load($param);
-		} else {
-			return $this->authorfactory->create()->load($param, $code);
-		}
-	}
+    /**
+     * get author by param
+     * @param $code
+     * @param $param
+     * @return \Mageplaza\Blog\Model\Author | null
+     */
+    public function getAuthorByParam($code, $param)
+    {
+        if ($code == 'id') {
+            return $this->authorfactory->create()->load($param);
+        } else {
+            return $this->authorfactory->create()->load($param, $code);
+        }
+    }
 
-	/**
-	 * get topic by param
-	 * @param $code
-	 * @param $param
-	 * @return \Mageplaza\Blog\Model\Topic | null
-	 */
+    /**
+     * get topic by param
+     * @param $code
+     * @param $param
+     * @return \Mageplaza\Blog\Model\Topic | null
+     */
     public function getTopicByParam($code, $param)
     {
         if ($code == 'id') {
@@ -482,10 +482,10 @@ class Data extends CoreHelper
         }
     }
 
-	/**
-	 * get most view post
-	 * @return array|string
-	 */
+    /**
+     * get most view post
+     * @return array|string
+     */
     public function getMosviewPosts()
     {
         $posts = $this->modelTraffic->getCollection()->addFieldToFilter('enabled', 1);
@@ -505,7 +505,7 @@ class Data extends CoreHelper
 
     /**
      * get recent post
-	 * @return array|string
+     * @return array|string
      */
     public function getRecentPost()
     {
@@ -522,324 +522,326 @@ class Data extends CoreHelper
         return $postList;
     }
 
-	/**
-	 * filter items by store
-	 * @param $items
-	 * @param null $limit
-	 * @return array|string
-	 */
+    /**
+     * filter items by store
+     * @param $items
+     * @param null $limit
+     * @return array|string
+     */
     public function filterItems($items, $limit = null)
     {
         $storeId = $this->store->getStore()->getId();
         $count = 0;
-        $results = array();
+        $results = [];
         foreach ($items as $item) {
-        	$itemStoreIds = $item->getStoreIds();
-			$itemStore = $itemStoreIds !== null ? explode(',', $itemStoreIds) : '';
-			if (is_array($itemStore) && (in_array($storeId, $itemStore) || in_array('0', $itemStore))) {
-				if ($limit && $count >= $limit) {
-					break;
-				}
-				$count++;
-				array_push($results, $item);
-			}
+            $itemStoreIds = $item->getStoreIds();
+            $itemStore = $itemStoreIds !== null ? explode(',', $itemStoreIds) : '';
+            if (is_array($itemStore) && (in_array($storeId, $itemStore) || in_array('0', $itemStore))) {
+                if ($limit && $count >= $limit) {
+                    break;
+                }
+                $count++;
+                array_push($results, $item);
+            }
         }
 
         if ($count == 0) {
             return '';
         }
-		return $results;
+        return $results;
     }
 
-	/**
-	 * check customer is logged in or not
-	 * @return bool
-	 */
-	public function isLoggedIn()
-	{
-		return $this->customerSession->isLoggedIn();
-	}
+    /**
+     * check customer is logged in or not
+     * @return bool
+     */
+    public function isLoggedIn()
+    {
+        return $this->customerSession->isLoggedIn();
+    }
 
-	/**
-	 * get login url
-	 * @return string
-	 */
-	public function getLoginUrl()
-	{
-		return $this->loginUrl->getLoginUrl();
-	}
+    /**
+     * get login url
+     * @return string
+     */
+    public function getLoginUrl()
+    {
+        return $this->loginUrl->getLoginUrl();
+    }
 
-	/**
-	 * get customer data
-	 * @return \Magento\Customer\Api\Data\CustomerInterface
-	 */
-	public function getCustomerData()
-	{
-		return $this->customerSession->getCustomerData();
-  	}
+    /**
+     * get customer data
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     */
+    public function getCustomerData()
+    {
+        return $this->customerSession->getCustomerData();
+    }
 
-	/**
-	 * generate url_key for post, tag, topic, category, author
-	 * @param $name
-	 * @param $count
-	 * @return string
-	 */
-	public function generateUrlKey($name, $count)
-	{
-		$name = $this->strReplace($name);
-		$text = $this->translitUrl->filter($name);
-		if ($count == 0) {
-			$count = '';
-		}
-		if (empty($text)) {
-			return 'n-a' . $count;
-		}
-		return $text . $count;
-	}
+    /**
+     * generate url_key for post, tag, topic, category, author
+     * @param $name
+     * @param $count
+     * @return string
+     */
+    public function generateUrlKey($name, $count)
+    {
+        $name = $this->strReplace($name);
+        $text = $this->translitUrl->filter($name);
+        if ($count == 0) {
+            $count = '';
+        }
+        if (empty($text)) {
+            return 'n-a' . $count;
+        }
+        return $text . $count;
+    }
 
-	/**
-	 * replace vietnamese characters to english characters
-	 * @param $str
-	 * @return mixed|string
-	 */
-	public function strReplace($str){
+    /**
+     * replace vietnamese characters to english characters
+     * @param $str
+     * @return mixed|string
+     */
+    public function strReplace($str)
+    {
 
-		$str = trim(mb_strtolower($str));
-		$str = preg_replace('/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/', 'a', $str);
-		$str = preg_replace('/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/', 'e', $str);
-		$str = preg_replace('/(ì|í|ị|ỉ|ĩ)/', 'i', $str);
-		$str = preg_replace('/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/', 'o', $str);
-		$str = preg_replace('/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/', 'u', $str);
-		$str = preg_replace('/(ỳ|ý|ỵ|ỷ|ỹ)/', 'y', $str);
-		$str = preg_replace('/(đ)/', 'd', $str);
+        $str = trim(mb_strtolower($str));
+        $str = preg_replace('/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/', 'a', $str);
+        $str = preg_replace('/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/', 'e', $str);
+        $str = preg_replace('/(ì|í|ị|ỉ|ĩ)/', 'i', $str);
+        $str = preg_replace('/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/', 'o', $str);
+        $str = preg_replace('/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/', 'u', $str);
+        $str = preg_replace('/(ỳ|ý|ỵ|ỷ|ỹ)/', 'y', $str);
+        $str = preg_replace('/(đ)/', 'd', $str);
 //			$str = preg_replace('/[^a-z0-9-\s]/', '', $str);
 //			$str = preg_replace('/([\s]+)/', '-', $str);
-		return $str;
-	}
+        return $str;
+    }
 
-	/**
-	 * get posts created_at
-	 * @return array
-	 */
-	public function getPostDate()
-	{
-		$posts = $this->getPostList();
-		$postDates = array();
-		if($posts) {
-			foreach ($posts as $post) {
-				$postDates[] = $post->getCreatedAt();
-			}
-		}
-		return $postDates;
-	}
+    /**
+     * get posts created_at
+     * @return array
+     */
+    public function getPostDate()
+    {
+        $posts = $this->getPostList();
+        $postDates = [];
+        if ($posts) {
+            foreach ($posts as $post) {
+                $postDates[] = $post->getCreatedAt();
+            }
+        }
+        return $postDates;
+    }
 
-	/**
-	 * get date label
-	 * @return array
-	 */
-	public function getDateLabel(){
-		$posts = $this->getPostList();
-		$postDates = array();
+    /**
+     * get date label
+     * @return array
+     */
+    public function getDateLabel()
+    {
+        $posts = $this->getPostList();
+        $postDates = [];
 
-		if($posts) {
-			foreach ($posts as $post) {
-				$postDates[] = $this->getDateFormat($post->getCreatedAt(), true);
-			}
-		}
-		$result = array_values(array_unique($postDates));
-		return $result;
-	}
+        if ($posts) {
+            foreach ($posts as $post) {
+                $postDates[] = $this->getDateFormat($post->getCreatedAt(), true);
+            }
+        }
+        $result = array_values(array_unique($postDates));
+        return $result;
+    }
 
-	/**
-	 * get array of posts's date formated
-	 * @return array
-	 */
-	public function getDateArray(){
-		$dateArray = array();
-		foreach ($this->getPostDate() as $postDate){
-			$dateArray[] = date("F Y",$this->dateTime->timestamp($postDate));
-		}
+    /**
+     * get array of posts's date formated
+     * @return array
+     */
+    public function getDateArray()
+    {
+        $dateArray = [];
+        foreach ($this->getPostDate() as $postDate) {
+            $dateArray[] = date("F Y", $this->dateTime->timestamp($postDate));
+        }
 
-		return $dateArray;
-	}
+        return $dateArray;
+    }
 
-	/**
-	 * get count of posts's date
-	 * @return array
-	 */
-	public function getDateArrayCount()
-	{
-		return $dateArrayCount = array_values(array_count_values($this->getDateArray()));
-	}
+    /**
+     * get count of posts's date
+     * @return array
+     */
+    public function getDateArrayCount()
+    {
+        return $dateArrayCount = array_values(array_count_values($this->getDateArray()));
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getDateArrayUnique()
-	{
-		return $dateArrayUnique = array_values(array_unique($this->getDateArray()));
-	}
+    /**
+     * @return array
+     */
+    public function getDateArrayUnique()
+    {
+        return $dateArrayUnique = array_values(array_unique($this->getDateArray()));
+    }
 
-	/**
-	 * get date count
-	 * @return int|mixed
-	 */
-	public function getDateCount()
-	{
-		$limit = $this->getBlogConfig('monthly_archive/number_records') ?: 5;
-		$dateArrayCount = $this->getDateArrayCount();
-		$count = count($dateArrayCount);
-		$result = ($count < $limit) ? $count : $limit ;
-		return $result;
-	}
-	/**
-	 * get author image link
-	 * @return string
-	 */
-	public function getAuthorImageUrl($image)
-	{
-		return $this->getBaseMediaUrl(). self::AUTHOR_IMG . $image;
-	}
+    /**
+     * get date count
+     * @return int|mixed
+     */
+    public function getDateCount()
+    {
+        $limit = $this->getBlogConfig('monthly_archive/number_records') ?: 5;
+        $dateArrayCount = $this->getDateArrayCount();
+        $count = count($dateArrayCount);
+        $result = ($count < $limit) ? $count : $limit ;
+        return $result;
+    }
+    /**
+     * get author image link
+     * @return string
+     */
+    public function getAuthorImageUrl($image)
+    {
+        return $this->getBaseMediaUrl(). self::AUTHOR_IMG . $image;
+    }
 
-	/**
-	 * get date formatted
-	 * @param $date
-	 * @return false|string
-	 */
-	public function getDateFormat($date, $monthly = false)
-	{
+    /**
+     * get date formatted
+     * @param $date
+     * @return false|string
+     */
+    public function getDateFormat($date, $monthly = false)
+    {
         $dateTime =(new \DateTime($date, new \DateTimeZone('UTC')));
         $dateTime->setTimezone(new \DateTimeZone($this->getTimezone()));
-		$dateArray = array(
-			'F j, Y',
-			'Y-m-d',
-			'm/d/Y',
-			'd/m/Y',
-			'F j, Y g:i a',
-			'F j, Y g:i A',
-			'Y-m-d g:i a',
-			'Y-m-d g:i A',
-			'd/m/Y g:i a',
-			'd/m/Y g:i A',
-			'm/d/Y H:i',
-			'd/m/Y H:i'
-		);
+        $dateArray = [
+            'F j, Y',
+            'Y-m-d',
+            'm/d/Y',
+            'd/m/Y',
+            'F j, Y g:i a',
+            'F j, Y g:i A',
+            'Y-m-d g:i a',
+            'Y-m-d g:i A',
+            'd/m/Y g:i a',
+            'd/m/Y g:i A',
+            'm/d/Y H:i',
+            'd/m/Y H:i'
+        ];
 
-		$result = array();
+        $result = [];
 
-		for ( $i = 0 ; $i < 12 ; $i ++)
-		{
-			$result[$i] = $dateTime->format($dateArray[$i]);
-		}
-		if ($monthly) {
-			$monthlyArray = array(
-				'F , Y',
-				'Y - m',
-				'm / Y',
-				'm / Y'
-			);
-			$resultMonthly = array();
-			for ( $i = 0 ; $i < 4 ; $i ++)
-			{
-				$resultMonthly[$i] = $dateTime->format($monthlyArray[$i]);
-			}
-			$dateType = $this->getBlogConfig('monthly_archive/date_type_monthly');
-			switch ($dateType) {
-				case 0:
-					$dateFormat = $resultMonthly[0];
-					break;
-				case 1:
-					$dateFormat = $resultMonthly[1];
-					break;
-				case 2:
-					$dateFormat = $resultMonthly[2];
-					break;
-				case 3:
-					$dateFormat = $resultMonthly[3];
-					break;
-				default:
-					$dateFormat = $resultMonthly[0];
-					break;
-			}
-			return $dateFormat;
-		}
+        for ($i = 0; $i < 12; $i ++) {
+            $result[$i] = $dateTime->format($dateArray[$i]);
+        }
+        if ($monthly) {
+            $monthlyArray = [
+                'F , Y',
+                'Y - m',
+                'm / Y',
+                'm / Y'
+            ];
+            $resultMonthly = [];
+            for ($i = 0; $i < 4; $i ++) {
+                $resultMonthly[$i] = $dateTime->format($monthlyArray[$i]);
+            }
+            $dateType = $this->getBlogConfig('monthly_archive/date_type_monthly');
+            switch ($dateType) {
+                case 0:
+                    $dateFormat = $resultMonthly[0];
+                    break;
+                case 1:
+                    $dateFormat = $resultMonthly[1];
+                    break;
+                case 2:
+                    $dateFormat = $resultMonthly[2];
+                    break;
+                case 3:
+                    $dateFormat = $resultMonthly[3];
+                    break;
+                default:
+                    $dateFormat = $resultMonthly[0];
+                    break;
+            }
+            return $dateFormat;
+        }
 
-		$dateType = $this->getBlogConfig('general/date_type');
+        $dateType = $this->getBlogConfig('general/date_type');
 
-		switch ($dateType) {
-			case 0:
-				$dateFormat = $result[0];
-				break;
-			case 1:
-				$dateFormat = $result[1];
-				break;
-			case 2:
-				$dateFormat = $result[2];
-				break;
-			case 3:
-				$dateFormat = $result[3];
-				break;
-			case 4:
-				$dateFormat = $result[4];
-				break;
-			case 5:
-				$dateFormat = $result[5];
-				break;
-			case 6:
-				$dateFormat = $result[6];
-				break;
-			case 7:
-				$dateFormat = $result[7];
-				break;
-			case 8:
-				$dateFormat = $result[8];
-				break;
-			case 9:
-				$dateFormat = $result[9];
-				break;
-			case 10:
-				$dateFormat = $result[10];
-				break;
-			case 11:
-				$dateFormat = $result[11];
-				break;
-			default:
-				$dateFormat = $result[0];
-				break;
-		}
+        switch ($dateType) {
+            case 0:
+                $dateFormat = $result[0];
+                break;
+            case 1:
+                $dateFormat = $result[1];
+                break;
+            case 2:
+                $dateFormat = $result[2];
+                break;
+            case 3:
+                $dateFormat = $result[3];
+                break;
+            case 4:
+                $dateFormat = $result[4];
+                break;
+            case 5:
+                $dateFormat = $result[5];
+                break;
+            case 6:
+                $dateFormat = $result[6];
+                break;
+            case 7:
+                $dateFormat = $result[7];
+                break;
+            case 8:
+                $dateFormat = $result[8];
+                break;
+            case 9:
+                $dateFormat = $result[9];
+                break;
+            case 10:
+                $dateFormat = $result[10];
+                break;
+            case 11:
+                $dateFormat = $result[11];
+                break;
+            default:
+                $dateFormat = $result[0];
+                break;
+        }
 
-		return $dateFormat;
-	}
+        return $dateFormat;
+    }
 
-	/**
-	 * get configuration zone
-	 * @return mixed
-	 */
-	public function getTimezone()
-	{
-		$om = \Magento\Framework\App\ObjectManager::getInstance();
-		$context = $om->get('\Magento\Framework\View\Element\Template\Context');
-		$storeModel = $context->getStoreManager()->getStore()->getId();
-		$timeZone       = $context->getScopeConfig()->getValue(
-			'general/locale/timezone',
-			\Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-			$storeModel
-		);
-		return $timeZone;
-	}
+    /**
+     * get configuration zone
+     * @return mixed
+     */
+    public function getTimezone()
+    {
+        $om = \Magento\Framework\App\ObjectManager::getInstance();
+        $context = $om->get('\Magento\Framework\View\Element\Template\Context');
+        $storeModel = $context->getStoreManager()->getStore()->getId();
+        $timeZone       = $context->getScopeConfig()->getValue(
+            'general/locale/timezone',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeModel
+        );
+        return $timeZone;
+    }
 
-	/**
-	 * get related posts
-	 * @param $id
-	 * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
-	 */
-	public function getRelatedPostList($id){
-		$collection = $this->postCollectionFactory->create();
-		$collection->getSelect()->join(['related' => $collection->getTable('mageplaza_blog_post_product')],'related.post_id=main_table.post_id 
+    /**
+     * get related posts
+     * @param $id
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     */
+    public function getRelatedPostList($id)
+    {
+        $collection = $this->postCollectionFactory->create();
+        $collection->getSelect()->join(['related' => $collection->getTable('mageplaza_blog_post_product')], 'related.post_id=main_table.post_id 
 		AND related.entity_id='.$id .' AND main_table.enabled=1');
-		$collection->setOrder('created_at', 'DESC');
-		return $collection;
-	}
+        $collection->setOrder('created_at', 'DESC');
+        return $collection;
+    }
     public function getCurrentDate()
     {
         return $this->dateTime->date();

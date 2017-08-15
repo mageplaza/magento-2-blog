@@ -62,49 +62,49 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
-	public $collectionFactory;
+    public $collectionFactory;
 
     /**
      * Blog Category Resource instance
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category
      */
-	public $categoryResource;
+    public $categoryResource;
 
     /**
      * Cache instance
      *
      * @var \Magento\Framework\App\CacheInterface
      */
-	public $cache;
+    public $cache;
 
     /**
      * Store Manager instance
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-	public $storeManager;
+    public $storeManager;
 
     /**
      * App resource
      *
      * @var \Magento\Framework\App\ResourceConnection
      */
-	public $coreResource;
+    public $coreResource;
 
     /**
      * Blog Category Collection
      *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\Collection
      */
-	public $collection;
+    public $collection;
 
     /**
      * Inactive Blog Category Ids
      *
      * @var array
      */
-	public $inactiveCategoryIds;
+    public $inactiveCategoryIds;
 
     /**
      * constructor
@@ -255,7 +255,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      */
     public function getDisabledIds($collection, $allIds)
     {
-    	/* implement this for frontend */
+        /* implement this for frontend */
         return [];
     }
 
@@ -417,8 +417,8 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
             $pathIds = explode('/', $item['path']);
             $level = (int)$item['level'];
             while ($level > 0) {
-            	$lastId = end($pathIds);
-            	$lastIndex = key($lastId);
+                $lastId = end($pathIds);
+                $lastIndex = key($lastId);
                 $pathIds[$lastIndex] = '%';
                 $path = implode('/', $pathIds);
                 $where["{$levelField}={$level} AND {$pathField} LIKE '{$path}'"] = true;
