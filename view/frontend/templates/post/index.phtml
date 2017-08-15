@@ -94,18 +94,31 @@ if ($checkRss):
                         </div>
                     </div>
 				<?php endforeach; ?>
+                    <?php echo $this->getChildHtml('mpblog_copyright');?>
             </div>
 
                 <div class="mp-sidebar col-md-3 col-sm-4">
 
-                <?php echo $this->getChildHtml();?>
+                <?php
+                echo $this->getChildHtml('mpblog_sidebarmostview');
+                echo $this->getChildHtml('mpblog_sidebarcategory');
+                echo $this->getChildHtml('mpblog_sidebarmonthly');
+                echo $this->getChildHtml('mpblog_sidebartopic');
+                echo $this->getChildHtml('mpblog_sidebartag');
+                ?>
 
             </div>
 				<?php
 			}else{ ?>
 
                 <div class="mp-sidebar col-md-3 col-sm-4">
-                    <?php echo $this->getChildHtml();?>
+                    <?php
+                    echo $this->getChildHtml('mpblog_sidebarmostview');
+                    echo $this->getChildHtml('mpblog_sidebarcategory');
+                    echo $this->getChildHtml('mpblog_sidebarmonthly');
+                    echo $this->getChildHtml('mpblog_sidebartopic');
+                    echo $this->getChildHtml('mpblog_sidebartag');
+                    ?>
                 </div>
 
                 <div class="post-list-content col-md-9 col-sm-8">
@@ -159,6 +172,7 @@ if ($checkRss):
                         </div>
                     </div>
 				<?php endforeach; ?>
+                <?php echo $this->getChildHtml('mpblog_copyright');?>
             </div>
 
 			<?php }?>
