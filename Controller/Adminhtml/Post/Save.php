@@ -236,8 +236,9 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
      */
     protected function converToTz($dateTime = "", $toTz = '', $fromTz = '')
     {
+        $date = date_create_from_format('d/m/Y H:i',$dateTime,new \DateTimeZone($fromTz));
         // timezone by php friendly values
-        $date = new \DateTime($dateTime, new \DateTimeZone($fromTz));
+//        $date = new \DateTime($dateTime, new \DateTimeZone($fromTz));
         $date->setTimezone(new \DateTimeZone($toTz));
         $dateTime = $date->format('m/d/Y H:i:s');
         return $dateTime;
