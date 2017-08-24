@@ -302,7 +302,6 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
   * NoIndex, Follow
   * Index, NoFollow
 
-  ![magento 2 blog create a new post](https://cdn.mageplaza.com/docs/blog-create-new-blog-post.gif)
 
 * Tap `Save and Continue Edit`
 
@@ -312,7 +311,6 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
 * You can do it when you create a new post in the **Topics** tab, or go to **Posts** tab
 * In the list of the available posts, mark the checkbox that is next to the posts you want to assign
 
-![blog assign to a topic](https://cdn.mageplaza.com/docs/blog-assign-to-topics.gif)
 
 * Tap `Save and Continue Edit`
 
@@ -322,7 +320,6 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
 * You can do it when you create a new post in the **Categories** tab, or go to **Posts** tab
 * In the list of the available posts, mark the checkbox that is next to the posts you want to assign
 
-![assign categories](https://cdn.mageplaza.com/docs/blog-assign-to-categories.gif)
 
 * Tap `Save and Continue Edit`
 
@@ -332,7 +329,6 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
 * You can do it when you create a new post in the **Tags** tab, or go to **Posts** tab
 * In the list of the available posts, mark the checkbox that is next to the posts you want to assign
 
-![assign tags](https://cdn.mageplaza.com/docs/blog-assign-to-tags.gif)
 
 * Tap `Save and Continue Edit`, then hit `Save Post` to finish. 
 
@@ -345,7 +341,6 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
 * Use WYSIWYG Mode to enter the description of the tag
 * Enter the `URL Key` that the visitor can access the tag
 
-![create a new tag](https://cdn.mageplaza.com/docs/blog-create-new-tag.gif)
 
 * If need, you can assign the new tag to specific post.
 * Click on `Save Tag` when complete.
@@ -367,7 +362,6 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
   * NoIndex, Follow
   * Index, NoFollow
 
-![create a new topic](https://cdn.mageplaza.com/docs/blog-create-new-topic.gif)
 
 * If need, you can assign the new topic to specific post.
 * Click on `Save Topic` when complete.
@@ -388,7 +382,6 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
   * NoIndex, Follow
   * Index, NoFollow
 
-![create a new category](https://cdn.mageplaza.com/docs/blog-create-new-category.gif)
 
 * If need, you can assign the new category to specific post.
 * Click on `Save Category` when complete.
