@@ -1,6 +1,6 @@
-# Magento 2 Blog extension FREE
+# Magento 2 Blog extension FREE by Mageplaza
 
-**Magento 2 Blog by Mageplaza** is integrated right into the Magento backend so you can manage your blog and your e-commerce store all in the one place. It is the perfect marketing tool for your bussiness that not only provides update information to your existing customers but also drive more visitors to your online store.
+**Magento 2 Blog extension by Mageplaza** is integrated right into the Magento backend so you can manage your blog and your e-commerce store all in the one place. It is the perfect marketing tool for your bussiness that not only provides update information to your existing customers but also drive more visitors to your online store.
 
 [![Latest Stable Version](https://poser.pugx.org/mageplaza/magento-2-blog-extension/v/stable)](https://packagist.org/packages/mageplaza/magento-2-blog-extension)
 [![Total Downloads](https://poser.pugx.org/mageplaza/magento-2-blog-extension/downloads)](https://packagist.org/packages/mageplaza/magento-2-blog-extension)
@@ -232,7 +232,7 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
   
   * To show the sidebar on the storefront, select "Yes" in the `Show Sidebar Right/ Left` field.
 
-![blog sidebar](https://i.imgur.com/0dIdrwc.png)
+![blog configuration](https://i.imgur.com/JWBqTOU.png)
 
 * Open **Sidebar** section,
 
@@ -240,7 +240,7 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
   
   * Enter `Number of most view posts` that display on the sidebar.
 
-![config sidebar](https://i.imgur.com/kMwejsJ.png)
+![config sidebar](http://i.imgur.com/FNR97UP.png)
 
 * Open **Comments** section,
 
@@ -250,7 +250,7 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
     * Facebook Comment 
     * Disable Completely
 
-![configure comment](https://i.imgur.com/UJnhJl1.png)
+![configure comment](http://i.imgur.com/v40bKQ1.png)
 
 * Open **SEO** section, you can configure the meta that is useful for your better SEO
 
@@ -258,7 +258,7 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
   * Set `Meta description for posts list page`
   * Set `Meta keywords for posts list page`
 
-![configure SEO](https://i.imgur.com/bGgJsMB.png)
+![configure SEO](https://i.imgur.com/FAx534w.png)
 
 * Open **Social** section,
 
@@ -406,7 +406,7 @@ There are few hidden tricks in Mageplza Blog for Magento 2. Here are hidden CMS 
 
 See this:
 
-![blog magento 2](https://www.mageplaza.com/assets/img/extensions-images/magento-2-blog/hidden-static-block.jpg)
+![blog magento 2](https://i.imgur.com/EpVJPXR.jpg)
 
 
 
@@ -416,11 +416,9 @@ See this:
 
 From Admin panel > Content > Blocks > Add New Block
 
-![add a new block](https://i.imgur.com/vHoPfUE.png)
 
 Then fill the content of block such as Name, idenity, content ...
 
-![block content](https://i.imgur.com/cuHNsfk.png)
 
 then click on `Save and continue`
 
