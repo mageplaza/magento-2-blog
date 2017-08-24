@@ -7,7 +7,7 @@
 
 Demo: http://blog.demo.mageplaza.com/blog/
 
-## Documentation
+## 1. Documentation
 
 - Installation guide: https://www.mageplaza.com/install-magento-2-extension/
 - User guide: https://docs.mageplaza.com/blog-m2/index.html
@@ -18,23 +18,18 @@ Demo: http://blog.demo.mageplaza.com/blog/
 - Changelog: https://www.mageplaza.com/changelog/m2-blog.txt
 - License https://www.mageplaza.com/LICENSE.txt
 
-## FAQs
+## 2. FAQs
 
 #### Q: I got error: `Mageplaza_Core has been already defined`
 A: Read solution: https://github.com/mageplaza/module-core/issues/3
 
 
 
-## How to install
+## 3. How to install
 
-### Method 1: Install ready-to-paste package
+### ✓ Install via composer (recommend)
 
-- Download the latest version at [Mageplaza Blog for Magento 2](https://www.mageplaza.com/magento-2-blog/)
--  [Installation guide](https://www.mageplaza.com/install-magento-2-extension/)
-
-### Method 2: Install via composer
-
-Run the following command in Magento 2 root folder
+Run the following command in Magento 2 root folder:
 
 ```
 composer require mageplaza/magento-2-blog-extension
@@ -42,14 +37,115 @@ php bin/magento setup:upgrade
 php bin/magento setup:static-content:deploy
 ```
 
+### ✓ Install ready-to-paste package
 
-## Contribute to this module
+- Download the latest version at [Mageplaza Blog for Magento 2](https://www.mageplaza.com/magento-2-blog-extension/)
+-  [Installation guide](https://www.mageplaza.com/install-magento-2-extension/)
+
+
+
+
+## 4. Contribute to this module
 
 Feel free to **Fork** and contrinute to this module and create a pull request so we will merge your changes to `master` branch.
 
 --------
+## 5. SWEET MAGEPLAZA EXTENSIONS TO BRING YOU MORE MONEY
 
-## Blog benefits
+### [✓ One Step Checkout](https://www.mageplaza.com/magento-2-one-step-checkout-extension/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
+
+☞ ↑30% INCREASE CONVERSION RATE 
+
+☞ ↓66% DECREASE ABANDONMENT CART
+
+☞ ↓80% REDUCE CHECKOUT TIME
+
+### [✓ Layered Navigation](https://www.mageplaza.com/magento-2-layered-navigation-extension/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
+
+☞ ↑84% USER'S FILTERING EXPERIENCE
+
+☞ ↑25% CONVERSION RATE
+
+☞ ↓67% SHOPPING TIME
+
+### [✓ Frequently Bought Together](https://www.mageplaza.com/magento-2-frequently-bought-together/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
+
+☞ Amazon Product Recommendation Solution
+ 
+☞ AJAX loading for better performance
+
+☞ Support Custom Options and all product types
+
+
+
+### [✓ Gift Card](https://www.mageplaza.com/magento-2-gift-card-extension/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
+
+☞ Physical, virtual or combined gift cards
+ 
+☞ Different gift card values from prices
+
+☞ Send cards via email, SMS, post office or messenger
+
+
+### [✓ Who Bought This Also Bought](https://www.mageplaza.com/magento-2-who-bought-this-also-bought/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
+
+☞ Display on Product Page, Category Page, Shopping Cart page
+
+☞ AJAX loading for better performance.
+
+☞ Flexible layout and design.
+
+
+### [✓ Social Login](https://www.mageplaza.com/magento-2-social-login-extension/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
+
+☞ Increase signup rate up-to 30%
+
+☞ Supports 11 Types: Facebook, Google Plus, Twitter, Linkedin, Instagram, Yahoo, Github, Foursquare, VK, Live, Amazon
+
+☞ Easy custom design fit with your store design
+
+☞ [Social Login on Github](https://github.com/mageplaza/magento-2-social-login)
+
+
+
+### [✓ Shop By Brand](https://www.mageplaza.com/magento-2-shop-by-brand/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
+
+☞ Fully Compatible with Layered Navigation
+
+☞ Instant Search brands
+
+☞ Import brands
+
+
+
+
+### [✓ Affiliate](https://www.mageplaza.com/magento-2-affiliate-extension/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
+
+☞ Multiple Affiliate Campaigns
+
+☞ Smart Referral Links
+
+☞ Affiliate Report
+
+
+
+
+
+## Mageplaza extensions on Magento Marketplace
+
+☞ [Magento 2 One Step Checkout extension](https://marketplace.magento.com/mageplaza-magento-2-one-step-checkout-extension.html)
+
+☞ [Magento 2 Blog extension](https://marketplace.magento.com/mageplaza-magento-2-blog-extension.html)
+
+☞ [Magento 2 Layered Navigation extension](https://marketplace.magento.com/mageplaza-layered-navigation-m2.html)
+
+☞ [Magento One Step Checkout](https://github.com/magento-2/one-step-checkout)
+
+
+
+--------
+
+## 6. Blog benefits
 
 Magento 2 blog extension can give you a greate opportunity to communicate with your potential and existing customers. Blog posts can help you to create a 2-way communication platform to publish new information such as news, promotions, comming products. Read more benefits of Blog.
 
@@ -111,7 +207,7 @@ Full RSS integration into Magento 2. The blog RSS feed appears right next to the
 
 ---------
 
-## USER GUIDE
+## 7. USER GUIDE
 
 ### General Configuration
 
@@ -332,166 +428,153 @@ then click on `Save and continue`
 
 
 --------------
-## BLOG CHANGELOG 
 
 
-### SEO v1.4.1
-Released on  2017-06-12
+## 8. BLOG CHANGELOG 
+
+
+### Blog v2.4.5
+Released on  2017-08-16
 Release notes: 
 
-- Optimize Structured Data ld-json
-- Optimize Social share Open graph (Google+ and Pinterest) and twitter card
-- Fixed Breadcrumbs issue
-- Fixed canonical link issue
+- Improve Style and Top Nav menu 
 
 
 
-### SEO v1.4.0
-Released on  2017-05-23
+### Blog v2.4.4
+Released on  2017-08-13
 Release notes: 
 
-- Released Seo Crosslinks
-- Fixed minor bugs
+- add related product to post view
+- fixed conflict with Mageplaza Shop By Brand
+- #79 compatible with YOURSTORE theme
+- Hotfix #81 Area code not set Area code must be set before starting a session.
 
 
 
-### SEO v1.3.1
-Released on  2017-05-23
+### Blog v2.4.3
+Released on  2017-07-25
 Release notes: 
 
-- Fixed issue on bundle products
-- Fixed Remove inject object in Search/Catalog block
-- Optimize config object
-- Optimize Search Nofollow
+- Fixed RSS Date issue
+- Fixed posts does not show up in frontend
+- Improving fresh installation #76 (CE2.1.7)
 
 
 
-### SEO v1.3.0
+### Blog v2.4.2
+Released on  2017-06-26
+Release notes: 
+
+- Update admin menu
+- Update admin configuration
+- Change composer version
+
+
+
+### Blog v2.4.1
+Released on  2017-06-13
+Release notes: 
+
+Fix responsive design issue
+
+
+
+### Blog v2.4.0
+Released on  2017-05-16
+Release notes: 
+
++ Product related posts
++ Improve date options
++ Update csv i18n file
+
+
+
+### Blog v2.3.0
+Released on  2017-04-28
+Release notes: 
+
+- Fixed sitemap bugs
+- Fixed meta robot bug
+- Added monthly archive widget
+- Added cloud tags widget
+- Added Magento comment engine. There is Magento comment, Facebook, and Disqus comment engine.
+- Added Author feature
+- Added Ajax Search box in Blog
+- Added Topic widget
+- Improved router
+
+
+
+
+### Blog v2.2.2
 Released on  2017-04-24
 Release notes: 
 
-**SEO Core , Sitemap**
-
-* Exclude CMS pages in HTML Sitemap
-+ Include custom links in HTML Sitemap
-* Opt to exclude out-of-stock in HTML, XML Sitemap
-* Optimize canonical tag, rich snippet, hrefLang, alternate
-
-**Rule templates**
-
-+ Compatible with Layered Navigation
-+ Add Mageplaza_Blog posts meta data template
-+ Optimize template rule products, categories, CMS pages.
-+ Preview rule template
+- Edit composer.json to require mageplazamodule-core instead of mageplazacore-m2
 
 
 
-
-### SEO v1.2.2
-Released on  2017-04-24
-Release notes: 
-
-- Edit composer.json to require mageplaza/module-core instead of mageplaza/core-m2
-
-
-
-### SEO v1.2.1
+### Blog v2.2.1
 Released on  2017-04-09
 Release notes: 
 
-- Fix composer issue
 
 
 
-### SEO v1.2.0
-Released on  2017-04-09
+
+### Blog v2.2.0
+Released on  2017-03-01
 Release notes: 
 
-**Features**
-
-+ Add Verification configuration
-+ Add Stop words feature
-+ Hreflang tags feature
+**Added Features**
+- Post limit options
+- Multistores
+- Top menu link
 
 **Bug fixes**
-
-- Performance optimization
-- Group SEO menu
-- Optimize Configuration options
+- Compilation
+- Date format
 
 
 
 
-### SEO v1.1.4
-Released on  2016-11-23
+### Blog v2.1.0
+Released on  2016-07-22
 Release notes: 
 
-- Fix Upgrade issue
+- Add CMS static Block in Blog Post, Sidebar
+- Fix styling bug
 
 
 
 
-### SEO v1.1.2
-Released on  2016-11-22
+### Blog v2.0.0
+Released on  2016-07-18
 Release notes: 
 
-- Improve Robots meta tags categories, products, cms pages
+- New style
+- Tags, Categories, Popular, Recent posts
+- Related posts
+- Better Share buttons
+- Improve Post meta information
+- Performance improvements
 
 
 
 
-### SEO v1.1.1
-Released on  2016-10-20
+### Blog v1.0.1
+Released on  2016-05-25
 Release notes: 
 
-- add HTML Sitemap features
 
 
 
-
-### SEO v1.1.0
-Released on  2016-10-20
+### Blog v1.0.0
+Released on  2016-05-19
 Release notes: 
 
-## Improvement
-- Optimize code and performance
-- Comment code
-
-## Features
-- Add config Disable URL parameter in canonical URL
-
-## Bug fixing
-- Fix bug canonical url
-
-
-
-
-### SEO v1.0.2
-Released on  2016-08-09
-Release notes: 
-
-- Compatible Magento 2.1
-- Fix bug Dependency 
-- Fix JSONLD broken tags
-- Optimize Review rating value
-
-
-
-
-### SEO v1.0.1
-Released on  2016-07-20
-Release notes: 
-
-- Add composer and packagist.org
-
-
-
-### SEO v1.0.0-beta
-Released on  2016-04-23
-Release notes: 
-
-- Release first version
-
+Release first version
 
 
 
