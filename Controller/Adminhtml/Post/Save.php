@@ -107,7 +107,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         if (empty($data['publish_date'])) {
             $data['publish_date'] = $this->date->date();
         } else {
-            $data['publish_date'] = $this->converToTz(
+            $data['publish_date'] = $this->convertToTz(
                 $data['publish_date'],
                 // get default timezone of system (UTC)
                 $timezone->getDefaultTimezone(),
@@ -228,16 +228,18 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 
         return $resultRedirect;
     }
+
     /**
-     * converToTz convert Datetime from one zone to another
-     * @param string $dateTime which we want to convert
-     * @param string $toTz timezone in which we want to convert
-     * @param string $fromTz timezone from which we want to convert
+     * @param string $dateTime
+     * @param string $toTz
+     * @param string $fromTz
+     * @return string
      */
-    protected function converToTz($dateTime = "", $toTz = '', $fromTz = '')
+    protected function convertToTz($dateTime = "", $toTz = '', $fromTz = '')
     {
+        $date = date_create_from_format('d/m/Y H:i',$dateTime,new \DateTimeZone($fromTz));
         // timezone by php friendly values
-        $date = new \DateTime($dateTime, new \DateTimeZone($fromTz));
+//        $date = new \DateTime($dateTime, new \DateTimeZone($fromTz));
         $date->setTimezone(new \DateTimeZone($toTz));
         $dateTime = $date->format('m/d/Y H:i:s');
         return $dateTime;
