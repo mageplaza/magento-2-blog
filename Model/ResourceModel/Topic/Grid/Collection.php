@@ -54,7 +54,7 @@ class Collection extends \Mageplaza\Blog\Model\ResourceModel\Topic\Collection im
         $eventObject,
         $resourceModel,
         $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
     
