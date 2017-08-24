@@ -1,6 +1,6 @@
-# Magento 2 Blog extension FREE by Mageplaza
+# Magento 2 Blog extension FREE
 
-**Magento 2 Blog extension by Mageplaza** is integrated right into the Magento backend so you can manage your blog and your e-commerce store all in the one place. It is the perfect marketing tool for your bussiness that not only provides update information to your existing customers but also drive more visitors to your online store.
+**Magento 2 Blog by Mageplaza** is integrated right into the Magento backend so you can manage your blog and your e-commerce store all in the one place. It is the perfect marketing tool for your bussiness that not only provides update information to your existing customers but also drive more visitors to your online store.
 
 [![Latest Stable Version](https://poser.pugx.org/mageplaza/magento-2-blog-extension/v/stable)](https://packagist.org/packages/mageplaza/magento-2-blog-extension)
 [![Total Downloads](https://poser.pugx.org/mageplaza/magento-2-blog-extension/downloads)](https://packagist.org/packages/mageplaza/magento-2-blog-extension)
@@ -132,15 +132,25 @@ Feel free to **Fork** and contrinute to this module and create a pull request so
 
 ## Mageplaza extensions on Magento Marketplace, Github
 
+
 ☞ [Magento 2 One Step Checkout extension](https://marketplace.magento.com/mageplaza-magento-2-one-step-checkout-extension.html)
+
 ☞ [Magento 2 Blog extension](https://marketplace.magento.com/mageplaza-magento-2-blog-extension.html)
+
 ☞ [Magento 2 Layered Navigation extension](https://marketplace.magento.com/mageplaza-layered-navigation-m2.html)
+
 ☞ [Magento One Step Checkout](https://github.com/magento-2/one-step-checkout)
+
 ☞ [Magento 2 Blog on Github](https://github.com/mageplaza/magento-2-blog)
+
 ☞ [Magento 2 Social Login on Github](https://github.com/mageplaza/magento-2-social-login)
+
 ☞ [Magento 2 SEO on Github](https://github.com/mageplaza/magento-2-seo)
+
 ☞ [Magento 2 SMTP on Github](https://github.com/mageplaza/magento-2-smtp)
+
 ☞ [Magento 2 Product Slider on Github](https://github.com/mageplaza/magento-2-product-slider)
+
 ☞ [Magento 2 Banner on Github](https://github.com/mageplaza/magento-2-banner-slider)
 
 
