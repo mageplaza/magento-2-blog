@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\Config\Source\Comments;
 
+/**
+ * Class Type
+ * @package Mageplaza\Blog\Model\Config\Source\Comments
+ */
 class Type implements \Magento\Framework\Option\ArrayInterface
 {
     /**

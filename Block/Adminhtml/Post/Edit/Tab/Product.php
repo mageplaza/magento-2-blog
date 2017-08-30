@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
 
+/**
+ * Class Product
+ * @package Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab
+ */
 class Product extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
@@ -43,16 +47,14 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended implements \Ma
      */
     public $productFactory;
 
-    /**
-     * constructor
-     *
-     * @param \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $tagCollectionFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param array $data
-     */
+	/**
+	 * Product constructor.
+	 * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+	 * @param \Magento\Framework\Registry $coreRegistry
+	 * @param \Magento\Backend\Block\Template\Context $context
+	 * @param \Magento\Backend\Helper\Data $backendHelper
+	 * @param array $data
+	 */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Framework\Registry $coreRegistry,

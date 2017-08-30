@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\Post;
 
+/**
+ * Class Image
+ * @package Mageplaza\Blog\Model\Post
+ */
 class Image
 {
     /**

@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Author;
 
+/**
+ * Class Edit
+ * @package Mageplaza\Blog\Controller\Adminhtml\Author
+ */
 class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Author
 {
     /**
@@ -42,6 +46,10 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Author
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     public $resultJsonFactory;
+
+	/**
+	 * @var \Magento\Backend\Model\Auth\Session
+	 */
     protected $authSession;
 
     /**

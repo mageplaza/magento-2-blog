@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Setup;
 
+/**
+ * Class InstallSchema
+ * @package Mageplaza\Blog\Setup
+ */
 class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 {
     /**

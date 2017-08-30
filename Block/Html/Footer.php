@@ -23,11 +23,28 @@ namespace Mageplaza\Blog\Block\Html;
 use \Magento\Framework\View\Element\Template\Context;
 use \Mageplaza\Blog\Helper\Data;
 
+/**
+ * Class Footer
+ * @package Mageplaza\Blog\Block\Html
+ */
 class Footer extends \Magento\Framework\View\Element\Html\Link
 {
+	/**
+	 * @var \Mageplaza\Blog\Helper\Data
+	 */
     public $helper;
+
+	/**
+	 * @var string
+	 */
     protected $_template = 'Mageplaza_Blog::html\footer.phtml';
 
+	/**
+	 * Footer constructor.
+	 * @param \Magento\Framework\View\Element\Template\Context $context
+	 * @param \Mageplaza\Blog\Helper\Data $helper
+	 * @param array $data
+	 */
     public function __construct(
         Context $context,
         Data $helper,
@@ -38,10 +55,17 @@ class Footer extends \Magento\Framework\View\Element\Html\Link
         parent::__construct($context, $data);
     }
 
+	/**
+	 * @return string
+	 */
     public function getHref()
     {
         return $this->helper->getBlogUrl('');
     }
+
+	/**
+	 * @return \Magento\Framework\Phrase|mixed
+	 */
     public function getLabel()
     {
         if ($this->helper->getBlogConfig('general/name')=="") {
@@ -49,6 +73,10 @@ class Footer extends \Magento\Framework\View\Element\Html\Link
         }
         return $this->helper->getBlogConfig('general/name');
     }
+
+	/**
+	 * @return string
+	 */
     public function getHtmlSiteMapUrl()
     {
         $moduleRoute = $this->helper->getBlogConfig('general/url_prefix');

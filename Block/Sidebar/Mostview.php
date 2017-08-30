@@ -22,14 +22,24 @@ namespace Mageplaza\Blog\Block\Sidebar;
 
 use Mageplaza\Blog\Block\Frontend;
 
+/**
+ * Class Mostview
+ * @package Mageplaza\Blog\Block\Sidebar
+ */
 class Mostview extends Frontend
 {
 
+	/**
+	 * @return array|string
+	 */
     public function getMosviewPosts()
     {
         return $this->helperData->getMosviewPosts();
     }
 
+	/**
+	 * @return array|string
+	 */
     public function getRecentPost()
     {
         return $this->helperData->getRecentPost();

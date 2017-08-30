@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model;
 
+/**
+ * Class Upload
+ * @package Mageplaza\Blog\Model
+ */
 class Upload
 {
     /**

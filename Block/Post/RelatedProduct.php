@@ -25,7 +25,11 @@ use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\ListProduct;
 use Mageplaza\Blog\Helper\Data as HelperData;
 
-class Relatedproduct extends ListProduct
+/**
+ * Class RelatedProduct
+ * @package Mageplaza\Blog\Block\Post
+ */
+class RelatedProduct extends ListProduct
 {
     protected $_productCollectionFactory;
     protected $visibleProduts;
@@ -41,6 +45,18 @@ class Relatedproduct extends ListProduct
     */
     const LIMIT = '12';
 
+	/**
+	 * RelatedProduct constructor.
+	 * @param \Magento\Catalog\Block\Product\Context $context
+	 * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
+	 * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
+	 * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
+	 * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+	 * @param \Magento\Catalog\Model\Product\Visibility $visibleProduts
+	 * @param \Mageplaza\Blog\Helper\Data $helperData
+	 * @param \Magento\Framework\Url\Helper\Data $urlHelper
+	 * @param array $data
+	 */
     public function __construct(Context $context,
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,

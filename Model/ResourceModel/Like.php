@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\ResourceModel;
 
+/**
+ * Class Like
+ * @package Mageplaza\Blog\Model\ResourceModel
+ */
 class Like extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

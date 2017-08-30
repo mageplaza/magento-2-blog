@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
+/**
+ * Class Save
+ * @package Mageplaza\Blog\Controller\Adminhtml\Category
+ */
 class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
 {
     /**
@@ -50,18 +54,16 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public $jsHelper;
 
-    /**
-     * constructor
-     *
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Backend\Helper\Js $jsHelper
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+	/**
+	 * Save constructor.
+	 * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+	 * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+	 * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+	 * @param \Magento\Backend\Helper\Js $jsHelper
+	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,

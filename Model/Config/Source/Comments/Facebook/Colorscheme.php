@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\Config\Source\Comments\Facebook;
 
+/**
+ * Class Colorscheme
+ * @package Mageplaza\Blog\Model\Config\Source\Comments\Facebook
+ */
 class Colorscheme implements \Magento\Framework\Option\ArrayInterface
 {
     const LIGHT = 'light';

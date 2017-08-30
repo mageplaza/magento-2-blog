@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
+/**
+ * Class Index
+ * @package Mageplaza\Blog\Controller\Adminhtml\Category
+ */
 class Index extends \Magento\Backend\App\Action
 {
     /**

@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\Config\Source\Blogview;
 
+/**
+ * Class Display
+ * @package Mageplaza\Blog\Model\Config\Source\Blogview
+ */
 class Display implements \Magento\Framework\Option\ArrayInterface
 {
     /**
@@ -31,6 +35,9 @@ class Display implements \Magento\Framework\Option\ArrayInterface
     const LIST_VIEW = 1;
     const GRID = 2;
 
+	/**
+	 * @return array
+	 */
     public function toOptionArray()
     {
         return [

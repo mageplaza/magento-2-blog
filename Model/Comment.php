@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model;
 
+/**
+ * Class Comment
+ * @package Mageplaza\Blog\Model
+ */
 class Comment extends \Magento\Framework\Model\AbstractModel
 {
     /**
@@ -51,6 +55,15 @@ class Comment extends \Magento\Framework\Model\AbstractModel
      */
     public $postCollectionFactory;
 
+	/**
+	 * Comment constructor.
+	 * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
+	 * @param \Magento\Framework\Model\Context $context
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+	 * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+	 * @param array $data
+	 */
     public function __construct(
         \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
         \Magento\Framework\Model\Context $context,

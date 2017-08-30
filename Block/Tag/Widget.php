@@ -22,14 +22,25 @@ namespace Mageplaza\Blog\Block\Tag;
 
 use Mageplaza\Blog\Block\Frontend;
 
+/**
+ * Class Widget
+ * @package Mageplaza\Blog\Block\Tag
+ */
 class Widget extends Frontend
 {
+	/**
+	 * @return array|string
+	 */
     public function getTagList()
     {
 
         return $this->helperData->getTagList();
     }
 
+	/**
+	 * @param $tag
+	 * @return string
+	 */
     public function getTagUrl($tag)
     {
         return $this->helperData->getTagUrl($tag);

@@ -22,8 +22,15 @@ namespace Mageplaza\Blog\Controller\Category;
 
 use Magento\Framework\Exception\NotFoundException;
 
+/**
+ * Class Rss
+ * @package Mageplaza\Blog\Controller\Category
+ */
 class Rss extends \Magento\Rss\Controller\Feed
 {
+	/**
+	 * @throws \Magento\Framework\Exception\NotFoundException
+	 */
     public function execute()
     {
 

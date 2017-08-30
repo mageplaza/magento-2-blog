@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 
+/**
+ * Class Save
+ * @package Mageplaza\Blog\Controller\Adminhtml\Topic
+ */
 class Save extends \Mageplaza\Blog\Controller\Adminhtml\Topic
 {
     /**
@@ -36,16 +40,13 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Topic
      */
     public $jsHelper;
 
-    /**
-     * constructor
-     *
-     * @param \Magento\Backend\Model\Session $backendSession
-     * @param \Magento\Backend\Helper\Js $jsHelper
-     * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+	/**
+	 * Save constructor.
+	 * @param \Magento\Backend\Helper\Js $jsHelper
+	 * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Magento\Backend\Helper\Js $jsHelper,
         \Mageplaza\Blog\Model\TopicFactory $topicFactory,

@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\Config\Source\DateFormat;
 
+/**
+ * Class Type
+ * @package Mageplaza\Blog\Model\Config\Source\DateFormat
+ */
 class Type implements \Magento\Framework\Option\ArrayInterface
 {
 
@@ -47,25 +51,31 @@ class Type implements \Magento\Framework\Option\ArrayInterface
 
     public function setOptionArray()
     {
-        $dateArray = [
-            'F j, Y',
-            'Y-m-d',
-            'm/d/Y',
-            'd/m/Y',
-            'F j, Y g:i a',
-            'F j, Y g:i A',
-            'Y-m-d g:i a',
-            'Y-m-d g:i A',
-            'd/m/Y g:i a',
-            'd/m/Y g:i A',
-            'm/d/Y H:i',
-            'd/m/Y H:i'];
-        $result = [];
-        for ($i = 0; $i < 12; $i++) {
-            $result[$i] = __($dateArray[$i].' ('.date($dateArray[$i], time()).')');
-        }
+    	$dateArray = [];
+    	$type = [
+    		'F j, Y',
+			'Y-m-d',
+			'm/d/Y',
+			'd/m/Y',
+			'F j, Y g:i a',
+			'F j, Y g:i A',
+			'Y-m-d g:i a',
+			'Y-m-d g:i A',
+			'd/m/Y g:i a',
+			'd/m/Y g:i A',
+			'm/d/Y H:i',
+			'd/m/Y H:i',
+		];
+    	foreach ($type as $item)
+		{
 
-        return $result ;
+			$dateArray[] = [
+				'value'=> $item,
+				'label' => $item.' ('.date($item,time()).')'
+			];
+		}
+
+        return $dateArray ;
     }
 
     /**
@@ -79,7 +89,6 @@ class Type implements \Magento\Framework\Option\ArrayInterface
         date_default_timezone_set($this->getTimezone());
         return $this->setOptionArray();
     }
-
     /**
      * Get options in "key-value" format
      *

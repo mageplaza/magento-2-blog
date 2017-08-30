@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab;
 
+/**
+ * Class Post
+ * @package Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab
+ */
 class Post extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**

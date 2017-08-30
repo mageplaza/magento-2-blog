@@ -32,16 +32,15 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
      */
     public $imageModel;
 
-    /**
-     * constructor
-     *
-     * @param \Mageplaza\Blog\Model\Post\Image $imageModel
-     * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param array $data
-     */
+	/**
+	 * Image constructor.
+	 * @param \Mageplaza\Blog\Model\Author\Image $imageModel
+	 * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
+	 * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
+	 * @param \Magento\Framework\Escaper $escaper
+	 * @param \Magento\Framework\UrlInterface $urlBuilder
+	 * @param array $data
+	 */
     public function __construct(
         \Mageplaza\Blog\Model\Author\Image $imageModel,
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,

@@ -20,8 +20,15 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
+/**
+ * Class ProductsGrid
+ * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ */
 class ProductsGrid extends \Mageplaza\Blog\Controller\Adminhtml\Post\Products
 {
+	/**
+	 * @return null
+	 */
     public function getBlogPost()
     {
         return null;

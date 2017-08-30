@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
+/**
+ * Class Tags
+ * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ */
 class Tags extends \Mageplaza\Blog\Controller\Adminhtml\Post
 {
     /**
@@ -29,15 +33,13 @@ class Tags extends \Mageplaza\Blog\Controller\Adminhtml\Post
      */
     public $resultLayoutFactory;
 
-    /**
-     * constructor
-     *
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @param \Mageplaza\Blog\Model\PostFactory $tagFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+	/**
+	 * Tags constructor.
+	 * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+	 * @param \Mageplaza\Blog\Model\PostFactory $tagFactory
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Mageplaza\Blog\Model\PostFactory $tagFactory,

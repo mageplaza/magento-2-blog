@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\ResourceModel\Category;
 
+/**
+ * Class Tree
+ * @package Mageplaza\Blog\Model\ResourceModel\Category
+ */
 class Tree extends \Magento\Framework\Data\Tree\Dbp
 {
     /**

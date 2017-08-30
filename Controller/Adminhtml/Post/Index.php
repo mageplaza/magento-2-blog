@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
+/**
+ * Class Index
+ * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ */
 class Index extends \Magento\Backend\App\Action
 {
     /**

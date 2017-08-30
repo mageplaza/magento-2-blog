@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\ResourceModel;
 
+/**
+ * Class Comment
+ * @package Mageplaza\Blog\Model\ResourceModel
+ */
 class Comment extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

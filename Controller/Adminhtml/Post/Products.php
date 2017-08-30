@@ -1,16 +1,24 @@
 <?php
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
+/**
+ * Class Products
+ * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ */
 class Products extends \Mageplaza\Blog\Controller\Adminhtml\Post
 {
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory
      */
     protected $resultLayoutFactory;
-    /**
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @param Action\Context $context
-     */
+
+	/**
+	 * Products constructor.
+	 * @param \Magento\Backend\App\Action\Context $context
+	 * @param \Mageplaza\Blog\Model\PostFactory $productFactory
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+	 */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Mageplaza\Blog\Model\PostFactory $productFactory,

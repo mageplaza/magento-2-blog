@@ -22,12 +22,25 @@ namespace Mageplaza\Blog\Block\Author;
 
 use Mageplaza\Blog\Block\Frontend;
 
+/**
+ * Class Widget
+ * @package Mageplaza\Blog\Block\Author
+ */
 class Widget extends Frontend
 {
+
+	/**
+	 * @return mixed
+	 */
     public function getCurrentAuthor()
     {
         return $this->getRequest()->getParam('id');
     }
+
+	/**
+	 * @param $content
+	 * @return string
+	 */
     public function getPageFilter($content)
     {
         return $this->filterProvider->getPageFilter()->filter($content);

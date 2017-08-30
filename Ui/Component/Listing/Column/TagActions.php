@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Ui\Component\Listing\Column;
 
+/**
+ * Class TagActions
+ * @package Mageplaza\Blog\Ui\Component\Listing\Column
+ */
 class TagActions extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**

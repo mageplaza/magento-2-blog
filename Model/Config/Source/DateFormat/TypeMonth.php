@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\Config\Source\DateFormat;
 
+/**
+ * Class TypeMonth
+ * @package Mageplaza\Blog\Model\Config\Source\DateFormat
+ */
 class TypeMonth implements \Magento\Framework\Option\ArrayInterface
 {
 
@@ -46,18 +50,23 @@ class TypeMonth implements \Magento\Framework\Option\ArrayInterface
      */
     public function setOptionArray()
     {
-        $dateArray = [
+		$dateArray = [];
+        $type = [
             'F , Y',
             'Y - m',
             'm / Y',
             'M  Y'
         ];
-        $result = [];
-        for ($i = 0; $i < 4; $i++) {
-            $result[$i] = __($dateArray[$i].' ('.date($dateArray[$i], time()).')');
-        }
+        foreach ($type as $item)
+        {
 
-        return $result ;
+			$dateArray [] = [
+				'value' => $item,
+				'label' => $item.' ('.date($item,time()).')'
+			];
+		}
+
+        return $dateArray ;
     }
 
     /**

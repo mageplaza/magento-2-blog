@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 
+/**
+ * Class NewAction
+ * @package Mageplaza\Blog\Controller\Adminhtml\Topic
+ */
 class NewAction extends \Magento\Backend\App\Action
 {
     /**

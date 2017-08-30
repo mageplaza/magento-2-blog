@@ -22,13 +22,24 @@ namespace Mageplaza\Blog\Block\Category;
 
 use Mageplaza\Blog\Block\Frontend;
 
+/**
+ * Class Listpost
+ * @package Mageplaza\Blog\Block\Category
+ */
 class Listpost extends Frontend
 {
+
+	/**
+	 * @return array|string
+	 */
     public function getPostList()
     {
         return $this->getBlogPagination(\Mageplaza\Blog\Helper\Data::CATEGORY, $this->getRequest()->getParam('id'));
     }
 
+	/**
+	 * @return string
+	 */
     public function checkRss()
     {
 //        $categoryId = $this->getRequest()->getParam('id');

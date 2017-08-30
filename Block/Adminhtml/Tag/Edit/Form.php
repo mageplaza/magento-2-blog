@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Tag\Edit;
 
+/**
+ * Class Form
+ * @package Mageplaza\Blog\Block\Adminhtml\Tag\Edit
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

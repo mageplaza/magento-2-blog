@@ -28,5 +28,8 @@ namespace Mageplaza\Blog\Block\Html;
  */
 class CategoryMenu extends \Magento\Framework\View\Element\Template
 {
+	/**
+	 * @var string
+	 */
     protected $_template = 'Mageplaza_Blog::html/topmenu.phtml';
 }

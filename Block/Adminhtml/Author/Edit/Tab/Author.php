@@ -20,10 +20,21 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Author\Edit\Tab;
 
+/**
+ * Class Author
+ * @package Mageplaza\Blog\Block\Adminhtml\Author\Edit\Tab
+ */
 class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
+
+	/**
+	 * @var \Magento\Store\Model\System\Store
+	 */
     public $systemStore;
 
+	/**
+	 * @var \Magento\Cms\Model\Wysiwyg\Config
+	 */
     public $wysiwygConfig;
 
     /**

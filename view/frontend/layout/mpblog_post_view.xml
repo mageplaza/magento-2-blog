@@ -36,7 +36,7 @@
             <block class="Mageplaza\Blog\Block\Frontend" template="Mageplaza_Blog::design.phtml"/>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Post\View" name="mp.blog.view" template="Mageplaza_Blog::post/view.phtml">
+            <block class="Mageplaza\Blog\Block\Post\View" name="mp.blog.view" template="Mageplaza_Blog::post/view.phtml" cacheable="false">
                 <block class="Mageplaza\Blog\Block\Sidebar\Search" name="mp.blog.view.sidebar.search" as="sidebar_search"
                        template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search"/>
                 <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview" as="sidebar_mostview"
@@ -49,7 +49,8 @@
                        template="Mageplaza_Blog::topic/widget.phtml"/>
                 <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag" as="sidebar_tag"
                        template="Mageplaza_Blog::tag/widget.phtml"/>
-
+                <block class="Mageplaza\Blog\Block\Frontend" name="mp.blog.copy.right"
+                       as="mpblog_copyright" template="Mageplaza_Blog::html/copyright.phtml"/>
                 <block class="Mageplaza\Blog\Block\Post\RelatedProduct" name="related.category.products" as="related_products"
                        template="Magento_Catalog::product/list.phtml" />
 

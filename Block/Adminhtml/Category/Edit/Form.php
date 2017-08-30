@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit;
 
+/**
+ * Class Form
+ * @package Mageplaza\Blog\Block\Adminhtml\Category\Edit
+ */
 class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
 {
     /**

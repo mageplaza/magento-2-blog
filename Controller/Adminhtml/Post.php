@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml;
 
+/**
+ * Class Post
+ * @package Mageplaza\Blog\Controller\Adminhtml
+ */
 abstract class Post extends \Magento\Backend\App\Action
 {
     /**
@@ -43,14 +47,12 @@ abstract class Post extends \Magento\Backend\App\Action
      */
     public $resultRedirectFactory;
 
-    /**
-     * constructor
-     *
-     * @param \Mageplaza\Blog\Model\PostFactory $postFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+	/**
+	 * Post constructor.
+	 * @param \Mageplaza\Blog\Model\PostFactory $postFactory
+	 * @param \Magento\Framework\Registry $coreRegistry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Mageplaza\Blog\Model\PostFactory $postFactory,
         \Magento\Framework\Registry $coreRegistry,

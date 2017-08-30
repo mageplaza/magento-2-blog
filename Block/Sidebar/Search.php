@@ -3,11 +3,15 @@ namespace Mageplaza\Blog\Block\Sidebar;
 
 use Mageplaza\Blog\Block\Frontend;
 
+/**
+ * Class Search
+ * @package Mageplaza\Blog\Block\Sidebar
+ */
 class Search extends Frontend
 {
-    /**
-     * get search blog's data
-     */
+	/**
+	 * @return string
+	 */
     public function getSearchBlogData()
     {
         $result = [];

@@ -22,14 +22,24 @@ namespace Mageplaza\Blog\Block\Tag;
 
 use Mageplaza\Blog\Block\Frontend;
 
+/**
+ * Class Listpost
+ * @package Mageplaza\Blog\Block\Tag
+ */
 class Listpost extends Frontend
 {
 
+	/**
+	 * @return array|string
+	 */
     public function getPostList()
     {
         return $this->getBlogPagination(\Mageplaza\Blog\Helper\Data::TAG, $this->getRequest()->getParam('id'));
     }
 
+	/**
+	 * @return string
+	 */
     public function checkRss()
     {
         return $this->helperData->getBlogUrl('post/rss');

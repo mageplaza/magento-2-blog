@@ -38,7 +38,8 @@
                        template="Mageplaza_Blog::topic/widget.phtml"/>
                 <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"
                        template="Mageplaza_Blog::tag/widget.phtml"/>
-
+                <block class="Mageplaza\Blog\Block\Frontend" name="mp.blog.copy.right"
+                       as="mpblog_copyright" template="Mageplaza_Blog::html/copyright.phtml"/>
             </block>
         </referenceContainer>
     </body>

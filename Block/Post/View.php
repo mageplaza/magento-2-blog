@@ -22,29 +22,55 @@ namespace Mageplaza\Blog\Block\Post;
 
 use Mageplaza\Blog\Block\Frontend;
 
+/**
+ * Class View
+ * @package Mageplaza\Blog\Block\Post
+ */
 class View extends Frontend
 {
+	/**
+	 * config logo blog path
+	 */
     const LOGO = 'mageplaza/blog/logo/';
 
+	/**
+	 * @return string
+	 */
     public function checkRss()
     {
         return $this->helperData->getBlogUrl('post/rss');
     }
+
+	/**
+	 * @param $topic
+	 * @return string
+	 */
     public function getTopicUrl($topic)
     {
         return $this->helperData->getTopicUrl($topic);
     }
 
+	/**
+	 * @param $tag
+	 * @return string
+	 */
     public function getTagUrl($tag)
     {
         return $this->helperData->getTagUrl($tag);
     }
 
+	/**
+	 * @param $category
+	 * @return string
+	 */
     public function getCategoryUrl($category)
     {
         return $this->helperData->getCategoryUrl($category);
     }
 
+	/**
+	 * @return bool|mixed
+	 */
     public function checkComment()
     {
         if (!$this->helperData->getBlogConfig('general/enabled')) {
@@ -55,6 +81,10 @@ class View extends Frontend
         return $comment;
     }
 
+	/**
+	 * @param $code
+	 * @return mixed
+	 */
     public function helperComment($code)
     {
         return $this->helperData->getBlogConfig('comment/' . $code);
@@ -80,15 +110,19 @@ class View extends Frontend
         return $result;
     }
 
-    /**
-     * @param $image
-     * get Logo for seo article snippet
-     */
+	/**
+	 * @param $image
+	 * @return string
+	 */
     public function getLogoImage($image)
     {
         return $this->helperData->getBaseMediaUrl() . self::LOGO . $image;
     }
 
+	/**
+	 * @param $content
+	 * @return string
+	 */
     public function getPageFilter($content)
     {
         return $this->filterProvider->getPageFilter()->filter($content);

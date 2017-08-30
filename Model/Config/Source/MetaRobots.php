@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\Config\Source;
 
+/**
+ * Class MetaRobots
+ * @package Mageplaza\Blog\Model\Config\Source
+ */
 class MetaRobots implements \Magento\Framework\Option\ArrayInterface
 {
     const INDEXFOLLOW = 'INDEX,FOLLOW';
@@ -54,6 +58,10 @@ class MetaRobots implements \Magento\Framework\Option\ArrayInterface
         ];
         return $options;
     }
+
+	/**
+	 * @return array
+	 */
     public function getOptionArray()
     {
         return [

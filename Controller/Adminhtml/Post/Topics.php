@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
+/**
+ * Class Topics
+ * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ */
 class Topics extends \Mageplaza\Blog\Controller\Adminhtml\Post
 {
     /**
@@ -29,15 +33,13 @@ class Topics extends \Mageplaza\Blog\Controller\Adminhtml\Post
      */
     public $resultLayoutFactory;
 
-    /**
-     * constructor
-     *
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @param \Mageplaza\Blog\Model\PostFactory $topicFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+	/**
+	 * Topics constructor.
+	 * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+	 * @param \Mageplaza\Blog\Model\PostFactory $topicFactory
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Mageplaza\Blog\Model\PostFactory $topicFactory,

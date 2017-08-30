@@ -28,7 +28,9 @@ $resizeHeight = $block->getBlogConfig('general/resize_image/resize_height');
 if ($checkRss):
 	?>
 	<div class="mp-blog-rss">
-            <a href="<?php echo $checkRss ?>" class="bb-rss-icon"><img src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px"> </a>
+            <a href="<?php echo $checkRss ?>" class="bb-rss-icon">
+                <img src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px">
+            </a>
         </div>
 <?php endif; ?>
 <?php if ($posts != '') : ?>
@@ -45,7 +47,8 @@ if ($checkRss):
             <div class="post-list-content col-md-9 col-sm-8">
 
                 <?php foreach ($posts as $post) : ?>
-                    <div class="post-list-item <?php if($block->getBlogConfig('general/display_style') == 2){echo ' col-sm-6';}else echo ' col-sm-12';?>">
+                    <div class="post-list-item <?php if($block->getBlogConfig('general/display_style') == 2)
+                    {echo ' col-sm-6';}else echo ' col-sm-12';?>">
                         <div class="post-item-wraper">
                             <div class="post-image">
                                 <?php if ($post->getImage()) : ?>
@@ -58,25 +61,28 @@ if ($checkRss):
                             </div>
                             <div class="post-info-wraper">
                                 <h2 class="mp-post-title">
-                                    <a class="post-link-title" title="<?php echo $post->getName(); ?>" href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
+                                    <a class="post-link-title" title="<?php echo $post->getName(); ?>"
+                                       href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
                                         <?php echo $post->getName();?>
                                     </a>
                                 </h2>
-
 
                                 <div class="mp-post-info">
                                     <?php echo __('Posted on'); ?> <?php echo $block->getDateFormat($post->getPublishDate());
                                     ?>
                                     <?php 	echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):(''); ?>
+									<?php
+									if ($block->getAuthorByPost($post->getAuthorId())->getName() && $block->getBlogConfig('general/display_author')){ ?>
+                                        | By : <a class="mp-info" href="<?php echo $block->getAuthorUrl($block->getAuthorByPost($post->getAuthorId())) ?>">
+                                            <?php echo  $block->getAuthorByPost($post->getAuthorId())->getName(); ?></a>
+									<?php } ?>
                                 </div>
-
 
                                 <div class="post-short-description">
                                     <p><?php echo $post->getShortDescription(); ?></p>
                                 </div>
 
                                 <div class="mp-clearfix"></div>
-
 
                                 <div class="mp-post-meta-info mp-alignright">
                                         <div class="actions">
@@ -88,7 +94,7 @@ if ($checkRss):
                         </div>
                     </div>
                 <?php endforeach; ?>
-
+				<?php echo $this->getChildHtml('mpblog_copyright');?>
             </div>
 
             <div class="mp-sidebar col-md-3 col-sm-4">
@@ -105,7 +111,8 @@ if ($checkRss):
                   <div class="post-list-content col-md-9 col-sm-8">
 
                         <?php foreach ($posts as $post) : ?>
-                            <div class="post-list-item <?php if($block->getBlogConfig('general/display_style') == 2){echo ' col-sm-6';}else echo ' col-sm-12';?>">
+                            <div class="post-list-item <?php if($block->getBlogConfig('general/display_style') == 2)
+                            {echo ' col-sm-6';}else echo ' col-sm-12';?>">
                                 <div class="post-item-wraper">
                                     <div class="post-image">
                                         <?php if ($post->getImage()) : ?>
@@ -118,25 +125,28 @@ if ($checkRss):
                                     </div>
                                     <div class="post-info-wraper">
                                         <h2 class="mp-post-title">
-                                            <a class="post-link-title" title="<?php echo $post->getName(); ?>" href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
+                                            <a class="post-link-title" title="<?php echo $post->getName(); ?>"
+                                               href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
                                                 <?php echo $post->getName();?>
                                             </a>
                                         </h2>
-
 
                                         <div class="mp-post-info">
                                             <?php echo __('Posted on'); ?> <?php echo $block->getDateFormat($post->getPublishDate());
                                             ?>
                                             <?php 	echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):(''); ?>
+											<?php
+											if ($block->getAuthorByPost($post->getAuthorId())->getName() && $block->getBlogConfig('general/display_author')){ ?>
+                                                | By : <a class="mp-info" href="<?php echo $block->getAuthorUrl($block->getAuthorByPost($post->getAuthorId())) ?>">
+                                            <?php echo  $block->getAuthorByPost($post->getAuthorId())->getName(); ?></a>
+											<?php } ?>
                                         </div>
-
 
                                         <div class="post-short-description">
                                             <p><?php echo $post->getShortDescription(); ?></p>
                                         </div>
 
                                         <div class="mp-clearfix"></div>
-
 
                                         <div class="mp-post-meta-info mp-alignright">
                                                 <div class="actions">
@@ -148,7 +158,7 @@ if ($checkRss):
                                 </div>
                             </div>
                         <?php endforeach; ?>
-
+                    <?php echo $this->getChildHtml('mpblog_copyright');?>
                     </div>
 
 			  <?php }?>

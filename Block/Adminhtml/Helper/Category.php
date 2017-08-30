@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Helper;
 
+/**
+ * Class Category
+ * @package Mageplaza\Blog\Block\Adminhtml\Helper
+ */
 class Category extends \Magento\Framework\Data\Form\Element\Multiselect
 {
     /**

@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\Author;
 
+/**
+ * Class Image
+ * @package Mageplaza\Blog\Model\Author
+ */
 class Image
 {
     /**

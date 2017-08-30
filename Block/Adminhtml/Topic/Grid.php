@@ -20,8 +20,15 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Topic;
 
+/**
+ * Class Grid
+ * @package Mageplaza\Blog\Block\Adminhtml\Topic
+ */
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
+	/**
+	 * @return null
+	 */
     public function getTopicGrid()
     {
         return null;

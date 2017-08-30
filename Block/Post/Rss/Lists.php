@@ -53,13 +53,14 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
      */
     public $helper;
 
-    /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Image $imageHelper
-     * @param \Magento\Catalog\Model\Rss\Product\NewProducts $rssModel
-     * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
-     * @param array $data
-     */
+	/**
+	 * Lists constructor.
+	 * @param \Magento\Framework\View\Element\Template\Context $context
+	 * @param \Mageplaza\Blog\Model\PostFactory $rssModel
+	 * @param \Mageplaza\Blog\Helper\Data $helper
+	 * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
+	 * @param array $data
+	 */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Mageplaza\Blog\Model\PostFactory $rssModel,

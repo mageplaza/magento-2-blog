@@ -7,10 +7,40 @@
  */
 namespace Mageplaza\Blog\Model;
 
+/**
+ * Class Sitemap
+ * @package Mageplaza\Blog\Model
+ */
 class Sitemap extends \Magento\Sitemap\Model\Sitemap
 {
+	/**
+	 * @var \Mageplaza\Blog\Helper\Data
+	 */
     protected $blogDataHelper;
+	/**
+	 * @var mixed
+	 */
     protected $router;
+
+	/**
+	 * Sitemap constructor.
+	 * @param \Mageplaza\Blog\Helper\Data $blogDataHelper
+	 * @param \Magento\Framework\Model\Context $context
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Framework\Escaper $escaper
+	 * @param \Magento\Sitemap\Helper\Data $sitemapData
+	 * @param \Magento\Framework\Filesystem $filesystem
+	 * @param \Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory $categoryFactory
+	 * @param \Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory $productFactory
+	 * @param \Magento\Sitemap\Model\ResourceModel\Cms\PageFactory $cmsFactory
+	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $modelDate
+	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+	 * @param \Magento\Framework\App\RequestInterface $request
+	 * @param \Magento\Framework\Stdlib\DateTime $dateTime
+	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+	 * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+	 * @param array $data
+	 */
     public function __construct(
         \Mageplaza\Blog\Helper\Data $blogDataHelper,
         \Magento\Framework\Model\Context $context,

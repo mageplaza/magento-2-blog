@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml;
 
+/**
+ * Class Category
+ * @package Mageplaza\Blog\Block\Adminhtml
+ */
 class Category extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**

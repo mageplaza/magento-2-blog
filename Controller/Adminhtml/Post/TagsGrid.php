@@ -20,8 +20,16 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
+/**
+ * Class TagsGrid
+ * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ */
 class TagsGrid extends \Mageplaza\Blog\Controller\Adminhtml\Post\Tags
 {
+
+	/**
+	 * @return null
+	 */
     public function getBlogPost()
     {
         return null;

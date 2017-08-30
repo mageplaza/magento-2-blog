@@ -48,7 +48,8 @@ if ($checkRss):
 						echo ' col-sm-6';}else echo ' col-sm-12';?>">
                         <div class="post-item-wraper">
                             <div class="post-image">
-                                <?php if ($post->getImage()) : ?>
+                                <?php if ($post->getImage()) :
+                                    ?>
                                     <a href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
                                         <img class="img-responsive"
                                              src="<?php echo $block->resizeImage($post->getImage(),$resizeWidth,$resizeHeight); ?>"
@@ -100,6 +101,7 @@ if ($checkRss):
                 <div class="mp-sidebar col-md-3 col-sm-4">
 
                 <?php
+				echo $this->getChildHtml('sidebar_search');
                 echo $this->getChildHtml('mpblog_sidebarmostview');
                 echo $this->getChildHtml('mpblog_sidebarcategory');
                 echo $this->getChildHtml('mpblog_sidebarmonthly');
@@ -113,6 +115,7 @@ if ($checkRss):
 
                 <div class="mp-sidebar col-md-3 col-sm-4">
                     <?php
+					echo $this->getChildHtml('sidebar_search');
                     echo $this->getChildHtml('mpblog_sidebarmostview');
                     echo $this->getChildHtml('mpblog_sidebarcategory');
                     echo $this->getChildHtml('mpblog_sidebarmonthly');

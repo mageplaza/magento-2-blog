@@ -62,7 +62,7 @@ if ($checkRss):
                     <div class="col-xs-12">
                         <hr/>
                         <div class="mp-post-info">
-                            <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getCreatedAt()); ?></span>
+                            <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getPublishDate()); ?></span>
                             <?php if ($block->getPostCategoryHtml($_post)) {?>
                                 | <span><i class="fa fa-folder-open-o"></i> <?php echo __('Categories:'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> </span>
                             <?php } ?>
@@ -79,6 +79,7 @@ if ($checkRss):
                         </div>
                         <hr/>
                     </div>
+					<?php echo $this->getChildHtml('mpblog_copyright');?>
                 </div>
 
                 <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
@@ -123,7 +124,7 @@ if ($checkRss):
                         <div class="col-xs-12">
                             <hr/>
                             <div class="mp-post-info">
-                                <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getCreatedAt()); ?></span>
+                                <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getPublishDate()); ?></span>
 								<?php if ($block->getPostCategoryHtml($_post)) {?>
                                     | <span><i class="fa fa-folder-open-o"></i> <?php echo __('Categories:'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> </span>
 								<?php } ?>
@@ -142,6 +143,7 @@ if ($checkRss):
                             </div>
                             <hr/>
                         </div>
+						<?php echo $this->getChildHtml('mpblog_copyright');?>
                     </div>
 
 				<?php }?>
@@ -395,7 +397,7 @@ if ($checkRss):
     "height": 800,
     "width": 800
   },
-  "datePublished": "<?php echo $block->getDateFormat($_post->getCreatedAt()); ?>",
+  "datePublished": "<?php echo $block->getDateFormat($_post->getPublishDate()); ?>",
   "dateModified": "<?php echo $block->getDateFormat($_post->getUpdatedAt()); ?>",
   "author": {
     "@type": "Person",
