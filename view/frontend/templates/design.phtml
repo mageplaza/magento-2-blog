@@ -19,6 +19,10 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 ?>
+<?php
+$helper = $this->helper('Mageplaza\Blog\Helper\Data');
+$color = $helper->getBlogConfig('general/font_color');
+?>
 <script type="text/javascript">
     require([
             'jquery'
@@ -29,10 +33,6 @@
     );
 </script>
 <?php
-/*===================================================================
-|                       Compatible Themes        				    |
-====================================================================*/
-
 /**
  * Compatible with YourStore Theme
  * URL: https://themeforest.net/item/yourstore-premium-multipurpose-magento-theme/17782705
@@ -89,4 +89,275 @@ if ($block->getCurrentTheme() == "Etheme/yourstore") :
 </style>
 <?php endif;?>
 
+
+<style type="text/css">
+    <?php
+        /**
+         * Post List Page Css
+         */
+    ?>
+    ul.mp-blog-pages {
+        text-align: center;
+    }
+    li.mp-page-item{
+        display: inline-block;
+        margin-right: 5px;
+    }
+    li.mp-page-item a{
+        display: block;
+        width: 25px;
+        height: 25px;
+        border: 1px solid #ddd;
+        line-height: 25px;
+        border-radius: 2px;
+        color: <?php echo $color;?>;
+    }
+    li.mp-page-item a:hover{
+        text-decoration: none !important;
+        background: <?php echo $color;?>;
+        color: #fff;
+    }
+    li.mp-page-item a span.label{
+        display: none;
+    }
+    li.mp-page-item span.selected_page{
+        display: block;
+        width: 25px;
+        height: 25px;
+        border: 1px solid #ddd;
+        line-height: 25px;
+        border-radius: 2px;
+        color: #FFF;
+        background: <?php echo $color?>;
+    }
+    <?php
+	   /**
+		* Post List Content Css
+		*/
+    ?>
+
+    h2.mp-post-title a {
+        color: <?php echo $color?>;
+    }
+    h2.mp-post-title a:hover {
+        text-decoration: none;
+        color: <?php echo $color?>;
+    }
+    h2.mp-post-title a:focus {
+        text-decoration: none;
+        color: <?php echo $color?>;
+    }
+    .mp-post-meta-info a.mp-read-more {
+        color: <?php echo $color?>;
+    }
+    .mp-post-meta-info a.mp-read-more:hover {
+        color: <?php echo $color?>;
+    }
+    .mp-post-info a.mp-info{
+        color: <?php echo $color?>;
+    }
+    .mp-post-info a.mp-info:hover{
+        color: <?php echo $color?>;
+    }
+    .post-info-wraper h2.mp-post-title{
+        margin-top: 0px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: <?php echo $color?>;
+    }
+    .mp-post-info a.mp-info {
+        color: <?php echo $color?>;
+    }
+    .mp-post-info a.mp-info:hover {
+        text-decoration: none;
+        color: <?php echo $color?>;
+    }
+    .nav .nav-tabs li.active{
+        border-top-color: <?php echo $color?>;
+    }
+
+    .about-admin h4.admin-title a{
+        color: <?php echo $color?>;
+    }
+
+    .about-admin h4.admin-title a:hover {
+        color: <?php echo $color?>;
+    }
+    .relate-content a.mp-relate-link{
+        color: #0a0a0a;
+    }
+    .relate-content a.mp-relate-link:hover{
+        color: <?php echo $color?>;
+        text-decoration: none;
+    }
+    .owl-item a.mp-relate-link:hover{
+        color: <?php echo $color?>;
+        text-decoration: none;
+    }
+    .owl-item a.mp-relate-link:focus{
+        color: <?php echo $color?>;
+        text-decoration: none;
+    }
+    ul.nav-tabs li.active{
+        border-top-color: <?php echo $color?>;
+        border-top-style: solid;
+    }
+    a.label.label-default.tags-list:hover {
+        background: <?php echo $color?>;
+        border: 1px solid;
+        color: #fff !important;
+    }
+    a.label.label-default.tags-list:focus{
+        background: <?php echo $color?>;
+        color: #fff !important;
+    }
+    ul.menu-categories a.list-categories:hover {
+        text-decoration: none;
+        color: <?php echo $color?>;
+    }
+    ul.menu-categories a.list-categories:hover i {
+        color: <?php echo $color?>;
+    }
+    #mostview a.list-post-tabs:hover {
+        text-decoration: none;
+        background: #fbfbfb;
+        color: <?php echo $color?>;
+    }
+    #mostrecent a.list-post-tabs:hover {
+        text-decoration: none;
+        background: #fbfbfb;
+        color: <?php echo $color?>;
+    }
+    .nav-tabs a:hover{
+        color: <?php echo $color?> !important;
+    }
+
+    @media(max-width: 768px){
+        ul.nav-tabs li{
+            width: 100%;
+        }
+        ul.nav-tabs li.active{
+            width: 100%;
+            background: <?php echo $color?>;
+            color: #ffffff;
+        }
+    }
+
+    .mpblog-product-name {
+        font-size: 18px;
+        color: <?php echo $color?> !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .products-same-post a.product-item-link:hover {
+        color:<?php echo $color?>;
+        text-decoration: none;
+    }
+    <?php
+        /**
+        * Site Map CSS
+        */
+    ?>
+    .mp-sidebar a.sitemap-link {
+        color: <?php echo $color?> !important;
+    }
+    .mp-sidebar a.sitemap-link:hover {
+        text-decoration: none !important;
+        color: <?php echo $color?> !important;
+    }
+    .menu-archives {
+        list-style: none;
+        padding-left: 8px;
+    }
+    .menu-archives a.list-archives {
+        color: inherit;
+    }
+    .menu-archives a.list-archives:hover {
+        color: <?php echo $color?>;
+        text-decoration: none;
+    }
+
+    <?php
+        /**
+        * Comment CSS
+        */
+    ?>
+    button.default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit {
+        background: <?php echo $color?> !important;
+        color: #fff;
+        border-color: #999 !important;
+    }
+    button.default-cmt__cmt-login__btn-login {
+        background: <?php echo $color?> !important;
+        border-color: #999 !important;
+    }
+    span.cmt-row__cmt-username {
+        font-weight: 600;
+        color: <?php echo $color?>;
+    }
+    a.interactions__btn-actions{
+        color: <?php echo $color?> !important;
+    }
+
+    <?php
+        /**
+        * Widget CSS
+        */
+    ?>
+    .widget-title a{
+        color: <?php echo $color?>;
+        font-size: 26px;
+    }
+    .widget-title a:hover{
+        color: <?php echo $color?>;
+        text-decoration: none;
+        font-size: 26px;
+    }
+    .widget-title a:focus{
+        color: <?php echo $color?>;
+        text-decoration: none;
+        font-size: 26px;
+    }
+
+    <?php
+        /**
+        * Author CSS
+        */
+    ?>
+    .author-name h3{
+        color: <?php echo $color?>;
+        text-align: center;
+    }
+    .author-image img.img-responsive {
+        height: 200px;
+        width: 100%;
+        border: none;
+        padding-right: 7px;
+        padding-left: 7px;
+        margin-top: 15px;
+        margin-bottom: 20px;
+    }
+
+    .share-col-right{
+        display: inline-block;
+        width: 50%;
+    }
+    @media (min-width: 768px) {
+        .post-list-body{
+            display: flex;
+            flex-wrap: wrap;
+        }
+    }
+    @media (max-width: 767px) {
+        .share-col-right{
+            display: inline-block;
+            width: 100%;
+        }
+    }
+
+
+
+</style>
 

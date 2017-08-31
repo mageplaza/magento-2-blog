@@ -20,17 +20,34 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml;
 
+/**
+ * Class Author
+ * @package Mageplaza\Blog\Controller\Adminhtml
+ */
 abstract class Author extends \Magento\Backend\App\Action
 {
 
+	/**
+	 * @var \Mageplaza\Blog\Model\AuthorFactory
+	 */
     public $authorFactory;
 
-
+	/**
+	 * @var \Magento\Framework\Registry
+	 */
     public $coreRegistry;
 
-
+	/**
+	 * @var \Magento\Framework\App\Response\RedirectInterface
+	 */
     public $resultRedirectFactory;
 
+	/**
+	 * Author constructor.
+	 * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
+	 * @param \Magento\Framework\Registry $coreRegistry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Mageplaza\Blog\Model\AuthorFactory $authorFactory,
         \Magento\Framework\Registry $coreRegistry,
@@ -43,7 +60,9 @@ abstract class Author extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
-
+	/**
+	 * @return \Mageplaza\Blog\Model\Author
+	 */
     public function initAuthor()
     {
         $author    = $this->authorFactory->create();

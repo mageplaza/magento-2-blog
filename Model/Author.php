@@ -10,6 +10,10 @@ namespace Mageplaza\Blog\Model;
 
 use \Magento\Framework\Model\AbstractModel;
 
+/**
+ * Class Author
+ * @package Mageplaza\Blog\Model
+ */
 class Author extends AbstractModel
 {
     const CACHE_TAG = 'mageplaza_blog_author';
@@ -18,11 +22,17 @@ class Author extends AbstractModel
         $this->_init('Mageplaza\Blog\Model\ResourceModel\Author');
     }
 
+	/**
+	 * @return array
+	 */
     public function getIdentities()
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
     }
 
+	/**
+	 * @return array
+	 */
     public function getDefaultValues()
     {
         $values = [];

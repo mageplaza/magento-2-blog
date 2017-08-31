@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
+/**
+ * Class RefreshPath
+ * @package Mageplaza\Blog\Controller\Adminhtml\Category
+ */
 class RefreshPath extends \Mageplaza\Blog\Controller\Adminhtml\Category
 {
     /**
@@ -29,15 +33,13 @@ class RefreshPath extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public $resultJsonFactory;
 
-    /**
-     * constructor
-     *
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+	/**
+	 * RefreshPath constructor.
+	 * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+	 * @param \Magento\Framework\Registry $coreRegistry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,

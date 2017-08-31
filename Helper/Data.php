@@ -30,6 +30,10 @@ use Mageplaza\Blog\Model\TopicFactory;
 use Mageplaza\Blog\Model\AuthorFactory;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
 
+/**
+ * Class Data
+ * @package Mageplaza\Blog\Helper
+ */
 class Data extends CoreHelper
 {
     const XML_PATH_BLOG = 'blog/';
@@ -56,6 +60,23 @@ class Data extends CoreHelper
     public $dateTime;
     public $dateTimeFormat;
 
+	/**
+	 * Data constructor.
+	 * @param \Magento\Customer\Model\Session $session
+	 * @param \Magento\Customer\Model\Url $url
+	 * @param \Magento\Framework\App\Helper\Context $context
+	 * @param \Magento\Framework\ObjectManagerInterface $objectManager
+	 * @param \Mageplaza\Blog\Model\PostFactory $postFactory
+	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+	 * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
+	 * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
+	 * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
+	 * @param \Magento\Framework\View\Element\Template\Context $templateContext
+	 * @param \Magento\Framework\Filter\TranslitUrl $translitUrl
+	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+	 * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
+	 * @param \Mageplaza\Blog\Model\Traffic $traffic
+	 */
     public function __construct(
         \Magento\Customer\Model\Session $session,
         \Magento\Customer\Model\Url $url,
@@ -132,7 +153,7 @@ class Data extends CoreHelper
     {
         $month = $this->_getRequest()->getParam('month');
         return $list = ($month) ? $type->getSelectedPostsCollection()
-            ->addFieldToFilter('created_at', ['like'=>$month . '%'])
+            ->addFieldToFilter('publish_date', ['like'=>$month . '%'])
             : $type->getSelectedPostsCollection();
     }
 
@@ -163,7 +184,7 @@ class Data extends CoreHelper
         } elseif ($type == self::AUTHOR) {
             $list = $posts->getCollection()->addFieldToFilter('author_id', $id);
         } elseif ($type == self::MONTHLY) {
-            $list = $posts->getCollection()->addFieldToFilter('created_at', ['like'=>$id . '%']);
+            $list = $posts->getCollection()->addFieldToFilter('publish_date', ['like'=>$id . '%']);
         }
 
         if ($list->getSize()) {
@@ -512,7 +533,7 @@ class Data extends CoreHelper
         $posts = $this->postfactory->create()
             ->getCollection()
             ->addFieldToFilter('enabled', 1)
-            ->setOrder('created_at', 'DESC');
+            ->setOrder('publish_date', 'DESC');
 
         $limitRecent = $this->getBlogConfig('sidebar/number_recent_posts') ?: 1;
         $postList = $this->filterItems($posts, $limitRecent);
@@ -618,8 +639,9 @@ class Data extends CoreHelper
         return $str;
     }
 
+//************************* Monthly Archive widget functions  ***************************
     /**
-     * get posts created_at
+     * get posts publish_date
      * @return array
      */
     public function getPostDate()
@@ -628,7 +650,7 @@ class Data extends CoreHelper
         $postDates = [];
         if ($posts) {
             foreach ($posts as $post) {
-                $postDates[] = $post->getCreatedAt();
+                $postDates[] = $post->getPublishDate();
             }
         }
         return $postDates;
@@ -645,7 +667,7 @@ class Data extends CoreHelper
 
         if ($posts) {
             foreach ($posts as $post) {
-                $postDates[] = $this->getDateFormat($post->getCreatedAt(), true);
+                $postDates[] = $this->getDateFormat($post->getPublishDate(), true);
             }
         }
         $result = array_values(array_unique($postDates));
@@ -704,110 +726,27 @@ class Data extends CoreHelper
         return $this->getBaseMediaUrl(). self::AUTHOR_IMG . $image;
     }
 
-    /**
-     * get date formatted
-     * @param $date
-     * @return false|string
-     */
+	/**
+	 * get date formatted
+	 * @param $date
+	 * @param bool $monthly
+	 * @return false|string
+	 */
     public function getDateFormat($date, $monthly = false)
     {
         $dateTime =(new \DateTime($date, new \DateTimeZone('UTC')));
         $dateTime->setTimezone(new \DateTimeZone($this->getTimezone()));
-        $dateArray = [
-            'F j, Y',
-            'Y-m-d',
-            'm/d/Y',
-            'd/m/Y',
-            'F j, Y g:i a',
-            'F j, Y g:i A',
-            'Y-m-d g:i a',
-            'Y-m-d g:i A',
-            'd/m/Y g:i a',
-            'd/m/Y g:i A',
-            'm/d/Y H:i',
-            'd/m/Y H:i'
-        ];
 
-        $result = [];
-
-        for ($i = 0; $i < 12; $i ++) {
-            $result[$i] = $dateTime->format($dateArray[$i]);
-        }
         if ($monthly) {
-            $monthlyArray = [
-                'F , Y',
-                'Y - m',
-                'm / Y',
-                'm / Y'
-            ];
-            $resultMonthly = [];
-            for ($i = 0; $i < 4; $i ++) {
-                $resultMonthly[$i] = $dateTime->format($monthlyArray[$i]);
-            }
+
             $dateType = $this->getBlogConfig('monthly_archive/date_type_monthly');
-            switch ($dateType) {
-                case 0:
-                    $dateFormat = $resultMonthly[0];
-                    break;
-                case 1:
-                    $dateFormat = $resultMonthly[1];
-                    break;
-                case 2:
-                    $dateFormat = $resultMonthly[2];
-                    break;
-                case 3:
-                    $dateFormat = $resultMonthly[3];
-                    break;
-                default:
-                    $dateFormat = $resultMonthly[0];
-                    break;
-            }
+			$dateFormat = $dateTime->format($dateType);
+
             return $dateFormat;
         }
 
         $dateType = $this->getBlogConfig('general/date_type');
-
-        switch ($dateType) {
-            case 0:
-                $dateFormat = $result[0];
-                break;
-            case 1:
-                $dateFormat = $result[1];
-                break;
-            case 2:
-                $dateFormat = $result[2];
-                break;
-            case 3:
-                $dateFormat = $result[3];
-                break;
-            case 4:
-                $dateFormat = $result[4];
-                break;
-            case 5:
-                $dateFormat = $result[5];
-                break;
-            case 6:
-                $dateFormat = $result[6];
-                break;
-            case 7:
-                $dateFormat = $result[7];
-                break;
-            case 8:
-                $dateFormat = $result[8];
-                break;
-            case 9:
-                $dateFormat = $result[9];
-                break;
-            case 10:
-                $dateFormat = $result[10];
-                break;
-            case 11:
-                $dateFormat = $result[11];
-                break;
-            default:
-                $dateFormat = $result[0];
-                break;
-        }
+		$dateFormat = $dateTime->format($dateType);
 
         return $dateFormat;
     }
@@ -839,9 +778,13 @@ class Data extends CoreHelper
         $collection = $this->postCollectionFactory->create();
         $collection->getSelect()->join(['related' => $collection->getTable('mageplaza_blog_post_product')], 'related.post_id=main_table.post_id 
 		AND related.entity_id='.$id .' AND main_table.enabled=1');
-        $collection->setOrder('created_at', 'DESC');
+        $collection->setOrder('publish_date', 'DESC');
         return $collection;
     }
+
+	/**
+	 * @return string
+	 */
     public function getCurrentDate()
     {
         return $this->dateTime->date();

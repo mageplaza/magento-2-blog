@@ -22,14 +22,25 @@ namespace Mageplaza\Blog\Block\Category;
 
 use Mageplaza\Blog\Block\Frontend;
 
+/**
+ * Class Widget
+ * @package Mageplaza\Blog\Block\Category
+ */
 class Widget extends Frontend
 {
-    
+
+	/**
+	 * @return array|string
+	 */
     public function getCategoryList()
     {
         return $this->helperData->getCategoryList();
     }
 
+	/**
+	 * @param $category
+	 * @return string
+	 */
     public function getCategoryUrl($category)
     {
         return $this->helperData->getCategoryUrl($category);

@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml;
 
+/**
+ * Class Category
+ * @package Mageplaza\Blog\Controller\Adminhtml
+ */
 abstract class Category extends \Magento\Backend\App\Action
 {
     /**
@@ -43,14 +47,12 @@ abstract class Category extends \Magento\Backend\App\Action
      */
     public $resultRedirectFactory;
 
-    /**
-     * constructor
-     *
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+	/**
+	 * Category constructor.
+	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+	 * @param \Magento\Framework\Registry $coreRegistry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
         \Magento\Framework\Registry $coreRegistry,

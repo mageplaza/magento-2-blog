@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml;
 
+/**
+ * Class Tag
+ * @package Mageplaza\Blog\Controller\Adminhtml
+ */
 abstract class Tag extends \Magento\Backend\App\Action
 {
     /**
@@ -43,14 +47,12 @@ abstract class Tag extends \Magento\Backend\App\Action
      */
     public $resultRedirectFactory;
 
-    /**
-     * constructor
-     *
-     * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+	/**
+	 * Tag constructor.
+	 * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
+	 * @param \Magento\Framework\Registry $coreRegistry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Mageplaza\Blog\Model\TagFactory $tagFactory,
         \Magento\Framework\Registry $coreRegistry,

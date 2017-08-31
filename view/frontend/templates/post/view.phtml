@@ -45,7 +45,9 @@ if ($checkRss):
                 <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1){
 				?>
                 <div class="post-list-content col-md-9 col-sm-8">
-
+                    <div class="post-title col-xs-12" style="margin-bottom: 20px;">
+                        <h1><?php echo $_post->getName();?></h1>
+                    </div>
                     <div class="post-image col-xs-12">
                        <?php if ($_post->getImage()) : ?>
                            <a class="fancybox" href="<?php echo $block->getImageUrl($_post->getImage()); ?>">
@@ -54,7 +56,6 @@ if ($checkRss):
                        <?php endif; ?>
                     </div>
 
-
                     <div class="post-post_content col-xs-12">
                          <?php echo $block->getPageFilter($_post->getPostContent()); ?>
                     </div>
@@ -62,7 +63,7 @@ if ($checkRss):
                     <div class="col-xs-12">
                         <hr/>
                         <div class="mp-post-info">
-                            <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getCreatedAt()); ?></span>
+                            <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getPublishDate()); ?></span>
                             <?php if ($block->getPostCategoryHtml($_post)) {?>
                                 | <span><i class="fa fa-folder-open-o"></i> <?php echo __('Categories:'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> </span>
                             <?php } ?>
@@ -79,34 +80,37 @@ if ($checkRss):
                         </div>
                         <hr/>
                     </div>
+					<?php echo $this->getChildHtml('mpblog_copyright');?>
                 </div>
 
                 <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
-                        <?php
-                        echo $this->getChildHtml('sidebar_search');
-                        echo $this->getChildHtml('sidebar_mostview');
-                        echo $this->getChildHtml('sidebar_category');
-                        echo $this->getChildHtml('sidebar_monthly');
-                        echo $this->getChildHtml('sidebar_topic');
-                        echo $this->getChildHtml('sidebar_tag');
-                        ?>
+                         <?php
+						 echo $this->getChildHtml('sidebar_search');
+						 echo $this->getChildHtml('mpblog_sidebarmostview');
+						 echo $this->getChildHtml('mpblog_sidebarcategory');
+						 echo $this->getChildHtml('mpblog_sidebarmonthly');
+						 echo $this->getChildHtml('mpblog_sidebartopic');
+						 echo $this->getChildHtml('mpblog_sidebartag');
+						 ?>
                 </div>
 					<?php
 				}else{ ?>
 
                     <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
-                        <?php
-                        echo $this->getChildHtml('sidebar_search');
-                        echo $this->getChildHtml('sidebar_mostview');
-                        echo $this->getChildHtml('sidebar_category');
-                        echo $this->getChildHtml('sidebar_monthly');
-                        echo $this->getChildHtml('sidebar_topic');
-                        echo $this->getChildHtml('sidebar_tag');
-                        ?>
+                         <?php
+						 echo $this->getChildHtml('sidebar_search');
+						 echo $this->getChildHtml('mpblog_sidebarmostview');
+						 echo $this->getChildHtml('mpblog_sidebarcategory');
+						 echo $this->getChildHtml('mpblog_sidebarmonthly');
+						 echo $this->getChildHtml('mpblog_sidebartopic');
+						 echo $this->getChildHtml('mpblog_sidebartag');
+						 ?>
                     </div>
 
                     <div class="post-list-content col-md-9 col-sm-8">
-
+                        <div class="post-title col-xs-12" style="margin-bottom: 20px;">
+                        <h1><?php echo $_post->getName();?></h1>
+                    </div>
                         <div class="post-image col-xs-12">
                            <?php if ($_post->getImage()) : ?>
                                <a class="fancybox" href="<?php echo $block->getImageUrl($_post->getImage()); ?>">
@@ -123,7 +127,7 @@ if ($checkRss):
                         <div class="col-xs-12">
                             <hr/>
                             <div class="mp-post-info">
-                                <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getCreatedAt()); ?></span>
+                                <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getPublishDate()); ?></span>
 								<?php if ($block->getPostCategoryHtml($_post)) {?>
                                     | <span><i class="fa fa-folder-open-o"></i> <?php echo __('Categories:'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> </span>
 								<?php } ?>
@@ -142,12 +146,12 @@ if ($checkRss):
                             </div>
                             <hr/>
                         </div>
+						<?php echo $this->getChildHtml('mpblog_copyright');?>
                     </div>
 
 				<?php }?>
             </div>
         </div>
-
 
 <?php if ($block->getBlogConfig('share/enabled')): ?>
 	<div class="mpcss">
@@ -200,7 +204,7 @@ if ($checkRss):
 	?>
 <?php if (count($relatedPosts)): ?>
 
-	<div class="post-same-topics topic-list mpcss">
+	<div class="post-same-topics topic-list mpcss" style="width: 90%;">
 		<div class="row">
 
 					<h2><?php echo ($limitRelated) ? __('Related Posts') : __(''); ?></h2>
@@ -211,12 +215,12 @@ if ($checkRss):
 								$countRelated++;
 							?>
 								<?php if($countRelated > $limitRelated) break; ?>
-						<div class="relate-content item col-md-3 col-sm-6 col-xs-12" style="height: 300px">
+						<div class="relate-content item col-md-3 col-sm-6 col-xs-12">
 							<a class="mp-relate-link" href="<?php echo $block->getUrlByPost($relatedPost) ?>">
                                 <?php if ($relatedPost->getImage()){ ?>
                                 <img class="img-responsive" src="<?php echo $block->getImageUrl($relatedPost->getImage()); ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
                                 <?php } else {?>
-                                    <img class="img-responsive" src="<?php echo $block->getDefaultImageUrl() ?>"align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
+                                    <img class="img-responsive" src="<?php echo $block->getDefaultImageUrl() ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
                                 <?php }?>
 								<?php echo $relatedPost->getName(); ?>
                             </a>
@@ -232,7 +236,7 @@ if ($checkRss):
         //************************* Related products from the same post ***************************
         if ($block->getBlogConfig('product_post/post_detail/enable_product')) :
     ?>
-    <div class="products-same-post mpcss">
+    <div class="products-same-post mpcss" style="width: 90%;">
         <div class="row">
 
             <h2><?php echo ($block->getBlogConfig('product_post/post_detail/title')) ? __($block->getBlogConfig('product_post/post_detail/title')): __('Related Products')?></h2>
@@ -242,7 +246,7 @@ if ($checkRss):
     </div>
     <?php endif;?>
 
-<div class="mpcss mp-comment">
+<div class="mpcss mp-comment" style="width: 90%">
 
         <?php if( $_post->getAllowComment()==1) { ?>
             <?php $typeComment = $block->checkComment(); ?>
@@ -344,29 +348,6 @@ if ($checkRss):
         }?>
 
 </div>
-<script>
-    less = {
-        env: "production",
-        logLevel: 2,
-        async: false,
-        fileAsync: false,
-        poll: 1000,
-        functions: {},
-        dumpLineNumbers: "comments",
-        relativeUrls: false,
-        useFileCache: true,
-        modifyVars: {
-            '@color': '<?php echo $block->getBlogConfig('general/font_color')?>'
-        }
-
-    };
-</script>
-<script>
-	require([
-		'jquery',
-		'Mageplaza_Blog/js/lib/less.min'
-	]);
-</script>
 
 <?php
 	/**
@@ -395,7 +376,7 @@ if ($checkRss):
     "height": 800,
     "width": 800
   },
-  "datePublished": "<?php echo $block->getDateFormat($_post->getCreatedAt()); ?>",
+  "datePublished": "<?php echo $block->getDateFormat($_post->getPublishDate()); ?>",
   "dateModified": "<?php echo $block->getDateFormat($_post->getUpdatedAt()); ?>",
   "author": {
     "@type": "Person",
@@ -445,4 +426,17 @@ if ($checkRss):
         });
     });
 </script>
+
+<style type="text/css">
+    <?php if ($block->helperComment('facebook_colorscheme') == "dark"){
+     ?>
+    .mp-comment .box-collateral span{
+        background-color: #3e2f3a !important;
+    }
+    <?php }?>
+    .post-same-topics .relate-content-container{
+        display: flex;
+        flex-wrap: wrap;
+    }
+</style>
 

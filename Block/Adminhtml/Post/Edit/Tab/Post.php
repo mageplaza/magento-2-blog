@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
 
+/**
+ * Class Post
+ * @package Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab
+ */
 class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
@@ -43,8 +47,16 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      */
     public $metaRobotsOptions;
 
+	/**
+	 * @var \Magento\Store\Model\System\Store
+	 */
     public $systemStore;
+
+	/**
+	 * @var \Magento\Backend\Model\Auth\Session
+	 */
     protected $authSession;
+
     /**
      * constructor
      *
@@ -201,7 +213,7 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 				'title' => __('Publish Date'),
 				'date_format' => $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT),
 				'time_format' => $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT),
-                'note' => __('GTM 0 Time Zone'),
+				'timezone' => false
 			)
 		);
 		$fieldset->addField(
@@ -261,6 +273,12 @@ class Post extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 $post->addData($post->getDefaultValues());
             }
         }
+		if ($post->getData('publish_date')) {
+			$date = $post->getData('publish_date');
+			$date = new \DateTime($date, new \DateTimeZone('UTC'));
+			$date->setTimezone(new \DateTimeZone($this->_localeDate->getConfigTimezone()));
+			$post->setData('publish_date', $date);
+		}
         $form->addValues($post->getData());
         $this->setForm($form);
         return parent::_prepareForm();

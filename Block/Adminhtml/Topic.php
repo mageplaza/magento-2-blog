@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml;
 
+/**
+ * Class Topic
+ * @package Mageplaza\Blog\Block\Adminhtml
+ */
 class Topic extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**

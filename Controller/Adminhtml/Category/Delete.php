@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
+/**
+ * Class Delete
+ * @package Mageplaza\Blog\Controller\Adminhtml\Category
+ */
 class Delete extends \Mageplaza\Blog\Controller\Adminhtml\Category
 {
     /**

@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Tag;
 
+/**
+ * Class Edit
+ * @package Mageplaza\Blog\Block\Adminhtml\Tag
+ */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**

@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml;
 
+/**
+ * Class Tag
+ * @package Mageplaza\Blog\Block\Adminhtml
+ */
 class Tag extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**

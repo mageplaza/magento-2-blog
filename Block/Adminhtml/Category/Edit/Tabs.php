@@ -39,15 +39,14 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      */
     public $coreRegistry;
 
-    /**
-     * constructor
-     *
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param array $data
-     */
+	/**
+	 * Tabs constructor.
+	 * @param \Magento\Framework\Registry $coreRegistry
+	 * @param \Magento\Backend\Block\Template\Context $context
+	 * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+	 * @param \Magento\Backend\Model\Auth\Session $authSession
+	 * @param array $data
+	 */
     public function __construct(
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\Block\Template\Context $context,

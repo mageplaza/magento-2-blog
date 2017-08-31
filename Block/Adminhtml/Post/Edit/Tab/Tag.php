@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
 
+/**
+ * Class Tag
+ * @package Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab
+ */
 class Tag extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**

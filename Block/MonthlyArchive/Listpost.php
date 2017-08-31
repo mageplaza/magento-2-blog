@@ -22,18 +22,31 @@ namespace Mageplaza\Blog\Block\MonthlyArchive;
 
 use Mageplaza\Blog\Block\Frontend;
 
+/**
+ * Class Listpost
+ * @package Mageplaza\Blog\Block\MonthlyArchive
+ */
 class Listpost extends Frontend
 {
+	/**
+	 * @return array|string
+	 */
     public function getPostList()
     {
         return $this->getBlogPagination(\Mageplaza\Blog\Helper\Data::MONTHLY, $this->getCurrentUrl());
     }
 
+	/**
+	 * @return string
+	 */
     public function checkRss()
     {
         return $this->helperData->getBlogUrl('post/rss');
     }
 
+	/**
+	 * @return mixed
+	 */
     public function getCurrentUrl()
     {
         $currentUrl = $this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);

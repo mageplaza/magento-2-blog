@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\ResourceModel\Category;
 
+/**
+ * Class Collection
+ * @package Mageplaza\Blog\Model\ResourceModel\Category
+ */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**

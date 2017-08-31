@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
+/**
+ * Class SuggestCategories
+ * @package Mageplaza\Blog\Controller\Adminhtml\Category
+ */
 class SuggestCategories extends \Mageplaza\Blog\Controller\Adminhtml\Category
 {
     /**
@@ -36,16 +40,14 @@ class SuggestCategories extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public $layoutFactory;
 
-    /**
-     * constructor
-     *
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+	/**
+	 * SuggestCategories constructor.
+	 * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+	 * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+	 * @param \Magento\Framework\Registry $coreRegistry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,

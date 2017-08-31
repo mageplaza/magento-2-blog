@@ -20,8 +20,15 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Post;
 
+/**
+ * Class Grid
+ * @package Mageplaza\Blog\Block\Adminhtml\Post
+ */
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
+	/**
+	 * @return null
+	 */
     public function getPostGrid()
     {
         return null;

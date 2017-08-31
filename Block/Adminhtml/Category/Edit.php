@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Category;
 
+/**
+ * Class Edit
+ * @package Mageplaza\Blog\Block\Adminhtml\Category
+ */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
 

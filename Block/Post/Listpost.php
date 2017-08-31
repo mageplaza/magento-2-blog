@@ -22,9 +22,16 @@ namespace Mageplaza\Blog\Block\Post;
 
 use Mageplaza\Blog\Block\Frontend;
 
+/**
+ * Class Listpost
+ * @package Mageplaza\Blog\Block\Post
+ */
 class Listpost extends Frontend
 {
 
+	/**
+	 * @return string
+	 */
     public function checkRss()
     {
         return $this->helperData->getBlogUrl('post/rss');

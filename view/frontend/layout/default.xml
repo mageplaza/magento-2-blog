@@ -22,7 +22,6 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <css src="Mageplaza_Blog::css/source/_module.less" rel="stylesheet/less" type="text/less"/>
         <css src="Mageplaza_Core::css/mp.css"/>
         <css src="Mageplaza_Core::css/font-awesome.min.css"/>
     </head>
@@ -31,10 +30,6 @@
             <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_footer_link" as="mp_footer_link"
                    template="Mageplaza_Blog::html/footer.phtml">
             </block>
-
-
-            <!--...-->
-
         </referenceBlock>
     </body>
 </page>

@@ -20,10 +20,21 @@
  */
 namespace Mageplaza\Blog\Plugin;
 
+/**
+ * Class Topmenu
+ * @package Mageplaza\Blog\Plugin
+ */
 class Topmenu
 {
+	/**
+	 * @var \Mageplaza\Blog\Helper\Data
+	 */
     public $helper;
 
+	/**
+	 * Topmenu constructor.
+	 * @param \Mageplaza\Blog\Helper\Data $helper
+	 */
     public function __construct(
         \Mageplaza\Blog\Helper\Data $helper
     ) {
@@ -31,6 +42,11 @@ class Topmenu
         $this->helper = $helper;
     }
 
+	/**
+	 * @param \Magento\Theme\Block\Html\Topmenu $topmenu
+	 * @param $html
+	 * @return string
+	 */
     public function afterGetHtml(\Magento\Theme\Block\Html\Topmenu $topmenu, $html)
     {
         $blogHtml='';

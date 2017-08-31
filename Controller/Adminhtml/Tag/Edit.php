@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 
+/**
+ * Class Edit
+ * @package Mageplaza\Blog\Controller\Adminhtml\Tag
+ */
 class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Tag
 {
     /**
@@ -43,17 +47,14 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Tag
      */
     public $resultJsonFactory;
 
-    /**
-     * constructor
-     *
-     * @param \Magento\Backend\Model\Session $backendSession
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+	/**
+	 * Edit constructor.
+	 * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+	 * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+	 * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,

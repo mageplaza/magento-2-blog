@@ -26,21 +26,14 @@
             <block class="Mageplaza\Blog\Block\Frontend" template="Mageplaza_Blog::design.phtml"/>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Author\Listpost" template="Mageplaza_Blog::category/post/list.phtml">
-                <block class="Mageplaza\Blog\Block\Author\Widget" name="mp.blog.view.sidebar.author"
-            template="Mageplaza_Blog::author/widget.phtml"/>
-            <!--<block class="Mageplaza\Blog\Block\Frontend" template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search" />-->
-            <!--<block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"-->
-            <!--template="Mageplaza_Blog::sidebar/mostview.phtml"/>-->
-            <!--<block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category"-->
-            <!--template="Mageplaza_Blog::category/widget.phtml"/>-->
-            <block class="Mageplaza\Blog\Block\MonthlyArchive\Widget" name="mp.blog.view.sidebar.monthly"
-            template="Mageplaza_Blog::monthly/widget.phtml"/>
-            <!--<block class="Mageplaza\Blog\Block\Topic\Widget" name="mp.blog.view.sidebar.topic"-->
-            <!--template="Mageplaza_Blog::topic/widget.phtml"/>-->
-            <!--<block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"-->
-            <!--template="Mageplaza_Blog::tag/widget.phtml"/>-->
-
+            <block class="Mageplaza\Blog\Block\Author\Listpost" name="mp.blog.author.post.list" as="mpblog_author_post"
+                   template="Mageplaza_Blog::category/post/list.phtml">
+                <block class="Mageplaza\Blog\Block\Author\Widget" name="mp.blog.view.sidebar.author" as="mpblog_sidebarauthor"
+                    template="Mageplaza_Blog::author/widget.phtml"/>
+                <block class="Mageplaza\Blog\Block\MonthlyArchive\Widget" name="mp.blog.view.sidebar.monthly" as="mpblog_sidebarmonthly"
+                    template="Mageplaza_Blog::monthly/widget.phtml"/>
+                <block class="Mageplaza\Blog\Block\Frontend" name="mp.blog.copy.right" as="mpblog_copyright"
+                   template="Mageplaza_Blog::html/copyright.phtml"/>
             </block>
         </referenceContainer>
     </body>

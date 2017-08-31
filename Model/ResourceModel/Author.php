@@ -9,6 +9,10 @@ namespace Mageplaza\Blog\Model\ResourceModel;
 
 use \Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
+/**
+ * Class Author
+ * @package Mageplaza\Blog\Model\ResourceModel
+ */
 class Author extends AbstractDb
 {
     public $helperData;

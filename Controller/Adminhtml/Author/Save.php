@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Author;
 
+/**
+ * Class Save
+ * @package Mageplaza\Blog\Controller\Adminhtml\Author
+ */
 class Save extends \Mageplaza\Blog\Controller\Adminhtml\Author
 {
     /**
@@ -49,17 +53,22 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Author
      * @var \Magento\Backend\Helper\Js
      */
     public $jsHelper;
+
+	/**
+	 * @var \Magento\Framework\Stdlib\DateTime\DateTime
+	 */
     public $date;
-    /**
-     * constructor
-     *
-     * @param \Magento\Backend\Model\Session $backendSession
-     * @param \Magento\Backend\Helper\Js $jsHelper
-     * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+
+	/**
+	 * Save constructor.
+	 * @param \Mageplaza\Blog\Model\Upload $uploadModel
+	 * @param \Mageplaza\Blog\Model\Author\Image $imageModel
+	 * @param \Magento\Backend\Helper\Js $jsHelper
+	 * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
+	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Mageplaza\Blog\Model\Upload $uploadModel,
         \Mageplaza\Blog\Model\Author\Image $imageModel,

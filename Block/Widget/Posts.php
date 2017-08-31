@@ -23,11 +23,21 @@ namespace Mageplaza\Blog\Block\Widget;
 use Magento\Widget\Block\BlockInterface;
 use Mageplaza\Blog\Block\Frontend;
 
+/**
+ * Class Posts
+ * @package Mageplaza\Blog\Block\Widget
+ */
 class Posts extends Frontend implements BlockInterface
 {
 
+	/**
+	 * @var string
+	 */
     protected $_template = "widget/posts.phtml";
 
+	/**
+	 * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection|\Mageplaza\Blog\Model\ResourceModel\Post\Collection
+	 */
     public function getCollection()
     {
         if ($this->hasData('show_type') && $this->getData('show_type')==='category') {
@@ -35,15 +45,23 @@ class Posts extends Frontend implements BlockInterface
         } else {
             $postsCollection = $this->helperData->postfactory->create()->getCollection();
         }
-        $postsCollection->addOrder('created_at')->setPageSize($this->getData('post_count'));
+        $postsCollection->addOrder('publish_date')->setPageSize($this->getData('post_count'));
         return $postsCollection;
     }
+
+	/**
+	 * @return mixed
+	 */
     public function getTitle()
     {
 
         return $this->getData('title');
     }
 
+	/**
+	 * @param $code
+	 * @return string
+	 */
     public function getBlogUrl($code)
     {
 

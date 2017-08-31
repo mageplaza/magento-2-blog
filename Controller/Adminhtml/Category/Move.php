@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
+/**
+ * Class Move
+ * @package Mageplaza\Blog\Controller\Adminhtml\Category
+ */
 class Move extends \Mageplaza\Blog\Controller\Adminhtml\Category
 {
     /**
@@ -36,24 +40,20 @@ class Move extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public $layoutFactory;
 
-    /**
-     * Logger instance
-     *
-     * @var \Psr\Log\LoggerInterface
-     */
+	/**
+	 * @var \Psr\Log\LoggerInterface
+	 */
     public $logger;
 
-    /**
-     * constructor
-     *
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+	/**
+	 * Move constructor.
+	 * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+	 * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+	 * @param \Psr\Log\LoggerInterface $logger
+	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+	 * @param \Magento\Framework\Registry $coreRegistry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,

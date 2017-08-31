@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
+/**
+ * Class Edit
+ * @package Mageplaza\Blog\Controller\Adminhtml\Category
+ */
 class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
 {
     /**
@@ -43,21 +47,25 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public $resultJsonFactory;
 
+	/**
+	 * @var \Magento\Framework\ObjectManagerInterface
+	 */
     public $objectManager;
 
+	/**
+	 * @var \Magento\Framework\DataObject
+	 */
     public $dataObject;
 
-    /**
-     * constructor
-     *
-     * @param \Magento\Backend\Model\Session $backendSession
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+	/**
+	 * Edit constructor.
+	 * @param \Magento\Framework\DataObject $dataObject
+	 * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+	 * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Magento\Framework\DataObject $dataObject,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,

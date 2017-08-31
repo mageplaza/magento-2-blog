@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 
+/**
+ * Class MassDelete
+ * @package Mageplaza\Blog\Controller\Adminhtml\Tag
+ */
 class MassDelete extends \Magento\Backend\App\Action
 {
     /**

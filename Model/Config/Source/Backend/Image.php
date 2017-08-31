@@ -21,6 +21,10 @@
 
 namespace Mageplaza\Blog\Model\Config\Source\Backend;
 
+/**
+ * Class Image
+ * @package Mageplaza\Blog\Model\Config\Source\Backend
+ */
 class Image extends \Magento\Config\Model\Config\Backend\Image
 {
     const UPLOAD_DIR = 'mageplaza/blog/logo';

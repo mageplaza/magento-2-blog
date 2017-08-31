@@ -26,19 +26,22 @@
             <block class="Mageplaza\Blog\Block\Frontend" template="Mageplaza_Blog::design.phtml"/>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\MonthlyArchive\Listpost" template="Mageplaza_Blog::category/post/list.phtml">
-                <block class="Mageplaza\Blog\Block\Sidebar\Search" template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search" />
-                <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview"
+            <block class="Mageplaza\Blog\Block\MonthlyArchive\Listpost" name="mp.blog.monthly.post.list" as="mpblog_monthly_post"
+                   template="Mageplaza_Blog::category/post/list.phtml">
+                <block class="Mageplaza\Blog\Block\Sidebar\Search" name="mp.blog.view.sidebar.search" as="sidebar_search"
+                       template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search" />
+                <block class="Mageplaza\Blog\Block\Sidebar\Mostview" name="mp.blog.view.sidebar.mostview" as="mpblog_sidebarmostview"
                        template="Mageplaza_Blog::sidebar/mostview.phtml"/>
-                <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category"
+                <block class="Mageplaza\Blog\Block\Category\Widget" name="mp.blog.view.sidebar.category" as="mpblog_sidebarcategory"
                        template="Mageplaza_Blog::category/widget.phtml"/>
-                <block class="Mageplaza\Blog\Block\MonthlyArchive\Widget" name="mp.blog.view.sidebar.monthly"
+                <block class="Mageplaza\Blog\Block\MonthlyArchive\Widget" name="mp.blog.view.sidebar.monthly" as="mpblog_sidebarmonthly"
                        template="Mageplaza_Blog::monthly/widget.phtml"/>
-                <block class="Mageplaza\Blog\Block\Topic\Widget" name="mp.blog.view.sidebar.topic"
+                <block class="Mageplaza\Blog\Block\Topic\Widget" name="mp.blog.view.sidebar.topic" as="mpblog_sidebartopic"
                        template="Mageplaza_Blog::topic/widget.phtml"/>
-                <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag"
+                <block class="Mageplaza\Blog\Block\Tag\Widget" name="mp.blog.view.sidebar.tag" as="mpblog_sidebartag"
                        template="Mageplaza_Blog::tag/widget.phtml"/>
-
+                <block class="Mageplaza\Blog\Block\Frontend" name="mp.blog.copy.right" as="mpblog_copyright"
+                       template="Mageplaza_Blog::html/copyright.phtml"/>
             </block>
         </referenceContainer>
     </body>

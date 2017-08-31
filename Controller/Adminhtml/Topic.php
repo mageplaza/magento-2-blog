@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml;
 
+/**
+ * Class Topic
+ * @package Mageplaza\Blog\Controller\Adminhtml
+ */
 abstract class Topic extends \Magento\Backend\App\Action
 {
     /**
@@ -43,14 +47,12 @@ abstract class Topic extends \Magento\Backend\App\Action
      */
     public $resultRedirectFactory;
 
-    /**
-     * constructor
-     *
-     * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\App\Action\Context $context
-     */
+	/**
+	 * Topic constructor.
+	 * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
+	 * @param \Magento\Framework\Registry $coreRegistry
+	 * @param \Magento\Backend\App\Action\Context $context
+	 */
     public function __construct(
         \Mageplaza\Blog\Model\TopicFactory $topicFactory,
         \Magento\Framework\Registry $coreRegistry,

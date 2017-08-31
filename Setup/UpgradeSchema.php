@@ -578,5 +578,52 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
             $installer->endSetup();
         }
+		if (version_compare($context->getVersion(), '2.4.3', '<')) {
+
+			if ($installer->getConnection()->isTableExists('mageplaza_blog_post') == true) {
+				$connection = $installer->getConnection();
+				$connection->modifyColumn('mageplaza_blog_post', 'created_at', ['type' =>\Magento\Framework\DB\Ddl\Table::TYPE_DATETIME]);
+			}
+
+			if ($installer->getConnection()->isTableExists('mageplaza_blog_post') == true) {
+				$connection = $installer->getConnection();
+				$connection->modifyColumn('mageplaza_blog_post', 'updated_at', ['type' =>\Magento\Framework\DB\Ddl\Table::TYPE_DATETIME]);
+			}
+
+			if ($installer->getConnection()->isTableExists('mageplaza_blog_post') == true) {
+				$connection = $installer->getConnection();
+				$connection->modifyColumn('mageplaza_blog_post', 'publish_date', ['type' =>\Magento\Framework\DB\Ddl\Table::TYPE_DATETIME]);
+			}
+
+			if ($installer->getConnection()->isTableExists('mageplaza_blog_tag') == true) {
+				$connection = $installer->getConnection();
+				$connection->modifyColumn('mageplaza_blog_tag', 'created_at', ['type' =>\Magento\Framework\DB\Ddl\Table::TYPE_DATETIME]);
+			}
+
+			if ($installer->getConnection()->isTableExists('mageplaza_blog_tag') == true) {
+				$connection = $installer->getConnection();
+				$connection->modifyColumn('mageplaza_blog_tag', 'updated_at', ['type' =>\Magento\Framework\DB\Ddl\Table::TYPE_DATETIME]);
+			}
+
+			if ($installer->getConnection()->isTableExists('mageplaza_blog_category') == true) {
+				$connection = $installer->getConnection();
+				$connection->modifyColumn('mageplaza_blog_category', 'created_at', ['type' =>\Magento\Framework\DB\Ddl\Table::TYPE_DATETIME]);
+			}
+
+			if ($installer->getConnection()->isTableExists('mageplaza_blog_category') == true) {
+				$connection = $installer->getConnection();
+				$connection->modifyColumn('mageplaza_blog_category', 'updated_at', ['type' =>\Magento\Framework\DB\Ddl\Table::TYPE_DATETIME]);
+			}
+
+			if ($installer->getConnection()->isTableExists('mageplaza_blog_topic') == true) {
+				$connection = $installer->getConnection();
+				$connection->modifyColumn('mageplaza_blog_topic', 'created_at', ['type' =>\Magento\Framework\DB\Ddl\Table::TYPE_DATETIME]);
+			}
+
+			if ($installer->getConnection()->isTableExists('mageplaza_blog_topic') == true) {
+				$connection = $installer->getConnection();
+				$connection->modifyColumn('mageplaza_blog_topic', 'updated_at', ['type' =>\Magento\Framework\DB\Ddl\Table::TYPE_DATETIME]);
+			}
+		}
     }
 }

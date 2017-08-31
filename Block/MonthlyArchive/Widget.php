@@ -22,29 +22,49 @@ namespace Mageplaza\Blog\Block\MonthlyArchive;
 
 use Mageplaza\Blog\Block\Frontend;
 
+/**
+ * Class Widget
+ * @package Mageplaza\Blog\Block\MonthlyArchive
+ */
 class Widget extends Frontend
 {
 
+	/**
+	 * @return array
+	 */
     public function getDateArrayCount()
     {
         return $this->helperData->getDateArrayCount();
     }
 
+	/**
+	 * @return array
+	 */
     public function getDateArrayUnique()
     {
         return $this->helperData->getDateArrayUnique();
     }
 
+	/**
+	 * @return int|mixed
+	 */
     public function getDateCount()
     {
         return $this->helperData->getDateCount();
     }
 
+	/**
+	 * @param $month
+	 * @return string
+	 */
     public function getMonthlyUrl($month)
     {
         return $this->helperData->getMonthlyUrl($month);
     }
 
+	/**
+	 * @return array
+	 */
     public function getDateLabel()
     {
         return $this->helperData->getDateLabel();

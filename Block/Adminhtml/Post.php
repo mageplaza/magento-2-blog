@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml;
 
+/**
+ * Class Post
+ * @package Mageplaza\Blog\Block\Adminhtml
+ */
 class Post extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**

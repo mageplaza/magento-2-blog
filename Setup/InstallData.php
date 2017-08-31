@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Setup;
 
+/**
+ * Class InstallData
+ * @package Mageplaza\Blog\Setup
+ */
 class InstallData implements \Magento\Framework\Setup\InstallDataInterface
 {
     /**
@@ -29,11 +33,11 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
      */
     public $categorySetupFactory;
 
-    /**
-     * constructor
-     *
-     * @param \Mageplaza\Blog\Setup\CategorySetupFactory $categorySetupFactory
-     */
+	/**
+	 * InstallData constructor.
+	 * @param \Magento\Framework\App\State $appState
+	 * @param \Mageplaza\Blog\Setup\CategorySetupFactory $categorySetupFactory
+	 */
     public function __construct(
         \Magento\Framework\App\State $appState,
         \Mageplaza\Blog\Setup\CategorySetupFactory $categorySetupFactory

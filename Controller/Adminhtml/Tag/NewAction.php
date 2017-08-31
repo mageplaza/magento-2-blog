@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 
+/**
+ * Class NewAction
+ * @package Mageplaza\Blog\Controller\Adminhtml\Tag
+ */
 class NewAction extends \Magento\Backend\App\Action
 {
     /**

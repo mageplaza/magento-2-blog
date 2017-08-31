@@ -20,8 +20,15 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Tag;
 
+/**
+ * Class Grid
+ * @package Mageplaza\Blog\Block\Adminhtml\Tag
+ */
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
+	/**
+	 * @return null
+	 */
     public function getTagGrid()
     {
         return null;

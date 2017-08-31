@@ -20,10 +20,16 @@
  */
 namespace Mageplaza\Blog\Model\Config\Source\Widget;
 
+/**
+ * Class ShowType
+ * @package Mageplaza\Blog\Model\Config\Source\Widget
+ */
 class ShowType implements \Magento\Framework\Option\ArrayInterface
 {
 
-
+	/**
+	 * @return array
+	 */
     public function toOptionArray()
     {
         return [

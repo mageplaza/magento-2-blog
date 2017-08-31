@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\Config\Source\Comments\Facebook;
 
+/**
+ * Class Orderby
+ * @package Mageplaza\Blog\Model\Config\Source\Comments\Facebook
+ */
 class Orderby implements \Magento\Framework\Option\ArrayInterface
 {
     const SOCIAL = 'social';

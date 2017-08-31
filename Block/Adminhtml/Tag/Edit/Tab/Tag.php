@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Tag\Edit\Tab;
 
+/**
+ * Class Tag
+ * @package Mageplaza\Blog\Block\Adminhtml\Tag\Edit\Tab
+ */
 class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
@@ -36,8 +40,14 @@ class Tag extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento
      */
     public $booleanOptions;
 
+	/**
+	 * @var \Magento\Store\Model\System\Store
+	 */
     public $systemStore;
 
+	/**
+	 * @var \Mageplaza\Blog\Model\Config\Source\MetaRobots
+	 */
     public $metaRobots;
 
     /**

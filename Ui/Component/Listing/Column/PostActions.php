@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Ui\Component\Listing\Column;
 
+/**
+ * Class PostActions
+ * @package Mageplaza\Blog\Ui\Component\Listing\Column
+ */
 class PostActions extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**

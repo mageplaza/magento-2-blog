@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab;
 
+/**
+ * Class Category
+ * @package Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab
+ */
 class Category extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
@@ -36,26 +40,24 @@ class Category extends \Magento\Backend\Block\Widget\Form\Generic implements \Ma
      */
     public $booleanOptions;
 
-    /**
-     * Meta Robots options
-     *
-     * @var \Mageplaza\Blog\Model\Category\Source\MetaRobots
-     */
+	/**
+	 * @var \Mageplaza\Blog\Model\Config\Source\MetaRobots
+	 */
     public $metaRobotsOptions;
 
     public $systemStore;
 
-    /**
-     * constructor
-     *
-     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
-     * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
-     * @param \Mageplaza\Blog\Model\Category\Source\MetaRobots $metaRobotsOptions
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param array $data
-     */
+	/**
+	 * Category constructor.
+	 * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
+	 * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
+	 * @param \Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobotsOptions
+	 * @param \Magento\Store\Model\System\Store $systemStore
+	 * @param \Magento\Backend\Block\Template\Context $context
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Framework\Data\FormFactory $formFactory
+	 * @param array $data
+	 */
     public function __construct(
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Config\Model\Config\Source\Yesno $booleanOptions,

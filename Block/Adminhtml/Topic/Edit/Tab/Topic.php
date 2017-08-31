@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Topic\Edit\Tab;
 
+/**
+ * Class Topic
+ * @package Mageplaza\Blog\Block\Adminhtml\Topic\Edit\Tab
+ */
 class Topic extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
@@ -36,26 +40,27 @@ class Topic extends \Magento\Backend\Block\Widget\Form\Generic implements \Magen
      */
     public $booleanOptions;
 
-    /**
-     * Meta Robots options
-     *
-     * @var \Mageplaza\Blog\Model\Topic\Source\MetaRobots
-     */
+	/**
+	 * @var \Mageplaza\Blog\Model\Config\Source\MetaRobots
+	 */
     public $metaRobotsOptions;
 
+	/**
+	 * @var \Magento\Store\Model\System\Store
+	 */
     public $systemStore;
 
-    /**
-     * constructor
-     *
-     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
-     * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
-     * @param \Mageplaza\Blog\Model\Topic\Source\MetaRobots $metaRobotsOptions
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param array $data
-     */
+	/**
+	 * Topic constructor.
+	 * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
+	 * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
+	 * @param \Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobotsOptions
+	 * @param \Magento\Store\Model\System\Store $systemStore
+	 * @param \Magento\Backend\Block\Template\Context $context
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Framework\Data\FormFactory $formFactory
+	 * @param array $data
+	 */
     public function __construct(
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Config\Model\Config\Source\Yesno $booleanOptions,

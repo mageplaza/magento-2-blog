@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\ResourceModel;
 
+/**
+ * Class Tag
+ * @package Mageplaza\Blog\Model\ResourceModel
+ */
 class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -43,13 +47,14 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public $tagPostTable;
     public $helperData;
-    /**
-     * constructor
-     *
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     */
+
+	/**
+	 * Tag constructor.
+	 * @param \Mageplaza\Blog\Helper\Data $helperData
+	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+	 * @param \Magento\Framework\Event\ManagerInterface $eventManager
+	 * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+	 */
     public function __construct(
         \Mageplaza\Blog\Helper\Data $helperData,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,

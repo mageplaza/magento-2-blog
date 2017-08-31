@@ -79,14 +79,22 @@ class Frontend extends Template
      */
     protected $_imageFactory;
     protected $_themeProvider;
-    /**
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime      $dateTime
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Mageplaza\Blog\Helper\Data                      $helperData
-     * @param \Magento\Framework\View\Element\Template\Context $templateContext
-     * @param \Magento\Cms\Model\Template\FilterProvider       $filterProvider
-     * @param array                                            $data
-     */
+
+	/**
+	 * Frontend constructor.
+	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+	 * @param \Mageplaza\Blog\Model\CommentFactory $commentFactory
+	 * @param \Mageplaza\Blog\Model\LikeFactory $likeFactory
+	 * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+	 * @param \Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobots
+	 * @param \Magento\Framework\View\Element\Template\Context $context
+	 * @param \Mageplaza\Blog\Helper\Data $helperData
+	 * @param \Magento\Framework\View\Element\Template\Context $templateContext
+	 * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
+	 * @param \Magento\Framework\Image\AdapterFactory $imageFactory
+	 * @param \Magento\Framework\View\Design\Theme\ThemeProviderInterface $_themeProvider
+	 * @param array $data
+	 */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Mageplaza\Blog\Model\CommentFactory $commentFactory,
@@ -456,12 +464,11 @@ class Frontend extends Template
         return $this->setDataFromType($name, $type);
     }
 
-    /**
-     * @param $data
-     * @param $type
-     *
-     * @return $this|string|void
-     */
+	/**
+	 * @param $data
+	 * @param $type
+	 * @return $this|string|void
+	 */
     public function setDataFromType($data, $type)
     {
         switch ($type) {
@@ -633,17 +640,17 @@ class Frontend extends Template
         return $this->helperData->getLoginUrl();
     }
 
-    /**
-     * get comments
-     *
-     * @param $postId
-     */
+	/**
+	 * @param $postId
+	 * @return array
+	 */
     public function getPostComments($postId)
     {
         $result = [];
         $comments = $this->cmtFactory->create()->getCollection()
             ->addFieldToFilter('post_id', $postId);
         foreach ($comments as $comment) {
+//        	\Zend_Debug::dump($comment->getData());die();
             array_push($result, $comment->getData());
         }
         return $result;
@@ -715,22 +722,20 @@ class Frontend extends Template
         return $this->commentTree;
     }
 
-    /**
-     * get comment user
-     *
-     * @param $userId
-     */
+	/**
+	 * @param $userId
+	 * @return \Magento\Customer\Api\Data\CustomerInterface
+	 */
     public function getUserComment($userId)
     {
         $user = $this->customerRepository->getById($userId);
         return $user;
     }
 
-    /**
-     * get comment likes
-     *
-     * @param $cmtId
-     */
+	/**
+	 * @param $cmtId
+	 * @return int|string
+	 */
     public function getCommentLikes($cmtId)
     {
         $likes = $this->likeFactory->create()->getCollection()
@@ -752,11 +757,11 @@ class Frontend extends Template
         );
     }
 
-    /**
-     * get date formatted
-     *
-     * @param $date
-     */
+	/**
+	 * @param $date
+	 * @param bool $monthly
+	 * @return false|string
+	 */
     public function getDateFormat($date, $monthly = false)
     {
         return $this->helperData->getDateFormat($date, $monthly);
@@ -812,4 +817,12 @@ class Frontend extends Template
 
         return $theme->getCode();
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getPageParam()
+	{
+		return $this->getRequest()->getParam('p');
+	}
 }

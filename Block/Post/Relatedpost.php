@@ -22,24 +22,39 @@ namespace Mageplaza\Blog\Block\Post;
 
 use Mageplaza\Blog\Block\Frontend;
 
-//use Magento\Framework\DataObject\IdentityInterface;
-
+/**
+ * Class Relatedpost
+ * @package Mageplaza\Blog\Block\Post
+ */
 class Relatedpost extends Frontend
 {
+
     public function _construct()
     {
 
         $this->setTabTitle();
     }
+
+	/**
+	 * @return mixed
+	 */
     public function getCurrentProduct()
     {
         return $this->getRequest()->getParam('id');
     }
 
+	/**
+	 * @param $id
+	 * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+	 */
 	public function getRelatedPostList($id)
 	{
 		return $this->helperData->getRelatedPostList($id);
 	}
+
+	/**
+	 * @return int|mixed
+	 */
 	public function getLimitPosts()
 	{
 		$limitRelated = ($this->getBlogConfig('product_post/product_detail/post_limit')==''
@@ -48,6 +63,8 @@ class Relatedpost extends Frontend
             : $this->getBlogConfig('product_post/product_detail/post_limit');
 		return $limitRelated;
 	}
+
+
 	public function setTabTitle()
 	{
 		$posts = $this->getRelatedPostList($this->getCurrentProduct());

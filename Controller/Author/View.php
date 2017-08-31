@@ -30,19 +30,58 @@ use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Controller\Result\ForwardFactory;
 
+/**
+ * Class View
+ * @package Mageplaza\Blog\Controller\Author
+ */
 class View extends Action
 {
+	/**
+	 * @var \Magento\Framework\View\Result\PageFactory
+	 */
     public $resultPageFactory;
+
+	/**
+	 * @var \Mageplaza\Blog\Helper\Data
+	 */
     public $helperBlog;
+
+	/**
+	 * @var \Magento\Customer\Api\AccountManagementInterface
+	 */
     public $accountManagement;
+
+	/**
+	 * @var \Magento\Customer\Model\Url
+	 */
     public $customerUrl;
+
+	/**
+	 * @var \Magento\Customer\Model\Session
+	 */
     public $session;
+
+	/**
+	 * @var \Magento\Store\Model\StoreManagerInterface
+	 */
     public $storeManager;
+
     /**
      * @type \Magento\Framework\Controller\Result\ForwardFactory
      */
     protected $resultForwardFactory;
 
+	/**
+	 * View constructor.
+	 * @param \Magento\Framework\App\Action\Context $context
+	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+	 * @param \Mageplaza\Blog\Helper\Data $helperBlog
+	 * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+	 * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
+	 * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
+	 * @param \Magento\Customer\Model\Url $customerUrl
+	 * @param \Magento\Customer\Model\Session $customerSession
+	 */
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,
@@ -63,6 +102,9 @@ class View extends Action
         $this->resultForwardFactory = $resultForwardFactory;
     }
 
+	/**
+	 * @return $this|\Magento\Framework\View\Result\Page
+	 */
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');

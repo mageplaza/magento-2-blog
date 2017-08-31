@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 
+/**
+ * Class InlineEdit
+ * @package Mageplaza\Blog\Controller\Adminhtml\Topic
+ */
 abstract class InlineEdit extends \Magento\Backend\App\Action
 {
     /**

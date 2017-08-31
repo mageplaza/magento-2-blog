@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Ui\Component\Listing\Column;
 
+/**
+ * Class TopicActions
+ * @package Mageplaza\Blog\Ui\Component\Listing\Column
+ */
 class TopicActions extends \Magento\Ui\Component\Listing\Columns\Column
 {
     /**

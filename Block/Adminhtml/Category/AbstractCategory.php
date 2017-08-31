@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Block\Adminhtml\Category;
 
+/**
+ * Class AbstractCategory
+ * @package Mageplaza\Blog\Block\Adminhtml\Category
+ */
 class AbstractCategory extends \Magento\Backend\Block\Template
 {
     /**
@@ -116,12 +120,11 @@ class AbstractCategory extends \Magento\Backend\Block\Template
         return \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
     }
 
-    /**
-     * @param null $parentNodeCategory
-     * @param int $recursionLevel
-     * @return Node|mixed
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
+	/**
+	 * @param null $parentNodeCategory
+	 * @param int $recursionLevel
+	 * @return \Magento\Framework\Data\Tree\Node|\Mageplaza\Blog\Block\Adminhtml\Category\Node|mixed
+	 */
     public function getRoot($parentNodeCategory = null, $recursionLevel = 3)
     {
         if ($parentNodeCategory !== null && $parentNodeCategory->getId()) {

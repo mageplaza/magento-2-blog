@@ -10,6 +10,10 @@
  */
 namespace Mageplaza\Blog\Model\Config\Source;
 
+/**
+ * Class SideBarLR
+ * @package Mageplaza\Blog\Model\Config\Source
+ */
 class SideBarLR implements \Magento\Framework\Option\ArrayInterface
 {
     /**

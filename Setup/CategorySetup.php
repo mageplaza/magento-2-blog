@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Setup;
 
+/**
+ * Class CategorySetup
+ * @package Mageplaza\Blog\Setup
+ */
 class CategorySetup
 {
     /**

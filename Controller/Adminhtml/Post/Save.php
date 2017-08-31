@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
+/**
+ * Class Save
+ * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ */
 class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
 {
     /**
@@ -81,7 +85,8 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         \Mageplaza\Blog\Model\PostFactory $postFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Backend\App\Action\Context $context
+        \Magento\Backend\App\Action\Context $context,
+		\Magento\Framework\Stdlib\DateTime\Filter\DateTime $dateFilter
     ) {
         $this->date         = $date;
         $this->uploadModel    = $uploadModel;
@@ -90,6 +95,7 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         $this->backendSession = $context->getSession();
         $this->jsHelper       = $jsHelper;
         $this->authSession = $authSession;
+        $this->dateFilter = $dateFilter;
         parent::__construct($postFactory, $registry, $context);
     }
 
@@ -104,17 +110,9 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         $timezone =$this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $user = $this->authSession->getUser();
         $data = $this->getRequest()->getPost('post');
-        if (empty($data['publish_date'])) {
-            $data['publish_date'] = $this->date->date();
-        } else {
-            $data['publish_date'] = $this->convertToTz(
-                $data['publish_date'],
-                // get default timezone of system (UTC)
-                $timezone->getDefaultTimezone(),
-                // get Config Timezone of current user
-                $timezone->getConfigTimezone()
-            );
-        }
+
+        //set specify field data
+		$data['publish_date'] = $timezone->convertConfigTimeToUtc(isset($data['publish_date']) ? $data['publish_date'] : null);
         $data['store_ids'] = implode(',', $data['store_ids']);
         $data['modifier_id'] = $user->getId();
         //check delete image
@@ -163,8 +161,6 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
             }
 //            $categoryIds = $this->getRequest()->getPost('categories_ids',-1);
 //
-
-
 
             if (!isset($data['categories_ids'])) {
                 $post->setCategoriesIds([]);
@@ -229,19 +225,4 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
         return $resultRedirect;
     }
 
-    /**
-     * @param string $dateTime
-     * @param string $toTz
-     * @param string $fromTz
-     * @return string
-     */
-    protected function convertToTz($dateTime = "", $toTz = '', $fromTz = '')
-    {
-        $date = date_create_from_format('d/m/Y H:i',$dateTime,new \DateTimeZone($fromTz));
-        // timezone by php friendly values
-//        $date = new \DateTime($dateTime, new \DateTimeZone($fromTz));
-        $date->setTimezone(new \DateTimeZone($toTz));
-        $dateTime = $date->format('m/d/Y H:i:s');
-        return $dateTime;
-    }
 }

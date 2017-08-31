@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 
+/**
+ * Class Delete
+ * @package Mageplaza\Blog\Controller\Adminhtml\Tag
+ */
 class Delete extends \Mageplaza\Blog\Controller\Adminhtml\Tag
 {
     /**

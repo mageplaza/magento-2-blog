@@ -20,6 +20,10 @@
  */
 namespace Mageplaza\Blog\Model\ResourceModel;
 
+/**
+ * Class Post
+ * @package Mageplaza\Blog\Model\ResourceModel
+ */
 class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -58,13 +62,14 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public $postCategoryTable;
     public $postProductTable;
     public $helperData;
-    /**
-     * constructor
-     *
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     */
+
+	/**
+	 * Post constructor.
+	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+	 * @param \Magento\Framework\Event\ManagerInterface $eventManager
+	 * @param \Mageplaza\Blog\Helper\Data $helperData
+	 * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+	 */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Event\ManagerInterface $eventManager,
