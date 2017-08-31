@@ -817,4 +817,12 @@ class Frontend extends Template
 
         return $theme->getCode();
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getPageParam()
+	{
+		return $this->getRequest()->getParam('p');
+	}
 }
