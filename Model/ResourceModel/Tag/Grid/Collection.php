@@ -151,4 +151,21 @@ class Collection extends \Mageplaza\Blog\Model\ResourceModel\Tag\Collection impl
     {
         return $this;
     }
+
+	/**
+	 * @param null $limit
+	 * @param null $offset
+	 * @return \Magento\Framework\DB\Select
+	 */
+	protected function _getAllIdsSelect($limit = null, $offset = null)
+	{
+		$idsSelect = clone $this->getSelect();
+		$idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
+		$idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+		$idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+		$idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+		$idsSelect->columns($this->getResource()->getIdFieldName(), 'main_table');
+		$idsSelect->limit($limit, $offset);
+		return $idsSelect;
+	}
 }
