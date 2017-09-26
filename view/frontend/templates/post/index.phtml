@@ -20,12 +20,12 @@
  */
 ?>
 <?php
-$posts = $block->getBlogPagination();
-$resizeWidth = $block->getBlogConfig('general/resize_image/resize_width');
+$posts        = $block->getBlogPagination();
+$resizeWidth  = $block->getBlogConfig('general/resize_image/resize_width');
 $resizeHeight = $block->getBlogConfig('general/resize_image/resize_height');
-$pageNum = $block->getPageParam();
-if ($pageNum == null){
-    $pageNum = 1;
+$currentPage  = $block->getPageParam();
+if ($currentPage == null) {
+	$currentPage = 1;
 }
 ?>
 <?php $checkRss = $block->checkRss();
@@ -43,21 +43,22 @@ if ($checkRss):
 	?>
     <div class="post-list-container mpcss" id="mpblog-list-container">
         <div class="row">
-            <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1){
+            <?php if ($block->getBlogConfig('sidebar/sidebar_left_right') == 1) {
 				?>
 
                 <div class="post-list-content col-md-9 col-sm-8 col-xs-12">
                     <div class="post-list-body">
                 <?php foreach ($posts as $post) : ?>
                     <div class="post-list-item <?php if ($block->getBlogConfig('general/display_style') == 2) {
-						echo ' col-sm-6';}else echo ' col-sm-12';?>">
+						echo ' col-sm-6';
+					} else echo ' col-sm-12'; ?>">
                         <div class="post-item-wraper">
                             <div class="post-image">
                                 <?php if ($post->getImage()) :
-                                    ?>
-                                    <a href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
+									?>
+                                    <a href="<?php echo substr($block->getUrlByPost($post), 0, -1) ?>">
                                         <img class="img-responsive"
-                                             src="<?php echo $block->resizeImage($post->getImage(),$resizeWidth,$resizeHeight); ?>"
+                                             src="<?php echo $block->resizeImage($post->getImage(), $resizeWidth, $resizeHeight); ?>"
                                              alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
                                     </a>
 								<?php endif; ?>
@@ -65,8 +66,8 @@ if ($checkRss):
                             <div class="post-info-wraper">
                                 <h2 class="mp-post-title">
                                     <a class="post-link-title" title="<?php echo $post->getName(); ?>"
-                                       href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
-                                        <?php echo $post->getName();?>
+                                       href="<?php echo substr($block->getUrlByPost($post), 0, -1) ?>">
+                                        <?php echo $post->getName(); ?>
                                     </a>
                                 </h2>
 
@@ -74,93 +75,12 @@ if ($checkRss):
                                 <div class="mp-post-info">
                                     <?php echo __('Posted on ') . $block->getDateFormat($post->getPublishDate()); ?>
 									<?php
-									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
-                                    ?>
-                                    <?php
-                                    if ($block->getAuthorByPost($post->getAuthorId())->getName() && $block->getBlogConfig('general/display_author')){ ?>
-                                        | By : <a class="mp-info" href="<?php echo $block->getAuthorUrl($block->getAuthorByPost($post->getAuthorId())) ?>"><?php echo  $block->getAuthorByPost($post->getAuthorId())->getName(); ?></a>
-                                   <?php } ?>
-                                </div>
-
-
-                                <div class="post-short-description">
-                                    <p><?php echo $post->getShortDescription(); ?></p>[...]
-                                </div>
-
-                                <div class="mp-clearfix"></div>
-
-                                <div class="mp-post-meta-info mp-alignright">
-                                        <div class="actions">
-                                            <a class="mp-read-more" href="<?php echo substr($block->getUrlByPost($post),0,-1); ?>"
-                                               title="<?php echo __('Read More'); ?>"><?php echo __('Read more'); ?></a>
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-				<?php endforeach; ?>
-                </div>
-                    <?php echo $this->getChildHtml('mpblog_copyright');?>
-            </div>
-
-                <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
-
-                <?php
-				echo $this->getChildHtml('sidebar_search');
-                echo $this->getChildHtml('mpblog_sidebarmostview');
-                echo $this->getChildHtml('mpblog_sidebarcategory');
-                echo $this->getChildHtml('mpblog_sidebarmonthly');
-                echo $this->getChildHtml('mpblog_sidebartopic');
-                echo $this->getChildHtml('mpblog_sidebartag');
-                ?>
-
-            </div>
-				<?php
-			}else{ ?>
-
-                <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
-                    <?php
-					echo $this->getChildHtml('sidebar_search');
-                    echo $this->getChildHtml('mpblog_sidebarmostview');
-                    echo $this->getChildHtml('mpblog_sidebarcategory');
-                    echo $this->getChildHtml('mpblog_sidebarmonthly');
-                    echo $this->getChildHtml('mpblog_sidebartopic');
-                    echo $this->getChildHtml('mpblog_sidebartag');
-                    ?>
-                </div>
-
-                <div class="post-list-content col-md-9 col-sm-8 col-xs-12">
-                    <div class="post-list-body">
-                <?php foreach ($posts as $post) : ?>
-                    <div class="post-list-item <?php if ($block->getBlogConfig('general/display_style') == 2) {
-						echo ' col-sm-6';}else echo ' col-sm-12';?>">
-                        <div class="post-item-wraper">
-                            <div class="post-image">
-                                <?php if ($post->getImage()) : ?>
-                                    <a href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
-                                        <img class="img-responsive"
-                                             src="<?php echo $block->resizeImage($post->getImage(),$resizeWidth,$resizeHeight); ?>"
-                                             alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
-                                    </a>
-								<?php endif; ?>
-                            </div>
-                            <div class="post-info-wraper">
-                                <h2 class="mp-post-title">
-                                    <a class="post-link-title" title="<?php echo $post->getName(); ?>"
-                                       href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
-                                        <?php echo $post->getName();?>
-                                    </a>
-                                </h2>
-
-                                <div class="mp-post-info">
-                                    <?php echo __('Posted on ') . $block->getDateFormat($post->getPublishDate()); ?>
+									echo ($block->getPostCategoryHtml($post)) ? __('| Posted in ') . $block->getPostCategoryHtml($post) : ('');
+									?>
 									<?php
-									echo ($block->getPostCategoryHtml($post))?__('| Posted in ') . $block->getPostCategoryHtml($post):('');
-                                    ?>
-									<?php
-
-									if ($block->getAuthorByPost($post->getAuthorId())->getName() && $block->getBlogConfig('general/display_author')){ ?>
-                                        | By : <a class="mp-info" href="<?php echo $block->getAuthorUrl($block->getAuthorByPost($post->getAuthorId())) ?>"><?php echo  $block->getAuthorByPost($post->getAuthorId())->getName(); ?></a>
+									if ($block->getAuthorByPost($post->getAuthorId())->getName() && $block->getBlogConfig('general/display_author')) { ?>
+                                        | By :
+                                        <a class="mp-info" href="<?php echo $block->getAuthorUrl($block->getAuthorByPost($post->getAuthorId())) ?>"><?php echo $block->getAuthorByPost($post->getAuthorId())->getName(); ?></a>
 									<?php } ?>
                                 </div>
 
@@ -173,7 +93,7 @@ if ($checkRss):
 
                                 <div class="mp-post-meta-info mp-alignright">
                                         <div class="actions">
-                                            <a class="mp-read-more" href="<?php echo substr($block->getUrlByPost($post),0,-1); ?>"
+                                            <a class="mp-read-more" href="<?php echo substr($block->getUrlByPost($post), 0, -1); ?>"
                                                title="<?php echo __('Read More'); ?>"><?php echo __('Read more'); ?></a>
                                         </div>
                                 </div>
@@ -182,40 +102,122 @@ if ($checkRss):
                     </div>
 				<?php endforeach; ?>
                 </div>
-                <?php echo $this->getChildHtml('mpblog_copyright');?>
+					<?php echo $this->getChildHtml('mpblog_copyright'); ?>
             </div>
 
-			<?php }?>
+                <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
+
+                <?php
+				echo $this->getChildHtml('sidebar_search');
+				echo $this->getChildHtml('mpblog_sidebarmostview');
+				echo $this->getChildHtml('mpblog_sidebarcategory');
+				echo $this->getChildHtml('mpblog_sidebarmonthly');
+				echo $this->getChildHtml('mpblog_sidebartopic');
+				echo $this->getChildHtml('mpblog_sidebartag');
+				?>
+
+            </div>
+				<?php
+			} else { ?>
+
+                <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
+                    <?php
+					echo $this->getChildHtml('sidebar_search');
+					echo $this->getChildHtml('mpblog_sidebarmostview');
+					echo $this->getChildHtml('mpblog_sidebarcategory');
+					echo $this->getChildHtml('mpblog_sidebarmonthly');
+					echo $this->getChildHtml('mpblog_sidebartopic');
+					echo $this->getChildHtml('mpblog_sidebartag');
+					?>
+                </div>
+
+                <div class="post-list-content col-md-9 col-sm-8 col-xs-12">
+                    <div class="post-list-body">
+                <?php foreach ($posts as $post) : ?>
+                    <div class="post-list-item <?php if ($block->getBlogConfig('general/display_style') == 2) {
+						echo ' col-sm-6';
+					} else echo ' col-sm-12'; ?>">
+                        <div class="post-item-wraper">
+                            <div class="post-image">
+                                <?php if ($post->getImage()) : ?>
+                                    <a href="<?php echo substr($block->getUrlByPost($post), 0, -1) ?>">
+                                        <img class="img-responsive"
+                                             src="<?php echo $block->resizeImage($post->getImage(), $resizeWidth, $resizeHeight); ?>"
+                                             alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
+                                    </a>
+								<?php endif; ?>
+                            </div>
+                            <div class="post-info-wraper">
+                                <h2 class="mp-post-title">
+                                    <a class="post-link-title" title="<?php echo $post->getName(); ?>"
+                                       href="<?php echo substr($block->getUrlByPost($post), 0, -1) ?>">
+                                        <?php echo $post->getName(); ?>
+                                    </a>
+                                </h2>
+
+                                <div class="mp-post-info">
+                                    <?php echo __('Posted on ') . $block->getDateFormat($post->getPublishDate()); ?>
+									<?php
+									echo ($block->getPostCategoryHtml($post)) ? __('| Posted in ') . $block->getPostCategoryHtml($post) : ('');
+									?>
+									<?php
+
+									if ($block->getAuthorByPost($post->getAuthorId())->getName() && $block->getBlogConfig('general/display_author')) { ?>
+                                        | By :
+                                        <a class="mp-info" href="<?php echo $block->getAuthorUrl($block->getAuthorByPost($post->getAuthorId())) ?>"><?php echo $block->getAuthorByPost($post->getAuthorId())->getName(); ?></a>
+									<?php } ?>
+                                </div>
+
+
+                                <div class="post-short-description">
+                                    <p><?php echo $post->getShortDescription(); ?></p>[...]
+                                </div>
+
+                                <div class="mp-clearfix"></div>
+
+                                <div class="mp-post-meta-info mp-alignright">
+                                        <div class="actions">
+                                            <a class="mp-read-more" href="<?php echo substr($block->getUrlByPost($post), 0, -1); ?>"
+                                               title="<?php echo __('Read More'); ?>"><?php echo __('Read more'); ?></a>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				<?php endforeach; ?>
+                </div>
+					<?php echo $this->getChildHtml('mpblog_copyright'); ?>
+            </div>
+
+			<?php } ?>
         </div>
     </div>
 
-	<?php if($countPage > 1): ?>
+	<?php if ($countPage > 1): ?>
         <ul class="items mp-blog-pages" aria-labelledby="paging-label">
         <?php
-            for ($i = 1; $i <= $countPage; $i++):
-        ?>
-            <li class="item mp-page-item">
-                <?php
-                if ($pageNum == $i)
-                   { ?>
-                    <span class="selected_page"><?php echo $i; ?></span>
-                <?php } else {?>
-                    <a href="<?php
-					if ($block->getMonthParam())
-					{
-						echo $this->getUrl('*/*/*', ['_use_rewrite' => true]) .'?month='.$block->getMonthParam().'&p=' . $i;
-					}
-					else
-					{
-						echo $this->getUrl('*/*/*', ['_use_rewrite' => true]) . '?p=' . $i;
-					}
-					?>" class="page">
-                    <span class="label"><?php echo __('Page') ?></span>
-                        <span><?php echo $i; ?></span>
-                </a>
-                <?php }?>
-            </li>
-        <?php endfor; ?>
+		$end         = $countPage;
+		$relatedPage = $currentPage - 2;
+		if ($relatedPage == 0) {
+			$relatedPage = 1;
+		}
+		?>
+
+		<?php echo $block->getPrevPage($currentPage); ?>
+		<?php echo $block->getFirstPage($currentPage); ?>
+
+		<?php
+		for ($i = 1; $i <= 5; $i++) {
+			echo $block->getAllPage($currentPage, $relatedPage, $i);
+			if ($relatedPage == $countPage) {
+				break;
+			}
+			$relatedPage = $relatedPage + 1;
+		}
+		?>
+		<?php echo $block->getLastPage($currentPage, $end); ?>
+		<?php echo $block->getNextPage($currentPage, $countPage); ?>
+
         </ul>
 	<?php endif; ?>
 
@@ -223,13 +225,13 @@ if ($checkRss):
 
     <div class="post-list-container mpcss">
         <div class="row">
-              <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1){
-			  ?>
-            <div class="post-list-content col-md-9 col-sm-8 col-xs-12">
+              <?php if ($block->getBlogConfig('sidebar/sidebar_left_right') == 1) {
+				  ?>
+                  <div class="post-list-content col-md-9 col-sm-8 col-xs-12">
                   <?php echo __('There are no posts at this moment'); ?>
-				  <?php echo $this->getChildHtml('mpblog_copyright');?>
+				  <?php echo $this->getChildHtml('mpblog_copyright'); ?>
             </div>
-            <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
+                  <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
                 <?php
 				echo $this->getChildHtml('sidebar_search');
 				echo $this->getChildHtml('mpblog_sidebarmostview');
@@ -239,8 +241,8 @@ if ($checkRss):
 				echo $this->getChildHtml('mpblog_sidebartag');
 				?>
             </div>
-            <?php }else{?>
-                    <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
+			  <?php } else { ?>
+                  <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
                         <?php
 						echo $this->getChildHtml('sidebar_search');
 						echo $this->getChildHtml('mpblog_sidebarmostview');
@@ -251,11 +253,11 @@ if ($checkRss):
 						?>
                     </div>
 
-                    <div class="post-list-content col-md-9 col-sm-8 col-xs-12">
+                  <div class="post-list-content col-md-9 col-sm-8 col-xs-12">
                         <?php echo __('There are no posts at this moment'); ?>
-						<?php echo $this->getChildHtml('mpblog_copyright');?>
+						<?php echo $this->getChildHtml('mpblog_copyright'); ?>
                     </div>
-            <?php }?>
+			  <?php } ?>
         </div>
 
     </div>
@@ -266,7 +268,7 @@ if ($checkRss):
     require([
         'jquery',
         'Mageplaza_Blog/js/lib/less.min'
-    ],function ($) {
+    ], function ($) {
         $(document).ready(function () {
             $("#popular-tab").click(function () {
                 $("#recent-tab").css("display", "block");
