@@ -23,9 +23,9 @@
 $posts=$block->getPostList();
 $resizeWidth = $block->getBlogConfig('general/resize_image/resize_width');
 $resizeHeight = $block->getBlogConfig('general/resize_image/resize_height');
-$pageNum = $block->getPageParam();
-if ($pageNum == null){
-	$pageNum = 1;
+$currentPage  = $block->getPageParam();
+if ($currentPage == null) {
+	$currentPage = 1;
 }
 ?>
 	<?php $checkRss = $block->checkRss();
@@ -186,33 +186,31 @@ if ($checkRss):
 		</div>
     </div>
 
-	<?php if($countPage > 1): ?>
+	<?php if ($countPage > 1): ?>
         <ul class="items mp-blog-pages" aria-labelledby="paging-label">
         <?php
-		for ($i = 1; $i <= $countPage; $i++):
-			?>
-            <li class="item mp-page-item">
-                  <?php
-				  if ($pageNum == $i)
-				  { ?>
-                      <span class="selected_page"><?php echo $i; ?></span>
-				  <?php } else {?>
-                <a href="<?php
-                if ($block->getMonthParam())
-                {
-					echo $this->getUrl('*/*/*', ['_use_rewrite' => true]) .'?month='.$block->getMonthParam().'&p=' . $i;
-                }
-                else
-                {
-					echo $this->getUrl('*/*/*', ['_use_rewrite' => true]) . '?p=' . $i;
-                }
-                ?>" class="page">
-                    <span class="label"><?php echo __('Page') ?></span>
-                        <span><?php echo $i; ?></span>
-                </a>
-                <?php }?>
-            </li>
-		<?php endfor; ?>
+		$end         = floor($countPage);
+		$relatedPage = $currentPage - 2;
+		if ($relatedPage == 0) {
+			$relatedPage = 1;
+		}
+		?>
+
+		<?php echo $block->getPrevPage($currentPage); ?>
+		<?php echo $block->getFirstPage($currentPage); ?>
+
+		<?php
+		for ($i = 1; $i <= 5; $i++) {
+			echo $block->getAllPage($currentPage, $relatedPage, $i);
+			if ($relatedPage == $end) {
+				break;
+			}
+			$relatedPage = $relatedPage + 1;
+		}
+		?>
+		<?php echo $block->getLastPage($currentPage, $end); ?>
+		<?php echo $block->getNextPage($currentPage, $end); ?>
+
         </ul>
 	<?php endif; ?>
 

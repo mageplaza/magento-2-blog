@@ -55,7 +55,7 @@ if ($checkRss):
                         <div class="post-item-wraper">
                             <div class="post-image">
                                 <?php if ($post->getImage()) :
-									?>
+                                    ?>
                                     <a href="<?php echo substr($block->getUrlByPost($post), 0, -1) ?>">
                                         <img class="img-responsive"
                                              src="<?php echo $block->resizeImage($post->getImage(), $resizeWidth, $resizeHeight); ?>"
@@ -196,7 +196,7 @@ if ($checkRss):
 	<?php if ($countPage > 1): ?>
         <ul class="items mp-blog-pages" aria-labelledby="paging-label">
         <?php
-		$end         = $countPage;
+		$end         = floor($countPage);
 		$relatedPage = $currentPage - 2;
 		if ($relatedPage == 0) {
 			$relatedPage = 1;
@@ -209,14 +209,14 @@ if ($checkRss):
 		<?php
 		for ($i = 1; $i <= 5; $i++) {
 			echo $block->getAllPage($currentPage, $relatedPage, $i);
-			if ($relatedPage == $countPage) {
+			if ($relatedPage == $end) {
 				break;
 			}
 			$relatedPage = $relatedPage + 1;
 		}
 		?>
 		<?php echo $block->getLastPage($currentPage, $end); ?>
-		<?php echo $block->getNextPage($currentPage, $countPage); ?>
+		<?php echo $block->getNextPage($currentPage, $end); ?>
 
         </ul>
 	<?php endif; ?>

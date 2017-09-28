@@ -46,18 +46,69 @@ class Data extends CoreHelper
     const AUTHOR = 'author';
     const MONTHLY = 'month';
 
+	/**
+	 * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
+	 */
     public $postCollectionFactory;
+
+	/**
+	 * @var \Mageplaza\Blog\Model\PostFactory
+	 */
     public $postfactory;
+
+	/**
+	 * @var \Mageplaza\Blog\Model\CategoryFactory
+	 */
     public $categoryfactory;
+
+	/**
+	 * @var \Mageplaza\Blog\Model\TagFactory
+	 */
     public $tagfactory;
+
+	/**
+	 * @var \Mageplaza\Blog\Model\TopicFactory
+	 */
     public $topicfactory;
+
+	/**
+	 * @var \Magento\Store\Model\StoreManagerInterface
+	 */
     public $store;
+
+	/**
+	 * @var \Mageplaza\Blog\Model\Traffic
+	 */
     public $modelTraffic;
+
+	/**
+	 * @var \Mageplaza\Blog\Model\AuthorFactory
+	 */
     public $authorfactory;
+
+	/**
+	 * @var \Magento\Customer\Model\Session
+	 */
     public $customerSession;
+
+	/**
+	 * @var \Magento\Customer\Model\Url
+	 */
     public $loginUrl;
+
+	/**
+	 * @var \Magento\Framework\Filter\TranslitUrl
+	 */
     public $translitUrl;
+
+	/**
+	 * @var \Magento\Framework\Stdlib\DateTime\DateTime
+	 */
     public $dateTime;
+
+	/**
+	 * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+	 */
     public $dateTimeFormat;
 
 	/**
@@ -122,23 +173,32 @@ class Data extends CoreHelper
         return $isModuleOutputEnabled && $this->getBlogConfig('general/enabled', $store);
     }
 
+	/**
+	 * @param $code
+	 * @param null $storeId
+	 * @return mixed
+	 */
     public function getBlogConfig($code, $storeId = null)
     {
         return $this->getConfigValue(self::XML_PATH_BLOG . $code, $storeId);
     }
 
-    /**
-     * get sidebar config
-     */
+	/**
+	 * Get Size Bar Configure
+	 * @param $code
+	 * @param null $storeId
+	 * @return mixed
+	 */
     public function getSidebarConfig($code, $storeId = null)
     {
         return $this->getBlogConfig('sidebar/'.$code, $storeId);
     }
 
-    /**
-     * @param $code, $storeId = null
-     * @return mixed
-     */
+	/**
+	 * @param $code
+	 * @param null $storeId
+	 * @return mixed
+	 */
     public function getSeoConfig($code, $storeId = null)
     {
         return $this->getBlogConfig('seo/'.$code, $storeId);
@@ -675,7 +735,7 @@ class Data extends CoreHelper
     }
 
     /**
-     * get array of posts's date formated
+     * get array of posts's date formatted
      * @return array
      */
     public function getDateArray()
@@ -717,10 +777,11 @@ class Data extends CoreHelper
         $result = ($count < $limit) ? $count : $limit ;
         return $result;
     }
-    /**
-     * get author image link
-     * @return string
-     */
+
+	/**
+	 * @param $image
+	 * @return string
+	 */
     public function getAuthorImageUrl($image)
     {
         return $this->getBaseMediaUrl(). self::AUTHOR_IMG . $image;
