@@ -83,6 +83,8 @@ class Router implements \Magento\Framework\App\RouterInterface
         $routePath  = explode('/', $identifier);
         $urlPrefix = $this->helper->getBlogConfig('general/url_prefix') ?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX;
         $routeSize  = sizeof($routePath);
+		$urlPrefix	= urlencode($urlPrefix);
+
         if (!$this->helper->isEnabled() ||
             !$routeSize || ($routeSize > 3) ||
             (array_shift($routePath) != $urlPrefix)
