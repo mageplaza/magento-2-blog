@@ -13,8 +13,16 @@ require([
 
     $('li.default-cmt__content__cmt-content__cmt-row:first').css({'border-top' : 'none'});
 
+    // $('.default-cmt__cmt-login__btn-login').click(function () {
+    //     window.location.href = loginUrl;
+    // });
+
     $('.default-cmt__cmt-login__btn-login').click(function () {
-        window.location.href = loginUrl;
+        if($("[href$='social-login-popup']").length != 0){
+            $("[href$='social-login-popup']").first().trigger("click");
+        }else{
+            window.location.href = loginUrl;
+        }
     });
 
     //submit comment
