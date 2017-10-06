@@ -191,7 +191,7 @@ if ($checkRss):
         <?php
 		$end         = floor($countPage);
 		$relatedPage = $currentPage - 2;
-		if ($relatedPage == 0) {
+		if ($relatedPage <= 0) {
 			$relatedPage = 1;
 		}
 		?>
@@ -208,8 +208,13 @@ if ($checkRss):
 			$relatedPage = $relatedPage + 1;
 		}
 		?>
-		<?php echo $block->getLastPage($currentPage, $end); ?>
-		<?php echo $block->getNextPage($currentPage, $end); ?>
+		<?php
+		if ($relatedPage < $end){
+			echo $block->getLastPage($currentPage, $end);
+
+        }
+		echo $block->getNextPage($currentPage, $end);
+		?>
 
         </ul>
 	<?php endif; ?>

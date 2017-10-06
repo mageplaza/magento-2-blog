@@ -339,7 +339,8 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
 
         $item['id'] = $node->getId();
         $item['path'] = $node->getData('path');
-
+		$item['url'] = $node->getData('url_key');
+		$item['storeIds'] = $node->getData('store_ids');
         $item['cls'] = 'folder ' . 'active-category';
         $allowMove = $this->isCategoryMoveable($node);
         $item['allowDrop'] = $allowMove;

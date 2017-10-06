@@ -356,8 +356,40 @@ if ($block->getCurrentTheme() == "Etheme/yourstore") :
             width: 100%;
         }
     }
+    <?php
+        /**
+        * Category Tree CSS
+        */
+    ?>
+    .mp-sidebar .category-level3 {
 
+        padding-left: 15px !important;
+        padding-top: 0px !important;
+        padding-bottom: 5px !important;
+        border: none !important;
+    }
 
+    .mp-sidebar .category-level4 {
+
+        padding-left: 30px !important;
+        padding-top: 0px !important;
+        padding-bottom: 5px !important;
+        border: none !important;
+    }
+
+    /*.mp-blog-expand-tree{*/
+    /*display: none;*/
+    /*}*/
+    .category-level3 {
+        display: none;
+    }
+
+    .category-level4 {
+        display: none;
+    }
+    .mp-sidebar .menu-categories i{
+        cursor: pointer;
+    }
 
 </style>
 

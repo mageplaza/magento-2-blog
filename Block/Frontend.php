@@ -21,12 +21,19 @@
 
 namespace Mageplaza\Blog\Block;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\View\Element\Template;
-
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Mageplaza\Blog\Model\CommentFactory;
+use Mageplaza\Blog\Model\LikeFactory;
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Cms\Model\Template\FilterProvider;
+use Mageplaza\Blog\Model\Config\Source\MetaRobots;
+use Magento\Framework\Image\AdapterFactory;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class Frontend
@@ -35,6 +42,7 @@ use Magento\Cms\Model\Template\FilterProvider;
  */
 class Frontend extends Template
 {
+
 	/**
 	 * @type \Mageplaza\Blog\Helper\Data
 	 */
@@ -49,36 +57,54 @@ class Frontend extends Template
 	 * @type \Magento\Framework\Stdlib\DateTime\DateTime
 	 */
 	public $dateTime;
+
 	/**
 	 * @var \Mageplaza\Blog\Model\Config\Source\MetaRobots
 	 */
 	public $mpRobots;
+
 	/**
 	 * @var FilterProvider
 	 */
 	public $filterProvider;
+
 	/**
 	 * @var \Mageplaza\Blog\Model\CommentFactory
 	 */
 	public $cmtFactory;
+
 	/**
 	 * @var \Mageplaza\Blog\Model\LikeFactory
 	 */
 	public $likeFactory;
+
 	/**
 	 * @var \Magento\Customer\Api\CustomerRepositoryInterface
 	 */
 	public $customerRepository;
 
+	/**
+	 * @var
+	 */
 	public $commentTree;
+
+	/**
+	 * @var \Magento\Framework\ObjectManagerInterface
+	 */
+	public $objectManager;
 	/**
 	 * @var \Magento\Framework\Filesystem
 	 */
 	protected $_filesystem;
+
 	/**
 	 * @var \Magento\Framework\Image\AdapterFactory
 	 */
 	protected $_imageFactory;
+
+	/**
+	 * @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface
+	 */
 	protected $_themeProvider;
 
 	/**
@@ -94,21 +120,22 @@ class Frontend extends Template
 	 * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
 	 * @param \Magento\Framework\Image\AdapterFactory $imageFactory
 	 * @param \Magento\Framework\View\Design\Theme\ThemeProviderInterface $_themeProvider
+	 * @param \Magento\Framework\ObjectManagerInterface $objectManager
 	 * @param array $data
 	 */
 	public function __construct(
-		\Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-		\Mageplaza\Blog\Model\CommentFactory $commentFactory,
-		\Mageplaza\Blog\Model\LikeFactory $likeFactory,
-		\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-		\Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobots,
+		DateTime $dateTime,
+		CommentFactory $commentFactory,
+		LikeFactory $likeFactory,
+		CustomerRepositoryInterface $customerRepository,
+		MetaRobots $metaRobots,
 		Context $context,
 		HelperData $helperData,
 		TemplateContext $templateContext,
 		FilterProvider $filterProvider,
-		//resizeImage function
-		\Magento\Framework\Image\AdapterFactory $imageFactory,
-		\Magento\Framework\View\Design\Theme\ThemeProviderInterface $_themeProvider,
+		AdapterFactory $imageFactory,
+		ThemeProviderInterface $_themeProvider,
+		ObjectManagerInterface $objectManager,
 		array $data = []
 	)
 	{
@@ -123,6 +150,7 @@ class Frontend extends Template
 		$this->_filesystem        = $context->getFilesystem();
 		$this->_imageFactory      = $imageFactory;
 		$this->_themeProvider     = $_themeProvider;
+		$this->objectManager      = $objectManager;
 		parent::__construct($context, $data);
 	}
 
@@ -271,7 +299,7 @@ class Frontend extends Template
 							['label' => ucfirst($category->getName()),
 							 'title' => $category->getName(),
 							 'link'  => $this->helperData->getCategoryUrl(
-								 $category
+								 $category->getUrlKey()
 							 )]
 						);
 					}

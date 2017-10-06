@@ -28,7 +28,7 @@ if (!empty($categories)):
 	<h2><?php echo count($categories) == 1 ? __('Category') : __('Categories') ?></h2>
 	<ul>
 		<?php foreach ($categories as $category): ?>
-			<li><a href="<?php echo $helper->getCategoryUrl($category) ?>"><?php echo $category->getName(); ?></a> </li>
+			<li><a href="<?php echo $helper->getCategoryUrl($category->getUrlKey()) ?>"><?php echo $category->getName(); ?></a> </li>
 		<?php endforeach; ?>
 	</ul>
 <?php endif; ?>

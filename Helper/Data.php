@@ -267,9 +267,9 @@ class Data extends CoreHelper
         $category = $this->categoryfactory->create();
         $list     = $category->getCollection()->addFieldToFilter('enabled', 1);
         $result = $this->filterItems($list);
-        if ($result == '') {
-            return '';
-        }
+		if ($result == '') {
+			return '';
+		}
         return $result;
     }
 
@@ -415,15 +415,14 @@ class Data extends CoreHelper
         return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
     }
 
-    /**
-     * get category url
-     * @param $category
-     * @return string
-     */
-    public function getCategoryUrl($category)
+	/**
+	 * @param $categoryUrl
+	 * @return string
+	 */
+    public function getCategoryUrl($categoryUrl)
     {
         $urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
-        return $this->_getUrl($urlPrefix .'/'. self::CATEGORY .'/'. $category->getUrlKey());
+        return $this->_getUrl($urlPrefix .'/'. self::CATEGORY .'/'. $categoryUrl);
     }
 
     /**
@@ -483,7 +482,7 @@ class Data extends CoreHelper
             return null;
         } else {
             foreach ($categories as $_cat) {
-                $categoryHtml[] = '<a class="mp-info" href="' . $this->getCategoryUrl($_cat) . '">' . $_cat->getName()
+                $categoryHtml[] = '<a class="mp-info" href="' . $this->getCategoryUrl($_cat->getUrlKey()) . '">' . $_cat->getName()
                     . '</a>';
             }
         }
@@ -615,7 +614,8 @@ class Data extends CoreHelper
         $count = 0;
         $results = [];
         foreach ($items as $item) {
-            $itemStoreIds = $item->getStoreIds();
+
+			$itemStoreIds = ($item['storeIds']) ? $item['storeIds'] : $item->getStoreIds();
             $itemStore = $itemStoreIds !== null ? explode(',', $itemStoreIds) : '';
             if (is_array($itemStore) && (in_array($storeId, $itemStore) || in_array('0', $itemStore))) {
                 if ($limit && $count >= $limit) {
