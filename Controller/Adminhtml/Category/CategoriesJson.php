@@ -15,16 +15,24 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Registry;
+use Magento\Framework\View\LayoutFactory;
+use Mageplaza\Blog\Controller\Adminhtml\Category;
+use Mageplaza\Blog\Model\CategoryFactory;
 
 /**
  * Class CategoriesJson
  * @package Mageplaza\Blog\Controller\Adminhtml\Category
  */
-class CategoriesJson extends \Mageplaza\Blog\Controller\Adminhtml\Category
+class CategoriesJson extends Category
 {
     /**
      * JSON Result Factory
@@ -40,25 +48,26 @@ class CategoriesJson extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public $layoutFactory;
 
-	/**
-	 * CategoriesJson constructor.
-	 * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-	 * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-	 * @param \Magento\Framework\Registry $coreRegistry
-	 * @param \Magento\Backend\App\Action\Context $context
-	 */
+    /**
+     * CategoriesJson constructor.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     */
     public function __construct(
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-    
+        Context $context,
+        Registry $coreRegistry,
+        CategoryFactory $categoryFactory,
+        JsonFactory $resultJsonFactory,
+        LayoutFactory $layoutFactory
+    )
+    {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory     = $layoutFactory;
-        parent::__construct($categoryFactory, $coreRegistry, $context);
+
+        parent::__construct($context, $coreRegistry, $categoryFactory);
     }
 
     /**
@@ -68,28 +77,31 @@ class CategoriesJson extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public function execute()
     {
-        if ($this->getRequest()->getParam('expand_all')) {
-            $this->_getSession()->setMageplazaBlogCategoryIsTreeWasExpanded(true);
-        } else {
-            $this->_getSession()->setMageplazaBlogCategoryIsTreeWasExpanded(false);
-        }
-        $categoryId = (int)$this->getRequest()->getPost('id');
+        $this->_getSession()->setData(
+            'mageplaza_blog_category_is_tree_was_expanded',
+            (boolean)$this->getRequest()->getParam('expand_all')
+        );
+
         $resultJson = $this->resultJsonFactory->create();
-        if ($categoryId) {
+        if ($categoryId = (int)$this->getRequest()->getPost('id')) {
             $this->getRequest()->setParam('category_id', $categoryId);
 
-            $category = $this->initCategory();
+            $category = $this->initCategory(true);
             if (!$category) {
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
-                return $resultRedirect->setPath('mageplaza_blog/*/', ['_current' => true, 'category_id' => null]);
+
+                return $resultRedirect->setPath('mageplaza_blog/*/', ['_current' => true]);
             }
+
+            $treeJson = $this->layoutFactory->create()
+                ->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Tree')
+                ->getTreeJson($category);
+
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-            return $resultJson->setJsonData(
-                $this->layoutFactory->create()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Tree')
-                    ->getTreeJson($category)
-            );
+            return $resultJson->setJsonData($treeJson);
         }
+
         return $resultJson->setJsonData('[]');
     }
 }

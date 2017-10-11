@@ -16,7 +16,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
@@ -30,12 +30,16 @@
             <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General</label>
                 <field id="head" translate="label" type="button" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <frontend_model>Mageplaza\Blog\Block\Adminhtml\System\Config\Head</frontend_model>
+                    <frontend_model>Mageplaza\Core\Block\Adminhtml\System\Config\Head</frontend_model>
+                    <comment><![CDATA[
+                        <ul class="mageplaza-head">
+                            <li><a href="https://docs.mageplaza.com/blog-m2/" target="_blank">User Guide</a>    </li>
+                            <li><a href="https://mageplaza.freshdesk.com/support/discussions/forums/6000241382" target="_blank">Ask Community</a> </li>
+                            <li><a href="https://mageplaza.freshdesk.com/" target="_blank">Ask Mageplaza</a> </li>
+                            <li><strong><a href="https://www.mageplaza.com/?utm_source=magento2&utm_medium=documents&utm_campaign=layered-navigation" target="_blank">Find more extensions</a></strong> </li>
+                        </ul>
+                        ]]></comment>
                 </field>
-                <!--<field id="version" translate="label" type="button" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">-->
-                    <!--<frontend_model>Mageplaza\Core\Block\Adminhtml\System\Config\Version</frontend_model>-->
-                <!--</field>-->
-
                 <field id="enabled" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -51,46 +55,41 @@
                     <label>Url Suffix</label>
                     <comment>Leave empty for no suffix. Default: .html</comment>
                 </field>
-                <field id="toplinks" translate="label comment" type="select" sortOrder="20" showInDefault="20"
-                       showInWebsite="1" showInStore="1">
+                <field id="toplinks" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Show Blog Link in Top Menu</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="footer" translate="label comment" type="select" sortOrder="25" showInDefault="20" showInWebsite="1" showInStore="1">
+                <field id="footer" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Show Blog Link in Footer links</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-
-                <field id="related_post" translate="label comment" type="text" sortOrder="35" showInDefault="1" showInStore="1" showInWebsite="1">
-                    <label>Limit related post</label>
-                    <comment>Number of related post in post view page</comment>
-                </field>
-                <field id="display_style" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInStore="1" showInWebsite="1">
-                    <label>Display blogs style</label>
-                    <source_model>Mageplaza\Blog\Model\Config\Source\Blogview\Display</source_model>
-                    <comment>Grid view style is better</comment>
-                </field>
-                <field id="display_author" translate="label comment" type="select" sortOrder="50" showInDefault="20"
-                       showInWebsite="1" showInStore="1">
+                <field id="display_author" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display author</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="display_sitemap" translate="label comment" type="select" sortOrder="55" showInDefault="20"
-                       showInWebsite="1" showInStore="1">
+                <field id="display_sitemap" translate="label comment" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display sitemap</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="date_type" translate="label" type="select" sortOrder="57" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="date_type" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Date format</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\DateFormat\Type</source_model>
                 </field>
-                <field id="font_color" translate="label comment" type="text" sortOrder="60" showInWebsite="1" showInStore="1" showInDefault="1">
-                    <label>Choose blog's color</label>
-                    <validate>jscolor {hash:true,refine:false}</validate>
+                <field id="related_post" translate="label comment" type="text" sortOrder="45" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Limit related post</label>
+                    <comment>Number of related post in post view page</comment>
                 </field>
-                <field id="pagination" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInStore="1" showInWebsite="1">
+                <field id="display_style" translate="label comment" type="select" sortOrder="55" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Display blogs style</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\Blogview\Display</source_model>
+                </field>
+                <field id="pagination" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInStore="1" showInWebsite="1">
                     <label>Pagination</label>
                     <comment>Number of post per page</comment>
+                </field>
+                <field id="font_color" translate="label comment" type="text" sortOrder="65" showInWebsite="1" showInStore="1" showInDefault="1">
+                    <label>Choose blog's color</label>
+                    <validate>jscolor {hash:true,refine:false}</validate>
                 </field>
                 <group id="resize_image" translate="label" showInDefault="1" sortOrder="80" showInWebsite="1" showInStore="1">
                     <label>Resize Content Image</label>
@@ -106,7 +105,6 @@
             </group>
             <group id="product_post" translate="label" showInDefault="1" sortOrder="5" showInWebsite="1" showInStore="1">
                 <label>Related Products Content</label>
-
                 <group id="product_detail" translate="label" showInDefault="1" sortOrder="10" showInWebsite="1" showInStore="1">
                     <label>Product Detail Page</label>
                     <field id="enable_post" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -119,7 +117,6 @@
                         <comment>Limit number of related posts in product page tab</comment>
                     </field>
                 </group>
-
                 <group id="post_detail" translate="label" showInDefault="1" sortOrder="10" showInWebsite="1" showInStore="1">
                     <label>Post View Page</label>
                     <field id="enable_product" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -136,7 +133,6 @@
                         <comment>Title of related products in post view page</comment>
                     </field>
                 </group>
-
             </group>
             <group id="sidebar" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Sidebar</label>

@@ -15,9 +15,10 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model\ResourceModel\Category;
 
 /**
@@ -127,8 +128,8 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\ResourceConnection $coreResource
-    ) {
-    
+    )
+    {
         $this->eventManager      = $eventManager;
         $this->collectionFactory = $collectionFactory;
         $this->categoryResource  = $categoryResource;
@@ -139,8 +140,8 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
             $coreResource->getConnection('mageplaza_blog_write'),
             $coreResource->getTableName('mageplaza_blog_category'),
             [
-                \Magento\Framework\Data\Tree\Dbp::ID_FIELD => 'category_id',
-                \Magento\Framework\Data\Tree\Dbp::PATH_FIELD => 'path',
+                \Magento\Framework\Data\Tree\Dbp::ID_FIELD    => 'category_id',
+                \Magento\Framework\Data\Tree\Dbp::PATH_FIELD  => 'path',
                 \Magento\Framework\Data\Tree\Dbp::ORDER_FIELD => 'position',
                 \Magento\Framework\Data\Tree\Dbp::LEVEL_FIELD => 'level'
             ]
@@ -165,7 +166,8 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         $exclude = [],
         $toLoad = true,
         $onlyActive = false
-    ) {
+    )
+    {
         if ($collection === null) {
             $collection = $this->getCollection($sorted);
         } else {
@@ -221,6 +223,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
             $this->initInactiveCategoryIds();
         }
         $this->inactiveCategoryIds = array_merge($ids, $this->inactiveCategoryIds);
+
         return $this;
     }
 
@@ -233,6 +236,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     {
         $this->inactiveCategoryIds = [];
         $this->eventManager->dispatch('mageplaza_blog_category_tree_init_inactive_category_ids', ['tree' => $this]);
+
         return $this;
     }
 
@@ -300,6 +304,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         if ($this->collection === null) {
             $this->collection = $this->getDefaultCollection($sorted);
         }
+
         return $this->collection;
     }
 
@@ -331,6 +336,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
             $this->clean($this->collection);
         }
         $this->collection = $collection;
+
         return $this;
     }
 
@@ -379,6 +385,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     public function afterMove()
     {
         $this->cache->clean([\Mageplaza\Blog\Model\Category::CACHE_TAG]);
+
         return $this;
     }
 
@@ -394,14 +401,14 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     public function loadByIds($ids, $addCollectionData = true)
     {
         $levelField = $this->_conn->quoteIdentifier('level');
-        $pathField = $this->_conn->quoteIdentifier('path');
+        $pathField  = $this->_conn->quoteIdentifier('path');
         // load first two levels, if no ids specified
         if (empty($ids)) {
             $select = $this->_conn
                 ->select()
                 ->from($this->_table, 'category_id')
                 ->where($levelField . ' <= 2');
-            $ids = $this->_conn->fetchCol($select);
+            $ids    = $this->_conn->fetchCol($select);
         }
         if (!is_array($ids)) {
             $ids = [$ids];
@@ -415,16 +422,16 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
             ->select()
             ->from($this->_table, ['path', 'level'])
             ->where('category_id IN (?)', $ids);
-        $where = [$levelField . '=0' => true];
+        $where  = [$levelField . '=0' => true];
 
         foreach ($this->_conn->fetchAll($select) as $item) {
             $pathIds = explode('/', $item['path']);
-            $level = (int)$item['level'];
+            $level   = (int)$item['level'];
             while ($level > 0) {
-                $lastId = end($pathIds);
-                $lastIndex = key($lastId);
-                $pathIds[$lastIndex] = '%';
-                $path = implode('/', $pathIds);
+                $lastId                                                          = end($pathIds);
+                $lastIndex                                                       = key($lastId);
+                $pathIds[$lastIndex]                                             = '%';
+                $path                                                            = implode('/', $pathIds);
                 $where["{$levelField}={$level} AND {$pathField} LIKE '{$path}'"] = true;
                 array_pop($pathIds);
                 $level--;
@@ -450,10 +457,11 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         foreach ($arrNodes as $key => $nodeInfo) {
             $pathToParent = explode('/', $nodeInfo[$this->_pathField]);
             array_pop($pathToParent);
-            $pathToParent = implode('/', $pathToParent);
+            $pathToParent                   = implode('/', $pathToParent);
             $childrenItems[$pathToParent][] = $nodeInfo;
         }
         $this->addChildNodes($childrenItems, '', null);
+
         return $this;
     }
 
@@ -486,6 +494,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
             );
             $result = $this->_conn->fetchAll($select);
         }
+
         return $result;
     }
 
@@ -514,6 +523,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
             'see.path LIKE ?',
             $subConcat
         );
+
         return $select;
     }
 
@@ -535,6 +545,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
             ->select()
             ->from($this->_table, ['category_id'])
             ->where('category_id IN (?)', $ids);
+
         return $this->_conn->fetchCol($select);
     }
 }

@@ -93,7 +93,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
                 if ($item->getImage()) :
                     $imagesCollection[] = new \Magento\Framework\DataObject(
                         [
-                        'url' => 'mageplaza/blog/post/image'.$item->getImage(),
+                        'url' => $item->getImage(),
                         'caption' => null,
                         ]
                     );

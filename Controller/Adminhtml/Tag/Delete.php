@@ -15,57 +15,48 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
+
+use Mageplaza\Blog\Controller\Adminhtml\Tag;
 
 /**
  * Class Delete
  * @package Mageplaza\Blog\Controller\Adminhtml\Tag
  */
-class Delete extends \Mageplaza\Blog\Controller\Adminhtml\Tag
+class Delete extends Tag
 {
     /**
-     * execute action
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $id = $this->getRequest()->getParam('tag_id');
-        if ($id) {
-            $name = "";
+        if ($id = $this->getRequest()->getParam('id')) {
             try {
-                /** @var \Mageplaza\Blog\Model\Tag $tag */
-                $tag = $this->tagFactory->create();
-                $tag->load($id);
-                $name = $tag->getName();
-                $tag->delete();
+                $this->tagFactory->create()
+                    ->load($id)
+                    ->delete();
                 $this->messageManager->addSuccess(__('The Tag has been deleted.'));
-                $this->_eventManager->dispatch(
-                    'adminhtml_mageplaza_blog_tag_on_delete',
-                    ['name' => $name, 'status' => 'success']
-                );
-                $resultRedirect->setPath('mageplaza_blog/*/');
-                return $resultRedirect;
             } catch (\Exception $e) {
-                $this->_eventManager->dispatch(
-                    'adminhtml_mageplaza_blog_tag_on_delete',
-                    ['name' => $name, 'status' => 'fail']
-                );
                 // display error message
                 $this->messageManager->addError($e->getMessage());
                 // go back to edit form
-                $resultRedirect->setPath('mageplaza_blog/*/edit', ['tag_id' => $id]);
+                $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $id]);
+
                 return $resultRedirect;
             }
+        } else {
+            // display error message
+            $this->messageManager->addError(__('Tag to delete was not found.'));
         }
-        // display error message
-        $this->messageManager->addError(__('Tag to delete was not found.'));
+
         // go to grid
         $resultRedirect->setPath('mageplaza_blog/*/');
+
         return $resultRedirect;
     }
 }

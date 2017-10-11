@@ -15,16 +15,21 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
+
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFacory;
 
 /**
  * Class NewAction
  * @package Mageplaza\Blog\Controller\Adminhtml\Category
  */
-class NewAction extends \Magento\Backend\App\Action
+class NewAction extends Action
 {
     /**
      * Redirect result factory
@@ -34,17 +39,17 @@ class NewAction extends \Magento\Backend\App\Action
     public $resultForwardFactory;
 
     /**
-     * constructor
-     *
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * NewAction constructor.
      * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\Model\View\Result\ForwardFacory $resultForwardFactory
      */
     public function __construct(
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-    
+        Context $context,
+        ForwardFacory $resultForwardFactory
+    )
+    {
         $this->resultForwardFactory = $resultForwardFactory;
+
         parent::__construct($context);
     }
 
@@ -56,8 +61,10 @@ class NewAction extends \Magento\Backend\App\Action
     public function execute()
     {
         $this->_getSession()->unsMageplazaBlogCategoryActiveTabId();
+
         $resultForward = $this->resultForwardFactory->create();
         $resultForward->forward('edit');
+
         return $resultForward;
     }
 }

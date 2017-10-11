@@ -15,22 +15,16 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
 /**
  * Class ProductsGrid
  * @package Mageplaza\Blog\Controller\Adminhtml\Post
  */
-class ProductsGrid extends \Mageplaza\Blog\Controller\Adminhtml\Post\Products
+class ProductsGrid extends Products
 {
-	/**
-	 * @return null
-	 */
-    public function getBlogPost()
-    {
-        return null;
-    }
 }

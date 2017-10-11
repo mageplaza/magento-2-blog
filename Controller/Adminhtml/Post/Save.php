@@ -15,214 +15,142 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Helper\Js;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Registry;
+use Mageplaza\Blog\Controller\Adminhtml\Post;
+use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Model\PostFactory;
 
 /**
  * Class Save
  * @package Mageplaza\Blog\Controller\Adminhtml\Post
  */
-class Save extends \Mageplaza\Blog\Controller\Adminhtml\Post
+class Save extends Post
 {
-    /**
-     * Backend session
-     *
-     * @var \Magento\Backend\Model\Session
-     */
-    public $backendSession;
-
-    /**
-     * Upload model
-     *
-     * @var \Mageplaza\Blog\Model\Upload
-     */
-    public $uploadModel;
-
-    /**
-     * Image model
-     *
-     * @var \Mageplaza\Blog\Model\Post\Image
-     */
-    public $imageModel;
-
     /**
      * JS helper
      *
      * @var \Magento\Backend\Helper\Js
      */
     public $jsHelper;
-    public $trafficFactory;
-    protected $authSession;
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     */
-    public $date;
 
     /**
-     * constructor
-     *
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Mageplaza\Blog\Model\Upload                $uploadModel
-     * @param \Mageplaza\Blog\Model\Post\Image            $imageModel
-     * @param \Mageplaza\Blog\Model\TrafficFactory        $trafficFactory
-     * @param \Magento\Backend\Helper\Js                  $jsHelper
-     * @param \Mageplaza\Blog\Model\PostFactory           $postFactory
-     * @param \Magento\Framework\Registry                 $registry
-     * @param \Magento\Backend\Model\Auth\Session         $authSession
-     * @param \Magento\Backend\App\Action\Context         $context
-     *
-     * @internal param \Magento\Backend\Model\Session $backendSession
-     * @internal param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @var \Mageplaza\Blog\Helper\Image
+     */
+    protected $imageHelper;
+
+    /**
+     * Save constructor.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Mageplaza\Blog\Model\PostFactory $postFactory
+     * @param \Magento\Backend\Helper\Js $jsHelper
+     * @param \Mageplaza\Blog\Helper\Image $imageHelper
      */
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Mageplaza\Blog\Model\Upload $uploadModel,
-        \Mageplaza\Blog\Model\Post\Image $imageModel,
-        \Mageplaza\Blog\Model\TrafficFactory $trafficFactory,
-        \Magento\Backend\Helper\Js $jsHelper,
-        \Mageplaza\Blog\Model\PostFactory $postFactory,
-        \Magento\Framework\Registry $registry,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Backend\App\Action\Context $context,
-		\Magento\Framework\Stdlib\DateTime\Filter\DateTime $dateFilter
-    ) {
-        $this->date         = $date;
-        $this->uploadModel    = $uploadModel;
-        $this->imageModel     = $imageModel;
-        $this->trafficFactory = $trafficFactory;
-        $this->backendSession = $context->getSession();
-        $this->jsHelper       = $jsHelper;
-        $this->authSession = $authSession;
-        $this->dateFilter = $dateFilter;
+        Context $context,
+        Registry $registry,
+        PostFactory $postFactory,
+        Js $jsHelper,
+        Image $imageHelper
+    )
+    {
+        $this->jsHelper    = $jsHelper;
+        $this->imageHelper = $imageHelper;
+
         parent::__construct($postFactory, $registry, $context);
     }
 
     /**
-     * run the action
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
-        // Magento Timezone Interface
-        $timezone =$this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $user = $this->authSession->getUser();
-        $data = $this->getRequest()->getPost('post');
-
-        //set specify field data
-		$data['publish_date'] = $timezone->convertConfigTimeToUtc(isset($data['publish_date']) ? $data['publish_date'] : null);
-        $data['store_ids'] = implode(',', $data['store_ids']);
-        $data['modifier_id'] = $user->getId();
-        //check delete image
-        $deleteImage = false;
         $resultRedirect = $this->resultRedirectFactory->create();
-        if ($data) {
+
+        if ($data = $this->getRequest()->getPost('post')) {
+            /** @var \Mageplaza\Blog\Model\Post $post */
             $post = $this->initPost();
-            $post->setData($data);
-            if (isset($data['image'])) {
-                if (isset($data['image']['delete']) && $data['image']['delete'] == '1') {
-                    unset($data['image']);
-                    $post->setImage('');
-                    $deleteImage = true;
-                }
-            }
+            $this->prepareData($post, $data);
 
-            if ((!isset($data['image']) || (count($data['image']) == 1)) && !$deleteImage) {
-                $image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
-                if ($image === false) {
-                    $this->messageManager->addError(__('Please choose an image to upload.'));
-                    $resultRedirect->setPath(
-                        'mageplaza_blog/*/edit',
-                        [
-                            'post_id'  => $post->getId(),
-                            '_current' => true
-                        ]
-                    );
+            $this->_eventManager->dispatch('mageplaza_blog_post_prepare_save', ['post' => $post, 'request' => $this->getRequest()]);
 
-                    return $resultRedirect;
-                }
-
-                $post->setImage($image);
-            }
-
-            $tags = $this->getRequest()->getPost('tags', -1);
-            if ($tags != -1) {
-                $post->setTagsData($this->jsHelper->decodeGridSerializedInput($tags));
-            }
-            $topics = $this->getRequest()->getPost('topics', -1);
-            if ($topics != -1) {
-                $post->setTopicsData($this->jsHelper->decodeGridSerializedInput($topics));
-            }
-            $products = $this->getRequest()->getPost('products', -1);
-            if ($products != -1) {
-                $post->setProductsData($this->jsHelper->decodeGridSerializedInput($products));
-            }
-//            $categoryIds = $this->getRequest()->getPost('categories_ids',-1);
-//
-
-            if (!isset($data['categories_ids'])) {
-                $post->setCategoriesIds([]);
-            }
-//            else{
-//
-//
-//                $post->setCategoriesIds($this->jsHelper->decodeGridSerializedInput($categoryIds));
-//            }
-            $this->_eventManager->dispatch(
-                'mageplaza_blog_post_prepare_save',
-                [
-                    'post'    => $post,
-                    'request' => $this->getRequest()
-                ]
-            );
             try {
                 $post->save();
 
-                $trafficModel=$this->trafficFactory->create()->load($post->getId(), 'post_id');
-                if (!$trafficModel->getId()) {
-                    $trafficData=['post_id'=>$post->getId(),'numbers_view'=>'0'];
-                    $trafficModel->setData($trafficData);
-                    $trafficModel->save();
-                }
-                $this->messageManager->addSuccess(__('The Post has been saved.'));
-                $this->backendSession->setMageplazaBlogPostData(false);
-                if ($this->getRequest()->getParam('back')) {
-                    $resultRedirect->setPath(
-                        'mageplaza_blog/*/edit',
-                        [
-                            'post_id'  => $post->getId(),
-                            '_current' => true
-                        ]
-                    );
+                $this->messageManager->addSuccess(__('The post has been saved.'));
+                $this->_getSession()->setData('mageplaza_blog_post_data', false);
 
-                    return $resultRedirect;
+                if ($this->getRequest()->getParam('back')) {
+                    $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $post->getId(), '_current' => true]);
+                } else {
+                    $resultRedirect->setPath('mageplaza_blog/*/');
                 }
-                $resultRedirect->setPath('mageplaza_blog/*/');
 
                 return $resultRedirect;
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\RuntimeException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the Post.'));
             }
-            $this->_getSession()->setMageplazaBlogPostData($data);
-            $resultRedirect->setPath(
-                'mageplaza_blog/*/edit',
-                [
-                    'post_id'  => $post->getId(),
-                    '_current' => true
-                ]
-            );
+
+            $this->_getSession()->setData('mageplaza_blog_post_data', $data);
+
+            $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $post->getId(), '_current' => true]);
 
             return $resultRedirect;
         }
+
         $resultRedirect->setPath('mageplaza_blog/*/');
 
         return $resultRedirect;
     }
 
+    /**
+     * @param \Mageplaza\Blog\Model\Post $post
+     * @param array $data
+     * @return $this
+     */
+    protected function prepareData($post, $data = [])
+    {
+        $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_POST, $post->getImage());
+
+        //set specify field data
+        $timezone               = $this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $data['publish_date']   = $timezone->convertConfigTimeToUtc(isset($data['publish_date']) ? $data['publish_date'] : null);
+        $data['modifier_id']    = $this->_auth->getUser()->getId();
+        $data['categories_ids'] = isset($data['categories_ids']) ? $data['categories_ids'] : [];
+
+        $post->addData($data);
+
+        if ($tags = $this->getRequest()->getPost('tags', false)) {
+            $post->setTagsData(
+                $this->jsHelper->decodeGridSerializedInput($tags)
+            );
+        }
+
+        if ($topics = $this->getRequest()->getPost('topics', false)) {
+            $post->setTopicsData(
+                $this->jsHelper->decodeGridSerializedInput($topics)
+            );
+        }
+
+        if ($products = $this->getRequest()->getPost('products', false)) {
+            $post->setProductsData(
+                $this->jsHelper->decodeGridSerializedInput($products)
+            );
+        }
+
+        return $this;
+    }
 }

@@ -15,16 +15,26 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Adminhtml\Category;
+
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\DB\Helper;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\CategoryFactory;
+use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory;
+use Mageplaza\Blog\Model\ResourceModel\Category\Tree as TreeResource;
 
 /**
  * @method Tree setUseAjax($useAjax)
  * @method bool getUseAjax()
  */
-class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
+class Tree extends AbstractCategory
 {
     /**
      * Tree template
@@ -55,33 +65,34 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     public $resourceHelper;
 
     /**
-     * constructor
-     *
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Backend\Model\Auth\Session $backendSession
-     * @param \Magento\Framework\DB\Helper $resourceHelper
+     * Tree constructor.
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
-     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Backend\Model\Auth\Session $backendSession
+     * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Backend\Model\Auth\Session $backendSession,
-        \Magento\Framework\DB\Helper $resourceHelper,
-        \Magento\Framework\Registry $registry,
-        \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree,
-        \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
-        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-        \Magento\Backend\Block\Widget\Context $context,
+        Context $context,
+        Registry $registry,
+        TreeResource $categoryTree,
+        CategoryFactory $categoryFactory,
+        CollectionFactory $categoryCollectionFactory,
+        EncoderInterface $jsonEncoder,
+        Session $backendSession,
+        Helper $resourceHelper,
         array $data = []
-    ) {
+    )
+    {
         $this->jsonEncoder    = $jsonEncoder;
         $this->backendSession = $backendSession;
         $this->resourceHelper = $resourceHelper;
-        parent::__construct($registry, $categoryTree, $categoryFactory, $categoryCollectionFactory, $context, $data);
+
+        parent::__construct($context, $registry, $categoryTree, $categoryFactory, $categoryCollectionFactory, $data);
     }
 
     /**
@@ -94,9 +105,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     }
 
     /**
-     * Add buttons
-     *
-     * @return $this
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {
@@ -106,11 +115,11 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
             'add_sub_button',
             'Magento\Backend\Block\Widget\Button',
             [
-                'label' => __('Add Child Category'),
+                'label'   => __('Add Child Category'),
                 'onclick' => "addNew('" . $addUrl . "', false)",
-                'class' => 'add',
-                'id' => 'add_child_category_button',
-                'style' => $this->canAddChildCategory() ? '' : 'display: none;'
+                'class'   => 'add',
+                'id'      => 'add_child_category_button',
+                'style'   => $this->canAddChildCategory() ? '' : 'display: none;'
             ]
         );
 
@@ -119,13 +128,14 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
                 'add_root_button',
                 'Magento\Backend\Block\Widget\Button',
                 [
-                    'label' => __('Add Root Category'),
+                    'label'   => __('Add Root Category'),
                     'onclick' => "addNew('" . $addUrl . "', true)",
-                    'class' => 'add',
-                    'id' => 'add_root_category_button'
+                    'class'   => 'add',
+                    'id'      => 'add_root_category_button'
                 ]
             );
         }
+
         return parent::_prepareLayout();
     }
 
@@ -140,7 +150,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
 
         /* @var $matchingNameCollection \Mageplaza\Blog\Model\ResourceModel\Category\Collection */
         $matchingNameCollection = clone $collection;
-        $escapedNamePart = $this->resourceHelper->addLikeEscape(
+        $escapedNamePart        = $this->resourceHelper->addLikeEscape(
             $namePart,
             ['position' => 'any']
         );
@@ -148,10 +158,10 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
             'name',
             ['like' => $escapedNamePart]
         )
-        ->addFieldToFilter(
-            'category_id',
-            ['neq' => \Mageplaza\Blog\Model\Category::TREE_ROOT_ID]
-        );
+            ->addFieldToFilter(
+                'category_id',
+                ['neq' => \Mageplaza\Blog\Model\Category::TREE_ROOT_ID]
+            );
 
         $shownCategoriesIds = [];
         foreach ($matchingNameCollection as $category) {
@@ -167,7 +177,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
 
         $categoriesById = [
             \Mageplaza\Blog\Model\Category::TREE_ROOT_ID => [
-                'id' => \Mageplaza\Blog\Model\Category::TREE_ROOT_ID,
+                'id'       => \Mageplaza\Blog\Model\Category::TREE_ROOT_ID,
                 'children' => [],
             ],
         ];
@@ -178,10 +188,11 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
                     $categoriesById[$categoryId] = ['id' => $categoryId, 'children' => []];
                 }
             }
-            $categoriesById[$category->getId()]['is_active'] = true;
-            $categoriesById[$category->getId()]['label'] = $category->getName();
-            $categoriesById[$category->getParentId()]['children'][] = & $categoriesById[$category->getId()];
+            $categoriesById[$category->getId()]['is_active']        = true;
+            $categoriesById[$category->getId()]['label']            = $category->getName();
+            $categoriesById[$category->getParentId()]['children'][] = &$categoriesById[$category->getId()];
         }
+
         return $this->jsonEncoder->encode($categoriesById[\Mageplaza\Blog\Model\Category::TREE_ROOT_ID]['children']);
     }
 
@@ -228,6 +239,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
             || $expanded == true) {
             $params['expand_all'] = true;
         }
+
         return $this->getUrl('*/*/categoriesJson', $params);
     }
 
@@ -274,7 +286,8 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     public function getTree($parentNodeCategory = null)
     {
         $rootArray = $this->getNodeJson($this->getRoot($parentNodeCategory));
-        $tree = isset($rootArray['children']) ? $rootArray['children'] : [];
+        $tree      = isset($rootArray['children']) ? $rootArray['children'] : [];
+
         return $tree;
     }
 
@@ -285,7 +298,8 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     public function getTreeJson($parentNodeCategory = null)
     {
         $rootArray = $this->getNodeJson($this->getRoot($parentNodeCategory));
-        $json = $this->jsonEncoder->encode(isset($rootArray['children']) ? $rootArray['children'] : []);
+        $json      = $this->jsonEncoder->encode(isset($rootArray['children']) ? $rootArray['children'] : []);
+
         return $json;
     }
 
@@ -309,9 +323,10 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
         foreach ($categories as $key => $category) {
             $categories[$key] = $this->getNodeJson($categories);
         }
+
         return '<script>require(["prototype"], function(){' . $javascriptVarName . ' = ' . $this->jsonEncoder->encode(
-            $categories
-        ) .
+                $categories
+            ) .
             ';' .
             ($this->canAddChildCategories()
                 ? '$("add_child_category_button").show();' : '$("add_child_category_button").hide();') .
@@ -334,15 +349,15 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
             $node = new \Magento\Framework\Data\Tree\Node($node, 'category_id', new \Magento\Framework\Data\Tree());
         }
 
-        $item = [];
+        $item         = [];
         $item['text'] = $this->buildNodeName($node);
 
-        $item['id'] = $node->getId();
-        $item['path'] = $node->getData('path');
-		$item['url'] = $node->getData('url_key');
-		$item['storeIds'] = $node->getData('store_ids');
-        $item['cls'] = 'folder ' . 'active-category';
-        $allowMove = $this->isCategoryMoveable($node);
+        $item['id']        = $node->getId();
+        $item['path']      = $node->getData('path');
+        $item['url']       = $node->getData('url_key');
+        $item['storeIds']  = $node->getData('store_ids');
+        $item['cls']       = 'folder ' . 'active-category';
+        $allowMove         = $this->isCategoryMoveable($node);
         $item['allowDrop'] = $allowMove;
         $item['allowDrag'] = $allowMove && ($node->getLevel() == 0 ? false : true);
 
@@ -377,6 +392,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     public function buildNodeName($node)
     {
         $result = $this->escapeHtml($node->getName());
+
         return $result;
     }
 
@@ -388,6 +404,7 @@ class Tree extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     {
         $options = new \Magento\Framework\DataObject(['is_moveable' => true, 'category' => $node]);
         $this->_eventManager->dispatch('adminhtml_mageplaza_blog_category_tree_is_moveable', ['options' => $options]);
+
         return $options->getIsMoveable();
     }
 

@@ -15,16 +15,21 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Adminhtml\Topic;
+
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Block\Widget\Form\Container;
+use Magento\Framework\Registry;
 
 /**
  * Class Edit
  * @package Mageplaza\Blog\Block\Adminhtml\Topic
  */
-class Edit extends \Magento\Backend\Block\Widget\Form\Container
+class Edit extends Container
 {
     /**
      * Core registry
@@ -34,19 +39,19 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public $coreRegistry;
 
     /**
-     * constructor
-     *
-     * @param \Magento\Framework\Registry $coreRegistry
+     * Edit constructor.
      * @param \Magento\Backend\Block\Widget\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Block\Widget\Context $context,
+        Context $context,
+        Registry $coreRegistry,
         array $data = []
-    ) {
-    
+    )
+    {
         $this->coreRegistry = $coreRegistry;
+
         parent::__construct($context, $data);
     }
 
@@ -57,20 +62,20 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _construct()
     {
-        $this->_objectId = 'topic_id';
         $this->_blockGroup = 'Mageplaza_Blog';
         $this->_controller = 'adminhtml_topic';
+
         parent::_construct();
-        $this->buttonList->update('save', 'label', __('Save Topic'));
+
         $this->buttonList->add(
             'save-and-continue',
             [
-                'label' => __('Save and Continue Edit'),
-                'class' => 'save',
+                'label'          => __('Save and Continue Edit'),
+                'class'          => 'save',
                 'data_attribute' => [
                     'mage-init' => [
                         'button' => [
-                            'event' => 'saveAndContinueEdit',
+                            'event'  => 'saveAndContinueEdit',
                             'target' => '#edit_form'
                         ]
                     ]
@@ -78,8 +83,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             ],
             -100
         );
-        $this->buttonList->update('delete', 'label', __('Delete Topic'));
     }
+
     /**
      * Retrieve text for header element depending on loaded Topic
      *
@@ -92,6 +97,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         if ($topic->getId()) {
             return __("Edit Topic '%1'", $this->escapeHtml($topic->getName()));
         }
+
         return __('New Topic');
     }
 }

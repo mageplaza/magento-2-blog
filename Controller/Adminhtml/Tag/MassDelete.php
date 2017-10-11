@@ -15,46 +15,49 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
+
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Ui\Component\MassAction\Filter;
+use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory;
 
 /**
  * Class MassDelete
  * @package Mageplaza\Blog\Controller\Adminhtml\Tag
  */
-class MassDelete extends \Magento\Backend\App\Action
+class MassDelete extends Action
 {
     /**
-     * Mass Action Filter
-     *
      * @var \Magento\Ui\Component\MassAction\Filter
      */
     public $filter;
 
     /**
-     * Collection Factory
-     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory
      */
     public $collectionFactory;
 
     /**
-     * constructor
-     *
+     * MassDelete constructor.
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Ui\Component\MassAction\Filter $filter
      * @param \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $collectionFactory
-     * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Magento\Ui\Component\MassAction\Filter $filter,
-        \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $collectionFactory,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-    
+        Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory
+    )
+    {
         $this->filter            = $filter;
         $this->collectionFactory = $collectionFactory;
+
         parent::__construct($context);
     }
 
@@ -69,16 +72,14 @@ class MassDelete extends \Magento\Backend\App\Action
 
         try {
             $collection->walk('delete');
+            $this->messageManager->addSuccess(__('Tags has been deleted.'));
         } catch (\Exception $e) {
-            $this->messageManager->addSuccess(__('Something wrong when delete Topics.'));
-            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-            $resultRedirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
-            return $resultRedirect->setPath('*/*/');
+            $this->messageManager->addSuccess(__('Something wrong when delete Tag.'));
         }
 
-        $this->messageManager->addSuccess(__('Tags has been deleted.'));
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+
         return $resultRedirect->setPath('*/*/');
     }
 }

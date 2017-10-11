@@ -15,87 +15,23 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
+/** @var \Mageplaza\Blog\Block\Frontend $block */
 ?>
-<?php
-$helper = $this->helper('Mageplaza\Blog\Helper\Data');
-$color = $helper->getBlogConfig('general/font_color');
-?>
+
 <script type="text/javascript">
-    require([
-            'jquery'
-        ],
-        function ($) {
+    require(['jquery'], function ($) {
             $(".navigation li.mpblog-top-link").addClass("active");
         }
     );
 </script>
-<?php
-/**
- * Compatible with YourStore Theme
- * URL: https://themeforest.net/item/yourstore-premium-multipurpose-magento-theme/17782705
- */
-if ($block->getCurrentTheme() == "Etheme/yourstore") :
-?>
 
-<style>
-    @media (min-width: 768px) {
-    <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1) { ?>
-        .post-list-content{
-            border-right: solid 1px #dfdfdf;
-        }
-    <?php } else {?>
-        .post-list-content{
-            border-left: solid 1px #dfdfdf;
-        }
-    <?php } ?>
-    }
-    .post-list-container{
-        width: 85%;
-        margin: auto;
-    }
-    .mp-blog-rss{
-        width: 85%;
-        margin: auto;
-    }
-    .post-view{
-        width: 85%;
-        margin: auto;
-    }
-    .mp-blog-rss{
-        width: 85%;
-        margin: auto;
-    }
-    @media (min-width: 1024px) {
-        .products-same-post li{
-            height: 400px;
-            width: 24.5% !important;
-        }
-    }
-    @media (min-width: 1440px) {
-        .products-same-post li{
-            height: 500px;
-            width: 16.67% !important;
-        }
-    }
-    .products-same-post{
-        border-bottom: solid 1px #dfdfdf;
-    }
-    .post-same-topics{
-        border-bottom: solid 1px #dfdfdf;
-    }
-</style>
-<?php endif;?>
-
-
+<?php $color  = $block->getBlogConfig('general/font_color'); ?>
 <style type="text/css">
-    <?php
-        /**
-         * Post List Page Css
-         */
-    ?>
+    /*Post List Page Css*/
     ul.mp-blog-pages {
         text-align: center;
     }
@@ -110,11 +46,11 @@ if ($block->getCurrentTheme() == "Etheme/yourstore") :
         border: 1px solid #ddd;
         line-height: 25px;
         border-radius: 2px;
-        color: <?php echo $color;?>;
+        color: <?php echo $color ;?>;
     }
     li.mp-page-item a:hover{
         text-decoration: none !important;
-        background: <?php echo $color;?>;
+        background: <?php echo $color ;?>;
         color: #fff;
     }
     li.mp-page-item a span.label{
@@ -128,144 +64,68 @@ if ($block->getCurrentTheme() == "Etheme/yourstore") :
         line-height: 25px;
         border-radius: 2px;
         color: #FFF;
-        background: <?php echo $color?>;
+        background: <?php echo $color ?>;
     }
-    <?php
-	   /**
-		* Post List Content Css
-		*/
-    ?>
 
-    h2.mp-post-title a {
-        color: <?php echo $color?>;
-    }
-    h2.mp-post-title a:hover {
-        text-decoration: none;
-        color: <?php echo $color?>;
-    }
-    h2.mp-post-title a:focus {
-        text-decoration: none;
-        color: <?php echo $color?>;
-    }
-    .mp-post-meta-info a.mp-read-more {
-        color: <?php echo $color?>;
-    }
-    .mp-post-meta-info a.mp-read-more:hover {
-        color: <?php echo $color?>;
-    }
-    .mp-post-info a.mp-info{
-        color: <?php echo $color?>;
-    }
-    .mp-post-info a.mp-info:hover{
-        color: <?php echo $color?>;
-    }
+    /*Post List Content Css*/
     .post-info-wraper h2.mp-post-title{
         margin-top: 0px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        color: <?php echo $color?>;
-    }
-    .mp-post-info a.mp-info {
-        color: <?php echo $color?>;
-    }
-    .mp-post-info a.mp-info:hover {
-        text-decoration: none;
-        color: <?php echo $color?>;
+        color: <?php echo $color ?>;
     }
     .nav .nav-tabs li.active{
-        border-top-color: <?php echo $color?>;
+        border-top-color: <?php echo $color ?>;
     }
 
-    .about-admin h4.admin-title a{
-        color: <?php echo $color?>;
-    }
-
-    .about-admin h4.admin-title a:hover {
-        color: <?php echo $color?>;
+    .mp-post-info a.mp-info,
+    .about-admin h4.admin-title a,
+    .about-admin h4.admin-title a:hover, h2.mp-post-title a, .mp-post-meta-info a.mp-read-more, .mp-post-meta-info a.mp-read-more:hover, .mp-post-info a.mp-info, .mp-post-info a.mp-info:hover {
+        color: <?php echo $color ?>;
     }
     .relate-content a.mp-relate-link{
         color: #0a0a0a;
     }
-    .relate-content a.mp-relate-link:hover{
-        color: <?php echo $color?>;
-        text-decoration: none;
-    }
-    .owl-item a.mp-relate-link:hover{
-        color: <?php echo $color?>;
-        text-decoration: none;
-    }
-    .owl-item a.mp-relate-link:focus{
-        color: <?php echo $color?>;
+    ul.menu-categories a.list-categories:hover, .products-same-post a.product-item-link:hover, h2.mp-post-title a:hover, h2.mp-post-title a:focus, .mp-post-info a.mp-info:hover, .relate-content a.mp-relate-link:hover, .owl-item a.mp-relate-link:hover, .owl-item a.mp-relate-link:focus{
+        color: <?php echo $color ?>;
         text-decoration: none;
     }
     ul.nav-tabs li.active{
-        border-top-color: <?php echo $color?>;
+        border-top-color: <?php echo $color ?>;
         border-top-style: solid;
     }
     a.label.label-default.tags-list:hover {
-        background: <?php echo $color?>;
+        background: <?php echo $color ?>;
         border: 1px solid;
         color: #fff !important;
     }
     a.label.label-default.tags-list:focus{
-        background: <?php echo $color?>;
+        background: <?php echo $color ?>;
         color: #fff !important;
     }
-    ul.menu-categories a.list-categories:hover {
-        text-decoration: none;
-        color: <?php echo $color?>;
+    ul.menu-categories a.list-categories:hover i, .nav-tabs a:hover{
+        color: <?php echo $color ?> !important;
     }
-    ul.menu-categories a.list-categories:hover i {
-        color: <?php echo $color?>;
-    }
-    #mostview a.list-post-tabs:hover {
+    #mostview a.list-post-tabs:hover, #mostrecent a.list-post-tabs:hover {
         text-decoration: none;
         background: #fbfbfb;
-        color: <?php echo $color?>;
+        color: <?php echo $color ?>;
     }
-    #mostrecent a.list-post-tabs:hover {
-        text-decoration: none;
-        background: #fbfbfb;
-        color: <?php echo $color?>;
-    }
-    .nav-tabs a:hover{
-        color: <?php echo $color?> !important;
-    }
-
-    @media(max-width: 768px){
-        ul.nav-tabs li{
-            width: 100%;
-        }
-        ul.nav-tabs li.active{
-            width: 100%;
-            background: <?php echo $color?>;
-            color: #ffffff;
-        }
-    }
-
     .mpblog-product-name {
         font-size: 18px;
-        color: <?php echo $color?> !important;
+        color: <?php echo $color ?> !important;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
-    .products-same-post a.product-item-link:hover {
-        color:<?php echo $color?>;
-        text-decoration: none;
-    }
-    <?php
-        /**
-        * Site Map CSS
-        */
-    ?>
+    /*Site Map CSS*/
     .mp-sidebar a.sitemap-link {
-        color: <?php echo $color?> !important;
+        color: <?php echo $color ?> !important;
     }
-    .mp-sidebar a.sitemap-link:hover {
+    .mp-sidebar a.sitemap-link:hover, .menu-archives a.list-archives:hover{
         text-decoration: none !important;
-        color: <?php echo $color?> !important;
+        color: <?php echo $color ?> !important;
     }
     .menu-archives {
         list-style: none;
@@ -274,60 +134,37 @@ if ($block->getCurrentTheme() == "Etheme/yourstore") :
     .menu-archives a.list-archives {
         color: inherit;
     }
-    .menu-archives a.list-archives:hover {
-        color: <?php echo $color?>;
-        text-decoration: none;
-    }
 
-    <?php
-        /**
-        * Comment CSS
-        */
-    ?>
+    /*Comment CSS*/
     button.default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit {
-        background: <?php echo $color?> !important;
+        background: <?php echo $color ?> !important;
         color: #fff;
         border-color: #999 !important;
     }
     button.default-cmt__cmt-login__btn-login {
-        background: <?php echo $color?> !important;
+        background: <?php echo $color ?> !important;
         border-color: #999 !important;
     }
     span.cmt-row__cmt-username {
         font-weight: 600;
-        color: <?php echo $color?>;
+        color: <?php echo $color ?>;
     }
     a.interactions__btn-actions{
-        color: <?php echo $color?> !important;
+        color: <?php echo $color ?> !important;
     }
 
-    <?php
-        /**
-        * Widget CSS
-        */
-    ?>
-    .widget-title a{
-        color: <?php echo $color?>;
+    /*Widget CSS*/
+    .widget-title a, .widget-title a:hover, .widget-title a:focus{
+        color: <?php echo $color ?>;
         font-size: 26px;
     }
-    .widget-title a:hover{
-        color: <?php echo $color?>;
+    .widget-title a:hover, .widget-title a:focus{
         text-decoration: none;
-        font-size: 26px;
-    }
-    .widget-title a:focus{
-        color: <?php echo $color?>;
-        text-decoration: none;
-        font-size: 26px;
     }
 
-    <?php
-        /**
-        * Author CSS
-        */
-    ?>
+    /*Author CSS*/
     .author-name h3{
-        color: <?php echo $color?>;
+        color: <?php echo $color ?>;
         text-align: center;
     }
     .author-image img.img-responsive {
@@ -339,11 +176,28 @@ if ($block->getCurrentTheme() == "Etheme/yourstore") :
         margin-top: 15px;
         margin-bottom: 20px;
     }
-
     .share-col-right{
         display: inline-block;
         width: 50%;
     }
+
+    /*Category Tree CSS*/
+    .mp-sidebar .category-level3, .mp-sidebar .category-level4 {
+        padding-left: 15px !important;
+        padding-top: 0 !important;
+        padding-bottom: 5px !important;
+        border: none !important;
+    }
+    .mp-sidebar .category-level4 {
+        padding-left: 30px !important;
+    }
+    .category-level3, .category-level4 {
+        display: none;
+    }
+    .mp-sidebar .menu-categories i{
+        cursor: pointer;
+    }
+
     @media (min-width: 768px) {
         .post-list-body{
             display: flex;
@@ -351,45 +205,71 @@ if ($block->getCurrentTheme() == "Etheme/yourstore") :
         }
     }
     @media (max-width: 767px) {
-        .share-col-right{
-            display: inline-block;
+        .share-col-right, ul.nav-tabs li{
             width: 100%;
         }
-    }
-    <?php
-        /**
-        * Category Tree CSS
-        */
-    ?>
-    .mp-sidebar .category-level3 {
-
-        padding-left: 15px !important;
-        padding-top: 0px !important;
-        padding-bottom: 5px !important;
-        border: none !important;
+        ul.nav-tabs li.active{
+            background: <?php echo $color ?>;
+            color: #ffffff;
+        }
     }
 
-    .mp-sidebar .category-level4 {
-
-        padding-left: 30px !important;
-        padding-top: 0px !important;
-        padding-bottom: 5px !important;
-        border: none !important;
+    /* Footer Copyright */
+    .mp-footer{
+        margin-top: 50px;
+        font-size: 8px !important;
+        display: block;
+        clear: both;
+        float: right;
+        text-transform: inherit;
+    }
+    .mp-footer h3{
+        margin-top: 50px;
+        font-size: 8px !important;
+        display: block;
+        clear: both;
+        float: right;
+        text-transform: inherit;
+    }
+    .mp-footer-links-light{
+        color: #E8E8E8 !important;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        vertical-align: baseline;
+    }
+    .mp-footer-links-light a {
+        color: #E8E8E8 !important;
     }
 
-    /*.mp-blog-expand-tree{*/
-    /*display: none;*/
-    /*}*/
-    .category-level3 {
-        display: none;
+    /*Compatible with YourStore Theme*/
+<?php if ($block->getCurrentTheme() == "Etheme/yourstore") :?>
+    .post-list-container, .mp-blog-rss, .post-view, .mp-blog-rss{
+        width: 85%;
+        margin: auto;
     }
-
-    .category-level4 {
-        display: none;
+    .products-same-post, .post-same-topics{
+        border-bottom: solid 1px #dfdfdf;
     }
-    .mp-sidebar .menu-categories i{
-        cursor: pointer;
+    @media (min-width: 768px) {
+        <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1) : ?>
+            .post-list-content{border-right: solid 1px #dfdfdf;  }
+        <?php else:?>
+            .post-list-content{border-left: solid 1px #dfdfdf;  }
+        <?php endif; ?>
     }
-
+    @media (min-width: 1024px) {
+        .products-same-post li{
+            height: 400px;
+            width: 24.5% !important;
+        }
+    }
+    @media (min-width: 1440px) {
+        .products-same-post li{
+            height: 500px;
+            width: 16.67% !important;
+        }
+    }
+<?php endif;?>
 </style>
 

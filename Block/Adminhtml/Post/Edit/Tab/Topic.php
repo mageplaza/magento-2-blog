@@ -15,60 +15,54 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
+
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Grid\Extended;
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Backend\Helper\Data;
+use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\TopicFactory;
 
 /**
  * Class Topic
  * @package Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab
  */
-class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Topic extends Extended implements TabInterface
 {
     /**
-     * Topic collection factory
-     *
-     * @var \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory
-     */
-    public $topicCollectionFactory;
-
-    /**
-     * Registry
-     *
      * @var \Magento\Framework\Registry
      */
     public $coreRegistry;
 
     /**
-     * Topic factory
-     *
      * @var \Mageplaza\Blog\Model\TopicFactory
      */
     public $topicFactory;
 
     /**
-     * constructor
-     *
-     * @param \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory $topicCollectionFactory
+     * Topic constructor.
+     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
-     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param array $data
      */
     public function __construct(
-        \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory $topicCollectionFactory,
-        \Magento\Framework\Registry $coreRegistry,
-        \Mageplaza\Blog\Model\TopicFactory $topicFactory,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Data $backendHelper,
+        Context $context,
+        Registry $coreRegistry,
+        TopicFactory $topicFactory,
+        Data $backendHelper,
         array $data = []
-    ) {
-    
-        $this->topicCollectionFactory = $topicCollectionFactory;
-        $this->coreRegistry           = $coreRegistry;
-        $this->topicFactory           = $topicFactory;
+    )
+    {
+        $this->coreRegistry = $coreRegistry;
+        $this->topicFactory = $topicFactory;
+
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -82,41 +76,29 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Mage
         $this->setDefaultSort('position');
         $this->setDefaultDir('ASC');
         $this->setUseAjax(true);
+
         if ($this->getPost()->getId()) {
-            $this->setDefaultFilter(['in_topics'=>1]);
+            $this->setDefaultFilter(['in_topics' => 1]);
         }
     }
 
     /**
-     * prepare the collection
-
-     * @return $this
+     * @inheritdoc
      */
     protected function _prepareCollection()
     {
         /** @var \Mageplaza\Blog\Model\ResourceModel\Topic\Collection $collection */
-        $collection = $this->topicCollectionFactory->create();
-        if ($this->getPost()->getId()) {
-            $constraint = 'related.post_id='.$this->getPost()->getId();
-        } else {
-            $constraint = 'related.post_id=0';
-        }
+        $collection = $this->topicFactory->create()
+            ->getCollection();
         $collection->getSelect()->joinLeft(
             ['related' => $collection->getTable('mageplaza_blog_post_topic')],
-            'related.topic_id=main_table.topic_id AND '.$constraint,
+            'related.topic_id=main_table.topic_id AND related.post_id=' . ($this->getPost()->getId() ?: 0),
             ['position']
         );
-        $this->setCollection($collection);
-        parent::_prepareCollection();
-        return $this;
-    }
 
-    /**
-     * @return $this
-     */
-    protected function _prepareMassaction()
-    {
-        return $this;
+        $this->setCollection($collection);
+
+        return parent::_prepareCollection();
     }
 
     /**
@@ -124,72 +106,66 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Mage
      */
     protected function _prepareColumns()
     {
-        $this->addColumn(
-            'in_topics',
-            [
-                'header_css_class'  => 'a-center',
-                'type'   => 'checkbox',
-                'name'   => 'in_topic',
-                'values' => $this->_getSelectedTopics(),
-                'align'  => 'center',
-                'index'  => 'topic_id'
+        $this->addColumn('in_topics', [
+                'header_css_class' => 'a-center',
+                'type'             => 'checkbox',
+                'name'             => 'in_topic',
+                'values'           => $this->_getSelectedTopics(),
+                'align'            => 'center',
+                'index'            => 'topic_id'
             ]
         );
-        $this->addColumn(
-            'topic_id',
-            [
-                'header' => __('ID'),
-                'sortable' => true,
-                'index' => 'topic_id',
-                'type' => 'number',
+
+        $this->addColumn('topic_id', [
+                'header'           => __('ID'),
+                'sortable'         => true,
+                'index'            => 'topic_id',
+                'type'             => 'number',
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id'
             ]
         );
 
-        $this->addColumn(
-            'title',
-            [
-                'header' => __('Name'),
-                'index' => 'name',
+        $this->addColumn('title', [
+                'header'           => __('Name'),
+                'index'            => 'name',
                 'header_css_class' => 'col-name',
                 'column_css_class' => 'col-name'
             ]
         );
 
-        $this->addColumn(
-            'position',
-            [
-                'header' => __('Position'),
-                'name'   => 'position',
-                'width'  => 60,
-                'type'   => 'number',
+        $this->addColumn('position', [
+                'header'         => __('Position'),
+                'name'           => 'position',
+                'width'          => 60,
+                'type'           => 'number',
                 'validate_class' => 'validate-number',
-                'index' => 'position',
-                'editable'  => true,
+                'index'          => 'position',
+                'editable'       => true,
             ]
         );
+
         return $this;
     }
 
     /**
      * Retrieve selected Topics
-
      * @return array
      */
     protected function _getSelectedTopics()
     {
-        $topics = $this->getPostTopics();
+        $topics = $this->getRequest()->getPost('post_topics', null);
         if (!is_array($topics)) {
             $topics = $this->getPost()->getTopicsPosition();
+
             return array_keys($topics);
         }
+
         return $topics;
     }
 
     /**
      * Retrieve selected Topics
-
      * @return array
      */
     public function getSelectedTopics()
@@ -202,6 +178,7 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Mage
                 $selected[$key] = ['position' => $value];
             }
         }
+
         return $selected;
     }
 
@@ -221,12 +198,7 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Mage
      */
     public function getGridUrl()
     {
-        return $this->getUrl(
-            '*/*/topicsGrid',
-            [
-                'post_id' => $this->getPost()->getId()
-            ]
-        );
+        return $this->getUrl('*/*/topicsGrid', ['post_id' => $this->getPost()->getId()]);
     }
 
     /**
@@ -249,15 +221,16 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Extended implements \Mage
                 $topicIds = 0;
             }
             if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('main_table.topic_id', ['in'=>$topicIds]);
+                $this->getCollection()->addFieldToFilter('main_table.topic_id', ['in' => $topicIds]);
             } else {
                 if ($topicIds) {
-                    $this->getCollection()->addFieldToFilter('main_table.topic_id', ['nin'=>$topicIds]);
+                    $this->getCollection()->addFieldToFilter('main_table.topic_id', ['nin' => $topicIds]);
                 }
             }
         } else {
             parent::_addColumnFilterToCollection($column);
         }
+
         return $this;
     }
 

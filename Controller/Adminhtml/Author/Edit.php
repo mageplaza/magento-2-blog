@@ -15,78 +15,46 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Author;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\PageFactory;
+use Mageplaza\Blog\Controller\Adminhtml\Author;
+use Mageplaza\Blog\Model\AuthorFactory;
 
 /**
  * Class Edit
  * @package Mageplaza\Blog\Controller\Adminhtml\Author
  */
-class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Author
+class Edit extends Author
 {
     /**
-     * Backend session
-     *
-     * @var \Magento\Backend\Model\Session
-     */
-    public $backendSession;
-
-    /**
-     * Page factory
-     *
      * @var \Magento\Framework\View\Result\PageFactory
      */
     public $resultPageFactory;
 
     /**
-     * Result JSON factory
-     *
-     * @var \Magento\Framework\Controller\Result\JsonFactory
-     */
-    public $resultJsonFactory;
-
-	/**
-	 * @var \Magento\Backend\Model\Auth\Session
-	 */
-    protected $authSession;
-
-    /**
-     * constructor
-     *
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
-     * @param \Magento\Framework\Registry $registry
+     * Edit constructor.
      * @param \Magento\Backend\App\Action\Context $context
-     * @internal param \Magento\Backend\Model\Session $backendSession
-     * @internal param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Mageplaza\Blog\Model\AuthorFactory $authorFactory,
-        \Magento\Framework\Registry $registry,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-
-        $this->backendSession    = $context->getSession();
-        $this->resultPageFactory = $resultPageFactory;
-        $this->resultJsonFactory = $resultJsonFactory;
-        $this->authSession = $authSession;
-        parent::__construct($authorFactory, $registry, $context);
-    }
-
-    /**
-     * is action allowed
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
+        Context $context,
+        Registry $registry,
+        AuthorFactory $authorFactory,
+        PageFactory $resultPageFactory
+    )
     {
-        return $this->_authorization->isAllowed('Mageplaza_Blog::author');
+        $this->resultPageFactory = $resultPageFactory;
+
+        parent::__construct($context, $registry, $authorFactory);
     }
 
     /**
@@ -94,26 +62,24 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Author
      */
     public function execute()
     {
-        $user = $this->authSession->getUser();
-        $userFullname = $user->getFirstName(). ' ' . $user->getLastName();
-        $id = $user->getId();
-        $authors = $this->initAuthor()->load($id);
-        if (!$authors->getId()) {
-            $authors->setData(['user_id' => $id])->save();
+        /** @var \Mageplaza\Blog\Model\Author $author */
+        $author = $this->initAuthor();
+
+        //Set entered data if was error when we do save
+        $data = $this->_session->getData('mageplaza_blog_author_data', true);
+        if (!empty($data)) {
+            $author->addData($data);
         }
+
+        $this->coreRegistry->register('mageplaza_blog_author', $author);
+
         /** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mageplaza_Blog::author');
         $resultPage->getConfig()->getTitle()->set(__('Author Management'));
 
-        $authors->load($id);
-        $title = $userFullname;
-        $resultPage->getConfig()->getTitle()->prepend($title);
-        $data = $this->backendSession->getData('mageplaza_blog_author_data', true);
+        $resultPage->getConfig()->getTitle()->prepend($this->_auth->getUser()->getName());
 
-        if (!empty($data)) {
-            $authors->setData($data);
-        }
         return $resultPage;
     }
 }

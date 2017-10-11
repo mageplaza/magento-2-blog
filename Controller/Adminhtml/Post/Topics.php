@@ -15,16 +15,23 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\LayoutFactory;
+use Mageplaza\Blog\Controller\Adminhtml\Post;
+use Mageplaza\Blog\Model\PostFactory;
 
 /**
  * Class Topics
  * @package Mageplaza\Blog\Controller\Adminhtml\Post
  */
-class Topics extends \Mageplaza\Blog\Controller\Adminhtml\Post
+class Topics extends Post
 {
     /**
      * Result layout factory
@@ -33,20 +40,20 @@ class Topics extends \Mageplaza\Blog\Controller\Adminhtml\Post
      */
     public $resultLayoutFactory;
 
-	/**
-	 * Topics constructor.
-	 * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-	 * @param \Mageplaza\Blog\Model\PostFactory $topicFactory
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Backend\App\Action\Context $context
-	 */
+    /**
+     * Topics constructor.
+     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param \Mageplaza\Blog\Model\PostFactory $topicFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Backend\App\Action\Context $context
+     */
     public function __construct(
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
-        \Mageplaza\Blog\Model\PostFactory $topicFactory,
-        \Magento\Framework\Registry $registry,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-    
+        LayoutFactory $resultLayoutFactory,
+        PostFactory $topicFactory,
+        Registry $registry,
+        Context $context
+    )
+    {
         $this->resultLayoutFactory = $resultLayoutFactory;
         parent::__construct($topicFactory, $registry, $context);
     }
@@ -56,13 +63,8 @@ class Topics extends \Mageplaza\Blog\Controller\Adminhtml\Post
      */
     public function execute()
     {
-        $this->initPost();
-        $resultLayout = $this->resultLayoutFactory->create();
-        /** @var \Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Topic $topicsBlock */
-        $topicsBlock = $resultLayout->getLayout()->getBlock('post.edit.tab.topic');
-        if ($topicsBlock) {
-            $topicsBlock->setPostTopics($this->getRequest()->getPost('post_topics', null));
-        }
-        return $resultLayout;
+        $this->initPost(true);
+
+        return $this->resultLayoutFactory->create();
     }
 }

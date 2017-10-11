@@ -15,16 +15,21 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
+
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 
 /**
  * Class Index
  * @package Mageplaza\Blog\Controller\Adminhtml\Category
  */
-class Index extends \Magento\Backend\App\Action
+class Index extends Action
 {
     /**
      * Forward factory
@@ -34,16 +39,15 @@ class Index extends \Magento\Backend\App\Action
     public $resultForwardFactory;
 
     /**
-     * constructor
-     *
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * Index constructor.
      * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-    
+        Context $context,
+        ForwardFactory $resultForwardFactory
+    )
+    {
         $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
@@ -57,6 +61,7 @@ class Index extends \Magento\Backend\App\Action
     {
         /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();
+
         return $resultForward->forward('edit');
     }
 }

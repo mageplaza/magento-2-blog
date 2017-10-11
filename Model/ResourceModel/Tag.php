@@ -15,16 +15,23 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model\ResourceModel;
+
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Tag
  * @package Mageplaza\Blog\Model\ResourceModel
  */
-class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Tag extends AbstractDb
 {
     /**
      * Date model
@@ -46,25 +53,32 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var string
      */
     public $tagPostTable;
+
+    /**
+     * @var \Mageplaza\Blog\Helper\Data
+     */
     public $helperData;
 
-	/**
-	 * Tag constructor.
-	 * @param \Mageplaza\Blog\Helper\Data $helperData
-	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-	 * @param \Magento\Framework\Event\ManagerInterface $eventManager
-	 * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-	 */
+    /**
+     * Tag constructor.
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param \Mageplaza\Blog\Helper\Data $helperData
+     */
     public function __construct(
-        \Mageplaza\Blog\Helper\Data $helperData,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Model\ResourceModel\Db\Context $context
-    ) {
-        $this->helperData = $helperData;
+        Context $context,
+        ManagerInterface $eventManager,
+        DateTime $date,
+        Data $helperData
+    )
+    {
+        $this->helperData   = $helperData;
         $this->date         = $date;
         $this->eventManager = $eventManager;
+
         parent::__construct($context);
+
         $this->tagPostTable = $this->getTable('mageplaza_blog_post_tag');
     }
 
@@ -87,17 +101,16 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getTagNameById($id)
     {
         $adapter = $this->getConnection();
-        $select = $adapter->select()
+        $select  = $adapter->select()
             ->from($this->getMainTable(), 'name')
             ->where('tag_id = :tag_id');
-        $binds = ['tag_id' => (int)$id];
+        $binds   = ['tag_id' => (int)$id];
+
         return $adapter->fetchOne($select, $binds);
     }
+
     /**
-     * before save callback
-     *
-     * @param \Magento\Framework\Model\AbstractModel|\Mageplaza\Blog\Model\Tag $object
-     * @return $this
+     * @inheritdoc
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -105,48 +118,25 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($object->isObjectNew()) {
             $object->setCreatedAt($this->date->date());
         }
-        //Check Url Key
 
-        if ($object->isObjectNew()) {
-            $count   = 0;
-            $objName = $object->getName();
-            if ($object->getUrlKey()) {
-                $urlKey = $object->getUrlKey();
-            } else {
-                $urlKey = $this->generateUrlKey($objName, $count);
-            }
-            while ($this->checkUrlKey($urlKey)) {
-                $count++;
-                $urlKey = $this->generateUrlKey($urlKey, $count);
-            }
-            $object->setUrlKey($urlKey);
-        } else {
-            $objectId = $object->getId();
-            $count    = 0;
-            $objName  = $object->getName();
-            if ($object->getUrlKey()) {
-                $urlKey = $object->getUrlKey();
-            } else {
-                $urlKey = $this->generateUrlKey($objName, $count);
-            }
-            while ($this->checkUrlKey($urlKey, $objectId)) {
-                $count++;
-                $urlKey = $this->generateUrlKey($urlKey, $count);
-            }
-
-            $object->setUrlKey($urlKey);
+        if (is_array($object->getStoreIds())) {
+            $object->setStoreIds(implode(',', $object->getStoreIds()));
         }
+
+        $object->setUrlKey(
+            $this->helperData->generateUrlKey($this, $object, $object->getUrlKey() ?: $object->getName())
+        );
+
         return parent::_beforeSave($object);
     }
+
     /**
-     * after save callback
-     *
-     * @param \Magento\Framework\Model\AbstractModel|\Mageplaza\Blog\Model\Tag $object
-     * @return $this
+     * @inheritdoc
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         $this->savePostRelation($object);
+
         return parent::_afterSave($object);
     }
 
@@ -156,14 +146,12 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getPostsPosition(\Mageplaza\Blog\Model\Tag $tag)
     {
-        $select = $this->getConnection()->select()->from(
-            $this->tagPostTable,
-            ['post_id', 'position']
-        )
-        ->where(
-            'tag_id = :tag_id'
-        );
+        $select = $this->getConnection()->select()
+            ->from($this->tagPostTable, ['post_id', 'position'])
+            ->where('tag_id = :tag_id');
+
         $bind = ['tag_id' => (int)$tag->getId()];
+
         return $this->getConnection()->fetchPairs($select, $bind);
     }
 
@@ -174,22 +162,22 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function savePostRelation(\Mageplaza\Blog\Model\Tag $tag)
     {
         $tag->setIsChangedPostList(false);
-        $id = $tag->getId();
+        $id    = $tag->getId();
         $posts = $tag->getPostsData();
         if ($posts === null) {
             return $this;
         }
         $oldPosts = $tag->getPostsPosition();
-        $insert = array_diff_key($posts, $oldPosts);
-        $delete = array_diff_key($oldPosts, $posts);
-        $update = array_intersect_key($posts, $oldPosts);
-        $_update = [];
+        $insert   = array_diff_key($posts, $oldPosts);
+        $delete   = array_diff_key($oldPosts, $posts);
+        $update   = array_intersect_key($posts, $oldPosts);
+        $_update  = [];
         foreach ($update as $key => $settings) {
             if (isset($oldPosts[$key]) && $oldPosts[$key] != $settings['position']) {
                 $_update[$key] = $settings;
             }
         }
-        $update = $_update;
+        $update  = $_update;
         $adapter = $this->getConnection();
         if (!empty($delete)) {
             $condition = ['post_id IN(?)' => array_keys($delete), 'tag_id=?' => $id];
@@ -199,8 +187,8 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $data = [];
             foreach ($insert as $postId => $position) {
                 $data[] = [
-                    'tag_id' => (int)$id,
-                    'post_id' => (int)$postId,
+                    'tag_id'   => (int)$id,
+                    'post_id'  => (int)$postId,
                     'position' => (int)$position['position']
                 ];
             }
@@ -209,7 +197,7 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if (!empty($update)) {
             foreach ($update as $postId => $position) {
                 $where = ['tag_id = ?' => (int)$id, 'post_id = ?' => (int)$postId];
-                $bind = ['position' => (int)$position['position']];
+                $bind  = ['position' => (int)$position['position']];
                 $adapter->update($this->tagPostTable, $bind, $where);
             }
         }
@@ -225,31 +213,7 @@ class Tag extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $postIds = array_keys($insert + $delete + $update);
             $tag->setAffectedPostIds($postIds);
         }
+
         return $this;
-    }
-    public function generateUrlKey($name, $count)
-    {
-        return $this->helperData->generateUrlKey($name, $count);
-    }
-
-    public function checkUrlKey($url, $id = null)
-    {
-        $adapter = $this->getConnection();
-        if ($id) {
-            $select            = $adapter->select()
-                ->from($this->getMainTable(), '*')
-                ->where('url_key = :url_key')
-                ->where('tag_id != :tag_id');
-            $binds['url_key']  = (string)$url;
-            $binds ['tag_id'] = (int)$id;
-        } else {
-            $select = $adapter->select()
-                ->from($this->getMainTable(), '*')
-                ->where('url_key = :url_key');
-            $binds  = ['url_key' => (string)$url];
-        }
-        $result = $adapter->fetchOne($select, $binds);
-
-        return $result;
     }
 }

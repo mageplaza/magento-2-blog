@@ -15,17 +15,26 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml;
+
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\CategoryFactory;
 
 /**
  * Class Category
  * @package Mageplaza\Blog\Controller\Adminhtml
  */
-abstract class Category extends \Magento\Backend\App\Action
+abstract class Category extends Action
 {
+    /** Authorization level of a basic admin session */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::category';
+
     /**
      * Blog Category Factory
      *
@@ -41,44 +50,46 @@ abstract class Category extends \Magento\Backend\App\Action
     public $coreRegistry;
 
     /**
-     * Result redirect factory
-     *
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     * Category constructor.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
      */
-    public $resultRedirectFactory;
-
-	/**
-	 * Category constructor.
-	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-	 * @param \Magento\Framework\Registry $coreRegistry
-	 * @param \Magento\Backend\App\Action\Context $context
-	 */
     public function __construct(
-        \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-    
-        $this->categoryFactory       = $categoryFactory;
-        $this->coreRegistry          = $coreRegistry;
-        $this->resultRedirectFactory = $context->getRedirect();
+        Context $context,
+        Registry $coreRegistry,
+        CategoryFactory $categoryFactory
+    )
+    {
+        $this->categoryFactory = $categoryFactory;
+        $this->coreRegistry    = $coreRegistry;
+
         parent::__construct($context);
     }
 
     /**
-     * Init Blog Category
-     *
-     * @return \Mageplaza\Blog\Model\Category
+     * @param bool $register
+     * @return bool|\Mageplaza\Blog\Model\Category
      */
-    public function initCategory()
+    public function initCategory($register = false)
     {
-        $categoryId  = (int) $this->getRequest()->getParam('category_id');
-        /** @var \Mageplaza\Blog\Model\Category $category */
-        $category    = $this->categoryFactory->create();
+        $categoryId = (int)$this->getRequest()->getParam('category_id');
+
+        /** @var \Mageplaza\Blog\Model\Post $post */
+        $category = $this->categoryFactory->create();
         if ($categoryId) {
             $category->load($categoryId);
+            if (!$category->getId()) {
+                $this->messageManager->addErrorMessage(__('This post no longer exists.'));
+
+                return false;
+            }
         }
-        $this->coreRegistry->register('mageplaza_blog_category', $category);
+
+        if ($register) {
+            $this->coreRegistry->register('mageplaza_blog_category', $category);
+        }
+
         return $category;
     }
 }

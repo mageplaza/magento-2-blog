@@ -15,9 +15,10 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Adminhtml\Author\Edit\Tab;
 
 /**
@@ -27,14 +28,14 @@ namespace Mageplaza\Blog\Block\Adminhtml\Author\Edit\Tab;
 class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
 
-	/**
-	 * @var \Magento\Store\Model\System\Store
-	 */
+    /**
+     * @var \Magento\Store\Model\System\Store
+     */
     public $systemStore;
 
-	/**
-	 * @var \Magento\Cms\Model\Wysiwyg\Config
-	 */
+    /**
+     * @var \Magento\Cms\Model\Wysiwyg\Config
+     */
     public $wysiwygConfig;
 
     /**
@@ -53,23 +54,26 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         array $data = []
-    ) {
-        $this->wysiwygConfig     = $wysiwygConfig;
-        $this->systemStore = $systemStore;
+    )
+    {
+        $this->wysiwygConfig = $wysiwygConfig;
+        $this->systemStore   = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
-     * Prepare form
-     *
-     * @return $this
+     * @inheritdoc
      */
     protected function _prepareForm()
     {
+        /** @var \Mageplaza\Blog\Model\Author $author */
         $author = $this->_coreRegistry->registry('mageplaza_blog_author');
+
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('author_');
         $form->setFieldNameSuffix('author');
+
         $fieldset = $form->addFieldset(
             'base_fieldset',
             [
@@ -77,78 +81,62 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
                 'class'  => 'fieldset-wide'
             ]
         );
-        $fieldset->addType('image', 'Mageplaza\Blog\Block\Adminhtml\Author\Helper\Image');
+
         if ($author->getId()) {
-            $fieldset->addField(
-                'user_id',
-                'hidden',
-                ['name' => 'user_id']
-            );
+            $fieldset->addField('user_id', 'hidden', ['name' => 'user_id']);
         }
 
-        $fieldset->addField(
-            'name',
-            'text',
-            [
-                'name'  => 'name',
-                'label' => __('Display Name'),
-                'title' => __('Display Name'),
-                'note' => __('This name will be displayed on frontend'),
-            ]
-        );
-        
-        $fieldset->addField(
-            'short_description',
-            'editor',
-            [
-                'name'  => 'short_description',
-                'label' => __('Short Description'),
-                'title' => __('Short Description'),
-                'note' => __('Short Description'),
-                'config'    => $this->wysiwygConfig->getConfig()
+        $fieldset->addField('name', 'text', [
+                'name'     => 'name',
+                'label'    => __('Display Name'),
+                'title'    => __('Display Name'),
+                'required' => true,
+                'note'     => __('This name will be displayed on frontend')
             ]
         );
 
-        $fieldset->addField(
-            'image',
-            'image',
-            [
+        $fieldset->addField('short_description', 'editor', [
+                'name'   => 'short_description',
+                'label'  => __('Short Description'),
+                'title'  => __('Short Description'),
+                'note'   => __('Short Description'),
+                'config' => $this->wysiwygConfig->getConfig()
+            ]
+        );
+
+        $fieldset->addField('image', 'image', [
                 'name'  => 'image',
                 'label' => __('Avatar'),
                 'title' => __('Avatar'),
-                'note' => __(''),
             ]
         );
-        $fieldset->addField(
-            'facebook_link',
-            'text',
-            [
+
+        $fieldset->addField('url_key', 'text', [
+                'name'  => 'url_key',
+                'label' => __('URL Key'),
+                'title' => __('URL Key')
+            ]
+        );
+
+        $fieldset->addField('facebook_link', 'text', [
                 'name'  => 'facebook_link',
                 'label' => __('Facebook'),
                 'title' => __('Facebook'),
-                'note' => __('Facebook URL'),
+                'note'  => __('Facebook URL'),
             ]
         );
-        $fieldset->addField(
-            'twitter_link',
-            'text',
-            [
+
+        $fieldset->addField('twitter_link', 'text', [
                 'name'  => 'twitter_link',
                 'label' => __('Twitter'),
                 'title' => __('Twitter'),
-                'note' => __('Twitter URL'),
+                'note'  => __('Twitter URL'),
             ]
         );
-        $authorData = $this->_session->getData('mageplaza_blog_author_data', true);
-        if ($authorData) {
-            $author->addData($authorData);
-        } else {
-            if (!$author->getId()) {
-                $author->addData($author->getDefaultValues());
-            }
-        }
+
         $form->addValues($author->getData());
         $this->setForm($form);
+
         return parent::_prepareForm();
     }
 

@@ -15,23 +15,16 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
 /**
  * Class TopicsGrid
  * @package Mageplaza\Blog\Controller\Adminhtml\Post
  */
-class TopicsGrid extends \Mageplaza\Blog\Controller\Adminhtml\Post\Topics
+class TopicsGrid extends Topics
 {
-
-	/**
-	 * @return null
-	 */
-    public function getBlogPost()
-    {
-        return null;
-    }
 }

@@ -15,10 +15,18 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model;
+
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
 
 /**
  * @method Tag setName($name)
@@ -38,7 +46,7 @@ namespace Mageplaza\Blog\Model;
  * @method Tag setAffectedPostIds(array $ids)
  * @method bool getAffectedPostIds()
  */
-class Tag extends \Magento\Framework\Model\AbstractModel
+class Tag extends AbstractModel
 {
     /**
      * Cache tag
@@ -76,25 +84,25 @@ class Tag extends \Magento\Framework\Model\AbstractModel
     public $postCollectionFactory;
 
     /**
-     * constructor
-     *
-     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
+     * Tag constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        CollectionFactory $postCollectionFactory,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
-    ) {
-    
+    )
+    {
         $this->postCollectionFactory = $postCollectionFactory;
+
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -120,18 +128,6 @@ class Tag extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * get entity default values
-     *
-     * @return array
-     */
-    public function getDefaultValues()
-    {
-        $values = [];
-        $values['enabled'] = '1';
-        $values['store_ids'] = '1';
-        return $values;
-    }
-    /**
      * @return array|mixed
      */
     public function getPostsPosition()
@@ -139,11 +135,13 @@ class Tag extends \Magento\Framework\Model\AbstractModel
         if (!$this->getId()) {
             return [];
         }
+
         $array = $this->getData('posts_position');
-        if ($array === null) {
+        if (!$array) {
             $array = $this->getResource()->getPostsPosition($this);
             $this->setData('posts_position', $array);
         }
+
         return $array;
     }
 
@@ -155,12 +153,14 @@ class Tag extends \Magento\Framework\Model\AbstractModel
         if ($this->postCollection === null) {
             $collection = $this->postCollectionFactory->create();
             $collection->join(
-                $this->getResource()->getTable('mageplaza_blog_post_tag'),
-                'main_table.post_id='.$this->getResource()->getTable('mageplaza_blog_post_tag').'.post_id AND '.$this->getResource()->getTable('mageplaza_blog_post_tag').'.tag_id='.$this->getId(),
+                ['post_tag' => $this->getResource()->getTable('mageplaza_blog_post_tag')],
+                'main_table.post_id=post_tag.post_id AND post_tag.tag_id=' . $this->getId(),
                 ['position']
             );
+
             $this->postCollection = $collection;
         }
+
         return $this->postCollection;
     }
 }

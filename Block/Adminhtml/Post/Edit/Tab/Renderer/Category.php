@@ -15,20 +15,29 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
-namespace Mageplaza\Blog\Block\Adminhtml\Helper;
+
+namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer;
+
+use Magento\Backend\Helper\Data;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Data\Form\Element\Multiselect;
+use Magento\Framework\Escaper;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\View\LayoutInterface;
+use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory as BlogCategoryCollectionFactory;
 
 /**
  * Class Category
- * @package Mageplaza\Blog\Block\Adminhtml\Helper
+ * @package Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer
  */
-class Category extends \Magento\Framework\Data\Form\Element\Multiselect
+class Category extends Multiselect
 {
     /**
-     * Collection factory
-     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
     public $collectionFactory;
@@ -75,22 +84,23 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
      * @param array $data
      */
     public function __construct(
-        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $collectionFactory,
-        \Magento\Backend\Helper\Data $backendData,
-        \Magento\Framework\View\LayoutInterface $layout,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Framework\AuthorizationInterface $authorization,
-        \Magento\Framework\Data\Form\Element\Factory $factoryElement,
-        \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Framework\Escaper $escaper,
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
+        Escaper $escaper,
+        LayoutInterface $layout,
+        EncoderInterface $jsonEncoder,
+        AuthorizationInterface $authorization,
+        Data $backendData,
+        BlogCategoryCollectionFactory $collectionFactory,
         array $data = []
-    ) {
-    
+    )
+    {
         $this->collectionFactory = $collectionFactory;
         $this->backendData       = $backendData;
         $this->layout            = $layout;
         $this->jsonEncoder       = $jsonEncoder;
         $this->authorization     = $authorization;
+
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
@@ -102,6 +112,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
     public function getNoDisplay()
     {
         $isNotAllowed = !$this->authorization->isAllowed('Mageplaza_Blog::category');
+
         return $this->getData('no_display') || $isNotAllowed;
     }
 
@@ -113,7 +124,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
     public function getValues()
     {
         $collection = $this->getCategoriesCollection();
-        $values = $this->getValue();
+        $values     = $this->getValue();
         if (!is_array($values)) {
             $values = explode(',', $values);
         }
@@ -123,6 +134,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
             /** @var \Mageplaza\Blog\Model\Category $category */
             $options[] = ['label' => $category->getName(), 'value' => $category->getId()];
         }
+
         return $options;
     }
 
@@ -143,17 +155,17 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
      */
     public function getAfterElementHtml()
     {
-        $htmlId = $this->getHtmlId();
+        $htmlId             = $this->getHtmlId();
         $suggestPlaceholder = __('start typing to search Blog Category');
-        $selectorOptions = $this->jsonEncoder->encode($this->getSelectorOptions());
+        $selectorOptions    = $this->jsonEncoder->encode($this->getSelectorOptions());
         $newCategoryCaption = __('New Blog Category');
         /** @var \Magento\Backend\Block\Widget\Button $button */
         $button = $this->layout->createBlock('Magento\Backend\Block\Widget\Button')
             ->setData([
-                'id' => 'add_category_button',
-                'label' => $newCategoryCaption,
-                'title' => $newCategoryCaption,
-                'onclick' => 'jQuery("#new-category").trigger("openModal")',
+                'id'       => 'add_category_button',
+                'label'    => $newCategoryCaption,
+                'title'    => $newCategoryCaption,
+                'onclick'  => 'jQuery("#new-category").trigger("openModal")',
                 'disabled' => $this->getDisabled()
             ]);
         // move this somewhere else when magento team decides to move it.
@@ -167,6 +179,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
             });
         </script>
 HTML;
+
         return $return . $button->toHtml();
 //		return $return;
     }
@@ -179,11 +192,11 @@ HTML;
     public function getSelectorOptions()
     {
         return [
-            'source' => $this->backendData->getUrl('mageplaza_blog/category/suggestCategories'),
-            'valueField' => '#' . $this->getHtmlId(),
-            'className' => 'category-select',
+            'source'      => $this->backendData->getUrl('mageplaza_blog/category/suggestCategories'),
+            'valueField'  => '#' . $this->getHtmlId(),
+            'className'   => 'category-select',
             'multiselect' => true,
-            'showAll' => true
+            'showAll'     => true
         ];
     }
 }

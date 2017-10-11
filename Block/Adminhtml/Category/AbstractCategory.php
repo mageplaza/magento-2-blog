@@ -15,16 +15,25 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Adminhtml\Category;
+
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\Category;
+use Mageplaza\Blog\Model\CategoryFactory;
+use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory;
+use Mageplaza\Blog\Model\ResourceModel\Category\Tree;
 
 /**
  * Class AbstractCategory
  * @package Mageplaza\Blog\Block\Adminhtml\Category
  */
-class AbstractCategory extends \Magento\Backend\Block\Template
+class AbstractCategory extends Template
 {
     /**
      * Core registry
@@ -55,28 +64,28 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     public $categoryCollectionFactory;
 
     /**
-     * constructor
-     *
+     * AbstractCategory constructor.
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
-     * @param \Magento\Backend\Block\Widget\Context $context
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Registry $coreRegistry,
-        \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree,
-        \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
-        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-        \Magento\Backend\Block\Widget\Context $context,
+        Context $context,
+        Registry $coreRegistry,
+        Tree $categoryTree,
+        CategoryFactory $categoryFactory,
+        CollectionFactory $categoryCollectionFactory,
         array $data = []
-    ) {
-    
+    )
+    {
         $this->coreRegistry              = $coreRegistry;
         $this->categoryTree              = $categoryTree;
         $this->categoryFactory           = $categoryFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
+
         parent::__construct($context, $data);
     }
 
@@ -98,7 +107,8 @@ class AbstractCategory extends \Magento\Backend\Block\Template
         if ($this->getCategory()) {
             return $this->getCategory()->getId();
         }
-        return \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
+
+        return Category::TREE_ROOT_ID;
     }
 
     /**
@@ -117,14 +127,15 @@ class AbstractCategory extends \Magento\Backend\Block\Template
         if ($this->getCategory()) {
             return $this->getCategory()->getPath();
         }
-        return \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
+
+        return Category::TREE_ROOT_ID;
     }
 
-	/**
-	 * @param null $parentNodeCategory
-	 * @param int $recursionLevel
-	 * @return \Magento\Framework\Data\Tree\Node|\Mageplaza\Blog\Block\Adminhtml\Category\Node|mixed
-	 */
+    /**
+     * @param null $parentNodeCategory
+     * @param int $recursionLevel
+     * @return \Magento\Framework\Data\Tree\Node|\Mageplaza\Blog\Block\Adminhtml\Category\Node|mixed
+     */
     public function getRoot($parentNodeCategory = null, $recursionLevel = 3)
     {
         if ($parentNodeCategory !== null && $parentNodeCategory->getId()) {
@@ -132,7 +143,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
         }
         $root = $this->coreRegistry->registry('mageplaza_blog_category_root');
         if ($root === null) {
-            $rootId = \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
+            $rootId = Category::TREE_ROOT_ID;
 
             $tree = $this->categoryTree->load(null, $recursionLevel);
 
@@ -144,9 +155,9 @@ class AbstractCategory extends \Magento\Backend\Block\Template
 
             $root = $tree->getNodeById($rootId);
 
-            if ($root && $rootId != \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
+            if ($root && $rootId != Category::TREE_ROOT_ID) {
                 $root->setIsVisible(true);
-            } elseif ($root && $root->getId() == \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
+            } elseif ($root && $root->getId() == Category::TREE_ROOT_ID) {
                 $root->setName(__('ROOT'));
             }
 
@@ -166,6 +177,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
             $collection = $this->categoryCollectionFactory->create();
             $this->setData('category_collection', $collection);
         }
+
         return $collection;
     }
 
@@ -183,36 +195,37 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     {
         $root = $this->coreRegistry->registry('mageplaza_blog_category_root');
         if (null === $root) {
-            $ids = $this->categoryTree->getExistingCategoryIdsBySpecifiedIds($ids);
-            $tree = $this->categoryTree->loadByIds($ids);
-            $rootId = \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
-            $root = $tree->getNodeById($rootId);
-            if ($root && $rootId != \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
+            $ids    = $this->categoryTree->getExistingCategoryIdsBySpecifiedIds($ids);
+            $tree   = $this->categoryTree->loadByIds($ids);
+            $rootId = Category::TREE_ROOT_ID;
+            $root   = $tree->getNodeById($rootId);
+            if ($root && $rootId != Category::TREE_ROOT_ID) {
                 $root->setIsVisible(true);
-            } elseif ($root && $root->getId() == \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
+            } elseif ($root && $root->getId() == Category::TREE_ROOT_ID) {
                 $root->setName(__('Root'));
             }
 
             $tree->addCollectionData($this->getCategoryCollection());
             $this->coreRegistry->register('mageplaza_blog_category_root', $root);
         }
+
         return $root;
     }
 
     /**
      * @param $parentNodeCategory
      * @param int $recursionLevel
-     * @return Node
+     * @return \Magento\Framework\Data\Tree\Node
      */
     public function getNode($parentNodeCategory, $recursionLevel = 2)
     {
         $nodeId = $parentNodeCategory->getId();
-        $node = $this->categoryTree->loadNode($nodeId);
+        $node   = $this->categoryTree->loadNode($nodeId);
         $node->loadChildren($recursionLevel);
 
-        if ($node && $nodeId != \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
+        if ($node && $nodeId != Category::TREE_ROOT_ID) {
             $node->setIsVisible(true);
-        } elseif ($node && $node->getId() == \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
+        } elseif ($node && $node->getId() == Category::TREE_ROOT_ID) {
             $node->setName(__('Root'));
         }
 
@@ -229,6 +242,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     {
         $params = ['_current' => false, '_query' => false];
         $params = array_merge($params, $args);
+
         return $this->getUrl('mageplaza_blog/*/save', $params);
     }
 
@@ -237,16 +251,14 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      */
     public function getEditUrl()
     {
-        return $this->getUrl(
-            'mageplaza_blog/category/edit',
-            ['_query' => false, 'id' => null, 'parent' => null]
-        );
+        return $this->getUrl('mageplaza_blog/category/edit', ['_query' => false, 'id' => null, 'parent' => null]);
     }
+
     /**
      * @return []
      */
     public function getRootIds()
     {
-        return [\Mageplaza\Blog\Model\Category::TREE_ROOT_ID];
+        return [Category::TREE_ROOT_ID];
     }
 }

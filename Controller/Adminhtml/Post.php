@@ -15,17 +15,26 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml;
+
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\PostFactory;
 
 /**
  * Class Post
  * @package Mageplaza\Blog\Controller\Adminhtml
  */
-abstract class Post extends \Magento\Backend\App\Action
+abstract class Post extends Action
 {
+    /** Authorization level of a basic admin session */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::post';
+
     /**
      * Post Factory
      *
@@ -41,44 +50,50 @@ abstract class Post extends \Magento\Backend\App\Action
     public $coreRegistry;
 
     /**
-     * Result redirect factory
-     *
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     * Post constructor.
+     * @param \Mageplaza\Blog\Model\PostFactory $postFactory
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Backend\App\Action\Context $context
      */
-    public $resultRedirectFactory;
-
-	/**
-	 * Post constructor.
-	 * @param \Mageplaza\Blog\Model\PostFactory $postFactory
-	 * @param \Magento\Framework\Registry $coreRegistry
-	 * @param \Magento\Backend\App\Action\Context $context
-	 */
     public function __construct(
-        \Mageplaza\Blog\Model\PostFactory $postFactory,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-    
-        $this->postFactory           = $postFactory;
-        $this->coreRegistry          = $coreRegistry;
-        $this->resultRedirectFactory = $context->getRedirect();
+        PostFactory $postFactory,
+        Registry $coreRegistry,
+        Context $context
+    )
+    {
+        $this->postFactory  = $postFactory;
+        $this->coreRegistry = $coreRegistry;
+
         parent::__construct($context);
     }
 
     /**
-     * Init Post
-     *
-     * @return \Mageplaza\Blog\Model\Post
+     * @param bool $register
+     * @return bool|\Mageplaza\Blog\Model\Post
      */
-    public function initPost()
+    protected function initPost($register = false)
     {
-        $postId  = (int) $this->getRequest()->getParam('post_id');
+        $postId = (int)$this->getRequest()->getParam('id');
+
         /** @var \Mageplaza\Blog\Model\Post $post */
-        $post    = $this->postFactory->create();
+        $post = $this->postFactory->create();
         if ($postId) {
             $post->load($postId);
+            if (!$post->getId()) {
+                $this->messageManager->addErrorMessage(__('This post no longer exists.'));
+
+                return false;
+            }
         }
-        $this->coreRegistry->register('mageplaza_blog_post', $post);
+
+        if (!$post->getAuthorId()) {
+            $post->setAuthorId($this->_auth->getUser()->getId());
+        }
+
+        if($register){
+            $this->coreRegistry->register('mageplaza_blog_post', $post);
+        }
+
         return $post;
     }
 }

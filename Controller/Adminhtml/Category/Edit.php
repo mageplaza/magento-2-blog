@@ -15,24 +15,26 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\PageFactory;
+use Mageplaza\Blog\Controller\Adminhtml\Category;
+use Mageplaza\Blog\Model\CategoryFactory;
 
 /**
  * Class Edit
  * @package Mageplaza\Blog\Controller\Adminhtml\Category
  */
-class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
+class Edit extends Category
 {
-    /**
-     * Backend session
-     *
-     * @var \Magento\Backend\Model\Session
-     */
-    public $backendSession;
-
     /**
      * Page factory
      *
@@ -47,41 +49,36 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public $resultJsonFactory;
 
-	/**
-	 * @var \Magento\Framework\ObjectManagerInterface
-	 */
-    public $objectManager;
-
-	/**
-	 * @var \Magento\Framework\DataObject
-	 */
+    /**
+     * @var \Magento\Framework\DataObject
+     */
     public $dataObject;
 
-	/**
-	 * Edit constructor.
-	 * @param \Magento\Framework\DataObject $dataObject
-	 * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-	 * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Backend\App\Action\Context $context
-	 */
+    /**
+     * Edit constructor.
+     * @param \Magento\Framework\DataObject $dataObject
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Backend\App\Action\Context $context
+     */
     public function __construct(
-        \Magento\Framework\DataObject $dataObject,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
-        \Magento\Framework\Registry $registry,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-        $this->dataObject = $dataObject;
-        $this->backendSession    = $context->getSession();
+        Context $context,
+        Registry $registry,
+        CategoryFactory $categoryFactory,
+        DataObject $dataObject,
+        PageFactory $resultPageFactory,
+        JsonFactory $resultJsonFactory
+    )
+    {
+        $this->dataObject        = $dataObject;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->objectManager = $context->getObjectManager();
-        parent::__construct($categoryFactory, $registry, $context);
+
+        parent::__construct($context, $registry, $categoryFactory);
     }
-    
+
     /**
      * Edit Blog category page
      *
@@ -91,39 +88,37 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public function execute()
     {
-        $parentId = (int)$this->getRequest()->getParam('parent');
         $categoryId = (int)$this->getRequest()->getParam('category_id');
 
         $category = $this->initCategory();
         if (!$category) {
-            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
-            return $resultRedirect->setPath('mageplaza_blog/*/', ['_current' => true, 'id' => null]);
+            $resultRedirect->setPath('*');
+
+            return $resultRedirect;
         }
 
         /**
          * Check if we have data in session (if during Blog category save was exception)
          */
-        $data = $this->_getSession()->getMageplazaBlogCategoryData(true);
+        $data = $this->_getSession()->getData('mageplaza_blog_category_data', true);
         if (isset($data['category'])) {
             $category->addData($data['category']);
         }
 
+        $this->coreRegistry->register('mageplaza_blog_category', $category);
+
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        /**
-         * Build response for ajax request
-         */
+
+        /** Build response for ajax request */
         if ($this->getRequest()->getQuery('isAjax')) {
             // prepare breadcrumbs of selected Blog category, if any
             $breadcrumbsPath = $category->getPath();
             if (empty($breadcrumbsPath)) {
                 // but if no Blog category, and it is deleted - prepare breadcrumbs from path, saved in session
-                $breadcrumbsPath = $this->objectManager->get(
-                    'Magento\Backend\Model\Auth\Session'
-                )->getDeletedPath(
-                    true
-                );
+                $breadcrumbsPath = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')
+                    ->getDeletedPath(true);
                 if (!empty($breadcrumbsPath)) {
                     $breadcrumbsPath = explode('/', $breadcrumbsPath);
                     // no need to get parent breadcrumbs if deleting Blog category level 1
@@ -136,21 +131,26 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
                 }
             }
 
+            $layout        = $resultPage->getLayout();
+            $content       = $layout->getBlock('mageplaza.blog.category.edit')->getFormHtml()
+                . $layout->getBlock('mageplaza.blog.category.tree')
+                    ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs');
             $eventResponse = $this->dataObject->addData([
-                'content' => $resultPage->getLayout()->getBlock('mageplaza.blog.category.edit')->getFormHtml()
-                    . $resultPage->getLayout()->getBlock('mageplaza.blog.category.tree')
-                        ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs'),
-                'messages' => $resultPage->getLayout()->getMessagesBlock()->getGroupedHtml(),
-                'toolbar' => $resultPage->getLayout()->getBlock('page.actions.toolbar')->toHtml()
+                'content'  => $content,
+                'messages' => $layout->getMessagesBlock()->getGroupedHtml(),
+                'toolbar'  => $layout->getBlock('page.actions.toolbar')->toHtml()
             ]);
+
             $this->_eventManager->dispatch(
                 'mageplaza_blog_category_prepare_ajax_response',
                 ['response' => $eventResponse, 'controller' => $this]
             );
+
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             $resultJson->setHeader('Content-type', 'application/json', true);
             $resultJson->setData($eventResponse->getData());
+
             return $resultJson;
         }
 
@@ -158,6 +158,7 @@ class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Category
         $resultPage->getConfig()->getTitle()->prepend(__('Categories'));
         $resultPage->getConfig()->getTitle()->prepend($categoryId ? $category->getName() : __('Categories'));
         $resultPage->addBreadcrumb(__('Manage Categories'), __('Manage Categories'));
+
         return $resultPage;
     }
 }

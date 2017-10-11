@@ -15,16 +15,26 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Helper\Js;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Registry;
+use Magento\Framework\View\LayoutFactory;
+use Mageplaza\Blog\Controller\Adminhtml\Category;
+use Mageplaza\Blog\Model\CategoryFactory;
 
 /**
  * Class Save
  * @package Mageplaza\Blog\Controller\Adminhtml\Category
  */
-class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
+class Save extends Category
 {
     /**
      * Result Raw Factory
@@ -54,57 +64,54 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public $jsHelper;
 
-	/**
-	 * Save constructor.
-	 * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-	 * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-	 * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-	 * @param \Magento\Backend\Helper\Js $jsHelper
-	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Backend\App\Action\Context $context
-	 */
+    /**
+     * Save constructor.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Backend\Helper\Js $jsHelper
+     */
     public function __construct(
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Backend\Helper\Js $jsHelper,
-        \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
-        \Magento\Framework\Registry $registry,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-    
+        Context $context,
+        Registry $coreRegistry,
+        CategoryFactory $categoryFactory,
+        RawFactory $resultRawFactory,
+        JsonFactory $resultJsonFactory,
+        LayoutFactory $layoutFactory,
+        Js $jsHelper
+    )
+    {
         $this->resultRawFactory  = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory     = $layoutFactory;
         $this->jsHelper          = $jsHelper;
-        parent::__construct($categoryFactory, $registry, $context);
+
+        parent::__construct($context, $coreRegistry, $categoryFactory);
     }
 
     /**
-     * run the action
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Framework\Controller\Result\Json|\Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
-        $data = $this->getRequest()->getPost('category');
-        if (isset($data['store_ids'])) {
-            $data['store_ids'] = implode(',', $data['store_ids']);
-        }
         $resultRedirect = $this->resultRedirectFactory->create();
-        if ($data) {
+        if ($data = $this->getRequest()->getPost('category')) {
             $category = $this->initCategory();
-
             if (!$category) {
-                return $resultRedirect->setPath('mageplaza_blog/*/', ['_current' => true, 'id' => null]);
+                $resultRedirect->setPath('mageplaza_blog/*/', ['_current' => true]);
+
+                return $resultRedirect;
             }
+
             $category->addData($data);
             if ($posts = $this->getRequest()->getPost('category_posts')) {
                 $posts = json_decode($posts, true);
                 $category->setPostsData($posts);
             }
-            $refreshTree = false;
+
             if (!$category->getId()) {
                 $parentId = $this->getRequest()->getParam('parent');
                 if (!$parentId) {
@@ -123,10 +130,11 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
             try {
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the Blog Category.'));
+                $this->_getSession()->setData('mageplaza_blog_category_data', false);
                 $refreshTree = true;
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
-                $this->_getSession()->setMageplazaBlogCategoryData($data);
+                $this->_getSession()->setData('mageplaza_blog_category_data', $data);
                 $refreshTree = false;
             }
 
@@ -139,27 +147,24 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Category
 
                 /** @var \Magento\Framework\Controller\Result\Json $resultJson */
                 $resultJson = $this->resultJsonFactory->create();
-                return $resultJson->setData(
+                $resultJson->setData(
                     [
                         'messages' => $block->getGroupedHtml(),
-                        'error' => !$refreshTree,
+                        'error'    => !$refreshTree,
                         'category' => $category->toArray(),
                     ]
                 );
+
+                return $resultJson;
             }
-            $redirectParams = [
-                '_current' => true,
-                'category_id' => $category->getId()
-            ];
-            return $resultRedirect->setPath(
-                'mageplaza_blog/*/edit',
-                $redirectParams
-            );
+
+            $resultRedirect->setPath('mageplaza_blog/*/edit', ['_current' => true, 'category_id' => $category->getId()]);
+
+            return $resultRedirect;
         }
-        $redirectParams = ['_current' => true];
-        return $resultRedirect->setPath(
-            'mageplaza_blog/*/edit',
-            $redirectParams
-        );
+
+        $resultRedirect->setPath('mageplaza_blog/*/edit', ['_current' => true]);
+
+        return $resultRedirect;
     }
 }

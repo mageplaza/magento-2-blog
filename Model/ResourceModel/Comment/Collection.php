@@ -15,13 +15,18 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model\ResourceModel\Comment;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
+/**
+ * Class Collection
+ * @package Mageplaza\Blog\Model\ResourceModel\Comment
+ */
 class Collection extends AbstractCollection
 {
     /**
@@ -29,9 +34,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init(
-            'Mageplaza\Blog\Model\Comment',
-            'Mageplaza\Blog\Model\ResourceModel\Comment'
-        );
+        $this->_init('Mageplaza\Blog\Model\Comment', 'Mageplaza\Blog\Model\ResourceModel\Comment');
     }
 }

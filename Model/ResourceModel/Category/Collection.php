@@ -15,9 +15,10 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model\ResourceModel\Category;
 
 /**
@@ -67,8 +68,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $countSelect = parent::getSelectCountSql();
         $countSelect->reset(\Zend_Db_Select::GROUP);
+
         return $countSelect;
     }
+
     /**
      * @param string $valueField
      * @param string $labelField
@@ -88,10 +91,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function addIdFilter($categoryIds)
     {
+        $condition = '';
+
         if (is_array($categoryIds)) {
-            if (empty($categoryIds)) {
-                $condition = '';
-            } else {
+            if (!empty($categoryIds)) {
                 $condition = ['in' => $categoryIds];
             }
         } elseif (is_numeric($categoryIds)) {
@@ -104,7 +107,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 $condition = ['in' => $ids];
             }
         }
-        $this->addFieldToFilter('category_id', $condition);
+
+        if ($condition != '') {
+            $this->addFieldToFilter('category_id', $condition);
+        }
+
         return $this;
     }
 }

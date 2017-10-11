@@ -15,16 +15,26 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Adminhtml\Category;
+
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Config\Model\Config\Source\Yesno;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Registry;
+use Magento\Store\Model\System\Store;
+use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory;
 
 /**
  * @method \bool getUseContainer()
  * @method NewCategory setUseContainer(\bool $use)
  */
-class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
+class NewCategory extends Generic
 {
     /**
      * JSON encoder
@@ -39,114 +49,93 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
      * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
      */
     public $categoryCollectionFactory;
+
+    /**
+     * @var \Magento\Store\Model\System\Store
+     */
     public $systemStore;
+
+    /**
+     * @var \Magento\Config\Model\Config\Source\Yesno
+     */
     public $booleanOptions;
 
     /**
-     * constructor
-     *
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+     * NewCategory constructor.
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
      * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Store\Model\System\Store $systemStore,
-        \Magento\Config\Model\Config\Source\Yesno $booleanOptions,
-        \Magento\Framework\Data\FormFactory $formFactory,
+        Context $context,
+        Registry $registry,
+        Store $systemStore,
+        Yesno $booleanOptions,
+        FormFactory $formFactory,
+        EncoderInterface $jsonEncoder,
+        CollectionFactory $categoryCollectionFactory,
         array $data = []
-    ) {
+    )
+    {
         $this->jsonEncoder               = $jsonEncoder;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
-        $this->systemStore = $systemStore;
-        $this->booleanOptions    = $booleanOptions;
+        $this->systemStore               = $systemStore;
+        $this->booleanOptions            = $booleanOptions;
+
         parent::__construct($context, $registry, $formFactory, $data);
+
         $this->setUseContainer(true);
     }
 
     /**
-     * Form preparation
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function _prepareForm()
     {
         /** @var \Magento\Framework\Data\Form $form */
-
-        $form = $this->_formFactory->create(
-            [
+        $form = $this->_formFactory->create([
                 'data' => [
-                    'id' => 'new_category_form',
+                    'id'    => 'new_category_form',
                     'class' => 'admin__scope-old'
                 ]
             ]
         );
         $form->setUseContainer($this->getUseContainer());
-
         $form->addField('new_category_messages', 'note', []);
 
         $fieldset = $form->addFieldset('new_category_form_fieldset', []);
 
-        $fieldset->addField(
-            'new_category_name',
-            'text',
-            [
-                'label' => __('Name'),
-                'title' => __('Name'),
+        $fieldset->addField('new_category_name', 'text', [
+                'label'    => __('Name'),
+                'title'    => __('Name'),
                 'required' => true,
-                'name' => 'new_category_name'
+                'name'     => 'new_category_name'
             ]
         );
-//		$fieldset->addField(
-//			'new_store_ids',
-//			'multiselect',
-//			[
-//				'name'  => 'new_store_ids',
-//				'label' => __('Store Views'),
-//				'title' => __('Store Views'),
-//				'note' => __('Select Store Views'),
-//				'values' => $this->systemStore->getStoreValuesForForm(false, true),
-//			]
-//		);
-//		$fieldset->addField(
-//			'new_enabled',
-//			'select',
-//			[
-//				'name'  => 'new_enabled',
-//				'label' => __('Enabled'),
-//				'title' => __('Enabled'),
-//				'values' => $this->booleanOptions->toOptionArray(),
-//			]
-//		);
+
         // add all required fields here
-        $fieldset->addField(
-            'new_category_parent',
-            'select',
-            [
-                'label' => __('Parent Category'),
-                'title' => __('Parent Category'),
+        $fieldset->addField('new_category_parent', 'select', [
+                'label'    => __('Parent Category'),
+                'title'    => __('Parent Category'),
                 'required' => false,
-                'options' => $this->getParentCategoryOptions(),
-                'class' => 'validate-parent-category',
-                'name' => 'new_category_parent',
+                'options'  => $this->getParentCategoryOptions(),
+                'class'    => 'validate-parent-category',
+                'name'     => 'new_category_parent',
                 // @codingStandardsIgnoreStart
-                'note' => __(
-                        'You can reassign the Category at any time in ' .
-                        '<a href="%1" target="_blank">Manage Categories</a>.',
+                'note'     => __(
+                    'You can reassign the Category at any time in <a href="%1" target="_blank">Manage Categories</a>.',
                     $this->getUrl('mageplaza_blog/category')
                 )
                 // @codingStandardsIgnoreEnd
             ]
         );
         $this->setForm($form);
+
         return parent::_prepareForm();
     }
 
@@ -163,7 +152,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
 
         $result = [];
         if (count($items) === 2) {
-            $item = array_pop($items);
+            $item   = array_pop($items);
             $result = [$item->getCategoryId() => $item->getName()];
         }
 
@@ -189,21 +178,22 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $widgetOptions = $this->jsonEncoder->encode(
             [
-                'suggestOptions' => [
-                    'source' => $this->getUrl('mageplaza_blog/category/suggestCategories'),
-                    'valueField' => '#new_category_parent',
-                    'className' => 'category-select',
+                'suggestOptions'  => [
+                    'source'      => $this->getUrl('mageplaza_blog/category/suggestCategories'),
+                    'valueField'  => '#new_category_parent',
+                    'className'   => 'category-select',
                     'multiselect' => true,
-                    'showAll' => true,
+                    'showAll'     => true,
                 ],
                 'saveCategoryUrl' => $this->getUrl('mageplaza_blog/category/save'),
             ]
         );
+
         //JavaScript logic should be moved to separate file or reviewed
         return <<<HTML
 <script>
-require(["jquery","mage/mage"],function($) {  // waiting for dependencies at first
-    $(function(){ // waiting for page to load to have '#category_ids-template' available
+require(["jquery","mage/mage"],function($) {
+    $(function(){
         $('#new-category').mage('newCategoryDialog', $widgetOptions);
     });
 });
