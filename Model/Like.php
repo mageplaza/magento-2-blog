@@ -18,13 +18,16 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model;
+
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Class Like
  * @package Mageplaza\Blog\Model
  */
-class Like extends \Magento\Framework\Model\AbstractModel
+class Like extends AbstractModel
 {
     /**
      * Cache tag
@@ -47,31 +50,10 @@ class Like extends \Magento\Framework\Model\AbstractModel
      */
     protected $_eventPrefix = 'mageplaza_blog_comment_like';
 
+    /**
+     * @var string
+     */
     protected $_idFieldName = 'like_id';
-
-	/**
-	 * @var
-	 */
-    public $postCollectionFactory;
-
-	/**
-	 * Like constructor.
-	 * @param \Magento\Framework\Model\Context $context
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-	 * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-	 * @param array $data
-	 */
-    public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
-    ) {
-    
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-    }
 
     /**
      * Initialize resource model

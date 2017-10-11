@@ -13,7 +13,7 @@
                 <value>5</value>
             </parameter>
             <parameter name="show_type" xsi:type="select" required="false" visible="true"
-                       source_model="Mageplaza\Blog\Model\Config\Source\Widget\ShowType">
+                       source_model="Mageplaza\Blog\Model\Config\Source\WidgetShowType">
                 <label translate="true">Show Type</label>
             </parameter>
             <parameter name="category_id" xsi:type="text" required="true" visible="true">

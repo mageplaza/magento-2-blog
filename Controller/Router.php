@@ -18,13 +18,20 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller;
+
+use Magento\Framework\App\ActionFactory;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\RouterInterface;
+use Magento\Framework\Url;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Router
  * @package Mageplaza\Blog\Controller
  */
-class Router implements \Magento\Framework\App\RouterInterface
+class Router implements RouterInterface
 {
     /**
      * @var \Magento\Framework\App\ActionFactory
@@ -36,6 +43,9 @@ class Router implements \Magento\Framework\App\RouterInterface
      */
     public $helper;
 
+    /**
+     * @var
+     */
     protected $_request;
 
     /**
@@ -43,11 +53,10 @@ class Router implements \Magento\Framework\App\RouterInterface
      * @param \Mageplaza\Blog\Helper\Data $helper
      */
     public function __construct(
-        \Magento\Framework\App\ActionFactory $actionFactory,
-        \Mageplaza\Blog\Helper\Data $helper
-    ) {
-    
-
+        ActionFactory $actionFactory,
+        Data $helper
+    )
+    {
         $this->actionFactory = $actionFactory;
         $this->helper        = $helper;
     }
@@ -77,13 +86,13 @@ class Router implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
      */
-    public function match(\Magento\Framework\App\RequestInterface $request)
+    public function match(RequestInterface $request)
     {
         $identifier = trim($request->getPathInfo(), '/');
         $routePath  = explode('/', $identifier);
-        $urlPrefix = $this->helper->getBlogConfig('general/url_prefix') ?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX;
+        $urlPrefix  = $this->helper->getRoute();
         $routeSize  = sizeof($routePath);
-		$urlPrefix	= urlencode($urlPrefix);
+        $urlPrefix  = urlencode($urlPrefix);
 
         if (!$this->helper->isEnabled() ||
             !$routeSize || ($routeSize > 3) ||
@@ -93,11 +102,11 @@ class Router implements \Magento\Framework\App\RouterInterface
         }
 
         $request->setModuleName('mpblog')
-            ->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
+            ->setAlias(Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
 
         $this->_request = $request;
-        $params     = [];
-        $controller = array_shift($routePath);
+        $params         = [];
+        $controller     = array_shift($routePath);
 
         if (!$controller) {
             return $this->_forward('post', 'index');
@@ -105,7 +114,7 @@ class Router implements \Magento\Framework\App\RouterInterface
 
         switch ($controller) {
             case 'post':
-                $path = array_shift($routePath);
+                $path   = array_shift($routePath);
                 $action = $path ?: 'index';
 
                 if (!in_array($action, ['index', 'rss'])) {
@@ -117,7 +126,7 @@ class Router implements \Magento\Framework\App\RouterInterface
 
                 break;
             case 'category':
-                $path = array_shift($routePath);
+                $path   = array_shift($routePath);
                 $action = $path ?: 'index';
 
                 if (!in_array($action, ['index', 'rss'])) {
@@ -130,15 +139,15 @@ class Router implements \Magento\Framework\App\RouterInterface
                 break;
             case 'tag':
                 $path = array_shift($routePath);
-                $tag    = $this->helper->getTagByParam('url_key', $path);
+                $tag  = $this->helper->getTagByParam('url_key', $path);
 
                 $action = 'view';
                 $params = ['id' => $tag->getId()];
 
                 break;
             case 'topic':
-                $path = array_shift($routePath);
-                $topic  = $this->helper->getTopicByParam('url_key', $path);
+                $path  = array_shift($routePath);
+                $topic = $this->helper->getTopicByParam('url_key', $path);
 
                 $action = 'view';
                 $params = ['id' => $topic->getId()];
@@ -149,16 +158,16 @@ class Router implements \Magento\Framework\App\RouterInterface
 
                 break;
             case 'author':
-                $path = array_shift($routePath);
-                $author  = $this->helper->getAuthorByParam('url_key', $path);
+                $path   = array_shift($routePath);
+                $author = $this->helper->getAuthorByParam('url_key', $path);
 
                 $action = 'view';
                 $params = ['id' => $author->getId()];
 
                 break;
             case 'month':
-                $path = array_shift($routePath);
-                $author  = $this->helper->getAuthorByParam('url_key', $path);
+                $path   = array_shift($routePath);
+                $author = $this->helper->getAuthorByParam('url_key', $path);
 
                 $action = 'view';
                 $params = ['id' => $author->getId()];

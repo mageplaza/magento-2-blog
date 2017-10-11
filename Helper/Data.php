@@ -24,7 +24,7 @@ namespace Mageplaza\Blog\Helper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Model\AuthorFactory;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\PostFactory;
@@ -38,7 +38,6 @@ use Mageplaza\Core\Helper\AbstractData as CoreHelper;
  */
 class Data extends CoreHelper
 {
-    const XML_PATH_BLOG = 'blog/';
     const POST_IMG = 'mageplaza/blog/post/image';
     const AUTHOR_IMG = 'mageplaza/blog/author/image';
     const DEFAULT_URL_PREFIX = 'blog';
@@ -115,32 +114,34 @@ class Data extends CoreHelper
 
     /**
      * Data constructor.
-     * @param \Magento\Customer\Model\Session $session
-     * @param \Magento\Customer\Model\Url $url
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Mageplaza\Blog\Model\PostFactory $postFactory
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
      * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
      * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
      * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
-     * @param \Magento\Framework\View\Element\Template\Context $templateContext
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Customer\Model\Session $session
+     * @param \Magento\Customer\Model\Url $url
      * @param \Magento\Framework\Filter\TranslitUrl $translitUrl
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
      * @param \Mageplaza\Blog\Model\Traffic $traffic
      */
     public function __construct(
-        \Magento\Customer\Model\Session $session,
-        \Magento\Customer\Model\Url $url,
         Context $context,
         ObjectManagerInterface $objectManager,
+        StoreManagerInterface $storeManager,
         PostFactory $postFactory,
         CategoryFactory $categoryFactory,
         TagFactory $tagFactory,
         TopicFactory $topicFactory,
         AuthorFactory $authorFactory,
-        TemplateContext $templateContext,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Customer\Model\Session $session,
+        \Magento\Customer\Model\Url $url,
         \Magento\Framework\Filter\TranslitUrl $translitUrl,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
@@ -154,13 +155,14 @@ class Data extends CoreHelper
         $this->tagfactory            = $tagFactory;
         $this->topicfactory          = $topicFactory;
         $this->authorfactory         = $authorFactory;
-        $this->store                 = $templateContext->getStoreManager();
+        $this->store                 = $storeManager;
         $this->modelTraffic          = $traffic;
         $this->translitUrl           = $translitUrl;
         $this->dateTime              = $dateTime;
-        $this->dateTimeFormat        = $templateContext->getLocaleDate();
+        $this->dateTimeFormat        = $localeDate;
         $this->postCollectionFactory = $postCollectionFactory;
-        parent::__construct($context, $objectManager, $templateContext->getStoreManager());
+
+        parent::__construct($context, $objectManager, $storeManager);
     }
 
     /**
@@ -191,7 +193,9 @@ class Data extends CoreHelper
      */
     public function getBlogConfig($code, $storeId = null)
     {
-        return $this->getConfigValue(self::XML_PATH_BLOG . $code, $storeId);
+        $code = ($code !== '') ? '/' . $code : '';
+
+        return $this->getConfigValue('blog' . $code, $storeId);
     }
 
     /**
@@ -349,8 +353,8 @@ class Data extends CoreHelper
     {
         $urlKey = '';
         if ($post->getUrlKey()) {
-            $url_prefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
-            $url_suffix = $this->getBlogConfig('general/url_suffix');
+            $url_prefix = $this->getRoute();
+            $url_suffix = $this->getUrlSuffix();
 
             if ($url_prefix) {
                 $urlKey .= $url_prefix . '/post/';
@@ -384,9 +388,7 @@ class Data extends CoreHelper
      */
     public function getBlogUrl($code)
     {
-        $blogUrl = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
-
-        return $this->_getUrl($blogUrl . '/' . $code);
+        return $this->_getUrl($this->getRoute() . '/' . $code);
     }
 
     /**
@@ -408,22 +410,12 @@ class Data extends CoreHelper
      */
     public function checkSuffix($url)
     {
-        $url_suffix = $this->getBlogConfig('general/url_suffix');
+        $url_suffix = $this->getUrlSuffix();
         if (strpos($url, $url_suffix) !== false) {
             $url = str_replace($url_suffix, '', $url);
         }
 
         return $url;
-    }
-
-    /**
-     * get image url by image file name
-     * @param $image
-     * @return string
-     */
-    public function getImageUrl($image)
-    {
-        return $this->getBaseMediaUrl() . self::POST_IMG . $image;
     }
 
     /**
@@ -436,14 +428,30 @@ class Data extends CoreHelper
     }
 
     /**
+     * @param null $store
+     * @return string
+     */
+    public function getRoute($store = null)
+    {
+        return $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
+    }
+
+    /**
+     * @param null $store
+     * @return mixed
+     */
+    public function getUrlSuffix($store = null)
+    {
+        return $this->getBlogConfig('general/url_suffix');
+    }
+
+    /**
      * @param $categoryUrl
      * @return string
      */
     public function getCategoryUrl($categoryUrl)
     {
-        $urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
-
-        return $this->_getUrl($urlPrefix . '/' . self::CATEGORY . '/' . $categoryUrl);
+        return $this->_getUrl($this->getRoute() . '/' . self::CATEGORY . '/' . $categoryUrl);
     }
 
     /**
@@ -453,9 +461,7 @@ class Data extends CoreHelper
      */
     public function getTagUrl($tag)
     {
-        $urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
-
-        return $this->_getUrl($urlPrefix . '/' . self::TAG . '/' . $tag->getUrlKey());
+        return $this->_getUrl($this->getRoute() . '/' . self::TAG . '/' . $tag->getUrlKey());
     }
 
     /**
@@ -465,9 +471,7 @@ class Data extends CoreHelper
      */
     public function getAuthorUrl($author)
     {
-        $urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
-
-        return $this->_getUrl($urlPrefix . '/' . self::AUTHOR . '/' . $author->getUrlKey());
+        return $this->_getUrl($this->getRoute() . '/' . self::AUTHOR . '/' . $author->getUrlKey());
     }
 
     /**
@@ -477,9 +481,7 @@ class Data extends CoreHelper
      */
     public function getTopicUrl($topic)
     {
-        $urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
-
-        return $this->_getUrl($urlPrefix . '/' . self::TOPIC . '/' . $topic->getUrlKey());
+        return $this->_getUrl($this->getRoute() . '/' . self::TOPIC . '/' . $topic->getUrlKey());
     }
 
     /**
@@ -489,9 +491,7 @@ class Data extends CoreHelper
      */
     public function getMonthlyUrl($month)
     {
-        $urlPrefix = $this->getBlogConfig('general/url_prefix') ?: self::DEFAULT_URL_PREFIX;
-
-        return $this->_getUrl($urlPrefix . '/' . self::MONTHLY . '/' . $month);
+        return $this->_getUrl($this->getRoute() . '/' . self::MONTHLY . '/' . $month);
     }
 
     /**
@@ -847,15 +847,6 @@ class Data extends CoreHelper
     }
 
     /**
-     * @param $image
-     * @return string
-     */
-    public function getAuthorImageUrl($image)
-    {
-        return $this->getBaseMediaUrl() . self::AUTHOR_IMG . $image;
-    }
-
-    /**
      * get date formatted
      * @param $date
      * @param bool $monthly
@@ -886,28 +877,21 @@ class Data extends CoreHelper
      */
     public function getTimezone()
     {
-        $om         = \Magento\Framework\App\ObjectManager::getInstance();
-        $context    = $om->get('\Magento\Framework\View\Element\Template\Context');
-        $storeModel = $context->getStoreManager()->getStore()->getId();
-        $timeZone   = $context->getScopeConfig()->getValue(
-            'general/locale/timezone',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeModel
-        );
-
-        return $timeZone;
+        return $this->getConfigValue('general/locale/timezone');
     }
 
     /**
-     * get related posts
      * @param $id
      * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
     public function getRelatedPostList($id)
     {
-        $collection = $this->postCollectionFactory->create();
-        $collection->getSelect()->join(['related' => $collection->getTable('mageplaza_blog_post_product')], 'related.post_id=main_table.post_id 
-		AND related.entity_id=' . $id . ' AND main_table.enabled=1');
+        /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $collection */
+        $collection = $this->postfactory->create()->getCollection();
+        $collection->getSelect()->join([
+            'related' => $collection->getTable('mageplaza_blog_post_product')],
+            'related.post_id=main_table.post_id AND related.entity_id=' . $id . ' AND main_table.enabled=1'
+        );
         $collection->setOrder('publish_date', 'DESC');
 
         return $collection;

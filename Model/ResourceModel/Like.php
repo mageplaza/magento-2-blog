@@ -21,11 +21,13 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * Class Like
  * @package Mageplaza\Blog\Model\ResourceModel
  */
-class Like extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Like extends AbstractDb
 {
     /**
      * Initialize resource model

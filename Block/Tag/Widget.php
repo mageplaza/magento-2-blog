@@ -18,6 +18,7 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Tag;
 
 use Mageplaza\Blog\Block\Frontend;
@@ -28,19 +29,18 @@ use Mageplaza\Blog\Block\Frontend;
  */
 class Widget extends Frontend
 {
-	/**
-	 * @return array|string
-	 */
+    /**
+     * @return array|string
+     */
     public function getTagList()
     {
-
         return $this->helperData->getTagList();
     }
 
-	/**
-	 * @param $tag
-	 * @return string
-	 */
+    /**
+     * @param $tag
+     * @return string
+     */
     public function getTagUrl($tag)
     {
         return $this->helperData->getTagUrl($tag);
@@ -49,13 +49,16 @@ class Widget extends Frontend
     /**
      * get tags size based on num of post
      * size = (maxSize * (currentItem - min))/(max - min)
+     *
+     * @param $tag
+     * @return float|string
      */
     public function getTagSize($tag)
     {
         $postList = $this->helperData->getPostList();
         if ($postList && is_array($postList)) {
-            $max = count($postList);
-            $min = 1;
+            $max     = count($postList);
+            $min     = 1;
             $maxSize = 30;
             $tagPost = $this->helperData->getPostList('tag', $tag->getId());
             if ($tagPost && is_array($tagPost)) {
@@ -65,6 +68,7 @@ class Widget extends Frontend
                 }
 
                 $size = ($maxSize * ($countTagPost - $min)) / ($max - $min);
+
                 return round($size);
             }
         }

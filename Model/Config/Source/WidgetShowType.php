@@ -18,18 +18,20 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
-namespace Mageplaza\Blog\Model\Config\Source\Widget;
+
+namespace Mageplaza\Blog\Model\Config\Source;
+
+use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class ShowType
  * @package Mageplaza\Blog\Model\Config\Source\Widget
  */
-class ShowType implements \Magento\Framework\Option\ArrayInterface
+class WidgetShowType implements ArrayInterface
 {
-
-	/**
-	 * @return array
-	 */
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return [

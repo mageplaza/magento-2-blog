@@ -18,9 +18,11 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Tag;
 
 use Mageplaza\Blog\Block\Frontend;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Listpost
@@ -29,17 +31,17 @@ use Mageplaza\Blog\Block\Frontend;
 class Listpost extends Frontend
 {
 
-	/**
-	 * @return array|string
-	 */
+    /**
+     * @return array|string
+     */
     public function getPostList()
     {
-        return $this->getBlogPagination(\Mageplaza\Blog\Helper\Data::TAG, $this->getRequest()->getParam('id'));
+        return $this->getBlogPagination(Data::TAG, $this->getRequest()->getParam('id'));
     }
 
-	/**
-	 * @return string
-	 */
+    /**
+     * @return string
+     */
     public function checkRss()
     {
         return $this->helperData->getBlogUrl('post/rss');

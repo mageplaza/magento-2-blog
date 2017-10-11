@@ -29,13 +29,12 @@ use Mageplaza\Blog\Block\Frontend;
  */
 class Listpost extends Frontend
 {
-
-	/**
-	 * @return string
-	 */
-	public function checkRss()
-	{
-		return $this->helperData->getBlogUrl('post/rss');
-	}
+    /**
+     * @return string
+     */
+    public function checkRss()
+    {
+        return $this->helperData->getBlogUrl('post/rss');
+    }
 
 }

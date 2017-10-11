@@ -18,9 +18,11 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\MonthlyArchive;
 
 use Mageplaza\Blog\Block\Frontend;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Listpost
@@ -28,34 +30,35 @@ use Mageplaza\Blog\Block\Frontend;
  */
 class Listpost extends Frontend
 {
-	/**
-	 * @return array|string
-	 */
+    /**
+     * @return array|string
+     */
     public function getPostList()
     {
-        return $this->getBlogPagination(\Mageplaza\Blog\Helper\Data::MONTHLY, $this->getCurrentUrl());
+        return $this->getBlogPagination(Data::MONTHLY, $this->getCurrentUrl());
     }
 
-	/**
-	 * @return string
-	 */
+    /**
+     * @return string
+     */
     public function checkRss()
     {
         return $this->helperData->getBlogUrl('post/rss');
     }
 
-	/**
-	 * @return mixed
-	 */
+    /**
+     * @return mixed
+     */
     public function getCurrentUrl()
     {
         $currentUrl = $this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
-        $arr = explode('/', $currentUrl);
-        $result = end($arr);
+        $arr        = explode('/', $currentUrl);
+        $result     = end($arr);
         if (strpos($result, '?') !== false) {
-            $arr = explode('?', $result);
+            $arr    = explode('?', $result);
             $result = reset($arr);
         }
+
         return $result;
     }
 }

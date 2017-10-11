@@ -32,4 +32,8 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Theme\Block\Html\Topmenu">
+        <plugin name="blog-topmenu" type="Mageplaza\Blog\Plugin\Topmenu" />
+    </type>
 </config>

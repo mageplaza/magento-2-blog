@@ -106,7 +106,6 @@ class Tag extends AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
-
     /**
      * Initialize resource model
      *

@@ -18,6 +18,7 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Category;
 
 use Mageplaza\Blog\Block\Frontend;
@@ -28,26 +29,19 @@ use Mageplaza\Blog\Block\Frontend;
  */
 class Listpost extends Frontend
 {
-
-	/**
-	 * @return array|string
-	 */
+    /**
+     * @return array|string
+     */
     public function getPostList()
     {
         return $this->getBlogPagination(\Mageplaza\Blog\Helper\Data::CATEGORY, $this->getRequest()->getParam('id'));
     }
 
-	/**
-	 * @return string
-	 */
+    /**
+     * @return string
+     */
     public function checkRss()
     {
-//        $categoryId = $this->getRequest()->getParam('id');
-//        if (!$categoryId) {
-//            return false;
-//        }
-//
-//        return $this->helperData->getBlogUrl('category/rss/category_id/' . $categoryId);
         return $this->helperData->getBlogUrl('post/rss');
     }
 }

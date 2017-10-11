@@ -21,11 +21,17 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel;
 
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Mageplaza\Blog\Helper\Data;
+
 /**
  * Class Post
  * @package Mageplaza\Blog\Model\ResourceModel
  */
-class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Post extends AbstractDb
 {
     /**
      * Date model
@@ -80,16 +86,18 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      */
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Mageplaza\Blog\Helper\Data $helperData,
-        \Magento\Framework\Model\ResourceModel\Db\Context $context
+        Context $context,
+        DateTime $date,
+        ManagerInterface $eventManager,
+        Data $helperData
     )
     {
         $this->date         = $date;
         $this->eventManager = $eventManager;
         $this->helperData   = $helperData;
+
         parent::__construct($context);
+
         $this->postTagTable      = $this->getTable('mageplaza_blog_post_tag');
         $this->postTopicTable    = $this->getTable('mageplaza_blog_post_topic');
         $this->postCategoryTable = $this->getTable('mageplaza_blog_post_category');
@@ -149,10 +157,7 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * after save callback
-     *
-     * @param \Magento\Framework\Model\AbstractModel|\Mageplaza\Blog\Model\Post $object
-     * @return $this
+     * @inheritdoc
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -412,6 +417,10 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $adapter->fetchCol($select);
     }
 
+    /**
+     * @param \Mageplaza\Blog\Model\Post $post
+     * @return $this
+     */
     public function saveProductRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedProductList(false);
@@ -470,6 +479,10 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $this;
     }
 
+    /**
+     * @param \Mageplaza\Blog\Model\Post $post
+     * @return array
+     */
     public function getProductsPosition(\Mageplaza\Blog\Model\Post $post)
     {
         $select = $this->getConnection()->select()->from(

@@ -21,11 +21,19 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel\Category;
 
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Data\Tree\Dbp;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Mageplaza\Blog\Model\ResourceModel\Category;
+use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory;
+
 /**
  * Class Tree
  * @package Mageplaza\Blog\Model\ResourceModel\Category
  */
-class Tree extends \Magento\Framework\Data\Tree\Dbp
+class Tree extends Dbp
 {
     /**
      * ID field
@@ -112,8 +120,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     public $inactiveCategoryIds;
 
     /**
-     * constructor
-     *
+     * Tree constructor.
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $collectionFactory
      * @param \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource
@@ -122,12 +129,12 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      * @param \Magento\Framework\App\ResourceConnection $coreResource
      */
     public function __construct(
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $collectionFactory,
-        \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource,
-        \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\ResourceConnection $coreResource
+        ManagerInterface $eventManager,
+        CollectionFactory $collectionFactory,
+        Category $categoryResource,
+        CacheInterface $cache,
+        StoreManagerInterface $storeManager,
+        ResourceConnection $coreResource
     )
     {
         $this->eventManager      = $eventManager;
@@ -136,14 +143,15 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         $this->cache             = $cache;
         $this->storeManager      = $storeManager;
         $this->coreResource      = $coreResource;
+
         parent::__construct(
             $coreResource->getConnection('mageplaza_blog_write'),
             $coreResource->getTableName('mageplaza_blog_category'),
             [
-                \Magento\Framework\Data\Tree\Dbp::ID_FIELD    => 'category_id',
-                \Magento\Framework\Data\Tree\Dbp::PATH_FIELD  => 'path',
-                \Magento\Framework\Data\Tree\Dbp::ORDER_FIELD => 'position',
-                \Magento\Framework\Data\Tree\Dbp::LEVEL_FIELD => 'level'
+                Dbp::ID_FIELD    => 'category_id',
+                Dbp::PATH_FIELD  => 'path',
+                Dbp::ORDER_FIELD => 'position',
+                Dbp::LEVEL_FIELD => 'level'
             ]
         );
     }

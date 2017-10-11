@@ -18,8 +18,10 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Category;
 
+use Mageplaza\Blog\Block\Adminhtml\Category\Tree;
 use Mageplaza\Blog\Block\Frontend;
 
 /**
@@ -28,57 +30,54 @@ use Mageplaza\Blog\Block\Frontend;
  */
 class Widget extends Frontend
 {
-
-	/**
-	 * @return array|string
-	 */
+    /**
+     * @return array|string
+     */
     public function getCategoryList()
     {
+        $tree = $this->objectManager->create(Tree::class);
+        $tree = $tree->getTree();
+        $tree = $this->helperData->filterItems($tree);
 
-		$tree = $this->objectManager->create('Mageplaza\Blog\Block\Adminhtml\Category\Tree');
-		$tree = $tree->getTree();
-		$tree = $this->helperData->filterItems($tree);
-
-		return $this->getCategoryTree($tree);
+        return $this->getCategoryTree($tree);
     }
 
-	/**
-	 * Generate Category Tree Html
-	 * @param $tree
-	 */
-    public function getCategoryTree($tree){
+    /**
+     * Generate Category Tree Html
+     * @param $tree
+     */
+    public function getCategoryTree($tree)
+    {
+        if ($tree) {
+            foreach ($tree as $value) {
+                $level = count(explode('/', ($value['path'])));
 
-		if ($tree){
-			foreach ($tree as $value){
-				$level = count(explode('/',($value['path'])));
-
-				if(isset($value['children']) && $level < 4 ){
-					echo '<li class="category-level'.$level.' category-item">
-						<i class="fa fa-plus-square-o mp-blog-expand-tree-'.$level.'"></i>		
-						<a class="list-categories" href="'.$this->getCategoryUrl($value['url']).'">
+                if (isset($value['children']) && $level < 4) {
+                    echo '<li class="category-level' . $level . ' category-item">
+						<i class="fa fa-plus-square-o mp-blog-expand-tree-' . $level . '"></i>		
+						<a class="list-categories" href="' . $this->getCategoryUrl($value['url']) . '">
 						<i class="fa fa-folder-open-o">&nbsp;&nbsp;</i>'
-						.ucfirst($value['text']).
-						'</a>';
-					$this->getCategoryTree($value['children']);
-				}else{
-					echo '<li class="category-level'.$level.' category-item">
-						<a class="list-categories" href="'.$this->getCategoryUrl($value['url']).'">
+                        . ucfirst($value['text']) .
+                        '</a>';
+                    $this->getCategoryTree($value['children']);
+                } else {
+                    echo '<li class="category-level' . $level . ' category-item">
+						<a class="list-categories" href="' . $this->getCategoryUrl($value['url']) . '">
 						<i class="fa fa-folder-open-o">&nbsp;&nbsp;</i>'
-						.ucfirst($value['text']).
-						'</a>';
-				}
-				echo '</li>';
+                        . ucfirst($value['text']) .
+                        '</a>';
+                }
+                echo '</li>';
+            }
+        } else {
+            echo __('No Categories.');
+        }
+    }
 
-			}
-		}else{
-			 echo __('No Categories.');
-		}
-	}
-
-	/**
-	 * @param $category
-	 * @return string
-	 */
+    /**
+     * @param $category
+     * @return string
+     */
     public function getCategoryUrl($category)
     {
         return $this->helperData->getCategoryUrl($category);

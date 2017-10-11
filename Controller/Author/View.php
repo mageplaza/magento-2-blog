@@ -23,8 +23,8 @@ namespace Mageplaza\Blog\Controller\Author;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Class View

@@ -18,6 +18,7 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Author;
 
 use Mageplaza\Blog\Block\Frontend;
@@ -28,19 +29,18 @@ use Mageplaza\Blog\Block\Frontend;
  */
 class Widget extends Frontend
 {
-
-	/**
-	 * @return mixed
-	 */
+    /**
+     * @return mixed
+     */
     public function getCurrentAuthor()
     {
         return $this->getRequest()->getParam('id');
     }
 
-	/**
-	 * @param $content
-	 * @return string
-	 */
+    /**
+     * @param $content
+     * @return string
+     */
     public function getPageFilter($content)
     {
         return $this->filterProvider->getPageFilter()->filter($content);

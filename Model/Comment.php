@@ -18,13 +18,21 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model;
+
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
 
 /**
  * Class Comment
  * @package Mageplaza\Blog\Model
  */
-class Comment extends \Magento\Framework\Model\AbstractModel
+class Comment extends AbstractModel
 {
     /**
      * Cache tag
@@ -47,6 +55,9 @@ class Comment extends \Magento\Framework\Model\AbstractModel
      */
     protected $_eventPrefix = 'mageplaza_blog_comment';
 
+    /**
+     * @var string
+     */
     protected $_idFieldName = 'comment_id';
 
     /**
@@ -55,38 +66,40 @@ class Comment extends \Magento\Framework\Model\AbstractModel
      */
     public $postCollectionFactory;
 
-	/**
-	 * Comment constructor.
-	 * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
-	 * @param \Magento\Framework\Model\Context $context
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-	 * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-	 * @param array $data
-	 */
+    /**
+     * Comment constructor.
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
+     */
     public function __construct(
-        \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        CollectionFactory $postCollectionFactory,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
-    ) {
-    
-        $this->postCollectionFactory     = $postCollectionFactory;
+    )
+    {
+        $this->postCollectionFactory = $postCollectionFactory;
+
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
     /**
-     * Initialize resource model
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
         $this->_init('Mageplaza\Blog\Model\ResourceModel\Comment');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getIdentities()
     {
         return [self::CACHE_TAG . '_' . $this->getId()];

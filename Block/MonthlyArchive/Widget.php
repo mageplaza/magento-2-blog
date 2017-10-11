@@ -18,6 +18,7 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\MonthlyArchive;
 
 use Mageplaza\Blog\Block\Frontend;
@@ -28,43 +29,42 @@ use Mageplaza\Blog\Block\Frontend;
  */
 class Widget extends Frontend
 {
-
-	/**
-	 * @return array
-	 */
+    /**
+     * @return array
+     */
     public function getDateArrayCount()
     {
         return $this->helperData->getDateArrayCount();
     }
 
-	/**
-	 * @return array
-	 */
+    /**
+     * @return array
+     */
     public function getDateArrayUnique()
     {
         return $this->helperData->getDateArrayUnique();
     }
 
-	/**
-	 * @return int|mixed
-	 */
+    /**
+     * @return int|mixed
+     */
     public function getDateCount()
     {
         return $this->helperData->getDateCount();
     }
 
-	/**
-	 * @param $month
-	 * @return string
-	 */
+    /**
+     * @param $month
+     * @return string
+     */
     public function getMonthlyUrl($month)
     {
         return $this->helperData->getMonthlyUrl($month);
     }
 
-	/**
-	 * @return array
-	 */
+    /**
+     * @return array
+     */
     public function getDateLabel()
     {
         return $this->helperData->getDateLabel();

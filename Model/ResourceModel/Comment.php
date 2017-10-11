@@ -21,11 +21,13 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * Class Comment
  * @package Mageplaza\Blog\Model\ResourceModel
  */
-class Comment extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Comment extends AbstractDb
 {
     /**
      * Initialize resource model

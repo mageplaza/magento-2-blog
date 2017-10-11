@@ -18,6 +18,7 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Post;
 
 use Mageplaza\Blog\Block\Frontend;
@@ -28,49 +29,46 @@ use Mageplaza\Blog\Block\Frontend;
  */
 class Relatedpost extends Frontend
 {
-
+    /**
+     * @inheritdoc
+     */
     public function _construct()
     {
+        parent::_construct();
 
-        $this->setTabTitle();
+        $posts     = $this->getRelatedPostList($this->getCurrentProduct());
+        $countPost = count($posts);
+        $title     = ($this->getLimitPosts() > $countPost) ? __('Related Posts (' . $countPost . ')') : __('Related Posts (' . $this->getLimitPosts() . ')');
+        $this->setTitle($title);
     }
 
-	/**
-	 * @return mixed
-	 */
+    /**
+     * @return mixed
+     */
     public function getCurrentProduct()
     {
         return $this->getRequest()->getParam('id');
     }
 
-	/**
-	 * @param $id
-	 * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
-	 */
-	public function getRelatedPostList($id)
-	{
-		return $this->helperData->getRelatedPostList($id);
-	}
+    /**
+     * @param $id
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     */
+    public function getRelatedPostList($id)
+    {
+        return $this->helperData->getRelatedPostList($id);
+    }
 
-	/**
-	 * @return int|mixed
-	 */
-	public function getLimitPosts()
-	{
-		$limitRelated = ($this->getBlogConfig('product_post/product_detail/post_limit')==''
-            || $this->getBlogConfig('product_post/product_detail/post_limit')==0)
+    /**
+     * @return int|mixed
+     */
+    public function getLimitPosts()
+    {
+        $limitRelated = ($this->getBlogConfig('product_post/product_detail/post_limit') == ''
+            || $this->getBlogConfig('product_post/product_detail/post_limit') == 0)
             ? 1
             : $this->getBlogConfig('product_post/product_detail/post_limit');
-		return $limitRelated;
-	}
 
-
-	public function setTabTitle()
-	{
-		$posts = $this->getRelatedPostList($this->getCurrentProduct());
-		$countPost = count($posts);
-		$title = ($this->getLimitPosts()>$countPost) ?  __('Related Posts ('.$countPost.')') : __('Related Posts ('.$this->getLimitPosts().')');
-		$this->setTitle($title);
-	}
-
+        return $limitRelated;
+    }
 }

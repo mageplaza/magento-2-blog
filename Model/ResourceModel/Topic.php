@@ -20,6 +20,10 @@
  */
 
 namespace Mageplaza\Blog\Model\ResourceModel;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Topic
@@ -55,22 +59,24 @@ class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Topic constructor.
-     * @param \Mageplaza\Blog\Helper\Data $helperData
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Mageplaza\Blog\Helper\Data $helperData
      */
     public function __construct(
-        \Mageplaza\Blog\Helper\Data $helperData,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Model\ResourceModel\Db\Context $context
+        Context $context,
+        DateTime $date,
+        ManagerInterface $eventManager,
+        Data $helperData
     )
     {
         $this->helperData   = $helperData;
         $this->date         = $date;
         $this->eventManager = $eventManager;
+
         parent::__construct($context);
+
         $this->topicPostTable = $this->getTable('mageplaza_blog_post_topic');
     }
 

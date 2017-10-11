@@ -25,12 +25,12 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Cms\Model\Wysiwyg\Config;
+use Magento\Config\Model\Config\Source\Design\Robots;
 use Magento\Config\Model\Config\Source\Enabledisable;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
-use Mageplaza\Blog\Model\Config\Source\MetaRobots;
 
 /**
  * Class Category
@@ -58,7 +58,7 @@ class Category extends Generic implements TabInterface
     protected $enableDisable;
 
     /**
-     * @var \Mageplaza\Blog\Model\Config\Source\MetaRobots
+     * @var \Magento\Config\Model\Config\Source\Design\Robots
      */
     protected $metaRobotsOptions;
 
@@ -75,7 +75,7 @@ class Category extends Generic implements TabInterface
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
      * @param \Magento\Config\Model\Config\Source\Enabledisable $enableDisable
-     * @param \Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobotsOptions
+     * @param \Magento\Config\Model\Config\Source\Design\Robots $metaRobotsOptions
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
      */
@@ -86,7 +86,7 @@ class Category extends Generic implements TabInterface
         Config $wysiwygConfig,
         Yesno $booleanOptions,
         Enabledisable $enableDisable,
-        MetaRobots $metaRobotsOptions,
+        Robots $metaRobotsOptions,
         Store $systemStore,
         array $data = []
     )

@@ -25,12 +25,12 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Cms\Model\Wysiwyg\Config;
+use Magento\Config\Model\Config\Source\Design\Robots;
 use Magento\Config\Model\Config\Source\Enabledisable;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
-use Mageplaza\Blog\Model\Config\Source\MetaRobots;
 
 /**
  * Class Tag
@@ -52,6 +52,9 @@ class Tag extends Generic implements TabInterface
      */
     public $booleanOptions;
 
+    /**
+     * @var \Magento\Config\Model\Config\Source\Enabledisable
+     */
     protected $enableDisable;
 
     /**
@@ -60,7 +63,7 @@ class Tag extends Generic implements TabInterface
     public $systemStore;
 
     /**
-     * @var \Mageplaza\Blog\Model\Config\Source\MetaRobots
+     * @var \Magento\Config\Model\Config\Source\Design\Robots
      */
     public $metaRobots;
 
@@ -73,7 +76,7 @@ class Tag extends Generic implements TabInterface
      * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
      * @param \Magento\Config\Model\Config\Source\Enabledisable $enableDisable
      * @param \Magento\Store\Model\System\Store $systemStore
-     * @param \Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobotsOptions
+     * @param \Magento\Config\Model\Config\Source\Design\Robots $metaRobotsOptions
      * @param array $data
      */
     public function __construct(
@@ -84,7 +87,7 @@ class Tag extends Generic implements TabInterface
         Yesno $booleanOptions,
         Enabledisable $enableDisable,
         Store $systemStore,
-        MetaRobots $metaRobotsOptions,
+        Robots $metaRobotsOptions,
         array $data = []
     )
     {
@@ -133,7 +136,7 @@ class Tag extends Generic implements TabInterface
                 'values' => $this->enableDisable->toOptionArray(),
             ]
         );
-        if(!$tag->hasData('enabled')){
+        if (!$tag->hasData('enabled')) {
             $tag->setEnabled(1);
         }
 
@@ -155,7 +158,7 @@ class Tag extends Generic implements TabInterface
                 'values' => $this->systemStore->getStoreValuesForForm(false, true)
             ])->setRenderer($rendererBlock);
 
-            if(!$tag->hasData('store_ids')){
+            if (!$tag->hasData('store_ids')) {
                 $tag->setStoreIds(0);
             }
         } else {

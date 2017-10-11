@@ -24,11 +24,13 @@ namespace Mageplaza\Blog\Helper;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Core\Helper\AbstractData;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Template
@@ -51,25 +53,33 @@ class Image extends AbstractData
     protected $uploaderFactory;
 
     /**
+     * @var \Magento\Framework\Image\AdapterFactory
+     */
+    protected $imageFactory;
+
+    /**
      * Image constructor.
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
+     * @param \Magento\Framework\Image\AdapterFactory $imageFactory
      */
     public function __construct(
         Context $context,
         ObjectManagerInterface $objectManager,
         StoreManagerInterface $storeManager,
         Filesystem $filesystem,
-        UploaderFactory $uploaderFactory
+        UploaderFactory $uploaderFactory,
+        AdapterFactory $imageFactory
     )
     {
         parent::__construct($context, $objectManager, $storeManager);
 
         $this->mediaDirectory  = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->uploaderFactory = $uploaderFactory;
+        $this->imageFactory    = $imageFactory;
     }
 
     /**
@@ -91,6 +101,8 @@ class Image extends AbstractData
                 $uploader = $this->uploaderFactory->create(['fileId' => $fileName]);
                 $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
                 $uploader->setAllowRenameFiles(true);
+                $uploader->setFilesDispersion(true);
+                $uploader->setAllowCreateFolders(true);
 
                 $path = $this->getBaseMediaPath($type);
 
@@ -109,6 +121,47 @@ class Image extends AbstractData
         }
 
         return $this;
+    }
+
+    /**
+     * Resize Image Function
+     * @param $image
+     * @param null $width
+     * @param null $height
+     * @return string
+     */
+    public function resizeImage($image, $width = null, $height = null)
+    {
+        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
+        $mediaDirectory = $this->getMediaDirectory();
+        if ($width) {
+            $height = $height ?: $width;
+
+            $imageFile = $this->getMediaPath(
+                $this->getExcludeMediaPath($image, Image::TEMPLATE_MEDIA_TYPE_POST),
+                Image::TEMPLATE_MEDIA_TYPE_POST . '/resize/' . $width . 'x' . $height
+            );
+            if (!$mediaDirectory->isFile($imageFile)) {
+                try {
+                    $imageResize = $this->imageFactory->create();
+                    $imageResize->open($mediaDirectory->getAbsolutePath($image));
+                    $imageResize->constrainOnly(true);
+                    $imageResize->keepTransparency(true);
+                    $imageResize->keepFrame(false);
+                    $imageResize->keepAspectRatio(true);
+                    $imageResize->resize($width, $height);
+                    $imageResize->save($mediaDirectory->getAbsolutePath($imageFile));
+
+                    $image = $imageFile;
+                } catch (\Exception $e) {
+                    $this->objectManager->get(LoggerInterface::class)->critical($e->getMessage());
+                }
+            } else {
+                $image = $imageFile;
+            }
+        }
+
+        return $this->getMediaUrl($image);
     }
 
     /**

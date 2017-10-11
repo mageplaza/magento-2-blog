@@ -18,18 +18,19 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Post;
 
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Helper\Data as HelperBlog;
-use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Model\Url as CustomerUrl;
-use Magento\Customer\Model\Session;
 use Mageplaza\Blog\Model\TrafficFactory;
-use Magento\Framework\Controller\Result\ForwardFactory;
 
 /**
  * Class View
@@ -37,58 +38,57 @@ use Magento\Framework\Controller\Result\ForwardFactory;
  */
 class View extends Action
 {
-
     const COMMENT = 1;
     const LIKE = 2;
 
-	/**
-	 * @var \Mageplaza\Blog\Model\TrafficFactory
-	 */
+    /**
+     * @var \Mageplaza\Blog\Model\TrafficFactory
+     */
     public $trafficFactory;
-	/**
-	 * @var \Magento\Framework\View\Result\PageFactory
-	 */
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
     public $resultPageFactory;
-	/**
-	 * @var \Mageplaza\Blog\Helper\Data
-	 */
+    /**
+     * @var \Mageplaza\Blog\Helper\Data
+     */
     public $helperBlog;
-	/**
-	 * @var \Magento\Customer\Api\AccountManagementInterface
-	 */
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
     public $accountManagement;
-	/**
-	 * @var \Magento\Customer\Model\Url
-	 */
+    /**
+     * @var \Magento\Customer\Model\Url
+     */
     public $customerUrl;
-	/**
-	 * @var \Magento\Customer\Model\Session
-	 */
+    /**
+     * @var \Magento\Customer\Model\Session
+     */
     public $session;
-	/**
-	 * @var \Magento\Store\Model\StoreManagerInterface
-	 */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     public $storeManager;
-	/**
-	 * @var \Magento\Framework\Json\Helper\Data
-	 */
+    /**
+     * @var \Magento\Framework\Json\Helper\Data
+     */
     public $jsonHelper;
-	/**
-	 * @var \Mageplaza\Blog\Model\CommentFactory
-	 */
+    /**
+     * @var \Mageplaza\Blog\Model\CommentFactory
+     */
     public $cmtFactory;
-	/**
-	 * @var \Mageplaza\Blog\Model\LikeFactory
-	 */
+    /**
+     * @var \Mageplaza\Blog\Model\LikeFactory
+     */
     public $likeFactory;
-	/**
-	 * @var \Magento\Framework\Stdlib\DateTime\DateTime
-	 */
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
     public $dateTime;
 
-	/**
-	 * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-	 */
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
     public $timeZone;
 
     /**
@@ -96,23 +96,23 @@ class View extends Action
      */
     protected $resultForwardFactory;
 
-	/**
-	 * View constructor.
-	 * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-	 * @param \Mageplaza\Blog\Model\CommentFactory $commentFactory
-	 * @param \Mageplaza\Blog\Model\LikeFactory $likeFactory
-	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
-	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
-	 * @param \Magento\Framework\App\Action\Context $context
-	 * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
-	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-	 * @param \Mageplaza\Blog\Helper\Data $helperBlog
-	 * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-	 * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
-	 * @param \Magento\Customer\Model\Url $customerUrl
-	 * @param \Magento\Customer\Model\Session $customerSession
-	 * @param \Mageplaza\Blog\Model\TrafficFactory $trafficFactory
-	 */
+    /**
+     * View constructor.
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param \Mageplaza\Blog\Model\CommentFactory $commentFactory
+     * @param \Mageplaza\Blog\Model\LikeFactory $likeFactory
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Mageplaza\Blog\Helper\Data $helperBlog
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
+     * @param \Magento\Customer\Model\Url $customerUrl
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Mageplaza\Blog\Model\TrafficFactory $trafficFactory
+     */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Mageplaza\Blog\Model\CommentFactory $commentFactory,
@@ -128,35 +128,36 @@ class View extends Action
         CustomerUrl $customerUrl,
         Session $customerSession,
         TrafficFactory $trafficFactory
-    ) {
-    
+    )
+    {
+
         parent::__construct($context);
-        $this->storeManager      = $storeManager;
-        $this->helperBlog        = $helperBlog;
-        $this->resultPageFactory = $resultPageFactory;
-        $this->accountManagement = $accountManagement;
-        $this->customerUrl       = $customerUrl;
-        $this->session           = $customerSession;
-        $this->timeZone = $timezone;
-        $this->trafficFactory    = $trafficFactory;
+        $this->storeManager         = $storeManager;
+        $this->helperBlog           = $helperBlog;
+        $this->resultPageFactory    = $resultPageFactory;
+        $this->accountManagement    = $accountManagement;
+        $this->customerUrl          = $customerUrl;
+        $this->session              = $customerSession;
+        $this->timeZone             = $timezone;
+        $this->trafficFactory       = $trafficFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->jsonHelper = $jsonHelper;
-        $this->cmtFactory = $commentFactory;
-        $this->likeFactory = $likeFactory;
-        $this->dateTime = $dateTime;
+        $this->jsonHelper           = $jsonHelper;
+        $this->cmtFactory           = $commentFactory;
+        $this->likeFactory          = $likeFactory;
+        $this->dateTime             = $dateTime;
     }
 
-	/**
-	 * @return $this|\Magento\Framework\View\Result\Page
-	 */
+    /**
+     * @return $this|\Magento\Framework\View\Result\Page
+     */
     public function execute()
     {
-		date_default_timezone_set($this->getTimezone());
-        $id=$this->getRequest()->getParam('id');
+        date_default_timezone_set($this->helperBlog->getTimezone());
+        $id = $this->getRequest()->getParam('id');
         if ($id) {
-            $trafficModel=$this->trafficFactory->create()->load($id, 'post_id');
+            $trafficModel = $this->trafficFactory->create()->load($id, 'post_id');
             if ($trafficModel->getId()) {
-                $trafficModel->setNumbersView($trafficModel->getNumbersView()+1);
+                $trafficModel->setNumbersView($trafficModel->getNumbersView() + 1);
                 $trafficModel->save();
             } else {
                 $traffic = $this->trafficFactory->create();
@@ -165,46 +166,51 @@ class View extends Action
         }
 
         if ($this->getRequest()->isAjax() && $this->helperBlog->isLoggedIn()) {
-            $params = $this->getRequest()->getParams();
+            $params       = $this->getRequest()->getParams();
             $customerData = $this->helperBlog->getCustomerData();
-            $result = [];
-			$now = getdate();
+            $result       = [];
+            $now          = getdate();
             if (isset($params['cmt_text'])) {
-                $cmtText = $params['cmt_text'];
-                $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
-                $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
+                $cmtText     = $params['cmt_text'];
+                $isReply     = isset($params['isReply']) ? $params['isReply'] : 0;
+                $replyId     = isset($params['replyId']) ? $params['replyId'] : 0;
                 $commentData = [
-                    'post_id'   => $id, '',
-                    'entity_id'     => $customerData->getId(),
-                    'is_reply'  => $isReply,
-                    'reply_id'  => $replyId,
-                    'content'   => $cmtText,
-                    'created_at'=> $this->dateTime->date('M d Y') .' at '. $now["hours"] . ":" . $now["minutes"]
+                    'post_id'    => $id, '',
+                    'entity_id'  => $customerData->getId(),
+                    'is_reply'   => $isReply,
+                    'reply_id'   => $replyId,
+                    'content'    => $cmtText,
+                    'created_at' => $this->dateTime->date('M d Y') . ' at ' . $now["hours"] . ":" . $now["minutes"]
                 ];
 
                 $commentModel = $this->cmtFactory->create();
-                $result = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
+                $result       = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
             }
 
             if (isset($params['cmtId'])) {
-                $cmtId = $params['cmtId'];
+                $cmtId    = $params['cmtId'];
                 $likeData = [
-                    'comment_id'    => $cmtId,
-                    'entity_id'         => $customerData->getId()
+                    'comment_id' => $cmtId,
+                    'entity_id'  => $customerData->getId()
                 ];
 
                 $likeModel = $this->likeFactory->create();
-                $result = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
+                $result    = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
             }
 
             return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
         }
 
-            return ($id) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
+        return ($id) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
     }
 
     /**
-     * like comment action
+     * @param $action
+     * @param $user
+     * @param $data
+     * @param $model
+     * @param null $cmtId
+     * @return array
      */
     public function commentActions($action, $user, $data, $model, $cmtId = null)
     {
@@ -220,16 +226,16 @@ class View extends Action
                         $cmtHasReply->setHasReply(1)->save();
                     }
 
-                    $lastCmt = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
+                    $lastCmt   = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
                     $lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
-                    $result = [
-                        'cmt_id'    => $lastCmtId,
-                        'cmt_text'  => $data['content'],
-                        'user_cmt'  => $user->getFirstname() .' '. $user->getLastname(),
-                        'is_reply'  => $data['is_reply'],
-                        'reply_cmt'     => $data['reply_id'],
-                        'created_at'=> __('Just now'),
-                        'status'    => 'ok'
+                    $result    = [
+                        'cmt_id'     => $lastCmtId,
+                        'cmt_text'   => $data['content'],
+                        'user_cmt'   => $user->getFirstname() . ' ' . $user->getLastname(),
+                        'is_reply'   => $data['is_reply'],
+                        'reply_cmt'  => $data['reply_id'],
+                        'created_at' => __('Just now'),
+                        'status'     => 'ok'
                     ];
                     break;
                 //like action
@@ -257,13 +263,13 @@ class View extends Action
         return $result;
     }
 
-	/**
-	 * check if user like a comment
-	 * @param $cmtId
-	 * @param $userId
-	 * @param $model
-	 * @return bool
-	 */
+    /**
+     * check if user like a comment
+     * @param $cmtId
+     * @param $userId
+     * @param $model
+     * @return bool
+     */
     public function isLikedComment($cmtId, $userId, $model)
     {
         $liked = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
@@ -271,6 +277,7 @@ class View extends Action
             if ($item->getEntityId() == $userId) {
                 try {
                     $item->delete();
+
                     return true;
                 } catch (\Exception $e) {
                     return false;
@@ -280,21 +287,4 @@ class View extends Action
 
         return false;
     }
-
-	/**
-	 * Get config TimeZone ( general/locale/timezone )
-	 * @return mixed
-	 */
-	public function getTimezone()
-	{
-
-		$context = $this->_objectManager->get('\Magento\Framework\View\Element\Template\Context');
-		$storeModel = $context->getStoreManager()->getStore()->getId();
-		$timeZone       = $context->getScopeConfig()->getValue(
-			'general/locale/timezone',
-			\Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-			$storeModel
-		);
-		return $timeZone;
-	}
 }

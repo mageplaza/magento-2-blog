@@ -18,25 +18,35 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model\Config\Source\Comments\Facebook;
+
+use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class Orderby
  * @package Mageplaza\Blog\Model\Config\Source\Comments\Facebook
  */
-class Orderby implements \Magento\Framework\Option\ArrayInterface
+class Orderby implements ArrayInterface
 {
     const SOCIAL = 'social';
-    const REVERSE_TIME  = 'reverse_time';
-    const TIME  = 'time';
+    const REVERSE_TIME = 'reverse_time';
+    const TIME = 'time';
 
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
-        return [
-            ['value' => self::SOCIAL, 'label' => __('Social')],
-            ['value' => self::REVERSE_TIME, 'label' => __('Reverse time')],
-            ['value' => self::TIME, 'label' => __('Time')]
-        ];
+        $options = [];
+        foreach ($this->toArray() as $value => $label) {
+            $options[] = [
+                'value' => $value,
+                'label' => $label
+            ];
+        }
+
+        return $options;
     }
 
     /**
@@ -49,6 +59,9 @@ class Orderby implements \Magento\Framework\Option\ArrayInterface
         return [self::SOCIAL => __('Social'), self::REVERSE_TIME => __('Reverse time'), self::TIME => __('Time')];
     }
 
+    /**
+     * @return array
+     */
     public function getAllOptions()
     {
         return $this->toOptionArray();

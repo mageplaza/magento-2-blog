@@ -21,6 +21,18 @@
 
 namespace Mageplaza\Blog\Model;
 
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime;
+use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory as PostCollectionFactory;
+use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory;
+use Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory as TopicCollectionFactory;
+
 /**
  * @method Post setName($name)
  * @method Post setShortDescription($shortDescription)
@@ -168,38 +180,60 @@ class Post extends \Magento\Framework\Model\AbstractModel
      */
     public $nextPostCollection;
 
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime
+     */
     public $dateTime;
+
+    /**
+     * @var \Mageplaza\Blog\Helper\Data
+     */
     public $helperData;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     */
     public $productCollectionFactory;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
+     */
     public $productCollection;
 
+    /**
+     * @var \Mageplaza\Blog\Model\TrafficFactory
+     */
     protected $trafficFactory;
 
     /**
-     * constructor
-     *
+     * Post constructor.
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Mageplaza\Blog\Helper\Data $helperData
+     * @param \Mageplaza\Blog\Model\TrafficFactory $trafficFactory
      * @param \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $tagCollectionFactory
      * @param \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory $topicCollectionFactory
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Mageplaza\Blog\Helper\Data $helperData,
+        Context $context,
+        Registry $registry,
+        DateTime $dateTime,
+        Data $helperData,
         TrafficFactory $trafficFactory,
-        \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $tagCollectionFactory,
-        \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory $topicCollectionFactory,
-        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-        \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        CollectionFactory $tagCollectionFactory,
+        TopicCollectionFactory $topicCollectionFactory,
+        CategoryCollectionFactory $categoryCollectionFactory,
+        PostCollectionFactory $postCollectionFactory,
+        ProductCollectionFactory $productCollectionFactory,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     )
     {
@@ -438,9 +472,12 @@ class Post extends \Magento\Framework\Model\AbstractModel
         return $this->relatedPostCollection;
     }
 
+    /**
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     */
     public function getSelectedProductsCollection()
     {
-        if ($this->productCollectionFactory === null) {
+        if ($this->productCollection === null) {
             $collection = $this->productCollectionFactory->create();
             $collection->getSelect()->join(
                 $this->getResource()->getTable('mageplaza_blog_post_product'),
@@ -454,6 +491,9 @@ class Post extends \Magento\Framework\Model\AbstractModel
         return $this->productCollection;
     }
 
+    /**
+     * @return array|mixed
+     */
     public function getProductsPosition()
     {
         if (!$this->getId()) {

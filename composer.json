@@ -5,7 +5,7 @@
     "mageplaza/module-core": "*"
   },
   "type": "magento2-module",
-  "version": "2.4.6",
+  "version": "2.4.7",
   "license": "Mageplaza License",
   "keywords": [
       "magento 2",

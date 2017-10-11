@@ -18,6 +18,7 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\SiteMap;
 
 use Magento\Framework\App\Action\Action;
@@ -30,28 +31,29 @@ use Magento\Framework\View\Result\PageFactory;
  */
 class Index extends Action
 {
-
-	/**
-	 * @var \Magento\Framework\View\Result\PageFactory
-	 */
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
     public $resultPageFactory;
 
-	/**
-	 * Index constructor.
-	 * @param \Magento\Framework\App\Action\Context $context
-	 * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-	 */
+    /**
+     * Index constructor.
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     */
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory
-    ) {
+    )
+    {
         parent::__construct($context);
+
         $this->resultPageFactory = $resultPageFactory;
     }
 
-	/**
-	 * @return \Magento\Framework\View\Result\Page
-	 */
+    /**
+     * @return \Magento\Framework\View\Result\Page
+     */
     public function execute()
     {
         return $this->resultPageFactory->create();

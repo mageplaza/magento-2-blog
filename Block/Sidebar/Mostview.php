@@ -18,6 +18,7 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Sidebar;
 
 use Mageplaza\Blog\Block\Frontend;
@@ -28,18 +29,17 @@ use Mageplaza\Blog\Block\Frontend;
  */
 class Mostview extends Frontend
 {
-
-	/**
-	 * @return array|string
-	 */
+    /**
+     * @return array|string
+     */
     public function getMosviewPosts()
     {
         return $this->helperData->getMosviewPosts();
     }
 
-	/**
-	 * @return array|string
-	 */
+    /**
+     * @return array|string
+     */
     public function getRecentPost()
     {
         return $this->helperData->getRecentPost();

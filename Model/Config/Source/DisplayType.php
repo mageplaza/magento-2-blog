@@ -18,32 +18,34 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
-namespace Mageplaza\Blog\Model\Config\Source\Blogview;
+
+namespace Mageplaza\Blog\Model\Config\Source;
+
+use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class Display
  * @package Mageplaza\Blog\Model\Config\Source\Blogview
  */
-class Display implements \Magento\Framework\Option\ArrayInterface
+class DisplayType implements ArrayInterface
 {
-    /**
-     * Options getter
-     *
-     * @return array
-     */
-
     const LIST_VIEW = 1;
     const GRID = 2;
 
-	/**
-	 * @return array
-	 */
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
-        return [
-            ['value' => self::LIST_VIEW, 'label' => __('List View')],
-            ['value' => self::GRID, 'label' => __('Grid View')]
-        ];
+        $options = [];
+        foreach ($this->toArray() as $value => $label) {
+            $options[] = [
+                'value' => $value,
+                'label' => $label
+            ];
+        }
+
+        return $options;
     }
 
     /**

@@ -21,11 +21,13 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel\Post;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+
 /**
  * Class Collection
  * @package Mageplaza\Blog\Model\ResourceModel\Post
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * ID Field Name

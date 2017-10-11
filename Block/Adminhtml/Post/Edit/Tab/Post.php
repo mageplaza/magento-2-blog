@@ -26,12 +26,12 @@ use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Cms\Model\Wysiwyg\Config;
+use Magento\Config\Model\Config\Source\Design\Robots;
 use Magento\Config\Model\Config\Source\Enabledisable;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
-use Mageplaza\Blog\Model\Config\Source\MetaRobots;
 
 /**
  * Class Post
@@ -59,9 +59,7 @@ class Post extends Generic implements TabInterface
     protected $enabledisable;
 
     /**
-     * Meta Robots options
-     *
-     * @var \Mageplaza\Blog\Model\Config\Source\MetaRobots
+     * @var \Magento\Config\Model\Config\Source\Design\Robots
      */
     public $metaRobotsOptions;
 
@@ -83,8 +81,8 @@ class Post extends Generic implements TabInterface
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
-     * @param \Magento\Config\Model\Config\Source\Enabledisable $enabledisable
-     * @param \Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobotsOptions
+     * @param \Magento\Config\Model\Config\Source\Enabledisable $enableDisable
+     * @param \Magento\Config\Model\Config\Source\Design\Robots $metaRobotsOptions
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
      */
@@ -95,18 +93,19 @@ class Post extends Generic implements TabInterface
         FormFactory $formFactory,
         Config $wysiwygConfig,
         Yesno $booleanOptions,
-        Enabledisable $enabledisable,
-        MetaRobots $metaRobotsOptions,
+        Enabledisable $enableDisable,
+        Robots $metaRobotsOptions,
         Store $systemStore,
         array $data = []
     )
     {
         $this->wysiwygConfig     = $wysiwygConfig;
         $this->booleanOptions    = $booleanOptions;
-        $this->enabledisable     = $enabledisable;
+        $this->enabledisable     = $enableDisable;
         $this->metaRobotsOptions = $metaRobotsOptions;
         $this->systemStore       = $systemStore;
         $this->authSession       = $authSession;
+
         parent::__construct($context, $registry, $formFactory, $data);
     }
 

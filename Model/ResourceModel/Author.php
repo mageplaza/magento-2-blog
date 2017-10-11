@@ -21,7 +21,9 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel;
 
-use \Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Author
@@ -41,12 +43,12 @@ class Author extends AbstractDb
 
     /**
      * Author constructor.
-     * @param \Mageplaza\Blog\Helper\Data $helperData
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Mageplaza\Blog\Helper\Data $helperData
      */
     public function __construct(
-        \Mageplaza\Blog\Helper\Data $helperData,
-        \Magento\Framework\Model\ResourceModel\Db\Context $context
+        Context $context,
+        Data $helperData
     )
     {
         $this->helperData = $helperData;

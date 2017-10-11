@@ -1,11 +1,29 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Admin
- * Date: 4/10/2017
- * Time: 11:26 AM
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Sitemap
@@ -13,170 +31,143 @@ namespace Mageplaza\Blog\Model;
  */
 class Sitemap extends \Magento\Sitemap\Model\Sitemap
 {
-	/**
-	 * @var \Mageplaza\Blog\Helper\Data
-	 */
+    /**
+     * @var \Mageplaza\Blog\Helper\Data
+     */
     protected $blogDataHelper;
-	/**
-	 * @var mixed
-	 */
+    /**
+     * @var mixed
+     */
     protected $router;
 
-	/**
-	 * Sitemap constructor.
-	 * @param \Mageplaza\Blog\Helper\Data $blogDataHelper
-	 * @param \Magento\Framework\Model\Context $context
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Framework\Escaper $escaper
-	 * @param \Magento\Sitemap\Helper\Data $sitemapData
-	 * @param \Magento\Framework\Filesystem $filesystem
-	 * @param \Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory $categoryFactory
-	 * @param \Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory $productFactory
-	 * @param \Magento\Sitemap\Model\ResourceModel\Cms\PageFactory $cmsFactory
-	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $modelDate
-	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-	 * @param \Magento\Framework\App\RequestInterface $request
-	 * @param \Magento\Framework\Stdlib\DateTime $dateTime
-	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-	 * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-	 * @param array $data
-	 */
-    public function __construct(
-        \Mageplaza\Blog\Helper\Data $blogDataHelper,
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Sitemap\Helper\Data $sitemapData,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory $categoryFactory,
-        \Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory $productFactory,
-        \Magento\Sitemap\Model\ResourceModel\Cms\PageFactory $cmsFactory,
-        \Magento\Framework\Stdlib\DateTime\DateTime $modelDate,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
-    ) {
-    
-        $this->blogDataHelper=$blogDataHelper;
-        $this->router = $this->blogDataHelper->getBlogConfig('general/url_prefix');
-        parent::__construct(
-            $context,
-            $registry,
-            $escaper,
-            $sitemapData,
-            $filesystem,
-            $categoryFactory,
-            $productFactory,
-            $cmsFactory,
-            $modelDate,
-            $storeManager,
-            $request,
-            $dateTime,
-            $resource,
-            $resourceCollection,
-            $data
-        );
+    /**
+     * Initialize resource model
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        parent::_construct();
+
+        $this->blogDataHelper = ObjectManager::getInstance()->get(Data::class);
+        $this->router         = $this->blogDataHelper->getBlogConfig('general/url_prefix');
     }
+
+    /**
+     * @return array
+     */
     public function getBlogPostsSiteMapCollection()
     {
-        $postCollection=$this->blogDataHelper->postfactory->create()->getCollection();
-        $postSiteMapCollection=[];
+        $postCollection        = $this->blogDataHelper->postfactory->create()->getCollection();
+        $postSiteMapCollection = [];
         if (!$this->router) {
             $this->router = 'blog';
         }
         foreach ($postCollection as $item) {
-            if ($item->getEnabled()!=null) :
+            if (!is_null($item->getEnabled())) {
                 $images = null;
                 if ($item->getImage()) :
-                    $imagesCollection[] = new \Magento\Framework\DataObject(
-                        [
-                        'url' => $item->getImage(),
-                        'caption' => null,
+                    $imagesCollection[] = new DataObject([
+                            'url'     => $item->getImage(),
+                            'caption' => null,
                         ]
                     );
-                    $images=new \Magento\Framework\DataObject(['collection'=>$imagesCollection]);
+                    $images             = new DataObject(['collection' => $imagesCollection]);
                 endif;
-                $postSiteMapCollection[$item->getId()]=new \Magento\Framework\DataObject([
-                'id'=>$item->getId(),
-                'url'=>$this->router.'/post/'.$item->getUrlKey(),
-                'images' => $images,
-                'updated_at'=>$item->getUpdatedAt(),
+                $postSiteMapCollection[$item->getId()] = new DataObject([
+                    'id'         => $item->getId(),
+                    'url'        => $this->router . '/post/' . $item->getUrlKey(),
+                    'images'     => $images,
+                    'updated_at' => $item->getUpdatedAt(),
                 ]);
-            endif;
+            }
         }
+
         return $postSiteMapCollection;
     }
+
+    /**
+     * @return array
+     */
     public function getBlogCategoriesSiteMapCollection()
     {
-        $categoryCollection=$this->blogDataHelper->categoryfactory->create()->getCollection();
-        $categorySiteMapCollection=[];
+        $categoryCollection        = $this->blogDataHelper->categoryfactory->create()->getCollection();
+        $categorySiteMapCollection = [];
         foreach ($categoryCollection as $item) {
-            if ($item->getEnabled()!=null) :
-                $categorySiteMapCollection[$item->getId()]=new \Magento\Framework\DataObject([
-                'id'=>$item->getId(),
-                'url'=>$this->router.'/category/'.$item->getUrlKey(),
-                'updated_at'=>$item->getUpdatedAt(),
+            if (!is_null($item->getEnabled())) {
+                $categorySiteMapCollection[$item->getId()] = new DataObject([
+                    'id'         => $item->getId(),
+                    'url'        => $this->router . '/category/' . $item->getUrlKey(),
+                    'updated_at' => $item->getUpdatedAt(),
                 ]);
-            endif;
+            }
         }
+
         return $categorySiteMapCollection;
     }
+
+    /**
+     * @return array
+     */
     public function getBlogTagsSiteMapCollection()
     {
-        $tagCollection=$this->blogDataHelper->tagfactory->create()->getCollection();
-        $tagSiteMapCollection=[];
+        $tagCollection        = $this->blogDataHelper->tagfactory->create()->getCollection();
+        $tagSiteMapCollection = [];
         foreach ($tagCollection as $item) {
-            if ($item->getEnabled()!=null) :
-                $tagSiteMapCollection[$item->getId()]=new \Magento\Framework\DataObject([
-                    'id'=>$item->getId(),
-                    'url'=>$this->router.'/tag/'.$item->getUrlKey(),
-                    'updated_at'=>$item->getUpdatedAt(),
+            if (!is_null($item->getEnabled())) {
+                $tagSiteMapCollection[$item->getId()] = new DataObject([
+                    'id'         => $item->getId(),
+                    'url'        => $this->router . '/tag/' . $item->getUrlKey(),
+                    'updated_at' => $item->getUpdatedAt(),
                 ]);
-            endif;
+            }
         }
+
         return $tagSiteMapCollection;
     }
+
+    /**
+     * @return array
+     */
     public function getBlogTopicsSiteMapCollection()
     {
-        $topicCollection=$this->blogDataHelper->topicfactory->create()->getCollection();
-        $topicSiteMapCollection=[];
+        $topicCollection        = $this->blogDataHelper->topicfactory->create()->getCollection();
+        $topicSiteMapCollection = [];
         foreach ($topicCollection as $item) {
-            if ($item->getEnabled()!=null) :
-                $topicSiteMapCollection[$item->getId()]=new \Magento\Framework\DataObject([
-                    'id'=>$item->getId(),
-                    'url'=>$this->router.'/topic/'.$item->getUrlKey(),
-                    'updated_at'=>$item->getUpdatedAt(),
+            if (!is_null($item->getEnabled())) {
+                $topicSiteMapCollection[$item->getId()] = new DataObject([
+                    'id'         => $item->getId(),
+                    'url'        => $this->router . '/topic/' . $item->getUrlKey(),
+                    'updated_at' => $item->getUpdatedAt(),
                 ]);
-            endif;
+            }
         }
+
         return $topicSiteMapCollection;
     }
+
+    /**
+     * @inheritdoc
+     */
     public function _initSitemapItems()
     {
-        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
-            [
+        $this->_sitemapItems[] = new DataObject([
                 'collection' => $this->getBlogPostsSiteMapCollection(),
             ]
         );
-        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
-            [
+        $this->_sitemapItems[] = new DataObject([
                 'collection' => $this->getBlogCategoriesSiteMapCollection(),
             ]
         );
-        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
-            [
+        $this->_sitemapItems[] = new DataObject([
                 'collection' => $this->getBlogTagsSiteMapCollection(),
             ]
         );
-        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
-            [
+        $this->_sitemapItems[] = new DataObject([
                 'collection' => $this->getBlogTopicsSiteMapCollection(),
             ]
         );
-//		die(\Zend_Debug::dump($this->_sitemapItems));
+
         parent::_initSitemapItems(); // TODO: Change the autogenerated stub
     }
 }

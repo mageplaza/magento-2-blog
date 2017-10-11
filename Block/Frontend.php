@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block;
 
 use Magento\Cms\Model\Template\FilterProvider;
+use Magento\Config\Model\Config\Source\Design\Robots;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\ObjectManagerInterface;
@@ -31,11 +32,8 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Mageplaza\Blog\Helper\Data as HelperData;
-use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\CommentFactory;
-use Mageplaza\Blog\Model\Config\Source\MetaRobots;
 use Mageplaza\Blog\Model\LikeFactory;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class Frontend
@@ -44,7 +42,6 @@ use Psr\Log\LoggerInterface;
  */
 class Frontend extends Template
 {
-
     /**
      * @type \Mageplaza\Blog\Helper\Data
      */
@@ -61,7 +58,7 @@ class Frontend extends Template
     public $dateTime;
 
     /**
-     * @var \Mageplaza\Blog\Model\Config\Source\MetaRobots
+     * @var \Magento\Config\Model\Config\Source\Design\Robots
      */
     public $mpRobots;
 
@@ -94,15 +91,11 @@ class Frontend extends Template
      * @var \Magento\Framework\ObjectManagerInterface
      */
     public $objectManager;
+
     /**
      * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
-
-    /**
-     * @var \Magento\Framework\Image\AdapterFactory
-     */
-    protected $_imageFactory;
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface
@@ -115,7 +108,7 @@ class Frontend extends Template
      * @param \Mageplaza\Blog\Model\CommentFactory $commentFactory
      * @param \Mageplaza\Blog\Model\LikeFactory $likeFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
-     * @param \Mageplaza\Blog\Model\Config\Source\MetaRobots $metaRobots
+     * @param \Magento\Config\Model\Config\Source\Design\Robots $metaRobots
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Mageplaza\Blog\Helper\Data $helperData
      * @param \Magento\Framework\View\Element\Template\Context $templateContext
@@ -130,7 +123,7 @@ class Frontend extends Template
         CommentFactory $commentFactory,
         LikeFactory $likeFactory,
         CustomerRepositoryInterface $customerRepository,
-        MetaRobots $metaRobots,
+        Robots $metaRobots,
         Context $context,
         HelperData $helperData,
         TemplateContext $templateContext,
@@ -150,7 +143,6 @@ class Frontend extends Template
         $this->store              = $templateContext->getStoreManager();
         $this->filterProvider     = $filterProvider;
         $this->_filesystem        = $context->getFilesystem();
-        $this->_imageFactory      = $imageFactory;
         $this->_themeProvider     = $_themeProvider;
         $this->objectManager      = $objectManager;
         parent::__construct($context, $data);
@@ -439,86 +431,27 @@ class Frontend extends Template
      */
     public function applySeoCode($post = null)
     {
-        $description = $this->getSeoConfig('meta_description');
-        $keywords    = $this->getSeoConfig('meta_keywords');
-
         if ($post) {
-            $title = $post->getMetaTitle();
-            $this->setPageData($title, 1, $post->getName());
-
+            $title       = $post->getMetaTitle() ?: $post->getName();
             $description = $post->getMetaDescription();
-            $this->setPageData($description, 2, $description);
-
-            $keywords = $post->getMetaKeywords();
-            $this->setPageData($keywords, 3, $keywords);
-
-            $robot = $post->getMetaRobots();
-            $array = $this->mpRobots->getOptionArray();
-//			\Zend_Debug::dump($array[$robot]);
-//			if ($keywords) {
-            $this->setPageData($array[$robot], 4);
-//			}
-            $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
-            if ($pageMainTitle) {
-                $pageMainTitle->setPageTitle($post->getName());
-            }
+            $keywords    = $post->getMetaKeywords();
+            $pageTitle   = $post->getName();
+            $this->pageConfig->setRobots($post->getMetaRobots());
         } else {
-            $title = $this->getSeoConfig('meta_title')
-                ?: $this->helperData->getBlogConfig('general/name');
-            $this->setPageData($title, 1, __('Blog'));
-
-            $this->setPageData($description, 2);
-
-            $this->setPageData($keywords, 3);
-
-            $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
-            if ($pageMainTitle) {
-                $pageMainTitle->setPageTitle(
-                    $this->helperData->getBlogConfig('general/name')
-                );
-            }
-        }
-    }
-
-    /**
-     * @param      $data
-     * @param      $type
-     * @param null $name
-     *
-     * @return string|void
-     */
-    public function setPageData($data, $type, $name = null)
-    {
-        if ($data) {
-            return $this->setDataFromType($data, $type);
+            $title       = $this->getSeoConfig('meta_title') ?: $this->helperData->getBlogConfig('general/name');
+            $description = $this->getSeoConfig('meta_description');
+            $keywords    = $this->getSeoConfig('meta_keywords');
+            $pageTitle   = $this->helperData->getBlogConfig('general/name');
         }
 
-        return $this->setDataFromType($name, $type);
-    }
+        $this->pageConfig->getTitle()->set($title ?: __('Blog'));
+        $this->pageConfig->setDescription($description);
+        $this->pageConfig->setKeywords($keywords);
 
-    /**
-     * @param $data
-     * @param $type
-     * @return $this|string|void
-     */
-    public function setDataFromType($data, $type)
-    {
-        switch ($type) {
-            case 1:
-                return $this->pageConfig->getTitle()->set($data);
-                break;
-            case 2:
-                return $this->pageConfig->setDescription($data);
-                break;
-            case 3:
-                return $this->pageConfig->setKeywords($data);
-                break;
-            case 4:
-                return $this->pageConfig->setRobots($data);
-                break;
+        $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
+        if ($pageMainTitle) {
+            $pageMainTitle->setPageTitle($pageTitle);
         }
-
-        return '';
     }
 
     /**
@@ -650,11 +583,6 @@ class Frontend extends Template
     public function getAuthorUrl($author)
     {
         return $this->helperData->getAuthorUrl($author);
-    }
-
-    public function getAuthorImageUrl($image)
-    {
-        return $this->helperData->getAuthorImageUrl($image);
     }
 
     /**
@@ -802,6 +730,9 @@ class Frontend extends Template
         return $this->helperData->getDateFormat($date, $monthly);
     }
 
+    /**
+     * @return mixed
+     */
     public function getMonthParam()
     {
         return $this->getRequest()->getParam('month');
@@ -816,39 +747,7 @@ class Frontend extends Template
      */
     public function resizeImage($image, $width = null, $height = null)
     {
-        /** @var \Mageplaza\Blog\Helper\Image $imageHelper */
-        $imageHelper = $this->helperData->getImageHelper();
-
-        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
-        $mediaDirectory = $imageHelper->getMediaDirectory();
-        if ($width) {
-            $height = $height ?: $width;
-
-            $imageFile        = $imageHelper->getMediaPath(
-                $imageHelper->getExcludeMediaPath($image, Image::TEMPLATE_MEDIA_TYPE_POST),
-                Image::TEMPLATE_MEDIA_TYPE_POST . '/resize/' . $width . 'x' . $height
-            );
-            if (!$mediaDirectory->isFile($imageFile)) {
-                try {
-                    $imageResize = $this->_imageFactory->create();
-                    $imageResize->open($mediaDirectory->getAbsolutePath($image));
-                    $imageResize->constrainOnly(true);
-                    $imageResize->keepTransparency(true);
-                    $imageResize->keepFrame(false);
-                    $imageResize->keepAspectRatio(true);
-                    $imageResize->resize($width, $height);
-                    $imageResize->save($mediaDirectory->getAbsolutePath($imageFile));
-
-                    $image = $imageFile;
-                } catch (\Exception $e) {
-                    $this->objectManager->get(LoggerInterface::class)->critical($e->getMessage());
-                }
-            } else {
-                $image = $imageFile;
-            }
-        }
-
-        return $imageHelper->getMediaUrl($image);
+        return $this->helperData->getImageHelper()->resizeImage($image, $width, $height);
     }
 
     /**

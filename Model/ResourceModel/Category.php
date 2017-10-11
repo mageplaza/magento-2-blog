@@ -21,11 +21,17 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel;
 
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Mageplaza\Blog\Helper\Data;
+
 /**
  * Class Category
  * @package Mageplaza\Blog\Model\ResourceModel
  */
-class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Category extends AbstractDb
 {
     /**
      * Date model
@@ -61,16 +67,18 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      */
     public function __construct(
-        \Mageplaza\Blog\Helper\Data $helperData,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Model\ResourceModel\Db\Context $context
+        Context $context,
+        DateTime $date,
+        ManagerInterface $eventManager,
+        Data $helperData
     )
     {
         $this->helperData   = $helperData;
         $this->date         = $date;
         $this->eventManager = $eventManager;
+
         parent::__construct($context);
+
         $this->categoryPostTable = $this->getTable('mageplaza_blog_post_category');
     }
 
@@ -115,6 +123,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         /** @var \Mageplaza\Blog\Model\Category $object */
         parent::_beforeSave($object);
+
         if (!$object->getChildrenCount()) {
             $object->setChildrenCount(0);
         }
@@ -152,11 +161,9 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $object->setStoreIds(implode(',', $object->getStoreIds()));
         }
 
-        if (!$object->getUrlKey()) {
-            $object->setUrlKey(
-                $this->helperData->generateUrlKey($this, $object, $object->getName())
-            );
-        }
+        $object->setUrlKey(
+            $this->helperData->generateUrlKey($this, $object, $object->getUrlKey() ?: $object->getName())
+        );
 
         return $this;
     }

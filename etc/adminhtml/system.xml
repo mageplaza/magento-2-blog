@@ -81,7 +81,7 @@
                 </field>
                 <field id="display_style" translate="label comment" type="select" sortOrder="55" showInDefault="1" showInStore="1" showInWebsite="1">
                     <label>Display blogs style</label>
-                    <source_model>Mageplaza\Blog\Model\Config\Source\Blogview\Display</source_model>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\DisplayType</source_model>
                 </field>
                 <field id="pagination" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInStore="1" showInWebsite="1">
                     <label>Pagination</label>
@@ -237,9 +237,10 @@
                     </field>
                     <field id="upload_image_id" translate="label comment" type="image" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Logo</label>
-                        <comment>Choose your website or organize logo.</comment>
-                        <backend_model>Mageplaza\Blog\Model\Config\Source\Backend\Image</backend_model>
+                        <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                        <upload_dir config="system/filesystem/media" scope_info="1">mageplaza/blog/logo</upload_dir>
                         <base_url type="media" scope_info="1">mageplaza/blog/logo</base_url>
+                        <comment><![CDATA[Choose your website or organize logo. (jpeg, gif, png)]]></comment>
                     </field>
                 </group>
             </group>
