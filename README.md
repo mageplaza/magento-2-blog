@@ -27,16 +27,6 @@ A: Read solution: https://github.com/mageplaza/module-core/issues/3
 
 ## 3. How to install
 
-### ✓ Install via composer (recommend)
-
-Run the following command in Magento 2 root folder:
-
-```
-composer require mageplaza/magento-2-blog-extension
-php bin/magento setup:upgrade
-php bin/magento setup:static-content:deploy
-```
-
 ### ✓ Install ready-to-paste package
 
 - Download the latest version at [Mageplaza Blog for Magento 2](https://www.mageplaza.com/magento-2-blog-extension/)
