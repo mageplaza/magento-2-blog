@@ -25,7 +25,6 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Model\Layer\Resolver;
-use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\Url\Helper\Data;
@@ -38,26 +37,6 @@ use Mageplaza\Blog\Helper\Data as HelperData;
 class RelatedProduct extends ListProduct
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     */
-    protected $_productCollectionFactory;
-
-    /**
-     * @var \Magento\Catalog\Model\Product\Visibility
-     */
-    protected $visibleProduts;
-
-    /**
-     * @var mixed
-     */
-    protected $limit;
-
-    /**
-     * @var \Mageplaza\Blog\Helper\Data
-     */
-    protected $helper;
-
-    /**
      * Default related product page title
      */
     const TITLE = 'Related Products';
@@ -68,13 +47,22 @@ class RelatedProduct extends ListProduct
     const LIMIT = '12';
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     */
+    protected $_productCollectionFactory;
+
+    /**
+     * @var \Mageplaza\Blog\Helper\Data
+     */
+    protected $helper;
+
+    /**
      * RelatedProduct constructor.
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Catalog\Model\Product\Visibility $visibleProduts
      * @param \Mageplaza\Blog\Helper\Data $helperData
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param array $data
@@ -85,25 +73,15 @@ class RelatedProduct extends ListProduct
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         CollectionFactory $productCollectionFactory,
-        Visibility $visibleProduts,
         HelperData $helperData,
         Data $urlHelper,
         array $data = []
     )
     {
         $this->_productCollectionFactory = $productCollectionFactory;
-        $this->visibleProduts            = $visibleProduts;
         $this->helper                    = $helperData;
-        $this->limit                     = $this->helper->getBlogConfig('product_post/post_detail/product_limit');
 
-        parent::__construct(
-            $context,
-            $postDataHelper,
-            $layerResolver,
-            $categoryRepository,
-            $urlHelper,
-            $data
-        );
+        parent::__construct($context, $postDataHelper, $layerResolver, $categoryRepository, $urlHelper, $data);
     }
 
     /**
@@ -112,18 +90,20 @@ class RelatedProduct extends ListProduct
      */
     public function _getProductCollection()
     {
-        $limit      = ($this->limit) ? $this->limit : SELF::LIMIT;
         $postId     = $this->getRequest()->getParam('id');
-        $collection = $this->_productCollectionFactory->create();
-        $collection->getSelect()->joinLeft(['product_post' => $collection->getTable('mageplaza_blog_post_product')]
-            , "e.entity_id = product_post.entity_id")->where('product_post.post_id = ' . $postId);
-        $collection
-            ->addAttributeToSelect('*');
-        if ($limit > $collection->getSize()) {
-            return $collection;
-        } else {
-            return $collection->setPageSize($limit);
-        }
+        $collection = $this->_productCollectionFactory->create()
+            ->addAttributeToSelect('*')
+            ->addStoreFilter();
+
+        $collection->getSelect()
+            ->joinLeft(
+                ['product_post' => $collection->getTable('mageplaza_blog_post_product')],
+                "e.entity_id = product_post.entity_id"
+            )
+            ->where('product_post.post_id = ' . $postId)
+            ->limit((int)$this->helper->getBlogConfig('product_post/post_detail/product_limit') ?: self::LIMIT);
+
+        return $collection;
     }
 
     /**

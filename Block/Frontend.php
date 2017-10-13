@@ -22,17 +22,13 @@
 namespace Mageplaza\Blog\Block;
 
 use Magento\Cms\Model\Template\FilterProvider;
-use Magento\Config\Model\Config\Source\Design\Robots;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Image\AdapterFactory;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Model\CommentFactory;
+use Mageplaza\Blog\Model\Config\Source\DisplayType;
 use Mageplaza\Blog\Model\LikeFactory;
 
 /**
@@ -43,6 +39,11 @@ use Mageplaza\Blog\Model\LikeFactory;
 class Frontend extends Template
 {
     /**
+     * @var FilterProvider
+     */
+    public $filterProvider;
+
+    /**
      * @type \Mageplaza\Blog\Helper\Data
      */
     public $helperData;
@@ -51,21 +52,6 @@ class Frontend extends Template
      * @type \Magento\Store\Model\StoreManagerInterface
      */
     public $store;
-
-    /**
-     * @type \Magento\Framework\Stdlib\DateTime\DateTime
-     */
-    public $dateTime;
-
-    /**
-     * @var \Magento\Config\Model\Config\Source\Design\Robots
-     */
-    public $mpRobots;
-
-    /**
-     * @var FilterProvider
-     */
-    public $filterProvider;
 
     /**
      * @var \Mageplaza\Blog\Model\CommentFactory
@@ -88,82 +74,79 @@ class Frontend extends Template
     public $commentTree;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    public $objectManager;
-
-    /**
-     * @var \Magento\Framework\Filesystem
-     */
-    protected $_filesystem;
-
-    /**
-     * @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface
-     */
-    protected $_themeProvider;
-
-    /**
      * Frontend constructor.
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
      * @param \Mageplaza\Blog\Model\CommentFactory $commentFactory
      * @param \Mageplaza\Blog\Model\LikeFactory $likeFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Config\Model\Config\Source\Design\Robots $metaRobots
-     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Mageplaza\Blog\Helper\Data $helperData
-     * @param \Magento\Framework\View\Element\Template\Context $templateContext
-     * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
-     * @param \Magento\Framework\Image\AdapterFactory $imageFactory
-     * @param \Magento\Framework\View\Design\Theme\ThemeProviderInterface $_themeProvider
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $data
      */
     public function __construct(
-        DateTime $dateTime,
+        Context $context,
+        FilterProvider $filterProvider,
         CommentFactory $commentFactory,
         LikeFactory $likeFactory,
         CustomerRepositoryInterface $customerRepository,
-        Robots $metaRobots,
-        Context $context,
         HelperData $helperData,
-        TemplateContext $templateContext,
-        FilterProvider $filterProvider,
-        AdapterFactory $imageFactory,
-        ThemeProviderInterface $_themeProvider,
-        ObjectManagerInterface $objectManager,
         array $data = []
     )
     {
-        $this->dateTime           = $dateTime;
-        $this->mpRobots           = $metaRobots;
+        $this->filterProvider     = $filterProvider;
         $this->cmtFactory         = $commentFactory;
         $this->likeFactory        = $likeFactory;
         $this->customerRepository = $customerRepository;
         $this->helperData         = $helperData;
-        $this->store              = $templateContext->getStoreManager();
-        $this->filterProvider     = $filterProvider;
-        $this->_filesystem        = $context->getFilesystem();
-        $this->_themeProvider     = $_themeProvider;
-        $this->objectManager      = $objectManager;
+        $this->store              = $context->getStoreManager();
+
         parent::__construct($context, $data);
     }
 
     /**
-     * @return mixed
+     * @return array|string
      */
-    public function getCurrentPost()
+    public function getPostCollection()
     {
-        return $this->helperData->getPost($this->getRequest()->getParam('id'));
+        $collection = $this->getCollection();
+
+        if ($collection->getSize()) {
+            $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'mpblog.post.pager');
+
+            $blogLimit = (int)$this->getBlogConfig('general/pagination');
+            $pager->setLimit($blogLimit ?: 10)
+                ->setCollection($collection);
+
+            $this->setChild('pager', $pager);
+        }
+
+        return $collection;
     }
 
     /**
-     * @param $post
+     * Override this function to apply collection for each type
      *
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     */
+    protected function getCollection()
+    {
+        return $this->helperData->getPostCollection();
+    }
+
+    /**
      * @return string
      */
-    public function getUrlByPost($post)
+    public function getPagerHtml()
     {
-        return $this->helperData->getUrlByPost($post);
+        return $this->getChildHtml('pager');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGridView()
+    {
+        return $this->helperData->getBlogConfig('general/display_style') == DisplayType::GRID;
     }
 
     /**
@@ -177,17 +160,11 @@ class Frontend extends Template
     }
 
     /**
-     * @param $createdAt
-     *
-     * @return \DateTime
+     * @return string
      */
-    public function getCreatedAtStoreDate($createdAt)
+    public function getRssUrl()
     {
-        return $this->_localeDate->scopeDate(
-            $this->_storeManager->getStore(),
-            $createdAt,
-            true
-        );
+        return $this->helperData->getBlogUrl('post/rss');
     }
 
     /**
@@ -211,29 +188,33 @@ class Frontend extends Template
     }
 
     /**
-     * filter post by store
-     * return true/false
+     * @param $code
+     * @param null $storeId
+     * @return mixed
      */
-    public function filterPost($post)
-    {
-        $storeId     = $this->store->getStore()->getId();
-        $postStoreId = $post->getStoreIds() != null ? explode(
-            ',',
-            $post->getStoreIds()
-        ) : '-1';
-        if (is_array($postStoreId)
-            && (in_array($storeId, $postStoreId)
-                || in_array('0', $postStoreId))
-        ) {
-            return true;
-        }
-
-        return false;
-    }
-
     public function getSeoConfig($code, $storeId = null)
     {
         return $this->helperData->getSeoConfig($code, $storeId);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getBreadcrumbsData()
+    {
+        $label = $this->helperData->getBlogName();
+
+        $data = [
+            'label' => $label,
+            'title' => $label,
+            'link'  => $this->helperData->getBlogUrl()
+        ];
+
+        if ($this->getRequest()->getFullActionName() == 'mpblog_post_index') {
+            unset($data['link']);
+        }
+
+        return $data;
     }
 
     /**
@@ -242,69 +223,22 @@ class Frontend extends Template
      */
     protected function _prepareLayout()
     {
+        if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
+            $breadcrumbs->addCrumb('home', [
+                'label' => __('Home'),
+                'title' => __('Go to Home Page'),
+                'link'  => $this->_storeManager->getStore()->getBaseUrl()
+            ])
+                ->addCrumb($this->helperData->getRoute(), $this->getBreadcrumbsData());
+
+            $this->applySeoCode();
+        }
         $actionName       = $this->getRequest()->getFullActionName();
         $breadcrumbs      = $this->getLayout()->getBlock('breadcrumbs');
-        $breadcrumbsLabel = ucfirst(
-            $this->helperData->getBlogConfig('general/name')
-                ?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX
-        );
-        $breadcrumbsLink  = $this->helperData->getBlogConfig(
-            'general/url_prefix'
-        ) ?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX;
+        $breadcrumbsLabel = ucfirst($this->helperData->getBlogName());
+        $breadcrumbsLink  = $this->helperData->getRoute();
         if ($breadcrumbs) {
-            if ($actionName == 'mpblog_post_index'
-                || $actionName == 'mpblog_month_view'
-            ) {
-                $breadcrumbs->addCrumb(
-                    'home',
-                    ['label' => __('Home'), 'title' => __('Go to Home Page'),
-                     'link'  => $this->_storeManager->getStore()->getBaseUrl()]
-                )->addCrumb(
-                    $this->helperData->getBlogConfig('general/url_prefix'),
-                    ['label' => $breadcrumbsLabel,
-                     'title' => $this->helperData->getBlogConfig(
-                         'general/url_prefix'
-                     )]
-                );
-                $this->applySeoCode();
-            } elseif ($actionName == 'mpblog_post_view') {
-                $post = $this->getCurrentPost();
-                if ($this->filterPost($post)) {
-                    $category = $post->getSelectedCategoriesCollection()
-                        ->addFieldToFilter('enabled', 1)->getFirstItem();
-                    $breadcrumbs->addCrumb(
-                        'home',
-                        ['label' => __('Home'),
-                         'title' => __('Go to Home Page'),
-                         'link'  => $this->_storeManager->getStore()
-                             ->getBaseUrl()]
-                    );
-                    $breadcrumbs->addCrumb(
-                        $this->helperData->getBlogConfig('general/url_prefix'),
-                        ['label'   => $breadcrumbsLabel,
-                         'title'   => $this->helperData->getBlogConfig(
-                             'general/url_prefix'
-                         ), 'link' => $this->_storeManager->getStore()
-                                ->getBaseUrl() . $breadcrumbsLink]
-                    );
-                    if ($category->getId()) {
-                        $breadcrumbs->addCrumb(
-                            $category->getUrlKey(),
-                            ['label' => ucfirst($category->getName()),
-                             'title' => $category->getName(),
-                             'link'  => $this->helperData->getCategoryUrl(
-                                 $category->getUrlKey()
-                             )]
-                        );
-                    }
-                    $breadcrumbs->addCrumb(
-                        $post->getUrlKey(),
-                        ['label' => ucfirst($post->getName()),
-                         'title' => $post->getName()]
-                    );
-                    $this->applySeoCode($post);
-                }
-            } elseif ($actionName == 'mpblog_category_view') {
+            if ($actionName == 'mpblog_category_view') {
                 $category = $this->helperData->getCategoryByParam(
                     'id',
                     $this->getRequest()->getParam('id')
@@ -420,146 +354,30 @@ class Frontend extends Template
             }
         }
 
-
         return parent::_prepareLayout();
     }
 
     /**
-     * @param null $post
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return $this
      */
-    public function applySeoCode($post = null)
+    public function applySeoCode()
     {
-        if ($post) {
-            $title       = $post->getMetaTitle() ?: $post->getName();
-            $description = $post->getMetaDescription();
-            $keywords    = $post->getMetaKeywords();
-            $pageTitle   = $post->getName();
-            $this->pageConfig->setRobots($post->getMetaRobots());
-        } else {
-            $title       = $this->getSeoConfig('meta_title') ?: $this->helperData->getBlogConfig('general/name');
-            $description = $this->getSeoConfig('meta_description');
-            $keywords    = $this->getSeoConfig('meta_keywords');
-            $pageTitle   = $this->helperData->getBlogConfig('general/name');
-        }
-
+        $title = $this->getSeoConfig('meta_title') ?: $this->helperData->getBlogConfig('general/name');
         $this->pageConfig->getTitle()->set($title ?: __('Blog'));
+
+        $description = $this->getSeoConfig('meta_description');
         $this->pageConfig->setDescription($description);
+
+        $keywords = $this->getSeoConfig('meta_keywords');
         $this->pageConfig->setKeywords($keywords);
 
+        $pageTitle     = $this->helperData->getBlogConfig('general/name');
         $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle) {
             $pageMainTitle->setPageTitle($pageTitle);
         }
-    }
 
-    /**
-     * @param null $type
-     * @param null $id
-     *
-     * @return array|string
-     */
-    public function getBlogPagination($type = null, $id = null)
-    {
-        $page     = $this->getRequest()->getParam('p');
-        $postList = '';
-        if ($type == null) {
-            $postList = $this->helperData->getPostList();
-        } elseif ($type == \Mageplaza\Blog\Helper\Data::CATEGORY) {
-            $postList = $this->helperData->getPostList(
-                \Mageplaza\Blog\Helper\Data::CATEGORY,
-                $id
-            );
-        } elseif ($type == \Mageplaza\Blog\Helper\Data::TAG) {
-            $postList = $this->helperData->getPostList(
-                \Mageplaza\Blog\Helper\Data::TAG,
-                $id
-            );
-        } elseif ($type == \Mageplaza\Blog\Helper\Data::TOPIC) {
-            $postList = $this->helperData->getPostList(
-                \Mageplaza\Blog\Helper\Data::TOPIC,
-                $id
-            );
-        } elseif ($type == \Mageplaza\Blog\Helper\Data::AUTHOR) {
-            $postList = $this->helperData->getPostList(
-                \Mageplaza\Blog\Helper\Data::AUTHOR,
-                $id
-            );
-        } elseif ($type == \Mageplaza\Blog\Helper\Data::MONTHLY) {
-            $postList = $this->helperData->getPostList(
-                \Mageplaza\Blog\Helper\Data::MONTHLY,
-                $id
-            );
-        }
-
-        if ($postList != '' && is_array($postList)) {
-            $limit     = (int)$this->getBlogConfig('general/pagination') ?: 1;
-            $numOfPost = count($postList);
-            $numOfPage = 1;
-            $countPost = count($postList);
-            if ($countPost > $limit) {
-                $numOfPage = ($numOfPost % $limit != 0) ? ($numOfPost / $limit)
-                    + 1 : ($numOfPost / $limit);
-
-                return $this->getPostPerPage(
-                    $page,
-                    $numOfPage,
-                    $limit,
-                    $postList
-                );
-            }
-
-            array_unshift($postList, $numOfPage);
-
-            return $postList;
-        }
-
-        return '';
-    }
-
-    /**
-     * @param null $page
-     * @param       $numOfPage
-     * @param       $limit
-     * @param array $array
-     *
-     * @return array
-     */
-    public function getPostPerPage(
-        $page = null,
-        $numOfPage,
-        $limit,
-        $array = []
-    )
-    {
-        $results    = [];
-        $firstIndex = 0;
-        $lastIndex  = $limit - 1;
-        if ($page) {
-            if ($page > $numOfPage || $page < 1) {
-                $page = 1;
-            }
-
-            $firstIndex = $limit * $page - $limit;
-            $lastIndex  = $firstIndex + $limit - 1;
-            if (!isset($array[$lastIndex])) {
-                for ($i = $lastIndex; $i >= $firstIndex; $i--) {
-                    if (isset($array[$i])) {
-                        $lastIndex = $i;
-                        break;
-                    }
-                }
-            }
-        }
-
-        for ($i = $firstIndex; $i <= $lastIndex; $i++) {
-            array_push($results, $array[$i]);
-        }
-
-        array_unshift($results, $numOfPage);
-
-        return $results;
+        return $this;
     }
 
     /**
@@ -575,14 +393,25 @@ class Frontend extends Template
         return $this->helperData->getSidebarConfig($code, $storeId);
     }
 
-    public function getAuthorByPost($authorId)
+    /**
+     * @param $post
+     * @return \Magento\Framework\Phrase|string
+     */
+    public function getPostInfo($post)
     {
-        return $this->helperData->getAuthorByPost($authorId);
-    }
+        $html = __('Posted on %1', $this->getDateFormat($post->getPublishDate()));
 
-    public function getAuthorUrl($author)
-    {
-        return $this->helperData->getAuthorUrl($author);
+        if ($categoryPost = $this->getPostCategoryHtml($post)) {
+            $html .= __('| Posted in %1', $categoryPost);
+        }
+
+        $author = $this->helperData->getAuthorByPost($post);
+        if ($author && $author->getName() && $this->helperData->showAuthorInfo()) {
+            $aTag = '<a class="mp-info" href="' . $author->getUrl() . '">' . $this->escapeHtml($author->getName()) . '</a>';
+            $html .= __('| By: %1', $aTag);
+        }
+
+        return $html;
     }
 
     /**
@@ -611,7 +440,6 @@ class Frontend extends Template
         $comments = $this->cmtFactory->create()->getCollection()
             ->addFieldToFilter('post_id', $postId);
         foreach ($comments as $comment) {
-//        	\Zend_Debug::dump($comment->getData());die();
             array_push($result, $comment->getData());
         }
 
@@ -715,9 +543,7 @@ class Frontend extends Template
      */
     public function getDefaultImageUrl()
     {
-        return $this->getViewFileUrl(
-            'Mageplaza_Blog::media/images/Mageplaza-logo.png'
-        );
+        return $this->getViewFileUrl('Mageplaza_Blog::media/images/mageplaza-logo-default.png');
     }
 
     /**
@@ -747,202 +573,11 @@ class Frontend extends Template
      */
     public function resizeImage($image, $width = null, $height = null)
     {
+        if (is_null($width)) {
+            $width  = $this->helperData->getBlogConfig('general/resize_image/resize_width');
+            $height = $this->helperData->getBlogConfig('general/resize_image/resize_height');
+        }
+
         return $this->helperData->getImageHelper()->resizeImage($image, $width, $height);
     }
-
-    /**
-     * Get Current Theme Name Function
-     * @return string
-     */
-    public function getCurrentTheme()
-    {
-        $themeId = $this->_scopeConfig->getValue(
-            \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $this->_storeManager->getStore()->getId()
-        );
-
-        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
-        $theme = $this->_themeProvider->getThemeById($themeId);
-
-        return $theme->getCode();
-    }
-
-
-    //************************* Page Pagination Design ***************************
-
-    /**
-     * @return mixed
-     */
-    public function getPageParam()
-    {
-        return $this->getRequest()->getParam('p');
-    }
-
-    /**
-     * @param $page
-     * @return string
-     */
-    public function getPageLink($page)
-    {
-
-        if ($this->getMonthParam()) {
-            $pageLink = $this->getUrl('*/*/*', ['_use_rewrite' => true]) . '?month=' . $this->getMonthParam() . '&p=' . $page;
-        } else {
-            $pageLink = $this->getUrl('*/*/*', ['_use_rewrite' => true]) . '?p=' . $page;
-        }
-
-        return $pageLink;
-    }
-
-    /**
-     * @param $currentPage
-     * @return string
-     */
-    public function getPrevPage($currentPage)
-    {
-        $html = '';
-
-        if ($currentPage > 1) {
-            $html = '<li class="item mp-page-item">
-							<a href="' . $this->getPageLink($currentPage - 1) . '" class="page">
-							<span class="label">' . __('Page') . '</span>
-								<span><</span>
-						</a>
-					</li>';
-        }
-
-        return $html;
-    }
-
-    /**
-     * @param $currentPage
-     * @return string
-     */
-    public function getFirstPage($currentPage)
-    {
-        $html  = '';
-        $start = 1;
-
-        if ($currentPage > ($start + 2)) {
-
-            $html = '<li class="item mp-page-item">
-                    <a href="' . $this->getPageLink($start) . '" class="page">
-                    <span class="label">' . __('Page') . '</span>
-                        <span>' . $start . '</span>
-                </a>
-            </li>';
-            if ($currentPage > ($start + 3)) {
-                $html .= '<li class="item mp-page-item">
-                        <span>...</span>
-            </li>';
-            }
-
-        }
-
-        return $html;
-    }
-
-    /**
-     * @param $currentPage
-     * @param $end
-     * @return string
-     */
-    public function getLastPage($currentPage, $end)
-    {
-        $html = '';
-
-        if ($currentPage < ($end - 2)) {
-
-            if ($currentPage < ($end - 3)) {
-                $html = '<li class="item mp-page-item">
-                    <span>...</span>
-            			</li>';
-            }
-            $html .= '<li class="item mp-page-item">
-                <a href="' . $this->getPageLink($end) . '" class="page">
-                <span class="label">' . __('Page') . '</span>
-                    <span>' . $end . '</span>
-            </a>
-            </li>';
-
-        }
-
-        return $html;
-    }
-
-    /**
-     * @param $currentPage
-     * @param $countPage
-     * @return string
-     */
-    public function getNextPage($currentPage, $countPage)
-    {
-        $html = '';
-
-
-        if ($currentPage < $countPage) {
-
-            $html = '<li class="item mp-page-item">
-                    <a href="' . $this->getPageLink($currentPage + 1) . '" class="page">
-                    <span class="label">' . __('Page') . '</span>
-                        <span>></span>
-                </a>
-            </li>';
-
-
-        }
-
-        return $html;
-    }
-
-    /**
-     * @param $currentPage
-     * @param $relatedPage
-     * @param $i
-     * @return string
-     */
-    public function getAllPage($currentPage, $relatedPage, $i)
-    {
-        $start = 1;
-
-
-        if ($currentPage == $start) {
-            $html = '<li class="item mp-page-item">';
-
-            if ($currentPage == $i) {
-                $html .= '<span class="selected_page">' . $i . '</span>';
-
-            } else {
-
-                $html .= '<a href="' . $this->getPageLink($i) . '" class="page">
-                        <span class="label">' . __('Page') . '</span>
-                            <span>' . $i . '</span>
-                    </a>';
-
-            }
-            $html .= '</li>';
-
-        } else {
-
-            $html = '<li class="item mp-page-item">';
-
-            if ($currentPage == $relatedPage) {
-
-                $html .= '<span class="selected_page">' . $relatedPage . '</span>';
-
-            } else {
-
-                $html .= '<a href="' . $this->getPageLink($relatedPage) . '" class="page">
-                            <span class="label">' . __('Page') . '</span>
-                                <span>' . $relatedPage . '</span>
-                        </a>
-						</li>';
-
-            }
-        }
-
-        return $html;
-    }
-
 }

@@ -41,7 +41,7 @@ class Listpost extends Frontend
     /**
      * @return string
      */
-    public function checkRss()
+    public function getRssUrl()
     {
         return $this->helperData->getBlogUrl('post/rss');
     }

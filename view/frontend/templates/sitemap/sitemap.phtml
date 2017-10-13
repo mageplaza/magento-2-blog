@@ -1,9 +1,32 @@
 <?php
-	$helper = $this->helper('Mageplaza\Blog\Helper\Data');
-	$posts = $helper->getPostList();
-	$categories = $helper->getCategoryList();
-	$tags = $helper->getTagList();
-	$topics = $helper->getTopicList();
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+use Mageplaza\Blog\Helper\Data;
+
+/** @var Data $helper */
+$helper         = $this->helper(Data::class);
+$posts      = $helper->getPostList();
+$categories = $helper->getCategoryList();
+$tags       = $helper->getTagList();
+$topics     = $helper->getTopicList();
 ?>
 <?php
 /**
@@ -14,7 +37,7 @@
 	<h2><?php echo count($posts) == 1 ? __('Post') : __('Posts') ?></h2>
 	<ul>
 		<?php foreach ($posts as $post): ?>
-			<li><a href="<?php echo substr($helper->getUrlByPost($post),0,-1) ?>"><?php echo $post->getName(); ?></a> </li>
+			<li><a href="<?php echo $post->getUrl() ?>"><?php echo $post->getName(); ?></a> </li>
 		<?php endforeach; ?>
 	</ul>
 <?php endif; ?>
@@ -28,7 +51,7 @@ if (!empty($categories)):
 	<h2><?php echo count($categories) == 1 ? __('Category') : __('Categories') ?></h2>
 	<ul>
 		<?php foreach ($categories as $category): ?>
-			<li><a href="<?php echo $helper->getCategoryUrl($category->getUrlKey()) ?>"><?php echo $category->getName(); ?></a> </li>
+			<li><a href="<?php echo $helper->getBlogUrl($category, Data::TYPE_CATEGORY) ?>"><?php echo $category->getName(); ?></a> </li>
 		<?php endforeach; ?>
 	</ul>
 <?php endif; ?>
@@ -42,7 +65,7 @@ if (!empty($tags)):
 	<h2><?php echo count($tags) == 1 ? __('Tag') : __('Tags') ?></h2>
 	<ul>
 		<?php foreach ($tags as $tag): ?>
-			<li><a href="<?php echo $helper->getTagUrl($tag) ?>"><?php echo $tag->getName(); ?></a> </li>
+			<li><a href="<?php echo $helper->getBlogUrl($tag, Data::TYPE_TAG) ?>"><?php echo $tag->getName(); ?></a> </li>
 		<?php endforeach; ?>
 	</ul>
 <?php endif; ?>
@@ -56,7 +79,7 @@ if (!empty($topics)):
     <h2><?php echo count($topics) == 1 ? __('Topic') : __('Topics') ?></h2>
     <ul>
 		<?php foreach ($topics as $topic): ?>
-            <li><a href="<?php echo $helper->getTopicUrl($topic) ?>"><?php echo $topic->getName(); ?></a> </li>
+            <li><a href="<?php echo $helper->getBlogUrl($topic, Data::TYPE_TOPIC) ?>"><?php echo $topic->getName(); ?></a> </li>
 		<?php endforeach; ?>
 	</ul>
 <?php endif; ?>

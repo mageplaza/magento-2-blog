@@ -279,6 +279,16 @@ class Post extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * @return bool|string
+     */
+    public function getUrl()
+    {
+        $url = $this->helperData->getUrlByPost($this);
+
+        return substr($url, 0, -1);
+    }
+
+    /**
      * Get identities
      *
      * @return array
@@ -426,50 +436,30 @@ class Post extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return array
+     * @param null $limit
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection|null
      */
-    public function getTopicIds()
+    public function getRelatedPostsCollection($limit = null)
     {
-        if (!$this->hasData('topic_ids')) {
-            $ids = $this->_getResource()->getTopicIds($this);
-            $this->setData('topic_ids', $ids);
-        }
-
-        return (array)$this->_getData('topic_ids');
-    }
-
-    /**
-     * get category id string
-     * @return mixed
-     */
-    public function getTopicSting()
-    {
-        if ($this->getTopicIds()) {
-            return implode(',', $this->getTopicIds());
-        } else {
-            return '';
-        }
-    }
-
-    /**
-     * get related posts
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
-     */
-    public function getRelatedPostsCollection()
-    {
-        if ($this->getTopicSting()) {
+        $topicIds = $this->_getResource()->getTopicIds($this);
+        if (sizeof($topicIds)) {
             $collection = $this->postCollectionFactory->create();
+            $collection->getSelect()
+                ->join(
+                    ['topic' => $this->getResource()->getTable('mageplaza_blog_post_topic')],
+                    'main_table.post_id=topic.post_id AND topic.post_id != "' . $this->getId() . '" AND topic.topic_id IN (' . implode(',', $topicIds) . ')',
+                    ['position']
+                )->group('main_table.post_id');
 
-            $collection->getSelect()->join(
-                $this->getResource()->getTable('mageplaza_blog_post_topic'),
-                'main_table.post_id=' . $this->getResource()->getTable('mageplaza_blog_post_topic') . '.post_id AND ' . $this->getResource()->getTable('mageplaza_blog_post_topic') . '.post_id != "'
-                . $this->getId() . '" AND ' . $this->getResource()->getTable('mageplaza_blog_post_topic') . '.topic_id IN (' . $this->getTopicSting() . ')',
-                ['position']
-            )->group('main_table.post_id');
-            $this->relatedPostCollection = $collection;
+            if ($limit = (int)$this->helperData->getBlogConfig('general/related_post')) {
+                $collection->getSelect()
+                    ->limit($limit);
+            }
+
+            return $collection;
         }
 
-        return $this->relatedPostCollection;
+        return null;
     }
 
     /**

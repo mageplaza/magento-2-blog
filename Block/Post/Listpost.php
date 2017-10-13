@@ -30,11 +30,10 @@ use Mageplaza\Blog\Block\Frontend;
 class Listpost extends Frontend
 {
     /**
-     * @return string
+     * @inheritdoc
      */
-    public function checkRss()
+    protected function _prepareLayout()
     {
-        return $this->helperData->getBlogUrl('post/rss');
+        parent::_prepareLayout();
     }
-
 }

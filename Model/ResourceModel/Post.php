@@ -405,14 +405,8 @@ class Post extends AbstractDb
     public function getTopicIds(\Mageplaza\Blog\Model\Post $post)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()->from(
-            $this->postTopicTable,
-            'topic_id'
-        )
-            ->where(
-                'post_id = ?',
-                (int)$post->getId()
-            );
+        $select  = $adapter->select()->from($this->postTopicTable, 'topic_id')
+            ->where('post_id = ?', (int)$post->getId());
 
         return $adapter->fetchCol($select);
     }

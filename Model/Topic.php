@@ -94,13 +94,12 @@ class Topic extends AbstractModel
     public $postCollectionFactory;
 
     /**
-     * constructor
-     *
-     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
+     * Topic constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -176,9 +175,8 @@ class Topic extends AbstractModel
         if ($this->postCollection === null) {
             $collection = $this->postCollectionFactory->create();
             $collection->join(
-                $this->getResource()->getTable('mageplaza_blog_post_topic'),
-                'main_table.post_id=' . $this->getResource()->getTable('mageplaza_blog_post_topic') . '.post_id 
-                AND ' . $this->getResource()->getTable('mageplaza_blog_post_topic') . '.topic_id=' . $this->getId(),
+                ['topic' => $this->getResource()->getTable('mageplaza_blog_post_topic')],
+                'main_table.post_id=topic.post_id AND topic.topic_id=' . $this->getId(),
                 ['position']
             );
             $this->postCollection = $collection;

@@ -20,15 +20,12 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="mpblog_design" />
     <body>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Author\Listpost" name="mp.blog.author.post.list" as="mpblog_author_post" template="Mageplaza_Blog::category/post/list.phtml">
-                <block class="Mageplaza\Blog\Block\Author\Widget" name="mp.blog.view.sidebar.author" as="mpblog_sidebarauthor" template="Mageplaza_Blog::author/widget.phtml"/>
-                <block class="Mageplaza\Blog\Block\MonthlyArchive\Widget" name="mp.blog.view.sidebar.monthly" as="mpblog_sidebarmonthly" template="Mageplaza_Blog::monthly/widget.phtml"/>
-                <block class="Mageplaza\Blog\Block\Frontend" name="mp.blog.copy.right" as="mpblog_copyright" template="Mageplaza_Blog::html/copyright.phtml"/>
-            </block>
+            <block class="Mageplaza\Blog\Block\Author\Listpost" name="mpblog.post.list" as="mpblog_post" template="Mageplaza_Blog::post/list.phtml" />
         </referenceContainer>
     </body>
 </page>

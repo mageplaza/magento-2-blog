@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block\MonthlyArchive;
 
 use Mageplaza\Blog\Block\Frontend;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Widget
@@ -59,7 +60,7 @@ class Widget extends Frontend
      */
     public function getMonthlyUrl($month)
     {
-        return $this->helperData->getMonthlyUrl($month);
+        return $this->helperData->getBlogUrl($month, Data::TYPE_MONTHLY);
     }
 
     /**

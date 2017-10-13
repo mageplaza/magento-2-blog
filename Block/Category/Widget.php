@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Block\Category;
 
 use Mageplaza\Blog\Block\Adminhtml\Category\Tree;
 use Mageplaza\Blog\Block\Frontend;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Widget
@@ -80,6 +81,6 @@ class Widget extends Frontend
      */
     public function getCategoryUrl($category)
     {
-        return $this->helperData->getCategoryUrl($category);
+        return $this->helperData->getBlogUrl($category, Data::TYPE_CATEGORY);
     }
 }

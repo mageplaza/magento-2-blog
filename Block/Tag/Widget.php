@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block\Tag;
 
 use Mageplaza\Blog\Block\Frontend;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Widget
@@ -43,7 +44,7 @@ class Widget extends Frontend
      */
     public function getTagUrl($tag)
     {
-        return $this->helperData->getTagUrl($tag);
+        return $this->helperData->getBlogUrl($tag, Data::TYPE_TAG);
     }
 
     /**

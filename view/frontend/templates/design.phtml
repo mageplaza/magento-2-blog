@@ -19,19 +19,35 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-/** @var \Mageplaza\Blog\Block\Frontend $block */
+/** @var \Mageplaza\Blog\Block\Design $block */
 ?>
-<?php $color  = $block->getBlogConfig('general/font_color'); ?>
+
+<script type="text/javascript">
+    require(['jquery'], function ($) {
+        var isSidebarRight = <?php echo $block->isSidebarRight(); ?>,
+            body = $('body');
+        body.removeClass('page-layout-1column');
+        if (isSidebarRight) {
+            body.addClass('page-layout-2columns-right');
+        } else {
+            body.addClass('page-layout-2columns-left');
+        }
+    });
+</script>
+
+<?php $color = $block->getHelper()->getBlogConfig('general/font_color'); ?>
 <style type="text/css">
     /*Post List Page Css*/
     ul.mp-blog-pages {
         text-align: center;
     }
-    li.mp-page-item{
+
+    li.mp-page-item {
         display: inline-block;
         margin-right: 5px;
     }
-    li.mp-page-item a{
+
+    li.mp-page-item a {
         display: block;
         width: 25px;
         height: 25px;
@@ -40,15 +56,18 @@
         border-radius: 2px;
         color: <?php echo $color ;?>;
     }
-    li.mp-page-item a:hover{
+
+    li.mp-page-item a:hover {
         text-decoration: none !important;
         background: <?php echo $color ;?>;
         color: #fff;
     }
-    li.mp-page-item a span.label{
+
+    li.mp-page-item a span.label {
         display: none;
     }
-    li.mp-page-item span.selected_page{
+
+    li.mp-page-item span.selected_page {
         display: block;
         width: 25px;
         height: 25px;
@@ -60,14 +79,15 @@
     }
 
     /*Post List Content Css*/
-    .post-info-wraper h2.mp-post-title{
+    .post-info-wraper h2.mp-post-title {
         margin-top: 0px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         color: <?php echo $color ?>;
     }
-    .nav .nav-tabs li.active{
+
+    .nav .nav-tabs li.active {
         border-top-color: <?php echo $color ?>;
     }
 
@@ -76,34 +96,42 @@
     .about-admin h4.admin-title a:hover, h2.mp-post-title a, .mp-post-meta-info a.mp-read-more, .mp-post-meta-info a.mp-read-more:hover, .mp-post-info a.mp-info, .mp-post-info a.mp-info:hover {
         color: <?php echo $color ?>;
     }
-    .relate-content a.mp-relate-link{
+
+    .relate-content a.mp-relate-link {
         color: #0a0a0a;
     }
-    ul.menu-categories a.list-categories:hover, .products-same-post a.product-item-link:hover, h2.mp-post-title a:hover, h2.mp-post-title a:focus, .mp-post-info a.mp-info:hover, .relate-content a.mp-relate-link:hover, .owl-item a.mp-relate-link:hover, .owl-item a.mp-relate-link:focus{
+
+    ul.menu-categories a.list-categories:hover, .products-same-post a.product-item-link:hover, h2.mp-post-title a:hover, h2.mp-post-title a:focus, .mp-post-info a.mp-info:hover, .relate-content a.mp-relate-link:hover, .owl-item a.mp-relate-link:hover, .owl-item a.mp-relate-link:focus {
         color: <?php echo $color ?>;
         text-decoration: none;
     }
-    ul.nav-tabs li.active{
+
+    ul.nav-tabs li.active {
         border-top-color: <?php echo $color ?>;
         border-top-style: solid;
     }
+
     a.label.label-default.tags-list:hover {
         background: <?php echo $color ?>;
         border: 1px solid;
         color: #fff !important;
     }
-    a.label.label-default.tags-list:focus{
+
+    a.label.label-default.tags-list:focus {
         background: <?php echo $color ?>;
         color: #fff !important;
     }
-    ul.menu-categories a.list-categories:hover i, .nav-tabs a:hover{
+
+    ul.menu-categories a.list-categories:hover i, .nav-tabs a:hover {
         color: <?php echo $color ?> !important;
     }
+
     #mostview a.list-post-tabs:hover, #mostrecent a.list-post-tabs:hover {
         text-decoration: none;
         background: #fbfbfb;
         color: <?php echo $color ?>;
     }
+
     .mpblog-product-name {
         font-size: 18px;
         color: <?php echo $color ?> !important;
@@ -115,14 +143,17 @@
     .mp-sidebar a.sitemap-link {
         color: <?php echo $color ?> !important;
     }
-    .mp-sidebar a.sitemap-link:hover, .menu-archives a.list-archives:hover{
+
+    .mp-sidebar a.sitemap-link:hover, .menu-archives a.list-archives:hover {
         text-decoration: none !important;
         color: <?php echo $color ?> !important;
     }
+
     .menu-archives {
         list-style: none;
         padding-left: 8px;
     }
+
     .menu-archives a.list-archives {
         color: inherit;
     }
@@ -133,32 +164,37 @@
         color: #fff;
         border-color: #999 !important;
     }
+
     button.default-cmt__cmt-login__btn-login {
         background: <?php echo $color ?> !important;
         border-color: #999 !important;
     }
+
     span.cmt-row__cmt-username {
         font-weight: 600;
         color: <?php echo $color ?>;
     }
-    a.interactions__btn-actions{
+
+    a.interactions__btn-actions {
         color: <?php echo $color ?> !important;
     }
 
     /*Widget CSS*/
-    .widget-title a, .widget-title a:hover, .widget-title a:focus{
+    .widget-title a, .widget-title a:hover, .widget-title a:focus {
         color: <?php echo $color ?>;
         font-size: 26px;
     }
-    .widget-title a:hover, .widget-title a:focus{
+
+    .widget-title a:hover, .widget-title a:focus {
         text-decoration: none;
     }
 
     /*Author CSS*/
-    .author-name h3{
+    .author-name h3 {
         color: <?php echo $color ?>;
         text-align: center;
     }
+
     .author-image img.img-responsive {
         height: 200px;
         width: 100%;
@@ -168,7 +204,8 @@
         margin-top: 15px;
         margin-bottom: 20px;
     }
-    .share-col-right{
+
+    .share-col-right {
         display: inline-block;
         width: 50%;
     }
@@ -180,34 +217,39 @@
         padding-bottom: 5px !important;
         border: none !important;
     }
+
     .mp-sidebar .category-level4 {
         padding-left: 30px !important;
     }
+
     .category-level3, .category-level4 {
         display: none;
     }
-    .mp-sidebar .menu-categories i{
+
+    .mp-sidebar .menu-categories i {
         cursor: pointer;
     }
 
     @media (min-width: 768px) {
-        .post-list-body{
+        .post-list-body {
             display: flex;
             flex-wrap: wrap;
         }
     }
+
     @media (max-width: 767px) {
-        .share-col-right, ul.nav-tabs li{
+        .share-col-right, ul.nav-tabs li {
             width: 100%;
         }
-        ul.nav-tabs li.active{
+
+        ul.nav-tabs li.active {
             background: <?php echo $color ?>;
             color: #ffffff;
         }
     }
 
     /* Footer Copyright */
-    .mp-footer{
+    .mp-footer {
         margin-top: 50px;
         font-size: 8px !important;
         display: block;
@@ -215,7 +257,8 @@
         float: right;
         text-transform: inherit;
     }
-    .mp-footer h3{
+
+    .mp-footer h3 {
         margin-top: 50px;
         font-size: 8px !important;
         display: block;
@@ -223,45 +266,92 @@
         float: right;
         text-transform: inherit;
     }
-    .mp-footer-links-light{
+
+    .mp-footer-links-light {
         color: #E8E8E8 !important;
         margin: 0;
         padding: 0;
         border: 0;
         vertical-align: baseline;
     }
+
     .mp-footer-links-light a {
         color: #E8E8E8 !important;
     }
 
+    .post-image {
+        min-height: 250px;
+        min-width: 250px;
+        position: relative;
+    }
+    .post-image img.img-responsive{
+        max-height: 100%;
+        max-width: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        margin: auto;
+    }
+
+    .post-item-wraper{padding: 10px !important;}
+    .post-item-list .post-image{
+        display: table-cell;
+    }
+    .post-item-list .post-info-wraper{
+        display: table-cell;
+        vertical-align: top;
+    }
+
+    <?php if ($block->getHelper()->getBlogConfig('comment/facebook_colorscheme') == "dark"):?>
+    .mp-comment .box-collateral span{
+        background-color: #3e2f3a !important;
+    }
+    <?php endif; ?>
+    .post-same-topics .relate-content-container{
+        display: flex;
+        flex-wrap: wrap;
+    }
+
     /*Compatible with YourStore Theme*/
-<?php if ($block->getCurrentTheme() == "Etheme/yourstore") :?>
-    .post-list-container, .mp-blog-rss, .post-view, .mp-blog-rss{
+    <?php if ($block->getCurrentTheme() == "Etheme/yourstore") :?>
+    .post-list-container, .mp-blog-rss, .post-view, .mp-blog-rss {
         width: 85%;
         margin: auto;
     }
-    .products-same-post, .post-same-topics{
+
+    .products-same-post, .post-same-topics {
         border-bottom: solid 1px #dfdfdf;
     }
+
     @media (min-width: 768px) {
-        <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1) : ?>
-            .post-list-content{border-right: solid 1px #dfdfdf;  }
-        <?php else:?>
-            .post-list-content{border-left: solid 1px #dfdfdf;  }
-        <?php endif; ?>
+    <?php if ($block->getHelper()->getBlogConfig('sidebar/sidebar_left_right')): ?>
+        .post-list-content {
+            border-right: solid 1px #dfdfdf;
+
+    <?php else:?>
+        .post-list-content {
+            border-left: solid 1px #dfdfdf;
+        }
+
+    <?php endif; ?>
     }
+
     @media (min-width: 1024px) {
-        .products-same-post li{
+        .products-same-post li {
             height: 400px;
             width: 24.5% !important;
         }
     }
+
     @media (min-width: 1440px) {
-        .products-same-post li{
+        .products-same-post li {
             height: 500px;
             width: 16.67% !important;
         }
     }
-<?php endif;?>
+
+    <?php endif;?>
 </style>
 

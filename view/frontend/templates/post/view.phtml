@@ -18,245 +18,140 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
+use Mageplaza\Blog\Model\Config\Source\Comments\Type;
+
+/** @var \Mageplaza\Blog\Block\Post\View $block */
+
+/** @var \Mageplaza\Blog\Helper\Data $helper */
+$helper = $this->helper(\Mageplaza\Blog\Helper\Data::class);
 ?>
 <?php
-$_post = $block->getCurrentPost();
-$author = $block->getAuthorByPost($_post->getAuthorId());
+$_post = $block->getPost();
+
+$author = $helper->getAuthorByPost($_post);
 $authorName = $author !== null ? $author->getName() : '';
-$modifier = $block->getAuthorByPost($_post->getModifierId());
+
+$modifier = $helper->getAuthorByPost($_post->getModifierId());
 $modifierName = $modifier !== null ? $modifier->getName() : '';
 ?>
-<?php $checkRss = $block->checkRss();
-if ($checkRss):
-	?>
-    <div class="mp-blog-rss">
-            <a href="<?php echo $checkRss ?>" class="bb-rss-icon"><img src="
-                <?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px"> </a>
-        </div>
-<?php endif; ?>
-<?php if($block->filterPost($_post)): ?>
+<div class="mp-blog-rss">
+    <a href="<?php echo $block->getRssUrl() ?>" class="bb-rss-icon">
+        <img src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px">
+    </a>
+</div>
 
-<?php if ($block->getBlogConfig('share/enabled')): ?>
-	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $block->getBlogConfig('share/pubid_id') ?>"
-			async="async"></script>
-<?php endif; ?>
-        <div class="mpcss post-view" id="mpblog-list-container">
-            <div class="row">
-                <?php if ($block->getBlogConfig('sidebar/sidebar_left_right')==1){
-				?>
-                <div class="post-list-content col-md-9 col-sm-8">
-                    <div class="post-title col-xs-12" style="margin-bottom: 20px;">
-                        <h1><?php echo $_post->getName();?></h1>
-                    </div>
-                    <div class="post-image col-xs-12">
-                       <?php if ($_post->getImage()) : ?>
-                           <a class="fancybox" href="<?php echo $block->getImageUrl($_post->getImage()); ?>">
-                               <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
-                           </a>
-                       <?php endif; ?>
-                    </div>
-
-                    <div class="post-post_content col-xs-12">
-                         <?php echo $block->getPageFilter($_post->getPostContent()); ?>
-                    </div>
-
-                    <div class="col-xs-12">
-                        <hr/>
-                        <div class="mp-post-info">
-                            <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getPublishDate()); ?></span>
-                            <?php if ($block->getPostCategoryHtml($_post)) {?>
-                                | <span><i class="fa fa-folder-open-o"></i> <?php echo __('Categories:'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> </span>
-                            <?php } ?>
-                            <?php if ($block->getTagList($_post)) {?>
-                                | <span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span>
-                            <?php } ?>
-							<?php if ($authorName && $block->getBlogConfig('general/display_author')){ ?>
-                                | <span><i class="fa fa-user"></i> By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($author) ?>"><?php echo $authorName; ?></a></span>
-                                <?php if ($authorName != $modifierName && $modifierName){ ?>
-                                    | <span><i class="fa fa-edit"></i> Modify By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($modifier) ?>"><?php echo $modifierName;?></a><?php echo ' at : '.$_post->getUpdatedAt(); ?></span>
-								<?php } ?>
-							<?php } ?>
-
-                        </div>
-                        <hr/>
-                    </div>
-					<?php echo $this->getChildHtml('mpblog_copyright');?>
+<?php if($_post && $_post->getId()): ?>
+<div class="mpcss post-view" id="mpblog-list-container">
+    <div class="row">
+        <div class="post-list-content col-md-9 col-sm-8">
+            <div class="post-title col-xs-12" style="margin-bottom: 20px;">
+                <h1><?php echo $_post->getName();?></h1>
+            </div>
+            <div class="post-image col-xs-12">
+               <?php if ($_post->getImage()) : ?>
+                   <a class="fancybox" href="<?php echo $block->getImageUrl($_post->getImage()); ?>">
+                       <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
+                   </a>
+               <?php endif; ?>
+            </div>
+            <div class="post-post_content col-xs-12">
+                 <?php echo $block->getPageFilter($_post->getPostContent()); ?>
+            </div>
+            <div class="col-xs-12">
+                <hr/>
+                <div class="mp-post-info">
+                    <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getPublishDate()); ?></span>
+                    <?php if ($categoryHtml = $block->getPostCategoryHtml($_post)): ?>
+                        | <span><i class="fa fa-folder-open-o"></i><?php echo __('Categories: %1', $categoryHtml); ?></span>
+                    <?php endif; ?>
+                    <?php if ($tagList = $block->getTagList($_post)): ?>
+                        | <span><i class="fa fa-tags"></i><?php echo __('Tags: %1', $tagList); ?></span>
+                    <?php endif; ?>
+                    <?php if ($authorName && $helper->showAuthorInfo()): ?>
+                        | <span><i class="fa fa-user"></i><?php echo __('By: %1', '<a class="mp-info" href="' . $author->getUrl() . '">' . $authorName . '</a>') ?></span>
+                        <?php if ($authorName != $modifierName && $modifierName): ?>
+                            | <span><i class="fa fa-edit"></i><?php echo __('Modify By: %1 at %2', '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>', $_post->getUpdatedAt()) ?></span>
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </div>
-
-                <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
-                         <?php
-						 echo $this->getChildHtml('sidebar_search');
-						 echo $this->getChildHtml('mpblog_sidebarmostview');
-						 echo $this->getChildHtml('mpblog_sidebarcategory');
-						 echo $this->getChildHtml('mpblog_sidebarmonthly');
-						 echo $this->getChildHtml('mpblog_sidebartopic');
-						 echo $this->getChildHtml('mpblog_sidebartag');
-						 ?>
-                </div>
-					<?php
-				}else{ ?>
-
-                    <div class="mp-sidebar col-md-3 col-sm-4 col-xs-12">
-                         <?php
-						 echo $this->getChildHtml('sidebar_search');
-						 echo $this->getChildHtml('mpblog_sidebarmostview');
-						 echo $this->getChildHtml('mpblog_sidebarcategory');
-						 echo $this->getChildHtml('mpblog_sidebarmonthly');
-						 echo $this->getChildHtml('mpblog_sidebartopic');
-						 echo $this->getChildHtml('mpblog_sidebartag');
-						 ?>
-                    </div>
-
-                    <div class="post-list-content col-md-9 col-sm-8">
-                        <div class="post-title col-xs-12" style="margin-bottom: 20px;">
-                        <h1><?php echo $_post->getName();?></h1>
-                    </div>
-                        <div class="post-image col-xs-12">
-                           <?php if ($_post->getImage()) : ?>
-                               <a class="fancybox" href="<?php echo $block->getImageUrl($_post->getImage()); ?>">
-                                   <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
-                               </a>
-                           <?php endif; ?>
-                        </div>
-
-
-                        <div class="post-post_content col-xs-12">
-                            <?php echo $block->getPageFilter($_post->getPostContent()); ?>
-                        </div>
-
-                        <div class="col-xs-12">
-                            <hr/>
-                            <div class="mp-post-info">
-                                <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getPublishDate()); ?></span>
-								<?php if ($block->getPostCategoryHtml($_post)) {?>
-                                    | <span><i class="fa fa-folder-open-o"></i> <?php echo __('Categories:'); ?> <?php echo $block->getPostCategoryHtml($_post); ?> </span>
-								<?php } ?>
-								<?php if ($block->getTagList($_post)) {?>
-                                    | <span><i class="fa fa-tags"></i> <?php echo __('Tags:'); ?>  <?php echo $block->getTagList($_post); ?></span>
-								<?php } ?>
-
-								<?php if ($authorName && $block->getBlogConfig('general/display_author')){ ?>
-                                    | <span><i class="fa fa-user"></i> By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($author) ?>"><?php echo $authorName; ?></a></span>
-                                <?php if ($authorName != $modifierName && $modifierName){ ?>
-                                        | <span><i class="fa fa-edit"></i> Modify By: <a class="mp-info" href="<?php echo $block->getAuthorUrl($modifier) ?>"><?php echo $modifierName;?></a><?php echo ' at : '.$_post->getUpdatedAt(); ?></span>
-
-									<?php } ?>
-								<?php } ?>
-
-                            </div>
-                            <hr/>
-                        </div>
-						<?php echo $this->getChildHtml('mpblog_copyright');?>
-                    </div>
-
-				<?php }?>
+                <hr/>
             </div>
         </div>
+    </div>
+</div>
+    <?php if ($block->getBlogConfig('share/enabled')): ?>
+        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $helper->getBlogConfig('share/pubid_id') ?>" async="async"></script>
+        <div class="mpcss">
+            <div id="sharing">
+                <div class="share-col-left">
+                    <h5><?php echo __('Share this post, Hit on social buttons!'); ?></h5>
+                </div>
+                <div class="share-col-right">
+                    <div class="post-sharing-button">
+                        <div class="addthis_inline_share_toolbox"></div>
+    <!--                    <div class="addthis_sharing_toolbox"></div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+    <?php if($authorName && $helper->showAuthorInfo()): ?>
+        <div class="mpcss about-admin">
+            <div class="row">
+                <div class="col-xs-12 author-title">
+                    <h4 class="admin-title"><?php echo __('About the Author: %1', $authorName);?></h4>
+                    <div id="admin-border"></div>
+                </div>
+                <div class="col-xs-12 author-des">
+                    <?php if($image = $author->getImage()):?>
+                    <div class="admin-avatar">
+                        <img class="img-responsive" src="<?php echo $block->getImageUrl($image);?>">
+                    </div>
+                    <?php endif;?>
+                    <div class="admin-description">
+                        <?php echo $author->getShortDescription();?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif;?>
 
-<?php if ($block->getBlogConfig('share/enabled')): ?>
-	<div class="mpcss">
-		<div id="sharing">
-			<div class="share-col-left">
-				<h5><?php echo __('Share this post, Hit on social buttons!'); ?></h5>
-			</div>
-			<div class="share-col-right">
-				<div class="post-sharing-button">
-						<div class="addthis_inline_share_toolbox"></div>
-<!--                        <div class="addthis_sharing_toolbox"></div>-->
-				</div>
-			</div>
-		</div>
-	</div>
-<?php endif; ?>
-
-<?php
-/**
- * About the author content
- */
-?>
-<?php if($block->getBlogConfig('general/display_author') && $block->getBlogConfig('general/author_description')): ?>
-	<div class="mpcss about-admin">
-		<div class="row">
-			<div class="col-xs-12 author-title">
-				<h4 class="admin-title"><?php echo __('About the Author: ');?><a class="mp-info"><?php if($block->getBlogConfig('general/author_name')) echo $block->getBlogConfig('general/author_name');?></a></h4>
-				<div id="admin-border"></div>
-			</div>
-			<div class="col-xs-12 author-des">
-				<?php if($block->getBlogConfig('general/upload_image')):?>
-				<div class="admin-avatar">
-					<img class="img-responsive" src="<?php echo $block->getImageUrl('mageplaza/author/'.$block->getBlogConfig('general/upload_image'));?>">
-				</div>
-				<?php endif;?>
-				<div class="admin-description">
-					<?php echo $block->getBlogConfig('general/author_description');?>
-<!--					--><?php //echo $block->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('mageplaza_blog_author_admin')->toHtml(); ?>
-				</div>
-			</div>
-		</div>
-	</div>
-<?php endif;?>
-
-	<?php
-    //************************* Related post from the same topic ***************************
-		$relatedPosts = $_post->getRelatedPostsCollection();
-		$countRelated = 0;
-		$limitRelated = $block->getBlogConfig('general/related_post');
-	?>
-<?php if (count($relatedPosts)): ?>
-
-	<div class="post-same-topics topic-list mpcss" style="width: 90%;">
-		<div class="row">
-
-					<h2><?php echo ($limitRelated) ? __('Related Posts') : __(''); ?></h2>
+	<?php $relatedPosts = $_post->getRelatedPostsCollection(); ?>
+    <?php if ($relatedPosts && sizeof($relatedPosts)): ?>
+	    <div class="post-same-topics topic-list mpcss" style="width: 90%;">
+		    <div class="row">
+                <h2><?php echo __('Related Posts'); ?></h2>
                 <div class="relate-content-container">
 					<?php foreach ($relatedPosts as $relatedPost): ?>
-						<?php
-							if($block->filterPost($relatedPost)):
-								$countRelated++;
-							?>
-								<?php if($countRelated > $limitRelated) break; ?>
 						<div class="relate-content item col-md-3 col-sm-6 col-xs-12">
-							<a class="mp-relate-link" href="<?php echo $block->getUrlByPost($relatedPost) ?>">
-                                <?php if ($relatedPost->getImage()){ ?>
-                                <img class="img-responsive" src="<?php echo $block->getImageUrl($relatedPost->getImage()); ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
-                                <?php } else {?>
-                                    <img class="img-responsive" src="<?php echo $block->getDefaultImageUrl() ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
-                                <?php }?>
+							<a class="mp-relate-link" href="<?php echo $relatedPost->getUrl() ?>">
+                                <img class="img-responsive" src="<?php echo $relatedPost->getImage() ? $block->getImageUrl($relatedPost->getImage()) : $block->getDefaultImageUrl(); ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
 								<?php echo $relatedPost->getName(); ?>
                             </a>
 						</div>
-							<?php endif; ?>
 					<?php endforeach; ?>
                 </div>
-
-		</div>
-    </div>
-<?php endif; ?>
-    <?php
-        //************************* Related products from the same post ***************************
-        if ($block->getBlogConfig('product_post/post_detail/enable_product')) :
-    ?>
-    <div class="products-same-post mpcss" style="width: 90%;">
-        <div class="row">
-
-            <h2><?php echo ($block->getBlogConfig('product_post/post_detail/title')) ? __($block->getBlogConfig('product_post/post_detail/title')): __('Related Products')?></h2>
-                <?php echo $this->getChildHtml('related_products');?>
-
+            </div>
         </div>
-    </div>
+    <?php endif; ?>
+    <?php if ($block->getBlogConfig('product_post/post_detail/enable_product')): ?>
+        <div class="products-same-post mpcss" style="width: 90%;">
+            <div class="row">
+                <h2><?php echo ($helper->getBlogConfig('product_post/post_detail/title')) ?: __('Related Products')?></h2>
+                <?php echo $this->getChildHtml('related_products');?>
+            </div>
+        </div>
     <?php endif;?>
-
-<div class="mpcss mp-comment" style="width: 90%">
-
-        <?php if( $_post->getAllowComment()==1) { ?>
-            <?php $typeComment = $block->checkComment(); ?>
-            <?php if ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DISQUS): ?>
+    <div class="mpcss mp-comment" style="width: 90%">
+        <?php if($_post->getAllowComment()): ?>
+            <?php $typeComment = $block->helperComment('type'); ?>
+            <?php if ($typeComment == Type::DISQUS): ?>
                 <div class="box-collateral box-reviews" id="post-reviews">
                     <h2><?php echo __('Comments') ?></h2>
-
                     <div id="disqus_thread"></div>
                     <script type="text/javascript">
-                        var disqus_shortname = '<?php echo $block->helperComment('disqus');?>';
+                        var disqus_shortname = '<?php echo $block->helperComment('disqus'); ?>';
 
                         /* * * DON'T EDIT BELOW THIS LINE * * */
                         (function () {
@@ -267,176 +162,132 @@ if ($checkRss):
                             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
                         })();
                     </script>
-
-
                 </div>
-            <?php elseif ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::FACEBOOK): ?>
+            <?php elseif ($typeComment == Type::FACEBOOK): ?>
                 <div class="box-collateral box-reviews" id="post-reviews">
                     <h2><?php echo __('Comments') ?></h2>
-
                     <div id="fb-root"></div>
                     <script>(function (d, s, id) {
                             var js, fjs = d.getElementsByTagName(s)[0];
                             if (d.getElementById(id)) return;
                             js = d.createElement(s);
                             js.id = id;
-                            js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId=<?php echo $this->getAppId()?>";
+                            js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId=<?php echo $block->helperComment('facebook_appid') ?>";
                             fjs.parentNode.insertBefore(js, fjs);
-                        }(document, 'script', 'facebook-jssdk'));</script>
-
-
-                    <div class="fb-comments" data-href="<?php echo $block->getUrlByPost($_post); ?>" data-numposts="<?php echo $block->helperComment('facebook_number_comment'); ?>"
-                         data-width="100%" data-colorscheme="<?php echo $block->helperComment('facebook_colorscheme') ?>" data-order-by="<?php echo $block->helperComment('facebook_order_by') ?>"></div>
-
+                        }(document, 'script', 'facebook-jssdk'));
+                    </script>
+                    <div class="fb-comments" data-href="<?php echo $_post->getUrl(); ?>"
+                         data-numposts="<?php echo $block->helperComment('facebook_number_comment'); ?>"
+                         data-width="100%"
+                         data-colorscheme="<?php echo $block->helperComment('facebook_colorscheme') ?>"
+                         data-order-by="<?php echo $block->helperComment('facebook_order_by') ?>">
+                    </div>
                 </div>
-
-            <?php elseif ($typeComment == Mageplaza\Blog\Model\Config\Source\Comments\Type::DEFAULT_COMMENT): ?>
+            <?php elseif ($typeComment == Type::DEFAULT_COMMENT): ?>
                 <div class="container default-cmt">
                     <div class="row">
                         <div class="col-xs-10"> <h2><?php echo __('Comments'); ?></h2></div>
                         <div class="col-xs-2">
-                            <div class="default-cmt__cmt-login" <?php if ($block->isLoggedIn()) {echo 'style="display:none;"';} ?>>
+                            <?php if($block->isLoggedIn()): ?>
+                            <div class="default-cmt__cmt-login">
                                 <button class="btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
                             </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="default-cmt__content">
-                                <?php
-                                /**
-                                 * Comment box
-                                 */
-                                 ?>
                                 <div class="default-cmt__content__cmt-block">
                                     <div class="default-cmt__content__cmt-block__cmt-box">
                                         <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input" maxlength="255" placeholder="<?php echo __('Type comments here...') ?>"></textarea>
                                         <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
-                                            <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit btn-primary" <?php if (!$block->isLoggedIn()) {echo ' disabled';} ?>><?php echo __('Comment') ?></button>
+                                            <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit btn-primary" <?php echo !$block->isLoggedIn() ? 'disabled' : '' ?>>
+                                                <?php echo __('Comment') ?>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="default-cmt__content__cmt-content">
-                                <?php
-                                /**
-                                 * Comment rows
-                                 */
-                                $comments = $block->getPostComments($_post->getId());
-                                $block->getCommentsTree($comments, 0);
-                                $html = $block->getCommentsHtml();
-                                echo $html;
-                                ?>
+                                    <?php
+                                        $comments = $block->getPostComments($_post->getId());
+                                        $block->getCommentsTree($comments, 0);
+                                        echo $block->getCommentsHtml();
+                                    ?>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <script>
-                    //get login url, text of button like, reply
-                    var loginUrl = '<?php echo $block->getLoginUrl(); ?>';
-                    var like = '<?php echo __('Like') ?>',
-                        reply = '<?php echo __('Reply') ?>';
-
-                    require([
-                        'comment'
-                    ]);
+                    require(['comment']);
                 </script>
-
-            <?php endif;
-        }?>
-
-</div>
-
-<?php
-	/**
-	 * Seo article snippet
-	 */
-	$enableSnippet = $block->getSeoConfig('snippet/enabled');
-	$orgName = $block->getSeoConfig('snippet/organize_name');
-	$logo = $block->getSeoConfig('snippet/upload_image_id') ? $block->getLogoImage($block->getSeoConfig('snippet/upload_image_id'))
-        : $block->getDefaultImageUrl();
-
-	if ($enableSnippet):
-?>
-<script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "NewsArticle",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://google.com/article"
-  },
-  "headline": "<?php echo $_post->getName(); ?>",
-  "image": {
-    "@type": "ImageObject",
-    "url": "<?php echo $_post->getImage() ? $block->getImageUrl($_post->getImage())
-        : $block->getDefaultImageUrl(); ?>",
-    "height": 800,
-    "width": 800
-  },
-  "datePublished": "<?php echo $block->getDateFormat($_post->getPublishDate()); ?>",
-  "dateModified": "<?php echo $block->getDateFormat($_post->getUpdatedAt()); ?>",
-  "author": {
-    "@type": "Person",
-    "name": "<?php echo $authorName; ?>"
-  },
-   "publisher": {
-    "@type": "Organization",
-    "name": "<?php echo $orgName; ?>",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "<?php echo $logo; ?>",
-      "width": 600,
-      "height": 60
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+    <?php
+        $orgName = $helper->getSeoConfig('snippet/organize_name');
+        $logo = $helper->getSeoConfig('snippet/upload_image_id');
+        $logo = $logo ? $helper->getImageHelper()->getMediaUrl($logo) : $block->getDefaultImageUrl();
+        if ($helper->getSeoConfig('snippet/enabled')):
+    ?>
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "NewsArticle",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://google.com/article"
+      },
+      "headline": "<?php echo $_post->getName(); ?>",
+      "image": {
+        "@type": "ImageObject",
+        "url": "<?php echo $_post->getImage() ? $block->getImageUrl($_post->getImage()) : $block->getDefaultImageUrl(); ?>",
+        "height": 800,
+        "width": 800
+      },
+      "datePublished": "<?php echo $block->getDateFormat($_post->getPublishDate()); ?>",
+      "dateModified": "<?php echo $block->getDateFormat($_post->getUpdatedAt()); ?>",
+      "author": {
+        "@type": "Person",
+        "name": "<?php echo $authorName; ?>"
+      },
+       "publisher": {
+        "@type": "Organization",
+        "name": "<?php echo $orgName; ?>",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "<?php echo $logo; ?>",
+          "width": 600,
+          "height": 60
+        }
+      },
+      "description": "<?php echo $_post->getShortDescription(); ?>"
     }
-  },
-  "description": "<?php echo $_post->getShortDescription(); ?>"
-}
-</script>
-
+    </script>
 	<?php endif; ?>
-
 <?php else: ?>
-    <div><?php echo __('This store has no post with name: ').$_post->getName() ?></div>
-
+    <div><?php echo __('This store has no post with name: %1', $_post->getName()) ?></div>
 <?php endif;?>
-
 <script type="text/javascript">
-    require([
-        'jquery',
-        'fancybox',
-        'migrate'
-    ], function($){
-        var addToAll = false;
-        var gallery = true;
-        var titlePosition = 'inside';
-        $(addToAll ? 'img' : 'img.fancybox').each(function(){
-            var $this = $(this);
-            var title = $this.attr('title');
-            var src = $this.attr('data-big') || $this.attr('src');
-            var a = $('<a href="#" class="fancybox"></a>').attr('href', src).attr('title', title);
-            $this.wrap(a);
+    require(['jquery', 'fancybox', 'migrate'], function($){
+        $('img.fancybox').each(function(){
+            var self = $(this),
+                title = self.attr('title'),
+                src = self.data('big') || self.attr('src');
+
+            self.wrap(
+                $('<a href="#" class="fancybox"></a>')
+                    .attr('href', src)
+                    .attr('title', title)
+            );
         });
-        if (gallery)
-            $('a.fancybox').attr('rel', 'fancyboxgallery');
-        $('a.fancybox').fancybox({
+
+        var titlePosition = 'inside',
+            fancybox = $('a.fancybox');
+        fancybox.attr('rel', 'fancyboxgallery');
+        fancybox.fancybox({
             titlePosition: titlePosition
         });
     });
 </script>
-
-<style type="text/css">
-    <?php if ($block->helperComment('facebook_colorscheme') == "dark"){
-     ?>
-    .mp-comment .box-collateral span{
-        background-color: #3e2f3a !important;
-    }
-    <?php }?>
-    .post-same-topics .relate-content-container{
-        display: flex;
-        flex-wrap: wrap;
-    }
-</style>
-

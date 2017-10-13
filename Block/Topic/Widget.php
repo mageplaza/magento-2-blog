@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block\Topic;
 
 use Mageplaza\Blog\Block\Frontend;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Widget
@@ -43,6 +44,6 @@ class Widget extends Frontend
      */
     public function getTopicUrl($topic)
     {
-        return $this->helperData->getTopicUrl($topic);
+        return $this->helperData->getBlogUrl($topic, Data::TYPE_TOPIC);
     }
 }
