@@ -26,20 +26,12 @@
         </div>
         <div class="col-xs-12">
             <ul class="menu-categories">
-                <?php
-				$block->getCategoryList()
-				?>
+                <?php echo $block->getCategoryListHtml() ?>
             </ul>
         </div>
-
     </div>
 </div>
 
 <script type="text/javascript">
-    require([
-            'Mageplaza_Blog/js/categorytree'
-        ],
-        function (categoryTree) {
-        }
-    );
+    require(['Mageplaza_Blog/js/categorytree'], function () {});
 </script>

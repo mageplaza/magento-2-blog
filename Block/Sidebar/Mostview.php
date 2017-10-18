@@ -30,18 +30,32 @@ use Mageplaza\Blog\Block\Frontend;
 class Mostview extends Frontend
 {
     /**
-     * @return array|string
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
     public function getMosviewPosts()
     {
-        return $this->helperData->getMosviewPosts();
+        $collection = $this->helperData->getPostList();
+        $collection->getSelect()
+            ->joinLeft(
+                ['traffic' => $collection->getTable('mageplaza_blog_post_traffic')],
+                'main_table.post_id=traffic.post_id',
+                'numbers_view'
+            )
+            ->order('numbers_view DESC')
+            ->limit((int)$this->getBlogConfig('sidebar/number_mostview_posts') ?: 1);
+
+        return $collection;
     }
 
     /**
-     * @return array|string
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
     public function getRecentPost()
     {
-        return $this->helperData->getRecentPost();
+        $collection = $this->helperData->getPostList();
+        $collection->getSelect()
+            ->limit((int)$this->getBlogConfig('sidebar/number_recent_posts') ?: 1);
+
+        return $collection;
     }
 }

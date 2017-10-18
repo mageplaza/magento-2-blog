@@ -21,42 +21,55 @@
 
 namespace Mageplaza\Blog\Block\Post;
 
-use Mageplaza\Blog\Block\Frontend;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Relatedpost
  * @package Mageplaza\Blog\Block\Post
  */
-class Relatedpost extends Frontend
+class Relatedpost extends Template
 {
     /**
-     * @inheritdoc
+     * @var \Mageplaza\Blog\Helper\Data
      */
-    public function _construct()
-    {
-        parent::_construct();
+    protected $helperData;
 
-        $posts     = $this->getRelatedPostList($this->getCurrentProduct());
-        $countPost = count($posts);
-        $title     = ($this->getLimitPosts() > $countPost) ? __('Related Posts (' . $countPost . ')') : __('Related Posts (' . $this->getLimitPosts() . ')');
-        $this->setTitle($title);
+    /**
+     * Relatedpost constructor.
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Mageplaza\Blog\Helper\Data $helperData
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        Data $helperData,
+        array $data = []
+    )
+    {
+        $this->helperData = $helperData;
+
+        parent::__construct($context, $data);
     }
 
     /**
-     * @return mixed
-     */
-    public function getCurrentProduct()
-    {
-        return $this->getRequest()->getParam('id');
-    }
-
-    /**
-     * @param $id
      * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-    public function getRelatedPostList($id)
+    public function getRelatedPostList()
     {
-        return $this->helperData->getRelatedPostList($id);
+        $currentPostId = $this->getRequest()->getParam('id');
+
+        /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $collection */
+        $collection = $this->helperData->getPostList();
+        $collection->getSelect()
+            ->join([
+                'related' => $collection->getTable('mageplaza_blog_post_product')],
+                'related.post_id=main_table.post_id AND related.entity_id=' . $currentPostId . ' AND main_table.enabled=1'
+            )
+            ->limit($this->getLimitPosts());
+
+        return $collection;
     }
 
     /**
@@ -64,11 +77,6 @@ class Relatedpost extends Frontend
      */
     public function getLimitPosts()
     {
-        $limitRelated = ($this->getBlogConfig('product_post/product_detail/post_limit') == ''
-            || $this->getBlogConfig('product_post/product_detail/post_limit') == 0)
-            ? 1
-            : $this->getBlogConfig('product_post/product_detail/post_limit');
-
-        return $limitRelated;
+        return (int)$this->helperData->getBlogConfig('product_post/product_detail/post_limit') ?: 1;
     }
 }

@@ -287,12 +287,11 @@ class Category extends AbstractModel
      */
     public function getSelectedPostsCollection()
     {
-        if ($this->postCollection === null) {
+        if (!$this->postCollection) {
             $collection = $this->postCollectionFactory->create();
             $collection->join(
-                $this->getResource()->getTable('mageplaza_blog_post_category'),
-                'main_table.post_id=' . $this->getResource()->getTable('mageplaza_blog_post_category') . '.post_id 
-                AND ' . $this->getResource()->getTable('mageplaza_blog_post_category') . '.category_id=' . $this->getId(),
+                ['cat' => $this->getResource()->getTable('mageplaza_blog_post_category')],
+                'main_table.post_id=cat.post_id AND cat.category_id=' . $this->getId(),
                 ['position']
             );
             $this->postCollection = $collection;

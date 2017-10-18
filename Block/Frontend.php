@@ -110,10 +110,10 @@ class Frontend extends Template
     {
         $collection = $this->getCollection();
 
-        if ($collection->getSize()) {
+        if ($collection && $collection->getSize()) {
             $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'mpblog.post.pager');
 
-            $blogLimit = (int)$this->getBlogConfig('general/pagination');
+            $blogLimit = (int)$this->helperData->getBlogConfig('general/pagination');
             $pager->setLimit($blogLimit ?: 10)
                 ->setCollection($collection);
 
@@ -168,33 +168,22 @@ class Frontend extends Template
     }
 
     /**
-     * @param $post
-     *
-     * @return null|string
+     * @inheritdoc
      */
-    public function getPostCategoryHtml($post)
+    protected function _prepareLayout()
     {
-        return $this->helperData->getPostCategoryHtml($post);
-    }
+        if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
+            $breadcrumbs->addCrumb('home', [
+                'label' => __('Home'),
+                'title' => __('Go to Home Page'),
+                'link'  => $this->_storeManager->getStore()->getBaseUrl()
+            ])
+                ->addCrumb($this->helperData->getRoute(), $this->getBreadcrumbsData());
+        }
 
-    /**
-     * @param $code
-     *
-     * @return mixed
-     */
-    public function getBlogConfig($code)
-    {
-        return $this->helperData->getBlogConfig($code);
-    }
+        $this->applySeoCode();
 
-    /**
-     * @param $code
-     * @param null $storeId
-     * @return mixed
-     */
-    public function getSeoConfig($code, $storeId = null)
-    {
-        return $this->helperData->getSeoConfig($code, $storeId);
+        return parent::_prepareLayout();
     }
 
     /**
@@ -206,12 +195,11 @@ class Frontend extends Template
 
         $data = [
             'label' => $label,
-            'title' => $label,
-            'link'  => $this->helperData->getBlogUrl()
+            'title' => $label
         ];
 
-        if ($this->getRequest()->getFullActionName() == 'mpblog_post_index') {
-            unset($data['link']);
+        if ($this->getRequest()->getFullActionName() != 'mpblog_post_index') {
+            $data['link'] = $this->helperData->getBlogUrl();
         }
 
         return $data;
@@ -219,178 +207,51 @@ class Frontend extends Template
 
     /**
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function _prepareLayout()
-    {
-        if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
-            $breadcrumbs->addCrumb('home', [
-                'label' => __('Home'),
-                'title' => __('Go to Home Page'),
-                'link'  => $this->_storeManager->getStore()->getBaseUrl()
-            ])
-                ->addCrumb($this->helperData->getRoute(), $this->getBreadcrumbsData());
-
-            $this->applySeoCode();
-        }
-        $actionName       = $this->getRequest()->getFullActionName();
-        $breadcrumbs      = $this->getLayout()->getBlock('breadcrumbs');
-        $breadcrumbsLabel = ucfirst($this->helperData->getBlogName());
-        $breadcrumbsLink  = $this->helperData->getRoute();
-        if ($breadcrumbs) {
-            if ($actionName == 'mpblog_category_view') {
-                $category = $this->helperData->getCategoryByParam(
-                    'id',
-                    $this->getRequest()->getParam('id')
-                );
-                $breadcrumbs->addCrumb(
-                    'home',
-                    ['label' => __('Home'), 'title' => __('Go to Home Page'),
-                     'link'  => $this->_storeManager->getStore()->getBaseUrl()]
-                );
-                $breadcrumbs->addCrumb(
-                    $this->helperData->getBlogConfig('general/url_prefix'),
-                    ['label'   => $breadcrumbsLabel,
-                     'title'   => $this->helperData->getBlogConfig(
-                         'general/url_prefix'
-                     ), 'link' => $this->_storeManager->getStore()->getBaseUrl()
-                        . $breadcrumbsLink]
-                )->addCrumb(
-                    $category->getUrlKey(),
-                    ['label' => ucfirst($category->getName()),
-                     'title' => $category->getName(),]
-                );
-                $this->applySeoCode($category);
-            } elseif ($actionName == 'mpblog_tag_view') {
-                $tag = $this->helperData->getTagByParam(
-                    'id',
-                    $this->getRequest()->getParam('id')
-                );
-                $breadcrumbs->addCrumb(
-                    'home',
-                    ['label' => __('Home'), 'title' => __('Go to Home Page'),
-                     'link'  => $this->_storeManager->getStore()->getBaseUrl()]
-                )->addCrumb(
-                    $this->helperData->getBlogConfig('general/url_prefix'),
-                    ['label'   => $breadcrumbsLabel,
-                     'title'   => $this->helperData->getBlogConfig(
-                         'general/url_prefix'
-                     ), 'link' => $this->_storeManager->getStore()->getBaseUrl()
-                        . $breadcrumbsLink]
-                )->addCrumb(
-                    'Tag' . $tag->getId(),
-                    ['label' => ucfirst($tag->getName()),
-                     'title' => $tag->getName()]
-                );
-                $this->applySeoCode($tag);
-            } elseif ($actionName == 'mpblog_topic_view') {
-                $topic = $this->helperData->getTopicByParam(
-                    'id',
-                    $this->getRequest()->getParam('id')
-                );
-                $breadcrumbs->addCrumb(
-                    'home',
-                    ['label' => __('Home'), 'title' => __('Go to Home Page'),
-                     'link'  => $this->_storeManager->getStore()->getBaseUrl()]
-                )->addCrumb(
-                    $this->helperData->getBlogConfig('general/url_prefix'),
-                    ['label'   => $breadcrumbsLabel,
-                     'title'   => $this->helperData->getBlogConfig(
-                         'general/url_prefix'
-                     ), 'link' => $this->_storeManager->getStore()->getBaseUrl()
-                        . $breadcrumbsLink]
-                )->addCrumb(
-                    'topic' . $topic->getId(),
-                    ['label' => ucfirst($topic->getName()),
-                     'title' => $topic->getName()]
-                );
-                $this->applySeoCode($topic);
-            } elseif ($actionName == 'mpblog_author_view') {
-                $author = $this->helperData->getAuthorByParam(
-                    'id',
-                    $this->getRequest()->getParam('id')
-                );
-                $breadcrumbs->addCrumb(
-                    'home',
-                    ['label' => __('Home'), 'title' => __('Go to Home Page'),
-                     'link'  => $this->_storeManager->getStore()->getBaseUrl()]
-                )->addCrumb(
-                    $this->helperData->getBlogConfig('general/url_prefix'),
-                    ['label'   => $breadcrumbsLabel,
-                     'title'   => $this->helperData->getBlogConfig(
-                         'general/url_prefix'
-                     ), 'link' => $this->_storeManager->getStore()->getBaseUrl()
-                        . $breadcrumbsLink]
-                )->addCrumb(
-                    'author' . $author->getId(),
-                    ['label' => __('Author'), 'title' => __('Author')]
-                );
-                $pageMainTitle = $this->getLayout()->getBlock(
-                    'page.main.title'
-                );
-                $pageMainTitle->setPageTitle('About Author');
-                $this->pageConfig->getTitle()->set($author->getName());
-            } elseif ($actionName == 'mpblog_sitemap_index') {
-                $breadcrumbs->addCrumb(
-                    'home',
-                    ['label' => __('Home'), 'title' => __('Go to Home Page'),
-                     'link'  => $this->_storeManager->getStore()->getBaseUrl()]
-                )->addCrumb(
-                    $this->helperData->getBlogConfig('general/url_prefix'),
-                    ['label'   => $breadcrumbsLabel,
-                     'title'   => $this->helperData->getBlogConfig(
-                         'general/url_prefix'
-                     ), 'link' => $this->_storeManager->getStore()->getBaseUrl()
-                        . $breadcrumbsLink]
-                )->addCrumb(
-                    'SiteMap',
-                    ['label' => __('Sitemap'), 'title' => __('Sitemap')]
-                );
-                $pageMainTitle = $this->getLayout()->getBlock(
-                    'page.main.title'
-                );
-                $pageMainTitle->setPageTitle('Site Map');
-                $this->pageConfig->getTitle()->set('Site Map');
-            }
-        }
-
-        return parent::_prepareLayout();
-    }
-
-    /**
-     * @return $this
      */
     public function applySeoCode()
     {
-        $title = $this->getSeoConfig('meta_title') ?: $this->helperData->getBlogConfig('general/name');
-        $this->pageConfig->getTitle()->set($title ?: __('Blog'));
+        $this->pageConfig->getTitle()->set(join($this->getTitleSeparator(), array_reverse($this->getBlogTitle(true))));
 
-        $description = $this->getSeoConfig('meta_description');
+        $description = $this->helperData->getSeoConfig('meta_description');
         $this->pageConfig->setDescription($description);
 
-        $keywords = $this->getSeoConfig('meta_keywords');
+        $keywords = $this->helperData->getSeoConfig('meta_keywords');
         $this->pageConfig->setKeywords($keywords);
 
-        $pageTitle     = $this->helperData->getBlogConfig('general/name');
         $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle) {
-            $pageMainTitle->setPageTitle($pageTitle);
+            $pageMainTitle->setPageTitle($this->getBlogTitle());
         }
 
         return $this;
     }
 
     /**
-     * get sidebar config
+     * Retrieve HTML title value separator (with space)
      *
-     * @param $code
-     * @param $storeId
-     *
-     * @return mixed
+     * @return string
      */
-    public function getSidebarConfig($code, $storeId = null)
+    public function getTitleSeparator()
     {
-        return $this->helperData->getSidebarConfig($code, $storeId);
+        $separator = (string)$this->helperData->getConfigValue('catalog/seo/title_separator');
+
+        return ' ' . $separator . ' ';
+    }
+
+    /**
+     * @param bool $meta
+     * @return array
+     */
+    public function getBlogTitle($meta = false)
+    {
+        $pageTitle = $this->helperData->getBlogConfig('general/name');
+        if ($meta) {
+            $title = $this->helperData->getSeoConfig('meta_title') ?: $pageTitle;
+
+            return [$title];
+        }
+
+        return $pageTitle;
     }
 
     /**
@@ -415,135 +276,24 @@ class Frontend extends Template
     }
 
     /**
-     * check customer is logged in or not
+     * get list category html of post
+     * @param $post
+     * @return null|string
      */
-    public function isLoggedIn()
+    public function getPostCategoryHtml($post)
     {
-        return $this->helperData->isLoggedIn();
-    }
-
-    /**
-     * get login url
-     */
-    public function getLoginUrl()
-    {
-        return $this->helperData->getLoginUrl();
-    }
-
-    /**
-     * @param $postId
-     * @return array
-     */
-    public function getPostComments($postId)
-    {
-        $result   = [];
-        $comments = $this->cmtFactory->create()->getCollection()
-            ->addFieldToFilter('post_id', $postId);
-        foreach ($comments as $comment) {
-            array_push($result, $comment->getData());
+        if (!$post->getCategoryIds()) {
+            return null;
         }
+
+        $categories   = $this->helperData->getCategoryCollection($post->getCategoryIds());
+        $categoryHtml = [];
+        foreach ($categories as $_cat) {
+            $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl($_cat, Data::TYPE_CATEGORY) . '">' . $_cat->getName() . '</a>';
+        }
+        $result = implode(', ', $categoryHtml);
 
         return $result;
-    }
-
-    /**
-     * get comments tree
-     *
-     * @param $comments
-     * @param $cmtId
-     */
-    public function getCommentsTree($comments, $cmtId)
-    {
-        $this->commentTree .= '<ul class="default-cmt__content__cmt-content row">';
-        foreach ($comments as $comment) {
-            if ($comment['reply_id'] == $cmtId) {
-                $isReply           = (bool)$comment['is_reply'];
-                $replyId           = $isReply ? $comment['reply_id'] : '';
-                $userCmt           = $this->getUserComment($comment['entity_id']);
-                $userName          = $userCmt->getFirstName() . ' '
-                    . $userCmt->getLastName();
-                $countLikes        = $this->getCommentLikes($comment['comment_id']);
-                $this->commentTree .= '<li class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12'
-                    . ($isReply ? ' reply-row' : '') . '" data-cmt-id="'
-                    . $comment['comment_id'] . '" ' . ($replyId
-                        ? 'data-reply-id="' . $replyId . '"' : '') . '>
-							<div class="cmt-row__cmt-username">
-								<span class="cmt-row__cmt-username username">'
-                    . $userName . '</span>
-							</div>
-							<div class="cmt-row__cmt-content">
-								<p>' . $comment['content'] . '</p>
-							</div>
-							<div class="cmt-row__cmt-interactions interactions">
-								<div class="interactions__btn-actions">
-									<a class="interactions__btn-actions action btn-like" data-cmt-id="'
-                    . $comment['comment_id'] . '">' . __('Like') . '</a>
-									<a class="interactions__btn-actions action btn-reply" data-cmt-id="'
-                    . $comment['comment_id'] . '">' . __('Reply') . '</a>
-									<a class="interactions__btn-actions count-like">
-										<i class="fa fa-thumbs-up" aria-hidden="true"></i>
-										<span class="count-like__like-text">'
-                    . $countLikes . '</span>
-									</a>
-								</div>
-								<div class="interactions__cmt-createdat">
-									<span>' . $comment['created_at'] . '</span>
-								</div>
-							</div>';
-                if ($comment['has_reply']) {
-                    $this->commentTree .= $this->getCommentsTree(
-                        $comments,
-                        $comment['comment_id']
-                    );
-                }
-                $this->commentTree .= '</li>';
-            }
-        }
-        $this->commentTree .= '</ul>';
-    }
-
-    /**
-     * get comments tree html
-     *
-     * @return mixed
-     */
-    public function getCommentsHtml()
-    {
-        return $this->commentTree;
-    }
-
-    /**
-     * @param $userId
-     * @return \Magento\Customer\Api\Data\CustomerInterface
-     */
-    public function getUserComment($userId)
-    {
-        $user = $this->customerRepository->getById($userId);
-
-        return $user;
-    }
-
-    /**
-     * @param $cmtId
-     * @return int|string
-     */
-    public function getCommentLikes($cmtId)
-    {
-        $likes = $this->likeFactory->create()->getCollection()
-            ->addFieldToFilter('comment_id', $cmtId)->getSize();
-        if ($likes) {
-            return $likes;
-        }
-
-        return '';
-    }
-
-    /**
-     * get default image url
-     */
-    public function getDefaultImageUrl()
-    {
-        return $this->getViewFileUrl('Mageplaza_Blog::media/images/mageplaza-logo-default.png');
     }
 
     /**
@@ -557,14 +307,6 @@ class Frontend extends Template
     }
 
     /**
-     * @return mixed
-     */
-    public function getMonthParam()
-    {
-        return $this->getRequest()->getParam('month');
-    }
-
-    /**
      * Resize Image Function
      * @param $image
      * @param null $width
@@ -573,11 +315,23 @@ class Frontend extends Template
      */
     public function resizeImage($image, $width = null, $height = null)
     {
+        if (!$image) {
+            return $this->getDefaultImageUrl();
+        }
+
         if (is_null($width)) {
             $width  = $this->helperData->getBlogConfig('general/resize_image/resize_width');
             $height = $this->helperData->getBlogConfig('general/resize_image/resize_height');
         }
 
         return $this->helperData->getImageHelper()->resizeImage($image, $width, $height);
+    }
+
+    /**
+     * get default image url
+     */
+    public function getDefaultImageUrl()
+    {
+        return $this->getViewFileUrl('Mageplaza_Blog::media/images/mageplaza-logo-default.png');
     }
 }

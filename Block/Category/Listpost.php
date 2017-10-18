@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block\Category;
 
 use Mageplaza\Blog\Block\Frontend;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Listpost
@@ -29,19 +30,78 @@ use Mageplaza\Blog\Block\Frontend;
  */
 class Listpost extends Frontend
 {
+    protected $_category;
+
     /**
-     * @return array|string
+     * Override this function to apply collection for each type
+     *
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-    public function getPostList()
+    protected function getCollection()
     {
-        return $this->getBlogPagination(\Mageplaza\Blog\Helper\Data::CATEGORY, $this->getRequest()->getParam('id'));
+        if ($category = $this->getCategory()) {
+            return $this->helperData->getPostCollection(Data::TYPE_CATEGORY, $category->getId());
+        }
+
+        return null;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function checkRss()
+    protected function getCategory()
     {
-        return $this->helperData->getBlogUrl('post/rss');
+        if (!$this->_category) {
+            $id = $this->getRequest()->getParam('id');
+
+            if ($id) {
+                $category = $this->helperData->getObjectByParam($id, null, Data::TYPE_CATEGORY);
+                if ($category && $category->getId()) {
+                    $this->_category = $category;
+                }
+            }
+        }
+
+        return $this->_category;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
+
+        if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
+            $category = $this->getCategory();
+            if ($category) {
+                $breadcrumbs->addCrumb($category->getUrlKey(), [
+                        'label' => __('Category'),
+                        'title' => __('Category')
+                    ]
+                );
+            }
+        }
+    }
+
+    /**
+     * @param bool $meta
+     * @return array
+     */
+    public function getBlogTitle($meta = false)
+    {
+        $blogTitle = parent::getBlogTitle($meta);
+        $category  = $this->getCategory();
+        if (!$category) {
+            return $blogTitle;
+        }
+
+        if ($meta) {
+            $blogTitle[] = $category->getName();
+        } else {
+            $blogTitle = $category->getName();
+        }
+
+        return $blogTitle;
     }
 }

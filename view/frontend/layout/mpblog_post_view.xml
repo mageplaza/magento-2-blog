@@ -20,6 +20,7 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
+
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="mpblog_design" />
     <head>
@@ -27,7 +28,7 @@
     </head>
     <body>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Post\View" name="mpblog.post.view" as="mpblog_post_view" template="Mageplaza_Blog::post/view.phtml">
+            <block class="Mageplaza\Blog\Block\Post\View" name="mpblog.post.view" template="post/view.phtml">
                 <block class="Mageplaza\Blog\Block\Post\RelatedProduct" name="related.category.products" as="related_products" template="Magento_Catalog::product/list.phtml" />
             </block>
         </referenceContainer>

@@ -23,6 +23,9 @@
 /** @var \Mageplaza\Blog\Block\Adminhtml\Category\Edit\Form $block */
 $parentId = $block->getParentCategoryId();
 $categoryId = $block->getCategoryId();
+
+$blockGrid = $block->getLayout()->getBlock('mageplaza_blog_category_edit_tab_post');
+$gridJsObjectName = $blockGrid->getJsObjectName();
 ?>
 <div class="category-edit-title">
     <h3 class="title"><?php echo $block->escapeHtml($block->getHeader()) . ($block->getCategoryId() ? ' (' . __('ID: %1', $block->getCategoryId()) . ')' : '') ?></h3>
@@ -32,8 +35,7 @@ $categoryId = $block->getCategoryId();
 </div>
 <?php echo $block->getTabsHtml() ?>
 
-<iframe name="iframeSave" style="display:none; width:100%;"
-        src="<?php echo $block->getViewFileUrl('blank.html') ?>"></iframe>
+<iframe name="iframeSave" style="display:none; width:100%;" src="<?php echo $block->getViewFileUrl('blank.html') ?>"></iframe>
 <form id="category_edit_form" name="category-edit-form" action="<?php echo $block->getSaveUrl() ?>" method="post"
       enctype="multipart/form-data">
     <div class="no-display">
@@ -46,7 +48,17 @@ $categoryId = $block->getCategoryId();
         <?php if ($categoryId !== 0): ?>
             <input type="hidden" name="category_id" value="<?php echo $categoryId; ?>"/>
         <?php endif; ?>
-        <input type="hidden" name="category_posts" id="in_category_posts" value=""/>
+        <input type="hidden" name="selected_products" id="in_category_products" value=""/>
+        <script type="text/x-magento-init">
+            {
+                "*": {
+                    "Magento_Catalog/catalog/category/assign-products": {
+                        "selectedProducts": <?php /* @escapeNotVerified */ echo $block->getPostsJson(); ?>,
+                        "gridJsObjectName": <?php /* @escapeNotVerified */ echo '"' . $gridJsObjectName . '"' ?: '{}'; ?>
+                    }
+                }
+            }
+        </script>
     </div>
     <div id="category_tab_content"></div>
 </form>
@@ -167,69 +179,5 @@ require(['jquery', 'jquery/ui', "mage/mage", "mage/translate"], function($){
         }
         $('active_tab_id').tabsJsObject = $('#<?php echo $tabsBlock->getId() ?>');
     });
-<?php endif; ?><?php if (($blockGrid = $block->getLayout()->getBlock('mageplaza_blog_category_edit_tab_post')) && ($_gridJsObject = $blockGrid->getJsObjectName())): ?>
-require([
-    "mage/adminhtml/grid"
-], function(){
-
-    var categoryPosts = $H(<?php echo $block->getPostsJson() ?>);
-    $('in_category_posts').value = Object.toJSON(categoryPosts);
-
-    function registerCategoryPost(grid, element, checked){
-        if(checked){
-            if(element.positionElement){
-                element.positionElement.disabled = false;
-                categoryPosts.set(element.value, element.positionElement.value);
-            }
-        }
-        else{
-            if(element.positionElement){
-                element.positionElement.disabled = true;
-            }
-            categoryPosts.unset(element.value);
-        }
-        $('in_category_posts').value = Object.toJSON(categoryPosts);
-        grid.reloadParams = {'selected_posts[]':categoryPosts.keys()};
-    }
-    function categoryPostRowClick(grid, event){
-        var trElement = Event.findElement(event, 'tr');
-        var isInput   = Event.element(event).tagName == 'INPUT';
-        if(trElement){
-            var checkbox = Element.getElementsBySelector(trElement, 'input');
-            if(checkbox[0]){
-                var checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
-                <?php echo $_gridJsObject ?>.setCheckboxChecked(checkbox[0], checked);
-            }
-        }
-    }
-    function positionChange(event){
-        var element = Event.element(event);
-        if(element && element.checkboxElement && element.checkboxElement.checked){
-            categoryPosts.set(element.checkboxElement.value, element.value);
-            $('in_category_posts').value = Object.toJSON(categoryPosts);
-        }
-    }
-
-    var tabIndex = 1000;
-    function categoryPostRowInit(grid, row){
-        var checkbox = $(row).getElementsByClassName('checkbox')[0];
-        var position = $(row).getElementsByClassName('input-text')[0];
-        if(checkbox && position){
-            checkbox.positionElement = position;
-            position.checkboxElement = checkbox;
-            position.disabled = !checkbox.checked;
-            position.tabIndex = tabIndex++;
-            Event.observe(position,'keyup',positionChange);
-        }
-    }
-
-
-    <?php echo $_gridJsObject ?>.rowClickCallback = categoryPostRowClick;
-    <?php echo $_gridJsObject ?>.initRowCallback = categoryPostRowInit;
-    <?php echo $_gridJsObject ?>.checkboxCheckCallback = registerCategoryPost;
-    if(<?php echo $_gridJsObject ?>.rows) {
-        <?php echo $_gridJsObject ?>.rows.each(function(row){categoryPostRowInit(<?php echo $_gridJsObject ?>, row)});
-    }
-});
 <?php endif; ?>
 </script>

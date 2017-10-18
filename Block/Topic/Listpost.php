@@ -30,19 +30,78 @@ use Mageplaza\Blog\Helper\Data;
  */
 class Listpost extends Frontend
 {
+    protected $_topic;
+
     /**
-     * @return array|string
+     * Override this function to apply collection for each type
+     *
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-    public function getPostList()
+    protected function getCollection()
     {
-        return $this->getBlogPagination(Data::TOPIC, $this->getRequest()->getParam('id'));
+        if ($topic = $this->getTopic()) {
+            return $this->helperData->getPostCollection(Data::TYPE_TOPIC, $topic->getId());
+        }
+
+        return null;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function checkRss()
+    protected function getTopic()
     {
-        return $this->helperData->getBlogUrl('post/rss');
+        if (!$this->_topic) {
+            $id = $this->getRequest()->getParam('id');
+
+            if ($id) {
+                $topic = $this->helperData->getObjectByParam($id, null, Data::TYPE_TOPIC);
+                if ($topic && $topic->getId()) {
+                    $this->_topic = $topic;
+                }
+            }
+        }
+
+        return $this->_topic;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
+
+        if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
+            $topic = $this->getTopic();
+            if ($topic) {
+                $breadcrumbs->addCrumb($topic->getUrlKey(), [
+                        'label' => __('Topic'),
+                        'title' => __('Topic')
+                    ]
+                );
+            }
+        }
+    }
+
+    /**
+     * @param bool $meta
+     * @return array
+     */
+    public function getBlogTitle($meta = false)
+    {
+        $blogTitle = parent::getBlogTitle($meta);
+        $topic     = $this->getTopic();
+        if (!$topic) {
+            return $blogTitle;
+        }
+
+        if ($meta) {
+            $blogTitle[] = $topic->getName();
+        } else {
+            $blogTitle = $topic->getName();
+        }
+
+        return $blogTitle;
     }
 }

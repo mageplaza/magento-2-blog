@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block\Sidebar;
 
 use Mageplaza\Blog\Block\Frontend;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Search
@@ -36,20 +37,36 @@ class Search extends Frontend
     {
         $result    = [];
         $posts     = $this->helperData->getPostList();
-        $limitDesc = $this->getSidebarConfig('search/description') ?: 100;
+        $limitDesc = (int)$this->getSidebarConfig('search/description') ?: 100;
         if (!empty($posts)) {
             foreach ($posts as $item) {
-                $tmp = [
+                $shortDescription = $item->getShortDescription() ?: '';
+                if (strlen($shortDescription) > $limitDesc) {
+                    $shortDescription = substr($shortDescription, 0, $limitDesc) . '...';
+                }
+
+                $result[] = [
                     'value' => $item->getName(),
-                    'url'   => $this->getUrlByPost($item),
-                    'image' => $item->getImage() ? $this->getImageUrl($item->getImage()) : $this->getDefaultImageUrl(),
-                    'desc'  => $item->getShortDescription() ? substr($item->getShortDescription(), 0, $limitDesc)
-                        : 'No description'
+                    'url'   => $item->getUrl(),
+                    'image' => $this->resizeImage($item->getImage(), 100),
+                    'desc'  => $shortDescription
                 ];
-                array_push($result, $tmp);
             }
         }
 
-        return json_encode($result);
+        return Data::jsonEncode($result);
+    }
+
+    /**
+     * get sidebar config
+     *
+     * @param $code
+     * @param $storeId
+     *
+     * @return mixed
+     */
+    public function getSidebarConfig($code, $storeId = null)
+    {
+        return $this->helperData->getBlogConfig('sidebar/' . $code, $storeId);
     }
 }

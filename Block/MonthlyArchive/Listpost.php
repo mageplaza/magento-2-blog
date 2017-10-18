@@ -31,34 +31,58 @@ use Mageplaza\Blog\Helper\Data;
 class Listpost extends Frontend
 {
     /**
-     * @return array|string
+     * Override this function to apply collection for each type
+     *
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-    public function getPostList()
+    protected function getCollection()
     {
-        return $this->getBlogPagination(Data::MONTHLY, $this->getCurrentUrl());
-    }
-
-    /**
-     * @return string
-     */
-    public function checkRss()
-    {
-        return $this->helperData->getBlogUrl('post/rss');
+        return $this->helperData->getPostCollection(Data::TYPE_MONTHLY, $this->getMonthKey());
     }
 
     /**
      * @return mixed
      */
-    public function getCurrentUrl()
+    protected function getMonthKey()
     {
-        $currentUrl = $this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
-        $arr        = explode('/', $currentUrl);
-        $result     = end($arr);
-        if (strpos($result, '?') !== false) {
-            $arr    = explode('?', $result);
-            $result = reset($arr);
+        return $this->getRequest()->getParam('month_key');
+    }
+
+    /**
+     * @return false|string
+     */
+    protected function getMonthLabel()
+    {
+        return $this->helperData->getDateFormat($this->getMonthKey(), true);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
+
+        if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
+            $breadcrumbs->addCrumb($this->getMonthKey(), [
+                    'label' => __('Monthy Archive'),
+                    'title' => __('Monthy Archive')
+                ]
+            );
+        }
+    }
+
+    /**
+     * @param bool $meta
+     * @return array
+     */
+    public function getBlogTitle($meta = false)
+    {
+        $blogTitle = parent::getBlogTitle($meta);
+        if ($meta) {
+            $blogTitle[] = $this->getMonthLabel();
         }
 
-        return $result;
+        return $blogTitle;
     }
 }

@@ -107,7 +107,7 @@ class Save extends Category
             }
 
             $category->addData($data);
-            if ($posts = $this->getRequest()->getPost('category_posts')) {
+            if ($posts = $this->getRequest()->getPost('selected_products')) {
                 $posts = json_decode($posts, true);
                 $category->setPostsData($posts);
             }

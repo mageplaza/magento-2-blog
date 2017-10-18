@@ -30,19 +30,78 @@ use Mageplaza\Blog\Helper\Data;
  */
 class Listpost extends Frontend
 {
+    protected $_author;
+
     /**
-     * @return array|string
+     * Override this function to apply collection for each type
+     *
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-    public function getPostList()
+    protected function getCollection()
     {
-        return $this->getBlogPagination(Data::AUTHOR, $this->getRequest()->getParam('id'));
+        if ($author = $this->getAuthor()) {
+            return $this->helperData->getPostCollection(Data::TYPE_AUTHOR, $author->getId());
+        }
+
+        return null;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getRssUrl()
+    protected function getAuthor()
     {
-        return $this->helperData->getBlogUrl('post/rss');
+        if (!$this->_author) {
+            $id = $this->getRequest()->getParam('id');
+
+            if ($id) {
+                $author = $this->helperData->getObjectByParam($id, null, Data::TYPE_AUTHOR);
+                if ($author && $author->getId()) {
+                    $this->_author = $author;
+                }
+            }
+        }
+
+        return $this->_author;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
+
+        if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
+            $author = $this->getAuthor();
+            if ($author) {
+                $breadcrumbs->addCrumb($author->getUrlKey(), [
+                    'label' => __('Author'),
+                    'title' => __('Author')
+                    ]
+                );
+            }
+        }
+    }
+
+    /**
+     * @param bool $meta
+     * @return array
+     */
+    public function getBlogTitle($meta = false)
+    {
+        $blogTitle = parent::getBlogTitle($meta);
+        $author  = $this->getAuthor();
+        if (!$author) {
+            return $blogTitle;
+        }
+
+        if ($meta) {
+            $blogTitle[] = $author->getName();
+        } else {
+            $blogTitle = $author->getName();
+        }
+
+        return $blogTitle;
     }
 }

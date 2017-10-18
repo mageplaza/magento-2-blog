@@ -32,7 +32,7 @@ $_post = $block->getPost();
 $author = $helper->getAuthorByPost($_post);
 $authorName = $author !== null ? $author->getName() : '';
 
-$modifier = $helper->getAuthorByPost($_post->getModifierId());
+$modifier = $helper->getAuthorByPost($_post, true);
 $modifierName = $modifier !== null ? $modifier->getName() : '';
 ?>
 <div class="mp-blog-rss">
@@ -80,7 +80,7 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
         </div>
     </div>
 </div>
-    <?php if ($block->getBlogConfig('share/enabled')): ?>
+    <?php if ($helper->getBlogConfig('share/enabled')): ?>
         <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $helper->getBlogConfig('share/pubid_id') ?>" async="async"></script>
         <div class="mpcss">
             <div id="sharing">
@@ -135,7 +135,7 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
             </div>
         </div>
     <?php endif; ?>
-    <?php if ($block->getBlogConfig('product_post/post_detail/enable_product')): ?>
+    <?php if ($helper->getBlogConfig('product_post/post_detail/enable_product')): ?>
         <div class="products-same-post mpcss" style="width: 90%;">
             <div class="row">
                 <h2><?php echo ($helper->getBlogConfig('product_post/post_detail/title')) ?: __('Related Products')?></h2>
@@ -270,7 +270,7 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
     <div><?php echo __('This store has no post with name: %1', $_post->getName()) ?></div>
 <?php endif;?>
 <script type="text/javascript">
-    require(['jquery', 'fancybox', 'migrate'], function($){
+    require(['jquery', 'fancybox', 'jquery/jquery-migrate'], function($){
         $('img.fancybox').each(function(){
             var self = $(this),
                 title = self.attr('title'),

@@ -20,11 +20,12 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
+
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="mpblog_design" />
     <body>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Tag\Listpost" name="mp.blog.tag.post.list" as="mpblog_tag_post" template="Mageplaza_Blog::category/post/list.phtml" />
+            <block class="Mageplaza\Blog\Block\Tag\Listpost" name="mpblog.tag.post.list" template="post/list.phtml" />
         </referenceContainer>
     </body>
 </page>

@@ -30,20 +30,78 @@ use Mageplaza\Blog\Helper\Data;
  */
 class Listpost extends Frontend
 {
+    protected $_tag;
 
     /**
-     * @return array|string
+     * Override this function to apply collection for each type
+     *
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-    public function getPostList()
+    protected function getCollection()
     {
-        return $this->getBlogPagination(Data::TAG, $this->getRequest()->getParam('id'));
+        if ($tag = $this->getTag()) {
+            return $this->helperData->getPostCollection(Data::TYPE_TAG, $tag->getId());
+        }
+
+        return null;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function checkRss()
+    protected function getTag()
     {
-        return $this->helperData->getBlogUrl('post/rss');
+        if (!$this->_tag) {
+            $id = $this->getRequest()->getParam('id');
+
+            if ($id) {
+                $tag = $this->helperData->getObjectByParam($id, null, Data::TYPE_TAG);
+                if ($tag && $tag->getId()) {
+                    $this->_tag = $tag;
+                }
+            }
+        }
+
+        return $this->_tag;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
+
+        if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
+            $tag = $this->getTag();
+            if ($tag) {
+                $breadcrumbs->addCrumb($tag->getUrlKey(), [
+                        'label' => __('Tag'),
+                        'title' => __('Tag')
+                    ]
+                );
+            }
+        }
+    }
+
+    /**
+     * @param bool $meta
+     * @return array
+     */
+    public function getBlogTitle($meta = false)
+    {
+        $blogTitle = parent::getBlogTitle($meta);
+        $tag  = $this->getTag();
+        if (!$tag) {
+            return $blogTitle;
+        }
+
+        if ($meta) {
+            $blogTitle[] = $tag->getName();
+        } else {
+            $blogTitle = $tag->getName();
+        }
+
+        return $blogTitle;
     }
 }

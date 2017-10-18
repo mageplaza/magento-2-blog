@@ -31,11 +31,20 @@ use Mageplaza\Blog\Helper\Data;
 class Widget extends Frontend
 {
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Tag\Collection
+     */
+    protected $_tagList;
+
+    /**
      * @return array|string
      */
     public function getTagList()
     {
-        return $this->helperData->getTagList();
+        if (!$this->_tagList) {
+            $this->_tagList = $this->helperData->getObjectList(Data::TYPE_TAG);
+        }
+
+        return $this->_tagList;
     }
 
     /**
@@ -49,31 +58,24 @@ class Widget extends Frontend
 
     /**
      * get tags size based on num of post
-     * size = (maxSize * (currentItem - min))/(max - min)
      *
      * @param $tag
      * @return float|string
      */
     public function getTagSize($tag)
     {
+        /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $postList */
         $postList = $this->helperData->getPostList();
-        if ($postList && is_array($postList)) {
-            $max     = count($postList);
-            $min     = 1;
+        if ($postList && ($max = $postList->getSize()) > 1) {
             $maxSize = 30;
-            $tagPost = $this->helperData->getPostList('tag', $tag->getId());
-            if ($tagPost && is_array($tagPost)) {
-                $countTagPost = count($tagPost);
-                if ($countTagPost <= 1) {
-                    return '';
-                }
-
-                $size = ($maxSize * ($countTagPost - $min)) / ($max - $min);
+            $tagPost = $this->helperData->getPostCollection(Data::TYPE_TAG, $tag->getId());
+            if ($tagPost && ($countTagPost = $tagPost->getSize()) > 1) {
+                $size = $maxSize * $countTagPost / $max;
 
                 return round($size);
             }
         }
 
-        return '';
+        return 8;
     }
 }

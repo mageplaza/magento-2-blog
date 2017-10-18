@@ -121,25 +121,25 @@ class Router implements RouterInterface
         switch ($controller) {
             case 'post':
                 if (!in_array($action, ['index', 'rss'])) {
-                    $post   = $this->helper->getPostByUrl($action);
+                    $post   = $this->helper->getObjectByParam($action, 'url_key');
                     $request->setParam('id', $post->getId());
                     $action = 'view';
                 }
                 break;
             case 'category':
                 if (!in_array($action, ['index', 'rss'])) {
-                    $category = $this->helper->getCategoryByParam('url_key', $action);
+                    $category = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_CATEGORY);
                     $request->setParam('id', $category->getId());
                     $action = 'view';
                 }
                 break;
             case 'tag':
-                $tag = $this->helper->getTagByParam('url_key', $action);
+                $tag = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_TAG);
                 $request->setParam('id', $tag->getId());
                 $action = 'view';
                 break;
             case 'topic':
-                $topic = $this->helper->getTopicByParam('url_key', $action);
+                $topic = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_TOPIC);
                 $request->setParam('id', $topic->getId());
                 $action = 'view';
                 break;
@@ -147,17 +147,16 @@ class Router implements RouterInterface
                 $action = 'index';
                 break;
             case 'author':
-                $author = $this->helper->getAuthorByParam('url_key', $action);
+                $author = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_AUTHOR);
                 $request->setParam('id', $author->getId());
                 $action = 'view';
                 break;
             case 'month':
-                $author = $this->helper->getAuthorByParam('url_key', $action);
-                $request->setParam('id', $author->getId());
+                $request->setParam('month_key', $action);
                 $action = 'view';
                 break;
             default:
-                $post = $this->helper->getPostByUrl($controller);
+                $post = $this->helper->getObjectByParam($controller, 'url_key');
                 $request->setParam('id', $post->getId());
                 $controller = 'post';
                 $action     = 'view';

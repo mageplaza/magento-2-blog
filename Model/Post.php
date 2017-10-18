@@ -283,9 +283,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
      */
     public function getUrl()
     {
-        $url = $this->helperData->getUrlByPost($this);
-
-        return substr($url, 0, -1);
+        return $this->helperData->getBlogUrl($this, Data::TYPE_POST);
     }
 
     /**

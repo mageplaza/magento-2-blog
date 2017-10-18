@@ -510,12 +510,10 @@ class Tree extends Dbp
      * Obtain select for Categories
      *
      * @param bool $sorted
-     * @param array $optionalAttributes
      * @return \Zend_Db_Select
      */
     public function createCollectionDataSelect($sorted = true)
     {
-
         $select = $this->getDefaultCollection($sorted ? $this->_orderField : false)->getSelect();
 
         // count children products qty plus self products qty

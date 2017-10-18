@@ -23,7 +23,7 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Backend\Model\View\Result\ForwardFacory;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 
 /**
  * Class NewAction
@@ -41,11 +41,11 @@ class NewAction extends Action
     /**
      * NewAction constructor.
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\ForwardFacory $resultForwardFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         Context $context,
-        ForwardFacory $resultForwardFactory
+        ForwardFactory $resultForwardFactory
     )
     {
         $this->resultForwardFactory = $resultForwardFactory;

@@ -23,9 +23,11 @@ namespace Mageplaza\Blog\Block\Adminhtml\Category;
 
 use Magento\Backend\Block\Widget\Context;
 use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\Data\Tree\Node;
 use Magento\Framework\DB\Helper;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Registry;
+use Mageplaza\Blog\Helper\Category;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory;
 use Mageplaza\Blog\Model\ResourceModel\Category\Tree as TreeResource;
@@ -65,6 +67,11 @@ class Tree extends AbstractCategory
     public $resourceHelper;
 
     /**
+     * @var \Mageplaza\Blog\Helper\Category
+     */
+    protected $categoryHelper;
+
+    /**
      * Tree constructor.
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -74,6 +81,7 @@ class Tree extends AbstractCategory
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Model\Auth\Session $backendSession
      * @param \Magento\Framework\DB\Helper $resourceHelper
+     * @param \Mageplaza\Blog\Helper\Category $categoryHelper
      * @param array $data
      */
     public function __construct(
@@ -85,12 +93,14 @@ class Tree extends AbstractCategory
         EncoderInterface $jsonEncoder,
         Session $backendSession,
         Helper $resourceHelper,
+        Category $categoryHelper,
         array $data = []
     )
     {
         $this->jsonEncoder    = $jsonEncoder;
         $this->backendSession = $backendSession;
         $this->resourceHelper = $resourceHelper;
+        $this->categoryHelper = $categoryHelper;
 
         parent::__construct($context, $registry, $categoryTree, $categoryFactory, $categoryCollectionFactory, $data);
     }
@@ -281,11 +291,12 @@ class Tree extends AbstractCategory
 
     /**
      * @param null $parentNodeCategory
+     * @param null $store
      * @return array
      */
-    public function getTree($parentNodeCategory = null)
+    public function getTree($parentNodeCategory = null, $store = null)
     {
-        $rootArray = $this->getNodeJson($this->getRoot($parentNodeCategory));
+        $rootArray = $this->getNodeJson($this->getRoot($parentNodeCategory), 0, $store);
         $tree      = isset($rootArray['children']) ? $rootArray['children'] : [];
 
         return $tree;
@@ -336,17 +347,22 @@ class Tree extends AbstractCategory
     /**
      * Get JSON of a tree node or an associative array
      *
-     * @param Node|array $node
+     * @param \Magento\Framework\Data\Tree\Node|array $node
      * @param int $level
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function getNodeJson($node, $level = 0)
+    public function getNodeJson($node, $level = 0, $store = null)
     {
         // create a node from data array
         if (is_array($node)) {
-            $node = new \Magento\Framework\Data\Tree\Node($node, 'category_id', new \Magento\Framework\Data\Tree());
+            $node = new Node($node, 'category_id', new \Magento\Framework\Data\Tree());
+        }
+
+        $storeIds = $node->getStoreIds() ? explode(',', $node->getStoreIds()) : [];
+        if (!empty($storeIds) && !in_array(0, $storeIds) && !is_null($store) && !in_array($store, $storeIds)) {
+            return null;
         }
 
         $item         = [];
@@ -371,7 +387,9 @@ class Tree extends AbstractCategory
             $item['children'] = [];
             if (!($this->getUseAjax() && $node->getLevel() > 1 && !$isParent)) {
                 foreach ($node->getChildren() as $child) {
-                    $item['children'][] = $this->getNodeJson($child, $level + 1);
+                    if ($noteTmp = $this->getNodeJson($child, $level + 1, $store)) {
+                        $item['children'][] = $noteTmp;
+                    }
                 }
             }
         }

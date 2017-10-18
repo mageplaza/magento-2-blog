@@ -165,9 +165,9 @@ class View extends Action
             }
         }
 
-        if ($this->getRequest()->isAjax() && $this->helperBlog->isLoggedIn()) {
+        if ($this->getRequest()->isAjax() && $this->session->isLoggedIn()) {
             $params       = $this->getRequest()->getParams();
-            $customerData = $this->helperBlog->getCustomerData();
+            $customerData = $this->session->getCustomerData();
             $result       = [];
             $now          = getdate();
             if (isset($params['cmt_text'])) {

@@ -20,44 +20,32 @@
 
 define([
         'jquery'
-    ], function treeAmination($) {
-
-        var parentCategory = $(".mp-blog-expand-tree-2");
-        var childCategory = $(".mp-blog-expand-tree-3");
-
-        parentCategory.click(function () {
-
-            $(this).each(function () {
-
-                if ($(this).hasClass("mp-blog-expand-tree-2")) {
-                    $(".category-level3").slideDown("fast");
-                    $(this).removeClass("mp-blog-expand-tree-2 fa fa-plus-square-o").addClass("mp-blog-narrow-tree-2 fa fa-minus-square-o");
-                } else {
-                    $(".category-level4").slideUp("fast");
-                    $(".category-level3").slideUp("fast");
-                    $(this).removeClass("mp-blog-narrow-tree-2 fa fa-minus-square-o").addClass("mp-blog-expand-tree-2 fa fa-plus-square-o");
-                    $(".mp-blog-narrow-tree-3").removeClass("mp-blog-narrow-tree-3 fa fa-minus-square-o").addClass("mp-blog-expand-tree-3 fa fa-plus-square-o");
-
-                }
-
-            });
-
+    ], function ($) {
+        $(".mp-blog-expand-tree-2").click(function () {
+            if ($(this).hasClass("mp-blog-expand-tree-2")) {
+                $(".category-level3").slideDown("fast");
+                $(this).removeClass("mp-blog-expand-tree-2 fa fa-plus-square-o")
+                    .addClass("mp-blog-narrow-tree-2 fa fa-minus-square-o");
+            } else {
+                $(".category-level4").slideUp("fast");
+                $(".category-level3").slideUp("fast");
+                $(this).removeClass("mp-blog-narrow-tree-2 fa fa-minus-square-o")
+                    .addClass("mp-blog-expand-tree-2 fa fa-plus-square-o");
+                $(".mp-blog-narrow-tree-3").removeClass("mp-blog-narrow-tree-3 fa fa-minus-square-o")
+                    .addClass("mp-blog-expand-tree-3 fa fa-plus-square-o");
+            }
         });
 
-        childCategory.click(function () {
-
-            $(this).each(function () {
-
-                if ($(this).hasClass("mp-blog-expand-tree-3")) {
-                    $(".category-level4").slideDown("fast");
-                    $(this).removeClass("mp-blog-expand-tree-3 fa fa-plus-square-o").addClass("mp-blog-narrow-tree-3 fa fa-minus-square-o");
-                } else {
-                    $(".category-level4").slideUp("fast");
-                    $(this).removeClass("mp-blog-narrow-tree-3 fa fa-minus-square-o").addClass("mp-blog-expand-tree-3 fa fa-plus-square-o");
-                }
-
-            });
-
+        $(".mp-blog-expand-tree-3").click(function () {
+            if ($(this).hasClass("mp-blog-expand-tree-3")) {
+                $(".category-level4").slideDown("fast");
+                $(this).removeClass("mp-blog-expand-tree-3 fa fa-plus-square-o")
+                    .addClass("mp-blog-narrow-tree-3 fa fa-minus-square-o");
+            } else {
+                $(".category-level4").slideUp("fast");
+                $(this).removeClass("mp-blog-narrow-tree-3 fa fa-minus-square-o")
+                    .addClass("mp-blog-expand-tree-3 fa fa-plus-square-o");
+            }
         });
     }
 );

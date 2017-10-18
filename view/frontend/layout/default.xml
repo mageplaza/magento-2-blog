@@ -23,8 +23,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="footer_links">
-            <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_footer_link" as="mp_footer_link"
-                   template="Mageplaza_Blog::html/footer.phtml">
+            <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_footer_link" template="html/footer.phtml">
             </block>
         </referenceBlock>
     </body>
