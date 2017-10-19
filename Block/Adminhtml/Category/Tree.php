@@ -27,7 +27,6 @@ use Magento\Framework\Data\Tree\Node;
 use Magento\Framework\DB\Helper;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Registry;
-use Mageplaza\Blog\Helper\Category;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory;
 use Mageplaza\Blog\Model\ResourceModel\Category\Tree as TreeResource;
@@ -67,11 +66,6 @@ class Tree extends AbstractCategory
     public $resourceHelper;
 
     /**
-     * @var \Mageplaza\Blog\Helper\Category
-     */
-    protected $categoryHelper;
-
-    /**
      * Tree constructor.
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -81,7 +75,6 @@ class Tree extends AbstractCategory
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Model\Auth\Session $backendSession
      * @param \Magento\Framework\DB\Helper $resourceHelper
-     * @param \Mageplaza\Blog\Helper\Category $categoryHelper
      * @param array $data
      */
     public function __construct(
@@ -93,14 +86,12 @@ class Tree extends AbstractCategory
         EncoderInterface $jsonEncoder,
         Session $backendSession,
         Helper $resourceHelper,
-        Category $categoryHelper,
         array $data = []
     )
     {
         $this->jsonEncoder    = $jsonEncoder;
         $this->backendSession = $backendSession;
         $this->resourceHelper = $resourceHelper;
-        $this->categoryHelper = $categoryHelper;
 
         parent::__construct($context, $registry, $categoryTree, $categoryFactory, $categoryCollectionFactory, $data);
     }

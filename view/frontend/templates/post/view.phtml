@@ -164,7 +164,7 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                     </script>
                 </div>
             <?php elseif ($typeComment == Type::FACEBOOK): ?>
-                <div class="box-collateral box-reviews" id="post-reviews">
+                <div class="box-collateral box-reviews <?php echo $helper->getBlogConfig('comment/facebook_colorscheme') ?>" id="post-reviews">
                     <h2><?php echo __('Comments') ?></h2>
                     <div id="fb-root"></div>
                     <script>(function (d, s, id) {

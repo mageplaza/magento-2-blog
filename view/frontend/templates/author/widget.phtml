@@ -23,7 +23,7 @@
 
 $author = $block->getCurrentAuthor();
 if ($author): ?>
-    <div class="mp-sidebar mpcss">
+<div class="mp-sidebar mpcss">
 	<div class="row">
         <div class="author-name col-xs-12">
             <h3><?php echo $author->getName() ?></h3>
@@ -39,9 +39,9 @@ if ($author): ?>
         <div class="author-social col-xs-12">
             <?php if ($author->getFacebookLink()): ?>
                 <a href="<?php echo $author->getFacebookLink() ?>" target="_blank">
-                <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/facebook.png') ?>" align="middle"
-                     alt="<?php echo $block->escapeHtml($author->getName()); ?>"/>
-            </a>
+                    <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/facebook.png') ?>" align="middle"
+                        alt="<?php echo $block->escapeHtml($author->getName()); ?>"/>
+                </a>
             <?php else: ?>
                 <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/facebookoff.png') ?>" align="middle"
                      alt="<?php echo $block->escapeHtml($author->getName()); ?>"/>
@@ -55,6 +55,7 @@ if ($author): ?>
                 <img class="img-responsive" src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/twitter-off.png') ?>" align="middle"
                      alt="<?php echo $block->escapeHtml($author->getName()); ?>"/>
             <?php endif; ?>
+            <div class="mp-clear"></div>
         </div>
         <div class="author-border col-xs-12"></div>
 	</div>

@@ -230,111 +230,32 @@
             color: #ffffff;
         }
     }
-
-    /* Footer Copyright */
-    .mp-footer {
-        margin-top: 50px;
-        font-size: 8px !important;
-        display: block;
-        clear: both;
-        float: right;
-        text-transform: inherit;
-    }
-
-    .mp-footer h3 {
-        margin-top: 50px;
-        font-size: 8px !important;
-        display: block;
-        clear: both;
-        float: right;
-        text-transform: inherit;
-    }
-
-    .mp-footer-links-light {
-        color: #E8E8E8 !important;
-        margin: 0;
-        padding: 0;
-        border: 0;
-        vertical-align: baseline;
-    }
-
-    .mp-footer-links-light a {
-        color: #E8E8E8 !important;
-    }
-
-    .post-image {
-        min-height: 250px;
-        min-width: 250px;
-        position: relative;
-    }
-    .post-image img.img-responsive{
-        max-height: 100%;
-        max-width: 100%;
-        position: absolute;
-        right: 0;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        margin: auto;
-    }
-
-    .post-item-wraper{padding: 10px !important;}
-    .post-item-list .post-image{
-        display: table-cell;
-    }
-    .post-item-list .post-info-wraper{
-        display: table-cell;
-        vertical-align: top;
-    }
-
-    <?php if ($block->getHelper()->getBlogConfig('comment/facebook_colorscheme') == "dark"):?>
-    .mp-comment .box-collateral span{
-        background-color: #3e2f3a !important;
-    }
-    <?php endif; ?>
-    .post-same-topics .relate-content-container{
-        display: flex;
-        flex-wrap: wrap;
-    }
-
     /*Compatible with YourStore Theme*/
     <?php if ($block->getCurrentTheme() == "Etheme/yourstore") :?>
     .post-list-container, .mp-blog-rss, .post-view, .mp-blog-rss {
         width: 85%;
         margin: auto;
     }
-
     .products-same-post, .post-same-topics {
         border-bottom: solid 1px #dfdfdf;
     }
-
     @media (min-width: 768px) {
-    <?php if ($block->getHelper()->getBlogConfig('sidebar/sidebar_left_right')): ?>
         .post-list-content {
-            border-right: solid 1px #dfdfdf;
-
-    <?php else:?>
-        .post-list-content {
-            border-left: solid 1px #dfdfdf;
+            <?php echo $block->isSidebarRight() ? 'border-right' : 'border-left' ?>: solid 1 px #dfdfdf;
         }
-
-    <?php endif; ?>
     }
-
     @media (min-width: 1024px) {
         .products-same-post li {
             height: 400px;
             width: 24.5% !important;
         }
     }
-
     @media (min-width: 1440px) {
         .products-same-post li {
             height: 500px;
             width: 16.67% !important;
         }
     }
-
     <?php endif;?>
 </style>
 

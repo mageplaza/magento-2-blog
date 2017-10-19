@@ -36,7 +36,6 @@
                     <block class="Mageplaza\Blog\Block\MonthlyArchive\Widget" name="mpblog.sidebar.monthly" template="monthly/widget.phtml"/>
                     <block class="Mageplaza\Blog\Block\Topic\Widget" name="mpblog.sidebar.topic" template="topic/widget.phtml"/>
                     <block class="Mageplaza\Blog\Block\Tag\Widget" name="mpblog.sidebar.tag" template="tag/widget.phtml"/>
-                    <block class="Mageplaza\Blog\Block\Author\Widget" name="mpblog.view.sidebar.author" template="author/widget.phtml"/>
                 </container>
             </container>
         </referenceContainer>
