@@ -45,7 +45,6 @@ class InstallData implements InstallDataInterface
             'position'           => 0,
             'children_count'     => 0,
             'name'               => 'ROOT',
-            'initial_setup_flag' => 1,
             'url_key'            => 'root'
         ];
         $setup->getConnection()->insert($setup->getTable('mageplaza_blog_category'), $sampleTemplates);
