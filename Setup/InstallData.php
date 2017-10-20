@@ -41,11 +41,12 @@ class InstallData implements InstallDataInterface
 
         /** Add root category */
         $sampleTemplates = [
-            'path'               => '1',
-            'position'           => 0,
-            'children_count'     => 0,
-            'name'               => 'ROOT',
-            'url_key'            => 'root'
+            'path'           => '1',
+            'position'       => 0,
+            'children_count' => 0,
+            'level'          => 0,
+            'name'           => 'ROOT',
+            'url_key'        => 'root'
         ];
         $setup->getConnection()->insert($setup->getTable('mageplaza_blog_category'), $sampleTemplates);
 

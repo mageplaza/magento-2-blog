@@ -27,7 +27,7 @@ $tags = $block->getTagList();
 		<div class="block-title col-xs-12 sidebar-tags">
             <p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Tags') ?></p>
 		</div>
-		<div class="col-xs-12">
+		<div class="block-content">
 			<?php if ($tags && $tags->getSize()): ?>
 				<?php foreach ($tags as $tag): ?>
 					<a class="label label-default tags-list"

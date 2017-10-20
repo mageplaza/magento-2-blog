@@ -142,19 +142,18 @@ class Category extends AbstractDb
             if (!$object->hasLevel()) {
                 $object->setLevel($level);
             }
-            if (!$object->hasParentId() && $level && !$object->getInitialSetupFlag()) {
+            if (!$object->hasParentId() && $level) {
                 $object->setParentId($path[$level - 1]);
             }
-            if (!$object->getId() && !$object->getInitialSetupFlag()) {
+            if (!$object->getId()) {
                 $object->setPath($object->getPath() . '/');
             }
-            if (!$object->getInitialSetupFlag()) {
-                $this->getConnection()->update(
-                    $this->getMainTable(),
-                    ['children_count' => 'children_count+1'],
-                    ['category_id IN(?)' => $toUpdateChild]
-                );
-            }
+
+            $this->getConnection()->update(
+                $this->getMainTable(),
+                ['children_count' => 'children_count+1'],
+                ['category_id IN(?)' => $toUpdateChild]
+            );
         }
 
         if (is_array($object->getStoreIds())) {
