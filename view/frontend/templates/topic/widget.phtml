@@ -28,7 +28,7 @@ if ($topics && $topics->getSize()):
             <p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Topics') ?></p>
 		</div>
         <div class="col-xs-12">
-            <ul class="block-content">
+            <ul class="block-content menu-categories">
             <?php foreach ($topics as $topic): ?>
                 <li class="category-item">
                     <a class="list-categories" href="<?php echo $block->getTopicUrl($topic) ?>">

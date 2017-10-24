@@ -67,12 +67,12 @@ class Widget extends Frontend
         /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $postList */
         $postList = $this->helperData->getPostList();
         if ($postList && ($max = $postList->getSize()) > 1) {
-            $maxSize = 30;
+            $maxSize = 22;
             $tagPost = $this->helperData->getPostCollection(Data::TYPE_TAG, $tag->getId());
             if ($tagPost && ($countTagPost = $tagPost->getSize()) > 1) {
                 $size = $maxSize * $countTagPost / $max;
 
-                return round($size);
+                return round($size) + 8;
             }
         }
 
