@@ -36,7 +36,7 @@ $posts = $block->getCollection();
                         <?php if ($post->getImage()) : ?>
                             <a href="<?php echo $post->getUrl() ?>">
                                 <img class="img-responsive" style="height: 220px"
-                                     src="<?php echo $block->resizeImage($post->getImage()); ?>"
+                                     src="<?php echo $block->resizeImage($post->getImage(), 400); ?>"
                                      alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
                             </a>
                         <?php endif; ?>

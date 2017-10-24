@@ -44,7 +44,11 @@
             <argument name="requestFieldName" xsi:type="string">tag_id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">tag_id</item>
+                    </item>
                 </item>
             </argument>
         </argument>
@@ -102,10 +106,6 @@
     <columns name="mageplaza_blog_tag_columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="storageConfig" xsi:type="array">
-                    <item name="provider" xsi:type="string">mageplaza_blog_tag_listing.mageplaza_blog_tag_listing.listing_top.bookmarks</item>
-                    <item name="namespace" xsi:type="string">current</item>
-                </item>
                 <item name="editorConfig" xsi:type="array">
                     <item name="selectProvider" xsi:type="string">mageplaza_blog_tag_listing.mageplaza_blog_tag_listing.mageplaza_blog_tag_columns.ids</item>
                     <item name="enabled" xsi:type="boolean">true</item>
@@ -123,11 +123,6 @@
                             <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
                             <item name="1" xsi:type="boolean">true</item>
                         </item>
-                    </item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">mageplaza_blog_tag_listing.mageplaza_blog_tag_listing.listing_top.bookmarks</item>
-                        <item name="root" xsi:type="string">columns.${ $.index }</item>
-                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
                     </item>
                 </item>
             </item>

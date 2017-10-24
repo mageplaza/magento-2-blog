@@ -35,21 +35,17 @@ $authorName = $author !== null ? $author->getName() : '';
 $modifier = $helper->getAuthorByPost($_post, true);
 $modifierName = $modifier !== null ? $modifier->getName() : '';
 ?>
-<div class="mp-blog-rss">
-    <a href="<?php echo $block->getRssUrl() ?>" class="bb-rss-icon">
-        <img src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px">
-    </a>
-</div>
-
-<?php if($_post && $_post->getId()): ?>
-<div class="mpcss post-view" id="mpblog-list-container">
-    <div class="row">
+<div class="mp-blog-view">
+    <div class="mp-blog-rss">
+        <a href="<?php echo $block->getRssUrl() ?>" class="bb-rss-icon">
+            <img src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px">
+        </a>
+    </div>
+    <div class="mpcss post-view" id="mpblog-list-container">
         <div class="post-list-content col-md-9 col-sm-8">
-            <div class="post-image col-xs-12">
+            <div class="post-view-image col-xs-12">
                <?php if ($_post->getImage()) : ?>
-                   <a class="fancybox" href="<?php echo $block->getImageUrl($_post->getImage()); ?>">
-                       <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
-                   </a>
+                   <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
                <?php endif; ?>
             </div>
             <div class="post-post_content col-xs-12">
@@ -76,7 +72,6 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
             </div>
         </div>
     </div>
-</div>
     <?php if ($helper->getBlogConfig('share/enabled')): ?>
         <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $helper->getBlogConfig('share/pubid_id') ?>" async="async"></script>
         <div class="mpcss">
@@ -94,58 +89,72 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
         </div>
     <?php endif; ?>
     <?php if($authorName && $helper->showAuthorInfo()): ?>
-        <div class="mpcss about-admin">
-            <div class="row">
-                <h2><?php echo __('About the Author');?></h2>
-                <div class="author-content-container">
-                    <div class="author-content-image">
-                        <img class="img-responsive" src="<?php echo $author->getImage() ? $block->resizeImage($author->getImage(), 135) : $block->getDefaultAuthorImage();?>">
-                    </div>
-                    <div class="author-content-information">
-                        <div class="author-name"><?php echo $authorName ?></div>
-                        <p class="author-description"><?php echo $author->getShortDescription();?></p>
-                    </div>
-                    <div class="mp-clear"></div>
+        <div class="block-blog-related about-admin">
+            <h2><?php echo __('About the Author');?></h2>
+            <div class="related-content-container">
+                <div class="author-content-image">
+                    <img class="img-responsive" src="<?php echo $author->getImage() ? $block->resizeImage($author->getImage(), 135) : $block->getDefaultAuthorImage();?>">
                 </div>
+                <div class="author-content-information">
+                    <div class="author-name"><?php echo $authorName ?></div>
+                    <p class="author-description"><?php echo $author->getShortDescription();?></p>
+                </div>
+                <div class="mp-clear"></div>
             </div>
         </div>
     <?php endif;?>
 
-	<?php $relatedPosts = $_post->getRelatedPostsCollection(); ?>
+    <?php $relatedPosts = $_post->getRelatedPostsCollection(); ?>
     <?php if ($relatedPosts && sizeof($relatedPosts)): ?>
-	    <div class="post-same-topics topic-list mpcss" style="width: 90%;">
-		    <div class="row">
-                <h2><?php echo __('Related Posts'); ?></h2>
-                <div class="relate-content-container">
-					<?php foreach ($relatedPosts as $relatedPost): ?>
-						<div class="relate-content item col-md-3 col-sm-6 col-xs-12">
-							<a class="mp-relate-link" href="<?php echo $relatedPost->getUrl() ?>">
-                                <img class="img-responsive" src="<?php echo $relatedPost->getImage() ? $block->getImageUrl($relatedPost->getImage()) : $block->getDefaultImageUrl(); ?>" align="middle" alt="<?php echo $block->escapeHtml($relatedPost->getName()); ?>">
-								<?php echo $relatedPost->getName(); ?>
-                            </a>
-						</div>
-					<?php endforeach; ?>
-                </div>
+        <div class="block-blog-related topic-list mpcss" style="width: 90%;">
+            <h2><?php echo __('Related Posts'); ?></h2>
+            <div class="related-content-container">
+                <?php foreach ($relatedPosts as $post): ?>
+                    <div class="post-list-item col-mp mp-6 mp-lg-4 mp-md-6 mp-xs-12">
+                        <div class="post-item-wraper">
+                            <div class="post-image">
+                                <?php if ($post->getImage()) : ?>
+                                    <a href="<?php echo $post->getUrl() ?>">
+                                        <img class="img-responsive"
+                                             src="<?php echo $block->resizeImage($post->getImage(), 400); ?>"
+                                             alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                            <div class="post-info-wraper">
+                                <h2 class="mp-post-title">
+                                    <a class="post-link-title" title="<?php echo $block->escapeHtml($post->getName()); ?>" href="<?php echo $post->getUrl() ?>">
+                                        <?php echo $post->getName();?>
+                                    </a>
+                                </h2>
+                                <div class="mp-post-info">
+                                    <?php echo $block->getPostInfo($post); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+                <div class="mp-clear"></div>
             </div>
         </div>
     <?php endif; ?>
     <?php if ($helper->getBlogConfig('product_post/post_detail/enable_product')): ?>
         <?php $relatedBlock = $block->getChildBlock('related_products'); ?>
         <?php if($relatedBlock->hasProduct()): ?>
-            <div class="products-same-post mpcss" style="width: 90%;">
-                <div class="row">
-                    <h2><?php echo ($helper->getBlogConfig('product_post/post_detail/title')) ?: __('Related Products')?></h2>
+            <div class="block-blog-related products-same-post page-products mpcss" style="width: 90%;">
+                <h2><?php echo ($helper->getBlogConfig('product_post/post_detail/title')) ?: __('Related Products')?></h2>
+                <div class="related-content-container">
                     <?php echo $relatedBlock->toHtml();?>
                 </div>
             </div>
         <?php endif; ?>
     <?php endif;?>
-    <div class="mpcss mp-comment" style="width: 90%">
-        <?php if($_post->getAllowComment()): ?>
+    <?php if($_post->getAllowComment()): ?>
+        <div class="block-blog-related blog-comment">
+            <h2><?php echo __('Comments') ?></h2>
             <?php $typeComment = $block->helperComment('type'); ?>
             <?php if ($typeComment == Type::DISQUS): ?>
-                <div class="box-collateral box-reviews" id="post-reviews">
-                    <h2><?php echo __('Comments') ?></h2>
+                <div class="related-content-container box-collateral box-reviews" id="post-reviews">
                     <div id="disqus_thread"></div>
                     <script type="text/javascript">
                         var disqus_shortname = '<?php echo $block->helperComment('disqus'); ?>';
@@ -161,8 +170,7 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                     </script>
                 </div>
             <?php elseif ($typeComment == Type::FACEBOOK): ?>
-                <div class="box-collateral box-reviews <?php echo $helper->getBlogConfig('comment/facebook_colorscheme') ?>" id="post-reviews">
-                    <h2><?php echo __('Comments') ?></h2>
+                <div class="related-content-container box-collateral box-reviews <?php echo $helper->getBlogConfig('comment/facebook_colorscheme') ?>" id="post-reviews">
                     <div id="fb-root"></div>
                     <script>(function (d, s, id) {
                             var js, fjs = d.getElementsByTagName(s)[0];
@@ -181,37 +189,30 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                     </div>
                 </div>
             <?php elseif ($typeComment == Type::DEFAULT_COMMENT): ?>
-                <div class="container default-cmt">
-                    <div class="row">
-                        <div class="col-xs-10"> <h2><?php echo __('Comments'); ?></h2></div>
-                        <div class="col-xs-2">
-                            <?php if(!$block->isLoggedIn()): ?>
-                            <div class="default-cmt__cmt-login">
-                                <button class="btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
-                            </div>
-                            <?php endif; ?>
-                        </div>
+                <div class="related-content-container container default-cmt">
+                    <?php if(!$block->isLoggedIn()): ?>
+                    <div class="default-cmt__cmt-login">
+                        <button class="btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
                     </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="default-cmt__content">
-                                <div class="default-cmt__content__cmt-block">
-                                    <div class="default-cmt__content__cmt-block__cmt-box">
-                                        <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input" maxlength="255" placeholder="<?php echo __('Type comments here...') ?>"></textarea>
-                                        <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
-                                            <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit btn-primary" <?php echo !$block->isLoggedIn() ? 'disabled' : '' ?>>
-                                                <?php echo __('Comment') ?>
-                                            </button>
-                                        </div>
+                    <?php endif; ?>
+                    <div class="mp-12">
+                        <div class="default-cmt__content">
+                            <div class="default-cmt__content__cmt-block">
+                                <div class="default-cmt__content__cmt-block__cmt-box">
+                                    <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input" maxlength="255" placeholder="<?php echo __('Type comments here...') ?>"></textarea>
+                                    <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
+                                        <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit btn-primary" <?php echo !$block->isLoggedIn() ? 'disabled' : '' ?>>
+                                            <?php echo __('Comment') ?>
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="default-cmt__content__cmt-content">
-                                    <?php
-                                        $comments = $block->getPostComments($_post->getId());
-                                        $block->getCommentsTree($comments, 0);
-                                        echo $block->getCommentsHtml();
-                                    ?>
-                                </div>
+                            </div>
+                            <div class="default-cmt__content__cmt-content">
+                                <?php
+                                    $comments = $block->getPostComments($_post->getId());
+                                    $block->getCommentsTree($comments, 0);
+                                    echo $block->getCommentsHtml();
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -220,70 +221,46 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                     require(['comment']);
                 </script>
             <?php endif; ?>
-        <?php endif; ?>
-    </div>
-    <?php
-        $orgName = $helper->getSeoConfig('snippet/organize_name');
+        </div>
+    <?php endif; ?>
+    <?php if ($helper->getSeoConfig('snippet/enabled')): ?>
+        <?php
         $logo = $helper->getSeoConfig('snippet/upload_image_id');
         $logo = $logo ? $helper->getImageHelper()->getMediaUrl($logo) : $block->getDefaultImageUrl();
-        if ($helper->getSeoConfig('snippet/enabled')):
-    ?>
-    <script type="application/ld+json">
-    {
-      "@context": "http://schema.org",
-      "@type": "NewsArticle",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://google.com/article"
-      },
-      "headline": "<?php echo $_post->getName(); ?>",
-      "image": {
-        "@type": "ImageObject",
-        "url": "<?php echo $_post->getImage() ? $block->getImageUrl($_post->getImage()) : $block->getDefaultImageUrl(); ?>",
-        "height": 800,
-        "width": 800
-      },
-      "datePublished": "<?php echo $block->getDateFormat($_post->getPublishDate()); ?>",
-      "dateModified": "<?php echo $block->getDateFormat($_post->getUpdatedAt()); ?>",
-      "author": {
-        "@type": "Person",
-        "name": "<?php echo $authorName; ?>"
-      },
-       "publisher": {
-        "@type": "Organization",
-        "name": "<?php echo $orgName; ?>",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "<?php echo $logo; ?>",
-          "width": 600,
-          "height": 60
+        ?>
+        <script type="application/ld+json">
+        {
+          "@context": "http://schema.org",
+          "@type": "NewsArticle",
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://google.com/article"
+          },
+          "headline": "<?php echo $_post->getName(); ?>",
+          "image": {
+            "@type": "ImageObject",
+            "url": "<?php echo $_post->getImage() ? $block->getImageUrl($_post->getImage()) : $block->getDefaultImageUrl(); ?>",
+            "height": 800,
+            "width": 800
+          },
+          "datePublished": "<?php echo $block->getDateFormat($_post->getPublishDate()); ?>",
+          "dateModified": "<?php echo $block->getDateFormat($_post->getUpdatedAt()); ?>",
+          "author": {
+            "@type": "Person",
+            "name": "<?php echo $authorName; ?>"
+          },
+           "publisher": {
+            "@type": "Organization",
+            "name": "<?php echo $helper->getSeoConfig('snippet/organize_name'); ?>",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "<?php echo $logo; ?>",
+              "width": 600,
+              "height": 60
+            }
+          },
+          "description": "<?php echo $_post->getShortDescription(); ?>"
         }
-      },
-      "description": "<?php echo $_post->getShortDescription(); ?>"
-    }
-    </script>
-	<?php endif; ?>
-<?php else: ?>
-    <div><?php echo __('This store has no post with name: %1', $_post->getName()) ?></div>
-<?php endif;?>
-<script type="text/javascript">
-    require(['jquery', 'fancybox', 'jquery/jquery-migrate'], function($){
-        $('img.fancybox').each(function(){
-            var self = $(this),
-                title = self.attr('title'),
-                src = self.data('big') || self.attr('src');
-
-            self.wrap(
-                $('<a href="#" class="fancybox"></a>')
-                    .attr('href', src)
-                    .attr('title', title)
-            );
-        });
-
-        var fancybox = $('a.fancybox');
-        fancybox.attr('rel', 'fancyboxgallery');
-        fancybox.fancybox({
-            titlePosition: 'inside'
-        });
-    });
-</script>
+        </script>
+    <?php endif; ?>
+</div>

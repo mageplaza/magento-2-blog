@@ -32,7 +32,7 @@
     <?php if ($postCollection && $postCollection->getSize()) : ?>
         <div class="post-list-body">
         <?php /** @var \Mageplaza\Blog\Model\Post $post */ foreach ($postCollection as $post) : ?>
-            <div class="post-list-item col-mp<?php echo $block->isGridView() ? ' mp-6 mp-lg-4 mp-md-6 mp-xs-12' : ' post-item-list mp-12'; ?>">
+            <div class="post-list-item col-mp<?php echo $block->isGridView() ? ' mp-6 mp-xs-12' : ' post-item-list mp-12'; ?>">
                 <div class="post-item-wraper">
                     <div class="post-image">
                         <?php if ($post->getImage()) : ?>
