@@ -45,9 +45,6 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
 <div class="mpcss post-view" id="mpblog-list-container">
     <div class="row">
         <div class="post-list-content col-md-9 col-sm-8">
-            <div class="post-title col-xs-12" style="margin-bottom: 20px;">
-                <h1><?php echo $_post->getName();?></h1>
-            </div>
             <div class="post-image col-xs-12">
                <?php if ($_post->getImage()) : ?>
                    <a class="fancybox" href="<?php echo $block->getImageUrl($_post->getImage()); ?>">
@@ -99,19 +96,16 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
     <?php if($authorName && $helper->showAuthorInfo()): ?>
         <div class="mpcss about-admin">
             <div class="row">
-                <div class="col-xs-12 author-title">
-                    <h4 class="admin-title"><?php echo __('About the Author: %1', $authorName);?></h4>
-                    <div id="admin-border"></div>
-                </div>
-                <div class="col-xs-12 author-des">
-                    <?php if($image = $author->getImage()):?>
-                    <div class="admin-avatar">
-                        <img class="img-responsive" src="<?php echo $block->getImageUrl($image);?>">
+                <h2><?php echo __('About the Author');?></h2>
+                <div class="author-content-container">
+                    <div class="author-content-image">
+                        <img class="img-responsive" src="<?php echo $author->getImage() ? $block->resizeImage($author->getImage(), 135) : $block->getDefaultAuthorImage();?>">
                     </div>
-                    <?php endif;?>
-                    <div class="admin-description">
-                        <?php echo $author->getShortDescription();?>
+                    <div class="author-content-information">
+                        <div class="author-name"><?php echo $authorName ?></div>
+                        <p class="author-description"><?php echo $author->getShortDescription();?></p>
                     </div>
+                    <div class="mp-clear"></div>
                 </div>
             </div>
         </div>
@@ -136,12 +130,15 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
         </div>
     <?php endif; ?>
     <?php if ($helper->getBlogConfig('product_post/post_detail/enable_product')): ?>
-        <div class="products-same-post mpcss" style="width: 90%;">
-            <div class="row">
-                <h2><?php echo ($helper->getBlogConfig('product_post/post_detail/title')) ?: __('Related Products')?></h2>
-                <?php echo $this->getChildHtml('related_products');?>
+        <?php $relatedBlock = $block->getChildBlock('related_products'); ?>
+        <?php if($relatedBlock->hasProduct()): ?>
+            <div class="products-same-post mpcss" style="width: 90%;">
+                <div class="row">
+                    <h2><?php echo ($helper->getBlogConfig('product_post/post_detail/title')) ?: __('Related Products')?></h2>
+                    <?php echo $relatedBlock->toHtml();?>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
     <?php endif;?>
     <div class="mpcss mp-comment" style="width: 90%">
         <?php if($_post->getAllowComment()): ?>
@@ -188,7 +185,7 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                     <div class="row">
                         <div class="col-xs-10"> <h2><?php echo __('Comments'); ?></h2></div>
                         <div class="col-xs-2">
-                            <?php if($block->isLoggedIn()): ?>
+                            <?php if(!$block->isLoggedIn()): ?>
                             <div class="default-cmt__cmt-login">
                                 <button class="btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
                             </div>
@@ -283,11 +280,10 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
             );
         });
 
-        var titlePosition = 'inside',
-            fancybox = $('a.fancybox');
+        var fancybox = $('a.fancybox');
         fancybox.attr('rel', 'fancyboxgallery');
         fancybox.fancybox({
-            titlePosition: titlePosition
+            titlePosition: 'inside'
         });
     });
 </script>

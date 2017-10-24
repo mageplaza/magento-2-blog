@@ -267,6 +267,15 @@ class Post extends Generic implements TabInterface
             ]
         );
 
+        if (!$post->getId()) {
+            $post->addData([
+                'meta_title'       => $this->_scopeConfig->getValue('blog/seo/meta_title'),
+                'meta_description' => $this->_scopeConfig->getValue('blog/seo/meta_description'),
+                'meta_keywords'    => $this->_scopeConfig->getValue('blog/seo/meta_keywords'),
+                'meta_robots'      => $this->_scopeConfig->getValue('blog/seo/meta_robots'),
+            ]);
+        }
+
         if ($post->getData('publish_date')) {
             $date = $post->getData('publish_date');
             $date = new \DateTime($date, new \DateTimeZone('UTC'));

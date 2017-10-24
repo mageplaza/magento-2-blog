@@ -25,7 +25,9 @@ $posts = $block->getCollection();
 ?>
 <div class="blog-widget-title"><a ></a></div>
 <div class="post-list-container mpcss" id="mpblog-list-container">
-    <div class="widget-title"><a href="<?php echo $block->getBlogUrl(''); ?>"><?php echo $block->getTitle(); ?></a></div>
+    <div class="widget-title">
+        <a href="<?php echo $block->getBlogUrl(''); ?>"><?php echo $block->getTitle(); ?></a>
+    </div>
     <div class="row">
         <?php foreach ($posts as $post) : ?>
             <div class="post-list-item col-sm-4 col-xs-4">

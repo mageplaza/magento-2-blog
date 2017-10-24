@@ -77,7 +77,7 @@ class Design extends Template
      */
     public function isSidebarRight()
     {
-        return (bool)$this->helperData->getBlogConfig('sidebar/sidebar_left_right');
+        return $this->helperData->getBlogConfig('sidebar/sidebar_left_right');
     }
 
     /**

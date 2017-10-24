@@ -140,13 +140,13 @@ class Tag extends Generic implements TabInterface
             $tag->setEnabled(1);
         }
 
-        $fieldset->addField('description', 'editor', [
-                'name'   => 'description',
-                'label'  => __('Description'),
-                'title'  => __('Description'),
-                'config' => $this->wysiwygConfig->getConfig()
-            ]
-        );
+//        $fieldset->addField('description', 'editor', [
+//                'name'   => 'description',
+//                'label'  => __('Description'),
+//                'title'  => __('Description'),
+//                'config' => $this->wysiwygConfig->getConfig()
+//            ]
+//        );
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             /** @var \Magento\Framework\Data\Form\Element\Renderer\RendererInterface $rendererBlock */
@@ -202,6 +202,15 @@ class Tag extends Generic implements TabInterface
                 'values' => $this->metaRobots->toOptionArray(),
             ]
         );
+
+        if (!$tag->getId()) {
+            $tag->addData([
+                'meta_title'       => $this->_scopeConfig->getValue('blog/seo/meta_title'),
+                'meta_description' => $this->_scopeConfig->getValue('blog/seo/meta_description'),
+                'meta_keywords'    => $this->_scopeConfig->getValue('blog/seo/meta_keywords'),
+                'meta_robots'      => $this->_scopeConfig->getValue('blog/seo/meta_robots'),
+            ]);
+        }
 
         $form->addValues($tag->getData());
         $this->setForm($form);

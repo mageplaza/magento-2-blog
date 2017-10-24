@@ -32,15 +32,16 @@ use Mageplaza\Blog\Helper\Data;
  */
 class Widget extends Frontend
 {
+
     /**
      * @return array|string
      */
-    public function getCategoryListHtml()
+    public function getTree()
     {
         $tree = ObjectManager::getInstance()->create(Tree::class);
         $tree = $tree->getTree(null, $this->store->getStore()->getId());
 
-        return $this->getCategoryTreeHtml($tree);
+        return $tree;
     }
 
     /**

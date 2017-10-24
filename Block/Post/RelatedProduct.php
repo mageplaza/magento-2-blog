@@ -86,24 +86,38 @@ class RelatedProduct extends ListProduct
 
     /**
      * @return mixed
+     */
+    public function hasProduct()
+    {
+        $collection = $this->_getProductCollection();
+
+        return $collection->getSize();
+    }
+
+    /**
+     * @return mixed
      * get ProductCollection in same brand ( filter by Atrribute Option_Id )
      */
     public function _getProductCollection()
     {
-        $postId     = $this->getRequest()->getParam('id');
-        $collection = $this->_productCollectionFactory->create()
-            ->addAttributeToSelect('*')
-            ->addStoreFilter();
+        if ($this->_productCollection === null) {
+            $postId     = $this->getRequest()->getParam('id');
+            $collection = $this->_productCollectionFactory->create()
+                ->addAttributeToSelect('*')
+                ->addStoreFilter();
 
-        $collection->getSelect()
-            ->joinLeft(
-                ['product_post' => $collection->getTable('mageplaza_blog_post_product')],
-                "e.entity_id = product_post.entity_id"
-            )
-            ->where('product_post.post_id = ' . $postId)
-            ->limit((int)$this->helper->getBlogConfig('product_post/post_detail/product_limit') ?: self::LIMIT);
+            $collection->getSelect()
+                ->joinLeft(
+                    ['product_post' => $collection->getTable('mageplaza_blog_post_product')],
+                    "e.entity_id = product_post.entity_id"
+                )
+                ->where('product_post.post_id = ' . $postId)
+                ->limit((int)$this->helper->getBlogConfig('product_post/post_detail/product_limit') ?: self::LIMIT);
 
-        return $collection;
+            $this->_productCollection = $collection;
+        }
+
+        return $this->_productCollection;
     }
 
     /**

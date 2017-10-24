@@ -218,13 +218,17 @@
             <group id="seo" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>SEO</label>
                 <field id="meta_title" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Meta title for posts list page</label>
+                    <label>Meta title</label>
                 </field>
                 <field id="meta_description" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Meta description for posts list page</label>
+                    <label>Meta description</label>
                 </field>
                 <field id="meta_keywords" translate="label" type="textarea" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Meta keywords for posts list page</label>
+                    <label>Meta keywords</label>
+                </field>
+                <field id="meta_robots" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Meta robots</label>
+                    <source_model>Magento\Config\Model\Config\Source\Design\Robots</source_model>
                 </field>
                 <group id="snippet" translate="label" showInStore="1" showInWebsite="1" sortOrder="100" showInDefault="1">
                     <label>Article Snippet</label>

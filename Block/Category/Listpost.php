@@ -39,7 +39,7 @@ class Listpost extends Frontend
      */
     protected function getCollection()
     {
-        if ($category = $this->getCategory()) {
+        if ($category = $this->getBlogObject()) {
             return $this->helperData->getPostCollection(Data::TYPE_CATEGORY, $category->getId());
         }
 
@@ -49,7 +49,7 @@ class Listpost extends Frontend
     /**
      * @return mixed
      */
-    protected function getCategory()
+    protected function getBlogObject()
     {
         if (!$this->_category) {
             $id = $this->getRequest()->getParam('id');
@@ -73,7 +73,7 @@ class Listpost extends Frontend
         parent::_prepareLayout();
 
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
-            $category = $this->getCategory();
+            $category = $this->getBlogObject();
             if ($category) {
                 $breadcrumbs->addCrumb($category->getUrlKey(), [
                         'label' => __('Category'),
@@ -91,7 +91,7 @@ class Listpost extends Frontend
     public function getBlogTitle($meta = false)
     {
         $blogTitle = parent::getBlogTitle($meta);
-        $category  = $this->getCategory();
+        $category  = $this->getBlogObject();
         if (!$category) {
             return $blogTitle;
         }

@@ -212,11 +212,16 @@ class Frontend extends Template
     {
         $this->pageConfig->getTitle()->set(join($this->getTitleSeparator(), array_reverse($this->getBlogTitle(true))));
 
-        $description = $this->helperData->getSeoConfig('meta_description');
+        $object = $this->getBlogObject();
+
+        $description = $object ? $object->getMetaDescription() : $this->helperData->getSeoConfig('meta_description');
         $this->pageConfig->setDescription($description);
 
-        $keywords = $this->helperData->getSeoConfig('meta_keywords');
+        $keywords = $object ? $object->getMetaKeywords() : $this->helperData->getSeoConfig('meta_keywords');
         $this->pageConfig->setKeywords($keywords);
+
+        $robots = $object ? $object->getMetaRobots() : $this->helperData->getSeoConfig('meta_robots');
+        $this->pageConfig->setRobots($robots);
 
         $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle) {
@@ -333,5 +338,13 @@ class Frontend extends Template
     public function getDefaultImageUrl()
     {
         return $this->getViewFileUrl('Mageplaza_Blog::media/images/mageplaza-logo-default.png');
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultAuthorImage()
+    {
+        return $this->getViewFileUrl('Mageplaza_Blog::media/images/no-artist-image.jpg');
     }
 }

@@ -21,6 +21,8 @@
 
 /** @var \Mageplaza\Blog\Model\ResourceModel\Tag\Collection $tags */
 $tags = $block->getTagList();
+
+if ($tags && $tags->getSize()):
 ?>
 <div class="mp-sidebar mpcss">
 	<div class="row">
@@ -28,17 +30,14 @@ $tags = $block->getTagList();
             <p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Tags') ?></p>
 		</div>
 		<div class="block-content">
-			<?php if ($tags && $tags->getSize()): ?>
-				<?php foreach ($tags as $tag): ?>
-					<a class="label label-default tags-list"
-                       style="font-size:<?php echo $block->getTagSize($tag) . 'px'; ?>"
-                       href="<?php echo $block->getTagUrl($tag) ?>">
-                        <?php echo $tag->getName(); ?>
-                    </a>
-				<?php endforeach; ?>
-            <?php else: ?>
-                <?php echo __('No Tags') ?>
-            <?php endif; ?>
+        <?php foreach ($tags as $tag): ?>
+            <a class="label label-default tags-list"
+               style="font-size:<?php echo $block->getTagSize($tag) . 'px'; ?>"
+               href="<?php echo $block->getTagUrl($tag) ?>">
+                <?php echo $tag->getName(); ?>
+            </a>
+        <?php endforeach; ?>
 		</div>
     </div>
 </div>
+<?php endif; ?>
