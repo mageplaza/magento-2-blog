@@ -85,7 +85,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'primary'  => true,
                         'unsigned' => true,
                     ], 'Traffic ID')
-                    ->addColumn('post_id', Table::TYPE_INTEGER, null, ['unsigned' => true, 'nullable' => false], 'Post ID')
+                    ->addColumn('post_id', Table::TYPE_INTEGER, null, [
+                        'unsigned' => true,
+                        'nullable' => false
+                    ], 'Post ID')
                     ->addColumn('numbers_view', Table::TYPE_TEXT, 255, [], 'Numbers View')
                     ->addIndex($installer->getIdxName('mageplaza_blog_post_traffic', ['post_id']), ['post_id'])
                     ->addIndex($installer->getIdxName('mageplaza_blog_post_traffic', ['traffic_id']), ['traffic_id'])
@@ -272,12 +275,20 @@ class UpgradeSchema implements UpgradeSchemaInterface
             if (!$installer->tableExists('mageplaza_blog_post_product')) {
                 $table = $installer->getConnection()
                     ->newTable($installer->getTable('mageplaza_blog_post_product'))
-                    ->addColumn('post_id', Table::TYPE_INTEGER, null, [
+                    ->addColumn('post_product_id', Table::TYPE_INTEGER, null, [
+                        'identity' => true,
                         'unsigned' => true,
                         'nullable' => false,
                         'primary'  => true,
+                    ], 'Post Product ID')
+                    ->addColumn('post_id', Table::TYPE_INTEGER, null, [
+                        'unsigned' => true,
+                        'nullable' => false
                     ], 'Post ID')
-                    ->addColumn('entity_id', Table::TYPE_INTEGER, null, ['unsigned' => true, 'nullable' => false], 'Entity ID')
+                    ->addColumn('entity_id', Table::TYPE_INTEGER, null, [
+                        'unsigned' => true,
+                        'nullable' => false
+                    ], 'Entity ID')
                     ->addColumn('position', Table::TYPE_INTEGER, null, ['nullable' => false, 'default' => '0'], 'Position')
                     ->addIndex($installer->getIdxName('mageplaza_blog_post_product', ['post_id']), ['post_id'])
                     ->addIndex($installer->getIdxName('mageplaza_blog_post_product', ['entity_id']), ['entity_id'])

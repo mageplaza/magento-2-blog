@@ -20,11 +20,13 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
+/** @var \Mageplaza\Blog\Block\MonthlyArchive\Widget $block */
+
 $dateArrayCount = $block->getDateArrayCount();
 $dateArrayUnique = $block->getDateArrayUnique();
 $dateLabel = $block->getDateLabel();
 
-if ($block->getBlogConfig('monthly_archive/enable_monthly') && $dateArrayUnique): ?>
+if ($block->isEnable() && $dateArrayUnique): ?>
 <div class="mp-sidebar mpcss">
 	<div class="row">
 		<div class="block-title col-xs-12 sidebar-archives">

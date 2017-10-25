@@ -75,6 +75,14 @@ class Widget extends Frontend
     }
 
     /**
+     * @return mixed
+     */
+    public function isEnable()
+    {
+        return $this->helperData->getBlogConfig('monthly_archive/enable_monthly');
+    }
+
+    /**
      * @return array
      */
     public function getDateArrayCount()
@@ -112,7 +120,7 @@ class Widget extends Frontend
         if (!$this->_postDate) {
             $posts     = $this->helperData->getPostList();
             $postDates = [];
-            if ($posts) {
+            if ($posts->getSize()) {
                 foreach ($posts as $post) {
                     $postDates[] = $post->getPublishDate();
                 }

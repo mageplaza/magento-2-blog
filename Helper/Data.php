@@ -258,7 +258,7 @@ class Data extends CoreHelper
     {
         /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $collection */
         $collection = $this->getObjectList(self::TYPE_POST, $storeId)
-            ->addFieldToFilter('publish_date', ["lt" => $this->dateTime->date()])
+            ->addFieldToFilter('publish_date', ["to" => $this->dateTime->date()])
             ->setOrder('publish_date', 'desc');
 
         return $collection;

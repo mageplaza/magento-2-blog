@@ -152,7 +152,6 @@ class View extends Action
      */
     public function execute()
     {
-        date_default_timezone_set($this->helperBlog->getTimezone());
         $id = $this->getRequest()->getParam('id');
         if ($id) {
             $trafficModel = $this->trafficFactory->create()->load($id, 'post_id');
