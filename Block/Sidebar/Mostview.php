@@ -42,7 +42,7 @@ class Mostview extends Frontend
                 'numbers_view'
             )
             ->order('numbers_view DESC')
-            ->limit((int)$this->getBlogConfig('sidebar/number_mostview_posts') ?: 4);
+            ->limit((int)$this->helperData->getBlogConfig('sidebar/number_mostview_posts') ?: 4);
 
         return $collection;
     }
@@ -54,7 +54,7 @@ class Mostview extends Frontend
     {
         $collection = $this->helperData->getPostList();
         $collection->getSelect()
-            ->limit((int)$this->getBlogConfig('sidebar/number_recent_posts') ?: 4);
+            ->limit((int)$this->helperData->getBlogConfig('sidebar/number_recent_posts') ?: 4);
 
         return $collection;
     }

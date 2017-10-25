@@ -97,7 +97,9 @@ class Listpost extends Frontend
         }
 
         if ($meta) {
-            $blogTitle[] = $category->getName();
+            if($title = $category->getMetaTitle()) {
+                $blogTitle = [$title];
+            }
         } else {
             $blogTitle = $category->getName();
         }
