@@ -45,13 +45,4 @@ class Widget extends Frontend
 
         return null;
     }
-
-    /**
-     * @param $content
-     * @return string
-     */
-    public function getPageFilter($content)
-    {
-        return $this->filterProvider->getPageFilter()->filter($content);
-    }
 }

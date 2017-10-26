@@ -142,6 +142,15 @@ class Frontend extends Template
     }
 
     /**
+     * @param $content
+     * @return string
+     */
+    public function getPageFilter($content)
+    {
+        return $this->filterProvider->getPageFilter()->filter($content);
+    }
+
+    /**
      * @return bool
      */
     public function isGridView()

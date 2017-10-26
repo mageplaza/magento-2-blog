@@ -72,8 +72,7 @@
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">mageplaza_blog_topic_listing.mageplaza_blog_topic_listing.mageplaza_blog_topic_columns.ids</item>
-                    <item name="indexField" xsi:type="string">topic_id</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/tree-massactions</item>
                 </item>
             </argument>
             <action name="delete">
@@ -89,14 +88,26 @@
                     </item>
                 </argument>
             </action>
-            <action name="edit">
+            <action name="status">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="type" xsi:type="string">edit</item>
-                        <item name="label" xsi:type="string" translate="true">Edit</item>
-                        <item name="callback" xsi:type="array">
-                            <item name="provider" xsi:type="string">mageplaza_blog_topic_listing.mageplaza_blog_topic_listing.mageplaza_blog_topic_columns_editor</item>
-                            <item name="target" xsi:type="string">editSelected</item>
+                        <item name="type" xsi:type="string">status</item>
+                        <item name="label" xsi:type="string" translate="true">Change status</item>
+                    </item>
+                </argument>
+                <argument name="actions" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="type" xsi:type="string">enable</item>
+                        <item name="label" xsi:type="string" translate="true">Enable</item>
+                        <item name="url" xsi:type="url" path="mageplaza_blog/topic/massStatus">
+                            <param name="status">1</param>
+                        </item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="type" xsi:type="string">disable</item>
+                        <item name="label" xsi:type="string" translate="true">Disable</item>
+                        <item name="url" xsi:type="url" path="mageplaza_blog/topic/massStatus">
+                            <param name="status">0</param>
                         </item>
                     </item>
                 </argument>

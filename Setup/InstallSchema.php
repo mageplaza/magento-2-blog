@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Setup;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
@@ -190,9 +191,9 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     Table::ACTION_CASCADE
                 )
                 ->addIndex(
-                    $installer->getIdxName('mageplaza_blog_post_tag', ['post_id', 'tag_id'], \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
+                    $installer->getIdxName('mageplaza_blog_post_tag', ['post_id', 'tag_id'], AdapterInterface::INDEX_TYPE_UNIQUE),
                     ['post_id', 'tag_id'],
-                    ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+                    ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
                 )
                 ->setComment('Post To Tag Link Table');
 
@@ -234,9 +235,9 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     Table::ACTION_CASCADE
                 )
                 ->addIndex(
-                    $installer->getIdxName('mageplaza_blog_post_topic', ['post_id', 'topic_id'], \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
+                    $installer->getIdxName('mageplaza_blog_post_topic', ['post_id', 'topic_id'], AdapterInterface::INDEX_TYPE_UNIQUE),
                     ['post_id', 'topic_id'],
-                    ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+                    ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
                 )
                 ->setComment('Post To Topic Link Table');
 
@@ -278,9 +279,9 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     Table::ACTION_CASCADE
                 )
                 ->addIndex(
-                    $installer->getIdxName('mageplaza_blog_post_category', ['category_id', 'post_id'], \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
+                    $installer->getIdxName('mageplaza_blog_post_category', ['category_id', 'post_id'], AdapterInterface::INDEX_TYPE_UNIQUE),
                     ['category_id', 'post_id'],
-                    ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+                    ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
                 )
                 ->setComment('Category To Post Link Table');
 

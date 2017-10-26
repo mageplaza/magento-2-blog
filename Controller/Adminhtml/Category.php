@@ -80,7 +80,7 @@ abstract class Category extends Action
         if ($categoryId) {
             $category->load($categoryId);
             if (!$category->getId()) {
-                $this->messageManager->addErrorMessage(__('This post no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This category no longer exists.'));
 
                 return false;
             }

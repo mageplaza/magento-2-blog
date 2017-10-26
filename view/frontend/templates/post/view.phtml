@@ -29,10 +29,10 @@ $helper = $this->helper(\Mageplaza\Blog\Helper\Data::class);
 <?php
 $_post = $block->getPost();
 
-$author = $helper->getAuthorByPost($_post);
+$author     = $helper->getAuthorByPost($_post);
 $authorName = $author !== null ? $author->getName() : '';
 
-$modifier = $helper->getAuthorByPost($_post, true);
+$modifier     = $helper->getAuthorByPost($_post, true);
 $modifierName = $modifier !== null ? $modifier->getName() : '';
 ?>
 <div class="mp-blog-view">
@@ -56,15 +56,18 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                 <div class="mp-post-info">
                     <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getPublishDate()); ?></span>
                     <?php if ($categoryHtml = $block->getPostCategoryHtml($_post)): ?>
-                        | <span><i class="fa fa-folder-open-o"></i><?php echo __('Categories: %1', $categoryHtml); ?></span>
+                        |
+                        <span><i class="fa fa-folder-open-o"></i><?php echo __('Categories: %1', $categoryHtml); ?></span>
                     <?php endif; ?>
                     <?php if ($tagList = $block->getTagList($_post)): ?>
                         | <span><i class="fa fa-tags"></i><?php echo __('Tags: %1', $tagList); ?></span>
                     <?php endif; ?>
                     <?php if ($authorName && $helper->showAuthorInfo()): ?>
-                        | <span><i class="fa fa-user"></i><?php echo __('By: %1', '<a class="mp-info" href="' . $author->getUrl() . '">' . $authorName . '</a>') ?></span>
+                        |
+                        <span><i class="fa fa-user"></i><?php echo __('By: %1', '<a class="mp-info" href="' . $author->getUrl() . '">' . $authorName . '</a>') ?></span>
                         <?php if ($authorName != $modifierName && $modifierName): ?>
-                            | <span><i class="fa fa-edit"></i><?php echo __('Modify By: %1 at %2', '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>', $_post->getUpdatedAt()) ?></span>
+                            |
+                            <span><i class="fa fa-edit"></i><?php echo __('Modify By: %1 at %2', '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>', $_post->getUpdatedAt()) ?></span>
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>
@@ -82,27 +85,27 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                 <div class="share-col-right">
                     <div class="post-sharing-button">
                         <div class="addthis_inline_share_toolbox"></div>
-    <!--                    <div class="addthis_sharing_toolbox"></div>-->
+                        <!--                    <div class="addthis_sharing_toolbox"></div>-->
                     </div>
                 </div>
             </div>
         </div>
     <?php endif; ?>
-    <?php if($authorName && $helper->showAuthorInfo()): ?>
+    <?php if ($authorName && $helper->showAuthorInfo()): ?>
         <div class="block-blog-related about-admin">
-            <h2><?php echo __('About the Author');?></h2>
+            <h2><?php echo __('About the Author'); ?></h2>
             <div class="related-content-container">
                 <div class="author-content-image">
-                    <img class="img-responsive" src="<?php echo $author->getImage() ? $block->resizeImage($author->getImage(), 135) : $block->getDefaultAuthorImage();?>">
+                    <img class="img-responsive" src="<?php echo $author->getImage() ? $block->resizeImage($author->getImage(), 135) : $block->getDefaultAuthorImage(); ?>">
                 </div>
                 <div class="author-content-information">
                     <div class="author-name"><?php echo $authorName ?></div>
-                    <p class="author-description"><?php echo $author->getShortDescription();?></p>
+                    <p class="author-description"><?php echo $block->getPageFilter($author->getShortDescription()); ?></p>
                 </div>
                 <div class="mp-clear"></div>
             </div>
         </div>
-    <?php endif;?>
+    <?php endif; ?>
 
     <?php $relatedPosts = $_post->getRelatedPostsCollection(); ?>
     <?php if ($relatedPosts && sizeof($relatedPosts)): ?>
@@ -124,7 +127,7 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                             <div class="post-info-wraper">
                                 <h2 class="mp-post-title">
                                     <a class="post-link-title" title="<?php echo $block->escapeHtml($post->getName()); ?>" href="<?php echo $post->getUrl() ?>">
-                                        <?php echo $post->getName();?>
+                                        <?php echo $post->getName(); ?>
                                     </a>
                                 </h2>
                                 <div class="mp-post-info">
@@ -140,16 +143,16 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
     <?php endif; ?>
     <?php if ($helper->getBlogConfig('product_post/post_detail/enable_product')): ?>
         <?php $relatedBlock = $block->getChildBlock('related_products'); ?>
-        <?php if($relatedBlock->hasProduct()): ?>
+        <?php if ($relatedBlock->hasProduct()): ?>
             <div class="block-blog-related products-same-post page-products mpcss" style="width: 90%;">
-                <h2><?php echo ($helper->getBlogConfig('product_post/post_detail/title')) ?: __('Related Products')?></h2>
+                <h2><?php echo ($helper->getBlogConfig('product_post/post_detail/title')) ?: __('Related Products') ?></h2>
                 <div class="related-content-container">
-                    <?php echo $relatedBlock->toHtml();?>
+                    <?php echo $relatedBlock->toHtml(); ?>
                 </div>
             </div>
         <?php endif; ?>
-    <?php endif;?>
-    <?php if($_post->getAllowComment()): ?>
+    <?php endif; ?>
+    <?php if ($_post->getAllowComment()): ?>
         <div class="block-blog-related blog-comment">
             <h2><?php echo __('Comments') ?></h2>
             <?php $typeComment = $block->helperComment('type'); ?>
@@ -170,6 +173,7 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                     </script>
                 </div>
             <?php elseif ($typeComment == Type::FACEBOOK): ?>
+
                 <div class="related-content-container box-collateral box-reviews <?php echo $helper->getBlogConfig('comment/facebook_colorscheme') ?>" id="post-reviews">
                     <div id="fb-root"></div>
                     <script>(function (d, s, id) {
@@ -189,9 +193,10 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                     </div>
                 </div>
             <?php elseif ($typeComment == Type::DEFAULT_COMMENT): ?>
+
                 <div class="related-content-container container default-cmt">
-                    <?php if(!$block->isLoggedIn()): ?>
-                    <div class="default-cmt__cmt-login">
+                    <?php if (!$block->isLoggedIn()): ?>
+                        <div class="default-cmt__cmt-login">
                         <button class="btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
                     </div>
                     <?php endif; ?>
@@ -209,15 +214,20 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                             </div>
                             <div class="default-cmt__content__cmt-content">
                                 <?php
-                                    $comments = $block->getPostComments($_post->getId());
-                                    $block->getCommentsTree($comments, 0);
-                                    echo $block->getCommentsHtml();
+                                $comments = $block->getPostComments($_post->getId());
+                                $block->getCommentsTree($comments, 0);
+                                echo $block->getCommentsHtml();
                                 ?>
                             </div>
                         </div>
                     </div>
                 </div>
                 <script>
+                    //get login url, text of button like, reply
+                    var loginUrl = '<?php echo $block->getLoginUrl(); ?>',
+                        like = '<?php echo __('Like') ?>',
+                        reply = '<?php echo __('Reply') ?>';
+
                     require(['comment']);
                 </script>
             <?php endif; ?>

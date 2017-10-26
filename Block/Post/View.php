@@ -24,6 +24,7 @@ namespace Mageplaza\Blog\Block\Post;
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Block\Frontend;
@@ -59,6 +60,11 @@ class View extends Frontend
     protected $postFactory;
 
     /**
+     * @var \Magento\Customer\Model\Url
+     */
+    protected $customerUrl;
+
+    /**
      * View constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
@@ -66,6 +72,7 @@ class View extends Frontend
      * @param \Mageplaza\Blog\Model\LikeFactory $likeFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Mageplaza\Blog\Helper\Data $helperData
+     * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
      * @param \Mageplaza\Blog\Model\PostFactory $postFactory
      * @param array $data
@@ -77,6 +84,7 @@ class View extends Frontend
         LikeFactory $likeFactory,
         CustomerRepositoryInterface $customerRepository,
         HelperData $helperData,
+        Url $customerUrl,
         CategoryFactory $categoryFactory,
         PostFactory $postFactory,
         array $data = []
@@ -84,6 +92,7 @@ class View extends Frontend
     {
         $this->categoryFactory = $categoryFactory;
         $this->postFactory     = $postFactory;
+        $this->customerUrl     = $customerUrl;
 
         parent::__construct($context, $filterProvider, $commentFactory, $likeFactory, $customerRepository, $helperData, $data);
     }
@@ -266,7 +275,7 @@ class View extends Frontend
 
     /**
      * get tag list
-     * @param $post
+     * @param Post $post
      * @return string
      */
     public function getTagList($post)
@@ -285,12 +294,11 @@ class View extends Frontend
     }
 
     /**
-     * @param $content
      * @return string
      */
-    public function getPageFilter($content)
+    public function getLoginUrl()
     {
-        return $this->filterProvider->getPageFilter()->filter($content);
+        return $this->customerUrl->getLoginUrl();
     }
 
     /**
