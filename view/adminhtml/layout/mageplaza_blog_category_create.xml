@@ -1,4 +1,5 @@
-<?php
+<?xml version="1.0"?>
+<!--
 /**
  * Mageplaza
  *
@@ -18,8 +19,13 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
-?>
-<div id="<?php echo $block->getNameInLayout() ?>" style="display:none">
-    <?php echo $block->getFormHtml();?>
-    <?php echo $block->getAfterElementHtml();?>
-</div>
+-->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <body>
+        <referenceContainer name="content">
+            <uiComponent name="blog_new_category_form"/>
+        </referenceContainer>
+    </body>
+</page>

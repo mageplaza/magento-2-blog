@@ -32,15 +32,15 @@ $posts = $block->getCollection();
         <?php foreach ($posts as $post) : ?>
             <div class="post-list-item col-sm-4 col-xs-4">
                 <div class="post-item-wraper">
-                    <div class="post-image">
-                        <?php if ($post->getImage()) : ?>
+                    <?php if ($post->getImage()) : ?>
+                        <div class="post-image">
                             <a href="<?php echo $post->getUrl() ?>">
                                 <img class="img-responsive" style="height: 220px"
                                      src="<?php echo $block->resizeImage($post->getImage(), 400); ?>"
                                      alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
                             </a>
-                        <?php endif; ?>
-                    </div>
+                        </div>
+                    <?php endif; ?>
                     <div class="post-info-wraper">
                         <h2 class="mp-post-title" style="font-size: 22px">
                             <a class="post-link-title" title="<?php echo $post->getName(); ?>" href="<?php echo $post->getUrl() ?>">

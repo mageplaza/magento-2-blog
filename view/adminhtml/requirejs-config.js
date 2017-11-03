@@ -21,8 +21,7 @@
 var config = {
     map: {
         '*': {
-            categoryForm: 'Mageplaza_Blog/category/form',
-            newCategoryDialog: 'Mageplaza_Blog/category/new-category-dialog'
+            categoryForm: 'Mageplaza_Blog/category/form'
         }
     }
 };

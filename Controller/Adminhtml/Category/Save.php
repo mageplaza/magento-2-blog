@@ -97,6 +97,64 @@ class Save extends Category
      */
     public function execute()
     {
+        if ($this->getRequest()->getPost('return_session_messages_only')) {
+            $category                      = $this->initCategory();
+            $categoryPostData              = $this->getRequest()->getPostValue();
+            $categoryPostData['store_ids'] = 0;
+            $categoryPostData['enabled']   = 1;
+
+            $category->addData($categoryPostData);
+
+            $parentId = $this->getRequest()->getParam('parent');
+            if (!$parentId) {
+                $parentId = \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
+            }
+            $parentCategory = $this->categoryFactory->create()->load($parentId);
+            $category->setPath($parentCategory->getPath());
+            $category->setParentId($parentId);
+
+            try {
+                $category->save();
+                $this->messageManager->addSuccess(__('You saved the category.'));
+            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+                $this->messageManager->addError($e->getMessage());
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $this->messageManager->addError($e->getMessage());
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            } catch (\Exception $e) {
+                $this->messageManager->addError(__('Something went wrong while saving the category.'));
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            }
+
+            $hasError = (bool)$this->messageManager->getMessages()->getCountByType(
+                \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+            );
+
+            $category->load($category->getId());
+            $category->addData([
+                'entity_id' => $category->getId(),
+                'is_active' => $category->getEnabled(),
+                'parent'    => $category->getParentId()
+            ]);
+
+            // to obtain truncated category name
+            /** @var $block \Magento\Framework\View\Element\Messages */
+            $block = $this->layoutFactory->create()->getMessagesBlock();
+            $block->setMessages($this->messageManager->getMessages(true));
+
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            $resultJson = $this->resultJsonFactory->create();
+
+            return $resultJson->setData(
+                [
+                    'messages' => $block->getGroupedHtml(),
+                    'error'    => $hasError,
+                    'category' => $category->toArray(),
+                ]
+            );
+        }
+
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data = $this->getRequest()->getPost('category')) {
             $category = $this->initCategory();
@@ -131,31 +189,9 @@ class Save extends Category
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the Blog Category.'));
                 $this->_getSession()->setData('mageplaza_blog_category_data', false);
-                $refreshTree = true;
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_getSession()->setData('mageplaza_blog_category_data', $data);
-                $refreshTree = false;
-            }
-
-            if ($this->getRequest()->getPost('return_session_messages_only')) {
-                $category->load($category->getId());
-                // to obtain truncated Blog Category Name
-                /** @var $block \Magento\Framework\View\Element\Messages */
-                $block = $this->layoutFactory->create()->getMessagesBlock();
-                $block->setMessages($this->messageManager->getMessages(true));
-
-                /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-                $resultJson = $this->resultJsonFactory->create();
-                $resultJson->setData(
-                    [
-                        'messages' => $block->getGroupedHtml(),
-                        'error'    => !$refreshTree,
-                        'category' => $category->toArray(),
-                    ]
-                );
-
-                return $resultJson;
             }
 
             $resultRedirect->setPath('mageplaza_blog/*/edit', ['_current' => true, 'category_id' => $category->getId()]);

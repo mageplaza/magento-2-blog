@@ -21,14 +21,13 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer;
 
-use Magento\Backend\Helper\Data;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\Element\Multiselect;
 use Magento\Framework\Escaper;
-use Magento\Framework\Json\EncoderInterface;
-use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\UrlInterface;
+use Mageplaza\Blog\Model\Category as CategoryModel;
 use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory as BlogCategoryCollectionFactory;
 
 /**
@@ -43,27 +42,6 @@ class Category extends Multiselect
     public $collectionFactory;
 
     /**
-     * Backend helper
-     *
-     * @var \Magento\Backend\Helper\Data
-     */
-    public $backendData;
-
-    /**
-     * Layout instance
-     *
-     * @var \Magento\Framework\View\LayoutInterface
-     */
-    public $layout;
-
-    /**
-     * Json encoder instance
-     *
-     * @var \Magento\Framework\Json\EncoderInterface
-     */
-    public $jsonEncoder;
-
-    /**
      * Authorization
      *
      * @var \Magento\Framework\AuthorizationInterface
@@ -71,37 +49,60 @@ class Category extends Multiselect
     public $authorization;
 
     /**
-     * constructor
-     *
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $collectionFactory
-     * @param \Magento\Backend\Helper\Data $backendData
-     * @param \Magento\Framework\View\LayoutInterface $layout
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\AuthorizationInterface $authorization
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $_urlBuilder;
+
+    /**
+     * Category constructor.
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $collectionFactory
+     * @param \Magento\Framework\AuthorizationInterface $authorization
+     * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param array $data
      */
     public function __construct(
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
         Escaper $escaper,
-        LayoutInterface $layout,
-        EncoderInterface $jsonEncoder,
-        AuthorizationInterface $authorization,
-        Data $backendData,
         BlogCategoryCollectionFactory $collectionFactory,
+        AuthorizationInterface $authorization,
+        UrlInterface $urlBuilder,
         array $data = []
     )
     {
         $this->collectionFactory = $collectionFactory;
-        $this->backendData       = $backendData;
-        $this->layout            = $layout;
-        $this->jsonEncoder       = $jsonEncoder;
         $this->authorization     = $authorization;
+        $this->_urlBuilder       = $urlBuilder;
 
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getElementHtml()
+    {
+        $html = '<div class="admin__field-control admin__control-grouped">';
+        $html .= '<div id="blog-category-select" class="admin__field" data-bind="scope:\'blogCategory\'" data-index="index">';
+        $html .= '<!-- ko foreach: elems() -->';
+        $html .= '<input name="post[categories_ids]" data-bind="value: value" style="display: none"/>';
+        $html .= '<!-- ko template: elementTmpl --><!-- /ko -->';
+        $html .= '<!-- /ko -->';
+        $html .= '</div>';
+
+        $html .= '<div class="admin__field admin__field-group-additional admin__field-small" data-bind="scope:\'create_category_button\'">';
+        $html .= '<div class="admin__field-control">';
+        $html .= '<!-- ko template: elementTmpl --><!-- /ko -->';
+        $html .= '</div></div></div>';
+
+        $html .= '<!-- ko scope: \'create_category_modal\' --><!-- ko template: getTemplate() --><!-- /ko --><!-- /ko -->';
+
+        $html .= $this->getAfterElementHtml();
+
+        return $html;
     }
 
     /**
@@ -117,35 +118,61 @@ class Category extends Multiselect
     }
 
     /**
+     * @return mixed
+     */
+    public function getCategoriesTree()
+    {
+        /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
+        $collection = $this->collectionFactory->create();
+
+        $categoryById = [
+            CategoryModel::TREE_ROOT_ID => [
+                'value'    => CategoryModel::TREE_ROOT_ID,
+                'optgroup' => null,
+            ],
+        ];
+
+        foreach ($collection as $category) {
+            foreach ([$category->getId(), $category->getParentId()] as $categoryId) {
+                if (!isset($categoryById[$categoryId])) {
+                    $categoryById[$categoryId] = ['value' => $categoryId];
+                }
+            }
+
+            $categoryById[$category->getId()]['is_active']        = 1;
+            $categoryById[$category->getId()]['label']            = $category->getName();
+            $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
+        }
+
+        return $categoryById[CategoryModel::TREE_ROOT_ID]['optgroup'];
+    }
+
+    /**
      * Get values for select
      *
      * @return array
      */
     public function getValues()
     {
-        $collection = $this->getCategoriesCollection();
-        $values     = $this->getValue();
+        $values = $this->getValue();
         if (!is_array($values)) {
             $values = explode(',', $values);
         }
-        $collection->addIdFilter($values);
+
+        if(!sizeof($values)){
+            return [];
+        }
+
+        /* @var $collection \Mageplaza\Blog\Model\ResourceModel\Category\Collection */
+        $collection = $this->collectionFactory->create()
+            ->addIdFilter($values);
+
         $options = [];
         foreach ($collection as $category) {
-            /** @var \Mageplaza\Blog\Model\Category $category */
-            $options[] = ['label' => $category->getName(), 'value' => $category->getId()];
+            $options[] = $category->getId();
         }
 
         return $options;
-    }
-
-    /**
-     * Get Blog Category collection
-     *
-     * @return \Mageplaza\Blog\Model\ResourceModel\Category\Collection
-     */
-    public function getCategoriesCollection()
-    {
-        return $this->collectionFactory->create();
     }
 
     /**
@@ -155,48 +182,97 @@ class Category extends Multiselect
      */
     public function getAfterElementHtml()
     {
-        $htmlId             = $this->getHtmlId();
-        $suggestPlaceholder = __('start typing to search Blog Category');
-        $selectorOptions    = $this->jsonEncoder->encode($this->getSelectorOptions());
-        $newCategoryCaption = __('New Blog Category');
-        /** @var \Magento\Backend\Block\Widget\Button $button */
-        $button = $this->layout->createBlock('Magento\Backend\Block\Widget\Button')
-            ->setData([
-                'id'       => 'add_category_button',
-                'label'    => $newCategoryCaption,
-                'title'    => $newCategoryCaption,
-                'onclick'  => 'jQuery("#new-category").trigger("openModal")',
-                'disabled' => $this->getDisabled()
-            ]);
-        // move this somewhere else when magento team decides to move it.
-        $return = <<<HTML
-        <input id="{$htmlId}-suggest" placeholder="$suggestPlaceholder" />
-        <script type="text/javascript">
-            require(["jquery","mage/mage"],function($) {  // waiting for dependencies at first
-                $(function(){ // waiting for page to load to have '#category_ids-template' available
-                    $('#{$htmlId}-suggest').mage('treeSuggest', {$selectorOptions});
-                });
-            });
-        </script>
-HTML;
+        $html = '<script type="text/x-magento-init">
+            {
+                "*": {
+                    "Magento_Ui/js/core/app": {
+                        "components": {
+                            "blogCategory": {
+                                "component": "uiComponent",
+                                "children": {
+                                    "blog_select_category": {
+                                        "component": "Magento_Catalog/js/components/new-category",
+                                        "config": {
+                                            "filterOptions": true,
+                                            "disableLabel": true,
+                                            "chipsEnabled": true,
+                                            "levelsVisibility": "1",
+                                            "elementTmpl": "ui/grid/filters/elements/ui-select",
+                                            "options": ' . json_encode($this->getCategoriesTree()) . ',
+                                            "value": ' . json_encode($this->getValues()) . ',
+                                            "listens": {
+                                                "index=create_category:responseData": "setParsed",
+                                                "newOption": "toggleOptionSelected"
+                                            },
+                                            "config": {
+                                                "dataScope": "blog_select_category",
+                                                "sortOrder": 10
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "create_category_button": {
+                                "title": "' . __('New Category') . '",
+                                "formElement": "container",
+                                "additionalClasses": "admin__field-small",
+                                "componentType": "container",
+                                "component": "Magento_Ui/js/form/components/button",
+                                "template": "ui/form/components/button/container",
+                                "actions": [
+                                    {
+                                        "targetName": "create_category_modal",
+                                        "actionName": "toggleModal"
+                                    },
+                                    {
+                                        "targetName": "create_category_modal.create_category",
+                                        "actionName": "render"
+                                    },
+                                    {
+                                        "targetName": "create_category_modal.create_category",
+                                        "actionName": "resetForm"
+                                    }
+                                ],
+                                "additionalForGroup": true,
+                                "provider": false,
+                                "source": "product_details",
+                                "displayArea": "insideGroup"
+                            },
+                            "create_category_modal": {
+                                "config": {
+                                    "isTemplate": false,
+                                    "componentType": "container",
+                                    "component": "Magento_Ui/js/modal/modal-component",
+                                    "options": {
+                                        "title": "' . __('New Category') . '",
+                                        "type": "slide"
+                                    },
+                                    "imports": {
+                                        "state": "!index=create_category:responseStatus"
+                                    }
+                                },
+                                "children": {
+                                    "create_category": {
+                                        "label": "",
+                                        "componentType": "container",
+                                        "component": "Magento_Ui/js/form/components/insert-form",
+                                        "dataScope": "",
+                                        "update_url": "' . $this->_urlBuilder->getUrl('mui/index/render') . '",
+                                        "render_url": "' . $this->_urlBuilder->getUrl('mui/index/render_handle', ['handle' => 'mageplaza_blog_category_create', 'buttons' => 1]) . '",
+                                        "autoRender": false,
+                                        "ns": "blog_new_category_form",
+                                        "externalProvider": "blog_new_category_form.new_category_form_data_source",
+                                        "toolbarContainer": "${ $.parentName }",
+                                        "formSubmitType": "ajax"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        </script>';
 
-        return $return . $button->toHtml();
-//		return $return;
-    }
-
-    /**
-     * Get selector options
-     *
-     * @return array
-     */
-    public function getSelectorOptions()
-    {
-        return [
-            'source'      => $this->backendData->getUrl('mageplaza_blog/category/suggestCategories'),
-            'valueField'  => '#' . $this->getHtmlId(),
-            'className'   => 'category-select',
-            'multiselect' => true,
-            'showAll'     => true
-        ];
+        return $html;
     }
 }

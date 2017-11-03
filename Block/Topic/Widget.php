@@ -36,8 +36,6 @@ class Widget extends Frontend
     public function getTopicList()
     {
         $collection = $this->helperData->getObjectList(Data::TYPE_TOPIC);
-        $collection->getSelect()
-            ->limit(5);
 
         return $collection;
     }
