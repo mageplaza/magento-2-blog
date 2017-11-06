@@ -65,7 +65,7 @@ class Relatedpost extends Template
         $collection->getSelect()
             ->join([
                 'related' => $collection->getTable('mageplaza_blog_post_product')],
-                'related.post_id=main_table.post_id AND related.entity_id=' . $currentPostId . ' AND main_table.enabled=1'
+                'related.post_id=main_table.post_id AND related.entity_id=' . $currentPostId
             )
             ->limit($this->getLimitPosts());
 

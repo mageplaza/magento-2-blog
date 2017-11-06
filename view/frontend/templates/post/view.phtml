@@ -54,20 +54,20 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
             <div class="col-xs-12">
                 <hr/>
                 <div class="mp-post-info">
-                    <span><i class="fa fa-calendar-times-o"></i> <?php echo $block->getDateFormat($_post->getPublishDate()); ?></span>
+                    <span><i class="fa fa-calendar-times-o">&nbsp;</i> <?php echo $block->getDateFormat($_post->getPublishDate()); ?></span>
                     <?php if ($categoryHtml = $block->getPostCategoryHtml($_post)): ?>
                         |
-                        <span><i class="fa fa-folder-open-o"></i><?php echo __('Categories: %1', $categoryHtml); ?></span>
+                        <span><i class="fa fa-folder-open-o">&nbsp;</i><?php echo __('Categories: %1', $categoryHtml); ?></span>
                     <?php endif; ?>
                     <?php if ($tagList = $block->getTagList($_post)): ?>
-                        | <span><i class="fa fa-tags"></i><?php echo __('Tags: %1', $tagList); ?></span>
+                        | <span><i class="fa fa-tags">&nbsp;</i><?php echo __('Tags: %1', $tagList); ?></span>
                     <?php endif; ?>
                     <?php if ($authorName && $helper->showAuthorInfo()): ?>
                         |
-                        <span><i class="fa fa-user"></i><?php echo __('By: %1', '<a class="mp-info" href="' . $author->getUrl() . '">' . $authorName . '</a>') ?></span>
+                        <span><i class="fa fa-user">&nbsp;</i><?php echo __('By: %1', '<a class="mp-info" href="' . $author->getUrl() . '">' . $authorName . '</a>') ?></span>
                         <?php if ($authorName != $modifierName && $modifierName): ?>
                             |
-                            <span><i class="fa fa-edit"></i><?php echo __('Modify By: %1 at %2', '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>', $_post->getUpdatedAt()) ?></span>
+                            <span><i class="fa fa-edit">&nbsp;</i><?php echo __('Modify By: %1 at %2', '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>', $_post->getUpdatedAt()) ?></span>
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>
@@ -173,7 +173,6 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                     </script>
                 </div>
             <?php elseif ($typeComment == Type::FACEBOOK): ?>
-
                 <div class="related-content-container box-collateral box-reviews <?php echo $helper->getBlogConfig('comment/facebook_colorscheme') ?>" id="post-reviews">
                     <div id="fb-root"></div>
                     <script>(function (d, s, id) {
@@ -193,11 +192,10 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                     </div>
                 </div>
             <?php elseif ($typeComment == Type::DEFAULT_COMMENT): ?>
-
                 <div class="related-content-container container default-cmt">
                     <?php if (!$block->isLoggedIn()): ?>
                         <div class="default-cmt__cmt-login">
-                        <button class="btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
+                        <button class="primary btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
                     </div>
                     <?php endif; ?>
                     <div class="mp-12">
@@ -206,7 +204,7 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                                 <div class="default-cmt__content__cmt-block__cmt-box">
                                     <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input" maxlength="255" placeholder="<?php echo __('Type comments here...') ?>"></textarea>
                                     <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
-                                        <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit btn-primary" <?php echo !$block->isLoggedIn() ? 'disabled' : '' ?>>
+                                        <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit primary btn-primary" <?php echo !$block->isLoggedIn() ? 'disabled' : '' ?>>
                                             <?php echo __('Comment') ?>
                                         </button>
                                     </div>
