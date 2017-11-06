@@ -71,7 +71,7 @@ class Options implements OptionSourceInterface
             $categoryById = [
                 CategoryModel::TREE_ROOT_ID => [
                     'value'    => CategoryModel::TREE_ROOT_ID,
-                    'optgroup' => null,
+                    'optgroup' => []
                 ],
             ];
 

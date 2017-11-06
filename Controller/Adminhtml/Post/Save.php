@@ -129,7 +129,7 @@ class Save extends Post
         $timezone               = $this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $data['publish_date']   = $timezone->convertConfigTimeToUtc(isset($data['publish_date']) ? $data['publish_date'] : null);
         $data['modifier_id']    = $this->_auth->getUser()->getId();
-        $data['categories_ids'] = isset($data['categories_ids']) ? explode(',', $data['categories_ids']) : [];
+        $data['categories_ids'] = (isset($data['categories_ids']) && $data['categories_ids']) ? explode(',', $data['categories_ids']) : [];
 
         $post->addData($data);
 

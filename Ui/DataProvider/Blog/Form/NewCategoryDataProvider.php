@@ -18,11 +18,12 @@
  * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Ui\DataProvider\Blog\Form;
 
+use Magento\Framework\UrlInterface;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory;
-use Magento\Framework\UrlInterface;
 
 /**
  * DataProvider for new category form
@@ -51,7 +52,8 @@ class NewCategoryDataProvider extends AbstractDataProvider
         UrlInterface $urlBuilder,
         array $meta = [],
         array $data = []
-    ) {
+    )
+    {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
 
         $this->collection = $collectionFactory->create();
@@ -68,10 +70,10 @@ class NewCategoryDataProvider extends AbstractDataProvider
             [
                 'config' => [
                     'data' => [
-                        'is_active' => 1,
-                        'include_in_menu' => 1,
+                        'is_active'                    => 1,
+                        'include_in_menu'              => 1,
                         'return_session_messages_only' => 1,
-                        'use_config' => ['available_sort_by', 'default_sort_by']
+                        'use_config'                   => ['available_sort_by', 'default_sort_by']
                     ]
                 ]
             ]
