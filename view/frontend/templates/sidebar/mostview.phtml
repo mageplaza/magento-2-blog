@@ -25,11 +25,11 @@
 $posts       = $block->getMosviewPosts();
 $postsRecent = $block->getRecentPost();
 ?>
-<div class="mp-sidebar">
+<div class="mp-sidebar product info detailed">
     <div class="product data items" data-mage-init='{"tabs":{"openedState":"active"}}'>
         <div class="data item title" data-role="collapsible" id="tab-label-popular">
             <a class="data switch" tabindex="-1" data-toggle="switch" id="tab-label-popular-title">
-                <?php echo __('Popular') ?>
+                <div><?php echo __('Popular') ?></div>
             </a>
         </div>
         <div class="data item content" id="tab-content-popular" data-role="content">
@@ -57,7 +57,7 @@ $postsRecent = $block->getRecentPost();
 
         <div class="data item title" data-role="collapsible" id="tab-label-mostview">
             <a class="data switch" tabindex="-1" data-toggle="switch" id="tab-label-mostview-title">
-                <?php echo __('Latest') ?>
+                <div><?php echo __('Latest') ?></div>
             </a>
         </div>
         <div class="data item content" id="tab-content-mostview" data-role="content">

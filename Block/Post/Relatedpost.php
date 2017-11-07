@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Post;
 
+use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data;
@@ -32,25 +33,54 @@ use Mageplaza\Blog\Helper\Data;
 class Relatedpost extends Template
 {
     /**
+     * Core registry
+     *
+     * @var \Magento\Framework\Registry
+     */
+    protected $_coreRegistry;
+
+    /**
      * @var \Mageplaza\Blog\Helper\Data
      */
     protected $helperData;
 
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     */
+    protected $_relatedPosts;
+
+    /**
      * Relatedpost constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Mageplaza\Blog\Helper\Data $helperData
      * @param array $data
      */
     public function __construct(
         Context $context,
+        Registry $registry,
         Data $helperData,
         array $data = []
     )
     {
-        $this->helperData = $helperData;
+        $this->_coreRegistry = $registry;
+        $this->helperData    = $helperData;
 
         parent::__construct($context, $data);
+
+        $this->setTabTitle();
+    }
+
+    /**
+     * Get current product id
+     *
+     * @return null|int
+     */
+    public function getProductId()
+    {
+        $product = $this->_coreRegistry->registry('product');
+
+        return $product ? $product->getId() : null;
     }
 
     /**
@@ -58,18 +88,20 @@ class Relatedpost extends Template
      */
     public function getRelatedPostList()
     {
-        $currentPostId = $this->getRequest()->getParam('id');
+        if ($this->_relatedPosts == null) {
+            /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $collection */
+            $collection = $this->helperData->getPostList();
+            $collection->getSelect()
+                ->join([
+                    'related' => $collection->getTable('mageplaza_blog_post_product')],
+                    'related.post_id=main_table.post_id AND related.entity_id=' . $this->getProductId()
+                )
+                ->limit($this->getLimitPosts());
 
-        /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $collection */
-        $collection = $this->helperData->getPostList();
-        $collection->getSelect()
-            ->join([
-                'related' => $collection->getTable('mageplaza_blog_post_product')],
-                'related.post_id=main_table.post_id AND related.entity_id=' . $currentPostId
-            )
-            ->limit($this->getLimitPosts());
+            $this->_relatedPosts = $collection;
+        }
 
-        return $collection;
+        return $this->_relatedPosts;
     }
 
     /**
@@ -78,5 +110,20 @@ class Relatedpost extends Template
     public function getLimitPosts()
     {
         return (int)$this->helperData->getBlogConfig('product_post/product_detail/post_limit') ?: 1;
+    }
+
+    /**
+     * Set tab title
+     *
+     * @return void
+     */
+    public function setTabTitle()
+    {
+        $relatedSize = min($this->getRelatedPostList()->getSize(), $this->getLimitPosts());
+        $title       = $relatedSize
+            ? __('Related Posts %1', '<span class="counter">' . $relatedSize . '</span>')
+            : __('Related Posts');
+
+        $this->setTitle($title);
     }
 }

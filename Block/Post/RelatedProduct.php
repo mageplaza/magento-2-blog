@@ -107,11 +107,12 @@ class RelatedProduct extends ListProduct
                 ->addStoreFilter();
 
             $collection->getSelect()
-                ->joinLeft(
+                ->join(
                     ['product_post' => $collection->getTable('mageplaza_blog_post_product')],
                     "e.entity_id = product_post.entity_id"
                 )
                 ->where('product_post.post_id = ' . $postId)
+                ->order('product_post.position ASC')
                 ->limit((int)$this->helper->getBlogConfig('product_post/post_detail/product_limit') ?: self::LIMIT);
 
             $this->_productCollection = $collection;
@@ -121,7 +122,15 @@ class RelatedProduct extends ListProduct
     }
 
     /**
-     * @return null
+     * @inheritdoc
+     */
+    public function getMode()
+    {
+        return 'grid';
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getToolbarHtml()
     {
@@ -129,10 +138,18 @@ class RelatedProduct extends ListProduct
     }
 
     /**
-     * @return null
+     * @inheritdoc
      */
     public function getAdditionalHtml()
     {
         return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _beforeToHtml()
+    {
+        return $this;
     }
 }
