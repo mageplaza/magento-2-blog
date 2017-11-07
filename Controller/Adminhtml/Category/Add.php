@@ -26,10 +26,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 
 /**
- * Class NewAction
+ * Class Add
  * @package Mageplaza\Blog\Controller\Adminhtml\Category
  */
-class NewAction extends Action
+class Add extends Action
 {
     /**
      * Redirect result factory

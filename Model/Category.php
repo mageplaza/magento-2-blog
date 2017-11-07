@@ -69,13 +69,6 @@ use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
 class Category extends AbstractModel
 {
     /**
-     * Root of the Blog Category tree
-     *
-     * @var string
-     */
-    const TREE_ROOT_ID = 1;
-
-    /**
      * Cache tag
      *
      * @var string

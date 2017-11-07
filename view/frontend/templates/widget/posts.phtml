@@ -51,7 +51,7 @@ $posts = $block->getCollection();
                             <?php echo $block->getPostInfo($post) ?>
                         </div>
                         <div class="post-short-description">
-                            <p><?php echo $post->getShortDescription(); ?></p>
+                            <p><?php echo $post->getShortDescription(true); ?></p>
                         </div>
                         <div class="mp-clearfix"></div>
                         <div class="mp-post-meta-info mp-alignright">

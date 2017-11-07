@@ -21,227 +21,60 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Category;
 
-use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Model\Auth\Session;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory as CatalogCategoryFactory;
+use Magento\Catalog\Model\ResourceModel\Category\Tree as TreeResource;
 use Magento\Framework\Data\Tree\Node;
 use Magento\Framework\DB\Helper;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\CategoryFactory;
-use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory;
-use Mageplaza\Blog\Model\ResourceModel\Category\Tree as TreeResource;
+use Mageplaza\Blog\Model\ResourceModel\Category\Tree as BlogTreeResource;
 
 /**
  * @method Tree setUseAjax($useAjax)
  * @method bool getUseAjax()
  */
-class Tree extends AbstractCategory
+class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
 {
     /**
-     * Tree template
-     *
-     * @var string
+     * @var int Store filter frontend
      */
-    protected $_template = 'category/tree.phtml';
-
-    /**
-     * JSON Encoder instance
-     *
-     * @var \Magento\Framework\Json\EncoderInterface
-     */
-    public $jsonEncoder;
-
-    /**
-     * Backend Session
-     *
-     * @var \Magento\Backend\Model\Auth\Session
-     */
-    public $backendSession;
-
-    /**
-     * Resource Helper
-     *
-     * @var \Magento\Framework\DB\Helper
-     */
-    public $resourceHelper;
+    protected $_blogStore;
 
     /**
      * Tree constructor.
-     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Backend\Model\Auth\Session $backendSession
      * @param \Magento\Framework\DB\Helper $resourceHelper
+     * @param \Magento\Backend\Model\Auth\Session $backendSession
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $blogCategoryTree
+     * @param \Mageplaza\Blog\Model\CategoryFactory $blogCategoryFactory
      * @param array $data
      */
     public function __construct(
         Context $context,
-        Registry $registry,
         TreeResource $categoryTree,
-        CategoryFactory $categoryFactory,
-        CollectionFactory $categoryCollectionFactory,
+        Registry $registry,
+        CatalogCategoryFactory $categoryFactory,
         EncoderInterface $jsonEncoder,
-        Session $backendSession,
         Helper $resourceHelper,
+        Session $backendSession,
+        BlogTreeResource $blogCategoryTree,
+        CategoryFactory $blogCategoryFactory,
         array $data = []
     )
     {
-        $this->jsonEncoder    = $jsonEncoder;
-        $this->backendSession = $backendSession;
-        $this->resourceHelper = $resourceHelper;
+        parent::__construct($context, $categoryTree, $registry, $categoryFactory, $jsonEncoder, $resourceHelper, $backendSession, $data);
 
-        parent::__construct($context, $registry, $categoryTree, $categoryFactory, $categoryCollectionFactory, $data);
-    }
-
-    /**
-     * @return void
-     */
-    protected function _construct()
-    {
-        parent::_construct();
-        $this->setUseAjax(0);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function _prepareLayout()
-    {
-        $addUrl = $this->getUrl("*/*/new", ['_current' => true, 'category_id' => null, '_query' => false]);
-
-        $this->addChild(
-            'add_sub_button',
-            'Magento\Backend\Block\Widget\Button',
-            [
-                'label'   => __('Add Child Category'),
-                'onclick' => "addNew('" . $addUrl . "', false)",
-                'class'   => 'add',
-                'id'      => 'add_child_category_button',
-                'style'   => $this->canAddChildCategory() ? '' : 'display: none;'
-            ]
-        );
-
-        if ($this->canAddChildCategory()) {
-            $this->addChild(
-                'add_root_button',
-                'Magento\Backend\Block\Widget\Button',
-                [
-                    'label'   => __('Add Root Category'),
-                    'onclick' => "addNew('" . $addUrl . "', true)",
-                    'class'   => 'add',
-                    'id'      => 'add_root_category_button'
-                ]
-            );
-        }
-
-        return parent::_prepareLayout();
-    }
-
-    /**
-     * @param $namePart
-     * @return string
-     */
-    public function getSuggestedCategoriesJson($namePart)
-    {
-        /* @var $collection \Mageplaza\Blog\Model\ResourceModel\Category\Collection */
-        $collection = $this->categoryCollectionFactory->create();
-
-        /* @var $matchingNameCollection \Mageplaza\Blog\Model\ResourceModel\Category\Collection */
-        $matchingNameCollection = clone $collection;
-        $escapedNamePart        = $this->resourceHelper->addLikeEscape(
-            $namePart,
-            ['position' => 'any']
-        );
-        $matchingNameCollection->addFieldToFilter(
-            'name',
-            ['like' => $escapedNamePart]
-        )
-            ->addFieldToFilter(
-                'category_id',
-                ['neq' => \Mageplaza\Blog\Model\Category::TREE_ROOT_ID]
-            );
-
-        $shownCategoriesIds = [];
-        foreach ($matchingNameCollection as $category) {
-            /** @var \Mageplaza\Blog\Model\Category $category */
-            foreach (explode('/', $category->getPath()) as $parentId) {
-                $shownCategoriesIds[$parentId] = 1;
-            }
-        }
-        $collection->addFieldToFilter(
-            'category_id',
-            ['in' => array_keys($shownCategoriesIds)]
-        );
-
-        $categoriesById = [
-            \Mageplaza\Blog\Model\Category::TREE_ROOT_ID => [
-                'id'       => \Mageplaza\Blog\Model\Category::TREE_ROOT_ID,
-                'children' => [],
-            ],
-        ];
-        foreach ($collection as $category) {
-            /** @var \Mageplaza\Blog\Model\Category $category */
-            foreach ([$category->getId(), $category->getParentId()] as $categoryId) {
-                if (!isset($categoriesById[$categoryId])) {
-                    $categoriesById[$categoryId] = ['id' => $categoryId, 'children' => []];
-                }
-            }
-            $categoriesById[$category->getId()]['is_active']        = true;
-            $categoriesById[$category->getId()]['label']            = $category->getName();
-            $categoriesById[$category->getParentId()]['children'][] = &$categoriesById[$category->getId()];
-        }
-
-        return $this->jsonEncoder->encode($categoriesById[\Mageplaza\Blog\Model\Category::TREE_ROOT_ID]['children']);
-    }
-
-    /**
-     * @return string
-     */
-    public function getAddRootButtonHtml()
-    {
-        return $this->getChildHtml('add_root_button');
-    }
-
-    /**
-     * @return string
-     */
-    public function getAddSubButtonHtml()
-    {
-        return $this->getChildHtml('add_sub_button');
-    }
-
-    /**
-     * @return string
-     */
-    public function getExpandButtonHtml()
-    {
-        return $this->getChildHtml('expand_button');
-    }
-
-    /**
-     * @return string
-     */
-    public function getCollapseButtonHtml()
-    {
-        return $this->getChildHtml('collapse_button');
-    }
-
-    /**
-     * @param bool|null $expanded
-     * @return string
-     */
-    public function getLoadTreeUrl($expanded = null)
-    {
-        $params = ['_current' => true, 'id' => null, 'store' => null];
-        if (($expanded === null) && $this->backendSession->getMageplazaBlogCategoryIsTreeWasExpanded()
-            || $expanded == true) {
-            $params['expand_all'] = true;
-        }
-
-        return $this->getUrl('*/*/categoriesJson', $params);
+        $this->_categoryTree     = $blogCategoryTree;
+        $this->_categoryFactory  = $blogCategoryFactory;
+        $this->_withProductCount = false;
     }
 
     /**
@@ -255,29 +88,32 @@ class Tree extends AbstractCategory
     /**
      * @return string
      */
-    public function getSwitchTreeUrl()
+    public function getMoveUrl()
     {
-        return $this->getUrl(
-            'mageplaza_blog/category/tree',
-            ['_current' => true, 'store' => null, '_query' => false, 'id' => null, 'parent' => null]
-        );
+        return $this->getUrl('mageplaza_blog/category/move');
     }
 
     /**
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @param array $args
+     * @return string
      */
-    public function getIsWasExpanded()
+    public function getSaveUrl(array $args = [])
     {
-        return $this->backendSession->getMageplazaBlogCategoryIsTreeWasExpanded();
+        $params = ['_current' => false, '_query' => false];
+        $params = array_merge($params, $args);
+
+        return $this->getUrl('mageplaza_blog/*/save', $params);
     }
 
     /**
      * @return string
      */
-    public function getMoveUrl()
+    public function getEditUrl()
     {
-        return $this->getUrl('mageplaza_blog/category/move');
+        return $this->getUrl(
+            'mageplaza_blog/category/edit',
+            ['store' => null, '_query' => false, 'id' => null, 'parent' => null]
+        );
     }
 
     /**
@@ -287,52 +123,9 @@ class Tree extends AbstractCategory
      */
     public function getTree($parentNodeCategory = null, $store = null)
     {
-        $rootArray = $this->getNodeJson($this->getRoot($parentNodeCategory), 0, $store);
-        $tree      = isset($rootArray['children']) ? $rootArray['children'] : [];
+        $this->_blogStore = $store;
 
-        return $tree;
-    }
-
-    /**
-     * @param mixed $parentNodeCategory
-     * @return string
-     */
-    public function getTreeJson($parentNodeCategory = null)
-    {
-        $rootArray = $this->getNodeJson($this->getRoot($parentNodeCategory));
-        $json      = $this->jsonEncoder->encode(isset($rootArray['children']) ? $rootArray['children'] : []);
-
-        return $json;
-    }
-
-    /**
-     * Get JSON of array of Categories, that are breadcrumbs for specified Blog Category path
-     *
-     * @param string $path
-     * @param string $javascriptVarName
-     * @return string
-     */
-    public function getBreadcrumbsJavascript($path, $javascriptVarName)
-    {
-        if (empty($path)) {
-            return '';
-        }
-
-        $categories = $this->categoryTree->loadBreadcrumbsArray($path);
-        if (empty($categories)) {
-            return '';
-        }
-        foreach ($categories as $key => $category) {
-            $categories[$key] = $this->getNodeJson($categories);
-        }
-
-        return '<script>require(["prototype"], function(){' . $javascriptVarName . ' = ' . $this->jsonEncoder->encode(
-                $categories
-            ) .
-            ';' .
-            ($this->canAddChildCategories()
-                ? '$("add_child_category_button").show();' : '$("add_child_category_button").hide();') .
-            '});</script>';
+        return parent::getTree($parentNodeCategory);
     }
 
     /**
@@ -344,7 +137,7 @@ class Tree extends AbstractCategory
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function getNodeJson($node, $level = 0, $store = null)
+    protected function _getNodeJson($node, $level = 0)
     {
         // create a node from data array
         if (is_array($node)) {
@@ -352,126 +145,34 @@ class Tree extends AbstractCategory
         }
 
         $storeIds = $node->getStoreIds() ? explode(',', $node->getStoreIds()) : [];
-        if (!empty($storeIds) && !in_array(0, $storeIds) && !is_null($store) && !in_array($store, $storeIds)) {
+        if (!empty($storeIds) && !in_array(0, $storeIds) && !is_null($this->_blogStore) && !in_array($this->_blogStore, $storeIds)) {
             return null;
         }
 
-        $item         = [];
-        $item['text'] = $this->buildNodeName($node);
+        $node->setIsActive(true);
 
-        $item['id']        = $node->getId();
-        $item['path']      = $node->getData('path');
+        $item = parent::_getNodeJson($node, $level);
+
         $item['url']       = $node->getData('url_key');
         $item['storeIds']  = $node->getData('store_ids');
-        $item['cls']       = 'folder ' . 'active-category';
-        $allowMove         = $this->isCategoryMoveable($node);
-        $item['allowDrop'] = $allowMove;
-        $item['allowDrag'] = $allowMove && ($node->getLevel() == 0 ? false : true);
-
-        if ((int)$node->getChildrenCount() > 0) {
-            $item['children'] = [];
-        }
-
-        $isParent = $this->isParentSelectedCategory($node);
-
-        if ($node->hasChildren()) {
-            $item['children'] = [];
-            if (!($this->getUseAjax() && $node->getLevel() > 1 && !$isParent)) {
-                foreach ($node->getChildren() as $child) {
-                    if ($noteTmp = $this->getNodeJson($child, $level + 1, $store)) {
-                        $item['children'][] = $noteTmp;
-                    }
-                }
-            }
-        }
-
-        if ($isParent || $node->getLevel() < 2) {
-            $item['expanded'] = true;
-        }
+        $item['allowDrag'] = $this->_isCategoryMoveable($node) && ($node->getLevel() == 0 ? false : true);
 
         return $item;
     }
 
     /**
-     * Get Blog Category Name
+     * Return ids of root categories as array
      *
-     * @param \Magento\Framework\DataObject $node
-     * @return string
+     * @return array
      */
-    public function buildNodeName($node)
+    public function getRootIds()
     {
-        $result = $this->escapeHtml($node->getName());
-
-        return $result;
-    }
-
-    /**
-     * @param Node|array $node
-     * @return bool
-     */
-    public function isCategoryMoveable($node)
-    {
-        $options = new \Magento\Framework\DataObject(['is_moveable' => true, 'category' => $node]);
-        $this->_eventManager->dispatch('adminhtml_mageplaza_blog_category_tree_is_moveable', ['options' => $options]);
-
-        return $options->getIsMoveable();
-    }
-
-    /**
-     * @param \Magento\Framework\Data\Tree\Node $node
-     * @return bool
-     */
-    protected function isParentSelectedCategory($node)
-    {
-        if ($node && $this->getCategory()) {
-            $pathIds = $this->getCategory()->getPathIds();
-            if (in_array($node->getId(), $pathIds)) {
-                return true;
-            }
+        $ids = $this->getData('root_ids');
+        if ($ids === null) {
+            $ids = [Category::TREE_ROOT_ID];
+            $this->setData('root_ids', $ids);
         }
 
-        return false;
-    }
-
-    /**
-     * Check if page loaded by outside link to Blog Category edit
-     *
-     * @return boolean
-     */
-    public function isClearEdit()
-    {
-        return (bool)$this->getRequest()->getParam('clear');
-    }
-
-    /**
-     * Check availability of adding root Blog Category
-     *
-     * @return boolean
-     */
-    public function canAddRootCategory()
-    {
-        $options = new \Magento\Framework\DataObject(['is_allow' => true]);
-        $this->_eventManager->dispatch(
-            'adminhtml_mageplaza_blog_category_tree_can_add_root_category',
-            ['category' => $this->getCategory(), 'options' => $options]
-        );
-
-        return $options->getIsAllow();
-    }
-
-    /**
-     * Check availability of adding child Blog Category
-     *
-     * @return boolean
-     */
-    public function canAddChildCategory()
-    {
-        $options = new \Magento\Framework\DataObject(['is_allow' => true]);
-        $this->_eventManager->dispatch(
-            'adminhtml_mageplaza_blog_category_tree_can_add_child_category',
-            ['category' => $this->getCategory(), 'options' => $options]
-        );
-
-        return $options->getIsAllow();
+        return $ids;
     }
 }

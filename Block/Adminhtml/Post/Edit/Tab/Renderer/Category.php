@@ -21,13 +21,13 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer;
 
+use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\Element\Multiselect;
 use Magento\Framework\Escaper;
 use Magento\Framework\UrlInterface;
-use Mageplaza\Blog\Model\Category as CategoryModel;
 use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory as BlogCategoryCollectionFactory;
 
 /**
@@ -159,7 +159,7 @@ class Category extends Multiselect
             $values = explode(',', $values);
         }
 
-        if(!sizeof($values)){
+        if (!sizeof($values)) {
             return [];
         }
 

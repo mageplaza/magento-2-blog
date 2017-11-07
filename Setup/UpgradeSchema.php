@@ -275,18 +275,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
             if (!$installer->tableExists('mageplaza_blog_post_product')) {
                 $table = $installer->getConnection()
                     ->newTable($installer->getTable('mageplaza_blog_post_product'))
-                    ->addColumn('post_product_id', Table::TYPE_INTEGER, null, [
-                        'identity' => true,
-                        'unsigned' => true,
-                        'nullable' => false,
-                        'primary'  => true,
-                    ], 'Post Product ID')
                     ->addColumn('post_id', Table::TYPE_INTEGER, null, [
                         'unsigned' => true,
+                        'primary'  => true,
                         'nullable' => false
                     ], 'Post ID')
                     ->addColumn('entity_id', Table::TYPE_INTEGER, null, [
                         'unsigned' => true,
+                        'primary'  => true,
                         'nullable' => false
                     ], 'Entity ID')
                     ->addColumn('position', Table::TYPE_INTEGER, null, ['nullable' => false, 'default' => '0'], 'Position')

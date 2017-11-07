@@ -219,7 +219,7 @@ class Post extends Extended implements TabInterface
      */
     public function getCategory()
     {
-        return $this->coreRegistry->registry('mageplaza_blog_category');
+        return $this->coreRegistry->registry('category');
     }
 
     /**

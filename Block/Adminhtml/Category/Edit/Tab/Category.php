@@ -106,7 +106,7 @@ class Category extends Generic implements TabInterface
     protected function _prepareForm()
     {
         /** @var \Mageplaza\Blog\Model\Category $category */
-        $category = $this->_coreRegistry->registry('mageplaza_blog_category');
+        $category = $this->_coreRegistry->registry('category');
 
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('category_');
@@ -121,7 +121,7 @@ class Category extends Generic implements TabInterface
         if (!$category->getId()) {
             $fieldset->addField('path', 'hidden', ['name' => 'path', 'value' => $this->getRequest()->getParam('parent') ?: 1]);
         } else {
-            $fieldset->addField('category_id', 'hidden', ['name' => 'category_id', 'value' => $category->getId()]);
+            $fieldset->addField('category_id', 'hidden', ['name' => 'id', 'value' => $category->getId()]);
             $fieldset->addField('path', 'hidden', ['name' => 'path', 'value' => $category->getPath()]);
         }
 
@@ -141,14 +141,6 @@ class Category extends Generic implements TabInterface
             ]
         );
 
-//        $fieldset->addField('description', 'editor', [
-//                'name'   => 'description',
-//                'label'  => __('Description'),
-//                'title'  => __('Description'),
-//                'config' => $this->wysiwygConfig->getConfig()
-//            ]
-//        );
-
         if (!$this->_storeManager->isSingleStoreMode()) {
             /** @var \Magento\Framework\Data\Form\Element\Renderer\RendererInterface $rendererBlock */
             $rendererBlock = $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element');
@@ -158,6 +150,10 @@ class Category extends Generic implements TabInterface
                 'title'  => __('Store Views'),
                 'values' => $this->systemStore->getStoreValuesForForm(false, true)
             ])->setRenderer($rendererBlock);
+
+            if (!$category->hasData('store_ids')) {
+                $category->setStoreIds(0);
+            }
         } else {
             $fieldset->addField('store_ids', 'hidden', [
                 'name'  => 'store_ids',
@@ -203,6 +199,7 @@ class Category extends Generic implements TabInterface
 
         if (!$category->getId()) {
             $category->addData([
+                'enabled'          => 1,
                 'meta_title'       => $this->_scopeConfig->getValue('blog/seo/meta_title'),
                 'meta_description' => $this->_scopeConfig->getValue('blog/seo/meta_description'),
                 'meta_keywords'    => $this->_scopeConfig->getValue('blog/seo/meta_keywords'),

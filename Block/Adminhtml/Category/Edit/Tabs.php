@@ -86,7 +86,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      */
     public function getCategory()
     {
-        return $this->coreRegistry->registry('mageplaza_blog_category');
+        return $this->coreRegistry->registry('category');
     }
 
     /**

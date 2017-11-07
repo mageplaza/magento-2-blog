@@ -48,7 +48,6 @@ use Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory as TopicCollectio
  * @method Post setMetaKeywords($metaKeywords)
  * @method Post setMetaRobots($metaRobots)
  * @method mixed getName()
- * @method mixed getShortDescription()
  * @method mixed getPostContent()
  * @method mixed getImage()
  * @method mixed getViews()
@@ -276,6 +275,22 @@ class Post extends \Magento\Framework\Model\AbstractModel
         }
 
         return parent::afterSave();
+    }
+
+    /**
+     * @param bool $shorten
+     * @return mixed|string
+     */
+    public function getShortDescription($shorten = false)
+    {
+        $shortDescription = $this->getData('short_description');
+
+        $maxLength = 200;
+        if ($shorten && strlen($shortDescription) > $maxLength) {
+            $shortDescription = substr($shortDescription, 0, $maxLength) . '...';
+        }
+
+        return $shortDescription;
     }
 
     /**

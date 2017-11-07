@@ -61,6 +61,65 @@ class Collection extends AbstractCollection
     }
 
     /**
+     * @param $field
+     * @param null $condition
+     * @return $this
+     */
+    public function addAttributeToFilter($field, $condition = null)
+    {
+        return $this->addFieldToFilter($field, $condition);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addFieldToFilter($field, $condition = null)
+    {
+        if ($field == 'entity_id') {
+            $field = 'category_id';
+        }
+
+        return parent::addFieldToFilter($field, $condition);
+    }
+
+    /**
+     * @param $storeId
+     * @return $this
+     */
+    public function setProductStoreId($storeId)
+    {
+        return $this;
+    }
+
+    /**
+     * @param $count
+     * @return $this
+     */
+    public function setLoadProductCount($count)
+    {
+        return $this;
+    }
+
+    /**
+     * @param $storeId
+     * @return $this
+     */
+    public function setStoreId($storeId)
+    {
+        return $this;
+    }
+
+    /**
+     * @param $attribute
+     * @param bool $joinType
+     * @return $this
+     */
+    public function addAttributeToSelect($attribute, $joinType = false)
+    {
+        return $this;
+    }
+
+    /**
      * Get SQL for get record count.
      * Extra GROUP BY strip added.
      *

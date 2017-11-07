@@ -21,8 +21,8 @@
 
 namespace Mageplaza\Blog\Ui\Component\Blog\Form\Categories;
 
+use Magento\Catalog\Model\Category;
 use Magento\Framework\Data\OptionSourceInterface;
-use Mageplaza\Blog\Model\Category as CategoryModel;
 use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 
 /**
@@ -69,8 +69,8 @@ class Options implements OptionSourceInterface
             $collection = $this->categoryCollectionFactory->create();
 
             $categoryById = [
-                CategoryModel::TREE_ROOT_ID => [
-                    'value'    => CategoryModel::TREE_ROOT_ID,
+                Category::TREE_ROOT_ID => [
+                    'value'    => Category::TREE_ROOT_ID,
                     'optgroup' => []
                 ],
             ];
@@ -87,7 +87,7 @@ class Options implements OptionSourceInterface
                 $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
             }
 
-            $this->categoriesTree = $categoryById[CategoryModel::TREE_ROOT_ID]['optgroup'];
+            $this->categoriesTree = $categoryById[Category::TREE_ROOT_ID]['optgroup'];
         }
 
         return $this->categoriesTree;

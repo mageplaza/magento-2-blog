@@ -77,14 +77,13 @@ class CategoriesJson extends Category
      */
     public function execute()
     {
-        $this->_getSession()->setData(
-            'mageplaza_blog_category_is_tree_was_expanded',
+        $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->setIsTreeWasExpanded(
             (boolean)$this->getRequest()->getParam('expand_all')
         );
 
         $resultJson = $this->resultJsonFactory->create();
         if ($categoryId = (int)$this->getRequest()->getPost('id')) {
-            $this->getRequest()->setParam('category_id', $categoryId);
+            $this->getRequest()->setParam('id', $categoryId);
 
             $category = $this->initCategory(true);
             if (!$category) {

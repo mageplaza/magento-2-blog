@@ -35,7 +35,7 @@ class Delete extends Category
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        if ($id = $this->getRequest()->getParam('category_id')) {
+        if ($id = $this->getRequest()->getParam('id')) {
             try {
                 $this->categoryFactory->create()
                     ->load($id)
@@ -50,7 +50,7 @@ class Delete extends Category
                 // display error message
                 $this->messageManager->addError($e->getMessage());
                 // go back to edit form
-                $resultRedirect->setPath('mageplaza_blog/*/edit', ['category_id' => $id]);
+                $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $id]);
 
                 return $resultRedirect;
             }

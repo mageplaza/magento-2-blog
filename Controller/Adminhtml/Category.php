@@ -73,7 +73,7 @@ abstract class Category extends Action
      */
     public function initCategory($register = false)
     {
-        $categoryId = (int)$this->getRequest()->getParam('category_id');
+        $categoryId = (int)$this->getRequest()->getParam('id');
 
         /** @var \Mageplaza\Blog\Model\Post $post */
         $category = $this->categoryFactory->create();
@@ -87,7 +87,7 @@ abstract class Category extends Action
         }
 
         if ($register) {
-            $this->coreRegistry->register('mageplaza_blog_category', $category);
+            $this->coreRegistry->register('category', $category);
         }
 
         return $category;

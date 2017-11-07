@@ -18,7 +18,7 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 .mp-blog-view a,
-.mp-sidebar a{
+.mp-sidebar a {
   text-decoration: none;
 }
 
@@ -56,9 +56,9 @@
   max-width: 100%;
   p {
     max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-height: 20px;
+    //overflow: hidden;
+    //text-overflow: ellipsis;
+    //max-height: 20px;
   }
 }
 
@@ -550,7 +550,8 @@ li.default-cmt__content__cmt-content__cmt-row.cmt-row {
     border: none;
   }
 }
-.mpblog-post-view{
+
+.mpblog-post-view {
   .post-view-image {
     text-align: center;
   }
@@ -562,11 +563,20 @@ li.default-cmt__content__cmt-content__cmt-row.cmt-row {
 
 .post-item-list {
   .post-image {
+    min-width: 250px;
     display: table-cell;
   }
   .post-info-wraper {
     display: table-cell;
     vertical-align: top;
+  }
+}
+
+.post-info-wraper {
+  display: table-cell;
+  vertical-align: top;
+  h2.mp-post-title{
+    margin-top: 0;
   }
 }
 

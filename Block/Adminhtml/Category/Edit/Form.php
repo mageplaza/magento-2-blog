@@ -21,14 +21,9 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit;
 
-use Magento\Backend\Block\Widget\Context;
+use Magento\Catalog\Block\Adminhtml\Category\AbstractCategory;
+use Magento\Catalog\Model\Category;
 use Magento\Framework\Json\EncoderInterface;
-use Magento\Framework\Registry;
-use Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory;
-use Mageplaza\Blog\Model\Category;
-use Mageplaza\Blog\Model\CategoryFactory;
-use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory;
-use Mageplaza\Blog\Model\ResourceModel\Category\Tree;
 
 /**
  * Class Form
@@ -58,29 +53,32 @@ class Form extends AbstractCategory
     public $jsonEncoder;
 
     /**
-     * constructor
-     *
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * Form constructor.
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
-     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $blogCategoryTree
+     * @param \Mageplaza\Blog\Model\CategoryFactory $blogCategoryFactory
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
      */
     public function __construct(
-        Context $context,
-        Registry $registry,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree,
+        \Magento\Framework\Registry $registry,
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Category\Tree $blogCategoryTree,
+        \Mageplaza\Blog\Model\CategoryFactory $blogCategoryFactory,
         EncoderInterface $jsonEncoder,
-        Tree $categoryTree,
-        CategoryFactory $categoryFactory,
-        CollectionFactory $categoryCollectionFactory,
         array $data = []
     )
     {
-        $this->jsonEncoder = $jsonEncoder;
+        parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
 
-        parent::__construct($context, $registry, $categoryTree, $categoryFactory, $categoryCollectionFactory, $data);
+        $this->jsonEncoder      = $jsonEncoder;
+        $this->_categoryTree    = $blogCategoryTree;
+        $this->_categoryFactory = $blogCategoryFactory;
     }
 
     /**
@@ -163,6 +161,26 @@ class Form extends AbstractCategory
     public function isAjax()
     {
         return $this->getRequest()->isAjax();
+    }
+
+    /**
+     * @param array $args
+     * @return string
+     */
+    public function getSaveUrl(array $args = [])
+    {
+        $params = ['_current' => false, '_query' => false];
+        $params = array_merge($params, $args);
+
+        return $this->getUrl('mageplaza_blog/*/save', $params);
+    }
+
+    /**
+     * @return string
+     */
+    public function getEditUrl()
+    {
+        return $this->getUrl('mageplaza_blog/category/edit', ['_query' => false, 'id' => null, 'parent' => null]);
     }
 
     /**
@@ -274,7 +292,7 @@ class Form extends AbstractCategory
      */
     public function getCategoryId()
     {
-        return (int)$this->templateContext->getRequest()->getParam('category_id');
+        return (int)$this->templateContext->getRequest()->getParam('id');
     }
 
     /**

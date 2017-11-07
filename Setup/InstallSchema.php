@@ -159,21 +159,20 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
         if (!$installer->tableExists('mageplaza_blog_post_tag')) {
             $table = $installer->getConnection()
                 ->newTable($installer->getTable('mageplaza_blog_post_tag'))
-                ->addColumn('post_tag_id', Table::TYPE_INTEGER, null, [
-                    'identity' => true,
-                    'unsigned' => true,
-                    'nullable' => false,
-                    'primary'  => true
-                ], 'Tag ID')
                 ->addColumn('tag_id', Table::TYPE_INTEGER, null, [
                     'unsigned' => true,
+                    'primary'  => true,
                     'nullable' => false
                 ], 'Tag ID')
                 ->addColumn('post_id', Table::TYPE_INTEGER, null, [
                     'unsigned' => true,
+                    'primary'  => true,
                     'nullable' => false
                 ], 'Post ID')
-                ->addColumn('position', Table::TYPE_INTEGER, null, ['nullable' => false, 'default' => '0'], 'Position')
+                ->addColumn('position', Table::TYPE_INTEGER, null, [
+                    'nullable' => false,
+                    'default' => '0'
+                ], 'Position')
                 ->addIndex($installer->getIdxName('mageplaza_blog_post_tag', ['post_id']), ['post_id'])
                 ->addIndex($installer->getIdxName('mageplaza_blog_post_tag', ['tag_id']), ['tag_id'])
                 ->addForeignKey(
@@ -203,18 +202,14 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
         if (!$installer->tableExists('mageplaza_blog_post_topic')) {
             $table = $installer->getConnection()
                 ->newTable($installer->getTable('mageplaza_blog_post_topic'))
-                ->addColumn('post_topic_id', Table::TYPE_INTEGER, null, [
-                    'identity' => true,
-                    'unsigned' => true,
-                    'nullable' => false,
-                    'primary'  => true
-                ], 'Post Topic ID')
                 ->addColumn('topic_id', Table::TYPE_INTEGER, null, [
                     'unsigned' => true,
+                    'primary'  => true,
                     'nullable' => false
                 ], 'Topic ID')
                 ->addColumn('post_id', Table::TYPE_INTEGER, null, [
                     'unsigned' => true,
+                    'primary'  => true,
                     'nullable' => false
                 ], 'Post ID')
                 ->addColumn('position', Table::TYPE_INTEGER, null, ['nullable' => false, 'default' => '0'], 'Position')
@@ -247,18 +242,14 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
         if (!$installer->tableExists('mageplaza_blog_post_category')) {
             $table = $installer->getConnection()
                 ->newTable($installer->getTable('mageplaza_blog_post_category'))
-                ->addColumn('post_category_id', Table::TYPE_INTEGER, null, [
-                    'identity' => true,
-                    'unsigned' => true,
-                    'nullable' => false,
-                    'primary'  => true
-                ], 'Post Category ID')
                 ->addColumn('category_id', Table::TYPE_INTEGER, null, [
                     'unsigned' => true,
+                    'primary'  => true,
                     'nullable' => false
                 ], 'Category ID')
                 ->addColumn('post_id', Table::TYPE_INTEGER, null, [
                     'unsigned' => true,
+                    'primary'  => true,
                     'nullable' => false
                 ], 'Post ID')
                 ->addColumn('position', Table::TYPE_INTEGER, null, ['nullable' => false, 'default' => '0'], 'Position')

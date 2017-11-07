@@ -88,7 +88,7 @@ class Edit extends Category
      */
     public function execute()
     {
-        $categoryId = (int)$this->getRequest()->getParam('category_id');
+        $categoryId = (int)$this->getRequest()->getParam('id');
 
         $category = $this->initCategory();
         if (!$category) {
@@ -106,7 +106,7 @@ class Edit extends Category
             $category->addData($data['category']);
         }
 
-        $this->coreRegistry->register('mageplaza_blog_category', $category);
+        $this->coreRegistry->register('category', $category);
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

@@ -66,7 +66,7 @@ class RefreshPath extends Category
      */
     public function execute()
     {
-        $categoryId = (int)$this->getRequest()->getParam('category_id');
+        $categoryId = (int)$this->getRequest()->getParam('id');
         if ($categoryId) {
             $category = $this->categoryFactory->create()->load($categoryId);
 

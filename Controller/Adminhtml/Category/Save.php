@@ -23,12 +23,17 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Js;
+use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Category;
 use Mageplaza\Blog\Model\CategoryFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Save
@@ -107,7 +112,7 @@ class Save extends Category
 
             $parentId = $this->getRequest()->getParam('parent');
             if (!$parentId) {
-                $parentId = \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
+                $parentId = CategoryModel::TREE_ROOT_ID;
             }
             $parentCategory = $this->categoryFactory->create()->load($parentId);
             $category->setPath($parentCategory->getPath());
@@ -116,19 +121,19 @@ class Save extends Category
             try {
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the category.'));
-            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+            } catch (AlreadyExistsException $e) {
                 $this->messageManager->addError($e->getMessage());
-                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $this->_objectManager->get(LoggerInterface::class)->critical($e);
+            } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->_objectManager->get(LoggerInterface::class)->critical($e);
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving the category.'));
-                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->_objectManager->get(LoggerInterface::class)->critical($e);
             }
 
             $hasError = (bool)$this->messageManager->getMessages()->getCountByType(
-                \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+                MessageInterface::TYPE_ERROR
             );
 
             $category->load($category->getId());
@@ -173,7 +178,7 @@ class Save extends Category
             if (!$category->getId()) {
                 $parentId = $this->getRequest()->getParam('parent');
                 if (!$parentId) {
-                    $parentId = \Mageplaza\Blog\Model\Category::TREE_ROOT_ID;
+                    $parentId = CategoryModel::TREE_ROOT_ID;
                 }
                 $parentCategory = $this->categoryFactory->create()->load($parentId);
                 $category->setPath($parentCategory->getPath());
@@ -194,7 +199,7 @@ class Save extends Category
                 $this->_getSession()->setData('mageplaza_blog_category_data', $data);
             }
 
-            $resultRedirect->setPath('mageplaza_blog/*/edit', ['_current' => true, 'category_id' => $category->getId()]);
+            $resultRedirect->setPath('mageplaza_blog/*/edit', ['_current' => true, 'id' => $category->getId()]);
 
             return $resultRedirect;
         }

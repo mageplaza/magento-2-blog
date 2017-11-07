@@ -28,7 +28,7 @@
         </referenceContainer>
         <referenceContainer name="left" htmlClass="admin__scope-old" htmlTag="div"/>
         <referenceContainer name="left">
-            <block class="Mageplaza\Blog\Block\Adminhtml\Category\Tree" name="mageplaza.blog.category.tree" template="category/tree.phtml"/>
+            <block class="Mageplaza\Blog\Block\Adminhtml\Category\Tree" name="mageplaza.blog.category.tree" template="Magento_Catalog::catalog/category/tree.phtml"/>
         </referenceContainer>
     </body>
 </page>

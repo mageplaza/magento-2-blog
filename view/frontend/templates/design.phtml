@@ -42,51 +42,28 @@
 
 <?php $color = $block->getHelper()->getBlogConfig('general/font_color'); ?>
 <style type="text/css">
-    /*Post List Content Css*/
-    .post-info-wraper h2.mp-post-title {
-        margin-top: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        color: <?php echo $color ?>;
-    }
-
-    .mp-post-info a.mp-info,
-    .about-admin h4.admin-title a,
-    .about-admin h4.admin-title a:hover,
-    h2.mp-post-title a,
-    .mp-post-meta-info a.mp-read-more,
-    .mp-post-meta-info a.mp-read-more:hover,
-    .mp-post-info a.mp-info,
-    .mp-post-info a.mp-info:hover {
-        color: <?php echo $color ?>;
-    }
-
-    ul.menu-categories a.list-categories:hover,
-    .products-same-post a.product-item-link:hover,
-    h2.mp-post-title a:hover,
-    h2.mp-post-title a:focus,
-    .mp-post-info a.mp-info:hover,
-    .relate-content a.mp-relate-link:hover,
-    .owl-item a.mp-relate-link:hover,
-    .owl-item a.mp-relate-link:focus {
-        color: <?php echo $color ?>;
+    #mpblog-list-container a{
         text-decoration: none;
     }
 
-    a.label.label-default.tags-list:hover {
-        background: <?php echo $color ?>;
-        border: 1px solid;
-        color: #fff !important;
+    /*Post List Content Css*/
+    .post-info-wraper h2.mp-post-title a,
+    .about-admin h4.admin-title a,
+    .mp-post-meta-info a.mp-read-more,
+    .mp-post-info a.mp-info,
+    ul.menu-categories a.list-categories:hover,
+    .products-same-post a.product-item-link:hover,
+    a.mp-relate-link{
+        color: <?php echo $color ?>;
     }
 
+    a.label.label-default.tags-list:hover,
     a.label.label-default.tags-list:focus {
         background: <?php echo $color ?>;
         color: #fff !important;
     }
 
-    a.list-post-tabs:hover {
-        text-decoration: none;
+    .list-post-tabs a{
         background: #fbfbfb;
         color: <?php echo $color ?>;
     }
@@ -99,11 +76,7 @@
     }
 
     /*Site Map CSS*/
-    .mp-sidebar a.sitemap-link {
-        color: <?php echo $color ?> !important;
-    }
-
-    .mp-sidebar a.sitemap-link:hover,
+    .mp-sidebar a.sitemap-link,
     .menu-archives a.list-archives:hover {
         text-decoration: none !important;
         color: <?php echo $color ?> !important;
@@ -131,16 +104,9 @@
     }
 
     /*Widget CSS*/
-    .widget-title a,
-    .widget-title a:hover,
-    .widget-title a:focus {
+    .widget-title a {
         color: <?php echo $color ?>;
         font-size: 26px;
-    }
-
-    .widget-title a:hover,
-    .widget-title a:focus {
-        text-decoration: none;
     }
 
     /*Author CSS*/
