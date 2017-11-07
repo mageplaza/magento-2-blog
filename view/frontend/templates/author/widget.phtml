@@ -30,7 +30,7 @@ if ($author): ?>
         </div>
         <div class="author-image col-xs-12">
             <img class="img-responsive"
-                 src="<?php echo ($author->getImage()) ? $block->getImageUrl($author->getImage()) : $this->getViewFileUrl('Mageplaza_Blog::media/images/default-user.png'); ?>"
+                 src="<?php echo ($author->getImage()) ? $block->getImageUrl($author->getImage()) : $block->getDefaultAuthorImage(); ?>"
                  alt="<?php echo $block->escapeHtml($author->getName()); ?>"/>
         </div>
         <div class="author-content col-xs-12">
