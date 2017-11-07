@@ -28,7 +28,7 @@
     </head>
     <body>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Post\View" name="mpblog.post.view" template="post/view.phtml">
+            <block class="Mageplaza\Blog\Block\Post\View" name="mpblog.post.view" template="post/view.phtml" cacheable="false">
                 <block class="Mageplaza\Blog\Block\Post\RelatedProduct" name="related.category.products" as="related_products" template="Magento_Catalog::product/list.phtml" />
             </block>
         </referenceContainer>
