@@ -56,6 +56,10 @@ class Widget extends Frontend
 
         $html = '';
         foreach ($tree as $value) {
+            if(!$value){
+                continue;
+            }
+
             $level    = count(explode('/', ($value['path'])));
             $hasChild = isset($value['children']) && $level < 4;
 
