@@ -308,8 +308,6 @@ h2.list-title {
 
 .autocomplete-suggestion {
   padding: 2px 5px;
-  white-space: nowrap;
-  overflow: hidden;
   border-bottom: 1px solid #eee;
   &:last-child {
     border-bottom: none;
@@ -331,8 +329,8 @@ h2.list-title {
     .mpblog-suggestion-left {
       max-width: 25%;
     }
-    .mpblog-suggestion-right {
-      max-width: calc(100% - 40%);
+    .mpblog-suggestion-right.image-visible {
+      max-width: calc(~"75% - 40px");
     }
   }
 }
@@ -354,19 +352,16 @@ h2.list-title {
   border-bottom: 1px solid #000;
 }
 
-@media (max-width: 767px) {
-  .autocomplete-suggestion .mpblog-suggestion .mpblog-suggestion-right {
-    max-width: calc(100% - 31%);
-  }
-}
+//@media (max-width: 767px) {
+//  .autocomplete-suggestion .mpblog-suggestion .mpblog-suggestion-right {
+//    max-width: calc(100% - 31%);
+//  }
+//}
 
 .mpblog-product-des {
   color: #333333;
   p {
     margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     font-size: 12px;
   }
 }

@@ -61,11 +61,13 @@
                 window.location.href = suggestion.url;
             },
             formatResult: function (suggestion, currentValue) {
+                var additionClass = '';
                 var html = "<div class='mpblog-suggestion'>";
                 if (visibleImage) {
-                    html += "<div class='mpblog-suggestion-left'><img class='img-responsive' src='" + suggestion.image + "' /></div>"
+                    html += "<div class='mpblog-suggestion-left'><img class='img-responsive' src='" + suggestion.image + "' /></div>";
+                    additionClass = 'image-visible';
                 }
-                html += "<div class='mpblog-suggestion-right'>" +
+                html += "<div class='mpblog-suggestion-right " + additionClass + "'>" +
                     "<div class='mpblog-product-line mpblog-product-name'>" + suggestion.value + "</div>" +
                     "<div class='mpblog-product-des'><p class='mpblog-short-des'>" + suggestion.desc + "</p></div></div></div>";
 

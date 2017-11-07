@@ -37,10 +37,10 @@ class Search extends Frontend
     {
         $result    = [];
         $posts     = $this->helperData->getPostList();
-        $limitDesc = (int)$this->getSidebarConfig('search/description') ?: 100;
+        $limitDesc = (int)$this->getSidebarConfig('search/description');
         if (!empty($posts)) {
             foreach ($posts as $item) {
-                $shortDescription = $item->getShortDescription() ?: '';
+                $shortDescription = ($item->getShortDescription() && $limitDesc > 0) ? $item->getShortDescription() : '';
                 if (strlen($shortDescription) > $limitDesc) {
                     $shortDescription = substr($shortDescription, 0, $limitDesc) . '...';
                 }
