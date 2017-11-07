@@ -15,69 +15,20 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model\Config\Source\DateFormat;
+
+use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class Type
  * @package Mageplaza\Blog\Model\Config\Source\DateFormat
  */
-class Type implements \Magento\Framework\Option\ArrayInterface
+class Type implements ArrayInterface
 {
-
-    /**
-     * Get config TimeZone ( general/locale/timezone )
-     * @return mixed
-     */
-    public function getTimezone()
-    {
-        $om = \Magento\Framework\App\ObjectManager::getInstance();
-        $context = $om->get('\Magento\Framework\View\Element\Template\Context');
-        $storeModel = $context->getStoreManager()->getStore()->getId();
-        $timeZone       = $context->getScopeConfig()->getValue(
-            'general/locale/timezone',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeModel
-        );
-        return $timeZone;
-    }
-
-    /**
-     * Set Datetime Option Array
-     * @return array
-     */
-
-    public function setOptionArray()
-    {
-    	$dateArray = [];
-    	$type = [
-    		'F j, Y',
-			'Y-m-d',
-			'm/d/Y',
-			'd/m/Y',
-			'F j, Y g:i a',
-			'F j, Y g:i A',
-			'Y-m-d g:i a',
-			'Y-m-d g:i A',
-			'd/m/Y g:i a',
-			'd/m/Y g:i A',
-			'm/d/Y H:i',
-			'd/m/Y H:i',
-		];
-    	foreach ($type as $item)
-		{
-
-			$dateArray[] = [
-				'value'=> $item,
-				'label' => $item.' ('.date($item,time()).')'
-			];
-		}
-
-        return $dateArray ;
-    }
-
     /**
      * Options getter
      *
@@ -86,17 +37,28 @@ class Type implements \Magento\Framework\Option\ArrayInterface
 
     public function toOptionArray()
     {
-        date_default_timezone_set($this->getTimezone());
-        return $this->setOptionArray();
-    }
-    /**
-     * Get options in "key-value" format
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        date_default_timezone_set($this->getTimezone());
-        return $this->setOptionArray();
+        $dateArray = [];
+        $type      = [
+            'F j, Y',
+            'Y-m-d',
+            'm/d/Y',
+            'd/m/Y',
+            'F j, Y g:i a',
+            'F j, Y g:i A',
+            'Y-m-d g:i a',
+            'Y-m-d g:i A',
+            'd/m/Y g:i a',
+            'd/m/Y g:i A',
+            'm/d/Y H:i',
+            'd/m/Y H:i',
+        ];
+        foreach ($type as $item) {
+            $dateArray[] = [
+                'value' => $item,
+                'label' => $item . ' (' . date($item) . ')'
+            ];
+        }
+
+        return $dateArray;
     }
 }

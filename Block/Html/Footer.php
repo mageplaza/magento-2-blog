@@ -15,74 +15,79 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Html;
 
-use \Magento\Framework\View\Element\Template\Context;
-use \Mageplaza\Blog\Helper\Data;
+use Magento\Framework\View\Element\Html\Link;
+use Magento\Framework\View\Element\Template\Context;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Footer
  * @package Mageplaza\Blog\Block\Html
  */
-class Footer extends \Magento\Framework\View\Element\Html\Link
+class Footer extends Link
 {
-	/**
-	 * @var \Mageplaza\Blog\Helper\Data
-	 */
+    /**
+     * @var \Mageplaza\Blog\Helper\Data
+     */
     public $helper;
 
-	/**
-	 * @var string
-	 */
+    /**
+     * @var string
+     */
     protected $_template = 'Mageplaza_Blog::html\footer.phtml';
 
-	/**
-	 * Footer constructor.
-	 * @param \Magento\Framework\View\Element\Template\Context $context
-	 * @param \Mageplaza\Blog\Helper\Data $helper
-	 * @param array $data
-	 */
+    /**
+     * Footer constructor.
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Mageplaza\Blog\Helper\Data $helper
+     * @param array $data
+     */
     public function __construct(
         Context $context,
         Data $helper,
         array $data = []
-    ) {
-
+    )
+    {
         $this->helper = $helper;
+
         parent::__construct($context, $data);
     }
 
-	/**
-	 * @return string
-	 */
+    /**
+     * @return string
+     */
     public function getHref()
     {
         return $this->helper->getBlogUrl('');
     }
 
-	/**
-	 * @return \Magento\Framework\Phrase|mixed
-	 */
+    /**
+     * @return string
+     */
     public function getLabel()
     {
-        if ($this->helper->getBlogConfig('general/name')=="") {
+        if ($this->helper->getBlogConfig('general/name') == "") {
             return __("Blog");
         }
+
         return $this->helper->getBlogConfig('general/name');
     }
 
-	/**
-	 * @return string
-	 */
+    /**
+     * @return string
+     */
     public function getHtmlSiteMapUrl()
     {
         $moduleRoute = $this->helper->getBlogConfig('general/url_prefix');
         if ($moduleRoute) {
-            return $this->getBaseUrl() . $moduleRoute .'/sitemap/';
+            return $this->getBaseUrl() . $moduleRoute . '/sitemap/';
         }
-        return $this->getBaseUrl() .'blog/sitemap/';
+
+        return $this->getBaseUrl() . 'blog/sitemap/';
     }
 }

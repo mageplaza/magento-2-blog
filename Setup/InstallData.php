@@ -15,57 +15,41 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Setup;
+
+use Magento\Framework\Setup\InstallDataInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * Class InstallData
  * @package Mageplaza\Blog\Setup
  */
-class InstallData implements \Magento\Framework\Setup\InstallDataInterface
+class InstallData implements InstallDataInterface
 {
-    /**
-     * Blog Category setup factory
-     *
-     * @var \Mageplaza\Blog\Setup\CategorySetupFactory
-     */
-    public $categorySetupFactory;
-
-	/**
-	 * InstallData constructor.
-	 * @param \Magento\Framework\App\State $appState
-	 * @param \Mageplaza\Blog\Setup\CategorySetupFactory $categorySetupFactory
-	 */
-    public function __construct(
-        \Magento\Framework\App\State $appState,
-        \Mageplaza\Blog\Setup\CategorySetupFactory $categorySetupFactory
-    ) {
-        $appState->setAreaCode('frontend');
-        $this->categorySetupFactory = $categorySetupFactory;
-    }
     /**
      * {@inheritdoc}
      */
-    public function install(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $setup,
-        \Magento\Framework\Setup\ModuleContextInterface $context
-    ) {
-    
-        $contextInstall = $context;
-        $contextInstall->getVersion();
-        /** @var \Mageplaza\Blog\Setup\CategorySetup $categorySetup */
-        $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
-        // Create Root Blog Category Node
-        $category = $categorySetup->createCategory();
-        $category
-            ->setPath('1')
-            ->setLevel(0)
-            ->setPosition(0)
-            ->setChildrenCount(0)
-            ->setName('ROOT')
-            ->setInitialSetupFlag(true)
-            ->save();
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    {
+        $installer = $setup;
+        $installer->startSetup();
+
+        /** Add root category */
+        $sampleTemplates = [
+            'path'           => '1',
+            'position'       => 0,
+            'children_count' => 0,
+            'level'          => 0,
+            'name'           => 'ROOT',
+            'url_key'        => 'root'
+        ];
+        $setup->getConnection()->insert($setup->getTable('mageplaza_blog_category'), $sampleTemplates);
+
+        $installer->endSetup();
     }
 }

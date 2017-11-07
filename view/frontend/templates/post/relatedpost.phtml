@@ -1,27 +1,32 @@
 <?php
-$helper = $this->helper('Mageplaza\Blog\Helper\Data');
-$posts = $block->getRelatedPostList($block->getCurrentProduct());
-$postCount = count($posts);
-$limitCount = $block->getLimitPosts();
-$countRelated = 0;
-?>
-<?php
 /**
- * show posts list
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
-if ($posts){
-	?>
-    <h2><?php echo $postCount ? __('Related Posts') : __('No Related Posts') ?></h2>
-    <ul>
-		<?php
-        foreach ($posts as $post):
-            if ($post){
-				$countRelated ++;
-            }
-            ?>
-			<?php if($countRelated > $limitCount) break; ?>
 
-            <li><a href="<?php echo substr($helper->getUrlByPost($post),0,-1) ?>"><?php echo $post->getName(); ?></a> </li>
+/** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $posts */
+$posts = $block->getRelatedPostList();
+?>
+<?php if ($posts): ?>
+    <h2><?php echo $posts->getSize() ? __('Related Posts') : __('No Related Posts') ?></h2>
+    <ul>
+		<?php foreach ($posts as $post): ?>
+            <li><a href="<?php echo $post->getUrl() ?>"><?php echo $post->getName(); ?></a> </li>
 		<?php endforeach; ?>
 	</ul>
-<?php } ?>
+<?php endif; ?>

@@ -16,44 +16,34 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
+/** @var \Mageplaza\Blog\Block\MonthlyArchive\Widget $block */
 
 $dateArrayCount = $block->getDateArrayCount();
 $dateArrayUnique = $block->getDateArrayUnique();
 $dateLabel = $block->getDateLabel();
-if ($block->getBlogConfig('monthly_archive/enable_monthly') ) {
-?>
+
+if ($block->isEnable() && $dateArrayUnique): ?>
 <div class="mp-sidebar mpcss">
 	<div class="row">
 		<div class="block-title col-xs-12 sidebar-archives">
-				<p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Monthly Archive') ?></p>
-
+            <p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Monthly Archive') ?></p>
 		</div>
-        <div class="col-xs-12">
-            <?php if ($dateArrayUnique) { ?>
+        <div class="block-content">
             <ul class="menu-archives">
-
-                 <?php
-                    for ($i=0;$i<$block->getDateCount();$i++) {
-				 ?>
+             <?php for ($i=0; $i<$block->getDateCount(); $i++): ?>
                 <li class="archive-item" >
-                        <a class="list-archives" href="<?php echo $block->getMonthlyUrl(date("Y-m",$this->dateTime->timestamp($dateArrayUnique[$i]))) ?>">
-							 <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;
-                            <?php
-								 echo $dateLabel[$i].'   ('.$dateArrayCount[$i].')';
-                             ?>
-                        </a>
+                    <a class="list-archives" href="<?php echo $block->getMonthlyUrl(date("Y-m",$this->dateTime->timestamp($dateArrayUnique[$i]))) ?>">
+                         <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;
+                        <?php echo $dateLabel[$i].'   ('.$dateArrayCount[$i].')'; ?>
+                    </a>
                 </li>
-              <?php } ?>
+              <?php endfor; ?>
             </ul>
-            <hr>
-			<?php }else { echo __('No Records found'); ?>
-                <hr>
-			<?php } ?>
         </div>
     </div>
 </div>
-
-<?php } ?>
+<?php endif; ?>

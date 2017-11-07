@@ -15,35 +15,39 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model\Config\Source\Comments;
+
+use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class Type
  * @package Mageplaza\Blog\Model\Config\Source\Comments
  */
-class Type implements \Magento\Framework\Option\ArrayInterface
+class Type implements ArrayInterface
 {
-    /**
-     * Options getter
-     *
-     * @return array
-     */
-    const DISQUS = 3;
-    const FACEBOOK = 2;
     const DEFAULT_COMMENT = 1;
+    const FACEBOOK = 2;
+    const DISQUS = 3;
     const DISABLE = 4;
 
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
-        return [
-            ['value' => self::DEFAULT_COMMENT, 'label' => __('Default Comment')],
-            ['value' => self::DISQUS, 'label' => __('Disqus Comment')],
-            ['value' => self::FACEBOOK, 'label' => __('Facebook Comment')],
-            ['value' => self::DISABLE, 'label' => __('Disable Completely')]
-        ];
+        $options = [];
+        foreach ($this->toArray() as $value => $label) {
+            $options[] = [
+                'value' => $value,
+                'label' => $label
+            ];
+        }
+
+        return $options;
     }
 
     /**
@@ -54,10 +58,10 @@ class Type implements \Magento\Framework\Option\ArrayInterface
     public function toArray()
     {
         return [
-            self::DISABLE => __('Disable Completely'),
             self::DEFAULT_COMMENT => __('Default Comment'),
-            self::FACEBOOK => __('Facebook Comment'),
-            self::DISQUS=> __('Disqus Comment')
+            self::DISQUS          => __('Disqus Comment'),
+            self::FACEBOOK        => __('Facebook Comment'),
+            self::DISABLE         => __('Disable Completely')
         ];
     }
 }

@@ -15,16 +15,23 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller;
+
+use Magento\Framework\App\ActionFactory;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\RouterInterface;
+use Magento\Framework\Url;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Router
  * @package Mageplaza\Blog\Controller
  */
-class Router implements \Magento\Framework\App\RouterInterface
+class Router implements RouterInterface
 {
     /**
      * @var \Magento\Framework\App\ActionFactory
@@ -36,6 +43,9 @@ class Router implements \Magento\Framework\App\RouterInterface
      */
     public $helper;
 
+    /**
+     * @var
+     */
     protected $_request;
 
     /**
@@ -43,11 +53,10 @@ class Router implements \Magento\Framework\App\RouterInterface
      * @param \Mageplaza\Blog\Helper\Data $helper
      */
     public function __construct(
-        \Magento\Framework\App\ActionFactory $actionFactory,
-        \Mageplaza\Blog\Helper\Data $helper
-    ) {
-    
-
+        ActionFactory $actionFactory,
+        Data $helper
+    )
+    {
         $this->actionFactory = $actionFactory;
         $this->helper        = $helper;
     }
@@ -72,106 +81,91 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
-     * Validate and Match Cms Page and modify request
-     *
      * @param \Magento\Framework\App\RequestInterface $request
-     * @return bool
+     * @return \Magento\Framework\App\ActionInterface|null
      */
-    public function match(\Magento\Framework\App\RequestInterface $request)
+    public function match(RequestInterface $request)
     {
-        $identifier = trim($request->getPathInfo(), '/');
-        $routePath  = explode('/', $identifier);
-        $urlPrefix = $this->helper->getBlogConfig('general/url_prefix') ?: \Mageplaza\Blog\Helper\Data::DEFAULT_URL_PREFIX;
-        $routeSize  = sizeof($routePath);
-		$urlPrefix	= urlencode($urlPrefix);
+        if (!$this->helper->isEnabled()) {
+            return null;
+        }
 
-        if (!$this->helper->isEnabled() ||
-            !$routeSize || ($routeSize > 3) ||
-            (array_shift($routePath) != $urlPrefix)
-        ) {
+        $identifier = trim($request->getPathInfo(), '/');
+        $urlSuffix  = $this->helper->getUrlSuffix();
+        if ($length = strlen($urlSuffix)) {
+            if (substr($identifier, -$length) == $urlSuffix) {
+                $identifier = substr($identifier, 0, strlen($identifier) - $length);
+            } else {
+                return null;
+            }
+        }
+
+        $routePath = explode('/', $identifier);
+        $routeSize = sizeof($routePath);
+        if (!$routeSize || ($routeSize > 3) || (array_shift($routePath) != $this->helper->getRoute())) {
             return null;
         }
 
         $request->setModuleName('mpblog')
-            ->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
-
-        $this->_request = $request;
-        $params     = [];
+            ->setAlias(Url::REWRITE_REQUEST_PATH_ALIAS, $identifier . $urlSuffix);
         $controller = array_shift($routePath);
-
         if (!$controller) {
-            return $this->_forward('post', 'index');
+            $request->setControllerName('post')
+                ->setActionName('index')
+                ->setPathInfo('/mpblog/post/index');
+
+            return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
         }
 
+        $action = array_shift($routePath) ?: 'index';
         switch ($controller) {
             case 'post':
-                $path = array_shift($routePath);
-                $action = $path ?: 'index';
-
                 if (!in_array($action, ['index', 'rss'])) {
-                    $post = $this->helper->getPostByUrl($action);
-
+                    $post   = $this->helper->getObjectByParam($action, 'url_key');
+                    $request->setParam('id', $post->getId());
                     $action = 'view';
-                    $params = ['id' => $post->getId()];
                 }
-
                 break;
             case 'category':
-                $path = array_shift($routePath);
-                $action = $path ?: 'index';
-
                 if (!in_array($action, ['index', 'rss'])) {
-                    $category = $this->helper->getCategoryByParam('url_key', $action);
-
+                    $category = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_CATEGORY);
+                    $request->setParam('id', $category->getId());
                     $action = 'view';
-                    $params = ['id' => $category->getId()];
                 }
-
                 break;
             case 'tag':
-                $path = array_shift($routePath);
-                $tag    = $this->helper->getTagByParam('url_key', $path);
-
+                $tag = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_TAG);
+                $request->setParam('id', $tag->getId());
                 $action = 'view';
-                $params = ['id' => $tag->getId()];
-
                 break;
             case 'topic':
-                $path = array_shift($routePath);
-                $topic  = $this->helper->getTopicByParam('url_key', $path);
-
+                $topic = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_TOPIC);
+                $request->setParam('id', $topic->getId());
                 $action = 'view';
-                $params = ['id' => $topic->getId()];
-
                 break;
             case 'sitemap':
                 $action = 'index';
-
                 break;
             case 'author':
-                $path = array_shift($routePath);
-                $author  = $this->helper->getAuthorByParam('url_key', $path);
-
+                $author = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_AUTHOR);
+                $request->setParam('id', $author->getId());
                 $action = 'view';
-                $params = ['id' => $author->getId()];
-
                 break;
             case 'month':
-                $path = array_shift($routePath);
-                $author  = $this->helper->getAuthorByParam('url_key', $path);
-
+                $request->setParam('month_key', $action);
                 $action = 'view';
-                $params = ['id' => $author->getId()];
-
                 break;
             default:
-                $post = $this->helper->getPostByUrl($controller);
-
+                $post = $this->helper->getObjectByParam($controller, 'url_key');
+                $request->setParam('id', $post->getId());
                 $controller = 'post';
                 $action     = 'view';
-                $params     = ['id' => $post->getId()];
         }
 
-        return $this->_forward($controller, $action, $params);
+        $request->setControllerName($controller)
+            ->setActionName($action)
+            ->setPathInfo('/mpblog/' . $controller . '/' . $action);
+
+        return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
     }
 }

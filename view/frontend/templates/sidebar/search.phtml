@@ -1,57 +1,75 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Blog\Block\Sidebar\Search $block */
+?>
 
 <div class="mpblog-search">
-    <div class="block block-content">
-        <div class="field search">
-            <label class="label" for="mpblog-search-box" data-role="minisearch-label">
-                <span><?php echo __('Search'); ?></span>
-            </label>
-            <div class="control">
-                <input id="mpblog-search-box"
-                       type="text"
-                       name="query"
-                       value="<?php echo $this->getRequest()->getParam('query') ?>"
-                       placeholder="<?php echo __('Search blogs here...'); ?>"
-                       class="input-text"
-                       role="combobox"
-                       aria-haspopup="false"
-                       aria-autocomplete="both"
-                       />
-            </div>
-        </div>
-        <div class="actions">
-            <button type="submit"
-                    title="<?php echo __('Search') ?>"
-                    class="action search">
-                <i class="fa fa-search" aria-hidden="true" style="font-size: 16px;margin-top: 5px;"></i>
-            </button>
+    <div class="field search">
+        <label class="label" for="mpblog-search-box" data-role="minisearch-label">
+            <span><?php echo __('Search'); ?></span>
+        </label>
+        <div class="control">
+            <input id="mpblog-search-box"
+                   type="text"
+                   name="query"
+                   value="<?php echo $this->getRequest()->getParam('query') ?>"
+                   placeholder="<?php echo __('Search blogs here...'); ?>"
+                   class="input-text"
+                   role="combobox"
+                   aria-haspopup="false"
+                   aria-autocomplete="both"
+            />
         </div>
     </div>
+    <div class="actions">
+        <button type="submit" title="<?php echo __('Search') ?>" class="action search">
+            <i class="fa fa-search" aria-hidden="true" style="font-size: 16px;margin-top: 5px;"></i>
+        </button>
+    </div>
 </div>
-
 <script>
-    require([
-        'jquery',
-        'autocomplete'
-    ], function ($) {
+    require(['jquery', 'autocomplete'], function ($) {
         var visibleImage = <?php echo $block->getSidebarConfig('search/show_image'); ?>;
         $('#mpblog-search-box').autocomplete({
             lookup: <?php echo $block->getSearchBlogData();?>,
             lookupLimit: <?php echo $block->getSidebarConfig('search/search_limit') ?: 10; ?>,
             maxHeight: 2000,
             minChars: <?php echo $block->getSidebarConfig('search/min_chars') ?: 1; ?>,
+            autoSelectFirst: true,
+            showNoSuggestionNotice: true,
+            triggerSelectOnValidInput: false,
             onSelect: function (suggestion) {
-                var urlString = suggestion.url;
-                window.location.href = urlString.substring(0,urlString.length - 1);
+                window.location.href = suggestion.url;
             },
             formatResult: function (suggestion, currentValue) {
-                var urlString = suggestion.url;
-                var html = "<a class='mpblog-suggestion' href='" + urlString.substring(0,urlString.length - 1) + "'>";
+                var additionClass = '';
+                var html = "<div class='mpblog-suggestion'>";
                 if (visibleImage) {
-                    html += "<div class='mpblog-suggestion-left'><img class='img-responsive' src='" + suggestion.image + "' /></div>"
+                    html += "<div class='mpblog-suggestion-left'><img class='img-responsive' src='" + suggestion.image + "' /></div>";
+                    additionClass = 'image-visible';
                 }
-                html += "<div class='mpblog-suggestion-right'>" +
+                html += "<div class='mpblog-suggestion-right " + additionClass + "'>" +
                     "<div class='mpblog-product-line mpblog-product-name'>" + suggestion.value + "</div>" +
-                    "<div class='mpblog-product-des'><p class='mpblog-short-des'>" + suggestion.desc + "</p></div></div></a>";
+                    "<div class='mpblog-product-des'><p class='mpblog-short-des'>" + suggestion.desc + "</p></div></div></div>";
 
                 return html;
             }

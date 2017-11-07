@@ -14,15 +14,14 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 var config = {
     map: {
         '*': {
-            categoryForm: 'Mageplaza_Blog/category/form',
-            newCategoryDialog: 'Mageplaza_Blog/category/new-category-dialog'
+            categoryForm: 'Mageplaza_Blog/category/form'
         }
     }
 };

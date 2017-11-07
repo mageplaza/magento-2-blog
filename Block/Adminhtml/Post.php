@@ -15,16 +15,19 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Adminhtml;
+
+use Magento\Backend\Block\Widget\Grid\Container;
 
 /**
  * Class Post
  * @package Mageplaza\Blog\Block\Adminhtml
  */
-class Post extends \Magento\Backend\Block\Widget\Grid\Container
+class Post extends Container
 {
     /**
      * constructor
@@ -33,10 +36,12 @@ class Post extends \Magento\Backend\Block\Widget\Grid\Container
      */
     protected function _construct()
     {
-        $this->_controller = 'adminhtml_post';
-        $this->_blockGroup = 'Mageplaza_Blog';
-        $this->_headerText = __('Posts');
+        $this->_controller     = 'adminhtml_post';
+        $this->_blockGroup     = 'Mageplaza_Blog';
+        $this->_headerText     = __('Posts');
+        $this->_headerText     = __('Posts');
         $this->_addButtonLabel = __('Create New Post');
+
         parent::_construct();
     }
 }

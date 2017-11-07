@@ -15,23 +15,37 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model\Config\Source\Comments\Facebook;
+
+use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class Colorscheme
  * @package Mageplaza\Blog\Model\Config\Source\Comments\Facebook
  */
-class Colorscheme implements \Magento\Framework\Option\ArrayInterface
+class Colorscheme implements ArrayInterface
 {
     const LIGHT = 'light';
-    const DARK  = 'dark';
+    const DARK = 'dark';
 
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
-        return [['value' => self::LIGHT, 'label' => __('Light')], ['value' => self::DARK, 'label' => __('Dark')]];
+        $options = [];
+        foreach ($this->toArray() as $value => $label) {
+            $options[] = [
+                'value' => $value,
+                'label' => $label
+            ];
+        }
+
+        return $options;
     }
 
     /**
@@ -44,6 +58,9 @@ class Colorscheme implements \Magento\Framework\Option\ArrayInterface
         return [self::LIGHT => __('Light'), self::DARK => __('Dark')];
     }
 
+    /**
+     * @return array
+     */
     public function getAllOptions()
     {
         return $this->toOptionArray();

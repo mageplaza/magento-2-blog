@@ -15,12 +15,14 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Author;
 
 use Mageplaza\Blog\Block\Frontend;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Widget
@@ -28,21 +30,19 @@ use Mageplaza\Blog\Block\Frontend;
  */
 class Widget extends Frontend
 {
-
-	/**
-	 * @return mixed
-	 */
+    /**
+     * @return mixed
+     */
     public function getCurrentAuthor()
     {
-        return $this->getRequest()->getParam('id');
-    }
+        $authorId = $this->getRequest()->getParam('id');
+        if ($authorId) {
+            $author = $this->helperData->getObjectByParam($authorId, null, Data::TYPE_AUTHOR);
+            if ($author && $author->getId()) {
+                return $author;
+            }
+        }
 
-	/**
-	 * @param $content
-	 * @return string
-	 */
-    public function getPageFilter($content)
-    {
-        return $this->filterProvider->getPageFilter()->filter($content);
+        return null;
     }
 }

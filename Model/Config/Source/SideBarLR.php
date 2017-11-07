@@ -1,21 +1,37 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-/**
- * Used in creating options for Yes|No config value selection
- *
- */
 namespace Mageplaza\Blog\Model\Config\Source;
+
+use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class SideBarLR
  * @package Mageplaza\Blog\Model\Config\Source
  */
-class SideBarLR implements \Magento\Framework\Option\ArrayInterface
+class SideBarLR implements ArrayInterface
 {
+    const LEFT = 0;
+    const RIGHT = 1;
+
     /**
      * Options getter
      *
@@ -23,7 +39,15 @@ class SideBarLR implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return [['value' => 1, 'label' => __('Right')], ['value' => 0, 'label' => __('Left')]];
+        $options = [];
+        foreach ($this->toArray() as $value => $label) {
+            $options[] = [
+                'value' => $value,
+                'label' => $label
+            ];
+        }
+
+        return $options;
     }
 
     /**
@@ -33,6 +57,9 @@ class SideBarLR implements \Magento\Framework\Option\ArrayInterface
      */
     public function toArray()
     {
-        return [0 => __('Left'), 1 => __('Right')];
+        return [
+            self::LEFT  => __('Left'),
+            self::RIGHT => __('Right')
+        ];
     }
 }

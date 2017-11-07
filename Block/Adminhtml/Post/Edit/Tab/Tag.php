@@ -15,20 +15,27 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
+
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Grid\Extended;
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Backend\Helper\Data;
+use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory;
+use Mageplaza\Blog\Model\TagFactory;
 
 /**
  * Class Tag
  * @package Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab
  */
-class Tag extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Tag extends Extended implements TabInterface
 {
     /**
-     * Tag collection factory
-     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory
      */
     public $tagCollectionFactory;
@@ -48,24 +55,23 @@ class Tag extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magent
     public $tagFactory;
 
     /**
-     * constructor
-     *
+     * Tag constructor.
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $tagCollectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
      * @param array $data
      */
     public function __construct(
-        \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $tagCollectionFactory,
-        \Magento\Framework\Registry $coreRegistry,
-        \Mageplaza\Blog\Model\TagFactory $tagFactory,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Data $backendHelper,
+        Context $context,
+        Data $backendHelper,
+        CollectionFactory $tagCollectionFactory,
+        Registry $coreRegistry,
+        TagFactory $tagFactory,
         array $data = []
-    ) {
-    
+    )
+    {
         $this->tagCollectionFactory = $tagCollectionFactory;
         $this->coreRegistry         = $coreRegistry;
         $this->tagFactory           = $tagFactory;
@@ -82,41 +88,28 @@ class Tag extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magent
         $this->setDefaultSort('position');
         $this->setDefaultDir('ASC');
         $this->setUseAjax(true);
+
         if ($this->getPost()->getId()) {
-            $this->setDefaultFilter(['in_tags'=>1]);
+            $this->setDefaultFilter(['in_tags' => 1]);
         }
     }
 
     /**
-     * prepare the collection
-
-     * @return $this
+     * @inheritdoc
      */
     protected function _prepareCollection()
     {
         /** @var \Mageplaza\Blog\Model\ResourceModel\Tag\Collection $collection */
         $collection = $this->tagCollectionFactory->create();
-        if ($this->getPost()->getId()) {
-            $constraint = 'related.post_id='.$this->getPost()->getId();
-        } else {
-            $constraint = 'related.post_id=0';
-        }
         $collection->getSelect()->joinLeft(
             ['related' => $collection->getTable('mageplaza_blog_post_tag')],
-            'related.tag_id=main_table.tag_id AND '.$constraint,
+            'related.tag_id=main_table.tag_id AND related.post_id=' . ($this->getPost()->getId() ?: 0),
             ['position']
         );
-        $this->setCollection($collection);
-        parent::_prepareCollection();
-        return $this;
-    }
 
-    /**
-     * @return $this
-     */
-    protected function _prepareMassaction()
-    {
-        return $this;
+        $this->setCollection($collection);
+
+        return parent::_prepareCollection();
     }
 
     /**
@@ -124,72 +117,66 @@ class Tag extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magent
      */
     protected function _prepareColumns()
     {
-        $this->addColumn(
-            'in_tags',
-            [
-                'header_css_class'  => 'a-center',
-                'type'   => 'checkbox',
-                'name'   => 'in_tag',
-                'values' => $this->_getSelectedTags(),
-                'align'  => 'center',
-                'index'  => 'tag_id'
+        $this->addColumn('in_tags', [
+                'header_css_class' => 'a-center',
+                'type'             => 'checkbox',
+                'name'             => 'in_tag',
+                'values'           => $this->_getSelectedTags(),
+                'align'            => 'center',
+                'index'            => 'tag_id'
             ]
         );
-        $this->addColumn(
-            'tag_id',
-            [
-                'header' => __('ID'),
-                'sortable' => true,
-                'index' => 'tag_id',
-                'type' => 'number',
+
+        $this->addColumn('tag_id', [
+                'header'           => __('ID'),
+                'sortable'         => true,
+                'index'            => 'tag_id',
+                'type'             => 'number',
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id'
             ]
         );
 
-        $this->addColumn(
-            'title',
-            [
-                'header' => __('Name'),
-                'index' => 'name',
+        $this->addColumn('title', [
+                'header'           => __('Name'),
+                'index'            => 'name',
                 'header_css_class' => 'col-name',
                 'column_css_class' => 'col-name'
             ]
         );
 
-        $this->addColumn(
-            'position',
-            [
-                'header' => __('Position'),
-                'name'   => 'position',
-                'width'  => 60,
-                'type'   => 'number',
+        $this->addColumn('position', [
+                'header'         => __('Position'),
+                'name'           => 'position',
+                'width'          => 60,
+                'type'           => 'number',
                 'validate_class' => 'validate-number',
-                'index' => 'position',
-                'editable'  => true,
+                'index'          => 'position',
+                'editable'       => true,
             ]
         );
+
         return $this;
     }
 
     /**
      * Retrieve selected Tags
-
      * @return array
      */
     protected function _getSelectedTags()
     {
-        $tags = $this->getPostTags();
+        $tags = $this->getRequest()->getPost('post_tags', null);
         if (!is_array($tags)) {
             $tags = $this->getPost()->getTagsPosition();
+
             return array_keys($tags);
         }
+
         return $tags;
     }
 
     /**
      * Retrieve selected Tags
-
      * @return array
      */
     public function getSelectedTags()
@@ -202,6 +189,7 @@ class Tag extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magent
                 $selected[$key] = ['position' => $value];
             }
         }
+
         return $selected;
     }
 
@@ -221,12 +209,7 @@ class Tag extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magent
      */
     public function getGridUrl()
     {
-        return $this->getUrl(
-            '*/*/tagsGrid',
-            [
-                'post_id' => $this->getPost()->getId()
-            ]
-        );
+        return $this->getUrl('*/*/tagsGrid', ['post_id' => $this->getPost()->getId()]);
     }
 
     /**
@@ -249,15 +232,16 @@ class Tag extends \Magento\Backend\Block\Widget\Grid\Extended implements \Magent
                 $tagIds = 0;
             }
             if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('main_table.tag_id', ['in'=>$tagIds]);
+                $this->getCollection()->addFieldToFilter('main_table.tag_id', ['in' => $tagIds]);
             } else {
                 if ($tagIds) {
-                    $this->getCollection()->addFieldToFilter('main_table.tag_id', ['nin'=>$tagIds]);
+                    $this->getCollection()->addFieldToFilter('main_table.tag_id', ['nin' => $tagIds]);
                 }
             }
         } else {
             parent::_addColumnFilterToCollection($column);
         }
+
         return $this;
     }
 

@@ -1,20 +1,43 @@
-<li>
-<a <?php echo $block->getLinkAttributes() ?>>
-    <?php
-        if ($this->helper->getBlogConfig('general/footer')&& $this->helper->getBlogConfig('general/enabled')){
-			echo $block->escapeHtml($block->getLabel());
-        }
-    ?>
-	<?php echo($block->getCounter()) ? '<span>' . $block->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
-</a>
-</li>
-<li>
-<a href="<?php echo $block->getHtmlSiteMapUrl() ?>">
-    <?php
-	if ($this->helper->getBlogConfig('general/display_sitemap')&& $this->helper->getBlogConfig('general/enabled')){
-		echo $block->escapeHtml('SiteMap');
-	}
-	?>
-	<?php echo($block->getCounter()) ? '<span>' . $block->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
-</a>
-</li>
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Blog\Helper\Data $helper */
+$helper = $this->helper(\Mageplaza\Blog\Helper\Data::class);
+?>
+
+<?php if ($helper->isEnabled()): ?>
+    <?php if ($helper->getBlogConfig('general/footer')): ?>
+        <li>
+            <a <?php echo $block->getLinkAttributes() ?>>
+                <?php echo $block->escapeHtml($block->getLabel()); ?>
+                <?php echo ($block->getCounter()) ? '<span>' . $block->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
+            </a>
+        </li>
+    <?php endif; ?>
+    <?php if ($helper->getBlogConfig('general/display_sitemap')): ?>
+        <li>
+            <a href="<?php echo $block->getHtmlSiteMapUrl() ?>">
+                <?php echo $block->escapeHtml('SiteMap'); ?>
+                <?php echo ($block->getCounter()) ? '<span>' . $block->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
+            </a>
+        </li>
+    <?php endif; ?>
+<?php endif; ?>

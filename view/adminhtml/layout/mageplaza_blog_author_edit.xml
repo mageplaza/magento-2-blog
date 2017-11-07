@@ -16,14 +16,12 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
+
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <head>
-        <css src="Mageplaza_Blog::category/category-selector.css"/>
-    </head>
     <update handle="editor"/>
     <body>
         <referenceContainer name="content">
@@ -38,7 +36,5 @@
                 </action>
             </block>
         </referenceContainer>
-
-
     </body>
 </page>

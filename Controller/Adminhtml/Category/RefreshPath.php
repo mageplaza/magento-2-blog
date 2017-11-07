@@ -15,16 +15,23 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Registry;
+use Mageplaza\Blog\Controller\Adminhtml\Category;
+use Mageplaza\Blog\Model\CategoryFactory;
 
 /**
  * Class RefreshPath
  * @package Mageplaza\Blog\Controller\Adminhtml\Category
  */
-class RefreshPath extends \Mageplaza\Blog\Controller\Adminhtml\Category
+class RefreshPath extends Category
 {
     /**
      * JSON Result Factory
@@ -33,22 +40,23 @@ class RefreshPath extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public $resultJsonFactory;
 
-	/**
-	 * RefreshPath constructor.
-	 * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-	 * @param \Magento\Framework\Registry $coreRegistry
-	 * @param \Magento\Backend\App\Action\Context $context
-	 */
+    /**
+     * RefreshPath constructor.
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Backend\App\Action\Context $context
+     */
     public function __construct(
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-    
+        Context $context,
+        Registry $coreRegistry,
+        CategoryFactory $categoryFactory,
+        JsonFactory $resultJsonFactory
+    )
+    {
         $this->resultJsonFactory = $resultJsonFactory;
-        parent::__construct($categoryFactory, $coreRegistry, $context);
+
+        parent::__construct($context, $coreRegistry, $categoryFactory);
     }
 
     /**
@@ -58,12 +66,13 @@ class RefreshPath extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public function execute()
     {
-        $categoryId = (int)$this->getRequest()->getParam('category_id');
+        $categoryId = (int)$this->getRequest()->getParam('id');
         if ($categoryId) {
             $category = $this->categoryFactory->create()->load($categoryId);
 
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
+
             return $resultJson->setData(['id' => $categoryId, 'path' => $category->getPath()]);
         }
     }

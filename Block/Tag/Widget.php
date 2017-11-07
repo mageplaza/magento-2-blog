@@ -15,12 +15,14 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Tag;
 
 use Mageplaza\Blog\Block\Frontend;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Widget
@@ -28,47 +30,52 @@ use Mageplaza\Blog\Block\Frontend;
  */
 class Widget extends Frontend
 {
-	/**
-	 * @return array|string
-	 */
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Tag\Collection
+     */
+    protected $_tagList;
+
+    /**
+     * @return array|string
+     */
     public function getTagList()
     {
+        if (!$this->_tagList) {
+            $this->_tagList = $this->helperData->getObjectList(Data::TYPE_TAG);
+        }
 
-        return $this->helperData->getTagList();
+        return $this->_tagList;
     }
 
-	/**
-	 * @param $tag
-	 * @return string
-	 */
+    /**
+     * @param $tag
+     * @return string
+     */
     public function getTagUrl($tag)
     {
-        return $this->helperData->getTagUrl($tag);
+        return $this->helperData->getBlogUrl($tag, Data::TYPE_TAG);
     }
 
     /**
      * get tags size based on num of post
-     * size = (maxSize * (currentItem - min))/(max - min)
+     *
+     * @param $tag
+     * @return float|string
      */
     public function getTagSize($tag)
     {
+        /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $postList */
         $postList = $this->helperData->getPostList();
-        if ($postList && is_array($postList)) {
-            $max = count($postList);
-            $min = 1;
-            $maxSize = 30;
-            $tagPost = $this->helperData->getPostList('tag', $tag->getId());
-            if ($tagPost && is_array($tagPost)) {
-                $countTagPost = count($tagPost);
-                if ($countTagPost <= 1) {
-                    return '';
-                }
+        if ($postList && ($max = $postList->getSize()) > 1) {
+            $maxSize = 22;
+            $tagPost = $this->helperData->getPostCollection(Data::TYPE_TAG, $tag->getId());
+            if ($tagPost && ($countTagPost = $tagPost->getSize()) > 1) {
+                $size = $maxSize * $countTagPost / $max;
 
-                $size = ($maxSize * ($countTagPost - $min)) / ($max - $min);
-                return round($size);
+                return round($size) + 8;
             }
         }
 
-        return '';
+        return 8;
     }
 }

@@ -15,29 +15,24 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Post\Rss;
 
 use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Framework\App\Rss\UrlBuilderInterface;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Template\Context;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class NewProducts
  * @package Magento\Catalog\Block\Rss\Product
  */
-class Lists extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
+class Lists extends AbstractBlock implements DataProviderInterface
 {
-    /**
-     * @var \Mageplaza\Blog\Helper\Image
-     */
-    public $imageHelper;
-
-    /**
-     * @var \Magento\Catalog\Model\Rss\Product\NewProducts
-     */
-    public $rssModel;
-
     /**
      * @var \Magento\Framework\App\Rss\UrlBuilderInterface
      */
@@ -53,26 +48,24 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
      */
     public $helper;
 
-	/**
-	 * Lists constructor.
-	 * @param \Magento\Framework\View\Element\Template\Context $context
-	 * @param \Mageplaza\Blog\Model\PostFactory $rssModel
-	 * @param \Mageplaza\Blog\Helper\Data $helper
-	 * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
-	 * @param array $data
-	 */
+    /**
+     * Lists constructor.
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Mageplaza\Blog\Helper\Data $helper
+     * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
+     * @param array $data
+     */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Mageplaza\Blog\Model\PostFactory $rssModel,
-        \Mageplaza\Blog\Helper\Data $helper,
-        \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder,
+        Context $context,
+        UrlBuilderInterface $rssUrlBuilder,
+        Data $helper,
         array $data = []
-    ) {
-    
-        $this->helper        = $helper;
-        $this->rssModel      = $rssModel;
+    )
+    {
         $this->rssUrlBuilder = $rssUrlBuilder;
+        $this->helper        = $helper;
         $this->storeManager  = $context->getStoreManager();
+
         parent::__construct($context, $data);
     }
 
@@ -82,6 +75,7 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
     protected function _construct()
     {
         $this->setCacheKey('rss_blog_posts_store_' . $this->getStoreId());
+
         parent::_construct();
     }
 
@@ -90,7 +84,7 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
      */
     public function isAllowed()
     {
-        return $this->_scopeConfig->isSetFlag('blog/general/enabled', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->helper->isEnabled();
     }
 
     /**
@@ -99,58 +93,33 @@ class Lists extends \Magento\Framework\View\Element\AbstractBlock implements Dat
     public function getRssData()
     {
         $storeModel = $this->storeManager->getStore($this->getStoreId());
-        $newUrl     = $this->rssUrlBuilder->getUrl(['store_id' => $this->getStoreId(), 'type' => 'blog_posts']);
         $title      = __('List Posts from %1', $storeModel->getFrontendName());
-        $lang       = $this->_scopeConfig->getValue(
-            'general/locale/code',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeModel
-        );
         $data       = [
             'title'       => $title,
             'description' => $title,
-            'link'        => $newUrl,
+            'link'        => $this->rssUrlBuilder->getUrl(['store_id' => $this->getStoreId(), 'type' => 'blog_posts']),
             'charset'     => 'UTF-8',
-            'language'    => $lang,
+            'language'    => $this->helper->getConfigValue('general/locale/code', $storeModel),
         ];
-        $limit      = 10;
-        $count      = 0;
-        $posts      = $this->rssModel->create()->getCollection();
-        $posts
-            ->addFieldToFilter('enabled', 1)
+
+        $posts = $this->helper->getPostList($this->getStoreId())
             ->addFieldToFilter('in_rss', 1)
             ->setOrder('post_id', 'DESC');
+        $posts->getSelect()
+            ->limit(10);
         foreach ($posts as $item) {
-            if ($item->getPublishDate() < $this->helper->getCurrentDate()) {
-                $count++;
-                if ($count > $limit) {
-                    break;
-                }
-                $item->setAllowedInRss(true);
-                $item->setAllowedPriceInRss(true);
+            $item->setAllowedInRss(true);
+            $item->setAllowedPriceInRss(true);
 
-                if (!$item->getAllowedInRss()) {
-                    continue;
-                }
-
-                $description
-                    = '
-                <table><tr>
-                <td style="text-decoration:none;"> %s</td>
-                </tr></table>
-            ';
-                $description = sprintf(
-                    $description,
-                    $item->getShortDescription()
-                );
-
-                $data['entries'][] = ['title'          => $item->getName(),
-                                      'link'           => $this->helper->getUrlByPost($item),
-                                      'description' => $description,
-                                      'lastUpdate' => strtotime($item->getPublishDate())
-                ];
-            }
+            $description       = '<table><tr><td style="text-decoration:none;"> ' . $item->getShortDescription() . '</td></tr></table>';
+            $data['entries'][] = [
+                'title'       => $item->getName(),
+                'link'        => $item->getUrl(),
+                'description' => $description,
+                'lastUpdate'  => strtotime($item->getPublishDate())
+            ];
         }
+
         return $data;
     }
 

@@ -15,16 +15,26 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Registry;
+use Magento\Framework\View\LayoutFactory;
+use Mageplaza\Blog\Controller\Adminhtml\Category;
+use Mageplaza\Blog\Model\CategoryFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Move
  * @package Mageplaza\Blog\Controller\Adminhtml\Category
  */
-class Move extends \Mageplaza\Blog\Controller\Adminhtml\Category
+class Move extends Category
 {
     /**
      * JSON Result Factory
@@ -40,49 +50,45 @@ class Move extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public $layoutFactory;
 
-	/**
-	 * @var \Psr\Log\LoggerInterface
-	 */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     public $logger;
 
-	/**
-	 * Move constructor.
-	 * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-	 * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-	 * @param \Psr\Log\LoggerInterface $logger
-	 * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-	 * @param \Magento\Framework\Registry $coreRegistry
-	 * @param \Magento\Backend\App\Action\Context $context
-	 */
+    /**
+     * Move constructor.
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Backend\App\Action\Context $context
+     */
     public function __construct(
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-    
+        Context $context,
+        Registry $coreRegistry,
+        CategoryFactory $categoryFactory,
+        JsonFactory $resultJsonFactory,
+        LayoutFactory $layoutFactory,
+        LoggerInterface $logger
+    )
+    {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory     = $layoutFactory;
         $this->logger            = $logger;
-        parent::__construct($categoryFactory, $coreRegistry, $context);
+
+        parent::__construct($context, $coreRegistry, $categoryFactory);
     }
 
     /**
-     * Move Blog category action
-     *
-     * @return \Magento\Framework\Controller\Result\Raw
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
-        /**
-         * New parent Blog category identifier
-         */
+        /** New parent Blog category identifier */
         $parentNodeId = $this->getRequest()->getPost('pid', false);
-        /**
-         * Blog category id after which we have put our Blog category
-         */
+
+        /** Blog category id after which we have put our Blog category */
         $prevNodeId = $this->getRequest()->getPost('aid', false);
 
         /** @var $block \Magento\Framework\View\Element\Messages */
@@ -92,31 +98,29 @@ class Move extends \Mageplaza\Blog\Controller\Adminhtml\Category
         try {
             $category = $this->initCategory();
             if ($category === false) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Blog category is not available.'));
+                throw new LocalizedException(__('Blog category is not available.'));
             }
             $category->move($parentNodeId, $prevNodeId);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $error = true;
-            $this->messageManager->addError(__('There was a Blog category move error.'));
-        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-            $error = true;
-            $this->messageManager->addError(__('There was a Blog category move error. %1', $e->getMessage()));
+            $this->messageManager->addErrorMessage(__('There was a Blog category move error.'));
         } catch (\Exception $e) {
             $error = true;
-            $this->messageManager->addError(__('There was a Blog category move error.'));
+            $this->messageManager->addErrorMessage(__('There was a Blog category move error.'));
             $this->logger->critical($e);
         }
 
         if (!$error) {
-            $this->messageManager->addSuccess(__('You moved the Blog category'));
+            $this->messageManager->addSuccessMessage(__('You moved the Blog category'));
         }
 
         $block->setMessages($this->messageManager->getMessages(true));
         $resultJson = $this->resultJsonFactory->create();
-
-        return $resultJson->setData([
+        $resultJson->setData([
             'messages' => $block->getGroupedHtml(),
-            'error' => $error
+            'error'    => $error
         ]);
+
+        return $resultJson;
     }
 }

@@ -15,40 +15,46 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\LayoutFactory;
+use Mageplaza\Blog\Controller\Adminhtml\Tag;
+use Mageplaza\Blog\Model\TagFactory;
 
 /**
  * Class Posts
  * @package Mageplaza\Blog\Controller\Adminhtml\Tag
  */
-class Posts extends \Mageplaza\Blog\Controller\Adminhtml\Tag
+class Posts extends Tag
 {
     /**
-     * Result layout factory
-     *
      * @var \Magento\Framework\View\Result\LayoutFactory
      */
     public $resultLayoutFactory;
 
-	/**
-	 * Posts constructor.
-	 * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-	 * @param \Mageplaza\Blog\Model\TagFactory $postFactory
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Backend\App\Action\Context $context
-	 */
+    /**
+     * Posts constructor.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param \Mageplaza\Blog\Model\TagFactory $postFactory
+     */
     public function __construct(
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
-        \Mageplaza\Blog\Model\TagFactory $postFactory,
-        \Magento\Framework\Registry $registry,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-    
+        Context $context,
+        Registry $registry,
+        LayoutFactory $resultLayoutFactory,
+        TagFactory $postFactory
+    )
+    {
         $this->resultLayoutFactory = $resultLayoutFactory;
-        parent::__construct($postFactory, $registry, $context);
+
+        parent::__construct($context, $registry, $postFactory);
     }
 
     /**
@@ -56,13 +62,8 @@ class Posts extends \Mageplaza\Blog\Controller\Adminhtml\Tag
      */
     public function execute()
     {
-        $this->initTag();
-        $resultLayout = $this->resultLayoutFactory->create();
-        /** @var \Mageplaza\Blog\Block\Adminhtml\Tag\Edit\Tab\Post $postsBlock */
-        $postsBlock = $resultLayout->getLayout()->getBlock('tag.edit.tab.post');
-        if ($postsBlock) {
-            $postsBlock->setTagPosts($this->getRequest()->getPost('tag_posts', null));
-        }
-        return $resultLayout;
+        $this->initTag(true);
+
+        return $this->resultLayoutFactory->create();
     }
 }

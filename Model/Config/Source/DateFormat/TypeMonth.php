@@ -15,60 +15,20 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model\Config\Source\DateFormat;
+
+use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class TypeMonth
  * @package Mageplaza\Blog\Model\Config\Source\DateFormat
  */
-class TypeMonth implements \Magento\Framework\Option\ArrayInterface
+class TypeMonth implements ArrayInterface
 {
-
-    /**
-     * Get config TimeZone ( general/locale/timezone )
-     * @return mixed
-     */
-    public function getTimezone()
-    {
-        $om = \Magento\Framework\App\ObjectManager::getInstance();
-        $context = $om->get('\Magento\Framework\View\Element\Template\Context');
-        $storeModel = $context->getStoreManager()->getStore()->getId();
-        $timeZone       = $context->getScopeConfig()->getValue(
-            'general/locale/timezone',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeModel
-        );
-        return $timeZone;
-    }
-
-    /**
-     * Set Datetime Option Array
-     * @return array
-     */
-    public function setOptionArray()
-    {
-		$dateArray = [];
-        $type = [
-            'F , Y',
-            'Y - m',
-            'm / Y',
-            'M  Y'
-        ];
-        foreach ($type as $item)
-        {
-
-			$dateArray [] = [
-				'value' => $item,
-				'label' => $item.' ('.date($item,time()).')'
-			];
-		}
-
-        return $dateArray ;
-    }
-
     /**
      * Options getter
      *
@@ -76,18 +36,15 @@ class TypeMonth implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        date_default_timezone_set($this->getTimezone());
-        return $this->setOptionArray();
-    }
+        $dateArray = [];
+        $type      = ['F , Y', 'Y - m', 'm / Y', 'M  Y'];
+        foreach ($type as $item) {
+            $dateArray [] = [
+                'value' => $item,
+                'label' => $item . ' (' . date($item) . ')'
+            ];
+        }
 
-    /**
-     * Get options in "key-value" format
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        date_default_timezone_set($this->getTimezone());
-        return $this->setOptionArray();
+        return $dateArray;
     }
 }

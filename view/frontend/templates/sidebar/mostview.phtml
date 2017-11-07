@@ -15,85 +15,86 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
+/** @var \Mageplaza\Blog\Block\Sidebar\Mostview $block */
 ?>
 <?php
-$posts = $block->getMosviewPosts();
+$posts       = $block->getMosviewPosts();
 $postsRecent = $block->getRecentPost();
 ?>
-<div class="mp-sidebar mpcss">
-		<ul class="nav nav-tabs">
-			<li id="tab-1" class="active"><a id="popular-tab"><?php echo __('Popular') ?></a></li>
-			<li id="tab-2"><a id="recent-tab"><?php echo __('Latest') ?></a></li>
-		</ul>
-		
-		<div class="tab-content">
-			<div id="mostview">
-				<?php if ($posts != ''): ?>
-					<?php foreach ($posts as $post): ?>
-						<a class="list-post-tabs" href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
-							<div class="post-left">
-								<?php if ($post->getImage()) :
-                                    ?>
-									<img class="img-responsive" src="<?php echo $block->resizeImage($post->getImage(),100)?>">
-								<?php else:?>
-                                    <img class="img-responsive" src="<?php echo $block->getDefaultImageUrl(); ?>">
-								<?php endif; ?>
-							</div>
-							<div class="post-right">
-								<span><?php echo $post->getName() ?></span>
-								<span class="create-at">
-									<?php echo $block->getDateFormat($post->getPublishDate()); ?>
-								</span>
-							</div>
-						</a>
-					<?php endforeach; ?>
-	
-				<?php else: ?>
-                    <div style="height: 50px;line-height: 50px;text-align: center;"><?php echo __('No Posts'); ?></div>
-				<?php endif; ?>
-			</div>
-			<div id="mostrecent" style="display:none">
-				<?php if ($postsRecent != ''): ?>
-					<?php foreach ($postsRecent as $post): ?>
-						<a class="list-post-tabs" href="<?php echo substr($block->getUrlByPost($post),0,-1) ?>">
-							<div class="post-left">
-								<?php if ($post->getImage()) : ?>							
-									<img class="img-responsive" src="<?php echo $block->resizeImage($post->getImage(),100)?>">
-								<?php else:?>
-                                    <img class="img-responsive" src="<?php echo $block->getDefaultImageUrl() ?>">
-								<?php endif; ?>
-							</div>
-							<div class="post-right">
-								<span><?php echo $post->getName() ?></span>
-								<span class="create-at">
-									<?php echo $block->getDateFormat($post->getPublishDate()); ?>
-								</span>
-							</div>
-						</a>
-	
-					<?php endforeach; ?>
-	
-				<?php else: ?>
-					<div style="height: 50px;line-height: 50px;text-align: center;"><?php echo __('No Posts'); ?></div>
-				<?php endif; ?>
-			</div>
-		</div>
+<div class="mp-sidebar product info detailed">
+    <div class="product data items" data-mage-init='{"tabs":{"openedState":"active"}}'>
+        <div class="data item title" data-role="collapsible" id="tab-label-popular">
+            <a class="data switch" tabindex="-1" data-toggle="switch" id="tab-label-popular-title">
+                <div><?php echo __('Popular') ?></div>
+            </a>
+        </div>
+        <div class="data item content" id="tab-content-popular" data-role="content">
+            <?php if ($posts->getSize()): ?>
+                <?php foreach ($posts as $post): ?>
+                    <div class="list-post-tabs">
+                        <div class="post-left">
+                            <a href="<?php echo $post->getUrl() ?>">
+                                <img class="img-responsive" src="<?php echo $block->resizeImage($post->getImage(), 100); ?>">
+                            </a>
+                        </div>
+                        <div class="post-right">
+                            <a href="<?php echo $post->getUrl() ?>"><span><?php echo $post->getName() ?></span></a>
+                            <span class="create-at">
+                                <?php echo $post->getPublishDate() ? $block->getDateFormat($post->getPublishDate()) : ''; ?>
+                            </span>
+                        </div>
+                        <div class="mp-clear"></div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="mostview-nopost"><?php echo __('No Posts'); ?></div>
+            <?php endif; ?>
+        </div>
+
+        <div class="data item title" data-role="collapsible" id="tab-label-mostview">
+            <a class="data switch" tabindex="-1" data-toggle="switch" id="tab-label-mostview-title">
+                <div><?php echo __('Latest') ?></div>
+            </a>
+        </div>
+        <div class="data item content" id="tab-content-mostview" data-role="content">
+            <?php if ($postsRecent->getSize()): ?>
+                <?php foreach ($postsRecent as $post): ?>
+                    <div class="list-post-tabs" href="<?php echo $post->getUrl() ?>">
+                        <div class="post-left">
+                            <a href="<?php echo $post->getUrl() ?>">
+                                <img class="img-responsive" src="<?php echo $block->resizeImage($post->getImage(), 100) ?>">
+                            </a>
+                        </div>
+                        <div class="post-right">
+                            <a href="<?php echo $post->getUrl() ?>"><span><?php echo $post->getName() ?></span></a>
+                            <span class="create-at">
+                                <?php echo $post->getPublishDate() ? $block->getDateFormat($post->getPublishDate()) : ''; ?>
+                            </span>
+                        </div>
+                        <div class="mp-clear"></div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="mostview-nopost"><?php echo __('No Posts'); ?></div>
+            <?php endif; ?>
+        </div>
+    </div>
 </div>
 <script>
 require([
     'jquery'
 ], function ($) {
-    $("#popular-tab").click(function(){
+    $("#popular-tab").click(function () {
         $("#tab-1").addClass('active');
         $("#tab-2").removeClass('active');
         $('#mostview').show();
         $('#mostrecent').hide();
     });
-
-    $("#recent-tab").click(function(){
+    $("#recent-tab").click(function () {
         $("#tab-1").removeClass('active');
         $("#tab-2").addClass('active');
         $('#mostview').hide();

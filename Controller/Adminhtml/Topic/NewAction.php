@@ -15,16 +15,19 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
+
+use Magento\Backend\App\Action;
 
 /**
  * Class NewAction
  * @package Mageplaza\Blog\Controller\Adminhtml\Topic
  */
-class NewAction extends \Magento\Backend\App\Action
+class NewAction extends Action
 {
     /**
      * Redirect result factory
@@ -40,11 +43,12 @@ class NewAction extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-    
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+    )
+    {
         $this->resultForwardFactory = $resultForwardFactory;
+
         parent::__construct($context);
     }
 
@@ -57,6 +61,7 @@ class NewAction extends \Magento\Backend\App\Action
     {
         $resultForward = $this->resultForwardFactory->create();
         $resultForward->forward('edit');
+
         return $resultForward;
     }
 }

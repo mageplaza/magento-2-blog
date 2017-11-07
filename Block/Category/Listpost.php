@@ -15,12 +15,14 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Category;
 
 use Mageplaza\Blog\Block\Frontend;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Listpost
@@ -28,26 +30,80 @@ use Mageplaza\Blog\Block\Frontend;
  */
 class Listpost extends Frontend
 {
+    protected $_category;
 
-	/**
-	 * @return array|string
-	 */
-    public function getPostList()
+    /**
+     * Override this function to apply collection for each type
+     *
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     */
+    protected function getCollection()
     {
-        return $this->getBlogPagination(\Mageplaza\Blog\Helper\Data::CATEGORY, $this->getRequest()->getParam('id'));
+        if ($category = $this->getBlogObject()) {
+            return $this->helperData->getPostCollection(Data::TYPE_CATEGORY, $category->getId());
+        }
+
+        return null;
     }
 
-	/**
-	 * @return string
-	 */
-    public function checkRss()
+    /**
+     * @return mixed
+     */
+    protected function getBlogObject()
     {
-//        $categoryId = $this->getRequest()->getParam('id');
-//        if (!$categoryId) {
-//            return false;
-//        }
-//
-//        return $this->helperData->getBlogUrl('category/rss/category_id/' . $categoryId);
-        return $this->helperData->getBlogUrl('post/rss');
+        if (!$this->_category) {
+            $id = $this->getRequest()->getParam('id');
+
+            if ($id) {
+                $category = $this->helperData->getObjectByParam($id, null, Data::TYPE_CATEGORY);
+                if ($category && $category->getId()) {
+                    $this->_category = $category;
+                }
+            }
+        }
+
+        return $this->_category;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _prepareLayout()
+    {
+        parent::_prepareLayout();
+
+        if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
+            $category = $this->getBlogObject();
+            if ($category) {
+                $breadcrumbs->addCrumb($category->getUrlKey(), [
+                        'label' => __('Category'),
+                        'title' => __('Category')
+                    ]
+                );
+            }
+        }
+    }
+
+    /**
+     * @param bool $meta
+     * @return array
+     */
+    public function getBlogTitle($meta = false)
+    {
+        $blogTitle = parent::getBlogTitle($meta);
+        $category  = $this->getBlogObject();
+        if (!$category) {
+            return $blogTitle;
+        }
+
+        if ($meta) {
+            if($title = $category->getMetaTitle()) {
+                $blogTitle = [$title];
+            }
+        } else {
+            $blogTitle = $category->getName();
+        }
+
+        return $blogTitle;
     }
 }

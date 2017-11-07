@@ -15,16 +15,23 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model\ResourceModel;
+
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Category
  * @package Mageplaza\Blog\Model\ResourceModel
  */
-class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Category extends AbstractDb
 {
     /**
      * Date model
@@ -46,25 +53,32 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var string
      */
     public $categoryPostTable;
+
+    /**
+     * @var \Mageplaza\Blog\Helper\Data
+     */
     public $helperData;
 
-	/**
-	 * Category constructor.
-	 * @param \Mageplaza\Blog\Helper\Data $helperData
-	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-	 * @param \Magento\Framework\Event\ManagerInterface $eventManager
-	 * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-	 */
+    /**
+     * Category constructor.
+     * @param \Mageplaza\Blog\Helper\Data $helperData
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     */
     public function __construct(
-        \Mageplaza\Blog\Helper\Data $helperData,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Model\ResourceModel\Db\Context $context
-    ) {
-        $this->helperData = $helperData;
+        Context $context,
+        DateTime $date,
+        ManagerInterface $eventManager,
+        Data $helperData
+    )
+    {
+        $this->helperData   = $helperData;
         $this->date         = $date;
         $this->eventManager = $eventManager;
+
         parent::__construct($context);
+
         $this->categoryPostTable = $this->getTable('mageplaza_blog_post_category');
     }
 
@@ -87,12 +101,14 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getCategoryNameById($id)
     {
         $adapter = $this->getConnection();
-        $select = $adapter->select()
+        $select  = $adapter->select()
             ->from($this->getMainTable(), 'name')
             ->where('category_id = :category_id');
-        $binds = ['category_id' => (int)$id];
+        $binds   = ['category_id' => (int)$id];
+
         return $adapter->fetchOne($select, $binds);
     }
+
     /**
      * before save callback
      *
@@ -107,6 +123,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         /** @var \Mageplaza\Blog\Model\Category $object */
         parent::_beforeSave($object);
+
         if (!$object->getChildrenCount()) {
             $object->setChildrenCount(0);
         }
@@ -115,8 +132,8 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             if ($object->getPosition() === null) {
                 $object->setPosition($this->getMaxPosition($object->getPath()) + 1);
             }
-            $path = explode('/', $object->getPath());
-            $level = count($path)  - ($object->getId() ? 1 : 0);
+            $path          = explode('/', $object->getPath());
+            $level         = count($path) - ($object->getId() ? 1 : 0);
             $toUpdateChild = array_diff($path, [$object->getId()]);
 
             if (!$object->hasPosition()) {
@@ -125,52 +142,31 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             if (!$object->hasLevel()) {
                 $object->setLevel($level);
             }
-            if (!$object->hasParentId() && $level && !$object->getInitialSetupFlag()) {
+            if (!$object->hasParentId() && $level) {
                 $object->setParentId($path[$level - 1]);
             }
-            if (!$object->getId() && !$object->getInitialSetupFlag()) {
+            if (!$object->getId()) {
                 $object->setPath($object->getPath() . '/');
             }
-            if (!$object->getInitialSetupFlag()) {
-                $this->getConnection()->update(
-                    $this->getMainTable(),
-                    ['children_count' => 'children_count+1'],
-                    ['category_id IN(?)' => $toUpdateChild]
-                );
-            }
-        }
-        //Check Url Key
-        if ($object->isObjectNew()) {
-            $count   = 0;
-            $objName = $object->getName();
-            if ($object->getUrlKey()) {
-                $urlKey = $object->getUrlKey();
-            } else {
-                $urlKey = $this->generateUrlKey($objName, $count);
-            }
-            while ($this->checkUrlKey($urlKey)) {
-                $count++;
-                $urlKey = $this->generateUrlKey($urlKey, $count);
-            }
-            $object->setUrlKey($urlKey);
-        } else {
-            $objectId = $object->getId();
-            $count    = 0;
-            $objName  = $object->getName();
-            if ($object->getUrlKey()) {
-                $urlKey = $object->getUrlKey();
-            } else {
-                $urlKey = $this->generateUrlKey($objName, $count);
-            }
-            while ($this->checkUrlKey($urlKey, $objectId)) {
-                $count++;
-                $urlKey = $this->generateUrlKey($urlKey, $count);
-            }
 
-            $object->setUrlKey($urlKey);
+            $this->getConnection()->update(
+                $this->getMainTable(),
+                ['children_count' => 'children_count+1'],
+                ['category_id IN(?)' => $toUpdateChild]
+            );
         }
+
+        if (is_array($object->getStoreIds())) {
+            $object->setStoreIds(implode(',', $object->getStoreIds()));
+        }
+
+        $object->setUrlKey(
+            $this->helperData->generateUrlKey($this, $object, $object->getUrlKey() ?: $object->getName())
+        );
+
         return $this;
     }
+
     /**
      * after save callback
      *
@@ -185,6 +181,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->savePath($object);
         }
         $this->savePostRelation($object);
+
         return parent::_afterSave($object);
     }
 
@@ -194,11 +191,11 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function getMaxPosition($path)
     {
-        $adapter = $this->getConnection();
+        $adapter       = $this->getConnection();
         $positionField = $adapter->quoteIdentifier('position');
-        $level = count(explode('/', $path));
-        $bind = ['c_level' => $level, 'c_path' => $path . '/%'];
-        $select = $adapter->select()->from(
+        $level         = count(explode('/', $path));
+        $bind          = ['c_level' => $level, 'c_path' => $path . '/%'];
+        $select        = $adapter->select()->from(
             $this->getTable('mageplaza_blog_category'),
             'MAX(' . $positionField . ')'
         )->where(
@@ -211,6 +208,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if (!$position) {
             $position = 0;
         }
+
         return $position;
     }
 
@@ -230,6 +228,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             );
             $object->unsetData('path_ids');
         }
+
         return $this;
     }
 
@@ -248,11 +247,12 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($parentIds) {
             $childDecrease = $object->getChildrenCount() + 1;
             // +1 is itself
-            $data = ['children_count' => 'children_count - ' . $childDecrease];
+            $data  = ['children_count' => 'children_count - ' . $childDecrease];
             $where = ['category_id IN(?)' => $parentIds];
             $this->getConnection()->update($this->getMainTable(), $data, $where);
         }
         $this->deleteChildren($object);
+
         return $this;
     }
 
@@ -262,7 +262,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function deleteChildren(\Magento\Framework\DataObject $object)
     {
-        $adapter = $this->getConnection();
+        $adapter   = $this->getConnection();
         $pathField = $adapter->quoteIdentifier('path');
 
         $select = $adapter->select()->from(
@@ -283,6 +283,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
          * This data can be used in after delete event
          */
         $object->setDeletedChildrenIds($childrenIds);
+
         return $this;
     }
 
@@ -296,12 +297,13 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Mageplaza\Blog\Model\Category $category,
         \Mageplaza\Blog\Model\Category $newParent,
         $afterCategoryId = null
-    ) {
+    )
+    {
         $childrenCount = $this->getChildrenCount($category->getId()) + 1;
-        $table = $this->getMainTable();
-        $adapter = $this->getConnection();
-        $levelFiled = $adapter->quoteIdentifier('level');
-        $pathField = $adapter->quoteIdentifier('path');
+        $table         = $this->getMainTable();
+        $adapter       = $this->getConnection();
+        $levelFiled    = $adapter->quoteIdentifier('level');
+        $pathField     = $adapter->quoteIdentifier('path');
 
         /**
          * Decrease children count for all old Blog Category parent Categories
@@ -323,8 +325,8 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $position = $this->processPositions($category, $newParent, $afterCategoryId);
 
-        $newPath = sprintf('%s/%s', $newParent->getPath(), $category->getId());
-        $newLevel = $newParent->getLevel() + 1;
+        $newPath          = sprintf('%s/%s', $newParent->getPath(), $category->getId());
+        $newLevel         = $newParent->getLevel() + 1;
         $levelDisposition = $newLevel - $category->getLevel();
 
         /**
@@ -333,11 +335,11 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $adapter->update(
             $table,
             [
-                'path' => 'REPLACE(' . $pathField . ',' . $adapter->quote(
-                    $category->getPath() . '/'
-                ) . ', ' . $adapter->quote(
-                    $newPath . '/'
-                ) . ')',
+                'path'  => 'REPLACE(' . $pathField . ',' . $adapter->quote(
+                        $category->getPath() . '/'
+                    ) . ', ' . $adapter->quote(
+                        $newPath . '/'
+                    ) . ')',
                 'level' => $levelFiled . ' + ' . $levelDisposition
             ],
             [$pathField . ' LIKE ?' => $category->getPath() . '/%']
@@ -346,9 +348,9 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
          * Update moved Blog Category data
          */
         $data = [
-            'path' => $newPath,
-            'level' => $newLevel,
-            'position' => $position,
+            'path'      => $newPath,
+            'level'     => $newLevel,
+            'position'  => $position,
             'parent_id' => $newParent->getId(),
         ];
         $adapter->update($table, $data, ['category_id = ?' => $category->getId()]);
@@ -370,15 +372,16 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Mageplaza\Blog\Model\Category $category,
         \Mageplaza\Blog\Model\Category $newParent,
         $afterCategoryId
-    ) {
-    
-        $table = $this->getMainTable();
-        $adapter = $this->getConnection();
+    )
+    {
+
+        $table         = $this->getMainTable();
+        $adapter       = $this->getConnection();
         $positionField = $adapter->quoteIdentifier('position');
 
-        $bind = ['position' => $positionField . ' - 1'];
+        $bind  = ['position' => $positionField . ' - 1'];
         $where = [
-            'parent_id = ?' => $category->getParentId(),
+            'parent_id = ?'         => $category->getParentId(),
             $positionField . ' > ?' => $category->getPosition(),
         ];
         $adapter->update($table, $bind, $where);
@@ -387,14 +390,14 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
          * Prepare position value
          */
         if ($afterCategoryId) {
-            $select = $adapter->select()->from($table, 'position')->where('category_id = :category_id');
+            $select   = $adapter->select()->from($table, 'position')->where('category_id = :category_id');
             $position = $adapter->fetchOne($select, ['category_id' => $afterCategoryId]);
             $position++;
         } else {
             $position = 1;
         }
 
-        $bind = ['position' => $positionField . ' + 1'];
+        $bind  = ['position' => $positionField . ' + 1'];
         $where = ['parent_id = ?' => $newParent->getId(), $positionField . ' >= ?' => $position];
         $adapter->update($table, $bind, $where);
 
@@ -413,10 +416,11 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->where(
             'category_id = :category_id'
         );
-        $bind = ['category_id' => $categoryId];
+        $bind   = ['category_id' => $categoryId];
 
         return $this->getConnection()->fetchOne($select, $bind);
     }
+
     /**
      * @param \Mageplaza\Blog\Model\Category $category
      * @return array
@@ -427,10 +431,11 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->categoryPostTable,
             ['post_id', 'position']
         )
-        ->where(
-            'category_id = :category_id'
-        );
-        $bind = ['category_id' => (int)$category->getId()];
+            ->where(
+                'category_id = :category_id'
+            );
+        $bind   = ['category_id' => (int)$category->getId()];
+
         return $this->getConnection()->fetchPairs($select, $bind);
     }
 
@@ -441,22 +446,22 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function savePostRelation(\Mageplaza\Blog\Model\Category $category)
     {
         $category->setIsChangedPostList(false);
-        $id = $category->getId();
+        $id    = $category->getId();
         $posts = $category->getPostsData();
         if ($posts === null) {
             return $this;
         }
         $oldPosts = $category->getPostsPosition();
-        $insert = array_diff_key($posts, $oldPosts);
-        $delete = array_diff_key($oldPosts, $posts);
-        $update = array_intersect_key($posts, $oldPosts);
-        $_update = [];
+        $insert   = array_diff_key($posts, $oldPosts);
+        $delete   = array_diff_key($oldPosts, $posts);
+        $update   = array_intersect_key($posts, $oldPosts);
+        $_update  = [];
         foreach ($update as $key => $position) {
             if (isset($oldPosts[$key]) && $oldPosts[$key] != $position) {
                 $_update[$key] = $position;
             }
         }
-        $update = $_update;
+        $update  = $_update;
         $adapter = $this->getConnection();
         if (!empty($delete)) {
             $condition = ['post_id IN(?)' => array_keys($delete), 'category_id=?' => $id];
@@ -467,8 +472,8 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             foreach ($insert as $postId => $position) {
                 $data[] = [
                     'category_id' => (int)$id,
-                    'post_id' => (int)$postId,
-                    'position' => (int)$position
+                    'post_id'     => (int)$postId,
+                    'position'    => (int)$position
                 ];
             }
             $adapter->insertMultiple($this->categoryPostTable, $data);
@@ -476,7 +481,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if (!empty($update)) {
             foreach ($update as $postId => $position) {
                 $where = ['category_id = ?' => (int)$id, 'post_id = ?' => (int)$postId];
-                $bind = ['position' => (int)$position];
+                $bind  = ['position' => (int)$position];
                 $adapter->update($this->categoryPostTable, $bind, $where);
             }
         }
@@ -492,31 +497,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $postIds = array_keys($insert + $delete + $update);
             $category->setAffectedPostIds($postIds);
         }
+
         return $this;
-    }
-    public function generateUrlKey($name, $count)
-    {
-        return $this->helperData->generateUrlKey($name, $count);
-    }
-
-    public function checkUrlKey($url, $id = null)
-    {
-        $adapter = $this->getConnection();
-        if ($id) {
-            $select            = $adapter->select()
-                ->from($this->getMainTable(), '*')
-                ->where('url_key = :url_key')
-                ->where('category_id != :category_id');
-            $binds['url_key']  = (string)$url;
-            $binds ['category_id'] = (int)$id;
-        } else {
-            $select = $adapter->select()
-                ->from($this->getMainTable(), '*')
-                ->where('url_key = :url_key');
-            $binds  = ['url_key' => (string)$url];
-        }
-        $result = $adapter->fetchOne($select, $binds);
-
-        return $result;
     }
 }

@@ -15,16 +15,23 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\LayoutFactory;
+use Mageplaza\Blog\Controller\Adminhtml\Category;
+use Mageplaza\Blog\Model\CategoryFactory;
 
 /**
  * Class Posts
  * @package Mageplaza\Blog\Controller\Adminhtml\Category
  */
-class Posts extends \Mageplaza\Blog\Controller\Adminhtml\Category
+class Posts extends Category
 {
     /**
      * Result layout factory
@@ -33,22 +40,23 @@ class Posts extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public $resultLayoutFactory;
 
-	/**
-	 * Posts constructor.
-	 * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-	 * @param \Mageplaza\Blog\Model\CategoryFactory $postFactory
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Backend\App\Action\Context $context
-	 */
+    /**
+     * Posts constructor.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     */
     public function __construct(
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
-        \Mageplaza\Blog\Model\CategoryFactory $postFactory,
-        \Magento\Framework\Registry $registry,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-    
+        Context $context,
+        Registry $coreRegistry,
+        CategoryFactory $categoryFactory,
+        LayoutFactory $resultLayoutFactory
+    )
+    {
         $this->resultLayoutFactory = $resultLayoutFactory;
-        parent::__construct($postFactory, $registry, $context);
+
+        parent::__construct($context, $coreRegistry, $categoryFactory);
     }
 
     /**
@@ -56,13 +64,8 @@ class Posts extends \Mageplaza\Blog\Controller\Adminhtml\Category
      */
     public function execute()
     {
-        $this->initCategory();
-        $resultLayout = $this->resultLayoutFactory->create();
-        /** @var \Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Post $postsBlock */
-        $postsBlock = $resultLayout->getLayout()->getBlock('category.edit.tab.post');
-        if ($postsBlock) {
-            $postsBlock->setCategoryPosts($this->getRequest()->getPost('category_posts', null));
-        }
-        return $resultLayout;
+        $this->initCategory(true);
+
+        return $this->resultLayoutFactory->create();
     }
 }

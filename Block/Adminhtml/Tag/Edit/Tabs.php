@@ -15,13 +15,15 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Adminhtml\Tag\Edit;
 
 /**
- * @method Tabs setTitle(\string $title)
+ * Class Tabs
+ * @package Mageplaza\Blog\Block\Adminhtml\Tag\Edit
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {

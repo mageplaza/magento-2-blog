@@ -15,9 +15,10 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml;
 
 /**
@@ -26,47 +27,54 @@ namespace Mageplaza\Blog\Controller\Adminhtml;
  */
 abstract class Author extends \Magento\Backend\App\Action
 {
+    /** Authorization level of a basic admin session */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::author';
 
-	/**
-	 * @var \Mageplaza\Blog\Model\AuthorFactory
-	 */
-    public $authorFactory;
-
-	/**
-	 * @var \Magento\Framework\Registry
-	 */
+    /**
+     * @var \Magento\Framework\Registry
+     */
     public $coreRegistry;
 
-	/**
-	 * @var \Magento\Framework\App\Response\RedirectInterface
-	 */
-    public $resultRedirectFactory;
+    /**
+     * @var \Mageplaza\Blog\Model\AuthorFactory
+     */
+    public $authorFactory;
 
-	/**
-	 * Author constructor.
-	 * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
-	 * @param \Magento\Framework\Registry $coreRegistry
-	 * @param \Magento\Backend\App\Action\Context $context
-	 */
+    /**
+     * Author constructor.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
+     */
     public function __construct(
-        \Mageplaza\Blog\Model\AuthorFactory $authorFactory,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\App\Action\Context $context
-    ) {
+        \Mageplaza\Blog\Model\AuthorFactory $authorFactory
+    )
+    {
+        $this->authorFactory = $authorFactory;
+        $this->coreRegistry  = $coreRegistry;
 
-        $this->authorFactory         = $authorFactory;
-        $this->coreRegistry          = $coreRegistry;
-        $this->resultRedirectFactory = $context->getRedirect();
         parent::__construct($context);
     }
 
-	/**
-	 * @return \Mageplaza\Blog\Model\Author
-	 */
+    /**
+     * @return \Mageplaza\Blog\Model\Author
+     */
     public function initAuthor()
     {
-        $author    = $this->authorFactory->create();
-        $this->coreRegistry->register('mageplaza_blog_author', $author);
+        $user   = $this->_auth->getUser();
+        $userId = $user->getId();
+
+        /** @var \Mageplaza\Blog\Model\Author $author */
+        $author = $this->authorFactory->create()
+            ->load($userId);
+
+        if (!$author->getId()) {
+            $author->setId($userId)
+                ->setName($user->getName());
+        }
+
         return $author;
     }
 }

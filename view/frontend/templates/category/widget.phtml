@@ -15,9 +15,12 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
+$tree = $block->getTree();
+if($tree):
 ?>
 <div class="mp-sidebar mpcss">
     <div class="row">
@@ -25,21 +28,13 @@
             <p class="block-mp-sidebar-heading" role="heading" aria-label="2"><?php echo __('Categories') ?></p>
         </div>
         <div class="col-xs-12">
-            <ul class="menu-categories">
-                <?php
-				$block->getCategoryList()
-				?>
+            <ul class="block-content menu-categories">
+                <?php echo $block->getCategoryTreeHtml($tree) ?>
             </ul>
         </div>
-
     </div>
 </div>
-
 <script type="text/javascript">
-    require([
-            'Mageplaza_Blog/js/categorytree'
-        ],
-        function (categoryTree) {
-        }
-    );
+    require(['Mageplaza_Blog/js/categorytree'], function () {});
 </script>
+<?php endif; ?>

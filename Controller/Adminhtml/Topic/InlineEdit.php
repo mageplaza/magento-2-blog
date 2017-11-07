@@ -15,16 +15,20 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
+
+use Magento\Backend\App\Action;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class InlineEdit
  * @package Mageplaza\Blog\Controller\Adminhtml\Topic
  */
-abstract class InlineEdit extends \Magento\Backend\App\Action
+abstract class InlineEdit extends Action
 {
     /**
      * JSON Factory
@@ -41,20 +45,20 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
     public $topicFactory;
 
     /**
-     * constructor
-     *
+     * InlineEdit constructor.
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
      * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
-     * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
+        \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
-        \Mageplaza\Blog\Model\TopicFactory $topicFactory,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-    
+        \Mageplaza\Blog\Model\TopicFactory $topicFactory
+    )
+    {
         $this->jsonFactory  = $jsonFactory;
         $this->topicFactory = $topicFactory;
+
         parent::__construct($context);
     }
 
@@ -65,42 +69,41 @@ abstract class InlineEdit extends \Magento\Backend\App\Action
     {
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->jsonFactory->create();
-        $error = false;
-        $messages = [];
-        $postItems = $this->getRequest()->getParam('items', []);
+        $error      = false;
+        $messages   = [];
+        $postItems  = $this->getRequest()->getParam('items', []);
 
         if (!($this->getRequest()->getParam('isAjax') && !empty($postItems))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
-                'error' => true,
+                'error'    => true,
             ]);
         }
 
-        $key = array_keys($postItems);
-        $topicId = !empty($key) ? (int) $key[0] : '';
+        $key     = array_keys($postItems);
+        $topicId = !empty($key) ? (int)$key[0] : '';
         /** @var \Mageplaza\Blog\Model\Topic $topic */
         $topic = $this->topicFactory->create()->load($topicId);
         try {
-            $topicData = $postItems[$topicId];
-            $topic->addData($topicData);
-            $topic->save();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $topic->addData($postItems[$topicId])
+                ->save();
+        } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithTopicId($topic, $e->getMessage());
-            $error = true;
+            $error      = true;
         } catch (\RuntimeException $e) {
             $messages[] = $this->getErrorWithTopicId($topic, $e->getMessage());
-            $error = true;
+            $error      = true;
         } catch (\Exception $e) {
             $messages[] = $this->getErrorWithTopicId(
                 $topic,
                 __('Something went wrong while saving the Topic.')
             );
-            $error = true;
+            $error      = true;
         }
 
         return $resultJson->setData([
             'messages' => $messages,
-            'error' => $error
+            'error'    => $error
         ]);
     }
 

@@ -15,139 +15,79 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Author;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Mageplaza\Blog\Controller\Adminhtml\Author;
+use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Model\AuthorFactory;
 
 /**
  * Class Save
  * @package Mageplaza\Blog\Controller\Adminhtml\Author
  */
-class Save extends \Mageplaza\Blog\Controller\Adminhtml\Author
+class Save extends Author
 {
     /**
-     * Backend session
-     *
-     * @var \Magento\Backend\Model\Session
+     * @var \Mageplaza\Blog\Helper\Image
      */
-    public $backendSession;
+    protected $imageHelper;
 
     /**
-     * Upload model
-     *
-     * @var \Mageplaza\Blog\Model\Upload
+     * Save constructor.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
+     * @param \Mageplaza\Blog\Helper\Image $imageHelper
      */
-    public $uploadModel;
-
-    /**
-     * Image model
-     *
-     * @var \Mageplaza\Blog\Model\Post\Image
-     */
-    public $imageModel;
-
-    /**
-     * JS helper
-     *
-     * @var \Magento\Backend\Helper\Js
-     */
-    public $jsHelper;
-
-	/**
-	 * @var \Magento\Framework\Stdlib\DateTime\DateTime
-	 */
-    public $date;
-
-	/**
-	 * Save constructor.
-	 * @param \Mageplaza\Blog\Model\Upload $uploadModel
-	 * @param \Mageplaza\Blog\Model\Author\Image $imageModel
-	 * @param \Magento\Backend\Helper\Js $jsHelper
-	 * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
-	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Backend\App\Action\Context $context
-	 */
     public function __construct(
-        \Mageplaza\Blog\Model\Upload $uploadModel,
-        \Mageplaza\Blog\Model\Author\Image $imageModel,
-        \Magento\Backend\Helper\Js $jsHelper,
-        \Mageplaza\Blog\Model\AuthorFactory $authorFactory,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Registry $registry,
-        \Magento\Backend\App\Action\Context $context
-    ) {
-        $this->uploadModel    = $uploadModel;
-        $this->imageModel     = $imageModel;
-        $this->backendSession = $context->getSession();
-        $this->jsHelper       = $jsHelper;
-        $this->date         = $date;
-        parent::__construct($authorFactory, $registry, $context);
+        Context $context,
+        Registry $registry,
+        AuthorFactory $authorFactory,
+        Image $imageHelper
+    )
+    {
+        $this->imageHelper = $imageHelper;
+
+        parent::__construct($context, $registry, $authorFactory);
     }
 
     /**
-     * run the action
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
-        $data = $this->getRequest()->getPost('author');
-        $data['updated_at'] = $this->date->date();
         $resultRedirect = $this->resultRedirectFactory->create();
-        //check delete image
-        $deleteImage = false;
-        if ($data) {
+
+        if ($data = $this->getRequest()->getPost('author')) {
+            /** @var \Mageplaza\Blog\Model\Author $author */
             $author = $this->initAuthor();
-            $author->setData($data);
-            if (isset($data['image'])) {
-                if (isset($data['image']['delete']) && $data['image']['delete'] == '1') {
-                    unset($data['image']);
-                    $author->setImage('');
-                    $deleteImage = true;
-                }
+
+            $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_AUTH, $author->getImage());
+
+            if (!empty($data)) {
+                $author->addData($data);
             }
 
-            if ((!isset($data['image']) || (count($data['image']) == 1)) && !$deleteImage) {
-                $image = $this->uploadModel->uploadFileAndGetName('image', $this->imageModel->getBaseDir(), $data);
-                if ($image === false) {
-                    $this->messageManager->addError(__('Please choose an image to upload.'));
-                    $resultRedirect->setPath(
-                        'mageplaza_blog/*/edit',
-                        [
-                            'post_id'  => $author->getId(),
-                            '_current' => true
-                        ]
-                    );
+            $this->_eventManager->dispatch('mageplaza_blog_author_prepare_save', ['author' => $author, 'request' => $this->getRequest()]);
 
-                    return $resultRedirect;
-                }
-
-                $author->setImage($image);
-            }
-            $this->_eventManager->dispatch(
-                'mageplaza_blog_author_prepare_save',
-                [
-                    'author' => $author,
-                    'request' => $this->getRequest()
-                ]
-            );
             try {
                 $author->save();
+
                 $this->messageManager->addSuccess(__('The Author has been saved.'));
-                $this->backendSession->setMageplazaBlogAuthorData(false);
+                $this->_getSession()->setData('mageplaza_blog_author_data', false);
+
                 if ($this->getRequest()->getParam('back')) {
-                    $resultRedirect->setPath(
-                        'mageplaza_blog/*/edit',
-                        [
-                            'user_id' => $author->getId(),
-                            '_current' => true
-                        ]
-                    );
-                    return $resultRedirect;
+                    $resultRedirect->setPath('mageplaza_blog/*/edit', ['_current' => true]);
+                } else {
+                    $resultRedirect->setPath('mageplaza_blog/*/');
                 }
-                $resultRedirect->setPath('mageplaza_blog/*/');
+
                 return $resultRedirect;
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
@@ -156,17 +96,15 @@ class Save extends \Mageplaza\Blog\Controller\Adminhtml\Author
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the Author.'));
             }
-            $this->_getSession()->setMageplazaBlogAuthorData($data);
-            $resultRedirect->setPath(
-                'mageplaza_blog/*/edit',
-                [
-                    'user_id' => $author->getId(),
-                    '_current' => true
-                ]
-            );
+
+            $this->_getSession()->setData('mageplaza_blog_author_data', $data);
+
+            $resultRedirect->setPath('mageplaza_blog/*/edit', ['_current' => true]);
+
             return $resultRedirect;
         }
         $resultRedirect->setPath('mageplaza_blog/*/');
+
         return $resultRedirect;
     }
 }

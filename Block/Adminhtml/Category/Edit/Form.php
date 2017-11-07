@@ -15,16 +15,21 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit;
+
+use Magento\Catalog\Block\Adminhtml\Category\AbstractCategory;
+use Magento\Catalog\Model\Category;
+use Magento\Framework\Json\EncoderInterface;
 
 /**
  * Class Form
  * @package Mageplaza\Blog\Block\Adminhtml\Category\Edit
  */
-class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
+class Form extends AbstractCategory
 {
     /**
      * Additional buttons
@@ -48,55 +53,55 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     public $jsonEncoder;
 
     /**
-     * constructor
-     *
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * Form constructor.
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
-     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $blogCategoryTree
+     * @param \Mageplaza\Blog\Model\CategoryFactory $blogCategoryFactory
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree,
         \Magento\Framework\Registry $registry,
-        \Mageplaza\Blog\Model\ResourceModel\Category\Tree $categoryTree,
-        \Mageplaza\Blog\Model\CategoryFactory $categoryFactory,
-        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-        \Magento\Backend\Block\Widget\Context $context,
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Category\Tree $blogCategoryTree,
+        \Mageplaza\Blog\Model\CategoryFactory $blogCategoryFactory,
+        EncoderInterface $jsonEncoder,
         array $data = []
-    ) {
-    
-        $this->jsonEncoder = $jsonEncoder;
-        parent::__construct($registry, $categoryTree, $categoryFactory, $categoryCollectionFactory, $context, $data);
+    )
+    {
+        parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
+
+        $this->jsonEncoder      = $jsonEncoder;
+        $this->_categoryTree    = $blogCategoryTree;
+        $this->_categoryFactory = $blogCategoryFactory;
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {
         $category   = $this->getCategory();
-        $categoryId = (int)$category->getId();
-        // 0 when we create Blog Category, otherwise some value for editing Blog Category
+        $categoryId = (int)$category->getId(); // 0 when we create Blog Category, otherwise some value for editing Blog Category
 
-        $this->setChild(
-            'tabs',
-            $this->getLayout()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tabs', 'tabs')
-        );
+        $this->setChild('tabs', $this->getLayout()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tabs', 'tabs'));
 
         // Save button
         $this->addButton(
             'save',
             [
-                'id' => 'save',
-                'label' => __('Save Category'),
-                'class' => 'save primary save-category',
+                'id'             => 'save',
+                'label'          => __('Save Category'),
+                'class'          => 'save primary save-category',
                 'data_attribute' => [
                     'mage-init' => [
                         'Mageplaza_Blog/category/edit' => [
-                            'url' => $this->getSaveUrl(),
+                            'url'  => $this->getSaveUrl(),
                             'ajax' => true
                         ]
                     ]
@@ -109,13 +114,13 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
             $this->addButton(
                 'delete',
                 [
-                    'id' => 'delete',
-                    'label' => __('Delete Category'),
+                    'id'      => 'delete',
+                    'label'   => __('Delete Category'),
                     'onclick' => "categoryDelete('" . $this->getUrl(
-                        'mageplaza_blog/*/delete',
-                        ['_current' => true]
-                    ) . "')",
-                    'class' => 'delete'
+                            'mageplaza_blog/*/delete',
+                            ['_current' => true]
+                        ) . "')",
+                    'class'   => 'delete'
                 ]
             );
         }
@@ -125,10 +130,10 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
         $this->addButton(
             'reset',
             [
-                'id' => 'reset',
-                'label' => __('Reset'),
+                'id'      => 'reset',
+                'label'   => __('Reset'),
                 'onclick' => "categoryReset('" . $this->getUrl($resetPath, ['_current' => true]) . "',false)",
-                'class' => 'reset'
+                'class'   => 'reset'
             ]
         );
 
@@ -146,7 +151,36 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
         foreach ($this->additionalButtons as $childName) {
             $html .= $this->getChildHtml($childName);
         }
+
         return $html;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isAjax()
+    {
+        return $this->getRequest()->isAjax();
+    }
+
+    /**
+     * @param array $args
+     * @return string
+     */
+    public function getSaveUrl(array $args = [])
+    {
+        $params = ['_current' => false, '_query' => false];
+        $params = array_merge($params, $args);
+
+        return $this->getUrl('mageplaza_blog/*/save', $params);
+    }
+
+    /**
+     * @return string
+     */
+    public function getEditUrl()
+    {
+        return $this->getUrl('mageplaza_blog/category/edit', ['_query' => false, 'id' => null, 'parent' => null]);
     }
 
     /**
@@ -207,7 +241,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
             return $this->getCategoryName();
         } else {
             $parentId = (int)$this->getRequest()->getParam('parent');
-            if ($parentId && $parentId != \Mageplaza\Blog\Model\Category::TREE_ROOT_ID) {
+            if ($parentId && $parentId != Category::TREE_ROOT_ID) {
                 return __('New Child Category');
             } else {
                 return __('New Root Category');
@@ -223,6 +257,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     {
         $params = ['_current' => true];
         $params = array_merge($params, $args);
+
         return $this->getUrl('mageplaza_blog/*/delete', $params);
     }
 
@@ -236,15 +271,8 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     {
         $params = ['_current' => true];
         $params = array_merge($params, $args);
-        return $this->getUrl('mageplaza_blog/*/refreshPath', $params);
-    }
 
-    /**
-     * @return bool
-     */
-    public function isAjax()
-    {
-        return $this->_request->isXmlHttpRequest() || $this->_request->getParam('isAjax');
+        return $this->getUrl('mageplaza_blog/*/refreshPath', $params);
     }
 
     /**
@@ -264,7 +292,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
      */
     public function getCategoryId()
     {
-        return (int)$this->templateContext->getRequest()->getParam('category_id');
+        return (int)$this->templateContext->getRequest()->getParam('id');
     }
 
     /**
@@ -277,7 +305,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
     public function addButton($buttonId, array $data)
     {
         $childBlockId = $buttonId . '_button';
-        $button = $this->getButtonChildBlock($childBlockId);
+        $button       = $this->getButtonChildBlock($childBlockId);
         $button->setData($data);
         $block = $this->getLayout()->getBlock('page.actions.toolbar');
         if ($block) {
@@ -307,6 +335,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
         if (null === $blockClassName) {
             $blockClassName = 'Magento\Backend\Block\Widget\Button';
         }
+
         return $this->getLayout()->createBlock($blockClassName, $this->getNameInLayout() . '-' . $childId);
     }
 
@@ -319,6 +348,7 @@ class Form extends \Mageplaza\Blog\Block\Adminhtml\Category\AbstractCategory
         if (!empty($posts)) {
             return $this->jsonEncoder->encode($posts);
         }
+
         return '{}';
     }
 }

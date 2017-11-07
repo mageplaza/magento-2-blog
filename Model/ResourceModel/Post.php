@@ -15,16 +15,23 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Model\ResourceModel;
+
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Post
  * @package Mageplaza\Blog\Model\ResourceModel
  */
-class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Post extends AbstractDb
 {
     /**
      * Date model
@@ -60,30 +67,41 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var string
      */
     public $postCategoryTable;
+
+    /**
+     * @var string
+     */
     public $postProductTable;
+
+    /**
+     * @var \Mageplaza\Blog\Helper\Data
+     */
     public $helperData;
 
-	/**
-	 * Post constructor.
-	 * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-	 * @param \Magento\Framework\Event\ManagerInterface $eventManager
-	 * @param \Mageplaza\Blog\Helper\Data $helperData
-	 * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-	 */
+    /**
+     * Post constructor.
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Mageplaza\Blog\Helper\Data $helperData
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     */
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Mageplaza\Blog\Helper\Data $helperData,
-        \Magento\Framework\Model\ResourceModel\Db\Context $context
-    ) {
+        Context $context,
+        DateTime $date,
+        ManagerInterface $eventManager,
+        Data $helperData
+    )
+    {
         $this->date         = $date;
         $this->eventManager = $eventManager;
-        $this->helperData = $helperData;
+        $this->helperData   = $helperData;
+
         parent::__construct($context);
+
         $this->postTagTable      = $this->getTable('mageplaza_blog_post_tag');
         $this->postTopicTable    = $this->getTable('mageplaza_blog_post_topic');
         $this->postCategoryTable = $this->getTable('mageplaza_blog_post_category');
-        $this->postProductTable = $this->getTable('mageplaza_blog_post_product');
+        $this->postProductTable  = $this->getTable('mageplaza_blog_post_product');
     }
 
     /**
@@ -126,43 +144,20 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($object->isObjectNew()) {
             $object->setCreatedAt($this->date->date());
         }
-        //set URl Key post and check the duplication URL
-        if ($object->isObjectNew()) {
-            $count   = 0;
-            $objName = $object->getName();
-            if ($object->getUrlKey()) {
-                $urlKey = $object->getUrlKey();
-            } else {
-                $urlKey = $this->generateUrlKey($objName, $count);
-            }
-            while ($this->checkUrlKey($urlKey)) {
-                $count++;
-                $urlKey = $this->generateUrlKey($urlKey, $count);
-            }
-            $object->setUrlKey($urlKey);
-        } else {
-            $objectId = $object->getId();
-            $count    = 0;
-            $objName  = $object->getName();
-            if ($object->getUrlKey()) {
-                $urlKey = $object->getUrlKey();
-            } else {
-                $urlKey = $this->generateUrlKey($objName, $count);
-            }
-            while ($this->checkUrlKey($urlKey, $objectId)) {
-                $count++;
-                $urlKey = $this->generateUrlKey($urlKey, $count);
-            }
 
-            $object->setUrlKey($urlKey);
+        if (is_array($object->getStoreIds())) {
+            $object->setStoreIds(implode(',', $object->getStoreIds()));
         }
+
+        $object->setUrlKey(
+            $this->helperData->generateUrlKey($this, $object, $object->getUrlKey() ?: $object->getName())
+        );
+
+        return $this;
     }
 
     /**
-     * after save callback
-     *
-     * @param \Magento\Framework\Model\AbstractModel|\Mageplaza\Blog\Model\Post $object
-     * @return $this
+     * @inheritdoc
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -410,57 +405,29 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getTopicIds(\Mageplaza\Blog\Model\Post $post)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()->from(
-            $this->postTopicTable,
-            'topic_id'
-        )
-            ->where(
-                'post_id = ?',
-                (int)$post->getId()
-            );
+        $select  = $adapter->select()->from($this->postTopicTable, 'topic_id')
+            ->where('post_id = ?', (int)$post->getId());
 
         return $adapter->fetchCol($select);
     }
 
-    public function checkUrlKey($url, $id = null)
-    {
-        $adapter = $this->getConnection();
-        if ($id) {
-            $select            = $adapter->select()
-                ->from($this->getMainTable(), '*')
-                ->where('url_key = :url_key')
-                ->where('post_id != :post_id');
-            $binds['url_key']  = (string)$url;
-            $binds ['post_id'] = (int)$id;
-        } else {
-            $select = $adapter->select()
-                ->from($this->getMainTable(), '*')
-                ->where('url_key = :url_key');
-            $binds  = ['url_key' => (string)$url];
-        }
-        $result = $adapter->fetchOne($select, $binds);
-
-        return $result;
-    }
-    public function generateUrlKey($name, $count)
-    {
-        $result = $this->helperData->generateUrlKey($name, $count);
-        return $result;
-    }
-
+    /**
+     * @param \Mageplaza\Blog\Model\Post $post
+     * @return $this
+     */
     public function saveProductRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedProductList(false);
-        $id   = $post->getId();
+        $id       = $post->getId();
         $products = $post->getProductsData();
         if ($products === null) {
             return $this;
         }
         $oldProducts = $post->getProductsPosition();
-        $insert  = array_diff_key($products, $oldProducts);
-        $delete  = array_diff_key($oldProducts, $products);
-        $update  = array_intersect_key($products, $oldProducts);
-        $_update = [];
+        $insert      = array_diff_key($products, $oldProducts);
+        $delete      = array_diff_key($oldProducts, $products);
+        $update      = array_intersect_key($products, $oldProducts);
+        $_update     = [];
         foreach ($update as $key => $settings) {
             if (isset($oldProducts[$key]) && $oldProducts[$key] != $settings['position']) {
                 $_update[$key] = $settings;
@@ -476,9 +443,9 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $data = [];
             foreach ($insert as $entityId => $position) {
                 $data[] = [
-                    'post_id'  => (int)$id,
-                    'entity_id'   => (int)$entityId,
-                    'position' => (int)$position['position']
+                    'post_id'   => (int)$id,
+                    'entity_id' => (int)$entityId,
+                    'position'  => (int)$position['position']
                 ];
             }
             $adapter->insertMultiple($this->postProductTable, $data);
@@ -505,6 +472,11 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $this;
     }
+
+    /**
+     * @param \Mageplaza\Blog\Model\Post $post
+     * @return array
+     */
     public function getProductsPosition(\Mageplaza\Blog\Model\Post $post)
     {
         $select = $this->getConnection()->select()->from(

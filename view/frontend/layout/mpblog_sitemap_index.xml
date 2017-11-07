@@ -16,17 +16,16 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
+
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="mpblog_design" />
     <body>
-        <referenceBlock name="head.additional">
-            <block class="Mageplaza\Blog\Block\Frontend" template="Mageplaza_Blog::design.phtml"/>
-        </referenceBlock>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Frontend" name="mpblog_html_sitemap" template="Mageplaza_Blog::sitemap/sitemap.phtml" />
+            <block class="Magento\Framework\View\Element\Template" name="mpblog_html_sitemap" template="sitemap/sitemap.phtml" />
         </referenceContainer>
     </body>
 </page>

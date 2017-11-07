@@ -15,57 +15,49 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
+
+use Mageplaza\Blog\Controller\Adminhtml\Post;
 
 /**
  * Class Delete
  * @package Mageplaza\Blog\Controller\Adminhtml\Post
  */
-class Delete extends \Mageplaza\Blog\Controller\Adminhtml\Post
+class Delete extends Post
 {
     /**
-     * execute action
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $id = $this->getRequest()->getParam('post_id');
-        if ($id) {
-            $name = "";
+        if ($id = $this->getRequest()->getParam('id')) {
             try {
-                /** @var \Mageplaza\Blog\Model\Post $post */
-                $post = $this->postFactory->create();
-                $post->load($id);
-                $name = $post->getName();
-                $post->delete();
+                $this->postFactory->create()
+                    ->load($id)
+                    ->delete();
+
                 $this->messageManager->addSuccess(__('The Post has been deleted.'));
-                $this->_eventManager->dispatch(
-                    'adminhtml_mageplaza_blog_post_on_delete',
-                    ['name' => $name, 'status' => 'success']
-                );
-                $resultRedirect->setPath('mageplaza_blog/*/');
-                return $resultRedirect;
             } catch (\Exception $e) {
-                $this->_eventManager->dispatch(
-                    'adminhtml_mageplaza_blog_post_on_delete',
-                    ['name' => $name, 'status' => 'fail']
-                );
                 // display error message
                 $this->messageManager->addError($e->getMessage());
                 // go back to edit form
-                $resultRedirect->setPath('mageplaza_blog/*/edit', ['post_id' => $id]);
+                $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $id]);
+
                 return $resultRedirect;
             }
+        } else {
+            // display error message
+            $this->messageManager->addError(__('Post to delete was not found.'));
         }
-        // display error message
-        $this->messageManager->addError(__('Post to delete was not found.'));
+
         // go to grid
         $resultRedirect->setPath('mageplaza_blog/*/');
+
         return $resultRedirect;
     }
 }
