@@ -50,6 +50,11 @@ class Relatedpost extends Template
     protected $_relatedPosts;
 
     /**
+     * @var int
+     */
+    protected $_limitPost;
+
+    /**
      * Relatedpost constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -109,7 +114,11 @@ class Relatedpost extends Template
      */
     public function getLimitPosts()
     {
-        return (int)$this->helperData->getBlogConfig('product_post/product_detail/post_limit') ?: 1;
+        if ($this->_limitPost == null) {
+            $this->_limitPost = (int)$this->helperData->getBlogConfig('product_post/product_detail/post_limit') ?: 1;
+        }
+
+        return $this->_limitPost;
     }
 
     /**
