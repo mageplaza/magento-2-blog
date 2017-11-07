@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Registry;
@@ -156,7 +157,19 @@ class Edit extends Category
 
         $resultPage->setActiveMenu('Mageplaza_Blog::category');
         $resultPage->getConfig()->getTitle()->prepend(__('Categories'));
-        $resultPage->getConfig()->getTitle()->prepend($categoryId ? $category->getName() : __('Categories'));
+
+        if ($categoryId) {
+            $title = __('%1 (ID: %2)', $category->getName(), $categoryId);
+        } else {
+            $parentId = (int)$this->getRequest()->getParam('parent');
+            if ($parentId && $parentId != CategoryModel::TREE_ROOT_ID) {
+                $title = __('New Child Category');
+            } else {
+                $title = __('New Root Category');
+            }
+        }
+        $resultPage->getConfig()->getTitle()->prepend($title);
+
         $resultPage->addBreadcrumb(__('Manage Categories'), __('Manage Categories'));
 
         return $resultPage;

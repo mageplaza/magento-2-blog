@@ -27,9 +27,6 @@ $categoryId = $block->getCategoryId();
 $blockGrid = $block->getLayout()->getBlock('mageplaza_blog_category_edit_tab_post');
 $gridJsObjectName = $blockGrid->getJsObjectName();
 ?>
-<div class="category-edit-title">
-    <h3 class="title"><?php echo $block->escapeHtml($block->getHeader()) . ($block->getCategoryId() ? ' (' . __('ID: %1', $block->getCategoryId()) . ')' : '') ?></h3>
-</div>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
     <?php echo $block->getAdditionalButtonsHtml(); ?>
 </div>

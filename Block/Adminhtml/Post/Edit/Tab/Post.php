@@ -269,6 +269,7 @@ class Post extends Generic implements TabInterface
 
         if (!$post->getId()) {
             $post->addData([
+                'allow_comment'    => 1,
                 'meta_title'       => $this->_scopeConfig->getValue('blog/seo/meta_title'),
                 'meta_description' => $this->_scopeConfig->getValue('blog/seo/meta_description'),
                 'meta_keywords'    => $this->_scopeConfig->getValue('blog/seo/meta_keywords'),

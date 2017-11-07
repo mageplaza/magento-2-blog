@@ -23,7 +23,7 @@ namespace Mageplaza\Blog\Block\Post;
 
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
@@ -65,12 +65,18 @@ class View extends Frontend
     protected $customerUrl;
 
     /**
+     * @var \Magento\Customer\Model\Session
+     */
+    protected $customerSession;
+
+    /**
      * View constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
      * @param \Mageplaza\Blog\Model\CommentFactory $commentFactory
      * @param \Mageplaza\Blog\Model\LikeFactory $likeFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Customer\Model\Session $customerSession
      * @param \Mageplaza\Blog\Helper\Data $helperData
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
@@ -83,6 +89,7 @@ class View extends Frontend
         CommentFactory $commentFactory,
         LikeFactory $likeFactory,
         CustomerRepositoryInterface $customerRepository,
+        CustomerSession $customerSession,
         HelperData $helperData,
         Url $customerUrl,
         CategoryFactory $categoryFactory,
@@ -90,6 +97,7 @@ class View extends Frontend
         array $data = []
     )
     {
+        $this->customerSession = $customerSession;
         $this->categoryFactory = $categoryFactory;
         $this->postFactory     = $postFactory;
         $this->customerUrl     = $customerUrl;
@@ -116,9 +124,7 @@ class View extends Frontend
      */
     public function isLoggedIn()
     {
-        $customerSession = ObjectManager::getInstance()->get(Session::class);
-
-        return $customerSession->isLoggedIn();
+        return $this->customerSession->isLoggedIn();
     }
 
     /**
