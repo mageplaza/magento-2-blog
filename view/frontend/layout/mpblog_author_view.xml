@@ -27,7 +27,7 @@
         <referenceContainer name="content">
             <block class="Mageplaza\Blog\Block\Author\Listpost" name="mpblog.post.list" template="post/list.phtml" />
         </referenceContainer>
-        <referenceContainer name="sidebar.main">
+        <referenceContainer name="blog.sidebar.main">
             <block class="Mageplaza\Blog\Block\Author\Widget" after="mpblog.sidebar.mostview" name="mpblog.view.sidebar.author" template="author/widget.phtml"/>
         </referenceContainer>
         <referenceBlock name="mpblog.sidebar.category" remove="true"/>
