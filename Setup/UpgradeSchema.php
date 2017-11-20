@@ -159,16 +159,16 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
         if (version_compare($context->getVersion(), '1.1.2', '<')) {
             if ($installer->tableExists('mageplaza_blog_post')) {
-                $connection->modifyColumn('mageplaza_blog_post', 'meta_robots', ['type' => Table::TYPE_TEXT]);
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_post'), 'meta_robots', ['type' => Table::TYPE_TEXT]);
             }
             if ($installer->tableExists('mageplaza_blog_tag')) {
-                $connection->modifyColumn('mageplaza_blog_tag', 'meta_robots', ['type' => Table::TYPE_TEXT]);
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_tag'), 'meta_robots', ['type' => Table::TYPE_TEXT]);
             }
             if ($installer->tableExists('mageplaza_blog_category')) {
-                $connection->modifyColumn('mageplaza_blog_category', 'meta_robots', ['type' => Table::TYPE_TEXT]);
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_category'), 'meta_robots', ['type' => Table::TYPE_TEXT]);
             }
-            if ($installer->tableExists('mageplaza_blog_category')) {
-                $connection->modifyColumn('mageplaza_blog_topic', 'meta_robots', ['type' => Table::TYPE_TEXT]);
+            if ($installer->tableExists('mageplaza_blog_topic')) {
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_topic'), 'meta_robots', ['type' => Table::TYPE_TEXT]);
             }
 
             if (!$installer->tableExists('mageplaza_blog_comment')) {
@@ -324,31 +324,31 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), '2.4.3', '<')) {
             if ($installer->tableExists('mageplaza_blog_post')) {
-                $connection->modifyColumn('mageplaza_blog_post', 'created_at', ['type' => Table::TYPE_DATETIME]);
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_post'), 'created_at', ['type' => Table::TYPE_DATETIME]);
             }
             if ($installer->tableExists('mageplaza_blog_post')) {
-                $connection->modifyColumn('mageplaza_blog_post', 'updated_at', ['type' => Table::TYPE_DATETIME]);
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_post'), 'updated_at', ['type' => Table::TYPE_DATETIME]);
             }
             if ($installer->tableExists('mageplaza_blog_post')) {
-                $connection->modifyColumn('mageplaza_blog_post', 'publish_date', ['type' => Table::TYPE_DATETIME]);
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_post'), 'publish_date', ['type' => Table::TYPE_DATETIME]);
             }
             if ($installer->tableExists('mageplaza_blog_tag')) {
-                $connection->modifyColumn('mageplaza_blog_tag', 'created_at', ['type' => Table::TYPE_DATETIME]);
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_tag'), 'created_at', ['type' => Table::TYPE_DATETIME]);
             }
             if ($installer->tableExists('mageplaza_blog_tag')) {
-                $connection->modifyColumn('mageplaza_blog_tag', 'updated_at', ['type' => Table::TYPE_DATETIME]);
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_tag'), 'updated_at', ['type' => Table::TYPE_DATETIME]);
             }
             if ($installer->tableExists('mageplaza_blog_category')) {
-                $connection->modifyColumn('mageplaza_blog_category', 'created_at', ['type' => Table::TYPE_DATETIME]);
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_category'), 'created_at', ['type' => Table::TYPE_DATETIME]);
             }
             if ($installer->tableExists('mageplaza_blog_category')) {
-                $connection->modifyColumn('mageplaza_blog_category', 'updated_at', ['type' => Table::TYPE_DATETIME]);
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_category'), 'updated_at', ['type' => Table::TYPE_DATETIME]);
             }
             if ($installer->tableExists('mageplaza_blog_topic')) {
-                $connection->modifyColumn('mageplaza_blog_topic', 'created_at', ['type' => Table::TYPE_DATETIME]);
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_topic'), 'created_at', ['type' => Table::TYPE_DATETIME]);
             }
             if ($installer->tableExists('mageplaza_blog_topic')) {
-                $connection->modifyColumn('mageplaza_blog_topic', 'updated_at', ['type' => Table::TYPE_DATETIME]);
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_topic'), 'updated_at', ['type' => Table::TYPE_DATETIME]);
             }
         }
 
