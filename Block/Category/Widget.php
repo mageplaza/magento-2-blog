@@ -59,18 +59,19 @@ class Widget extends Frontend
             if(!$value){
                 continue;
             }
+			if ($value['enabled']){
+				$level    = count(explode('/', ($value['path'])));
+				$hasChild = isset($value['children']) && $level < 4;
 
-            $level    = count(explode('/', ($value['path'])));
-            $hasChild = isset($value['children']) && $level < 4;
+				$html .= '<li class="category-level' . $level . ' category-item">';
+				$html .= $hasChild ? '<i class="fa fa-plus-square-o mp-blog-expand-tree-' . $level . '"></i>' : '';
+				$html .= '<a class="list-categories" href="' . $this->getCategoryUrl($value['url']) . '">';
+				$html .= '<i class="fa fa-folder-open-o">&nbsp;&nbsp;</i>';
+				$html .= ucfirst($value['text']) . '</a>';
+				$html .= $hasChild ? $this->getCategoryTreeHtml($value['children']) : '';
 
-            $html .= '<li class="category-level' . $level . ' category-item">';
-            $html .= $hasChild ? '<i class="fa fa-plus-square-o mp-blog-expand-tree-' . $level . '"></i>' : '';
-            $html .= '<a class="list-categories" href="' . $this->getCategoryUrl($value['url']) . '">';
-            $html .= '<i class="fa fa-folder-open-o">&nbsp;&nbsp;</i>';
-            $html .= ucfirst($value['text']) . '</a>';
-            $html .= $hasChild ? $this->getCategoryTreeHtml($value['children']) : '';
-
-            $html .= '</li>';
+				$html .= '</li>';
+			}
         }
 
         return $html;
