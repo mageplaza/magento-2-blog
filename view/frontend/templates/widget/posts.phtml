@@ -36,7 +36,7 @@ $posts = $block->getCollection();
                         <div class="post-image">
                             <a href="<?php echo $post->getUrl() ?>">
                                 <img class="img-responsive" style="height: 220px"
-                                     src="<?php echo $block->resizeImage($post->getImage(), 400); ?>"
+                                     src="<?php echo $block->resizeImage($post->getImage(), '400x'); ?>"
                                      alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
                             </a>
                         </div>
@@ -51,7 +51,7 @@ $posts = $block->getCollection();
                             <?php echo $block->getPostInfo($post) ?>
                         </div>
                         <div class="post-short-description">
-                            <p><?php echo $post->getShortDescription(true); ?></p>
+                            <p><?php echo $post->getShortDescription(); ?></p>
                         </div>
                         <div class="mp-clearfix"></div>
                         <div class="mp-post-meta-info mp-alignright">

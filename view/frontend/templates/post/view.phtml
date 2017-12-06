@@ -91,12 +91,14 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
             </div>
         </div>
     <?php endif; ?>
-    <?php if ($authorName && $helper->showAuthorInfo()): ?>
+    <?php if ($authorName && $helper->showAuthorInfo()):
+        $block->resizeImage($author->getImage(), '135x', \Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH);
+        ?>
         <div class="block-blog-related about-admin">
             <h2><?php echo __('About the Author'); ?></h2>
             <div class="related-content-container">
                 <div class="author-content-image">
-                    <img class="img-responsive" src="<?php echo $author->getImage() ? $block->resizeImage($author->getImage(), 135) : $block->getDefaultAuthorImage(); ?>">
+                    <img class="img-responsive" src="<?php echo $author->getImage() ? $block->resizeImage($author->getImage(), '135x', \Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH) : $block->getDefaultAuthorImage(); ?>">
                 </div>
                 <div class="author-content-information">
                     <div class="author-name"><?php echo $authorName ?></div>
@@ -119,7 +121,7 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                                 <?php if ($post->getImage()) : ?>
                                     <a href="<?php echo $post->getUrl() ?>">
                                         <img class="img-responsive"
-                                             src="<?php echo $block->resizeImage($post->getImage(), 400); ?>"
+                                             src="<?php echo $block->resizeImage($post->getImage(), '400x'); ?>"
                                              alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
                                     </a>
                                 <?php endif; ?>
@@ -152,10 +154,10 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
             </div>
         <?php endif; ?>
     <?php endif; ?>
-    <?php if ($_post->getAllowComment()): ?>
+    <?php $typeComment = $block->helperComment('type'); ?>
+    <?php if (($typeComment != Type::DISABLE) && $_post->getAllowComment()): ?>
         <div class="block-blog-related blog-comment">
             <h2><?php echo __('Comments') ?></h2>
-            <?php $typeComment = $block->helperComment('type'); ?>
             <?php if ($typeComment == Type::DISQUS): ?>
                 <div class="related-content-container box-collateral box-reviews" id="post-reviews">
                     <div id="disqus_thread"></div>

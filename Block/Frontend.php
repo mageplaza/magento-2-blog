@@ -27,6 +27,7 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Data as HelperData;
+use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\Config\Source\DisplayType;
 use Mageplaza\Blog\Model\LikeFactory;
@@ -160,12 +161,15 @@ class Frontend extends Template
 
     /**
      * @param $image
-     *
+     * @param string $type
      * @return string
      */
-    public function getImageUrl($image)
+    public function getImageUrl($image, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
     {
-        return $this->helperData->getImageHelper()->getMediaUrl($image);
+        $imageHelper = $this->helperData->getImageHelper();
+        $imageFile = $imageHelper->getMediaPath($image, $type);
+
+        return $this->helperData->getImageHelper()->getMediaUrl($imageFile);
     }
 
     /**
@@ -322,23 +326,19 @@ class Frontend extends Template
 
     /**
      * Resize Image Function
+     *
      * @param $image
-     * @param null $width
-     * @param null $height
+     * @param null $size
+     * @param string $type
      * @return string
      */
-    public function resizeImage($image, $width = null, $height = null)
+    public function resizeImage($image, $size = null, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
     {
         if (!$image) {
             return $this->getDefaultImageUrl();
         }
 
-        if (is_null($width)) {
-            $width  = $this->helperData->getBlogConfig('general/resize_image/resize_width');
-            $height = $this->helperData->getBlogConfig('general/resize_image/resize_height');
-        }
-
-        return $this->helperData->getImageHelper()->resizeImage($image, $width, $height);
+        return $this->helperData->getImageHelper()->resizeImage($image, $size, $type);
     }
 
     /**

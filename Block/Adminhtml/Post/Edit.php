@@ -96,4 +96,20 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         return __('New Post');
     }
+
+    /**
+     * Get form action URL
+     *
+     * @return string
+     */
+    public function getFormActionUrl()
+    {
+        /** @var \Mageplaza\Blog\Model\Post $post */
+        $post = $this->coreRegistry->registry('mageplaza_blog_post');
+        if ($id = $post->getId()) {
+            return $this->getUrl('*/*/save', ['id' => $id]);
+        }
+
+        return parent::getFormActionUrl();
+    }
 }

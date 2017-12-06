@@ -48,7 +48,7 @@ class Search extends Frontend
                 $result[] = [
                     'value' => $item->getName(),
                     'url'   => $item->getUrl(),
-                    'image' => $this->resizeImage($item->getImage(), 100),
+                    'image' => $this->resizeImage($item->getImage(), '100x'),
                     'desc'  => $shortDescription
                 ];
             }

@@ -21,13 +21,14 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Author\Edit\Tab;
 
+use Mageplaza\Core\Block\Adminhtml\Renderer\Image;
+
 /**
  * Class Author
  * @package Mageplaza\Blog\Block\Adminhtml\Author\Edit\Tab
  */
 class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
-
     /**
      * @var \Magento\Store\Model\System\Store
      */
@@ -39,12 +40,18 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
     public $wysiwygConfig;
 
     /**
+     * @var \Mageplaza\Blog\Helper\Image
+     */
+    protected $imageHelper;
+
+    /**
      * Author constructor.
      * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Mageplaza\Blog\Helper\Image $imageHelper
      * @param array $data
      */
     public function __construct(
@@ -53,11 +60,14 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
+        \Mageplaza\Blog\Helper\Image $imageHelper,
         array $data = []
     )
     {
         $this->wysiwygConfig = $wysiwygConfig;
         $this->systemStore   = $systemStore;
+        $this->imageHelper = $imageHelper;
+
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -104,10 +114,11 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
             ]
         );
 
-        $fieldset->addField('image', 'image', [
+        $fieldset->addField('image', Image::class, [
                 'name'  => 'image',
                 'label' => __('Avatar'),
                 'title' => __('Avatar'),
+                'path'  => $this->imageHelper->getBaseMediaPath(\Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH)
             ]
         );
 

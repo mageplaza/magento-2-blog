@@ -32,6 +32,7 @@ use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
+use Mageplaza\Blog\Helper\Image;
 
 /**
  * Class Post
@@ -74,6 +75,11 @@ class Post extends Generic implements TabInterface
     protected $authSession;
 
     /**
+     * @var \Mageplaza\Blog\Helper\Image
+     */
+    protected $imageHelper;
+
+    /**
      * Post constructor.
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -84,6 +90,7 @@ class Post extends Generic implements TabInterface
      * @param \Magento\Config\Model\Config\Source\Enabledisable $enableDisable
      * @param \Magento\Config\Model\Config\Source\Design\Robots $metaRobotsOptions
      * @param \Magento\Store\Model\System\Store $systemStore
+     * @param \Mageplaza\Blog\Helper\Image $imageHelper
      * @param array $data
      */
     public function __construct(
@@ -96,6 +103,7 @@ class Post extends Generic implements TabInterface
         Enabledisable $enableDisable,
         Robots $metaRobotsOptions,
         Store $systemStore,
+        Image $imageHelper,
         array $data = []
     )
     {
@@ -105,6 +113,7 @@ class Post extends Generic implements TabInterface
         $this->metaRobotsOptions = $metaRobotsOptions;
         $this->systemStore       = $systemStore;
         $this->authSession       = $authSession;
+        $this->imageHelper       = $imageHelper;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -128,10 +137,6 @@ class Post extends Generic implements TabInterface
                 'class'  => 'fieldset-wide'
             ]
         );
-
-        if ($post->getId()) {
-            $fieldset->addField('post_id', 'hidden', ['name' => 'post_id']);
-        }
 
         $fieldset->addField('author_id', 'hidden', ['name' => 'author_id']);
 
@@ -189,10 +194,11 @@ class Post extends Generic implements TabInterface
             ]);
         }
 
-        $fieldset->addField('image', 'image', [
+        $fieldset->addField('image', \Mageplaza\Core\Block\Adminhtml\Renderer\Image::class, [
                 'name'  => 'image',
                 'label' => __('Image'),
-                'title' => __('Image')
+                'title' => __('Image'),
+                'path'  => $this->imageHelper->getBaseMediaPath(Image::TEMPLATE_MEDIA_TYPE_POST)
             ]
         );
 
