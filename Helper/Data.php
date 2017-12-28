@@ -21,9 +21,7 @@
 
 namespace Mageplaza\Blog\Helper;
 
-use Magento\Customer\Model\Session;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filter\TranslitUrl;
 use Magento\Framework\ObjectManagerInterface;
@@ -43,6 +41,8 @@ use Mageplaza\Core\Helper\AbstractData as CoreHelper;
  */
 class Data extends CoreHelper
 {
+    const CONFIG_MODULE_PATH = 'blog';
+
     const TYPE_POST = 'post';
     const TYPE_CATEGORY = 'category';
     const TYPE_TAG = 'tag';
@@ -152,7 +152,7 @@ class Data extends CoreHelper
     {
         $code = ($code !== '') ? '/' . $code : '';
 
-        return $this->getConfigValue('blog' . $code, $storeId);
+        return $this->getConfigValue(self::CONFIG_MODULE_PATH . $code, $storeId);
     }
 
     /**
