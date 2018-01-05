@@ -168,7 +168,6 @@ class View extends Action
             $params       = $this->getRequest()->getParams();
             $customerData = $this->session->getCustomerData();
             $result       = [];
-            $now          = getdate();
             if (isset($params['cmt_text'])) {
                 $cmtText     = $params['cmt_text'];
                 $isReply     = isset($params['isReply']) ? $params['isReply'] : 0;
@@ -179,7 +178,7 @@ class View extends Action
                     'is_reply'   => $isReply,
                     'reply_id'   => $replyId,
                     'content'    => $cmtText,
-                    'created_at' => $this->dateTime->date('M d Y') . ' at ' . $now["hours"] . ":" . $now["minutes"]
+                    'created_at' => $this->dateTime->date('M d Y \a\t g:ia')
                 ];
 
                 $commentModel = $this->cmtFactory->create();

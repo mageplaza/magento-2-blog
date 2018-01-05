@@ -21,14 +21,13 @@
 
 namespace Mageplaza\Blog\Block\MonthlyArchive;
 
-use Mageplaza\Blog\Block\Frontend;
 use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Listpost
  * @package Mageplaza\Blog\Block\MonthlyArchive
  */
-class Listpost extends Frontend
+class Listpost extends \Mageplaza\Blog\Block\Listpost
 {
     /**
      * Override this function to apply collection for each type

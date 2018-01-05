@@ -123,19 +123,6 @@ class Data extends CoreHelper
     }
 
     /**
-     * Is enable module on frontend
-     *
-     * @param null $store
-     * @return bool
-     */
-    public function isEnabled($store = null)
-    {
-        $isModuleOutputEnabled = $this->isModuleOutputEnabled();
-
-        return $isModuleOutputEnabled && $this->getBlogConfig('general/enabled', $store);
-    }
-
-    /**
      * @return \Mageplaza\Blog\Helper\Image
      */
     public function getImageHelper()
@@ -170,7 +157,7 @@ class Data extends CoreHelper
      */
     public function showAuthorInfo()
     {
-        return $this->getBlogConfig('general/display_author');
+        return $this->getConfigGeneral('display_author');
     }
 
     /**
@@ -179,7 +166,7 @@ class Data extends CoreHelper
      */
     public function getBlogName($store = null)
     {
-        return $this->getBlogConfig('general/name', $store) ?: 'Blog';
+        return $this->getConfigGeneral('name', $store) ?: 'Blog';
     }
 
     /**
@@ -188,7 +175,7 @@ class Data extends CoreHelper
      */
     public function getRoute($store = null)
     {
-        return $this->getBlogConfig('general/url_prefix', $store) ?: 'blog';
+        return $this->getConfigGeneral('url_prefix', $store) ?: 'blog';
     }
 
     /**
@@ -197,7 +184,7 @@ class Data extends CoreHelper
      */
     public function getUrlSuffix($store = null)
     {
-        return $this->getBlogConfig('general/url_suffix', $store) ?: '';
+        return $this->getConfigGeneral('url_suffix', $store) ?: '';
     }
 
     /**

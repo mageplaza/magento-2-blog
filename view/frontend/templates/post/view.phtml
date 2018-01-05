@@ -206,6 +206,9 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                                 <div class="default-cmt__content__cmt-block__cmt-box">
                                     <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input" maxlength="255" placeholder="<?php echo __('Type comments here...') ?>"></textarea>
                                     <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
+                                        <div class="default-cmt_loading" style="display: none">
+                                             <img src="<?php echo $block->getViewFileUrl('images/loader-1.gif'); ?>" alt="Loading...">
+                                        </div>
                                         <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit primary btn-primary" <?php echo !$block->isLoggedIn() ? 'disabled' : '' ?>>
                                             <?php echo __('Comment') ?>
                                         </button>

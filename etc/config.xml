@@ -37,7 +37,7 @@
                 <display_sitemap>1</display_sitemap>
                 <date_type>F j, Y</date_type>
                 <font_color>#1abc9c</font_color>
-                <pagination>10</pagination>
+                <pagination>10,20,50</pagination>
                 <related_post>5</related_post>
                 <resize_image>
                     <resize_width>900</resize_width>

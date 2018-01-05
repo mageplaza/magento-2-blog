@@ -21,14 +21,13 @@
 
 namespace Mageplaza\Blog\Block\Author;
 
-use Mageplaza\Blog\Block\Frontend;
 use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Listpost
  * @package Mageplaza\Blog\Block\Author
  */
-class Listpost extends Frontend
+class Listpost extends \Mageplaza\Blog\Block\Listpost
 {
     protected $_author;
 
@@ -76,8 +75,8 @@ class Listpost extends Frontend
             $author = $this->getAuthor();
             if ($author) {
                 $breadcrumbs->addCrumb($author->getUrlKey(), [
-                    'label' => __('Author'),
-                    'title' => __('Author')
+                        'label' => __('Author'),
+                        'title' => __('Author')
                     ]
                 );
             }
@@ -91,7 +90,8 @@ class Listpost extends Frontend
     public function getBlogTitle($meta = false)
     {
         $blogTitle = parent::getBlogTitle($meta);
-        $author  = $this->getAuthor();
+        $author    = $this->getAuthor();
+
         if (!$author) {
             return $blogTitle;
         }

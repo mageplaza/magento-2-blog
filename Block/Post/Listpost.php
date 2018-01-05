@@ -21,19 +21,10 @@
 
 namespace Mageplaza\Blog\Block\Post;
 
-use Mageplaza\Blog\Block\Frontend;
-
 /**
  * Class Listpost
  * @package Mageplaza\Blog\Block\Post
  */
-class Listpost extends Frontend
+class Listpost extends \Mageplaza\Blog\Block\Listpost
 {
-    /**
-     * @inheritdoc
-     */
-    protected function _prepareLayout()
-    {
-        parent::_prepareLayout();
-    }
 }

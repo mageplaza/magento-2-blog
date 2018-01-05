@@ -25,7 +25,7 @@
     <update handle="mpblog_design" />
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Framework\View\Element\Template" name="mpblog_html_sitemap" template="sitemap/sitemap.phtml" />
+            <block class="Magento\Framework\View\Element\Template" name="mpblog_html_sitemap" template="Mageplaza_Blog::sitemap/sitemap.phtml" />
         </referenceContainer>
     </body>
 </page>

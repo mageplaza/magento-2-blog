@@ -80,12 +80,12 @@
                     <comment>Number of related post in post view page</comment>
                 </field>
                 <field id="display_style" translate="label comment" type="select" sortOrder="55" showInDefault="1" showInStore="1" showInWebsite="1">
-                    <label>Display blogs style</label>
+                    <label>Display Blogs Mode</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\DisplayType</source_model>
                 </field>
                 <field id="pagination" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInStore="1" showInWebsite="1">
-                    <label>Pagination</label>
-                    <comment>Number of post per page</comment>
+                    <label>Blogs per Page Allowed Values</label>
+                    <comment>Comma-separated.</comment>
                 </field>
                 <field id="font_color" translate="label comment" type="text" sortOrder="65" showInWebsite="1" showInStore="1" showInDefault="1">
                     <label>Choose blog's color</label>

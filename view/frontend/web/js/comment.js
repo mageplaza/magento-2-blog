@@ -47,32 +47,16 @@ require([
         submitCmt.click(function () {
             var cmtText = cmtBox.val();
             if (cmtText.trim().length) {
-                ajaxCommentActions(cmtText, submitCmt);
+                $('.default-cmt_loading').show();
+                $(this).prop('disabled', true);
+                var ajaxRequest = ajaxCommentActions(cmtText, submitCmt);
+                ajaxRequest.done(function () {
+                    cmtBox.val('');
+                    $('.default-cmt_loading').hide();
+                    $(this).prop('disabled', false);
+                }.bind(this));
             }
         });
-    }
-
-    // display comment
-    function displayComment(cmt, isReply) {
-        var cmtRow = '<li class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12 ' + (isReply ? ('reply-row') : '') + '" data-cmt-id="' + cmt.cmt_id + '"' + (isReply ? ('data-reply-id="' + cmt.reply_cmt + '"') : '') + '> <div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username">' + cmt.user_cmt + '</span> </div> <div class="cmt-row__cmt-content"> <p>' + cmt.cmt_text + '</p> </div> <div class="cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> <a class="interactions__btn-actions action btn-like-new" data-cmt-id="' + cmt.cmt_id + '">' + like + '</a> <a class="interactions__btn-actions action btn-reply-new" data-cmt-id="' + cmt.cmt_id + '">' + reply + '</a> <a class="interactions__btn-actions count-like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> <span class="count-like__like-text"></span></a> </div> <div class="interactions__cmt-createdat"> <span>' + cmt.created_at + '</span> </div> </div> </li>';
-        if (isReply) {
-            var replyCmtId = cmt.reply_cmt;
-            var replyCmt = defaultCmt.find('.default-cmt__content__cmt-content__cmt-row');
-            replyCmt.each(function () {
-                var cmtEl = $(this);
-                if (cmtEl.attr('data-cmt-id') === replyCmtId) {
-                    var replyList = cmtEl.find('ul.default-cmt__content__cmt-content:first');
-                    if (!replyList.length) {
-                        cmtRow = '<ul class="default-cmt__content__cmt-content row">' + cmtRow + '</ul>';
-                        cmtEl.append(cmtRow);
-                    } else {
-                        replyList.append(cmtRow);
-                    }
-                }
-            });
-        } else {
-            defaultCmt.append(cmtRow);
-        }
     }
 
     //like action
@@ -101,20 +85,27 @@ require([
     //show reply
     function showReply(btn) {
         btn.each(function () {
-            var replyEl = $(this);
-            replyEl.click(function () {
-                defaultCmt.find('.cmt-row__reply-row').hide();
-                var cmtId = $(this).attr('data-cmt-id');
-                var cmtRow = defaultCmt.find('.default-cmt__content__cmt-content__cmt-row');
-                cmtRow.each(function () {
-                    var cmtEl = $(this);
-                    if (cmtEl.attr('data-cmt-id') === cmtId) {
-                        cmtEl.find('.cmt-row__reply-row').remove();
-                        cmtEl.append('<div class="cmt-row__reply-row row"><div class="reply-form__form-input form-group col-xs-8 col-md-6"><label for="reply_cmt' + cmtId + '"></label><input type="text" id="reply_cmt' + cmtId + '" class="form-group__input form-control" autofocus /></div></div>');
-                        var input = $('#reply_cmt' + cmtId)
-                        submitReply(input, cmtId, cmtEl);
-                    }
-                });
+            $(this).click(function () {
+                var cmtId = $(this).attr('data-cmt-id'),
+                    cmtRowContainer = $(this).closest('.default-cmt__content__cmt-content__cmt-row'),
+                    cmtRow = cmtRowContainer.find('.cmt-row__reply-row');
+
+                if (cmtRow.length) {
+                    cmtRow.toggle();
+                } else {
+                    cmtRowContainer.append('<div class="cmt-row__reply-row row">' +
+                            '<div class="reply-form__form-input form-group col-xs-8 col-md-6">' +
+                                '<label for="reply_cmt' + cmtId + '"></label>' +
+                                '<input type="text" id="reply_cmt' + cmtId + '" class="form-group__input form-control" placeholder="Press enter to submit reply" autofocus />' +
+                            '</div>' +
+                        '</div>');
+                    var input = $('#reply_cmt' + cmtId);
+                    input.closest('.form-group').append(
+                        $('.default-cmt__content__cmt-block__cmt-box__cmt-btn .default-cmt_loading').clone()
+                    );
+                    input.focus();
+                    submitReply(input, cmtId, cmtRowContainer);
+                }
             });
         });
     }
@@ -125,7 +116,15 @@ require([
             var text = input.val();
             if (text !== '') {
                 if (e.keyCode === 13) {
-                    ajaxCommentActions(text, input, true, replyId, parentComment);
+                    input.siblings('.default-cmt_loading').show();
+                    input.prop('disabled', true);
+
+                    var ajaxRequest = ajaxCommentActions(text, input, true, replyId, parentComment);
+                    ajaxRequest.done(function () {
+                        input.closest('.cmt-row__reply-row').hide();
+                        input.siblings('.default-cmt_loading').hide();
+                        input.prop('disabled', false);
+                    });
                 }
             }
         });
@@ -133,11 +132,11 @@ require([
 
     //submit comment actions
     function ajaxCommentActions(cmtText, inputEl, checkReply, cmtId, parentComment) {
-        var isReply = (typeof checkReply !== 'undefined') ? 1 : 0;
-        var replyId = (typeof cmtId !== 'undefined') ? cmtId : 0;
-        var displayReply = (typeof checkReply !== 'undefined');
+        var isReply = (typeof checkReply !== 'undefined') ? 1 : 0,
+            replyId = (typeof cmtId !== 'undefined') ? cmtId : 0,
+            displayReply = (typeof checkReply !== 'undefined');
 
-        $.ajax({
+        return $.ajax({
             type: 'POST',
             url: window.location.href,
             data: {cmt_text: cmtText, isReply: isReply, replyId: replyId},
@@ -152,12 +151,43 @@ require([
                         defaultCmt.append(response.error);
                     }
                 }
-
-                var likeBtnNew = defaultCmt.find('.btn-like-new'),
-                    replyNew = defaultCmt.find('.btn-reply-new');
-                likeComment(likeBtnNew);
-                showReply(replyNew);
             }
         });
+    }
+
+    // display comment
+    function displayComment(cmt, isReply) {
+        var cmtRow = '<li class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12 ' + (isReply ? ('reply-row') : '') + '" data-cmt-id="' + cmt.cmt_id + '"' + (isReply ? ('data-reply-id="' + cmt.reply_cmt + '"') : '') + '> <div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username">' + cmt.user_cmt + '</span> </div> <div class="cmt-row__cmt-content"> <p>' + cmt.cmt_text + '</p> </div> <div class="cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> <a class="interactions__btn-actions action btn-like-new" data-cmt-id="' + cmt.cmt_id + '">' + like + '</a> <a class="interactions__btn-actions action btn-reply-new" data-cmt-id="' + cmt.cmt_id + '">' + reply + '</a> <a class="interactions__btn-actions count-like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> <span class="count-like__like-text"></span></a> </div> <div class="interactions__cmt-createdat"> <span>' + cmt.created_at + '</span> </div> </div> </li>';
+        if (isReply) {
+            var replyCmtId = cmt.reply_cmt;
+            var replyCmt = defaultCmt.find('.default-cmt__content__cmt-content__cmt-row');
+            replyCmt.each(function () {
+                var cmtEl = $(this);
+                if (cmtEl.attr('data-cmt-id') === replyCmtId) {
+                    var replyList = cmtEl.find('ul.default-cmt__content__cmt-content:first');
+                    if (!replyList.length) {
+                        cmtRow = $('<ul class="default-cmt__content__cmt-content row">' + cmtRow + '</ul>');
+                        cmtEl.append(cmtRow);
+
+                        likeComment(cmtRow.find('.btn-like-new'));
+                        showReply(cmtRow.find('.btn-reply-new'));
+                    } else {
+                        cmtRow = $(cmtRow);
+                        replyList.append(cmtRow);
+
+                        likeComment(cmtRow.find('.btn-like-new'));
+                        showReply(cmtRow.find('.btn-reply-new'));
+                    }
+
+                    return false;
+                }
+            });
+        } else {
+            cmtRow = $(cmtRow);
+            defaultCmt.append(cmtRow);
+
+            likeComment(cmtRow.find('.btn-like-new'));
+            showReply(cmtRow.find('.btn-reply-new'));
+        }
     }
 });

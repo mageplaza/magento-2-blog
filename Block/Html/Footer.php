@@ -83,11 +83,6 @@ class Footer extends Link
      */
     public function getHtmlSiteMapUrl()
     {
-        $moduleRoute = $this->helper->getBlogConfig('general/url_prefix');
-        if ($moduleRoute) {
-            return $this->getBaseUrl() . $moduleRoute . '/sitemap/';
-        }
-
-        return $this->getBaseUrl() . 'blog/sitemap/';
+        return $this->helper->getBlogUrl('sitemap');
     }
 }

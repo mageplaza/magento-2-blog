@@ -21,14 +21,13 @@
 
 namespace Mageplaza\Blog\Block\Topic;
 
-use Mageplaza\Blog\Block\Frontend;
 use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Listpost
  * @package Mageplaza\Blog\Block\Topic
  */
-class Listpost extends Frontend
+class Listpost extends \Mageplaza\Blog\Block\Listpost
 {
     protected $_topic;
 
@@ -97,7 +96,7 @@ class Listpost extends Frontend
         }
 
         if ($meta) {
-            if($title = $topic->getMetaTitle()) {
+            if ($title = $topic->getMetaTitle()) {
                 $blogTitle = [$title];
             }
         } else {

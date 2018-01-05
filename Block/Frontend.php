@@ -105,58 +105,12 @@ class Frontend extends Template
     }
 
     /**
-     * @return array|string
-     */
-    public function getPostCollection()
-    {
-        $collection = $this->getCollection();
-
-        if ($collection && $collection->getSize()) {
-            $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'mpblog.post.pager');
-
-            $blogLimit = (int)$this->helperData->getBlogConfig('general/pagination');
-            $pager->setLimit($blogLimit ?: 10)
-                ->setCollection($collection);
-
-            $this->setChild('pager', $pager);
-        }
-
-        return $collection;
-    }
-
-    /**
-     * Override this function to apply collection for each type
-     *
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
-     */
-    protected function getCollection()
-    {
-        return $this->helperData->getPostCollection();
-    }
-
-    /**
-     * @return string
-     */
-    public function getPagerHtml()
-    {
-        return $this->getChildHtml('pager');
-    }
-
-    /**
      * @param $content
      * @return string
      */
     public function getPageFilter($content)
     {
         return $this->filterProvider->getPageFilter()->filter($content);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isGridView()
-    {
-        return $this->helperData->getBlogConfig('general/display_style') == DisplayType::GRID;
     }
 
     /**
@@ -178,98 +132,6 @@ class Frontend extends Template
     public function getRssUrl()
     {
         return $this->helperData->getBlogUrl('post/rss');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function _prepareLayout()
-    {
-        if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
-            $breadcrumbs->addCrumb('home', [
-                'label' => __('Home'),
-                'title' => __('Go to Home Page'),
-                'link'  => $this->_storeManager->getStore()->getBaseUrl()
-            ])
-                ->addCrumb($this->helperData->getRoute(), $this->getBreadcrumbsData());
-        }
-
-        $this->applySeoCode();
-
-        return parent::_prepareLayout();
-    }
-
-    /**
-     * @return array
-     */
-    protected function getBreadcrumbsData()
-    {
-        $label = $this->helperData->getBlogName();
-
-        $data = [
-            'label' => $label,
-            'title' => $label
-        ];
-
-        if ($this->getRequest()->getFullActionName() != 'mpblog_post_index') {
-            $data['link'] = $this->helperData->getBlogUrl();
-        }
-
-        return $data;
-    }
-
-    /**
-     * @return $this
-     */
-    public function applySeoCode()
-    {
-        $this->pageConfig->getTitle()->set(join($this->getTitleSeparator(), array_reverse($this->getBlogTitle(true))));
-
-        $object = $this->getBlogObject();
-
-        $description = $object ? $object->getMetaDescription() : $this->helperData->getSeoConfig('meta_description');
-        $this->pageConfig->setDescription($description);
-
-        $keywords = $object ? $object->getMetaKeywords() : $this->helperData->getSeoConfig('meta_keywords');
-        $this->pageConfig->setKeywords($keywords);
-
-        $robots = $object ? $object->getMetaRobots() : $this->helperData->getSeoConfig('meta_robots');
-        $this->pageConfig->setRobots($robots);
-
-        $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
-        if ($pageMainTitle) {
-            $pageMainTitle->setPageTitle($this->getBlogTitle());
-        }
-
-        return $this;
-    }
-
-    /**
-     * Retrieve HTML title value separator (with space)
-     *
-     * @return string
-     */
-    public function getTitleSeparator()
-    {
-        $separator = (string)$this->helperData->getConfigValue('catalog/seo/title_separator');
-
-        return ' ' . $separator . ' ';
-    }
-
-    /**
-     * @param bool $meta
-     * @return array
-     */
-    public function getBlogTitle($meta = false)
-    {
-        $pageTitle = $this->helperData->getBlogConfig('general/name');
-        if ($meta) {
-            $title = $this->helperData->getSeoConfig('meta_title') ?: $pageTitle;
-
-            return [$title];
-        }
-
-        return $pageTitle;
     }
 
     /**

@@ -21,14 +21,13 @@
 
 namespace Mageplaza\Blog\Block\Tag;
 
-use Mageplaza\Blog\Block\Frontend;
 use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Listpost
  * @package Mageplaza\Blog\Block\Tag
  */
-class Listpost extends Frontend
+class Listpost extends \Mageplaza\Blog\Block\Listpost
 {
     protected $_tag;
 
@@ -91,13 +90,13 @@ class Listpost extends Frontend
     public function getBlogTitle($meta = false)
     {
         $blogTitle = parent::getBlogTitle($meta);
-        $tag  = $this->getBlogObject();
+        $tag       = $this->getBlogObject();
         if (!$tag) {
             return $blogTitle;
         }
 
         if ($meta) {
-            if($title = $tag->getMetaTitle()) {
+            if ($title = $tag->getMetaTitle()) {
                 $blogTitle = [$title];
             }
         } else {

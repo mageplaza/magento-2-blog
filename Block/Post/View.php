@@ -25,9 +25,7 @@ use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Url;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
-use Mageplaza\Blog\Block\Frontend;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Model\CategoryFactory;
@@ -42,7 +40,7 @@ use Mageplaza\Blog\Model\PostFactory;
  * @method Post getPost()
  * @method void setPost($post)
  */
-class View extends Frontend
+class View extends \Mageplaza\Blog\Block\Listpost
 {
     /**
      * config logo blog path
@@ -117,6 +115,14 @@ class View extends Frontend
             $post->load($id);
         }
         $this->setPost($post);
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getBlogObject()
+    {
+        return $this->getPost();
     }
 
     /**
@@ -338,24 +344,25 @@ class View extends Frontend
     }
 
     /**
-     * @inheritdoc
+     * @param bool $meta
+     * @return array
      */
-    public function applySeoCode()
+    public function getBlogTitle($meta = false)
     {
-        $post = $this->getPost();
-
-        $title = $post->getMetaTitle() ?: $post->getName();
-        $this->pageConfig->getTitle()->set($title ?: __('Blog'));
-
-        $this->pageConfig->setDescription($post->getMetaDescription());
-        $this->pageConfig->setKeywords($post->getMetaKeywords());
-        $this->pageConfig->setRobots($post->getMetaRobots());
-
-        $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
-        if ($pageMainTitle) {
-            $pageMainTitle->setPageTitle($post->getName());
+        $blogTitle = parent::getBlogTitle($meta);
+        $post  = $this->getBlogObject();
+        if (!$post) {
+            return $blogTitle;
         }
 
-        return $this;
+        if ($meta) {
+            if ($title = $post->getMetaTitle()) {
+                $blogTitle = [$title];
+            }
+        } else {
+            $blogTitle = $post->getName();
+        }
+
+        return $blogTitle;
     }
 }
