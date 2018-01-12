@@ -139,7 +139,7 @@ class Listpost extends Frontend
 
         $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle) {
-            $pageMainTitle->setPageTitle($this->getBlogTitle());
+            $pageMainTitle->setPageTitle(implode('-',$this->getBlogTitle()));
         }
 
         return $this;

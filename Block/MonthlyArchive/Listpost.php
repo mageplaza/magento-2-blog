@@ -52,7 +52,7 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
      */
     protected function getMonthLabel()
     {
-        return $this->helperData->getDateFormat($this->getMonthKey(), true);
+        return $this->helperData->getDateFormat($this->getMonthKey().'-10', true);
     }
 
     /**
@@ -72,16 +72,12 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
-     * @param bool $meta
      * @return array
      */
-    public function getBlogTitle($meta = false)
+    public function getBlogTitle()
     {
-        $blogTitle = parent::getBlogTitle($meta);
-        if ($meta) {
-            $blogTitle[] = $this->getMonthLabel();
-        }
 
+        $blogTitle[] = $this->getMonthLabel();
         return $blogTitle;
     }
 }

@@ -113,7 +113,7 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
     <?php if ($relatedPosts && sizeof($relatedPosts)): ?>
         <div class="block-blog-related topic-list mpcss" style="width: 90%;">
             <h2><?php echo __('Related Posts'); ?></h2>
-            <div class="related-content-container">
+            <div class="related-content-container" style="display: flex; flex-wrap: wrap;">
                 <?php foreach ($relatedPosts as $post): ?>
                     <div class="post-list-item col-mp mp-6 mp-lg-4 mp-md-6 mp-xs-12">
                         <div class="post-item-wraper">

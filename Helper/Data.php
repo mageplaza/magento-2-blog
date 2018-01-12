@@ -404,7 +404,7 @@ class Data extends CoreHelper
     }
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @param $resource
      * @param $object
      * @param $urlKey
      * @return bool

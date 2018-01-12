@@ -42,7 +42,7 @@ class Search extends Frontend
             foreach ($posts as $item) {
                 $shortDescription = ($item->getShortDescription() && $limitDesc > 0) ? $item->getShortDescription() : '';
                 if (strlen($shortDescription) > $limitDesc) {
-                    $shortDescription = substr($shortDescription, 0, $limitDesc) . '...';
+                    $shortDescription = mb_substr($shortDescription, 0, $limitDesc,'UTF-8') . '...';
                 }
 
                 $result[] = [
