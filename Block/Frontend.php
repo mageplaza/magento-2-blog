@@ -107,6 +107,7 @@ class Frontend extends Template
     /**
      * @param $content
      * @return string
+     * @throws \Exception
      */
     public function getPageFilter($content)
     {

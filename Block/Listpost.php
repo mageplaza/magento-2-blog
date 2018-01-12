@@ -30,7 +30,8 @@ use Mageplaza\Blog\Model\Config\Source\DisplayType;
 class Listpost extends Frontend
 {
     /**
-     * @return array|string
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getPostCollection()
     {
@@ -118,10 +119,12 @@ class Listpost extends Frontend
 
     /**
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function applySeoCode()
     {
-        $this->pageConfig->getTitle()->set(join($this->getTitleSeparator(), array_reverse($this->getBlogTitle(true))));
+
+        $this->pageConfig->getTitle()->set(implode('-',$this->getBlogTitle()));
 
         $object = $this->getBlogObject();
 
@@ -155,18 +158,18 @@ class Listpost extends Frontend
     }
 
     /**
-     * @param bool $meta
      * @return array
      */
-    public function getBlogTitle($meta = false)
+    public function getBlogTitle()
     {
+
         $pageTitle = $this->helperData->getConfigGeneral('name') ?: __('Blog');
-        if ($meta) {
-            $title = $this->helperData->getSeoConfig('meta_title') ?: $pageTitle;
+        if ($this->helperData->getSeoConfig('meta_title')) {
+            $title = $this->helperData->getSeoConfig('meta_title');
 
             return [$title];
         }
 
-        return $pageTitle;
+        return [$pageTitle];
     }
 }

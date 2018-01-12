@@ -190,6 +190,8 @@ class View extends \Mageplaza\Blog\Block\Listpost
     /**
      * @param $userId
      * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getUserComment($userId)
     {
@@ -230,10 +232,10 @@ class View extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
-     * get comments tree
-     *
      * @param $comments
      * @param $cmtId
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getCommentsTree($comments, $cmtId)
     {
@@ -341,28 +343,21 @@ class View extends \Mageplaza\Blog\Block\Listpost
                 ]
             );
         }
+
     }
 
     /**
-     * @param bool $meta
      * @return array
      */
-    public function getBlogTitle($meta = false)
+    public function getBlogTitle()
     {
-        $blogTitle = parent::getBlogTitle($meta);
         $post  = $this->getBlogObject();
-        if (!$post) {
-            return $blogTitle;
-        }
 
-        if ($meta) {
-            if ($title = $post->getMetaTitle()) {
-                $blogTitle = [$title];
-            }
-        } else {
-            $blogTitle = $post->getName();
+        if ($post->getMetaTitle()) {
+                $blogTitle = $post->getMetaTitle();
+            }else {
+                $blogTitle = $post->getName();
         }
-
-        return $blogTitle;
+        return [$blogTitle];
     }
 }
