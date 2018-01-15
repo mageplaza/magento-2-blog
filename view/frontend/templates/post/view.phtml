@@ -37,19 +37,19 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
 ?>
 <div class="mp-blog-view">
     <div class="mp-blog-rss">
-        <a href="<?php echo $block->getRssUrl() ?>" class="bb-rss-icon">
+        <a href="<?php echo $block->getRssUrl('post/rss') ?>" class="bb-rss-icon">
             <img src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px">
         </a>
     </div>
     <div class="mpcss post-view" id="mpblog-list-container">
         <div class="post-list-content col-md-9 col-sm-8">
             <div class="post-view-image col-xs-12">
-               <?php if ($_post->getImage()) : ?>
-                   <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
-               <?php endif; ?>
+                <?php if ($_post->getImage()) : ?>
+                    <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
+                <?php endif; ?>
             </div>
             <div class="post-post_content col-xs-12">
-                 <?php echo $block->getPageFilter($_post->getPostContent()); ?>
+                <?php echo $block->getPageFilter($_post->getPostContent()); ?>
             </div>
             <div class="col-xs-12">
                 <hr/>
@@ -67,7 +67,7 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                         <span><i class="fa fa-user">&nbsp;</i><?php echo __('By: %1', '<a class="mp-info" href="' . $author->getUrl() . '">' . $authorName . '</a>') ?></span>
                         <?php if ($authorName != $modifierName && $modifierName): ?>
                             |
-                            <span><i class="fa fa-edit">&nbsp;</i><?php echo __('Modify By: %1 at %2', '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>', $_post->getUpdatedAt()) ?></span>
+                            <span><i class="fa fa-edit">&nbsp;</i><?php echo __('Modify By: %1 at %2', '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>', $block->getDateFormat($_post->getUpdatedAt())) ?></span>
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>
@@ -197,8 +197,8 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                 <div class="related-content-container container default-cmt">
                     <?php if (!$block->isLoggedIn()): ?>
                         <div class="default-cmt__cmt-login">
-                        <button class="primary btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
-                    </div>
+                            <button class="primary btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
+                        </div>
                     <?php endif; ?>
                     <div class="mp-12">
                         <div class="default-cmt__content">
@@ -207,7 +207,7 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                                     <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input" maxlength="255" placeholder="<?php echo __('Type comments here...') ?>"></textarea>
                                     <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
                                         <div class="default-cmt_loading" style="display: none">
-                                             <img src="<?php echo $block->getViewFileUrl('images/loader-1.gif'); ?>" alt="Loading...">
+                                            <img src="<?php echo $block->getViewFileUrl('images/loader-1.gif'); ?>" alt="Loading...">
                                         </div>
                                         <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit primary btn-primary" <?php echo !$block->isLoggedIn() ? 'disabled' : '' ?>>
                                             <?php echo __('Comment') ?>

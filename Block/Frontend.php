@@ -128,11 +128,21 @@ class Frontend extends Template
     }
 
     /**
+     * @param $urlKey
+     * @param null $type
      * @return string
      */
-    public function getRssUrl()
+    public function getRssUrl($urlKey,$type = null)
     {
-        return $this->helperData->getBlogUrl('post/rss');
+        if (is_object($urlKey)) {
+            $urlKey = $urlKey->getUrlKey();
+        }
+
+        $urlKey = ($type ? $type . '/' : '') . $urlKey;
+        $url    = $this->helperData->getUrl($this->helperData->getRoute() . '/' . $urlKey);
+
+        return rtrim($url, '/') . '.xml';
+
     }
 
     /**

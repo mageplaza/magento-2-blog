@@ -331,7 +331,7 @@ class Data extends CoreHelper
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url    = $this->_getUrl($this->getRoute() . '/' . $urlKey);
+        $url    = $this->getUrl($this->getRoute() . '/' . $urlKey);
 
         return rtrim($url, '/') . $this->getUrlSuffix();
     }
@@ -456,5 +456,15 @@ class Data extends CoreHelper
     public function getTimezone()
     {
         return $this->getConfigValue('general/locale/timezone');
+    }
+
+    /**
+     * @param $route
+     * @param array $params
+     * @return string
+     */
+    public function getUrl($route, $params = [])
+    {
+        return $this->_urlBuilder->getUrl($route, $params);
     }
 }

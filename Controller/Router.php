@@ -25,6 +25,8 @@ use Magento\Framework\App\ActionFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\RouterInterface;
 use Magento\Framework\Url;
+use Magento\Payment\Gateway\Http\Client\Zend;
+use Magento\Webapi\Controller\Rest\Router\Route;
 use Mageplaza\Blog\Helper\Data;
 
 /**
@@ -33,6 +35,9 @@ use Mageplaza\Blog\Helper\Data;
  */
 class Router implements RouterInterface
 {
+
+    const URL_SUFFIX_RSS_XML = ".xml";
+
     /**
      * @var \Magento\Framework\App\ActionFactory
      */
@@ -92,11 +97,20 @@ class Router implements RouterInterface
 
         $identifier = trim($request->getPathInfo(), '/');
         $urlSuffix  = $this->helper->getUrlSuffix();
+
         if ($length = strlen($urlSuffix)) {
-            if (substr($identifier, -$length) == $urlSuffix) {
+
+            if (substr($identifier, -$length) == $urlSuffix && !$this->isRss($identifier)) {
+
                 $identifier = substr($identifier, 0, strlen($identifier) - $length);
             } else {
-                return null;
+                if ($length = strlen(self::URL_SUFFIX_RSS_XML)) {
+                    if (substr($identifier, -$length) == self::URL_SUFFIX_RSS_XML && $this->isRss($identifier)) {
+                        $identifier = substr($identifier, 0, strlen($identifier) - $length);
+                    } else {
+                        return null;
+                    }
+                }
             }
         }
 
@@ -118,10 +132,11 @@ class Router implements RouterInterface
         }
 
         $action = array_shift($routePath) ?: 'index';
+
         switch ($controller) {
             case 'post':
                 if (!in_array($action, ['index', 'rss'])) {
-                    $post   = $this->helper->getObjectByParam($action, 'url_key');
+                    $post = $this->helper->getObjectByParam($action, 'url_key');
                     $request->setParam('id', $post->getId());
                     $action = 'view';
                 }
@@ -167,5 +182,24 @@ class Router implements RouterInterface
             ->setPathInfo('/mpblog/' . $controller . '/' . $action);
 
         return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+    }
+
+    /**
+     * check if action = rss
+     * @param $identifier
+     * @return bool
+     */
+    public function isRss($identifier)
+    {
+
+        $routePath = explode('/', $identifier);
+        $routePath    = array_pop($routePath);
+        $routePath = explode('.', $routePath);
+        $action =array_shift($routePath);
+        if ($action == "rss") {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
