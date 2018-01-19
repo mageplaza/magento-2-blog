@@ -437,6 +437,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCategoryIds()
     {
@@ -450,7 +451,8 @@ class Post extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @param null $limit
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection|null
+     * @return ResourceModel\Post\Collection|null
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getRelatedPostsCollection($limit = null)
     {

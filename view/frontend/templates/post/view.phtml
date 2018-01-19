@@ -34,6 +34,8 @@ $authorName = $author !== null ? $author->getName() : '';
 
 $modifier     = $helper->getAuthorByPost($_post, true);
 $modifierName = $modifier !== null ? $modifier->getName() : '';
+$isLogged     =($block->isLoggedIn()) ? 'Yes' : 'No';
+$color = $helper->getBlogConfig('general/font_color');
 ?>
 <div class="mp-blog-view">
     <div class="mp-blog-rss">
@@ -229,7 +231,9 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
                     //get login url, text of button like, reply
                     var loginUrl = '<?php echo $block->getLoginUrl(); ?>',
                         like = '<?php echo __('Like') ?>',
-                        reply = '<?php echo __('Reply') ?>';
+                        reply = '<?php echo __('Reply') ?>',
+                        isLogged = '<?php echo $isLogged ?>',
+                        likedColor = '<?php echo $color;?>';
 
                     require(['comment']);
                 </script>
@@ -277,3 +281,14 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
         </script>
     <?php endif; ?>
 </div>
+
+<style type="text/css">
+    .cmt-row__alert-row{
+        font-size: 13px;
+        color: red;
+        margin-top: 10px;
+    }
+    .cmt-row__alert-row p {
+        margin: 3px 0 !important;
+    }
+</style>

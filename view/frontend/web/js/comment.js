@@ -26,10 +26,11 @@ require([
         submitCmt = $('.default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit'),
         defaultCmt = $('ul.default-cmt__content__cmt-content:first'),
         likeBtn = defaultCmt.find('.btn-like'),
+        likeContainer = defaultCmt.find('.cmt-row__cmt-interactions'),
         replyBtn = defaultCmt.find('.btn-reply');
 
     submitComment();
-    likeComment(likeBtn);
+    likeComment(likeBtn,likeContainer);
     showReply(replyBtn);
 
     $('li.default-cmt__content__cmt-content__cmt-row:first').css({'border-top': 'none'});
@@ -64,20 +65,51 @@ require([
         btn.each(function () {
             var likeEl = $(this);
             likeEl.click(function () {
-                var cmtId = $(this).attr('data-cmt-id');
+                var cmtId = $(this).attr('data-cmt-id'),
+                    cmtRowContainer = $(this).closest('.default-cmt__content__cmt-content__cmt-row');
+                if (isLogged === 'Yes') {
+                    var likeCount = $(this).find('span').text();
+                    if($(this).attr('click')==='1') {
+                        if ($(this).hasClass('mpblog-liked')) {
+                            $(this).css('color', '#333333');
+                            likeCount--;
+                            $(this).find('span').text((likeCount === 0) ? "" : likeCount);
+                            $(this).removeClass('mpblog-liked')
 
-                $.ajax({
-                    type: "POST",
-                    url: window.location.href,
-                    data: {cmtId: cmtId},
-                    success: function (response) {
-                        if (response.status === 'ok') {
-                            likeEl.parent().find('.count-like__like-text').text(response.count_like);
-                        } else if (response.status === 'error' && response.hasOwnProperty(error)) {
-                            defaultCmt.append(response.error);
+                        } else {
+                            likeCount++;
+                            $(this).find('span').text(likeCount);
+                            $(this).css('color', likedColor);
+                            $(this).addClass('mpblog-liked')
                         }
+                        $.ajax({
+                            type: "POST",
+                            url: window.location.href,
+                            data: {cmtId: cmtId},
+                            success: function (response) {
+                                if (response.status === 'ok') {
+                                    $(likeEl).attr('click','1');
+                                } else if (response.status === 'error' && response.hasOwnProperty(error)) {
+                                    defaultCmt.append(response.error);
+                                }
+                            }
+                        });
                     }
-                });
+                    $(this).attr('click','0');
+
+                } else {
+                    cmtRowContainer.append('<div class="message error message-error row" style="margin-top: 5px;">You are not Login.</div>');
+                    jQuery.fn.fadeOutAndRemove = function (speed) {
+                        $(this).fadeOut(speed,function(){
+                            $(this).remove();
+                        })
+                    };
+                    var removeNotification = function () {
+                        $('.message.error.message-error.row').fadeOutAndRemove('normal');
+                    };
+                    setTimeout(removeNotification, 3000);
+                }
+
             });
         });
     }
@@ -85,28 +117,42 @@ require([
     //show reply
     function showReply(btn) {
         btn.each(function () {
-            $(this).click(function () {
-                var cmtId = $(this).attr('data-cmt-id'),
-                    cmtRowContainer = $(this).closest('.default-cmt__content__cmt-content__cmt-row'),
-                    cmtRow = cmtRowContainer.find('.cmt-row__reply-row');
 
-                if (cmtRow.length) {
-                    cmtRow.toggle();
-                } else {
-                    cmtRowContainer.append('<div class="cmt-row__reply-row row">' +
-                            '<div class="reply-form__form-input form-group col-xs-8 col-md-6">' +
+                $(this).click(function () {
+                    var cmtId = $(this).attr('data-cmt-id'),
+                        cmtRowContainer = $(this).closest('.default-cmt__content__cmt-content__cmt-row'),
+                        cmtRow = cmtRowContainer.find('.cmt-row__reply-row');
+
+                    if (isLogged === 'Yes'){
+                        if (cmtRow.length) {
+                            cmtRow.toggle();
+                        } else {
+                            cmtRowContainer.append('<div class="cmt-row__reply-row row">' +
+                                '<div class="reply-form__form-input form-group col-xs-8 col-md-6">' +
                                 '<label for="reply_cmt' + cmtId + '"></label>' +
                                 '<input type="text" id="reply_cmt' + cmtId + '" class="form-group__input form-control" placeholder="Press enter to submit reply" autofocus />' +
-                            '</div>' +
-                        '</div>');
-                    var input = $('#reply_cmt' + cmtId);
-                    input.closest('.form-group').append(
-                        $('.default-cmt__content__cmt-block__cmt-box__cmt-btn .default-cmt_loading').clone()
-                    );
-                    input.focus();
-                    submitReply(input, cmtId, cmtRowContainer);
-                }
-            });
+                                '</div>' +
+                                '</div>');
+                            var input = $('#reply_cmt' + cmtId);
+                            input.closest('.form-group').append(
+                                $('.default-cmt__content__cmt-block__cmt-box__cmt-btn .default-cmt_loading').clone()
+                            );
+                            input.focus();
+                            submitReply(input, cmtId, cmtRowContainer);
+                        }
+                    }else {
+                            cmtRowContainer.append('<div class="message error message-error row" style="margin-top: 5px;">You are not Login.</div>');
+                            jQuery.fn.fadeOutAndRemove = function (speed) {
+                                $(this).fadeOut(speed,function(){
+                                    $(this).remove();
+                                })
+                            };
+                            var removeNotification = function () {
+                                $('.message.error.message-error.row').fadeOutAndRemove('normal');
+                            };
+                            setTimeout(removeNotification, 3000);
+                    }
+                });
         });
     }
 
@@ -142,8 +188,11 @@ require([
             data: {cmt_text: cmtText, isReply: isReply, replyId: replyId},
             success: function (response) {
                 if (response.status === 'ok') {
-                    displayComment(response, displayReply);
-                    inputEl.val('');
+
+                    $('.default-cmt__content__cmt-block').prepend('<div class="message success message-success row">Your comment has been sent successfully. Please wait admin approve !</div>')
+                    $(".default-cmt__content__cmt-block__cmt-box__cmt-input").attr('disabled',1);
+                    // displayComment(response, displayReply);
+                    // inputEl.val('');
                 } else if (response.status === 'error' && response.hasOwnProperty(error)) {
                     if (checkReply !== 'undefined') {
                         parentComment.append(response.error);
@@ -157,7 +206,7 @@ require([
 
     // display comment
     function displayComment(cmt, isReply) {
-        var cmtRow = '<li class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12 ' + (isReply ? ('reply-row') : '') + '" data-cmt-id="' + cmt.cmt_id + '"' + (isReply ? ('data-reply-id="' + cmt.reply_cmt + '"') : '') + '> <div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username">' + cmt.user_cmt + '</span> </div> <div class="cmt-row__cmt-content"> <p>' + cmt.cmt_text + '</p> </div> <div class="cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> <a class="interactions__btn-actions action btn-like-new" data-cmt-id="' + cmt.cmt_id + '">' + like + '</a> <a class="interactions__btn-actions action btn-reply-new" data-cmt-id="' + cmt.cmt_id + '">' + reply + '</a> <a class="interactions__btn-actions count-like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> <span class="count-like__like-text"></span></a> </div> <div class="interactions__cmt-createdat"> <span>' + cmt.created_at + '</span> </div> </div> </li>';
+        var cmtRow = '<li id="cmt-id='+ cmt.cmt_id +'" class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12 ' + (isReply ? ('reply-row') : '') + '" data-cmt-id="' + cmt.cmt_id + '"' + (isReply ? ('data-reply-id="' + cmt.reply_cmt + '"') : '') + '> <div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username">' + cmt.user_cmt + '</span> </div> <div class="cmt-row__cmt-content"> <p>' + cmt.cmt_text + '</p> </div> <div class="cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> <a class="interactions__btn-actions action btn-like-new mpblog-like" data-cmt-id="' + cmt.cmt_id + '">' + like + '</a> <a class="interactions__btn-actions action btn-reply-new" data-cmt-id="' + cmt.cmt_id + '">' + reply + '</a> <a class="interactions__btn-actions count-like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> <span class="count-like__like-text"></span></a> </div> <div class="interactions__cmt-createdat"> <span>' + cmt.created_at + '</span> </div> </div> </li>';
         if (isReply) {
             var replyCmtId = cmt.reply_cmt;
             var replyCmt = defaultCmt.find('.default-cmt__content__cmt-content__cmt-row');

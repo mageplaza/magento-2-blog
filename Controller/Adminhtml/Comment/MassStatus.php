@@ -19,18 +19,18 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-namespace Mageplaza\Blog\Controller\Adminhtml\Post;
+namespace Mageplaza\Blog\Controller\Adminhtml\Comment;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
-use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
+use Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory;
 
 /**
  * Class MassStatus
- * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ * @package Mageplaza\Blog\Controller\Adminhtml\Comment
  */
 class MassStatus extends Action
 {
@@ -44,16 +44,15 @@ class MassStatus extends Action
     /**
      * Collection Factory
      *
-     * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
+     * @var \Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory
      */
     public $collectionFactory;
 
     /**
-     * constructor
-     *
-     * @param \Magento\Ui\Component\MassAction\Filter $filter
-     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $collectionFactory
-     * @param \Magento\Backend\App\Action\Context $context
+     * MassStatus constructor.
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         Context $context,
@@ -68,33 +67,31 @@ class MassStatus extends Action
     }
 
     /**
-     * @return $this|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
-     * @throws LocalizedException
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-        $collection = $this->filter->getCollection($this->collectionFactory->create());
-        $status     = (int)$this->getRequest()->getParam('status');
+        try{
 
-        $postUpdated = 0;
-        foreach ($collection as $post) {
-            try {
-                $post->setEnabled($status)
-                    ->save();
+            $commentUpdated = 0;
+            $status     = (int)$this->getRequest()->getParam('status');
+            $collection = $this->filter->getCollection($this->collectionFactory->create());
 
-                $postUpdated++;
-            } catch (LocalizedException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
-                $this->_getSession()->addException($e, __('Something went wrong while updating status for %1.', $post->getName()));
+            foreach ($collection as $comment) {
+                $comment->setStatus($status)->save();
+                $commentUpdated++;
             }
+
+        } catch (LocalizedException $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+        } catch (\Exception $e) {
+            $this->_getSession()->addException($e, __('Something went wrong while updating status'));
         }
 
-        if ($postUpdated) {
-            $this->messageManager->addSuccessMessage(__('A total of %1 record(s) have been updated.', $postUpdated));
+        if ($commentUpdated) {
+            $this->messageManager->addSuccessMessage(__('A total of %1 record(s) have been updated.', $commentUpdated));
         }
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         return $resultRedirect->setPath('*/*/');

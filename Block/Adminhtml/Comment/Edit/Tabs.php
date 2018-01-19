@@ -19,22 +19,25 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-namespace Mageplaza\Blog\Model\ResourceModel\Comment;
-
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+namespace Mageplaza\Blog\Block\Adminhtml\Comment\Edit;
 
 /**
- * Class Collection
- * @package Mageplaza\Blog\Model\ResourceModel\Comment
+ * Class Tabs
+ * @package Mageplaza\Blog\Block\Adminhtml\Comment\Edit
  */
-class Collection extends AbstractCollection
+class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
-    protected $_idFieldName = 'comment_id';
     /**
-     * Define model & resource model
+     * constructor
+     *
+     * @return void
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\Comment', 'Mageplaza\Blog\Model\ResourceModel\Comment');
+        parent::_construct();
+
+        $this->setId('comment_tabs');
+        $this->setDestElementId('edit_form');
+        $this->setTitle(__('Comment Information'));
     }
 }

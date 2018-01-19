@@ -25,7 +25,7 @@
     <body>
         <referenceBlock name="menu">
             <action method="setActive">
-                <argument name="itemId" xsi:type="string">Mageplaza_Blog::posts</argument>
+                <argument name="itemId" xsi:type="string">Mageplaza_Blog::post</argument>
             </action>
         </referenceBlock>
         <referenceBlock name="page.title">

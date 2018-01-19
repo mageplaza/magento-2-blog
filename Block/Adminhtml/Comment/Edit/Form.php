@@ -19,11 +19,11 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit;
+namespace Mageplaza\Blog\Block\Adminhtml\Comment\Edit;
 
 /**
  * Class Form
- * @package Mageplaza\Blog\Block\Adminhtml\Post\Edit
+ * @package Mageplaza\Blog\Block\Adminhtml\Comment\Edit
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {

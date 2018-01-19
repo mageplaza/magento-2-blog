@@ -19,35 +19,37 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-namespace Mageplaza\Blog\Block\Adminhtml\Author;
-use Magento\Backend\Block\Widget\Context;
-use Magento\Framework\Registry;
+namespace Mageplaza\Blog\Block\Adminhtml\Comment;
 
+use Magento\Framework\Registry;
+use Magento\Backend\Block\Widget\Context;
 /**
  * Class Edit
- * @package Mageplaza\Blog\Block\Adminhtml\Author
+ * @package Mageplaza\Blog\Block\Adminhtml\Comment
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
+     * Core registry
+     *
      * @var \Magento\Framework\Registry
      */
     public $coreRegistry;
 
     /**
-     * Edit constructor.
-     * @param \Magento\Backend\Block\Widget\Context $context
+     * constructor
+     *
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param array $data
      */
     public function __construct(
-        Context $context,
         Registry $coreRegistry,
+        Context $context,
         array $data = []
     )
     {
         $this->coreRegistry = $coreRegistry;
-
         parent::__construct($context, $data);
     }
 
@@ -58,17 +60,16 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _construct()
     {
-        $this->_objectId   = 'user_id';
         $this->_blockGroup = 'Mageplaza_Blog';
-        $this->_controller = 'adminhtml_author';
+        $this->_controller = 'adminhtml_comment';
 
         parent::_construct();
 
         $this->buttonList->add(
             'save-and-continue',
             [
-                'label'          => __('Save Change'),
-                'class'          => 'save primary',
+                'label'          => __('Save and Continue Edit'),
+                'class'          => 'save',
                 'data_attribute' => [
                     'mage-init' => [
                         'button' => [
@@ -80,8 +81,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             ],
             -100
         );
-        $this->buttonList->remove('back');
-        $this->buttonList->remove('save');
+        $this->buttonList->update('save','label','Save Comment');
+        $this->buttonList->remove('reset');
+        $this->buttonList->remove('delete');
+
     }
 
     /**
@@ -91,12 +94,28 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getHeaderText()
     {
-        /** @var \Mageplaza\Blog\Model\Post $post */
-        $author = $this->coreRegistry->registry('mageplaza_blog_author');
-        if ($author->getId()) {
-            return __("Edit Author '%1'", $this->escapeHtml($author->getName()));
+        /** @var \Mageplaza\Blog\Model\Comment $comment */
+        $comment = $this->coreRegistry->registry('mageplaza_blog_comment');
+        if ($comment->getId()) {
+            return __("Edit Comment");
         }
 
-        return __('New Author');
+        return __('New Comment');
+    }
+
+    /**
+     * Get form action URL
+     *
+     * @return string
+     */
+    public function getFormActionUrl()
+    {
+        /** @var \Mageplaza\Blog\Model\Post $post */
+        $comment = $this->coreRegistry->registry('mageplaza_blog_comment');
+        if ($id = $comment->getId()) {
+            return $this->getUrl('*/*/save', ['id' => $id]);
+        }
+
+        return parent::getFormActionUrl();
     }
 }

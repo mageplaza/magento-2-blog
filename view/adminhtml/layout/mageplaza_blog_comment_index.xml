@@ -25,7 +25,7 @@
     <body>
         <referenceBlock name="menu">
             <action method="setActive">
-                <argument name="itemId" xsi:type="string">Mageplaza_Blog::tag</argument>
+                <argument name="itemId" xsi:type="string">Mageplaza_Blog::comment</argument>
             </action>
         </referenceBlock>
         <referenceBlock name="page.title">
@@ -34,7 +34,7 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <uiComponent name="mageplaza_blog_tag_listing"/>
+            <uiComponent name="mageplaza_blog_comment_listing"/>
         </referenceContainer>
     </body>
 </page>

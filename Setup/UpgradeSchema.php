@@ -352,6 +352,37 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
 
+        if (version_compare($context->getVersion(), '2.4.4', '<')) {
+
+            if ($installer->tableExists('mageplaza_blog_comment')) {
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_comment'), 'content', ['type' => Table::TYPE_TEXT]);
+            }
+            if ($installer->tableExists('mageplaza_blog_comment')) {
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_comment'), 'created_at', ['type' => Table::TYPE_DATETIME]);
+            }
+
+            if ($installer->tableExists('mageplaza_blog_comment')) {
+                $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'customer_name', [
+                    'type'    => Table::TYPE_TEXT, null,
+                    'comment' => 'Customer Name',
+                ]);
+                $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'post_name', [
+                    'type'    => Table::TYPE_TEXT, null,
+                    'comment' => 'Post Name',
+                ]);
+                $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'status', [
+                    'type'    => Table::TYPE_INTEGER, null, [],
+                    'comment' => 'Post Name',
+                ]);
+                $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'store_ids', [
+                    'type'    => Table::TYPE_TEXT, null, ['nullable' => false, 'unsigned' => true,],
+                    'comment' => 'Store Id',
+                ]);
+
+            }
+
+        }
+
         $installer->endSetup();
     }
 }

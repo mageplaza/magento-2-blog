@@ -31,6 +31,7 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Helper\Data as HelperBlog;
 use Mageplaza\Blog\Model\TrafficFactory;
+use Mageplaza\Blog\Model\PostFactory;
 
 /**
  * Class View
@@ -97,21 +98,27 @@ class View extends Action
     protected $resultForwardFactory;
 
     /**
+     * @var \Mageplaza\Blog\Model\PostFactory
+     */
+    public $postFactory;
+
+    /**
      * View constructor.
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Mageplaza\Blog\Model\CommentFactory $commentFactory
      * @param \Mageplaza\Blog\Model\LikeFactory $likeFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Mageplaza\Blog\Helper\Data $helperBlog
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
-     * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Mageplaza\Blog\Model\TrafficFactory $trafficFactory
+     * @param Context $context
+     * @param ForwardFactory $resultForwardFactory
+     * @param StoreManagerInterface $storeManager
+     * @param HelperBlog $helperBlog
+     * @param PageFactory $resultPageFactory
+     * @param AccountManagementInterface $accountManagement
+     * @param CustomerUrl $customerUrl
+     * @param Session $customerSession
+     * @param TrafficFactory $trafficFactory
+     * @param PostFactory $postFactory
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -127,7 +134,8 @@ class View extends Action
         AccountManagementInterface $accountManagement,
         CustomerUrl $customerUrl,
         Session $customerSession,
-        TrafficFactory $trafficFactory
+        TrafficFactory $trafficFactory,
+        PostFactory $postFactory
     )
     {
 
@@ -145,15 +153,18 @@ class View extends Action
         $this->cmtFactory           = $commentFactory;
         $this->likeFactory          = $likeFactory;
         $this->dateTime             = $dateTime;
+        $this->postFactory          = $postFactory;
     }
 
     /**
-     * @return $this|\Magento\Framework\View\Result\Page
+     * @return $this|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page
+     * @throws \Exception
      */
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
         if ($id) {
+
             $trafficModel = $this->trafficFactory->create()->load($id, 'post_id');
             if ($trafficModel->getId()) {
                 $trafficModel->setNumbersView($trafficModel->getNumbersView() + 1);
@@ -167,6 +178,7 @@ class View extends Action
         if ($this->getRequest()->isAjax() && $this->session->isLoggedIn()) {
             $params       = $this->getRequest()->getParams();
             $customerData = $this->session->getCustomerData();
+            $postData = $this->postFactory->create()->load($id);
             $result       = [];
             if (isset($params['cmt_text'])) {
                 $cmtText     = $params['cmt_text'];
@@ -178,7 +190,11 @@ class View extends Action
                     'is_reply'   => $isReply,
                     'reply_id'   => $replyId,
                     'content'    => $cmtText,
-                    'created_at' => $this->dateTime->date('M d Y \a\t g:ia')
+                    'created_at' => $this->dateTime->date(),
+                    'customer_name' => $customerData->getFirstname().' '.$customerData->getLastname(),
+                    'post_name'  => $postData->getName(),
+                    'status'     => 3,
+                    'store_ids'  => $this->storeManager->getStore()->getId()
                 ];
 
                 $commentModel = $this->cmtFactory->create();
@@ -243,8 +259,10 @@ class View extends Action
                         $model->addData($data)->save();
                     }
                     $likes      = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
-                    $countLikes = $likes->getSize();
+                    $countLikes = ($likes->getSize())? $likes->getSize() :'';
+                    $isLiked    = ($checkLike) ? "yes" : "no";
                     $result     = [
+                        'liked'      => $isLiked,
                         'comment_id' => $cmtId,
                         'count_like' => $countLikes,
                         'status'     => 'ok'
@@ -270,6 +288,7 @@ class View extends Action
      */
     public function isLikedComment($cmtId, $userId, $model)
     {
+
         $liked = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
         foreach ($liked as $item) {
             if ($item->getEntityId() == $userId) {

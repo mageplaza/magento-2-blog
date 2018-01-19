@@ -28,6 +28,7 @@
         <add id="Mageplaza_Blog::topic" title="Manage Topics" module="Mageplaza_Blog" sortOrder="30" action="mageplaza_blog/topic" resource="Mageplaza_Blog::topic" parent="Mageplaza_Blog::blog"/>
         <add id="Mageplaza_Blog::category" title="Categories" module="Mageplaza_Blog" sortOrder="40" action="mageplaza_blog/category" resource="Mageplaza_Blog::category" parent="Mageplaza_Blog::blog"/>
         <add id="Mageplaza_Blog::author" title="Author Information" module="Mageplaza_Blog" sortOrder="50" action="mageplaza_blog/author/edit" resource="Mageplaza_Blog::author" parent="Mageplaza_Blog::blog"/>
-        <add id="Mageplaza_Blog::configuration" title="Configuration" module="Mageplaza_Blog" sortOrder="60" action="adminhtml/system_config/edit/section/blog" resource="Mageplaza_Blog::configuration" parent="Mageplaza_Blog::blog"/>
+        <add id="Mageplaza_Blog::comment" title="Manage Comments" module="Mageplaza_Blog" sortOrder="60" action="mageplaza_blog/comment" resource="Mageplaza_Blog::comment" parent="Mageplaza_Blog::blog"/>
+        <add id="Mageplaza_Blog::configuration" title="Configuration" module="Mageplaza_Blog" sortOrder="70" action="adminhtml/system_config/edit/section/blog" resource="Mageplaza_Blog::configuration" parent="Mageplaza_Blog::blog"/>
     </menu>
 </config>

@@ -216,6 +216,25 @@ class View extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
+     * @param $cmtId
+     * @return bool
+     */
+    public function isLiked($cmtId)
+    {
+        if ($this->customerSession->isLoggedIn()){
+            $customerData = $this->customerSession->getCustomerData();
+            $customerId = $customerData->getId();
+            $likes = $this->likeFactory->create()->getCollection();
+            foreach ($likes as $like){
+                if ($like->getEntityId() == $customerId && $like->getCommentId() ==$cmtId){
+                    return true;
+                }
+            }
+        }
+        return false;
+
+    }
+    /**
      * @param $postId
      * @return array
      */
@@ -223,7 +242,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
     {
         $result   = [];
         $comments = $this->cmtFactory->create()->getCollection()
-            ->addFieldToFilter('post_id', $postId);
+            ->addFieldToFilter('main_table.post_id', $postId);
         foreach ($comments as $comment) {
             array_push($result, $comment->getData());
         }
@@ -239,50 +258,52 @@ class View extends \Mageplaza\Blog\Block\Listpost
      */
     public function getCommentsTree($comments, $cmtId)
     {
+//        \Zend_Debug::dump($comments);
         $this->commentTree .= '<ul class="default-cmt__content__cmt-content row">';
-        foreach ($comments as $comment) {
-            if ($comment['reply_id'] == $cmtId) {
-                $isReply           = (bool)$comment['is_reply'];
-                $replyId           = $isReply ? $comment['reply_id'] : '';
-                $userCmt           = $this->getUserComment($comment['entity_id']);
-                $userName          = $userCmt->getFirstName() . ' '
-                    . $userCmt->getLastName();
-                $countLikes        = $this->getCommentLikes($comment['comment_id']);
-                $this->commentTree .= '<li class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12'
-                    . ($isReply ? ' reply-row' : '') . '" data-cmt-id="'
-                    . $comment['comment_id'] . '" ' . ($replyId
-                        ? 'data-reply-id="' . $replyId . '"' : '') . '>
-							<div class="cmt-row__cmt-username">
-								<span class="cmt-row__cmt-username username">'
-                    . $userName . '</span>
-							</div>
-							<div class="cmt-row__cmt-content">
-								<p>' . $comment['content'] . '</p>
-							</div>
-							<div class="cmt-row__cmt-interactions interactions">
-								<div class="interactions__btn-actions">
-									<a class="interactions__btn-actions action btn-like" data-cmt-id="'
-                    . $comment['comment_id'] . '">' . __('Like') . '</a>
-									<a class="interactions__btn-actions action btn-reply" data-cmt-id="'
-                    . $comment['comment_id'] . '">' . __('Reply') . '</a>
-									<a class="interactions__btn-actions count-like">
-										<i class="fa fa-thumbs-up" aria-hidden="true"></i>
-										<span class="count-like__like-text">'
-                    . $countLikes . '</span>
-									</a>
-								</div>
-								<div class="interactions__cmt-createdat">
-									<span>' . $comment['created_at'] . '</span>
-								</div>
-							</div>';
-                if ($comment['has_reply']) {
-                    $this->commentTree .= $this->getCommentsTree(
-                        $comments,
-                        $comment['comment_id']
-                    );
-                }
-                $this->commentTree .= '</li>';
-            }
+            foreach ($comments as $comment) {
+
+                    if ($comment['reply_id'] == $cmtId && $comment['status'] == 1) {
+                        $isReply           = (bool)$comment['is_reply'];
+                        $replyId           = $isReply ? $comment['reply_id'] : '';
+                        $userCmt           = $this->getUserComment($comment['entity_id']);
+                        $userName          = $userCmt->getFirstName() . ' '
+                            . $userCmt->getLastName();
+                        $countLikes        = $this->getCommentLikes($comment['comment_id']);
+                        $isLiked           = ($this->isLiked($comment['comment_id'])) ? "mpblog-liked":"mpblog-like";
+                        $this->commentTree .= '<li id="cmt-id='.$comment['comment_id'].'" class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12'
+                            . ($isReply ? ' reply-row' : '') . '" data-cmt-id="'
+                            . $comment['comment_id'] . '" ' . ($replyId
+                                ? 'data-reply-id="' . $replyId . '"' : '') . '>
+                                <div class="cmt-row__cmt-username">
+                                    <span class="cmt-row__cmt-username username">'
+                            . $userName . '</span>
+                                </div>
+                                <div class="cmt-row__cmt-content">
+                                    <p>' . $comment['content'] . '</p>
+                                </div>
+                                <div class="cmt-row__cmt-interactions interactions">
+                                    <div class="interactions__btn-actions">
+                                        <a class="interactions__btn-actions action btn-like '.$isLiked.'" data-cmt-id="'
+                            . $comment['comment_id'] . '" click="1">
+                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                        <span class="count-like__like-text">'
+                            . $countLikes . '</span></a>
+                                        <a class="interactions__btn-actions action btn-reply" data-cmt-id="'
+                            . $comment['comment_id'] . '">' . __('Reply') . '</a>
+                                    </div>
+                                    <div class="interactions__cmt-createdat">
+                                        <span>' . $this->getDateFormat($comment['created_at']) . '</span>
+                                    </div>
+                                </div>';
+                        if ($comment['has_reply']) {
+                            $this->commentTree .= $this->getCommentsTree(
+                                $comments,
+                                $comment['comment_id']
+                            );
+                        }
+                        $this->commentTree .= '</li>';
+                    }
+
         }
         $this->commentTree .= '</ul>';
     }
@@ -355,7 +376,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
 
         if ($post->getMetaTitle()) {
                 $blogTitle = $post->getMetaTitle();
-            }else {
+        }else {
                 $blogTitle = $post->getName();
         }
         return [$blogTitle];

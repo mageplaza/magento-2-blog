@@ -332,7 +332,8 @@ class Data extends CoreHelper
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
         $url    = $this->getUrl($this->getRoute() . '/' . $urlKey);
-
+        $url=explode('?',$url);
+        $url = $url[0];
         return rtrim($url, '/') . $this->getUrlSuffix();
     }
 

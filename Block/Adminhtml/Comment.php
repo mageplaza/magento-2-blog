@@ -19,22 +19,28 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-namespace Mageplaza\Blog\Model\ResourceModel\Comment;
+namespace Mageplaza\Blog\Block\Adminhtml;
 
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Backend\Block\Widget\Grid\Container;
 
 /**
- * Class Collection
- * @package Mageplaza\Blog\Model\ResourceModel\Comment
+ * Class Comment
+ * @package Mageplaza\Blog\Block\Adminhtml
  */
-class Collection extends AbstractCollection
+class Comment extends Container
 {
-    protected $_idFieldName = 'comment_id';
     /**
-     * Define model & resource model
+     * constructor
+     *
+     * @return void
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\Comment', 'Mageplaza\Blog\Model\ResourceModel\Comment');
+        $this->_controller     = 'adminhtml_comment';
+        $this->_blockGroup     = 'Mageplaza_Blog';
+        $this->_addButtonLabel = __('New Comment');
+
+        parent::_construct();
     }
+
 }

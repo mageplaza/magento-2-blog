@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Class Comment
@@ -29,6 +30,15 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
  */
 class Comment extends AbstractDb
 {
+
+    public function __construct(
+        Context $context,
+        $connectionName = null
+    )
+    {
+        parent::__construct($context, $connectionName);
+    }
+
     /**
      * Initialize resource model
      *
@@ -37,5 +47,19 @@ class Comment extends AbstractDb
     protected function _construct()
     {
         $this->_init('mageplaza_blog_comment', 'comment_id');
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     */
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+
+        if (is_array($object->getStoreIds())) {
+            $object->setStoreIds(implode(',', $object->getStoreIds()));
+        }
+
+        return $this;
     }
 }

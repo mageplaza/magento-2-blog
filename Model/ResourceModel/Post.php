@@ -116,9 +116,9 @@ class Post extends AbstractDb
 
     /**
      * Retrieves Post Name from DB by passed id.
-     *
-     * @param string $id
-     * @return string|bool
+     * @param $id
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getPostNameById($id)
     {
@@ -133,9 +133,9 @@ class Post extends AbstractDb
 
     /**
      * before save callback
-     *
-     * @param \Magento\Framework\Model\AbstractModel|\Mageplaza\Blog\Model\Post $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -346,7 +346,6 @@ class Post extends AbstractDb
         $delete         = array_diff($oldCategoryIds, $categories);
         $adapter        = $this->getConnection();
 
-        //\Zend_Debug::dump($delete);die();
 
         if (!empty($delete)) {
             $condition = ['category_id IN(?)' => $delete, 'post_id=?' => $id];
