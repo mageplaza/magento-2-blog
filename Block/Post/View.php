@@ -242,7 +242,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
     {
         $result   = [];
         $comments = $this->cmtFactory->create()->getCollection()
-            ->addFieldToFilter('main_table.post_id', $postId);
+            ->addFieldToFilter('post_id', $postId);
         foreach ($comments as $comment) {
             array_push($result, $comment->getData());
         }

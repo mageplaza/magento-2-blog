@@ -27,6 +27,11 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Controller\Adminhtml\Topic;
 use Mageplaza\Blog\Model\TopicFactory;
+use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
 
 /**
  * Class Save
@@ -42,29 +47,105 @@ class Save extends Topic
     public $jsHelper;
 
     /**
+     * Layout Factory
+     *
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    public $layoutFactory;
+
+    /**
+     * Result Json Factory
+     *
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
+    public $resultJsonFactory;
+
+    /**
      * Save constructor.
-     * @param \Magento\Backend\Helper\Js $jsHelper
-     * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param Context $context
+     * @param Registry $registry
+     * @param Js $jsHelper
+     * @param LayoutFactory $layoutFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param TopicFactory $topicFactory
      */
     public function __construct(
         Context $context,
         Registry $registry,
         Js $jsHelper,
+        LayoutFactory $layoutFactory,
+        JsonFactory $resultJsonFactory,
         TopicFactory $topicFactory
     )
     {
         $this->jsHelper = $jsHelper;
+        $this->layoutFactory     = $layoutFactory;
+        $this->resultJsonFactory = $resultJsonFactory;
 
         parent::__construct($context, $registry, $topicFactory);
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return $this|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
+
+        if ($this->getRequest()->getPost('return_session_messages_only')) {
+
+            $topic                     = $this->initTopic();
+            $topicPostData              = $this->getRequest()->getPostValue();
+            $topicPostData['store_ids'] = 0;
+            $topicPostData['enabled']   = 1;
+
+            $topic->addData($topicPostData);
+
+            try {
+                $topic->save();
+                $this->messageManager->addSuccess(__('You saved the topic.'));
+            } catch (AlreadyExistsException $e) {
+                $this->messageManager->addError($e->getMessage());
+                $this->_objectManager->get(LoggerInterface::class)->critical($e);
+            } catch (LocalizedException $e) {
+                $this->messageManager->addError($e->getMessage());
+                $this->_objectManager->get(LoggerInterface::class)->critical($e);
+            } catch (\Exception $e) {
+                $this->messageManager->addError(__('Something went wrong while saving the topic.'));
+                $this->_objectManager->get(LoggerInterface::class)->critical($e);
+            }
+
+            $hasError = (bool)$this->messageManager->getMessages()->getCountByType(
+                MessageInterface::TYPE_ERROR
+            );
+
+            $topic->load($topic->getId());
+            $topic->addData([
+                'level'     => '1',
+                'entity_id' => $topic->getId(),
+                'is_active' => $topic->getEnabled(),
+                'parent'    => '0'
+            ]);
+
+            // to obtain truncated category name
+            /** @var $block \Magento\Framework\View\Element\Messages */
+            $block = $this->layoutFactory->create()->getMessagesBlock();
+            $block->setMessages($this->messageManager->getMessages(true));
+
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            $resultJson = $this->resultJsonFactory->create();
+
+
+            return $resultJson->setData(
+                [
+                    'messages' => $block->getGroupedHtml(),
+                    'error'    => $hasError,
+                    'category' => $topic->toArray(),
+                ]
+            );
+
+        }
+
+
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data = $this->getRequest()->getPost('topic')) {
             /** @var \Mageplaza\Blog\Model\Topic $topic */

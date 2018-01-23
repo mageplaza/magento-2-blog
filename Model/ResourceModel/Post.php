@@ -171,78 +171,49 @@ class Post extends AbstractDb
 
     /**
      * @param \Mageplaza\Blog\Model\Post $post
-     * @return array
-     */
-    public function getTagsPosition(\Mageplaza\Blog\Model\Post $post)
-    {
-        $select = $this->getConnection()->select()->from(
-            $this->postTagTable,
-            ['tag_id', 'position']
-        )
-            ->where(
-                'post_id = :post_id'
-            );
-        $bind   = ['post_id' => (int)$post->getId()];
-
-        return $this->getConnection()->fetchPairs($select, $bind);
-    }
-
-    /**
-     * @param \Mageplaza\Blog\Model\Post $post
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function saveTagRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedTagList(false);
         $id   = $post->getId();
-        $tags = $post->getTagsData();
+        $tags = $post->getTagsIds();
+
         if ($tags === null) {
             return $this;
         }
-        $oldTags = $post->getTagsPosition();
-        $insert  = array_diff_key($tags, $oldTags);
-        $delete  = array_diff_key($oldTags, $tags);
-        $update  = array_intersect_key($tags, $oldTags);
-        $_update = [];
-        foreach ($update as $key => $settings) {
-            if (isset($oldTags[$key]) && $oldTags[$key] != $settings['position']) {
-                $_update[$key] = $settings;
-            }
-        }
-        $update  = $_update;
+        $oldTags = $post->getTagIds();
+
+        $insert  = array_diff($tags, $oldTags);
+        $delete  = array_diff($oldTags, $tags);
+
         $adapter = $this->getConnection();
         if (!empty($delete)) {
-            $condition = ['tag_id IN(?)' => array_keys($delete), 'post_id=?' => $id];
+            $condition = ['tag_id IN(?)' => $delete, 'post_id=?' => $id];
             $adapter->delete($this->postTagTable, $condition);
         }
         if (!empty($insert)) {
             $data = [];
-            foreach ($insert as $tagId => $position) {
+            foreach ($insert as $tagId) {
                 $data[] = [
                     'post_id'  => (int)$id,
                     'tag_id'   => (int)$tagId,
-                    'position' => (int)$position['position']
+                    'position' => 1
                 ];
             }
             $adapter->insertMultiple($this->postTagTable, $data);
-        }
-        if (!empty($update)) {
-            foreach ($update as $tagId => $position) {
-                $where = ['post_id = ?' => (int)$id, 'tag_id = ?' => (int)$tagId];
-                $bind  = ['position' => (int)$position['position']];
-                $adapter->update($this->postTagTable, $bind, $where);
-            }
         }
         if (!empty($insert) || !empty($delete)) {
             $tagIds = array_unique(array_merge(array_keys($insert), array_keys($delete)));
             $this->eventManager->dispatch(
                 'mageplaza_blog_post_change_tags',
-                ['post' => $post, 'tag_ids' => $tagIds]
-            );
+                ['post' => $post, 'tag_ids' => $tagIds]);
         }
-        if (!empty($insert) || !empty($update) || !empty($delete)) {
+
+        if (!empty($insert) || !empty($delete)) {
             $post->setIsChangedTagList(true);
-            $tagIds = array_keys($insert + $delete + $update);
+            $tagIds = array_keys($insert + $delete);
             $post->setAffectedTagIds($tagIds);
         }
 
@@ -251,68 +222,40 @@ class Post extends AbstractDb
 
     /**
      * @param \Mageplaza\Blog\Model\Post $post
-     * @return array
-     */
-    public function getTopicsPosition(\Mageplaza\Blog\Model\Post $post)
-    {
-        $select = $this->getConnection()->select()->from(
-            $this->postTopicTable,
-            ['topic_id', 'position']
-        )
-            ->where(
-                'post_id = :post_id'
-            );
-        $bind   = ['post_id' => (int)$post->getId()];
-
-        return $this->getConnection()->fetchPairs($select, $bind);
-    }
-
-    /**
-     * @param \Mageplaza\Blog\Model\Post $post
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function saveTopicRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedTopicList(false);
         $id     = $post->getId();
-        $topics = $post->getTopicsData();
+        $topics = $post->getTopicsIds();
+
         if ($topics === null) {
             return $this;
         }
-        $oldTopics = $post->getTopicsPosition();
-        $insert    = array_diff_key($topics, $oldTopics);
-        $delete    = array_diff_key($oldTopics, $topics);
-        $update    = array_intersect_key($topics, $oldTopics);
-        $_update   = [];
-        foreach ($update as $key => $settings) {
-            if (isset($oldTopics[$key]) && $oldTopics[$key] != $settings['position']) {
-                $_update[$key] = $settings;
-            }
-        }
-        $update  = $_update;
+        $oldTopics = $post->getTopicIds();
+
+        $insert    = array_diff($topics, $oldTopics);
+        $delete    = array_diff($oldTopics, $topics);
+
         $adapter = $this->getConnection();
         if (!empty($delete)) {
-            $condition = ['topic_id IN(?)' => array_keys($delete), 'post_id=?' => $id];
+            $condition = ['topic_id IN(?)' => $delete, 'post_id=?' => $id];
             $adapter->delete($this->postTopicTable, $condition);
         }
         if (!empty($insert)) {
             $data = [];
-            foreach ($insert as $topicId => $position) {
+            foreach ($insert as $topicId) {
                 $data[] = [
                     'post_id'  => (int)$id,
                     'topic_id' => (int)$topicId,
-                    'position' => (int)$position['position']
+                    'position' => 1
                 ];
             }
             $adapter->insertMultiple($this->postTopicTable, $data);
         }
-        if (!empty($update)) {
-            foreach ($update as $topicId => $position) {
-                $where = ['post_id = ?' => (int)$id, 'topic_id = ?' => (int)$topicId];
-                $bind  = ['position' => (int)$position['position']];
-                $adapter->update($this->postTopicTable, $bind, $where);
-            }
-        }
+
         if (!empty($insert) || !empty($delete)) {
             $topicIds = array_unique(array_merge(array_keys($insert), array_keys($delete)));
             $this->eventManager->dispatch(
@@ -320,9 +263,9 @@ class Post extends AbstractDb
                 ['post' => $post, 'topic_ids' => $topicIds]
             );
         }
-        if (!empty($insert) || !empty($update) || !empty($delete)) {
+        if (!empty($insert) || !empty($delete)) {
             $post->setIsChangedTopicList(true);
-            $topicIds = array_keys($insert + $delete + $update);
+            $topicIds = array_keys($insert + $delete);
             $post->setAffectedTopicIds($topicIds);
         }
 
@@ -331,7 +274,8 @@ class Post extends AbstractDb
 
     /**
      * @param \Mageplaza\Blog\Model\Post $post
-     * @return array
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function saveCategoryRelation(\Mageplaza\Blog\Model\Post $post)
     {
@@ -401,12 +345,30 @@ class Post extends AbstractDb
      * @param \Mageplaza\Blog\Model\Post $post
      * @return array
      */
+    public function getTagIds(\Mageplaza\Blog\Model\Post $post)
+    {
+        $adapter = $this->getConnection();
+        $select  = $adapter->select()->from(
+            $this->postTagTable,
+            'tag_id'
+        )
+            ->where(
+                'post_id = ?',
+                (int)$post->getId()
+            );
+
+        return $adapter->fetchCol($select);
+    }
+
+    /**
+     * @param \Mageplaza\Blog\Model\Post $post
+     * @return array
+     */
     public function getTopicIds(\Mageplaza\Blog\Model\Post $post)
     {
         $adapter = $this->getConnection();
         $select  = $adapter->select()->from($this->postTopicTable, 'topic_id')
             ->where('post_id = ?', (int)$post->getId());
-
         return $adapter->fetchCol($select);
     }
 

@@ -85,6 +85,10 @@ use Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory as TopicCollectio
  * @method bool getAffectedCategoryIds()
  * @method array getCategoriesIds()
  * @method Post setCategoriesIds(array $categoryIds)
+ * @method array getTagsIds()
+ * @method Post setTagsIds(array $tagIds)
+ * @method array getTopicsIds()
+ * @method Post setTopicsIds(array $topicIds)
  */
 class Post extends \Magento\Framework\Model\AbstractModel
 {
@@ -328,23 +332,6 @@ class Post extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return array|mixed
-     */
-    public function getTagsPosition()
-    {
-        if (!$this->getId()) {
-            return [];
-        }
-        $array = $this->getData('tags_position');
-        if ($array === null) {
-            $array = $this->getResource()->getTagsPosition($this);
-            $this->setData('tags_position', $array);
-        }
-
-        return $array;
-    }
-
-    /**
      * @return \Mageplaza\Blog\Model\ResourceModel\Tag\Collection
      */
     public function getSelectedTagsCollection()
@@ -364,23 +351,6 @@ class Post extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @return array|mixed
-     */
-    public function getTopicsPosition()
-    {
-        if (!$this->getId()) {
-            return [];
-        }
-        $array = $this->getData('topics_position');
-        if ($array === null) {
-            $array = $this->getResource()->getTopicsPosition($this);
-            $this->setData('topics_position', $array);
-        }
-
-        return $array;
-    }
-
-    /**
      * @return \Mageplaza\Blog\Model\ResourceModel\Topic\Collection
      */
     public function getSelectedTopicsCollection()
@@ -397,23 +367,6 @@ class Post extends \Magento\Framework\Model\AbstractModel
         }
 
         return $this->topicCollection;
-    }
-
-    /**
-     * @return array|mixed
-     */
-    public function getCategoriesPosition()
-    {
-        if (!$this->getId()) {
-            return [];
-        }
-        $array = $this->getData('categories_position');
-        if ($array === null) {
-            $array = $this->getResource()->getCategoriesPosition($this);
-            $this->setData('categories_position', $array);
-        }
-
-        return $array;
     }
 
     /**
@@ -447,6 +400,35 @@ class Post extends \Magento\Framework\Model\AbstractModel
         }
 
         return (array)$this->_getData('category_ids');
+    }
+
+    /**
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getTagIds()
+    {
+        if (!$this->hasData('tag_ids')) {
+            $ids = $this->_getResource()->getTagIds($this);
+
+            $this->setData('tag_ids', $ids);
+        }
+
+        return (array)$this->_getData('tag_ids');
+    }
+
+    /**
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getTopicIds()
+    {
+        if (!$this->hasData('topic_ids')) {
+            $ids = $this->_getResource()->getTopicIds($this);
+
+            $this->setData('topic_ids', $ids);
+        }
+        return (array)$this->_getData('topic_ids');
     }
 
     /**

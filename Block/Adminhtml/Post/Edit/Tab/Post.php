@@ -202,6 +202,16 @@ class Post extends Generic implements TabInterface
             ]
         );
 
+        $fieldset->addField('topics_ids', '\Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic', [
+                'name'  => 'topics_ids',
+                'label' => __('Topics'),
+                'title' => __('Topics'),
+            ]
+        );
+        if (!$post->getTopicsIds()) {
+            $post->setTopicsIds($post->getTopicIds());
+        }
+
         $fieldset->addField('categories_ids', '\Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category', [
                 'name'  => 'categories_ids',
                 'label' => __('Categories'),
@@ -210,6 +220,16 @@ class Post extends Generic implements TabInterface
         );
         if (!$post->getCategoriesIds()) {
             $post->setCategoriesIds($post->getCategoryIds());
+        }
+
+        $fieldset->addField('tags_ids', '\Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag', [
+                'name'  => 'tags_ids',
+                'label' => __('Tags'),
+                'title' => __('Tags'),
+            ]
+        );
+        if (!$post->getTagsIds()) {
+            $post->setTagsIds($post->getTagIds());
         }
 
         $fieldset->addField('in_rss', 'select', [

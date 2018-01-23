@@ -26,11 +26,10 @@ require([
         submitCmt = $('.default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit'),
         defaultCmt = $('ul.default-cmt__content__cmt-content:first'),
         likeBtn = defaultCmt.find('.btn-like'),
-        likeContainer = defaultCmt.find('.cmt-row__cmt-interactions'),
         replyBtn = defaultCmt.find('.btn-reply');
 
     submitComment();
-    likeComment(likeBtn,likeContainer);
+    likeComment(likeBtn);
     showReply(replyBtn);
 
     $('li.default-cmt__content__cmt-content__cmt-row:first').css({'border-top': 'none'});

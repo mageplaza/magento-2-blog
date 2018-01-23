@@ -151,6 +151,7 @@ class Save extends Category
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
 
+
             return $resultJson->setData(
                 [
                     'messages' => $block->getGroupedHtml(),
@@ -158,6 +159,7 @@ class Save extends Category
                     'category' => $category->toArray(),
                 ]
             );
+
         }
 
         $resultRedirect = $this->resultRedirectFactory->create();

@@ -36,6 +36,9 @@ abstract class Comment extends Action
     const ADMIN_RESOURCE = 'Mageplaza_Blog::comment';
 
 
+    /**
+     * @var \Mageplaza\Blog\Model\CommentFactory
+     */
     public $commentFactory;
 
     /**

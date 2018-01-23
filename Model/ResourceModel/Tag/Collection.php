@@ -84,4 +84,36 @@ class Collection extends AbstractCollection
     {
         return parent::_toOptionArray($valueField, $labelField, $additional);
     }
+
+    /**
+     * add if filter
+     *
+     * @param $tagIds
+     * @return $this
+     */
+    public function addIdFilter($tagIds)
+    {
+        $condition = '';
+
+        if (is_array($tagIds)) {
+            if (!empty($tagIds)) {
+                $condition = ['in' => $tagIds];
+            }
+        } elseif (is_numeric($tagIds)) {
+            $condition = $tagIds;
+        } elseif (is_string($tagIds)) {
+            $ids = explode(',', $tagIds);
+            if (empty($ids)) {
+                $condition = $tagIds;
+            } else {
+                $condition = ['in' => $ids];
+            }
+        }
+
+        if ($condition != '') {
+            $this->addFieldToFilter('tag_id', $condition);
+        }
+
+        return $this;
+    }
 }
