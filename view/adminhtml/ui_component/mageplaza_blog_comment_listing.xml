@@ -173,15 +173,12 @@
                 </item>
             </argument>
         </column>
-        <column name="status">
+        <column name="status" class="Mageplaza\Blog\Ui\Component\Listing\Columns\CommentStatus">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Mageplaza\Blog\Model\Config\Source\Comments\Status</item>
                 <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="editor" xsi:type="string">select</item>
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
@@ -206,6 +203,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
                     <item name="editor" xsi:type="array">
                         <item name="editorType" xsi:type="string">text</item>
                         <item name="validation" xsi:type="array">
