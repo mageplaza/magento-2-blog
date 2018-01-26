@@ -83,7 +83,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         );
         $this->buttonList->update('save','label','Save Comment');
         $this->buttonList->remove('reset');
-        $this->buttonList->remove('delete');
 
     }
 
