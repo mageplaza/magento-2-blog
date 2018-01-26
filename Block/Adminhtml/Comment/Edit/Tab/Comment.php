@@ -110,10 +110,11 @@ class Comment extends Generic implements TabInterface
             $fieldset->addField('comment_id', 'hidden', ['name' => 'comment_id']);
         }
 
+        $post = $this->_postFactory->create()->load($comment->getPostId());
         $postText = __(
             '<a href="%1" onclick="this.target=\'blank\'">%2</a>',
             $this->getUrl('mageplaza_blog/post/edit', ['id' => $comment->getPostId()]),
-            $this->escapeHtml($comment->getPostName())
+            $this->escapeHtml($post->getName())
         );
         $fieldset->addField('post_name', 'note',['text' => $postText, 'label' => __('Post'),'name' => 'post_name']);
 

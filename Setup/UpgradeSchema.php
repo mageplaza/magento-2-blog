@@ -362,14 +362,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
 
             if ($installer->tableExists('mageplaza_blog_comment')) {
-                $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'customer_name', [
-                    'type'    => Table::TYPE_TEXT, null,
-                    'comment' => 'Customer Name',
-                ]);
-                $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'post_name', [
-                    'type'    => Table::TYPE_TEXT, null,
-                    'comment' => 'Post Name',
-                ]);
+
                 $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'status', [
                     'type'    => Table::TYPE_INTEGER, null, [],
                     'comment' => 'Post Name',

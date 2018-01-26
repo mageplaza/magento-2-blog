@@ -27,14 +27,14 @@
             <item name="deps" xsi:type="string">mageplaza_blog_comment_listing.mageplaza_blog_comment_listing_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">mageplaza_blog_comment_columns</item>
-        <!--<item name="buttons" xsi:type="array">-->
-            <!--<item name="add" xsi:type="array">-->
-                <!--<item name="name" xsi:type="string">add</item>-->
+        <item name="buttons" xsi:type="array">
+            <item name="add" xsi:type="array">
+                <item name="name" xsi:type="string">add</item>
                 <!--<item name="label" xsi:type="string" translate="true">New Comment</item>-->
                 <!--<item name="class" xsi:type="string">primary</item>-->
                 <!--<item name="url" xsi:type="string">*/*/new</item>-->
-            <!--</item>-->
-        <!--</item>-->
+            </item>
+        </item>
     </argument>
     <dataSource name="mageplaza_blog_post_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
@@ -199,6 +199,7 @@
                 </item>
             </argument>
         </column>
+
         <column name="content">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

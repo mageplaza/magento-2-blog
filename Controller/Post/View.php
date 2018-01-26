@@ -178,7 +178,6 @@ class View extends Action
         if ($this->getRequest()->isAjax() && $this->session->isLoggedIn()) {
             $params       = $this->getRequest()->getParams();
             $customerData = $this->session->getCustomerData();
-            $postData = $this->postFactory->create()->load($id);
             $result       = [];
             if (isset($params['cmt_text'])) {
                 $cmtText     = $params['cmt_text'];
@@ -191,8 +190,6 @@ class View extends Action
                     'reply_id'   => $replyId,
                     'content'    => $cmtText,
                     'created_at' => $this->dateTime->date(),
-                    'customer_name' => $customerData->getFirstname().' '.$customerData->getLastname(),
-                    'post_name'  => $postData->getName(),
                     'status'     => 3,
                     'store_ids'  => $this->storeManager->getStore()->getId()
                 ];
