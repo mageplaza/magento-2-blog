@@ -57,7 +57,8 @@ class UpgradeData implements UpgradeDataInterface
 
             /** Add create at old comment */
             $sampleTemplates = [
-                'created_at'           => $this->date->date()
+                'created_at'           => $this->date->date(),
+                'status' => 3
             ];
             $setup->getConnection()->update($setup->getTable('mageplaza_blog_comment'), $sampleTemplates ,'comment_id IN ('.$commentIds.')');
 
