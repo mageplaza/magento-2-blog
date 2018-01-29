@@ -46,8 +46,9 @@ class Collection extends SearchResult
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->addCustomerName();
+
         $this->addPostName();
+        $this->addCustomerName();
         return $this;
     }
 
@@ -72,8 +73,9 @@ class Collection extends SearchResult
         $this->getSelect()->join(
             ['ce' => $this->getTable('customer_entity')],
             "main_table.entity_id = ce.entity_id",
-            ["customer_name" => " CONCAT(firstname,' ',lastname)"]
+            ["customer_name" => "CONCAT(`ce`.`firstname`,' ',`ce`.`lastname`)"]
         );
+
         return $this;
     }
 }
