@@ -54,14 +54,14 @@ class UpgradeData implements UpgradeDataInterface
 
             $commentIds = $this->comment->create()->getCollection()->getAllIds();
             $commentIds = implode(',',$commentIds);
-
-            /** Add create at old comment */
-            $sampleTemplates = [
-                'created_at'           => $this->date->date(),
-                'status' => 3
-            ];
-            $setup->getConnection()->update($setup->getTable('mageplaza_blog_comment'), $sampleTemplates ,'comment_id IN ('.$commentIds.')');
-
+            if ($commentIds){
+                /** Add create at old comment */
+                $sampleTemplates = [
+                    'created_at'           => $this->date->date(),
+                    'status' => 3
+                ];
+                $setup->getConnection()->update($setup->getTable('mageplaza_blog_comment'), $sampleTemplates ,'comment_id IN ('.$commentIds.')');
+            }
             $installer->endSetup();
         }
 
