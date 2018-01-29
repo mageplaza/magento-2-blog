@@ -170,7 +170,7 @@ class Post extends Generic implements TabInterface
                 'name'   => 'post_content',
                 'label'  => __('Content'),
                 'title'  => __('Content'),
-                'config' => $this->wysiwygConfig->getConfig()
+                'config' => $this->wysiwygConfig->getConfig(['add_variables' => false, 'add_widgets' => false])
             ]
         );
 
