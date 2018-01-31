@@ -58,7 +58,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogPostsSiteMapCollection()
     {
-        $postCollection        = $this->blogDataHelper->postfactory->create()->getCollection();
+        $postCollection = $this->blogDataHelper->postFactory->create()->getCollection();
         $postSiteMapCollection = [];
         if (!$this->router) {
             $this->router = 'blog';
@@ -91,7 +91,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogCategoriesSiteMapCollection()
     {
-        $categoryCollection        = $this->blogDataHelper->categoryfactory->create()->getCollection();
+        $categoryCollection        = $this->blogDataHelper->categoryFactory->create()->getCollection();
         $categorySiteMapCollection = [];
         foreach ($categoryCollection as $item) {
             if (!is_null($item->getEnabled())) {
@@ -111,7 +111,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogTagsSiteMapCollection()
     {
-        $tagCollection        = $this->blogDataHelper->tagfactory->create()->getCollection();
+        $tagCollection        = $this->blogDataHelper->tagFactory->create()->getCollection();
         $tagSiteMapCollection = [];
         foreach ($tagCollection as $item) {
             if (!is_null($item->getEnabled())) {
@@ -131,7 +131,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogTopicsSiteMapCollection()
     {
-        $topicCollection        = $this->blogDataHelper->topicfactory->create()->getCollection();
+        $topicCollection        = $this->blogDataHelper->topicFactory->create()->getCollection();
         $topicSiteMapCollection = [];
         foreach ($topicCollection as $item) {
             if (!is_null($item->getEnabled())) {
