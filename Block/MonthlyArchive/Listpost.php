@@ -72,12 +72,19 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
-     * @return array
+     * @param bool $meta
+     * @return array|false|string
      */
-    public function getBlogTitle()
+    public function getBlogTitle($meta = false)
     {
+        $blogTitle = parent::getBlogTitle($meta);
 
-        $blogTitle[] = $this->getMonthLabel();
-        return $blogTitle;
+        if ($meta) {
+
+            array_push($blogTitle, $this->getMonthLabel());
+            return $blogTitle;
+        }
+
+        return $this->getMonthLabel();
     }
 }

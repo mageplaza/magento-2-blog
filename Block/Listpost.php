@@ -40,7 +40,7 @@ class Listpost extends Frontend
         if ($collection && $collection->getSize()) {
             $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'mpblog.post.pager');
 
-            $perPageValues = (string) $this->helperData->getConfigGeneral('pagination');;
+            $perPageValues = (string)$this->helperData->getConfigGeneral('pagination');;
             $perPageValues = explode(',', $perPageValues);
             $perPageValues = array_combine($perPageValues, $perPageValues);
 
@@ -88,7 +88,7 @@ class Listpost extends Frontend
             $breadcrumbs->addCrumb('home', [
                 'label' => __('Home'),
                 'title' => __('Go to Home Page'),
-                'link'  => $this->_storeManager->getStore()->getBaseUrl()
+                'link' => $this->_storeManager->getStore()->getBaseUrl()
             ])
                 ->addCrumb($this->helperData->getRoute(), $this->getBreadcrumbsData());
         }
@@ -123,8 +123,7 @@ class Listpost extends Frontend
      */
     public function applySeoCode()
     {
-
-        $this->pageConfig->getTitle()->set(implode('-',$this->getBlogTitle()));
+        $this->pageConfig->getTitle()->set(join($this->getTitleSeparator(), array_reverse($this->getBlogTitle(true))));
 
         $object = $this->getBlogObject();
 
@@ -139,7 +138,7 @@ class Listpost extends Frontend
 
         $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle) {
-            $pageMainTitle->setPageTitle(implode('-',$this->getBlogTitle()));
+            $pageMainTitle->setPageTitle($this->getBlogTitle());
         }
 
         return $this;
@@ -158,18 +157,18 @@ class Listpost extends Frontend
     }
 
     /**
+     * @param bool $meta
      * @return array
      */
-    public function getBlogTitle()
+    public function getBlogTitle($meta = false)
     {
-
         $pageTitle = $this->helperData->getConfigGeneral('name') ?: __('Blog');
-        if ($this->helperData->getSeoConfig('meta_title')) {
-            $title = $this->helperData->getSeoConfig('meta_title');
-
+        if ($meta) {
+            $title = $this->helperData->getSeoConfig('meta_title') ?: $pageTitle;
             return [$title];
+
         }
 
-        return [$pageTitle];
+        return $pageTitle;
     }
 }

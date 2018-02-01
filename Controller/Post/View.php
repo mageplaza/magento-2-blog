@@ -30,6 +30,7 @@ use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Helper\Data as HelperBlog;
+use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\TrafficFactory;
 use Mageplaza\Blog\Model\PostFactory;
 
@@ -163,6 +164,7 @@ class View extends Action
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
+        $post = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($id);
         if ($id) {
 
             $trafficModel = $this->trafficFactory->create()->load($id, 'post_id');
@@ -212,7 +214,7 @@ class View extends Action
             return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
         }
 
-        return ($id) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
+        return ($post->getEnabled()) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
     }
 
     /**

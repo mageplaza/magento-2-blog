@@ -25,6 +25,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
+use Mageplaza\Blog\Helper\Data as HelperBlog;
 
 /**
  * Class View
@@ -43,21 +44,29 @@ class View extends Action
     protected $resultForwardFactory;
 
     /**
+     * @var \Mageplaza\Blog\Helper\Data
+     */
+    public $helperBlog;
+
+    /**
      * View constructor.
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
+     * @param ForwardFactory $resultForwardFactory
+     * @param HelperBlog $helperBlog
      */
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
-        ForwardFactory $resultForwardFactory
+        ForwardFactory $resultForwardFactory,
+        HelperBlog $helperBlog
     )
     {
         parent::__construct($context);
 
-        $this->resultPageFactory    = $resultPageFactory;
+        $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
+        $this->helperBlog = $helperBlog;
     }
 
     /**
@@ -66,7 +75,7 @@ class View extends Action
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-
-        return ($id) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
+        $tag = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_TAG)->create()->load($id);
+        return ($tag->getEnabled()) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
     }
 }

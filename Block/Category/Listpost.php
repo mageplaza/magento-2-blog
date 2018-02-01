@@ -87,17 +87,28 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
+     * @param bool $meta
      * @return array
      */
-    public function getBlogTitle()
+    public function getBlogTitle($meta = false)
     {
-        $category  = $this->getBlogObject();
+        $blogTitle = parent::getBlogTitle($meta);
+        $category = $this->getBlogObject();
 
-        if ($category->getMetaTitle()) {
-            $blogTitle = $category->getMetaTitle();
-        }else {
-            $blogTitle = ucfirst($category->getName());
+        if (!$category) {
+            return $blogTitle;
         }
-        return [$blogTitle];
+        if ($meta) {
+
+            if ($category->getMetaTitle()) {
+                array_push($blogTitle, $category->getMetaTitle());
+            } else {
+                array_push($blogTitle, ucfirst($category->getName()));
+            }
+
+            return $blogTitle;
+        }
+
+        return ucfirst($category->getName());
     }
 }
