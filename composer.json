@@ -6,6 +6,7 @@
   },
   "type": "magento2-module",
   "version": "2.5.0.1",
+  "license": "proprietary",
   "keywords": [
       "magento 2", "mageplaza", "blog", "magento 2 blog", "magento2"
   ],
