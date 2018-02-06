@@ -106,7 +106,7 @@ class Post extends Extended implements TabInterface
         $collection = $this->postCollectionFactory->create();
         $collection->getSelect()->joinLeft(
             ['related' => $collection->getTable('mageplaza_blog_post_category')],
-            'related.post_id=main_table.post_id AND related.category_id=' . ($this->getCategory()->getId() ?: 0),
+            'related.post_id=main_table.post_id AND related.category_id=' .(int)$this->getRequest()->getParam('id',0),
             ['position']
         );
 
@@ -117,6 +117,7 @@ class Post extends Extended implements TabInterface
 
     /**
      * @return $this
+     * @throws \Exception
      */
     protected function _prepareColumns()
     {
@@ -211,7 +212,7 @@ class Post extends Extended implements TabInterface
      */
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/postsGrid', ['category_id' => $this->getCategory()->getId()]);
+        return $this->getUrl('*/*/postsGrid', ['id' => $this->getCategory()->getId()]);
     }
 
     /**
@@ -225,6 +226,7 @@ class Post extends Extended implements TabInterface
     /**
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _addColumnFilterToCollection($column)
     {
