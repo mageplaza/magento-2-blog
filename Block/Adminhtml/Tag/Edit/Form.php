@@ -38,9 +38,9 @@ class Form extends Generic
         $form = $this->_formFactory->create(
             [
                 'data' => [
-                    'id'      => 'edit_form',
-                    'action'  => $this->getData('action'),
-                    'method'  => 'post',
+                    'id' => 'edit_form',
+                    'action' => $this->getData('action'),
+                    'method' => 'post',
                     'enctype' => 'multipart/form-data'
                 ]
             ]

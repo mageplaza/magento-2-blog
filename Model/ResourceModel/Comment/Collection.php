@@ -30,6 +30,7 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 class Collection extends AbstractCollection
 {
     protected $_idFieldName = 'comment_id';
+
     /**
      * Define model & resource model
      */

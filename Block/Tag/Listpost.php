@@ -29,6 +29,9 @@ use Mageplaza\Blog\Helper\Data;
  */
 class Listpost extends \Mageplaza\Blog\Block\Listpost
 {
+    /**
+     * @var \Mageplaza\Blog\Model\TagFactory
+     */
     protected $_tag;
 
     /**

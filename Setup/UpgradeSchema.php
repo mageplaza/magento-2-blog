@@ -47,24 +47,24 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '1.1.1', '<')) {
             if ($installer->tableExists('mageplaza_blog_tag')) {
                 $columns = [
-                    'meta_title'       => [
-                        'type'    => Table::TYPE_TEXT,
-                        'length'  => 255,
+                    'meta_title' => [
+                        'type' => Table::TYPE_TEXT,
+                        'length' => 255,
                         'comment' => 'Post Meta Title',
                     ],
                     'meta_description' => [
-                        'type'    => Table::TYPE_TEXT,
-                        'length'  => '64k',
+                        'type' => Table::TYPE_TEXT,
+                        'length' => '64k',
                         'comment' => 'Post Meta Description',
                     ],
-                    'meta_keywords'    => [
-                        'type'    => Table::TYPE_TEXT,
-                        'length'  => '64k',
+                    'meta_keywords' => [
+                        'type' => Table::TYPE_TEXT,
+                        'length' => '64k',
                         'comment' => 'Post Meta Keywords',
                     ],
-                    'meta_robots'      => [
-                        'type'    => Table::TYPE_INTEGER,
-                        'length'  => '64k',
+                    'meta_robots' => [
+                        'type' => Table::TYPE_INTEGER,
+                        'length' => '64k',
                         'comment' => 'Post Meta Robots',
                     ]
                 ];
@@ -82,7 +82,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ->addColumn('traffic_id', Table::TYPE_INTEGER, null, [
                         'identity' => true,
                         'nullable' => false,
-                        'primary'  => true,
+                        'primary' => true,
                         'unsigned' => true,
                     ], 'Traffic ID')
                     ->addColumn('post_id', Table::TYPE_INTEGER, null, [
@@ -114,7 +114,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ->addColumn('user_id', Table::TYPE_INTEGER, null, [
                         'unsigned' => true,
                         'nullable' => false,
-                        'primary'  => true,
+                        'primary' => true,
                     ], 'User ID')
                     ->addColumn('name', Table::TYPE_TEXT, 255, [], 'Display Name')
                     ->addColumn('url_key', Table::TYPE_TEXT, 255, [], 'Author URL Key')
@@ -139,14 +139,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
             if ($installer->tableExists('mageplaza_blog_topic')) {
                 $columns = [
-                    'author_id'   => [
-                        'type'     => Table::TYPE_INTEGER,
-                        'comment'  => 'Author ID',
+                    'author_id' => [
+                        'type' => Table::TYPE_INTEGER,
+                        'comment' => 'Author ID',
                         'unsigned' => true,
                     ],
                     'modifier_id' => [
-                        'type'     => Table::TYPE_INTEGER,
-                        'comment'  => 'Modifier ID',
+                        'type' => Table::TYPE_INTEGER,
+                        'comment' => 'Modifier ID',
                         'unsigned' => true,
                     ],
                 ];
@@ -178,7 +178,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'identity' => true,
                         'unsigned' => true,
                         'nullable' => false,
-                        'primary'  => true,
+                        'primary' => true,
                     ], 'Comment ID')
                     ->addColumn('post_id', Table::TYPE_INTEGER, null, ['unsigned' => true, 'nullable' => false,], 'Post ID')
                     ->addColumn('entity_id', Table::TYPE_INTEGER, null, ['unsigned' => true, 'nullable' => false,], 'User Comment ID')
@@ -212,7 +212,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'identity' => true,
                         'unsigned' => true,
                         'nullable' => false,
-                        'primary'  => true,
+                        'primary' => true,
                     ], 'Like ID')
                     ->addColumn('comment_id', Table::TYPE_INTEGER, null, ['unsigned' => true, 'nullable' => false,], 'Comment ID')
                     ->addColumn('entity_id', Table::TYPE_INTEGER, null, ['unsigned' => true, 'nullable' => false,], 'User Like ID')
@@ -238,28 +238,28 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '1.1.3', '<')) {
             if ($installer->tableExists('mageplaza_blog_author')) {
                 $columns = [
-                    'image'             => [
-                        'type'     => Table::TYPE_TEXT,
-                        'length'   => 255,
-                        'comment'  => 'Author Image',
+                    'image' => [
+                        'type' => Table::TYPE_TEXT,
+                        'length' => 255,
+                        'comment' => 'Author Image',
                         'unsigned' => true,
                     ],
                     'short_description' => [
-                        'type'     => Table::TYPE_TEXT,
-                        'length'   => '64k',
-                        'comment'  => 'Author Short Description',
+                        'type' => Table::TYPE_TEXT,
+                        'length' => '64k',
+                        'comment' => 'Author Short Description',
                         'unsigned' => true,
                     ],
-                    'facebook_link'     => [
-                        'type'     => Table::TYPE_TEXT,
-                        'length'   => 255,
-                        'comment'  => 'Facebook Link',
+                    'facebook_link' => [
+                        'type' => Table::TYPE_TEXT,
+                        'length' => 255,
+                        'comment' => 'Facebook Link',
                         'unsigned' => true,
                     ],
-                    'twitter_link'      => [
-                        'type'     => Table::TYPE_TEXT,
-                        'length'   => 255,
-                        'comment'  => 'Twitter Link',
+                    'twitter_link' => [
+                        'type' => Table::TYPE_TEXT,
+                        'length' => 255,
+                        'comment' => 'Twitter Link',
                         'unsigned' => true,
                     ],
                 ];
@@ -277,12 +277,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ->newTable($installer->getTable('mageplaza_blog_post_product'))
                     ->addColumn('post_id', Table::TYPE_INTEGER, null, [
                         'unsigned' => true,
-                        'primary'  => true,
+                        'primary' => true,
                         'nullable' => false
                     ], 'Post ID')
                     ->addColumn('entity_id', Table::TYPE_INTEGER, null, [
                         'unsigned' => true,
-                        'primary'  => true,
+                        'primary' => true,
                         'nullable' => false
                     ], 'Entity ID')
                     ->addColumn('position', Table::TYPE_INTEGER, null, ['nullable' => false, 'default' => '0'], 'Position')
@@ -316,7 +316,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '2.4.2', '<')) {
             if ($installer->tableExists('mageplaza_blog_post')) {
                 $connection->addColumn($installer->getTable('mageplaza_blog_post'), 'publish_date', [
-                    'type'    => Table::TYPE_TIMESTAMP, null,
+                    'type' => Table::TYPE_TIMESTAMP, null,
                     'comment' => 'Post Publish Date',
                 ]);
             }
@@ -364,11 +364,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
             if ($installer->tableExists('mageplaza_blog_comment')) {
 
                 $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'status', [
-                    'type'    => Table::TYPE_INTEGER, null, [],
+                    'type' => Table::TYPE_INTEGER, null, [],
                     'comment' => 'Post Name',
                 ]);
                 $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'store_ids', [
-                    'type'    => Table::TYPE_TEXT, null, ['nullable' => false, 'unsigned' => true,],
+                    'type' => Table::TYPE_TEXT, null, ['nullable' => false, 'unsigned' => true,],
                     'comment' => 'Store Id',
                 ]);
 

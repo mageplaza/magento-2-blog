@@ -52,7 +52,7 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
      */
     protected function getMonthLabel()
     {
-        return $this->helperData->getDateFormat($this->getMonthKey().'-10', true);
+        return $this->helperData->getDateFormat($this->getMonthKey() . '-10', true);
     }
 
     /**

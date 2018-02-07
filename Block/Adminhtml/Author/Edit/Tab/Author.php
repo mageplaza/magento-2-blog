@@ -65,14 +65,15 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
     )
     {
         $this->wysiwygConfig = $wysiwygConfig;
-        $this->systemStore   = $systemStore;
+        $this->systemStore = $systemStore;
         $this->imageHelper = $imageHelper;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
-     * @inheritdoc
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareForm()
     {
@@ -88,7 +89,7 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
             'base_fieldset',
             [
                 'legend' => __('Author Information'),
-                'class'  => 'fieldset-wide'
+                'class' => 'fieldset-wide'
             ]
         );
 
@@ -97,51 +98,51 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
         }
 
         $fieldset->addField('name', 'text', [
-                'name'     => 'name',
-                'label'    => __('Display Name'),
-                'title'    => __('Display Name'),
+                'name' => 'name',
+                'label' => __('Display Name'),
+                'title' => __('Display Name'),
                 'required' => true,
-                'note'     => __('This name will be displayed on frontend')
+                'note' => __('This name will be displayed on frontend')
             ]
         );
 
         $fieldset->addField('short_description', 'editor', [
-                'name'   => 'short_description',
-                'label'  => __('Short Description'),
-                'title'  => __('Short Description'),
-                'note'   => __('Short Description'),
+                'name' => 'short_description',
+                'label' => __('Short Description'),
+                'title' => __('Short Description'),
+                'note' => __('Short Description'),
                 'config' => $this->wysiwygConfig->getConfig()
             ]
         );
 
         $fieldset->addField('image', Image::class, [
-                'name'  => 'image',
+                'name' => 'image',
                 'label' => __('Avatar'),
                 'title' => __('Avatar'),
-                'path'  => $this->imageHelper->getBaseMediaPath(\Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH)
+                'path' => $this->imageHelper->getBaseMediaPath(\Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH)
             ]
         );
 
         $fieldset->addField('url_key', 'text', [
-                'name'  => 'url_key',
+                'name' => 'url_key',
                 'label' => __('URL Key'),
                 'title' => __('URL Key')
             ]
         );
 
         $fieldset->addField('facebook_link', 'text', [
-                'name'  => 'facebook_link',
+                'name' => 'facebook_link',
                 'label' => __('Facebook'),
                 'title' => __('Facebook'),
-                'note'  => __('Facebook URL'),
+                'note' => __('Facebook URL'),
             ]
         );
 
         $fieldset->addField('twitter_link', 'text', [
-                'name'  => 'twitter_link',
+                'name' => 'twitter_link',
                 'label' => __('Twitter'),
                 'title' => __('Twitter'),
-                'note'  => __('Twitter URL'),
+                'note' => __('Twitter URL'),
             ]
         );
 

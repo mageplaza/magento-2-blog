@@ -28,7 +28,8 @@ namespace Mageplaza\Blog\Block;
 class Sitemap extends Frontend
 {
     /**
-     * @inheritdoc
+     * @return $this|void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareLayout()
     {

@@ -37,7 +37,6 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
  */
 class Comment extends Generic implements TabInterface
 {
-
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
@@ -93,7 +92,6 @@ class Comment extends Generic implements TabInterface
      */
     protected function _prepareForm()
     {
-
         $comment = $this->_coreRegistry->registry('mageplaza_blog_comment');
 
         $form = $this->_formFactory->create();
@@ -116,7 +114,7 @@ class Comment extends Generic implements TabInterface
             $this->getUrl('mageplaza_blog/post/edit', ['id' => $comment->getPostId()]),
             $this->escapeHtml($post->getName())
         );
-        $fieldset->addField('post_name', 'note',['text' => $postText, 'label' => __('Post'),'name' => 'post_name']);
+        $fieldset->addField('post_name', 'note', ['text' => $postText, 'label' => __('Post'), 'name' => 'post_name']);
 
         $customer = $this->_customerRepository->getById($comment->getEntityId());
 
@@ -128,7 +126,7 @@ class Comment extends Generic implements TabInterface
             $this->escapeHtml($customer->getEmail())
         );
 
-        $fieldset->addField('customer_name', 'note',['text' => $customerText, 'label' => __('Customer'),'name' => 'customer_name']);
+        $fieldset->addField('customer_name', 'note', ['text' => $customerText, 'label' => __('Customer'), 'name' => 'customer_name']);
 
         $fieldset->addField(
             'status',
@@ -150,11 +148,11 @@ class Comment extends Generic implements TabInterface
 
         $viewText = __(
             '<a href="%1" onclick="this.target=\'blank\'">%2</a>',
-            $post->getUrl().'/#cmt-id='.$comment->getId(),
+            $post->getUrl() . '/#cmt-id=' . $comment->getId(),
             'View'
         );
 
-        $fieldset->addField('view_front', 'note',['text' => $viewText, 'label' => __('View On Front End'),'name' => 'view_front']);
+        $fieldset->addField('view_front', 'note', ['text' => $viewText, 'label' => __('View On Front End'), 'name' => 'view_front']);
 
         $form->addValues($comment->getData());
         $this->setForm($form);

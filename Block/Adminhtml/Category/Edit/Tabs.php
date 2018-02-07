@@ -95,7 +95,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     protected function _prepareLayout()
     {
         $this->addTab('category', [
-                'label'   => __('Category information'),
+                'label' => __('Category information'),
                 'content' => $this->getLayout()
                     ->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Category', 'mageplaza_blog_category_edit_tab_category')
                     ->toHtml()
@@ -103,7 +103,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         );
 
         $this->addTab('post', [
-                'label'   => __('Posts'),
+                'label' => __('Posts'),
                 'content' => $this->getLayout()
                     ->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Post', 'mageplaza_blog_category_edit_tab_post')
                     ->toHtml()

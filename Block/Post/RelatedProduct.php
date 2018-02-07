@@ -79,7 +79,7 @@ class RelatedProduct extends ListProduct
     )
     {
         $this->_productCollectionFactory = $productCollectionFactory;
-        $this->helper                    = $helperData;
+        $this->helper = $helperData;
 
         parent::__construct($context, $postDataHelper, $layerResolver, $categoryRepository, $urlHelper, $data);
     }
@@ -101,7 +101,7 @@ class RelatedProduct extends ListProduct
     public function _getProductCollection()
     {
         if ($this->_productCollection === null) {
-            $postId     = $this->getRequest()->getParam('id');
+            $postId = $this->getRequest()->getParam('id');
             $collection = $this->_productCollectionFactory->create()
                 ->addAttributeToSelect('*')
                 ->addStoreFilter();

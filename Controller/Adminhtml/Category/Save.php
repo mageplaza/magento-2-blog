@@ -89,10 +89,10 @@ class Save extends Category
         Js $jsHelper
     )
     {
-        $this->resultRawFactory  = $resultRawFactory;
+        $this->resultRawFactory = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory     = $layoutFactory;
-        $this->jsHelper          = $jsHelper;
+        $this->layoutFactory = $layoutFactory;
+        $this->jsHelper = $jsHelper;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }
@@ -103,10 +103,10 @@ class Save extends Category
     public function execute()
     {
         if ($this->getRequest()->getPost('return_session_messages_only')) {
-            $category                      = $this->initCategory();
-            $categoryPostData              = $this->getRequest()->getPostValue();
+            $category = $this->initCategory();
+            $categoryPostData = $this->getRequest()->getPostValue();
             $categoryPostData['store_ids'] = 0;
-            $categoryPostData['enabled']   = 1;
+            $categoryPostData['enabled'] = 1;
 
             $category->addData($categoryPostData);
 
@@ -140,7 +140,7 @@ class Save extends Category
             $category->addData([
                 'entity_id' => $category->getId(),
                 'is_active' => $category->getEnabled(),
-                'parent'    => $category->getParentId()
+                'parent' => $category->getParentId()
             ]);
 
             // to obtain truncated category name
@@ -155,7 +155,7 @@ class Save extends Category
             return $resultJson->setData(
                 [
                     'messages' => $block->getGroupedHtml(),
-                    'error'    => $hasError,
+                    'error' => $hasError,
                     'category' => $category->toArray(),
                 ]
             );

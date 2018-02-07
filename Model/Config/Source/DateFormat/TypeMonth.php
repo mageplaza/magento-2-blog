@@ -37,7 +37,7 @@ class TypeMonth implements ArrayInterface
     public function toOptionArray()
     {
         $dateArray = [];
-        $type      = ['F , Y', 'Y - m', 'm / Y', 'M  Y'];
+        $type = ['F , Y', 'Y - m', 'm / Y', 'M  Y'];
         foreach ($type as $item) {
             $dateArray [] = [
                 'value' => $item,

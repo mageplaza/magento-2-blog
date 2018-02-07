@@ -27,10 +27,10 @@ use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data;
 
 /**
- * Class Relatedpost
+ * Class RelatedPost
  * @package Mageplaza\Blog\Block\Post
  */
-class Relatedpost extends Template
+class RelatedPost extends Template
 {
     /**
      * Core registry
@@ -55,10 +55,10 @@ class Relatedpost extends Template
     protected $_limitPost;
 
     /**
-     * Relatedpost constructor.
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Helper\Data $helperData
+     * RelatedPost constructor.
+     * @param Context $context
+     * @param Registry $registry
+     * @param Data $helperData
      * @param array $data
      */
     public function __construct(
@@ -69,7 +69,7 @@ class Relatedpost extends Template
     )
     {
         $this->_coreRegistry = $registry;
-        $this->helperData    = $helperData;
+        $this->helperData = $helperData;
 
         parent::__construct($context, $data);
 
@@ -129,7 +129,7 @@ class Relatedpost extends Template
     public function setTabTitle()
     {
         $relatedSize = min($this->getRelatedPostList()->getSize(), $this->getLimitPosts());
-        $title       = $relatedSize
+        $title = $relatedSize
             ? __('Related Posts %1', '<span class="counter">' . $relatedSize . '</span>')
             : __('Related Posts');
 

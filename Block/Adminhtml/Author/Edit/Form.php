@@ -28,7 +28,8 @@ namespace Mageplaza\Blog\Block\Adminhtml\Author\Edit;
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
-     * @inheritdoc
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareForm()
     {
@@ -36,9 +37,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $form = $this->_formFactory->create(
             [
                 'data' => [
-                    'id'      => 'edit_form',
-                    'action'  => $this->getData('action'),
-                    'method'  => 'post',
+                    'id' => 'edit_form',
+                    'action' => $this->getData('action'),
+                    'method' => 'post',
                     'enctype' => 'multipart/form-data'
                 ]
             ]

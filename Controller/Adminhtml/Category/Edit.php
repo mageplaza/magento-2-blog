@@ -73,7 +73,7 @@ class Edit extends Category
         JsonFactory $resultJsonFactory
     )
     {
-        $this->dataObject        = $dataObject;
+        $this->dataObject = $dataObject;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
 
@@ -132,14 +132,14 @@ class Edit extends Category
                 }
             }
 
-            $layout        = $resultPage->getLayout();
-            $content       = $layout->getBlock('mageplaza.blog.category.edit')->getFormHtml()
+            $layout = $resultPage->getLayout();
+            $content = $layout->getBlock('mageplaza.blog.category.edit')->getFormHtml()
                 . $layout->getBlock('mageplaza.blog.category.tree')
                     ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs');
             $eventResponse = $this->dataObject->addData([
-                'content'  => $content,
+                'content' => $content,
                 'messages' => $layout->getMessagesBlock()->getGroupedHtml(),
-                'toolbar'  => $layout->getBlock('page.actions.toolbar')->toHtml()
+                'toolbar' => $layout->getBlock('page.actions.toolbar')->toHtml()
             ]);
 
             $this->_eventManager->dispatch(

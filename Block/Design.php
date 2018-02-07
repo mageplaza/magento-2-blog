@@ -58,7 +58,7 @@ class Design extends Template
         array $data = []
     )
     {
-        $this->helperData     = $helperData;
+        $this->helperData = $helperData;
         $this->_themeProvider = $_themeProvider;
 
         parent::__construct($context, $data);

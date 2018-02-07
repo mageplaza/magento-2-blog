@@ -68,16 +68,15 @@ class MassDelete extends Action
      */
     public function execute()
     {
-
         $collection = $this->filter->getCollection($this->collectionFactory->create());
 
         try {
             $count = 0;
-            foreach ($collection as $item){
+            foreach ($collection as $item) {
                 $item->delete();
                 $count++;
             }
-            $this->messageManager->addSuccessMessage(__('Total of %1 comments has been deleted.',$count));
+            $this->messageManager->addSuccessMessage(__('Total of %1 comments has been deleted.', $count));
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__('Something wrong when delete Comments.'));
         }

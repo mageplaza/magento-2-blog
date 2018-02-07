@@ -59,9 +59,9 @@ class Type implements ArrayInterface
     {
         return [
             self::DEFAULT_COMMENT => __('Default Comment'),
-            self::DISQUS          => __('Disqus Comment'),
-            self::FACEBOOK        => __('Facebook Comment'),
-            self::DISABLE         => __('Disable Completely')
+            self::DISQUS => __('Disqus Comment'),
+            self::FACEBOOK => __('Facebook Comment'),
+            self::DISABLE => __('Disable Completely')
         ];
     }
 }

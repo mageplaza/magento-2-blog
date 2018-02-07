@@ -141,13 +141,13 @@ class Topic extends Generic implements TabInterface
             $topic->setEnabled(1);
         }
 
-//        $fieldset->addField('description', 'editor', [
-//                'name'   => 'description',
-//                'label'  => __('Description'),
-//                'title'  => __('Description'),
-//                'config' => $this->wysiwygConfig->getConfig()
-//            ]
-//        );
+        $fieldset->addField('description', 'editor', [
+                'name'   => 'description',
+                'label'  => __('Description'),
+                'title'  => __('Description'),
+                'config' => $this->wysiwygConfig->getConfig(['add_variables' => false, 'add_widgets' => false])
+            ]
+        );
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             /** @var \Magento\Framework\Data\Form\Element\Renderer\RendererInterface $rendererBlock */

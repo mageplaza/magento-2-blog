@@ -30,9 +30,8 @@ use Magento\Backend\Block\Widget\Form\Generic;
 class Form extends Generic
 {
     /**
-     * Prepare form
-     *
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareForm()
     {
@@ -40,9 +39,9 @@ class Form extends Generic
         $form = $this->_formFactory->create(
             [
                 'data' => [
-                    'id'      => 'edit_form',
-                    'action'  => $this->getData('action'),
-                    'method'  => 'post',
+                    'id' => 'edit_form',
+                    'action' => $this->getData('action'),
+                    'method' => 'post',
                     'enctype' => 'multipart/form-data'
                 ]
             ]

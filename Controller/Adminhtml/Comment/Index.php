@@ -60,7 +60,6 @@ class Index extends Action
      */
     public function execute()
     {
-
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getConfig()->getTitle()->prepend(__('Comments'));
 

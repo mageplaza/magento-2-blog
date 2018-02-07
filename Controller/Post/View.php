@@ -141,20 +141,20 @@ class View extends Action
     {
 
         parent::__construct($context);
-        $this->storeManager         = $storeManager;
-        $this->helperBlog           = $helperBlog;
-        $this->resultPageFactory    = $resultPageFactory;
-        $this->accountManagement    = $accountManagement;
-        $this->customerUrl          = $customerUrl;
-        $this->session              = $customerSession;
-        $this->timeZone             = $timezone;
-        $this->trafficFactory       = $trafficFactory;
+        $this->storeManager = $storeManager;
+        $this->helperBlog = $helperBlog;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->accountManagement = $accountManagement;
+        $this->customerUrl = $customerUrl;
+        $this->session = $customerSession;
+        $this->timeZone = $timezone;
+        $this->trafficFactory = $trafficFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->jsonHelper           = $jsonHelper;
-        $this->cmtFactory           = $commentFactory;
-        $this->likeFactory          = $likeFactory;
-        $this->dateTime             = $dateTime;
-        $this->postFactory          = $postFactory;
+        $this->jsonHelper = $jsonHelper;
+        $this->cmtFactory = $commentFactory;
+        $this->likeFactory = $likeFactory;
+        $this->dateTime = $dateTime;
+        $this->postFactory = $postFactory;
     }
 
     /**
@@ -178,37 +178,37 @@ class View extends Action
         }
 
         if ($this->getRequest()->isAjax() && $this->session->isLoggedIn()) {
-            $params       = $this->getRequest()->getParams();
+            $params = $this->getRequest()->getParams();
             $customerData = $this->session->getCustomerData();
-            $result       = [];
+            $result = [];
             if (isset($params['cmt_text'])) {
-                $cmtText     = $params['cmt_text'];
-                $isReply     = isset($params['isReply']) ? $params['isReply'] : 0;
-                $replyId     = isset($params['replyId']) ? $params['replyId'] : 0;
+                $cmtText = $params['cmt_text'];
+                $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
+                $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
                 $commentData = [
-                    'post_id'    => $id, '',
-                    'entity_id'  => $customerData->getId(),
-                    'is_reply'   => $isReply,
-                    'reply_id'   => $replyId,
-                    'content'    => $cmtText,
+                    'post_id' => $id, '',
+                    'entity_id' => $customerData->getId(),
+                    'is_reply' => $isReply,
+                    'reply_id' => $replyId,
+                    'content' => $cmtText,
                     'created_at' => $this->dateTime->date(),
-                    'status'     => 3,
-                    'store_ids'  => $this->storeManager->getStore()->getId()
+                    'status' => 3,
+                    'store_ids' => $this->storeManager->getStore()->getId()
                 ];
 
                 $commentModel = $this->cmtFactory->create();
-                $result       = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
+                $result = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
             }
 
             if (isset($params['cmtId'])) {
-                $cmtId    = $params['cmtId'];
+                $cmtId = $params['cmtId'];
                 $likeData = [
                     'comment_id' => $cmtId,
-                    'entity_id'  => $customerData->getId()
+                    'entity_id' => $customerData->getId()
                 ];
 
                 $likeModel = $this->likeFactory->create();
-                $result    = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
+                $result = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
             }
 
             return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
@@ -239,16 +239,16 @@ class View extends Action
                         $cmtHasReply->setHasReply(1)->save();
                     }
 
-                    $lastCmt   = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
+                    $lastCmt = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
                     $lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
-                    $result    = [
-                        'cmt_id'     => $lastCmtId,
-                        'cmt_text'   => $data['content'],
-                        'user_cmt'   => $user->getFirstname() . ' ' . $user->getLastname(),
-                        'is_reply'   => $data['is_reply'],
-                        'reply_cmt'  => $data['reply_id'],
+                    $result = [
+                        'cmt_id' => $lastCmtId,
+                        'cmt_text' => $data['content'],
+                        'user_cmt' => $user->getFirstname() . ' ' . $user->getLastname(),
+                        'is_reply' => $data['is_reply'],
+                        'reply_cmt' => $data['reply_id'],
                         'created_at' => __('Just now'),
-                        'status'     => 'ok'
+                        'status' => 'ok'
                     ];
                     break;
                 //like action
@@ -257,14 +257,14 @@ class View extends Action
                     if (!$checkLike) {
                         $model->addData($data)->save();
                     }
-                    $likes      = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
-                    $countLikes = ($likes->getSize())? $likes->getSize() :'';
-                    $isLiked    = ($checkLike) ? "yes" : "no";
-                    $result     = [
-                        'liked'      => $isLiked,
+                    $likes = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
+                    $countLikes = ($likes->getSize()) ? $likes->getSize() : '';
+                    $isLiked = ($checkLike) ? "yes" : "no";
+                    $result = [
+                        'liked' => $isLiked,
                         'comment_id' => $cmtId,
                         'count_like' => $countLikes,
-                        'status'     => 'ok'
+                        'status' => 'ok'
                     ];
                     break;
                 default:

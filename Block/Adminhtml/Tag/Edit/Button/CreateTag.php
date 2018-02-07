@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Mageplaza\Blog\Block\Adminhtml\Tag\Edit\Button;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+
 /**
  * Button "Create Tag" in "New Category" slide-out panel of a product page
  */

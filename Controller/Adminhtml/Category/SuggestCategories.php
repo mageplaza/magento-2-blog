@@ -64,7 +64,7 @@ class SuggestCategories extends \Mageplaza\Blog\Controller\Adminhtml\Category
     )
     {
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory     = $layoutFactory;
+        $this->layoutFactory = $layoutFactory;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }
@@ -78,7 +78,7 @@ class SuggestCategories extends \Mageplaza\Blog\Controller\Adminhtml\Category
     {
         /** @var \Mageplaza\Blog\Block\Adminhtml\Category\Tree $treeBlock */
         $treeBlock = $this->layoutFactory->create()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Tree');
-        $data      = $treeBlock->getSuggestedCategoriesJson($this->getRequest()->getParam('label_part'));
+        $data = $treeBlock->getSuggestedCategoriesJson($this->getRequest()->getParam('label_part'));
 
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();

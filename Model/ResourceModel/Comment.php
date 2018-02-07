@@ -55,7 +55,6 @@ class Comment extends AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-
         if (is_array($object->getStoreIds())) {
             $object->setStoreIds(implode(',', $object->getStoreIds()));
         }

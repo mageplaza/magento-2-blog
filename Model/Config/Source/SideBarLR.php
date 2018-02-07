@@ -58,7 +58,7 @@ class SideBarLR implements ArrayInterface
     public function toArray()
     {
         return [
-            self::LEFT  => __('Left'),
+            self::LEFT => __('Left'),
             self::RIGHT => __('Right')
         ];
     }

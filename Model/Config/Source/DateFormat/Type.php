@@ -38,7 +38,7 @@ class Type implements ArrayInterface
     public function toOptionArray()
     {
         $dateArray = [];
-        $type      = [
+        $type = [
             'F j, Y',
             'Y-m-d',
             'm/d/Y',

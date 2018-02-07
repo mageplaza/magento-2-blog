@@ -61,7 +61,6 @@ class NewAction extends Action
      */
     public function execute()
     {
-
         $resultForward = $this->resultForwardFactory->create();
         $resultForward->forward('edit');
 

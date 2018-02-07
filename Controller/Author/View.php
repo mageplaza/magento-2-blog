@@ -56,7 +56,7 @@ class View extends Action
     {
         parent::__construct($context);
 
-        $this->resultPageFactory    = $resultPageFactory;
+        $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
     }
 

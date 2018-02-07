@@ -70,21 +70,20 @@ abstract class InlineEdit extends Action
      */
     public function execute()
     {
-
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->jsonFactory->create();
-        $error      = false;
-        $messages   = [];
-        $commentItems  = $this->getRequest()->getParam('items', []);
+        $error = false;
+        $messages = [];
+        $commentItems = $this->getRequest()->getParam('items', []);
 
         if (!($this->getRequest()->getParam('isAjax') && !empty($commentItems))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
-                'error'    => true,
+                'error' => true,
             ]);
         }
 
-        $key    = array_keys($commentItems);
+        $key = array_keys($commentItems);
         $commentId = !empty($key) ? (int)$key[0] : '';
 
         /** @var \Mageplaza\Blog\Model\Post $post */
@@ -95,21 +94,21 @@ abstract class InlineEdit extends Action
             $comment->save();
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithCommentId($comment, $e->getMessage());
-            $error      = true;
+            $error = true;
         } catch (\RuntimeException $e) {
             $messages[] = $this->getErrorWithCommentId($comment, $e->getMessage());
-            $error      = true;
+            $error = true;
         } catch (\Exception $e) {
             $messages[] = $this->getErrorWithCommentId(
                 $comment,
                 __('Something went wrong while saving the Comment.')
             );
-            $error      = true;
+            $error = true;
         }
 
         return $resultJson->setData([
             'messages' => $messages,
-            'error'    => $error
+            'error' => $error
         ]);
     }
 

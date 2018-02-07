@@ -29,12 +29,12 @@ $helper = $this->helper(\Mageplaza\Blog\Helper\Data::class);
 <?php
 $_post = $block->getPost();
 
-$author     = $helper->getAuthorByPost($_post);
+$author = $helper->getAuthorByPost($_post);
 $authorName = $author !== null ? $author->getName() : '';
 
-$modifier     = $helper->getAuthorByPost($_post, true);
+$modifier = $helper->getAuthorByPost($_post, true);
 $modifierName = $modifier !== null ? $modifier->getName() : '';
-$isLogged     =($block->isLoggedIn()) ? 'Yes' : 'No';
+$isLogged = ($block->isLoggedIn()) ? 'Yes' : 'No';
 $color = $helper->getBlogConfig('general/font_color');
 ?>
 <div class="mp-blog-view">
@@ -47,7 +47,8 @@ $color = $helper->getBlogConfig('general/font_color');
         <div class="post-list-content col-md-9 col-sm-8">
             <div class="post-view-image col-xs-12">
                 <?php if ($_post->getImage()) : ?>
-                    <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>" alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
+                    <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>"
+                         alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
                 <?php endif; ?>
             </div>
             <div class="post-post_content col-xs-12">
@@ -78,7 +79,9 @@ $color = $helper->getBlogConfig('general/font_color');
         </div>
     </div>
     <?php if ($helper->getBlogConfig('share/enabled')): ?>
-        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $helper->getBlogConfig('share/pubid_id') ?>" async="async"></script>
+        <script type="text/javascript"
+                src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $helper->getBlogConfig('share/pubid_id') ?>"
+                async="async"></script>
         <div class="mpcss">
             <div id="sharing">
                 <div class="share-col-left">
@@ -100,7 +103,8 @@ $color = $helper->getBlogConfig('general/font_color');
             <h2><?php echo __('About the Author'); ?></h2>
             <div class="related-content-container">
                 <div class="author-content-image">
-                    <img class="img-responsive" src="<?php echo $author->getImage() ? $block->resizeImage($author->getImage(), '135x', \Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH) : $block->getDefaultAuthorImage(); ?>">
+                    <img class="img-responsive"
+                         src="<?php echo $author->getImage() ? $block->resizeImage($author->getImage(), '135x', \Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH) : $block->getDefaultAuthorImage(); ?>">
                 </div>
                 <div class="author-content-information">
                     <div class="author-name"><?php echo $authorName ?></div>
@@ -130,7 +134,9 @@ $color = $helper->getBlogConfig('general/font_color');
                             </div>
                             <div class="post-info-wraper">
                                 <h2 class="mp-post-title">
-                                    <a class="post-link-title" title="<?php echo $block->escapeHtml($post->getName()); ?>" href="<?php echo $post->getUrl() ?>">
+                                    <a class="post-link-title"
+                                       title="<?php echo $block->escapeHtml($post->getName()); ?>"
+                                       href="<?php echo $post->getUrl() ?>">
                                         <?php echo $post->getName(); ?>
                                     </a>
                                 </h2>
@@ -177,7 +183,8 @@ $color = $helper->getBlogConfig('general/font_color');
                     </script>
                 </div>
             <?php elseif ($typeComment == Type::FACEBOOK): ?>
-                <div class="related-content-container box-collateral box-reviews <?php echo $helper->getBlogConfig('comment/facebook_colorscheme') ?>" id="post-reviews">
+                <div class="related-content-container box-collateral box-reviews <?php echo $helper->getBlogConfig('comment/facebook_colorscheme') ?>"
+                     id="post-reviews">
                     <div id="fb-root"></div>
                     <script>(function (d, s, id) {
                             var js, fjs = d.getElementsByTagName(s)[0];
@@ -206,10 +213,13 @@ $color = $helper->getBlogConfig('general/font_color');
                         <div class="default-cmt__content">
                             <div class="default-cmt__content__cmt-block">
                                 <div class="default-cmt__content__cmt-block__cmt-box">
-                                    <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input" maxlength="255" placeholder="<?php echo __('Type comments here...') ?>"></textarea>
+                                    <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input"
+                                              maxlength="255"
+                                              placeholder="<?php echo __('Type comments here...') ?>"></textarea>
                                     <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
                                         <div class="default-cmt_loading" style="display: none">
-                                            <img src="<?php echo $block->getViewFileUrl('images/loader-1.gif'); ?>" alt="Loading...">
+                                            <img src="<?php echo $block->getViewFileUrl('images/loader-1.gif'); ?>"
+                                                 alt="Loading...">
                                         </div>
                                         <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit primary btn-primary" <?php echo !$block->isLoggedIn() ? 'disabled' : '' ?>>
                                             <?php echo __('Comment') ?>
@@ -278,16 +288,18 @@ $color = $helper->getBlogConfig('general/font_color');
           },
           "description": "<?php echo $_post->getShortDescription(); ?>"
         }
+
         </script>
     <?php endif; ?>
 </div>
 
 <style type="text/css">
-    .cmt-row__alert-row{
+    .cmt-row__alert-row {
         font-size: 13px;
         color: red;
         margin-top: 10px;
     }
+
     .cmt-row__alert-row p {
         margin: 3px 0 !important;
     }

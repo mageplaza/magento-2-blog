@@ -20,6 +20,7 @@
  */
 
 namespace Mageplaza\Blog\Block\Adminhtml\Author;
+
 use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\Registry;
 
@@ -58,7 +59,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _construct()
     {
-        $this->_objectId   = 'user_id';
+        $this->_objectId = 'user_id';
         $this->_blockGroup = 'Mageplaza_Blog';
         $this->_controller = 'adminhtml_author';
 
@@ -67,12 +68,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->add(
             'save-and-continue',
             [
-                'label'          => __('Save Change'),
-                'class'          => 'save primary',
+                'label' => __('Save Change'),
+                'class' => 'save primary',
                 'data_attribute' => [
                     'mage-init' => [
                         'button' => [
-                            'event'  => 'saveAndContinueEdit',
+                            'event' => 'saveAndContinueEdit',
                             'target' => '#edit_form'
                         ]
                     ]

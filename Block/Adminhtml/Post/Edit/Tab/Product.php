@@ -61,7 +61,7 @@ class Product extends Extended implements TabInterface
     )
     {
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->coreRegistry             = $coreRegistry;
+        $this->coreRegistry = $coreRegistry;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -98,45 +98,46 @@ class Product extends Extended implements TabInterface
 
     /**
      * @return $this
+     * @throws \Exception
      */
     protected function _prepareColumns()
     {
         $this->addColumn('in_products', [
                 'header_css_class' => 'a-center',
-                'type'             => 'checkbox',
-                'name'             => 'in_product',
-                'values'           => $this->_getSelectedProducts(),
-                'align'            => 'center',
-                'index'            => 'entity_id'
+                'type' => 'checkbox',
+                'name' => 'in_product',
+                'values' => $this->_getSelectedProducts(),
+                'align' => 'center',
+                'index' => 'entity_id'
             ]
         );
 
         $this->addColumn('entity_id', [
-                'header'           => __('ID'),
-                'sortable'         => true,
-                'index'            => 'entity_id',
-                'type'             => 'number',
+                'header' => __('ID'),
+                'sortable' => true,
+                'index' => 'entity_id',
+                'type' => 'number',
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id'
             ]
         );
 
         $this->addColumn('title', [
-                'header'           => __('Sku'),
-                'index'            => 'sku',
+                'header' => __('Sku'),
+                'index' => 'sku',
                 'header_css_class' => 'col-name',
                 'column_css_class' => 'col-name'
             ]
         );
 
         $this->addColumn('position', [
-                'header'         => __('Position'),
-                'name'           => 'position',
-                'width'          => 60,
-                'type'           => 'number',
+                'header' => __('Position'),
+                'name' => 'position',
+                'width' => 60,
+                'type' => 'number',
                 'validate_class' => 'validate-number',
-                'index'          => 'position',
-                'editable'       => true,
+                'index' => 'position',
+                'editable' => true,
             ]
         );
 
@@ -207,6 +208,7 @@ class Product extends Extended implements TabInterface
     /**
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _addColumnFilterToCollection($column)
     {

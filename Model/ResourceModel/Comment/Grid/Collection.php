@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Mageplaza\Blog\Model\ResourceModel\Comment\Grid;
 
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
@@ -55,8 +56,8 @@ class Collection extends SearchResult
     /**
      * @return $this
      */
-    public function addPostName(){
-
+    public function addPostName()
+    {
         $this->getSelect()->join(
             ['mp' => $this->getTable('mageplaza_blog_post')],
             "main_table.post_id = mp.post_id",
@@ -68,8 +69,8 @@ class Collection extends SearchResult
     /**
      * @return $this
      */
-    public function addCustomerName(){
-
+    public function addCustomerName()
+    {
         $this->getSelect()->join(
             ['ce' => $this->getTable('customer_entity')],
             "main_table.entity_id = ce.entity_id",

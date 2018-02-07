@@ -65,7 +65,7 @@ class CategoriesJson extends Category
     )
     {
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory     = $layoutFactory;
+        $this->layoutFactory = $layoutFactory;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }

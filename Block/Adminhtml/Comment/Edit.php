@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Block\Adminhtml\Comment;
 
 use Magento\Framework\Registry;
 use Magento\Backend\Block\Widget\Context;
+
 /**
  * Class Edit
  * @package Mageplaza\Blog\Block\Adminhtml\Comment
@@ -68,12 +69,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->add(
             'save-and-continue',
             [
-                'label'          => __('Save and Continue Edit'),
-                'class'          => 'save',
+                'label' => __('Save and Continue Edit'),
+                'class' => 'save',
                 'data_attribute' => [
                     'mage-init' => [
                         'button' => [
-                            'event'  => 'saveAndContinueEdit',
+                            'event' => 'saveAndContinueEdit',
                             'target' => '#edit_form'
                         ]
                     ]
@@ -81,7 +82,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             ],
             -100
         );
-        $this->buttonList->update('save','label','Save Comment');
+        $this->buttonList->update('save', 'label', 'Save Comment');
         $this->buttonList->remove('reset');
 
     }

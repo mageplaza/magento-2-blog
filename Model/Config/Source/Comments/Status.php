@@ -58,8 +58,8 @@ class Status implements ArrayInterface
     {
         return [
             self::APPROVED => __('Approved'),
-            self::SPAM          => __('Spam'),
-            self::PENDING        => __('Pending')
+            self::SPAM => __('Spam'),
+            self::PENDING => __('Pending')
         ];
     }
 }

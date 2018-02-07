@@ -111,13 +111,13 @@ class Data extends CoreHelper
         DateTime $dateTime
     )
     {
-        $this->postFactory     = $postFactory;
+        $this->postFactory = $postFactory;
         $this->categoryFactory = $categoryFactory;
-        $this->tagFactory      = $tagFactory;
-        $this->topicFactory    = $topicFactory;
-        $this->authorFactory   = $authorFactory;
-        $this->translitUrl     = $translitUrl;
-        $this->dateTime        = $dateTime;
+        $this->tagFactory = $tagFactory;
+        $this->topicFactory = $topicFactory;
+        $this->authorFactory = $authorFactory;
+        $this->translitUrl = $translitUrl;
+        $this->dateTime = $dateTime;
 
         parent::__construct($context, $objectManager, $storeManager);
     }
@@ -331,8 +331,8 @@ class Data extends CoreHelper
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url    = $this->getUrl($this->getRoute() . '/' . $urlKey);
-        $url=explode('?',$url);
+        $url = $this->getUrl($this->getRoute() . '/' . $urlKey);
+        $url = explode('?', $url);
         $url = $url[0];
         return rtrim($url, '/') . $this->getUrlSuffix();
     }
@@ -417,7 +417,7 @@ class Data extends CoreHelper
         }
 
         $adapter = $resource->getConnection();
-        $select  = $adapter->select()
+        $select = $adapter->select()
             ->from($resource->getMainTable(), '*')
             ->where('url_key = :url_key');
 
@@ -444,7 +444,7 @@ class Data extends CoreHelper
         $dateTime = (new \DateTime($date, new \DateTimeZone('UTC')));
         $dateTime->setTimezone(new \DateTimeZone($this->getTimezone()));
 
-        $dateType   = $this->getBlogConfig($monthly ? 'monthly_archive/date_type_monthly' : 'general/date_type');
+        $dateType = $this->getBlogConfig($monthly ? 'monthly_archive/date_type_monthly' : 'general/date_type');
         $dateFormat = $dateTime->format($dateType);
 
         return $dateFormat;

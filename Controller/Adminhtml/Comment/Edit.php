@@ -89,9 +89,8 @@ class Edit extends Comment
         /** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mageplaza_Blog::comment');
-//        $resultPage->getConfig()->getTitle()->set(__('Comment'));
 
-        $title =__('Edit Comment');
+        $title = __('Edit Comment');
         $resultPage->getConfig()->getTitle()->prepend($title);
 
         return $resultPage;

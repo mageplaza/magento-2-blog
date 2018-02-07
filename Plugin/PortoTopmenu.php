@@ -32,76 +32,72 @@ use Mageplaza\Blog\Helper\Data;
  */
 class PortoTopmenu
 {
-	/**
-	 * @var \Mageplaza\Blog\Helper\Data
-	 */
-	protected $helper;
+    /**
+     * @var \Mageplaza\Blog\Helper\Data
+     */
+    protected $helper;
 
-	/**
-	 * @var \Magento\Framework\Data\TreeFactory
-	 */
-	protected $treeFactory;
+    /**
+     * @var \Magento\Framework\Data\TreeFactory
+     */
+    protected $treeFactory;
 
-	/**
-	 * @var \Magento\Framework\App\RequestInterface
-	 */
-	protected $request;
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    protected $request;
 
-	/**
-	 * Topmenu constructor.
-	 * @param \Mageplaza\Blog\Helper\Data $helper
-	 * @param \Magento\Framework\Data\TreeFactory $treeFactory
-	 * @param \Magento\Framework\App\RequestInterface $request
-	 */
-	public function __construct(
-		Data $helper,
-		TreeFactory $treeFactory,
-		RequestInterface $request
-	)
-	{
-		$this->helper      = $helper;
-		$this->treeFactory = $treeFactory;
-		$this->request     = $request;
-	}
+    /**
+     * Topmenu constructor.
+     * @param \Mageplaza\Blog\Helper\Data $helper
+     * @param \Magento\Framework\Data\TreeFactory $treeFactory
+     * @param \Magento\Framework\App\RequestInterface $request
+     */
+    public function __construct(
+        Data $helper,
+        TreeFactory $treeFactory,
+        RequestInterface $request
+    )
+    {
+        $this->helper = $helper;
+        $this->treeFactory = $treeFactory;
+        $this->request = $request;
+    }
 
-	/**
-	 * @param \Smartwave\Megamenu\Block\Topmenu $subject
-	 * @param $categories
-	 * @return mixed
-	 */
-	public function afterGetStoreCategories(
-		\Smartwave\Megamenu\Block\Topmenu $subject,
-		$categories
-	)
-	{
+    /**
+     * @param \Smartwave\Megamenu\Block\Topmenu $subject
+     * @param $categories
+     * @return mixed
+     */
+    public function afterGetStoreCategories(
+        \Smartwave\Megamenu\Block\Topmenu $subject,
+        $categories
+    )
+    {
+        if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
 
-		if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
+            $categories->add(
+                new Node(
+                    $this->getMenuAsArray(),
+                    'id',
+                    $this->treeFactory->create()
+                )
+            );
+        }
+        return $categories;
+    }
 
-			$categories->add(
-				new Node(
-					$this->getMenuAsArray(),
-					'id',
-					$this->treeFactory->create()
-				)
-			);
-		}
-		return $categories;
-	}
-
-	/**
-	 * @return array
-	 */
-	private function getMenuAsArray()
-	{
-//		$identifier = trim($this->request->getPathInfo(), '/');
-//		$routePath  = explode('/', $identifier);
-//		$routeSize  = sizeof($routePath);
-		return [
-			'name'       => $this->helper->getBlogConfig('general/name') ?: __('Blog'),
-			'id'         => 'mpblog-node',
-			'url'        => $this->helper->getBlogUrl(''),
-			'is_active'  => 1,
-			'include_in_menu' => 1
-		];
-	}
+    /**
+     * @return array
+     */
+    private function getMenuAsArray()
+    {
+        return [
+            'name' => $this->helper->getBlogConfig('general/name') ?: __('Blog'),
+            'id' => 'mpblog-node',
+            'url' => $this->helper->getBlogUrl(''),
+            'is_active' => 1,
+            'include_in_menu' => 1
+        ];
+    }
 }

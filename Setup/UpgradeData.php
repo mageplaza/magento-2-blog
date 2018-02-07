@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Mageplaza\Blog\Setup;
 
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -53,18 +54,17 @@ class UpgradeData implements UpgradeDataInterface
         if (version_compare($context->getVersion(), '2.4.4', '<')) {
 
             $commentIds = $this->comment->create()->getCollection()->getAllIds();
-            $commentIds = implode(',',$commentIds);
-            if ($commentIds){
+            $commentIds = implode(',', $commentIds);
+            if ($commentIds) {
                 /** Add create at old comment */
                 $sampleTemplates = [
-                    'created_at'           => $this->date->date(),
+                    'created_at' => $this->date->date(),
                     'status' => 3
                 ];
-                $setup->getConnection()->update($setup->getTable('mageplaza_blog_comment'), $sampleTemplates ,'comment_id IN ('.$commentIds.')');
+                $setup->getConnection()->update($setup->getTable('mageplaza_blog_comment'), $sampleTemplates, 'comment_id IN (' . $commentIds . ')');
             }
             $installer->endSetup();
         }
-
     }
 
 }

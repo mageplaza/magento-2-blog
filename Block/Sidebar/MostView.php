@@ -24,15 +24,15 @@ namespace Mageplaza\Blog\Block\Sidebar;
 use Mageplaza\Blog\Block\Frontend;
 
 /**
- * Class Mostview
+ * Class MostView
  * @package Mageplaza\Blog\Block\Sidebar
  */
-class Mostview extends Frontend
+class MostView extends Frontend
 {
     /**
      * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
-    public function getMosviewPosts()
+    public function getMostViewPosts()
     {
         $collection = $this->helperData->getPostList();
         $collection->getSelect()

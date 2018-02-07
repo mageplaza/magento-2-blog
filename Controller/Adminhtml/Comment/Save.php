@@ -54,7 +54,6 @@ class Save extends Comment
      */
     public function execute()
     {
-
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if ($data = $this->getRequest()->getPost('comment')) {

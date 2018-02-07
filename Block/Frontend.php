@@ -94,12 +94,12 @@ class Frontend extends Template
         array $data = []
     )
     {
-        $this->filterProvider     = $filterProvider;
-        $this->cmtFactory         = $commentFactory;
-        $this->likeFactory        = $likeFactory;
+        $this->filterProvider = $filterProvider;
+        $this->cmtFactory = $commentFactory;
+        $this->likeFactory = $likeFactory;
         $this->customerRepository = $customerRepository;
-        $this->helperData         = $helperData;
-        $this->store              = $context->getStoreManager();
+        $this->helperData = $helperData;
+        $this->store = $context->getStoreManager();
 
         parent::__construct($context, $data);
     }
@@ -132,14 +132,14 @@ class Frontend extends Template
      * @param null $type
      * @return string
      */
-    public function getRssUrl($urlKey,$type = null)
+    public function getRssUrl($urlKey, $type = null)
     {
         if (is_object($urlKey)) {
             $urlKey = $urlKey->getUrlKey();
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url    = $this->helperData->getUrl($this->helperData->getRoute() . '/' . $urlKey);
+        $url = $this->helperData->getUrl($this->helperData->getRoute() . '/' . $urlKey);
 
         return rtrim($url, '/') . '.xml';
 
@@ -177,7 +177,7 @@ class Frontend extends Template
             return null;
         }
 
-        $categories   = $this->helperData->getCategoryCollection($post->getCategoryIds());
+        $categories = $this->helperData->getCategoryCollection($post->getCategoryIds());
         $categoryHtml = [];
         foreach ($categories as $_cat) {
             $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl($_cat, Data::TYPE_CATEGORY) . '">' . $_cat->getName() . '</a>';

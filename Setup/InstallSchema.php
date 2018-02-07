@@ -33,13 +33,9 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 {
     /**
-     * install tables
-     *
-     * @param \Magento\Framework\Setup\SchemaSetupInterface $setup
-     * @param \Magento\Framework\Setup\ModuleContextInterface $context
-     *
-     * @return void
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @param SchemaSetupInterface $setup
+     * @param ModuleContextInterface $context
+     * @throws \Zend_Db_Exception
      */
     public function install(
         SchemaSetupInterface $setup,
@@ -56,7 +52,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ->addColumn('post_id', Table::TYPE_INTEGER, null, [
                     'identity' => true,
                     'nullable' => false,
-                    'primary'  => true,
+                    'primary' => true,
                     'unsigned' => true,
                 ], 'Post ID')
                 ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable => false'], 'Post Name')
@@ -86,7 +82,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ->addColumn('tag_id', Table::TYPE_INTEGER, null, [
                     'identity' => true,
                     'nullable' => false,
-                    'primary'  => true,
+                    'primary' => true,
                     'unsigned' => true,
                 ], 'Tag ID')
                 ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable => false'], 'Tag Name')
@@ -107,7 +103,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ->addColumn('topic_id', Table::TYPE_INTEGER, null, [
                     'identity' => true,
                     'nullable' => false,
-                    'primary'  => true,
+                    'primary' => true,
                     'unsigned' => true,
                 ], 'Topic ID')
                 ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable => false'], 'Topic Name')
@@ -132,7 +128,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ->addColumn('category_id', Table::TYPE_INTEGER, null, [
                     'identity' => true,
                     'nullable' => false,
-                    'primary'  => true,
+                    'primary' => true,
                     'unsigned' => true,
                 ], 'Category ID')
                 ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable => false'], 'Category Name')
@@ -161,12 +157,12 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ->newTable($installer->getTable('mageplaza_blog_post_tag'))
                 ->addColumn('tag_id', Table::TYPE_INTEGER, null, [
                     'unsigned' => true,
-                    'primary'  => true,
+                    'primary' => true,
                     'nullable' => false
                 ], 'Tag ID')
                 ->addColumn('post_id', Table::TYPE_INTEGER, null, [
                     'unsigned' => true,
-                    'primary'  => true,
+                    'primary' => true,
                     'nullable' => false
                 ], 'Post ID')
                 ->addColumn('position', Table::TYPE_INTEGER, null, [
@@ -204,12 +200,12 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ->newTable($installer->getTable('mageplaza_blog_post_topic'))
                 ->addColumn('topic_id', Table::TYPE_INTEGER, null, [
                     'unsigned' => true,
-                    'primary'  => true,
+                    'primary' => true,
                     'nullable' => false
                 ], 'Topic ID')
                 ->addColumn('post_id', Table::TYPE_INTEGER, null, [
                     'unsigned' => true,
-                    'primary'  => true,
+                    'primary' => true,
                     'nullable' => false
                 ], 'Post ID')
                 ->addColumn('position', Table::TYPE_INTEGER, null, ['nullable' => false, 'default' => '0'], 'Position')
@@ -244,12 +240,12 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ->newTable($installer->getTable('mageplaza_blog_post_category'))
                 ->addColumn('category_id', Table::TYPE_INTEGER, null, [
                     'unsigned' => true,
-                    'primary'  => true,
+                    'primary' => true,
                     'nullable' => false
                 ], 'Category ID')
                 ->addColumn('post_id', Table::TYPE_INTEGER, null, [
                     'unsigned' => true,
-                    'primary'  => true,
+                    'primary' => true,
                     'nullable' => false
                 ], 'Post ID')
                 ->addColumn('position', Table::TYPE_INTEGER, null, ['nullable' => false, 'default' => '0'], 'Position')
