@@ -42,5 +42,4 @@ class Comment extends Container
 
         parent::_construct();
     }
-
 }

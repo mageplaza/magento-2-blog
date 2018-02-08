@@ -27,14 +27,14 @@
             <item name="deps" xsi:type="string">mageplaza_blog_comment_listing.mageplaza_blog_comment_listing_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">mageplaza_blog_comment_columns</item>
-        <item name="buttons" xsi:type="array">
-            <item name="add" xsi:type="array">
-                <item name="name" xsi:type="string">add</item>
+        <!--<item name="buttons" xsi:type="array">-->
+            <!--<item name="add" xsi:type="array">-->
+                <!--<item name="name" xsi:type="string">add</item>-->
                 <!--<item name="label" xsi:type="string" translate="true">New Comment</item>-->
                 <!--<item name="class" xsi:type="string">primary</item>-->
                 <!--<item name="url" xsi:type="string">*/*/new</item>-->
-            </item>
-        </item>
+            <!--</item>-->
+        <!--</item>-->
     </argument>
     <dataSource name="mageplaza_blog_post_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
@@ -124,22 +124,13 @@
     <columns name="mageplaza_blog_comment_columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="editorConfig" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">mageplaza_blog_comment_listing.mageplaza_blog_comment_listing.mageplaza_blog_comment_columns.ids</item>
-                    <item name="enabled" xsi:type="boolean">true</item>
-                    <item name="indexField" xsi:type="string">comment_id</item>
-                    <item name="clientConfig" xsi:type="array">
-                        <item name="saveUrl" xsi:type="url" path="mageplaza_blog/comment/inlineEdit"/>
-                        <item name="validateBeforeSave" xsi:type="boolean">false</item>
-                    </item>
-                </item>
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">mageplaza_blog_comment_listing.mageplaza_blog_comment_listing.mageplaza_blog_comment_columns_editor</item>
-                        <item name="target" xsi:type="string">startEdit</item>
+                        <item name="provider" xsi:type="string">mageplaza_blog_comment_listing.mageplaza_blog_comment_listing.mageplaza_blog_comment_columns.actions</item>
+                        <item name="target" xsi:type="string">applyAction</item>
                         <item name="params" xsi:type="array">
-                            <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
-                            <item name="1" xsi:type="boolean">true</item>
+                            <item name="0" xsi:type="string">edit</item>
+                            <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
                         </item>
                     </item>
                 </item>
@@ -158,7 +149,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">textRange</item>
-                    <item name="sorting" xsi:type="string">asc</item>
+                    <item name="sorting" xsi:type="string">desc</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                 </item>
             </argument>
@@ -182,7 +173,6 @@
                 </item>
             </argument>
         </column>
-
         <column name="post_name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -199,7 +189,6 @@
                 </item>
             </argument>
         </column>
-
         <column name="content">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

@@ -74,6 +74,7 @@
             </monthly_archive>
             <comment>
                 <type>4</type>
+                <need_approve>0</need_approve>
                 <disqus>mageplazablog</disqus>
                 <facebook_number_comment>10</facebook_number_comment>
                 <facebook_appid>1562328304081606</facebook_appid>

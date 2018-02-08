@@ -35,6 +35,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Data as HelperBlog;
 use Mageplaza\Blog\Model\CommentFactory;
+use Mageplaza\Blog\Model\Config\Source\Comments\Status;
 use Mageplaza\Blog\Model\LikeFactory;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\TrafficFactory;
@@ -198,7 +199,7 @@ class View extends Action
                     'reply_id' => $replyId,
                     'content' => $cmtText,
                     'created_at' => $this->dateTime->date(),
-                    'status' => 3,
+                    'status' => $this->helperBlog->getBlogConfig('comment/need_approve') ? Status::PENDING : Status::APPROVED,
                     'store_ids' => $this->storeManager->getStore()->getId()
                 ];
 
@@ -254,7 +255,7 @@ class View extends Action
                         'is_reply' => $data['is_reply'],
                         'reply_cmt' => $data['reply_id'],
                         'created_at' => __('Just now'),
-                        'status' => 'ok'
+                        'status' => $data['status']
                     ];
                     break;
                 //like action

@@ -186,12 +186,11 @@ require([
             url: window.location.href,
             data: {cmt_text: cmtText, isReply: isReply, replyId: replyId},
             success: function (response) {
-                if (response.status === 'ok') {
-
+                if (parseInt(response.status) === 3) {
                     $('.default-cmt__content__cmt-block').prepend('<div class="message success message-success row">Your comment has been sent successfully. Please wait admin approve !</div>')
-                    $(".default-cmt__content__cmt-block__cmt-box__cmt-input").attr('disabled', 1);
-                    // displayComment(response, displayReply);
-                    // inputEl.val('');
+                } else if (parseInt(response.status) === 1) {
+                    displayComment(response, displayReply);
+                    inputEl.val('');
                 } else if (response.status === 'error' && response.hasOwnProperty(error)) {
                     if (checkReply !== 'undefined') {
                         parentComment.append(response.error);

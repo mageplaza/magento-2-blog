@@ -176,6 +176,12 @@
                     <label>Type of comment</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Type</source_model>
                 </field>
+                <field id="need_approve" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Need for Approval</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If yes, the comment will not be shown until approved by Admin.</comment>
+                    <depends><field id="type">1</field></depends>
+                </field>
                 <field id="disqus" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Disqus unique name</label>
                     <comment><![CDATA[Create at <a href="https://disqus.com/admin/create/" target="_blank">Disqus</a>]]></comment>
