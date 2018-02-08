@@ -121,12 +121,13 @@ class Tree extends Dbp
 
     /**
      * Tree constructor.
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param ManagerInterface $eventManager
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $collectionFactory
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource
-     * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\ResourceConnection $coreResource
+     * @param Category $categoryResource
+     * @param CacheInterface $cache
+     * @param StoreManagerInterface $storeManager
+     * @param ResourceConnection $coreResource
+     * @throws \Exception
      */
     public function __construct(
         ManagerInterface $eventManager,
@@ -515,20 +516,6 @@ class Tree extends Dbp
     public function createCollectionDataSelect($sorted = true)
     {
         $select = $this->getDefaultCollection($sorted ? $this->_orderField : false)->getSelect();
-
-        // count children products qty plus self products qty
-        $categoriesTable = $this->coreResource->getTableName('mageplaza_blog_category');
-
-        $subConcat = $this->_conn->getConcatSql(['e.path', $this->_conn->quote('/%')]);
-        $subSelect = $this->_conn->select()->from(
-            ['see' => $categoriesTable],
-            null
-        )->where(
-            'see.category_id = e.category_id'
-        )->orWhere(
-            'see.path LIKE ?',
-            $subConcat
-        );
 
         return $select;
     }

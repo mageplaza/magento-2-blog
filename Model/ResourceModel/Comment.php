@@ -30,15 +30,6 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
  */
 class Comment extends AbstractDb
 {
-
-    public function __construct(
-        Context $context,
-        $connectionName = null
-    )
-    {
-        parent::__construct($context, $connectionName);
-    }
-
     /**
      * Initialize resource model
      *

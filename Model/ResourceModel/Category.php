@@ -95,8 +95,9 @@ class Category extends AbstractDb
     /**
      * Retrieves Blog Category Name from DB by passed id.
      *
-     * @param string $id
-     * @return string|bool
+     * @param $id
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCategoryNameById($id)
     {
@@ -110,10 +111,11 @@ class Category extends AbstractDb
     }
 
     /**
-     * before save callback
+     * Before save call back
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Mageplaza\Blog\Model\Category $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -168,10 +170,11 @@ class Category extends AbstractDb
     }
 
     /**
-     * after save callback
+     * After save call back
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Mageplaza\Blog\Model\Category $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -215,8 +218,9 @@ class Category extends AbstractDb
     /**
      * Update path field
      *
-     * @param \Mageplaza\Blog\Model\Category $object
+     * @param $object
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function savePath($object)
     {
@@ -233,8 +237,9 @@ class Category extends AbstractDb
     }
 
     /**
-     * @param AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeDelete(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -259,6 +264,7 @@ class Category extends AbstractDb
     /**
      * @param \Magento\Framework\DataObject $object
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function deleteChildren(\Magento\Framework\DataObject $object)
     {
@@ -292,6 +298,7 @@ class Category extends AbstractDb
      * @param \Mageplaza\Blog\Model\Category $newParent
      * @param null $afterCategoryId
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function changeParent(
         \Mageplaza\Blog\Model\Category $category,
@@ -366,7 +373,8 @@ class Category extends AbstractDb
      * @param \Mageplaza\Blog\Model\Category $category
      * @param \Mageplaza\Blog\Model\Category $newParent
      * @param $afterCategoryId
-     * @return int
+     * @return int|string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function processPositions(
         \Mageplaza\Blog\Model\Category $category,
@@ -407,6 +415,7 @@ class Category extends AbstractDb
     /**
      * @param $categoryId
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getChildrenCount($categoryId)
     {

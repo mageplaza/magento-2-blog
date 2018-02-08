@@ -1,7 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 namespace Mageplaza\Blog\Model\ResourceModel\Comment\Grid;
@@ -14,14 +29,13 @@ use Psr\Log\LoggerInterface as Logger;
 
 class Collection extends SearchResult
 {
-
     /**
      * Collection constructor.
      * @param EntityFactory $entityFactory
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
-     * @param $mainTable
+     * @param null|\Zend_Db_Adapter_Abstract $mainTable
      * @param null $resourceModel
      * @param null $identifierName
      * @param null $connectionName

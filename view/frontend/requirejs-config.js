@@ -21,7 +21,6 @@
 var config = {
     paths: {
         comment: 'Mageplaza_Blog/js/comment',
-        autocomplete: 'Mageplaza_Blog/js/lib/jquery.autocomplete.min',
         categoryTree: 'Mageplaza_Blog/js/categorytree'
     }
 };

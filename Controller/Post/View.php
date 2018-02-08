@@ -165,56 +165,59 @@ class View extends Action
     {
         $id = $this->getRequest()->getParam('id');
         $post = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($id);
-        if ($id) {
 
-            $trafficModel = $this->trafficFactory->create()->load($id, 'post_id');
-            if ($trafficModel->getId()) {
-                $trafficModel->setNumbersView($trafficModel->getNumbersView() + 1);
-                $trafficModel->save();
-            } else {
-                $traffic = $this->trafficFactory->create();
-                $traffic->addData(['post_id' => $id, 'numbers_view' => 1])->save();
+        if ($post->getEnabled()) {
+            if ($id) {
+                $trafficModel = $this->trafficFactory->create()->load($id, 'post_id');
+                if ($trafficModel->getId()) {
+                    $trafficModel->setNumbersView($trafficModel->getNumbersView() + 1);
+                    $trafficModel->save();
+                } else {
+                    $traffic = $this->trafficFactory->create();
+                    $traffic->addData(['post_id' => $id, 'numbers_view' => 1])->save();
+                }
             }
+
+            if ($this->getRequest()->isAjax() && $this->session->isLoggedIn()) {
+                $params = $this->getRequest()->getParams();
+                $customerData = $this->session->getCustomerData();
+                $result = [];
+                if (isset($params['cmt_text'])) {
+                    $cmtText = $params['cmt_text'];
+                    $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
+                    $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
+                    $commentData = [
+                        'post_id' => $id, '',
+                        'entity_id' => $customerData->getId(),
+                        'is_reply' => $isReply,
+                        'reply_id' => $replyId,
+                        'content' => $cmtText,
+                        'created_at' => $this->dateTime->date(),
+                        'status' => 3,
+                        'store_ids' => $this->storeManager->getStore()->getId()
+                    ];
+
+                    $commentModel = $this->cmtFactory->create();
+                    $result = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
+                }
+
+                if (isset($params['cmtId'])) {
+                    $cmtId = $params['cmtId'];
+                    $likeData = [
+                        'comment_id' => $cmtId,
+                        'entity_id' => $customerData->getId()
+                    ];
+
+                    $likeModel = $this->likeFactory->create();
+                    $result = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
+                }
+
+                return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
+            }
+            return $this->resultPageFactory->create();
         }
 
-        if ($this->getRequest()->isAjax() && $this->session->isLoggedIn()) {
-            $params = $this->getRequest()->getParams();
-            $customerData = $this->session->getCustomerData();
-            $result = [];
-            if (isset($params['cmt_text'])) {
-                $cmtText = $params['cmt_text'];
-                $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
-                $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
-                $commentData = [
-                    'post_id' => $id, '',
-                    'entity_id' => $customerData->getId(),
-                    'is_reply' => $isReply,
-                    'reply_id' => $replyId,
-                    'content' => $cmtText,
-                    'created_at' => $this->dateTime->date(),
-                    'status' => 3,
-                    'store_ids' => $this->storeManager->getStore()->getId()
-                ];
-
-                $commentModel = $this->cmtFactory->create();
-                $result = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
-            }
-
-            if (isset($params['cmtId'])) {
-                $cmtId = $params['cmtId'];
-                $likeData = [
-                    'comment_id' => $cmtId,
-                    'entity_id' => $customerData->getId()
-                ];
-
-                $likeModel = $this->likeFactory->create();
-                $result = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
-            }
-
-            return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
-        }
-
-        return ($post->getEnabled()) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
+        return $this->resultForwardFactory->create()->forward('noroute');
     }
 
     /**
@@ -287,7 +290,6 @@ class View extends Action
      */
     public function isLikedComment($cmtId, $userId, $model)
     {
-
         $liked = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
         foreach ($liked as $item) {
             if ($item->getEntityId() == $userId) {

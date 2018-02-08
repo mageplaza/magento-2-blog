@@ -31,7 +31,6 @@ use Magento\Ui\Component\Listing\Columns\Column;
  */
 class CommentStatus extends Column
 {
-
     /**
      * CommentStatus constructor.
      * @param ContextInterface $context
@@ -44,8 +43,8 @@ class CommentStatus extends Column
         UiComponentFactory $uiComponentFactory,
         array $components = [],
         array $data = []
-    ) {
-
+    )
+    {
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -71,13 +70,9 @@ class CommentStatus extends Column
                             $item[$this->getData('name')] = '<span style="color:#ffd714">Pending</span>';
                             break;
                     }
-
                 }
             }
         }
-
         return $dataSource;
     }
-
-
 }

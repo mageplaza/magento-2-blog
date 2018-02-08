@@ -47,7 +47,7 @@
     </div>
 </div>
 <script>
-    require(['jquery', 'autocomplete'], function ($) {
+    require(['jquery', 'mpDevbridgeAutocomplete'], function ($) {
         var visibleImage = <?php echo $block->getSidebarConfig('search/show_image'); ?>;
         $('#mpblog-search-box').autocomplete({
             lookup: <?php echo $block->getSearchBlogData();?>,

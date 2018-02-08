@@ -67,24 +67,26 @@ class MassStatus extends Action
     }
 
     /**
+     * @inheritdoc
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @throws LocalizedException
      */
     public function execute()
     {
-        try {
-            $commentUpdated = 0;
-            $status = (int)$this->getRequest()->getParam('status');
-            $collection = $this->filter->getCollection($this->collectionFactory->create());
+        $commentUpdated = 0;
+        $status = (int)$this->getRequest()->getParam('status');
+        $collection = $this->filter->getCollection($this->collectionFactory->create());
 
-            foreach ($collection as $comment) {
+        foreach ($collection as $comment) {
+            try {
                 $comment->setStatus($status)->save();
                 $commentUpdated++;
+            } catch (LocalizedException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
+            } catch (\Exception $e) {
+                $this->_getSession()->addException($e, __('Something went wrong while updating status'));
             }
 
-        } catch (LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
-        } catch (\Exception $e) {
-            $this->_getSession()->addException($e, __('Something went wrong while updating status'));
         }
 
         if ($commentUpdated) {
