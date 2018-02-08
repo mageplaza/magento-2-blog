@@ -21,7 +21,7 @@ class Collection extends SearchResult
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
-     * @param $mainTable
+     * @param null|\Zend_Db_Adapter_Abstract $mainTable
      * @param null $resourceModel
      * @param null $identifierName
      * @param null $connectionName
