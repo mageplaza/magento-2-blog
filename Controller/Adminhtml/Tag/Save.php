@@ -118,10 +118,10 @@ class Save extends Tag
 
             $tag->load($tag->getId());
             $tag->addData([
-                'level'     => '1',
+                'level'     => 1,
                 'entity_id' => $tag->getId(),
                 'is_active' => $tag->getEnabled(),
-                'parent'    => '0'
+                'parent'    => 0
             ]);
 
             // to obtain truncated category name

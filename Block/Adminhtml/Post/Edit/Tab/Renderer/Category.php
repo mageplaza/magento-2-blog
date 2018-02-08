@@ -191,7 +191,7 @@ class Category extends Multiselect
                                 "component": "uiComponent",
                                 "children": {
                                     "blog_select_category": {
-                                        "component": "Magento_Catalog/js/components/new-category",
+                                        "component": "Mageplaza_Blog/js/components/new-category",
                                         "config": {
                                             "filterOptions": true,
                                             "disableLabel": true,

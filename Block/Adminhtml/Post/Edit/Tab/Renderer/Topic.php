@@ -124,14 +124,11 @@ class Topic extends Multiselect
     {
         /* @var $collection \Mageplaza\Blog\Model\ResourceModel\Topic\Collection */
         $collection = $this->collectionFactory->create();
-        $topicCount = 0;
         $topicById = [];
         foreach ($collection as $topic) {
-
-            $topicCount++;
-            $topicById[$topicCount]['value'] = $topic->getId();
-            $topicById[$topicCount]['is_active'] = 1;
-            $topicById[$topicCount]['label'] = $topic->getName();
+            $topicById[$topic->getId()]['value'] = $topic->getId();
+            $topicById[$topic->getId()]['is_active'] = 1;
+            $topicById[$topic->getId()]['label'] = $topic->getName();
 
         }
 
@@ -183,7 +180,7 @@ class Topic extends Multiselect
                                 "component": "uiComponent",
                                 "children": {
                                     "blog_select_topic": {
-                                        "component": "Magento_Catalog/js/components/new-category",
+                                        "component": "Mageplaza_Blog/js/components/new-category",
                                         "config": {
                                             "filterOptions": true,
                                             "disableLabel": true,

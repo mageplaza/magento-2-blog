@@ -118,10 +118,10 @@ class Save extends Topic
 
             $topic->load($topic->getId());
             $topic->addData([
-                'level'     => '1',
+                'level'     => 1,
                 'entity_id' => $topic->getId(),
                 'is_active' => $topic->getEnabled(),
-                'parent'    => '0'
+                'parent'    => 0
             ]);
 
             // to obtain truncated category name

@@ -124,14 +124,11 @@ class Tag extends Multiselect
     {
         /* @var $collection \Mageplaza\Blog\Model\ResourceModel\Tag\Collection */
         $collection = $this->collectionFactory->create();
-        $tagCount = 0;
         $tagById = [];
         foreach ($collection as $tag) {
-
-            $tagCount++;
-            $tagById[$tagCount]['value'] = $tag->getId();
-            $tagById[$tagCount]['is_active'] = 1;
-            $tagById[$tagCount]['label'] = $tag->getName();
+            $tagById[$tag->getId()]['value'] = $tag->getId();
+            $tagById[$tag->getId()]['is_active'] = 1;
+            $tagById[$tag->getId()]['label'] = $tag->getName();
 
         }
 
@@ -183,7 +180,7 @@ class Tag extends Multiselect
                                 "component": "uiComponent",
                                 "children": {
                                     "blog_select_tag": {
-                                        "component": "Magento_Catalog/js/components/new-category",
+                                        "component": "Mageplaza_Blog/js/components/new-category",
                                         "config": {
                                             "filterOptions": true,
                                             "disableLabel": true,

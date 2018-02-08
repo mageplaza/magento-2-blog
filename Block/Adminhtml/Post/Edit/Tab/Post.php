@@ -203,16 +203,6 @@ class Post extends Generic implements TabInterface
             ]
         );
 
-        $fieldset->addField('topics_ids', '\Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic', [
-                'name' => 'topics_ids',
-                'label' => __('Topics'),
-                'title' => __('Topics'),
-            ]
-        );
-        if (!$post->getTopicsIds()) {
-            $post->setTopicsIds($post->getTopicIds());
-        }
-
         $fieldset->addField('categories_ids', '\Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category', [
                 'name' => 'categories_ids',
                 'label' => __('Categories'),
@@ -221,6 +211,16 @@ class Post extends Generic implements TabInterface
         );
         if (!$post->getCategoriesIds()) {
             $post->setCategoriesIds($post->getCategoryIds());
+        }
+
+        $fieldset->addField('topics_ids', '\Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic', [
+                'name' => 'topics_ids',
+                'label' => __('Topics'),
+                'title' => __('Topics'),
+            ]
+        );
+        if (!$post->getTopicsIds()) {
+            $post->setTopicsIds($post->getTopicIds());
         }
 
         $fieldset->addField('tags_ids', '\Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag', [
@@ -259,34 +259,40 @@ class Post extends Generic implements TabInterface
             )
         );
 
-        $fieldset->addField('url_key', 'text', [
+        $seoFieldset = $form->addFieldset('seo_fieldset', [
+                'legend' => __('Search Engine Optimization'),
+                'class' => 'fieldset-wide'
+            ]
+        );
+
+        $seoFieldset->addField('url_key', 'text', [
                 'name' => 'url_key',
                 'label' => __('URL Key'),
                 'title' => __('URL Key')
             ]
         );
 
-        $fieldset->addField('meta_title', 'text', [
+        $seoFieldset->addField('meta_title', 'text', [
                 'name' => 'meta_title',
                 'label' => __('Meta Title'),
                 'title' => __('Meta Title')
             ]
         );
 
-        $fieldset->addField('meta_description', 'textarea', [
+        $seoFieldset->addField('meta_description', 'textarea', [
                 'name' => 'meta_description',
                 'label' => __('Meta Description'),
                 'title' => __('Meta Description')
             ]
         );
-        $fieldset->addField('meta_keywords', 'textarea', [
+        $seoFieldset->addField('meta_keywords', 'textarea', [
                 'name' => 'meta_keywords',
                 'label' => __('Meta Keywords'),
                 'title' => __('Meta Keywords')
             ]
         );
 
-        $fieldset->addField('meta_robots', 'select', [
+        $seoFieldset->addField('meta_robots', 'select', [
                 'name' => 'meta_robots',
                 'label' => __('Meta Robots'),
                 'title' => __('Meta Robots'),

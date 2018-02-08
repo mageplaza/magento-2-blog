@@ -66,7 +66,6 @@ class UpgradeData implements UpgradeDataInterface
         $installer->startSetup();
 
         if (version_compare($context->getVersion(), '2.4.4', '<')) {
-
             $commentIds = $this->comment->create()->getCollection()->getAllIds();
             $commentIds = implode(',', $commentIds);
             if ($commentIds) {
@@ -77,8 +76,9 @@ class UpgradeData implements UpgradeDataInterface
                 ];
                 $setup->getConnection()->update($setup->getTable('mageplaza_blog_comment'), $sampleTemplates, 'comment_id IN (' . $commentIds . ')');
             }
-            $installer->endSetup();
         }
+
+        $installer->endSetup();
     }
 
 }
