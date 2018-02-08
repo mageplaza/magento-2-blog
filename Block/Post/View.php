@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -206,13 +206,12 @@ class View extends \Mageplaza\Blog\Block\Listpost
      */
     public function getCommentLikes($cmtId)
     {
-        $likes = $this->likeFactory->create()->getCollection()
-            ->addFieldToFilter('comment_id', $cmtId)->getSize();
-        if ($likes) {
-            return $likes;
-        }
+        $likes = $this->likeFactory->create()
+            ->getCollection()
+            ->addFieldToFilter('comment_id', $cmtId)
+            ->getSize();
 
-        return '';
+        return $likes ?: '';
     }
 
     /**
@@ -231,8 +230,8 @@ class View extends \Mageplaza\Blog\Block\Listpost
                 }
             }
         }
-        return false;
 
+        return false;
     }
 
     /**
@@ -317,13 +316,13 @@ class View extends \Mageplaza\Blog\Block\Listpost
     {
         $tagCollection = $post->getSelectedTagsCollection();
         $result = '';
-        if (!empty($tagCollection)) :
+        if (!empty($tagCollection)) {
             $listTags = [];
             foreach ($tagCollection as $tag) {
                 $listTags[] = '<a class="mp-info" href="' . $this->getTagUrl($tag) . '">' . $tag->getName() . '</a>';
             }
             $result = implode(', ', $listTags);
-        endif;
+        }
 
         return $result;
     }
@@ -364,7 +363,6 @@ class View extends \Mageplaza\Blog\Block\Listpost
                 ]
             );
         }
-
     }
 
     /**
@@ -375,12 +373,11 @@ class View extends \Mageplaza\Blog\Block\Listpost
     {
         $blogTitle = parent::getBlogTitle($meta);
         $post = $this->getBlogObject();
-
         if (!$post) {
             return $blogTitle;
         }
-        if ($meta) {
 
+        if ($meta) {
             if ($post->getMetaTitle()) {
                 array_push($blogTitle, $post->getMetaTitle());
             } else {

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -95,8 +95,9 @@ class Tag extends AbstractDb
     /**
      * Retrieves Tag Name from DB by passed id.
      *
-     * @param string $id
-     * @return string|bool
+     * @param $id
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getTagNameById($id)
     {

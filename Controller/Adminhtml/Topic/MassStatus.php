@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -67,9 +67,8 @@ class MassStatus extends Action
     }
 
     /**
-     * execute action
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return $this|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @throws LocalizedException
      */
     public function execute()
     {

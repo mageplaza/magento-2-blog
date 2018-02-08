@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -75,7 +75,6 @@ class PortoTopmenu
     )
     {
         if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
-
             $categories->add(
                 new Node(
                     $this->getMenuAsArray(),

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -34,7 +34,6 @@ abstract class Comment extends Action
 {
     /** Authorization level of a basic admin session */
     const ADMIN_RESOURCE = 'Mageplaza_Blog::comment';
-
 
     /**
      * @var \Mageplaza\Blog\Model\CommentFactory
@@ -60,7 +59,7 @@ abstract class Comment extends Action
         Context $context
     )
     {
-        $this->commentFactory  = $commentFactory;
+        $this->commentFactory = $commentFactory;
         $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);
@@ -86,7 +85,7 @@ abstract class Comment extends Action
             }
         }
 
-        if($register){
+        if ($register) {
             $this->coreRegistry->register('mageplaza_blog_comment', $comment);
         }
 

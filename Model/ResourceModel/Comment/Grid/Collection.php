@@ -15,46 +15,20 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 namespace Mageplaza\Blog\Model\ResourceModel\Comment\Grid;
 
-use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
-use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
-use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
-use Psr\Log\LoggerInterface as Logger;
 
+/**
+ * Class Collection
+ * @package Mageplaza\Blog\Model\ResourceModel\Comment\Grid
+ */
 class Collection extends SearchResult
 {
-    /**
-     * Collection constructor.
-     * @param EntityFactory $entityFactory
-     * @param Logger $logger
-     * @param FetchStrategy $fetchStrategy
-     * @param EventManager $eventManager
-     * @param null|\Zend_Db_Adapter_Abstract $mainTable
-     * @param null $resourceModel
-     * @param null $identifierName
-     * @param null $connectionName
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function __construct(
-        EntityFactory $entityFactory,
-        Logger $logger,
-        FetchStrategy $fetchStrategy,
-        EventManager $eventManager,
-        $mainTable,
-        $resourceModel = null,
-        $identifierName = null,
-        $connectionName = null
-    )
-    {
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel, $identifierName, $connectionName);
-    }
-
     /**
      * @return $this
      */

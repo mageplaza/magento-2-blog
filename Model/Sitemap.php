@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -50,7 +50,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
         parent::_construct();
 
         $this->blogDataHelper = ObjectManager::getInstance()->get(Data::class);
-        $this->router         = $this->blogDataHelper->getBlogConfig('general/url_prefix');
+        $this->router = $this->blogDataHelper->getBlogConfig('general/url_prefix');
     }
 
     /**
@@ -68,16 +68,16 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
                 $images = null;
                 if ($item->getImage()) :
                     $imagesCollection[] = new DataObject([
-                            'url'     => $item->getImage(),
+                            'url' => $item->getImage(),
                             'caption' => null,
                         ]
                     );
-                    $images             = new DataObject(['collection' => $imagesCollection]);
+                    $images = new DataObject(['collection' => $imagesCollection]);
                 endif;
                 $postSiteMapCollection[$item->getId()] = new DataObject([
-                    'id'         => $item->getId(),
-                    'url'        => $this->router . '/post/' . $item->getUrlKey(),
-                    'images'     => $images,
+                    'id' => $item->getId(),
+                    'url' => $this->router . '/post/' . $item->getUrlKey(),
+                    'images' => $images,
                     'updated_at' => $item->getUpdatedAt(),
                 ]);
             }
@@ -91,13 +91,13 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogCategoriesSiteMapCollection()
     {
-        $categoryCollection        = $this->blogDataHelper->categoryFactory->create()->getCollection();
+        $categoryCollection = $this->blogDataHelper->categoryFactory->create()->getCollection();
         $categorySiteMapCollection = [];
         foreach ($categoryCollection as $item) {
             if (!is_null($item->getEnabled())) {
                 $categorySiteMapCollection[$item->getId()] = new DataObject([
-                    'id'         => $item->getId(),
-                    'url'        => $this->router . '/category/' . $item->getUrlKey(),
+                    'id' => $item->getId(),
+                    'url' => $this->router . '/category/' . $item->getUrlKey(),
                     'updated_at' => $item->getUpdatedAt(),
                 ]);
             }
@@ -111,13 +111,13 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogTagsSiteMapCollection()
     {
-        $tagCollection        = $this->blogDataHelper->tagFactory->create()->getCollection();
+        $tagCollection = $this->blogDataHelper->tagFactory->create()->getCollection();
         $tagSiteMapCollection = [];
         foreach ($tagCollection as $item) {
             if (!is_null($item->getEnabled())) {
                 $tagSiteMapCollection[$item->getId()] = new DataObject([
-                    'id'         => $item->getId(),
-                    'url'        => $this->router . '/tag/' . $item->getUrlKey(),
+                    'id' => $item->getId(),
+                    'url' => $this->router . '/tag/' . $item->getUrlKey(),
                     'updated_at' => $item->getUpdatedAt(),
                 ]);
             }
@@ -131,13 +131,13 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogTopicsSiteMapCollection()
     {
-        $topicCollection        = $this->blogDataHelper->topicFactory->create()->getCollection();
+        $topicCollection = $this->blogDataHelper->topicFactory->create()->getCollection();
         $topicSiteMapCollection = [];
         foreach ($topicCollection as $item) {
             if (!is_null($item->getEnabled())) {
                 $topicSiteMapCollection[$item->getId()] = new DataObject([
-                    'id'         => $item->getId(),
-                    'url'        => $this->router . '/topic/' . $item->getUrlKey(),
+                    'id' => $item->getId(),
+                    'url' => $this->router . '/topic/' . $item->getUrlKey(),
                     'updated_at' => $item->getUpdatedAt(),
                 ]);
             }

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -76,6 +76,7 @@ class View extends Action
     {
         $id = $this->getRequest()->getParam('id');
         $category = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_CATEGORY)->create()->load($id);
+
         return ($category->getEnabled()) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
     }
 }

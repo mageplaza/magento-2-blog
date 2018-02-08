@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -65,6 +65,9 @@ class Like extends AbstractModel
         $this->_init('Mageplaza\Blog\Model\ResourceModel\Like');
     }
 
+    /**
+     * @return array
+     */
     public function getIdentities()
     {
         return [self::CACHE_TAG . '_' . $this->getId()];

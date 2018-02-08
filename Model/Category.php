@@ -15,13 +15,14 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 namespace Mageplaza\Blog\Model;
 
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -131,7 +132,7 @@ class Category extends AbstractModel
         array $data = []
     )
     {
-        $this->categoryFactory       = $categoryFactory;
+        $this->categoryFactory = $categoryFactory;
         $this->postCollectionFactory = $postCollectionFactory;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -164,9 +165,9 @@ class Category extends AbstractModel
      */
     public function getDefaultValues()
     {
-        $values              = [];
+        $values = [];
         $values['store_ids'] = '1';
-        $values['enabled']   = '1';
+        $values['enabled'] = '1';
 
         return $values;
     }
@@ -203,7 +204,7 @@ class Category extends AbstractModel
      * @param $parentId
      * @param $afterCategoryId
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @throws \Exception
      */
     public function move($parentId, $afterCategoryId)
@@ -211,32 +212,31 @@ class Category extends AbstractModel
         try {
             $parent = $this->categoryFactory->create()->load($parentId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('Sorry, but we can\'t move the Blog Category because we can\'t find the new parent Blog Category you selected.'),
                 $e
             );
         }
 
         if (!$this->getId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('Sorry, but we can\'t move the Blog Category because we can\'t find the new parent Blog Category you selected.')
             );
         } elseif ($parent->getId() == $this->getId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('We can\'t perform this Blog Category move operation because the parent Blog Category matches the child Blog Category.')
             );
         }
 
         $this->setMovedCategoryId($this->getId());
-        $oldParentId  = $this->getParentId();
-        $oldParentIds = $this->getParentIds();
+        $oldParentId = $this->getParentId();
 
         $eventParams = [
             $this->_eventObject => $this,
-            'parent'            => $parent,
-            'category_id'       => $this->getId(),
-            'prev_parent_id'    => $oldParentId,
-            'parent_id'         => $parentId,
+            'parent' => $parent,
+            'category_id' => $this->getId(),
+            'prev_parent_id' => $oldParentId,
+            'parent_id' => $parentId,
         ];
 
         $this->_getResource()->beginTransaction();

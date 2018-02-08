@@ -14,7 +14,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -25,7 +25,6 @@ define([
         var childCategory = $(".mp-blog-expand-tree-3");
 
         parentCategory.click(function () {
-
             if ($(this).hasClass("mp-blog-expand-tree-2")) {
                 $(this).parent().find(".category-level3").slideDown("fast");
                 $(this).removeClass("mp-blog-expand-tree-2 fa fa-plus-square-o")
@@ -42,7 +41,6 @@ define([
         });
 
         childCategory.click(function () {
-
             if ($(this).hasClass("mp-blog-expand-tree-3")) {
                 $(this).parent().find(".category-level4").slideDown("fast");
                 $(this).removeClass("mp-blog-expand-tree-3 fa fa-plus-square-o")
@@ -52,7 +50,6 @@ define([
                 $(this).removeClass("mp-blog-narrow-tree-3 fa fa-minus-square-o")
                     .addClass("mp-blog-expand-tree-3 fa fa-plus-square-o");
             }
-
         });
     }
 );

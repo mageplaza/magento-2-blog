@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -53,7 +53,7 @@ abstract class Author extends \Magento\Backend\App\Action
     )
     {
         $this->authorFactory = $authorFactory;
-        $this->coreRegistry  = $coreRegistry;
+        $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);
     }
@@ -63,7 +63,7 @@ abstract class Author extends \Magento\Backend\App\Action
      */
     public function initAuthor()
     {
-        $user   = $this->_auth->getUser();
+        $user = $this->_auth->getUser();
         $userId = $user->getId();
 
         /** @var \Mageplaza\Blog\Model\Author $author */

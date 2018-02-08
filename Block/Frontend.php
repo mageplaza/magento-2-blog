@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -29,7 +29,6 @@ use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\CommentFactory;
-use Mageplaza\Blog\Model\Config\Source\DisplayType;
 use Mageplaza\Blog\Model\LikeFactory;
 
 /**
@@ -142,7 +141,6 @@ class Frontend extends Template
         $url = $this->helperData->getUrl($this->helperData->getRoute() . '/' . $urlKey);
 
         return rtrim($url, '/') . '.xml';
-
     }
 
     /**

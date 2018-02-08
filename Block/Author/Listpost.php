@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -55,7 +55,6 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     {
         if (!$this->_author) {
             $id = $this->getRequest()->getParam('id');
-
             if ($id) {
                 $author = $this->helperData->getObjectByParam($id, null, Data::TYPE_AUTHOR);
                 if ($author && $author->getId()) {
@@ -94,12 +93,11 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     {
         $blogTitle = parent::getBlogTitle($meta);
         $author = $this->getAuthor();
-
         if (!$author) {
             return $blogTitle;
         }
-        if ($meta) {
 
+        if ($meta) {
             array_push($blogTitle, ucfirst($author->getName()));
             return $blogTitle;
         }

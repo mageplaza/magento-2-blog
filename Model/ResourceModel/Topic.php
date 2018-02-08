@@ -15,12 +15,15 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 namespace Mageplaza\Blog\Model\ResourceModel;
+
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Helper\Data;
@@ -29,7 +32,7 @@ use Mageplaza\Blog\Helper\Data;
  * Class Topic
  * @package Mageplaza\Blog\Model\ResourceModel
  */
-class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Topic extends AbstractDb
 {
     /**
      * Date model
@@ -71,8 +74,8 @@ class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         Data $helperData
     )
     {
-        $this->helperData   = $helperData;
-        $this->date         = $date;
+        $this->helperData = $helperData;
+        $this->date = $date;
         $this->eventManager = $eventManager;
 
         parent::__construct($context);
@@ -93,16 +96,17 @@ class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Retrieves Topic Name from DB by passed id.
      *
-     * @param string $id
-     * @return string|bool
+     * @param $id
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getTopicNameById($id)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()
+        $select = $adapter->select()
             ->from($this->getMainTable(), 'name')
             ->where('topic_id = :topic_id');
-        $binds   = ['topic_id' => (int)$id];
+        $binds = ['topic_id' => (int)$id];
 
         return $adapter->fetchOne($select, $binds);
     }
@@ -110,7 +114,7 @@ class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @inheritdoc
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         $object->setUpdatedAt($this->date->date());
         if ($object->isObjectNew()) {
@@ -131,10 +135,10 @@ class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * after save callback
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Mageplaza\Blog\Model\Topic $object
+     * @param AbstractModel|\Mageplaza\Blog\Model\Topic $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         $this->savePostRelation($object);
 
@@ -154,7 +158,7 @@ class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->where(
                 'topic_id = :topic_id'
             );
-        $bind   = ['topic_id' => (int)$topic->getId()];
+        $bind = ['topic_id' => (int)$topic->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);
     }
@@ -166,22 +170,22 @@ class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function savePostRelation(\Mageplaza\Blog\Model\Topic $topic)
     {
         $topic->setIsChangedPostList(false);
-        $id    = $topic->getId();
+        $id = $topic->getId();
         $posts = $topic->getPostsData();
         if ($posts === null) {
             return $this;
         }
         $oldPosts = $topic->getPostsPosition();
-        $insert   = array_diff_key($posts, $oldPosts);
-        $delete   = array_diff_key($oldPosts, $posts);
-        $update   = array_intersect_key($posts, $oldPosts);
-        $_update  = [];
+        $insert = array_diff_key($posts, $oldPosts);
+        $delete = array_diff_key($oldPosts, $posts);
+        $update = array_intersect_key($posts, $oldPosts);
+        $_update = [];
         foreach ($update as $key => $settings) {
             if (isset($oldPosts[$key]) && $oldPosts[$key] != $settings['position']) {
                 $_update[$key] = $settings;
             }
         }
-        $update  = $_update;
+        $update = $_update;
         $adapter = $this->getConnection();
         if (!empty($delete)) {
             $condition = ['post_id IN(?)' => array_keys($delete), 'topic_id=?' => $id];
@@ -192,7 +196,7 @@ class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             foreach ($insert as $postId => $position) {
                 $data[] = [
                     'topic_id' => (int)$id,
-                    'post_id'  => (int)$postId,
+                    'post_id' => (int)$postId,
                     'position' => (int)$position['position']
                 ];
             }
@@ -201,7 +205,7 @@ class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if (!empty($update)) {
             foreach ($update as $postId => $position) {
                 $where = ['topic_id = ?' => (int)$id, 'post_id = ?' => (int)$postId];
-                $bind  = ['position' => (int)$position['position']];
+                $bind = ['position' => (int)$position['position']];
                 $adapter->update($this->topicPostTable, $bind, $where);
             }
         }

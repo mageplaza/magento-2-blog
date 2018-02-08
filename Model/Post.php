@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
@@ -90,7 +91,7 @@ use Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory as TopicCollectio
  * @method array getTopicsIds()
  * @method Post setTopicsIds(array $topicIds)
  */
-class Post extends \Magento\Framework\Model\AbstractModel
+class Post extends AbstractModel
 {
     /**
      * Cache tag
@@ -160,7 +161,6 @@ class Post extends \Magento\Framework\Model\AbstractModel
      * @type \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
     public $postCollectionFactory;
-
 
     /**
      * Related Post Collection
@@ -240,14 +240,14 @@ class Post extends \Magento\Framework\Model\AbstractModel
         array $data = []
     )
     {
-        $this->tagCollectionFactory      = $tagCollectionFactory;
-        $this->topicCollectionFactory    = $topicCollectionFactory;
+        $this->tagCollectionFactory = $tagCollectionFactory;
+        $this->topicCollectionFactory = $topicCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
-        $this->postCollectionFactory     = $postCollectionFactory;
-        $this->productCollectionFactory  = $productCollectionFactory;
-        $this->helperData                = $helperData;
-        $this->dateTime                  = $dateTime;
-        $this->trafficFactory            = $trafficFactory;
+        $this->postCollectionFactory = $postCollectionFactory;
+        $this->productCollectionFactory = $productCollectionFactory;
+        $this->helperData = $helperData;
+        $this->dateTime = $dateTime;
+        $this->trafficFactory = $trafficFactory;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -272,7 +272,7 @@ class Post extends \Magento\Framework\Model\AbstractModel
                 ->load($this->getId(), 'post_id');
             if (!$trafficModel->getId()) {
                 $trafficModel->setData([
-                    'post_id'      => $this->getId(),
+                    'post_id' => $this->getId(),
                     'numbers_view' => 0
                 ])->save();
             }
@@ -322,11 +322,11 @@ class Post extends \Magento\Framework\Model\AbstractModel
      */
     public function getDefaultValues()
     {
-        $values                  = [];
-        $values['in_rss']        = '1';
-        $values['enabled']       = '1';
+        $values = [];
+        $values['in_rss'] = '1';
+        $values['enabled'] = '1';
         $values['allow_comment'] = '1';
-        $values['store_ids']     = '1';
+        $values['store_ids'] = '1';
 
         return $values;
     }

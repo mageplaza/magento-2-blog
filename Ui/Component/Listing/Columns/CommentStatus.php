@@ -15,14 +15,12 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_GiftCard
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 namespace Mageplaza\Blog\Ui\Component\Listing\Columns;
 
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
@@ -31,23 +29,6 @@ use Magento\Ui\Component\Listing\Columns\Column;
  */
 class CommentStatus extends Column
 {
-    /**
-     * CommentStatus constructor.
-     * @param ContextInterface $context
-     * @param UiComponentFactory $uiComponentFactory
-     * @param array $components
-     * @param array $data
-     */
-    public function __construct(
-        ContextInterface $context,
-        UiComponentFactory $uiComponentFactory,
-        array $components = [],
-        array $data = []
-    )
-    {
-        parent::__construct($context, $uiComponentFactory, $components, $data);
-    }
-
     /**
      * Prepare Data Source
      *

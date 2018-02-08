@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -25,8 +25,6 @@ use Magento\Framework\App\ActionFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\RouterInterface;
 use Magento\Framework\Url;
-use Magento\Payment\Gateway\Http\Client\Zend;
-use Magento\Webapi\Controller\Rest\Router\Route;
 use Mageplaza\Blog\Helper\Data;
 
 /**
@@ -35,7 +33,6 @@ use Mageplaza\Blog\Helper\Data;
  */
 class Router implements RouterInterface
 {
-
     const URL_SUFFIX_RSS_XML = ".xml";
 
     /**
@@ -63,7 +60,7 @@ class Router implements RouterInterface
     )
     {
         $this->actionFactory = $actionFactory;
-        $this->helper        = $helper;
+        $this->helper = $helper;
     }
 
     /**
@@ -96,7 +93,7 @@ class Router implements RouterInterface
         }
 
         $identifier = trim($request->getPathInfo(), '/');
-        $urlSuffix  = $this->helper->getUrlSuffix();
+        $urlSuffix = $this->helper->getUrlSuffix();
 
         if ($length = strlen($urlSuffix)) {
 
@@ -174,7 +171,7 @@ class Router implements RouterInterface
                 $post = $this->helper->getObjectByParam($controller, 'url_key');
                 $request->setParam('id', $post->getId());
                 $controller = 'post';
-                $action     = 'view';
+                $action = 'view';
         }
 
         $request->setControllerName($controller)
@@ -191,15 +188,11 @@ class Router implements RouterInterface
      */
     public function isRss($identifier)
     {
-
         $routePath = explode('/', $identifier);
-        $routePath    = array_pop($routePath);
+        $routePath = array_pop($routePath);
         $routePath = explode('.', $routePath);
-        $action =array_shift($routePath);
-        if ($action == "rss") {
-            return true;
-        } else {
-            return false;
-        }
+        $action = array_shift($routePath);
+
+        return ($action == "rss");
     }
 }

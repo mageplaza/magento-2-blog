@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -165,8 +165,8 @@ class Listpost extends Frontend
         $pageTitle = $this->helperData->getConfigGeneral('name') ?: __('Blog');
         if ($meta) {
             $title = $this->helperData->getSeoConfig('meta_title') ?: $pageTitle;
-            return [$title];
 
+            return [$title];
         }
 
         return $pageTitle;

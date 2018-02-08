@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -80,8 +80,8 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
         $blogTitle = parent::getBlogTitle($meta);
 
         if ($meta) {
-
             array_push($blogTitle, $this->getMonthLabel());
+
             return $blogTitle;
         }
 

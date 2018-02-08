@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -90,9 +90,7 @@ class Save extends Topic
      */
     public function execute()
     {
-
         if ($this->getRequest()->getPost('return_session_messages_only')) {
-
             $topic                     = $this->initTopic();
             $topicPostData              = $this->getRequest()->getPostValue();
             $topicPostData['store_ids'] = 0;
@@ -134,7 +132,6 @@ class Save extends Topic
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
 
-
             return $resultJson->setData(
                 [
                     'messages' => $block->getGroupedHtml(),
@@ -142,15 +139,12 @@ class Save extends Topic
                     'category' => $topic->toArray(),
                 ]
             );
-
         }
-
 
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data = $this->getRequest()->getPost('topic')) {
             /** @var \Mageplaza\Blog\Model\Topic $topic */
             $topic = $this->initTopic();
-
             $topic->setData($data);
 
             if ($posts = $this->getRequest()->getPost('posts', false)) {
