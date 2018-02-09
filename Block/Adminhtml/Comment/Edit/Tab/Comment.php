@@ -109,22 +109,12 @@ class Comment extends Generic implements TabInterface
         }
 
         $post = $this->_postFactory->create()->load($comment->getPostId());
-        $postText = __(
-            '<a href="%1" onclick="this.target=\'blank\'">%2</a>',
-            $this->getUrl('mageplaza_blog/post/edit', ['id' => $comment->getPostId()]),
-            $this->escapeHtml($post->getName())
-        );
+        $postText = '<a href="' . $this->getUrl('mageplaza_blog/post/edit', ['id' => $comment->getPostId()]) . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($post->getName()) . '</a>';
         $fieldset->addField('post_name', 'note', ['text' => $postText, 'label' => __('Post'), 'name' => 'post_name']);
 
         $customer = $this->_customerRepository->getById($comment->getEntityId());
 
-        $customerText = __(
-            '<a href="%1" onclick="this.target=\'blank\'">%2 %3</a> <a href="mailto:%4">(%4)</a>',
-            $this->getUrl('customer/index/edit', ['id' => $customer->getId(), 'active_tab' => 'review']),
-            $this->escapeHtml($customer->getFirstname()),
-            $this->escapeHtml($customer->getLastname()),
-            $this->escapeHtml($customer->getEmail())
-        );
+        $customerText = '<a href="' . $this->getUrl('customer/index/edit', ['id' => $customer->getId(), 'active_tab' => 'review']) . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($customer->getFirstname() . ' ' . $customer->getLastname()) . '</a> <a href="mailto:%4">(' . $customer->getEmail() . ')</a>';
 
         $fieldset->addField('customer_name', 'note', ['text' => $customerText, 'label' => __('Customer'), 'name' => 'customer_name']);
 
@@ -146,11 +136,7 @@ class Comment extends Generic implements TabInterface
         $post = $this->_postFactory->create()->load($comment->getPostId());
 
 
-        $viewText = __(
-            '<a href="%1" onclick="this.target=\'blank\'">%2</a>',
-            $post->getUrl() . '/#cmt-id=' . $comment->getId(),
-            'View'
-        );
+        $viewText = '<a href="' . $post->getUrl() . '#cmt-id-' . $comment->getId() . '" onclick="this.target=\'blank\'">View</a>';
 
         $fieldset->addField('view_front', 'note', ['text' => $viewText, 'label' => __('View On Front End'), 'name' => 'view_front']);
 

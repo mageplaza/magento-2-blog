@@ -269,7 +269,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
                     . $userCmt->getLastName();
                 $countLikes = $this->getCommentLikes($comment['comment_id']);
                 $isLiked = ($this->isLiked($comment['comment_id'])) ? "mpblog-liked" : "mpblog-like";
-                $this->commentTree .= '<li id="cmt-id=' . $comment['comment_id'] . '" class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12'
+                $this->commentTree .= '<li id="cmt-id-' . $comment['comment_id'] . '" class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12'
                     . ($isReply ? ' reply-row' : '') . '" data-cmt-id="'
                     . $comment['comment_id'] . '" ' . ($replyId
                         ? 'data-reply-id="' . $replyId . '"' : '') . '>
