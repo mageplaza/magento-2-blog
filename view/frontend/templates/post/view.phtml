@@ -36,6 +36,7 @@ $modifier = $helper->getAuthorByPost($_post, true);
 $modifierName = $modifier !== null ? $modifier->getName() : '';
 $isLogged = ($block->isLoggedIn()) ? 'Yes' : 'No';
 $color = $helper->getBlogConfig('general/font_color');
+$loginWarning = '<div class="message error message-error row" style="margin-top: 5px;">You are not logged in. Please <a href="' . $block->getLoginUrl() . '"> Login </a> or <a href="' . $block->getRegisterUrl() . '"> Signup </a> to comment.</div>';
 ?>
 <div class="mp-blog-view">
     <div class="mp-blog-rss">
@@ -243,8 +244,8 @@ $color = $helper->getBlogConfig('general/font_color');
                         like = '<?php echo __('Like') ?>',
                         reply = '<?php echo __('Reply') ?>',
                         isLogged = '<?php echo $isLogged ?>',
-                        likedColor = '<?php echo $color;?>';
-
+                        likedColor = '<?php echo $color;?>',
+                        loginWarning = '<?php echo $loginWarning;?>';
                     require(['comment']);
                 </script>
             <?php endif; ?>

@@ -97,7 +97,7 @@ require([
                     $(this).attr('click', '0');
 
                 } else {
-                    cmtRowContainer.append('<div class="message error message-error row" style="margin-top: 5px;">You are not Login.</div>');
+                    cmtRowContainer.append(loginWarning);
                     jQuery.fn.fadeOutAndRemove = function (speed) {
                         $(this).fadeOut(speed, function () {
                             $(this).remove();
@@ -140,7 +140,7 @@ require([
                         submitReply(input, cmtId, cmtRowContainer);
                     }
                 } else {
-                    cmtRowContainer.append('<div class="message error message-error row" style="margin-top: 5px;">You are not Login.</div>');
+                    cmtRowContainer.append(loginWarning);
                     jQuery.fn.fadeOutAndRemove = function (speed) {
                         $(this).fadeOut(speed, function () {
                             $(this).remove();

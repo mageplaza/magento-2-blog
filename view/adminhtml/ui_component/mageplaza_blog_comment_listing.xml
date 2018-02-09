@@ -27,14 +27,11 @@
             <item name="deps" xsi:type="string">mageplaza_blog_comment_listing.mageplaza_blog_comment_listing_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">mageplaza_blog_comment_columns</item>
-        <!--<item name="buttons" xsi:type="array">-->
-            <!--<item name="add" xsi:type="array">-->
-                <!--<item name="name" xsi:type="string">add</item>-->
-                <!--<item name="label" xsi:type="string" translate="true">New Comment</item>-->
-                <!--<item name="class" xsi:type="string">primary</item>-->
-                <!--<item name="url" xsi:type="string">*/*/new</item>-->
-            <!--</item>-->
-        <!--</item>-->
+        <item name="buttons" xsi:type="array">
+            <item name="add" xsi:type="array">
+                <item name="name" xsi:type="string">add</item>
+            </item>
+        </item>
     </argument>
     <dataSource name="mageplaza_blog_post_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
@@ -164,12 +161,14 @@
                 </item>
             </argument>
         </column>
-        <column name="status" class="Mageplaza\Blog\Ui\Component\Listing\Columns\CommentStatus">
+        <column name="status">
             <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Mageplaza\Blog\Model\Config\Source\Comments\Status</item>
                 <item name="config" xsi:type="array">
-                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="filter" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
-                    <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="dataType" xsi:type="string">select</item>
                 </item>
             </argument>
         </column>
@@ -189,18 +188,13 @@
                 </item>
             </argument>
         </column>
-        <column name="content">
+        <column name="content" class="Mageplaza\Blog\Ui\Component\Listing\Columns\CommentContent">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="label" xsi:type="string" translate="true">Content</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="editor" xsi:type="array">
-                        <item name="editorType" xsi:type="string">text</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="required-entry" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                    <item name="label" xsi:type="string" translate="true">Content</item>
                 </item>
             </argument>
         </column>

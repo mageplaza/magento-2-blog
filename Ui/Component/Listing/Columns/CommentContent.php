@@ -24,10 +24,10 @@ namespace Mageplaza\Blog\Ui\Component\Listing\Columns;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
- * Class PoolAvailable
- * @package Mageplaza\GiftCard\Ui\Component\Listing\Columns
+ * Class CommentContent
+ * @package Mageplaza\Blog\Ui\Component\Listing\Columns
  */
-class CommentStatus extends Column
+class CommentContent extends Column
 {
     /**
      * Prepare Data Source
@@ -37,20 +37,15 @@ class CommentStatus extends Column
      */
     public function prepareDataSource(array $dataSource)
     {
+        $limitContent = 150;
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
                 if (isset($item[$this->getData('name')])) {
-                    switch ($item['status']) {
-                        case 1:
-                            $item[$this->getData('name')] = '<span style="color: green">Approved</span>';
-                            break;
-                        case 2:
-                            $item[$this->getData('name')] = '<span style="color: red">Spam</span>';
-                            break;
-                        case 3:
-                            $item[$this->getData('name')] = '<span style="color:#ffd714">Pending</span>';
-                            break;
+                    $content = $item['content'];
+                    if (strlen($content) > $limitContent) {
+                        $content = mb_substr($content, 0, $limitContent, 'UTF-8') . '.....';
                     }
+                    $item[$this->getData('name')] = '<span>' . $content . '</span>';
                 }
             }
         }

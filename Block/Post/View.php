@@ -336,6 +336,14 @@ class View extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
+     * @return string
+     */
+    public function getRegisterUrl()
+    {
+        return $this->customerUrl->getRegisterUrl();
+    }
+
+    /**
      * @inheritdoc
      */
     protected function _prepareLayout()
