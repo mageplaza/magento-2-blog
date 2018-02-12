@@ -204,7 +204,7 @@ require([
 
     // display comment
     function displayComment(cmt, isReply) {
-        var cmtRow = '<li id="cmt-id-' + cmt.cmt_id + '" class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12 ' + (isReply ? ('reply-row') : '') + '" data-cmt-id="' + cmt.cmt_id + '"' + (isReply ? ('data-reply-id="' + cmt.reply_cmt + '"') : '') + '> <div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username">' + cmt.user_cmt + '</span> </div> <div class="cmt-row__cmt-content"> <p>' + cmt.cmt_text + '</p> </div> <div class="cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> <a class="interactions__btn-actions action btn-like-new mpblog-like" data-cmt-id="' + cmt.cmt_id + '">' + like + '</a> <a class="interactions__btn-actions action btn-reply-new" data-cmt-id="' + cmt.cmt_id + '">' + reply + '</a> <a class="interactions__btn-actions count-like" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> <span class="count-like__like-text"></span></a> </div> <div class="interactions__cmt-createdat"> <span>' + cmt.created_at + '</span> </div> </div> </li>';
+        var cmtRow = '<li id="cmt-id-' + cmt.cmt_id + '" class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12 ' + (isReply ? ('reply-row') : '') + '" data-cmt-id="' + cmt.cmt_id + '"' + (isReply ? ('data-reply-id="' + cmt.reply_cmt + '"') : '') + '> <div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username">' + cmt.user_cmt + '</span> </div> <div class="cmt-row__cmt-content"> <p>' + cmt.cmt_text + '</p> </div> <div class="cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> <a class="interactions__btn-actions action btn-like mpblog-like" data-cmt-id="' + cmt.cmt_id + '" click="1"><i class="fa fa-thumbs-up" aria-hidden="true" style="margin-right: 3px"></i><span class="count-like__like-text"></span></a> <a class="interactions__btn-actions action btn-reply" data-cmt-id="' + cmt.cmt_id + '">' + reply + '</a>  </div> <div class="interactions__cmt-createdat"> <span>' + cmt.created_at + '</span> </div> </div> </li>';
         if (isReply) {
             var replyCmtId = cmt.reply_cmt;
             var replyCmt = defaultCmt.find('.default-cmt__content__cmt-content__cmt-row');
@@ -216,14 +216,14 @@ require([
                         cmtRow = $('<ul class="default-cmt__content__cmt-content row">' + cmtRow + '</ul>');
                         cmtEl.append(cmtRow);
 
-                        likeComment(cmtRow.find('.btn-like-new'));
-                        showReply(cmtRow.find('.btn-reply-new'));
+                        likeComment(cmtRow.find('.btn-like'));
+                        showReply(cmtRow.find('.btn-reply'));
                     } else {
                         cmtRow = $(cmtRow);
                         replyList.append(cmtRow);
 
-                        likeComment(cmtRow.find('.btn-like-new'));
-                        showReply(cmtRow.find('.btn-reply-new'));
+                        likeComment(cmtRow.find('.btn-like'));
+                        showReply(cmtRow.find('.btn-reply'));
                     }
 
                     return false;
@@ -233,8 +233,8 @@ require([
             cmtRow = $(cmtRow);
             defaultCmt.append(cmtRow);
 
-            likeComment(cmtRow.find('.btn-like-new'));
-            showReply(cmtRow.find('.btn-reply-new'));
+            likeComment(cmtRow.find('.btn-like'));
+            showReply(cmtRow.find('.btn-reply'));
         }
     }
 });
