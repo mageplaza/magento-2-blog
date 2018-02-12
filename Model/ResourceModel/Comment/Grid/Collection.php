@@ -21,7 +21,11 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel\Comment\Grid;
 
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
+use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
+use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class Collection
@@ -29,6 +33,28 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
  */
 class Collection extends SearchResult
 {
+    /**
+     * Collection constructor.
+     * @param EntityFactory $entityFactory
+     * @param Logger $logger
+     * @param FetchStrategy $fetchStrategy
+     * @param EventManager $eventManager
+     * @param $mainTable
+     * @param $resourceModel
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function __construct(
+        EntityFactory $entityFactory,
+        Logger $logger,
+        FetchStrategy $fetchStrategy,
+        EventManager $eventManager,
+        $mainTable = 'mageplaza_blog_comment',
+        $resourceModel = '\Mageplaza\Blog\Model\ResourceModel\Comment'
+    )
+    {
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
+    }
+
     /**
      * @return $this
      */
@@ -42,11 +68,29 @@ class Collection extends SearchResult
     }
 
     /**
+     * @param array|string $field
+     * @param null $condition
+     * @return $this
+     */
+    public function addFieldToFilter($field, $condition = null)
+    {
+        if ($field == 'customer_name') {
+            return parent::addFieldToFilter(['firstname', 'lastname'], [$condition, $condition]);
+        } else if ($field == 'post_name') {
+            $field = 'mp.name';
+        } else if ($field == 'created_at') {
+            $field = 'main_table.created_at';
+        }
+
+        return parent::addFieldToFilter($field, $condition);
+    }
+
+    /**
      * @return $this
      */
     public function addPostName()
     {
-        $this->getSelect()->join(
+        $this->getSelect()->joinLeft(
             ['mp' => $this->getTable('mageplaza_blog_post')],
             "main_table.post_id = mp.post_id",
             ['post_name' => 'name']
@@ -59,11 +103,13 @@ class Collection extends SearchResult
      */
     public function addCustomerName()
     {
-        $this->getSelect()->join(
+        $this->getSelect()->joinLeft(
             ['ce' => $this->getTable('customer_entity')],
             "main_table.entity_id = ce.entity_id",
-            ["customer_name" => "CONCAT(`ce`.`firstname`,' ',`ce`.`lastname`)"]
-        );
+            ['firstname', 'lastname']
+        )->columns([
+            "customer_name" => new \Zend_Db_Expr("CONCAT(`ce`.`firstname`,' ',`ce`.`lastname`)")
+        ]);
 
         return $this;
     }

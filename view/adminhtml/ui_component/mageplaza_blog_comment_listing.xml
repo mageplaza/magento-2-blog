@@ -27,11 +27,6 @@
             <item name="deps" xsi:type="string">mageplaza_blog_comment_listing.mageplaza_blog_comment_listing_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">mageplaza_blog_comment_columns</item>
-        <item name="buttons" xsi:type="array">
-            <item name="add" xsi:type="array">
-                <item name="name" xsi:type="string">add</item>
-            </item>
-        </item>
     </argument>
     <dataSource name="mageplaza_blog_post_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
@@ -56,11 +51,6 @@
         </argument>
     </dataSource>
     <listingToolbar name="listing_top">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="sticky" xsi:type="boolean">true</item>
-            </item>
-        </argument>
         <bookmark name="bookmarks" />
         <columnsControls name="columns_controls" />
         <exportButton name="export_button" />
