@@ -35,7 +35,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Mageplaza_Blog::configuration" title="Better Blog"/>
+                            <resource id="Mageplaza_Blog::configuration" title="Mageplaza Better Blog"/>
                         </resource>
                     </resource>
                 </resource>
