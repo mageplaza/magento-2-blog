@@ -33,10 +33,6 @@ use Psr\Log\LoggerInterface as Logger;
  */
 class Collection extends SearchResult
 {
-    /**
-     * @var string
-     */
-    public $mainTable;
 
     /**
      * Collection constructor.
