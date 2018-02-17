@@ -33,13 +33,14 @@ use Psr\Log\LoggerInterface as Logger;
  */
 class Collection extends SearchResult
 {
+
     /**
      * Collection constructor.
      * @param EntityFactory $entityFactory
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
-     * @param $mainTable
+     * @param string $mainTable
      * @param $resourceModel
      * @throws \Magento\Framework\Exception\LocalizedException
      */
