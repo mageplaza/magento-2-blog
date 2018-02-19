@@ -576,7 +576,10 @@ Release first version
 
 ☞ [Magento One Step Checkout](https://github.com/magento-2/one-step-checkout)
 
-☞ [Magento 2 Blog on Github](https://github.com/mageplaza/magento-2-blog)
+☞ [Magento Blog on Github](https://github.com/mageplaza/magento-blog)
+
+☞ [Magento Blog](https://www.mageplaza.com/magento-blog/)
+
 
 ☞ [Magento 2 Social Login on Github](https://github.com/mageplaza/magento-2-social-login)
 
