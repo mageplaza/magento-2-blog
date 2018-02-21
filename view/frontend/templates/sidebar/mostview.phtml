@@ -88,17 +88,13 @@ $postsRecent = $block->getRecentPost();
 require([
     'jquery'
 ], function ($) {
-    $("#popular-tab").click(function () {
-        $("#tab-1").addClass('active');
-        $("#tab-2").removeClass('active');
-        $('#mostview').show();
-        $('#mostrecent').hide();
+    $("#tab-label-popular").click(function () {
+        $('#tab-content-popular').show();
+        $('#tab-content-mostview').hide();
     });
-    $("#recent-tab").click(function () {
-        $("#tab-1").removeClass('active');
-        $("#tab-2").addClass('active');
-        $('#mostview').hide();
-        $('#mostrecent').show();
+    $("#tab-label-mostview").click(function () {
+        $('#tab-content-popular').hide();
+        $('#tab-content-mostview').show();
     });
 });
 </script>
