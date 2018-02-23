@@ -47,6 +47,8 @@ php bin/magento setup:static-content:deploy
 
 Feel free to **Fork** and contrinute to this module and create a pull request so we will merge your changes to `master` branch.
 
+Thanks [the contributors](https://github.com/mageplaza/magento-2-blog/graphs/contributors)
+
 --------
 ## 5. SWEET MAGEPLAZA EXTENSIONS TO BRING YOU MORE MONEY
 
