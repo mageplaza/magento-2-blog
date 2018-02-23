@@ -32,11 +32,14 @@
             </argument>
         </arguments>
     </type>
-
+    <!--Plugin List-->
     <type name="Magento\Theme\Block\Html\Topmenu">
         <plugin name="blog-topmenu" type="Mageplaza\Blog\Plugin\Topmenu" />
     </type>
     <type name="Smartwave\Megamenu\Block\Topmenu">
         <plugin name="blog-porto-theme-topmenu" type="Mageplaza\Blog\Plugin\PortoTopmenu" />
+    </type>
+    <type name="Infortis\UltraMegamenu\Block\Navigation">
+        <plugin name="blog-topmenu-infortis" type="Mageplaza\Blog\Plugin\InfortisTopmenu" />
     </type>
 </config>
