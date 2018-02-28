@@ -33,7 +33,6 @@ use Psr\Log\LoggerInterface as Logger;
  */
 class Collection extends SearchResult
 {
-
     /**
      * Collection constructor.
      * @param EntityFactory $entityFactory
