@@ -47,6 +47,8 @@ php bin/magento setup:static-content:deploy
 
 Feel free to **Fork** and contrinute to this module and create a pull request so we will merge your changes to `master` branch.
 
+Thanks [the contributors](https://github.com/mageplaza/magento-2-blog/graphs/contributors)
+
 --------
 ## 5. SWEET MAGEPLAZA EXTENSIONS TO BRING YOU MORE MONEY
 
@@ -576,7 +578,10 @@ Release first version
 
 ☞ [Magento One Step Checkout](https://github.com/magento-2/one-step-checkout)
 
-☞ [Magento 2 Blog on Github](https://github.com/mageplaza/magento-2-blog)
+☞ [Magento Blog on Github](https://github.com/mageplaza/magento-blog)
+
+☞ [Magento Blog](https://www.mageplaza.com/magento-blog/)
+
 
 ☞ [Magento 2 Social Login on Github](https://github.com/mageplaza/magento-2-social-login)
 

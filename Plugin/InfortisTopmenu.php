@@ -38,7 +38,7 @@ class InfortisTopmenu
             ->createBlock('Mageplaza\Blog\Block\Frontend')
             ->setTemplate('Mageplaza_Blog::position/topmenuinfortis.phtml')
             ->toHtml();
+
         return $html;
     }
-
 }
