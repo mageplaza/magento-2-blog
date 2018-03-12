@@ -31,7 +31,7 @@ use Mageplaza\Blog\Model\PostFactory;
  * Class InlineEdit
  * @package Mageplaza\Blog\Controller\Adminhtml\Post
  */
-abstract class InlineEdit extends Action
+class InlineEdit extends Action
 {
     /**
      * JSON Factory
