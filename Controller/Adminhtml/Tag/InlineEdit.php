@@ -31,7 +31,7 @@ use Mageplaza\Blog\Model\TagFactory;
  * Class InlineEdit
  * @package Mageplaza\Blog\Controller\Adminhtml\Tag
  */
-abstract class InlineEdit extends Action
+class InlineEdit extends Action
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory

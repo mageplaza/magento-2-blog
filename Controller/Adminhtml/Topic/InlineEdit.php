@@ -28,7 +28,7 @@ use Magento\Framework\Exception\LocalizedException;
  * Class InlineEdit
  * @package Mageplaza\Blog\Controller\Adminhtml\Topic
  */
-abstract class InlineEdit extends Action
+class InlineEdit extends Action
 {
     /**
      * JSON Factory
