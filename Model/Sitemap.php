@@ -21,9 +21,23 @@
 
 namespace Mageplaza\Blog\Model;
 
-use Magento\Framework\App\ObjectManager;
+use \Magento\Framework\Model\Context;
+use \Magento\Framework\Registry;
+use \Magento\Framework\Escaper;
+use \Magento\Sitemap\Helper\Data;
+use \Magento\Framework\Filesystem;
+use \Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory;
+use \Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory;
+use \Magento\Sitemap\Model\ResourceModel\Cms\PageFactory;
+use \Magento\Framework\Stdlib\DateTime\DateTime;
+use \Magento\Store\Model\StoreManagerInterface;
+use \Magento\Framework\App\RequestInterface;
+use \Magento\Framework\Model\ResourceModel\AbstractResource;
+use \Magento\Framework\Data\Collection\AbstractDb;
+use \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\DataObject;
-use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Helper\Data as BlogDataHelper;
+use Mageplaza\Blog\Helper\Image as BlogImageHelper;
 
 /**
  * Class Sitemap
@@ -35,22 +49,81 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      * @var \Mageplaza\Blog\Helper\Data
      */
     protected $blogDataHelper;
+
+    /**
+     * @var \Mageplaza\Blog\Helper\Image
+     */
+    protected $imageHelper;
+
     /**
      * @var mixed
      */
     protected $router;
 
     /**
-     * Initialize resource model
-     *
-     * @return void
+     * Sitemap constructor.
+     * @param Context $context
+     * @param Registry $registry
+     * @param Escaper $escaper
+     * @param Data $sitemapData
+     * @param Filesystem $filesystem
+     * @param CategoryFactory $categoryFactory
+     * @param ProductFactory $productFactory
+     * @param PageFactory $cmsFactory
+     * @param DateTime $modelDate
+     * @param StoreManagerInterface $storeManager
+     * @param RequestInterface $request
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param BlogDataHelper $blogDataHelper
+     * @param BlogImageHelper $blogImageHelper
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
+     * @param array $data
+     * @param DocumentRoot|null $documentRoot
      */
-    protected function _construct()
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Sitemap\Helper\Data $sitemapData,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory $categoryFactory,
+        \Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory $productFactory,
+        \Magento\Sitemap\Model\ResourceModel\Cms\PageFactory $cmsFactory,
+        \Magento\Framework\Stdlib\DateTime\DateTime $modelDate,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        BlogDataHelper $blogDataHelper,
+        BlogImageHelper $blogImageHelper,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = [],
+        DocumentRoot $documentRoot = null
+    )
     {
-        parent::_construct();
-
-        $this->blogDataHelper = ObjectManager::getInstance()->get(Data::class);
+        $this->blogDataHelper = $blogDataHelper;
+        $this->imageHelper = $blogImageHelper;
         $this->router = $this->blogDataHelper->getBlogConfig('general/url_prefix');
+
+        parent::__construct(
+            $context,
+            $registry,
+            $escaper,
+            $sitemapData,
+            $filesystem,
+            $categoryFactory,
+            $productFactory,
+            $cmsFactory,
+            $modelDate,
+            $storeManager,
+            $request,
+            $dateTime,
+            $resource,
+            $resourceCollection,
+            $data,
+            $documentRoot
+        );
     }
 
     /**
@@ -67,8 +140,13 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
             if (!is_null($item->getEnabled())) {
                 $images = null;
                 if ($item->getImage()) :
+                    $imageFile = $this->imageHelper->getMediaPath(
+                        $item->getImage(),
+                        \Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_POST
+                    );
+
                     $imagesCollection[] = new DataObject([
-                            'url' => $item->getImage(),
+                            'url' => $this->imageHelper->getMediaUrl($imageFile),
                             'caption' => null,
                         ]
                     );
