@@ -353,7 +353,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         if (version_compare($context->getVersion(), '2.4.4', '<')) {
-
             if ($installer->tableExists('mageplaza_blog_comment')) {
                 $connection->modifyColumn($installer->getTable('mageplaza_blog_comment'), 'content', ['type' => Table::TYPE_TEXT]);
             }
@@ -362,7 +361,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
 
             if ($installer->tableExists('mageplaza_blog_comment')) {
-
                 $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'status', [
                     'type' => Table::TYPE_INTEGER, null, [],
                     'comment' => 'Post Name',

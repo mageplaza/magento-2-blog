@@ -20,7 +20,6 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
-
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
     <container name="root" label="Root" output="1">
         <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Product" name="post.edit.tab.product"/>

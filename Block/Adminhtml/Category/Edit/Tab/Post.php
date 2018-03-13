@@ -36,22 +36,16 @@ use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
 class Post extends Extended implements TabInterface
 {
     /**
-     * Post collection factory
-     *
      * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
      */
     public $postCollectionFactory;
 
     /**
-     * Registry
-     *
      * @var \Magento\Framework\Registry
      */
     public $coreRegistry;
 
     /**
-     * Post factory
-     *
      * @var \Mageplaza\Blog\Model\PostFactory
      */
     public $postFactory;
@@ -139,7 +133,6 @@ class Post extends Extended implements TabInterface
                 'column_css_class' => 'col-id'
             ]
         );
-
         $this->addColumn('title', [
                 'header' => __('Name'),
                 'index' => 'name',
@@ -147,7 +140,6 @@ class Post extends Extended implements TabInterface
                 'column_css_class' => 'col-name'
             ]
         );
-
         $this->addColumn('position', [
                 'header' => __('Position'),
                 'name' => 'position',

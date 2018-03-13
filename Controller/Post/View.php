@@ -53,42 +53,52 @@ class View extends Action
      * @var \Mageplaza\Blog\Model\TrafficFactory
      */
     protected $trafficFactory;
+
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $resultPageFactory;
+
     /**
      * @var \Mageplaza\Blog\Helper\Data
      */
     protected $helperBlog;
+
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
      */
     protected $accountManagement;
+
     /**
      * @var \Magento\Customer\Model\Url
      */
     protected $customerUrl;
+
     /**
      * @var \Magento\Customer\Model\Session
      */
     protected $session;
+
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
+
     /**
      * @var JsonData
      */
     protected $jsonHelper;
+
     /**
      * @var CommentFactory
      */
     protected $cmtFactory;
+
     /**
      * @var LikeFactory
      */
     protected $likeFactory;
+
     /**
      * @var DateTime
      */

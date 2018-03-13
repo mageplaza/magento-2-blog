@@ -60,21 +60,20 @@ class MassStatus extends Action
         CollectionFactory $collectionFactory
     )
     {
-        $this->filter            = $filter;
+        $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
 
         parent::__construct($context);
     }
 
     /**
-     * execute action
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return $this|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @throws LocalizedException
      */
     public function execute()
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
-        $status     = (int)$this->getRequest()->getParam('status');
+        $status = (int)$this->getRequest()->getParam('status');
 
         $tagUpdated = 0;
         foreach ($collection as $tag) {

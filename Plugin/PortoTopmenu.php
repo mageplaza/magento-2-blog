@@ -69,10 +69,7 @@ class PortoTopmenu
      * @param $categories
      * @return mixed
      */
-    public function afterGetStoreCategories(
-        \Smartwave\Megamenu\Block\Topmenu $subject,
-        $categories
-    )
+    public function afterGetStoreCategories(\Smartwave\Megamenu\Block\Topmenu $subject, $categories)
     {
         if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
             $categories->add(

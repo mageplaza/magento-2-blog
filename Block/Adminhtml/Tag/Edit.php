@@ -21,7 +21,9 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Tag;
 
+use Magento\Backend\Block\Widget\Context;
 use Magento\Backend\Block\Widget\Form\Container;
+use Magento\Framework\Registry;
 
 /**
  * Class Edit
@@ -30,19 +32,19 @@ use Magento\Backend\Block\Widget\Form\Container;
 class Edit extends Container
 {
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
      * Edit constructor.
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param Context $context
+     * @param Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
+        Context $context,
+        Registry $coreRegistry,
         array $data = []
     )
     {

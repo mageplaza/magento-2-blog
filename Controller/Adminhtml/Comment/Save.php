@@ -21,9 +21,7 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Comment;
 
-use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Registry;
 use Mageplaza\Blog\Controller\Adminhtml\Comment;
 use Mageplaza\Blog\Model\CommentFactory;
 
@@ -33,22 +31,6 @@ use Mageplaza\Blog\Model\CommentFactory;
  */
 class Save extends Comment
 {
-
-    /**
-     * Save constructor.
-     * @param CommentFactory $commentFactory
-     * @param Registry $coreRegistry
-     * @param Context $context
-     */
-    public function __construct(
-        CommentFactory $commentFactory,
-        Registry $coreRegistry,
-        Context $context
-    )
-    {
-        parent::__construct($commentFactory, $coreRegistry, $context);
-    }
-
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
      */
@@ -57,7 +39,6 @@ class Save extends Comment
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if ($data = $this->getRequest()->getPost('comment')) {
-
             /** @var \Mageplaza\Blog\Model\Comment $post */
             $comment = $this->initComment();
 

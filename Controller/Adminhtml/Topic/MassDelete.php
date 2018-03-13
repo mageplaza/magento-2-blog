@@ -59,16 +59,15 @@ class MassDelete extends Action
         CollectionFactory $collectionFactory
     )
     {
-        $this->filter            = $filter;
+        $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
 
         parent::__construct($context);
     }
 
     /**
-     * execute action
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return $this|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {

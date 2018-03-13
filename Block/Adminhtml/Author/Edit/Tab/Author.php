@@ -21,46 +21,54 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Author\Edit\Tab;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Cms\Model\Wysiwyg\Config;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Registry;
+use Magento\Store\Model\System\Store;
+use Mageplaza\Blog\Helper\Image as ImageHelper;
 use Mageplaza\Core\Block\Adminhtml\Renderer\Image;
 
 /**
  * Class Author
  * @package Mageplaza\Blog\Block\Adminhtml\Author\Edit\Tab
  */
-class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Author extends Generic implements TabInterface
 {
     /**
-     * @var \Magento\Store\Model\System\Store
+     * @var Store
      */
     public $systemStore;
 
     /**
-     * @var \Magento\Cms\Model\Wysiwyg\Config
+     * @var Config
      */
     public $wysiwygConfig;
 
     /**
-     * @var \Mageplaza\Blog\Helper\Image
+     * @var ImageHelper
      */
     protected $imageHelper;
 
     /**
      * Author constructor.
-     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
-     * @param \Magento\Store\Model\System\Store $systemStore
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Mageplaza\Blog\Helper\Image $imageHelper
+     * @param Config $wysiwygConfig
+     * @param Store $systemStore
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param ImageHelper $imageHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
-        \Magento\Store\Model\System\Store $systemStore,
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Mageplaza\Blog\Helper\Image $imageHelper,
+        Config $wysiwygConfig,
+        Store $systemStore,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        ImageHelper $imageHelper,
         array $data = []
     )
     {
@@ -72,8 +80,7 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
     }
 
     /**
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @inheritdoc
      */
     protected function _prepareForm()
     {
@@ -105,7 +112,6 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
                 'note' => __('This name will be displayed on frontend')
             ]
         );
-
         $fieldset->addField('short_description', 'editor', [
                 'name' => 'short_description',
                 'label' => __('Short Description'),
@@ -114,22 +120,19 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
                 'config' => $this->wysiwygConfig->getConfig()
             ]
         );
-
         $fieldset->addField('image', Image::class, [
                 'name' => 'image',
                 'label' => __('Avatar'),
                 'title' => __('Avatar'),
-                'path' => $this->imageHelper->getBaseMediaPath(\Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH)
+                'path' => $this->imageHelper->getBaseMediaPath(ImageHelper::TEMPLATE_MEDIA_TYPE_AUTH)
             ]
         );
-
         $fieldset->addField('url_key', 'text', [
                 'name' => 'url_key',
                 'label' => __('URL Key'),
                 'title' => __('URL Key')
             ]
         );
-
         $fieldset->addField('facebook_link', 'text', [
                 'name' => 'facebook_link',
                 'label' => __('Facebook'),
@@ -137,7 +140,6 @@ class Author extends \Magento\Backend\Block\Widget\Form\Generic implements \Mage
                 'note' => __('Facebook URL'),
             ]
         );
-
         $fieldset->addField('twitter_link', 'text', [
                 'name' => 'twitter_link',
                 'label' => __('Twitter'),

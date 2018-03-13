@@ -23,15 +23,15 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Js;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\View\LayoutFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Tag;
 use Mageplaza\Blog\Model\TagFactory;
-use Magento\Framework\Message\MessageInterface;
-use Magento\Framework\Exception\AlreadyExistsException;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\View\LayoutFactory;
-use Magento\Framework\Controller\Result\JsonFactory;
 
 /**
  * Class Save
@@ -77,7 +77,7 @@ class Save extends Tag
     )
     {
         $this->jsHelper = $jsHelper;
-        $this->layoutFactory     = $layoutFactory;
+        $this->layoutFactory = $layoutFactory;
         $this->resultJsonFactory = $resultJsonFactory;
 
         parent::__construct($context, $registry, $tagFactory);
@@ -88,13 +88,11 @@ class Save extends Tag
      */
     public function execute()
     {
-
         if ($this->getRequest()->getPost('return_session_messages_only')) {
-
-            $tag                     = $this->initTag();
-            $tagPostData              = $this->getRequest()->getPostValue();
+            $tag = $this->initTag();
+            $tagPostData = $this->getRequest()->getPostValue();
             $tagPostData['store_ids'] = 0;
-            $tagPostData['enabled']   = 1;
+            $tagPostData['enabled'] = 1;
 
             $tag->addData($tagPostData);
 
@@ -118,10 +116,10 @@ class Save extends Tag
 
             $tag->load($tag->getId());
             $tag->addData([
-                'level'     => 1,
+                'level' => 1,
                 'entity_id' => $tag->getId(),
                 'is_active' => $tag->getEnabled(),
-                'parent'    => 0
+                'parent' => 0
             ]);
 
             // to obtain truncated category name
@@ -132,17 +130,13 @@ class Save extends Tag
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
 
-
-            return $resultJson->setData(
-                [
+            return $resultJson->setData([
                     'messages' => $block->getGroupedHtml(),
-                    'error'    => $hasError,
+                    'error' => $hasError,
                     'category' => $tag->toArray(),
                 ]
             );
-
         }
-
 
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data = $this->getRequest()->getPost('tag')) {

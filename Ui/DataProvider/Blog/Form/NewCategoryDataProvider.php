@@ -70,10 +70,10 @@ class NewCategoryDataProvider extends AbstractDataProvider
             [
                 'config' => [
                     'data' => [
-                        'is_active'                    => 1,
-                        'include_in_menu'              => 1,
+                        'is_active' => 1,
+                        'include_in_menu' => 1,
                         'return_session_messages_only' => 1,
-                        'use_config'                   => ['available_sort_by', 'default_sort_by']
+                        'use_config' => ['available_sort_by', 'default_sort_by']
                     ]
                 ]
             ]
@@ -108,9 +108,7 @@ class NewCategoryDataProvider extends AbstractDataProvider
     protected function getNotice()
     {
         return __(
-            'If there are no custom parent categories, please use the default parent category.'
-            . ' You can reassign the category at any time in'
-            . ' <a href="%1" target="_blank">Blogs &gt; Categories</a>.',
+            'If there are no custom parent categories, please use the default parent category. You can reassign the category at any time in <a href="%1" target="_blank">Blogs &gt; Categories</a>.',
             $this->urlBuilder->getUrl('mageplaza_blog/category')
         );
     }

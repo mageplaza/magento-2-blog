@@ -27,20 +27,17 @@ use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Registry;
 
 /**
- * @method Tabs setTitle(\string $title)
+ * Class Tabs
+ * @package Mageplaza\Blog\Block\Adminhtml\Category\Edit
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
-     * Tabs template
-     *
      * @var string
      */
     protected $_template = 'Magento_Backend::widget/tabshoriz.phtml';
 
     /**
-     * Registry
-     *
      * @var \Magento\Framework\Registry
      */
     public $coreRegistry;
@@ -101,7 +98,6 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
                     ->toHtml()
             ]
         );
-
         $this->addTab('post', [
                 'label' => __('Posts'),
                 'content' => $this->getLayout()

@@ -42,8 +42,6 @@ class Category extends Multiselect
     public $collectionFactory;
 
     /**
-     * Authorization
-     *
      * @var \Magento\Framework\AuthorizationInterface
      */
     public $authorization;

@@ -21,9 +21,15 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit;
 
+use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Adminhtml\Category\AbstractCategory;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\ResourceModel\Category\Tree;
 use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\CategoryFactory as BlogCategoryFactory;
+use Mageplaza\Blog\Model\ResourceModel\Category\Tree as BlogResourceTree;
 
 /**
  * Class Form
@@ -32,44 +38,38 @@ use Magento\Framework\Json\EncoderInterface;
 class Form extends AbstractCategory
 {
     /**
-     * Additional buttons
-     *
-     * @var array
+     * @var array Additional buttons
      */
     public $additionalButtons = [];
 
     /**
-     * Block template
-     *
-     * @var string
+     * @var string Block template
      */
     protected $_template = 'category/edit/form.phtml';
 
     /**
-     * JSON encoder
-     *
      * @var \Magento\Framework\Json\EncoderInterface
      */
     public $jsonEncoder;
 
     /**
      * Form constructor.
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $blogCategoryTree
-     * @param \Mageplaza\Blog\Model\CategoryFactory $blogCategoryFactory
+     * @param Context $context
+     * @param Tree $categoryTree
+     * @param Registry $registry
+     * @param CategoryFactory $categoryFactory
+     * @param BlogResourceTree $blogCategoryTree
+     * @param BlogCategoryFactory $blogCategoryFactory
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree,
-        \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Mageplaza\Blog\Model\ResourceModel\Category\Tree $blogCategoryTree,
-        \Mageplaza\Blog\Model\CategoryFactory $blogCategoryFactory,
+        Context $context,
+        Tree $categoryTree,
+        Registry $registry,
+        CategoryFactory $categoryFactory,
+        BlogResourceTree $blogCategoryTree,
+        BlogCategoryFactory $blogCategoryFactory,
         EncoderInterface $jsonEncoder,
         array $data = []
     )

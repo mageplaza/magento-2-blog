@@ -80,5 +80,4 @@ class UpgradeData implements UpgradeDataInterface
 
         $installer->endSetup();
     }
-
 }

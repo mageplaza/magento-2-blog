@@ -111,7 +111,6 @@ class Product extends Extended implements TabInterface
                 'index' => 'entity_id'
             ]
         );
-
         $this->addColumn('entity_id', [
                 'header' => __('ID'),
                 'sortable' => true,
@@ -121,7 +120,6 @@ class Product extends Extended implements TabInterface
                 'column_css_class' => 'col-id'
             ]
         );
-
         $this->addColumn('title', [
                 'header' => __('Sku'),
                 'index' => 'sku',
@@ -129,7 +127,6 @@ class Product extends Extended implements TabInterface
                 'column_css_class' => 'col-name'
             ]
         );
-
         $this->addColumn('position', [
                 'header' => __('Position'),
                 'name' => 'position',

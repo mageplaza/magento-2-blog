@@ -22,6 +22,8 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 
 /**
  * Class NewAction
@@ -32,19 +34,19 @@ class NewAction extends Action
     /**
      * Redirect result factory
      *
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @var ForwardFactory
      */
     public $resultForwardFactory;
 
     /**
      * constructor
      *
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param ForwardFactory $resultForwardFactory
+     * @param Context $context
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+        Context $context,
+        ForwardFactory $resultForwardFactory
     )
     {
         $this->resultForwardFactory = $resultForwardFactory;

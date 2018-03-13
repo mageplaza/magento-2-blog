@@ -24,13 +24,14 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
+use Mageplaza\Blog\Controller\Adminhtml\Tag;
 use Mageplaza\Blog\Model\TagFactory;
 
 /**
  * Class Edit
  * @package Mageplaza\Blog\Controller\Adminhtml\Tag
  */
-class Edit extends \Mageplaza\Blog\Controller\Adminhtml\Tag
+class Edit extends Tag
 {
     /**
      * Page factory

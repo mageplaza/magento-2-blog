@@ -21,7 +21,7 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel\Author;
 
-use \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
  * Class Collection

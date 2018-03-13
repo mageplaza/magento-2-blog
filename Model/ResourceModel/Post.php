@@ -92,16 +92,16 @@ class Post extends AbstractDb
         Data $helperData
     )
     {
-        $this->date         = $date;
+        $this->date = $date;
         $this->eventManager = $eventManager;
-        $this->helperData   = $helperData;
+        $this->helperData = $helperData;
 
         parent::__construct($context);
 
-        $this->postTagTable      = $this->getTable('mageplaza_blog_post_tag');
-        $this->postTopicTable    = $this->getTable('mageplaza_blog_post_topic');
+        $this->postTagTable = $this->getTable('mageplaza_blog_post_tag');
+        $this->postTopicTable = $this->getTable('mageplaza_blog_post_topic');
         $this->postCategoryTable = $this->getTable('mageplaza_blog_post_category');
-        $this->postProductTable  = $this->getTable('mageplaza_blog_post_product');
+        $this->postProductTable = $this->getTable('mageplaza_blog_post_product');
     }
 
     /**
@@ -123,10 +123,10 @@ class Post extends AbstractDb
     public function getPostNameById($id)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()
+        $select = $adapter->select()
             ->from($this->getMainTable(), 'name')
             ->where('post_id = :post_id');
-        $binds   = ['post_id' => (int)$id];
+        $binds = ['post_id' => (int)$id];
 
         return $adapter->fetchOne($select, $binds);
     }
@@ -177,7 +177,7 @@ class Post extends AbstractDb
     public function saveTagRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedTagList(false);
-        $id   = $post->getId();
+        $id = $post->getId();
         $tags = $post->getTagsIds();
 
         if ($tags === null) {
@@ -185,8 +185,8 @@ class Post extends AbstractDb
         }
         $oldTags = $post->getTagIds();
 
-        $insert  = array_diff($tags, $oldTags);
-        $delete  = array_diff($oldTags, $tags);
+        $insert = array_diff($tags, $oldTags);
+        $delete = array_diff($oldTags, $tags);
 
         $adapter = $this->getConnection();
         if (!empty($delete)) {
@@ -197,8 +197,8 @@ class Post extends AbstractDb
             $data = [];
             foreach ($insert as $tagId) {
                 $data[] = [
-                    'post_id'  => (int)$id,
-                    'tag_id'   => (int)$tagId,
+                    'post_id' => (int)$id,
+                    'tag_id' => (int)$tagId,
                     'position' => 1
                 ];
             }
@@ -228,7 +228,7 @@ class Post extends AbstractDb
     public function saveTopicRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedTopicList(false);
-        $id     = $post->getId();
+        $id = $post->getId();
         $topics = $post->getTopicsIds();
 
         if ($topics === null) {
@@ -236,8 +236,8 @@ class Post extends AbstractDb
         }
         $oldTopics = $post->getTopicIds();
 
-        $insert    = array_diff($topics, $oldTopics);
-        $delete    = array_diff($oldTopics, $topics);
+        $insert = array_diff($topics, $oldTopics);
+        $delete = array_diff($oldTopics, $topics);
 
         $adapter = $this->getConnection();
         if (!empty($delete)) {
@@ -248,7 +248,7 @@ class Post extends AbstractDb
             $data = [];
             foreach ($insert as $topicId) {
                 $data[] = [
-                    'post_id'  => (int)$id,
+                    'post_id' => (int)$id,
                     'topic_id' => (int)$topicId,
                     'position' => 1
                 ];
@@ -280,15 +280,15 @@ class Post extends AbstractDb
     public function saveCategoryRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedCategoryList(false);
-        $id         = $post->getId();
+        $id = $post->getId();
         $categories = $post->getCategoriesIds();
         if ($categories === null) {
             return $this;
         }
         $oldCategoryIds = $post->getCategoryIds();
-        $insert         = array_diff($categories, $oldCategoryIds);
-        $delete         = array_diff($oldCategoryIds, $categories);
-        $adapter        = $this->getConnection();
+        $insert = array_diff($categories, $oldCategoryIds);
+        $delete = array_diff($oldCategoryIds, $categories);
+        $adapter = $this->getConnection();
 
 
         if (!empty($delete)) {
@@ -299,9 +299,9 @@ class Post extends AbstractDb
             $data = [];
             foreach ($insert as $categoryId) {
                 $data[] = [
-                    'post_id'     => (int)$id,
+                    'post_id' => (int)$id,
                     'category_id' => (int)$categoryId,
-                    'position'    => 1
+                    'position' => 1
                 ];
             }
             $adapter->insertMultiple($this->postCategoryTable, $data);
@@ -329,7 +329,7 @@ class Post extends AbstractDb
     public function getCategoryIds(\Mageplaza\Blog\Model\Post $post)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()->from(
+        $select = $adapter->select()->from(
             $this->postCategoryTable,
             'category_id'
         )
@@ -348,7 +348,7 @@ class Post extends AbstractDb
     public function getTagIds(\Mageplaza\Blog\Model\Post $post)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()->from(
+        $select = $adapter->select()->from(
             $this->postTagTable,
             'tag_id'
         )
@@ -367,7 +367,7 @@ class Post extends AbstractDb
     public function getTopicIds(\Mageplaza\Blog\Model\Post $post)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()->from($this->postTopicTable, 'topic_id')
+        $select = $adapter->select()->from($this->postTopicTable, 'topic_id')
             ->where('post_id = ?', (int)$post->getId());
         return $adapter->fetchCol($select);
     }
@@ -379,22 +379,22 @@ class Post extends AbstractDb
     public function saveProductRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedProductList(false);
-        $id       = $post->getId();
+        $id = $post->getId();
         $products = $post->getProductsData();
         if ($products === null) {
             return $this;
         }
         $oldProducts = $post->getProductsPosition();
-        $insert      = array_diff_key($products, $oldProducts);
-        $delete      = array_diff_key($oldProducts, $products);
-        $update      = array_intersect_key($products, $oldProducts);
-        $_update     = [];
+        $insert = array_diff_key($products, $oldProducts);
+        $delete = array_diff_key($oldProducts, $products);
+        $update = array_intersect_key($products, $oldProducts);
+        $_update = [];
         foreach ($update as $key => $settings) {
             if (isset($oldProducts[$key]) && $oldProducts[$key] != $settings['position']) {
                 $_update[$key] = $settings;
             }
         }
-        $update  = $_update;
+        $update = $_update;
         $adapter = $this->getConnection();
         if (!empty($delete)) {
             $condition = ['entity_id IN(?)' => array_keys($delete), 'post_id=?' => $id];
@@ -404,9 +404,9 @@ class Post extends AbstractDb
             $data = [];
             foreach ($insert as $entityId => $position) {
                 $data[] = [
-                    'post_id'   => (int)$id,
+                    'post_id' => (int)$id,
                     'entity_id' => (int)$entityId,
-                    'position'  => (int)$position['position']
+                    'position' => (int)$position['position']
                 ];
             }
             $adapter->insertMultiple($this->postProductTable, $data);
@@ -414,7 +414,7 @@ class Post extends AbstractDb
         if (!empty($update)) {
             foreach ($update as $entityId => $position) {
                 $where = ['post_id = ?' => (int)$id, 'entity_id = ?' => (int)$entityId];
-                $bind  = ['position' => (int)$position['position']];
+                $bind = ['position' => (int)$position['position']];
                 $adapter->update($this->postProductTable, $bind, $where);
             }
         }
@@ -447,7 +447,7 @@ class Post extends AbstractDb
             ->where(
                 'post_id = :post_id'
             );
-        $bind   = ['post_id' => (int)$post->getId()];
+        $bind = ['post_id' => (int)$post->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);
     }

@@ -21,21 +21,21 @@
 
 namespace Mageplaza\Blog\Model;
 
-use \Magento\Framework\Model\Context;
-use \Magento\Framework\Registry;
-use \Magento\Framework\Escaper;
-use \Magento\Sitemap\Helper\Data;
-use \Magento\Framework\Filesystem;
-use \Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory;
-use \Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory;
-use \Magento\Sitemap\Model\ResourceModel\Cms\PageFactory;
-use \Magento\Framework\Stdlib\DateTime\DateTime;
-use \Magento\Store\Model\StoreManagerInterface;
-use \Magento\Framework\App\RequestInterface;
-use \Magento\Framework\Model\ResourceModel\AbstractResource;
-use \Magento\Framework\Data\Collection\AbstractDb;
-use \Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
+use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Sitemap\Helper\Data;
+use Magento\Sitemap\Model\ResourceModel\Catalog\CategoryFactory;
+use Magento\Sitemap\Model\ResourceModel\Catalog\ProductFactory;
+use Magento\Sitemap\Model\ResourceModel\Cms\PageFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Helper\Data as BlogDataHelper;
 use Mageplaza\Blog\Helper\Image as BlogImageHelper;
 

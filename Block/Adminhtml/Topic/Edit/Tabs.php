@@ -22,7 +22,8 @@
 namespace Mageplaza\Blog\Block\Adminhtml\Topic\Edit;
 
 /**
- * @method Tabs setTitle(\string $title)
+ * Class Tabs
+ * @package Mageplaza\Blog\Block\Adminhtml\Topic\Edit
  */
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {

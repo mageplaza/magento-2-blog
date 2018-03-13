@@ -21,35 +21,40 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\AuthorFactory;
+
 /**
  * Class Author
  * @package Mageplaza\Blog\Controller\Adminhtml
  */
-abstract class Author extends \Magento\Backend\App\Action
+abstract class Author extends Action
 {
     /** Authorization level of a basic admin session */
     const ADMIN_RESOURCE = 'Mageplaza_Blog::author';
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
-     * @var \Mageplaza\Blog\Model\AuthorFactory
+     * @var AuthorFactory
      */
     public $authorFactory;
 
     /**
      * Author constructor.
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param AuthorFactory $authorFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Mageplaza\Blog\Model\AuthorFactory $authorFactory
+        Context $context,
+        Registry $coreRegistry,
+        AuthorFactory $authorFactory
     )
     {
         $this->authorFactory = $authorFactory;

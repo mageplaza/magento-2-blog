@@ -131,7 +131,6 @@ class Post extends Extended implements TabInterface
                 'column_css_class' => 'col-id'
             ]
         );
-
         $this->addColumn(
             'title',
             [
@@ -141,7 +140,6 @@ class Post extends Extended implements TabInterface
                 'column_css_class' => 'col-name'
             ]
         );
-
         $this->addColumn(
             'position',
             [

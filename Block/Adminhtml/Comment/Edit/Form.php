@@ -21,15 +21,16 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Comment\Edit;
 
+use Magento\Backend\Block\Widget\Form\Generic;
+
 /**
  * Class Form
  * @package Mageplaza\Blog\Block\Adminhtml\Comment\Edit
  */
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Form extends Generic
 {
     /**
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @inheritdoc
      */
     protected function _prepareForm()
     {

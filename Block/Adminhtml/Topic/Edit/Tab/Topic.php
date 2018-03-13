@@ -91,11 +91,11 @@ class Topic extends Generic implements TabInterface
         array $data = []
     )
     {
-        $this->wysiwygConfig     = $wysiwygConfig;
-        $this->booleanOptions    = $booleanOptions;
-        $this->enableDisable     = $enableDisable;
+        $this->wysiwygConfig = $wysiwygConfig;
+        $this->booleanOptions = $booleanOptions;
+        $this->enableDisable = $enableDisable;
         $this->metaRobotsOptions = $metaRobotsOptions;
-        $this->systemStore       = $systemStore;
+        $this->systemStore = $systemStore;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -114,26 +114,24 @@ class Topic extends Generic implements TabInterface
 
         $fieldset = $form->addFieldset('base_fieldset', [
                 'legend' => __('Topic Information'),
-                'class'  => 'fieldset-wide'
+                'class' => 'fieldset-wide'
             ]
         );
-
         if ($topic->getId()) {
             $fieldset->addField('topic_id', 'hidden', ['name' => 'topic_id']);
         }
 
         $fieldset->addField('name', 'text', [
-                'name'     => 'name',
-                'label'    => __('Name'),
-                'title'    => __('Name'),
+                'name' => 'name',
+                'label' => __('Name'),
+                'title' => __('Name'),
                 'required' => true,
             ]
         );
-
         $fieldset->addField('enabled', 'select', [
-                'name'   => 'enabled',
-                'label'  => __('Status'),
-                'title'  => __('Status'),
+                'name' => 'enabled',
+                'label' => __('Status'),
+                'title' => __('Status'),
                 'values' => $this->enableDisable->toOptionArray(),
             ]
         );
@@ -142,9 +140,9 @@ class Topic extends Generic implements TabInterface
         }
 
         $fieldset->addField('description', 'editor', [
-                'name'   => 'description',
-                'label'  => __('Description'),
-                'title'  => __('Description'),
+                'name' => 'description',
+                'label' => __('Description'),
+                'title' => __('Description'),
                 'config' => $this->wysiwygConfig->getConfig(['add_variables' => false, 'add_widgets' => false])
             ]
         );
@@ -153,9 +151,9 @@ class Topic extends Generic implements TabInterface
             /** @var \Magento\Framework\Data\Form\Element\Renderer\RendererInterface $rendererBlock */
             $rendererBlock = $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element');
             $fieldset->addField('store_ids', 'multiselect', [
-                'name'   => 'store_ids',
-                'label'  => __('Store Views'),
-                'title'  => __('Store Views'),
+                'name' => 'store_ids',
+                'label' => __('Store Views'),
+                'title' => __('Store Views'),
                 'values' => $this->systemStore->getStoreValuesForForm(false, true)
             ])->setRenderer($rendererBlock);
             if (!$topic->hasData('store_ids')) {
@@ -163,53 +161,49 @@ class Topic extends Generic implements TabInterface
             }
         } else {
             $fieldset->addField('store_ids', 'hidden', [
-                'name'  => 'store_ids',
+                'name' => 'store_ids',
                 'value' => $this->_storeManager->getStore()->getId()
             ]);
         }
 
         $fieldset->addField('url_key', 'text', [
-                'name'  => 'url_key',
+                'name' => 'url_key',
                 'label' => __('URL Key'),
                 'title' => __('URL Key'),
             ]
         );
-
         $fieldset->addField('meta_title', 'text', [
-                'name'  => 'meta_title',
+                'name' => 'meta_title',
                 'label' => __('Meta Title'),
                 'title' => __('Meta Title'),
             ]
         );
-
         $fieldset->addField('meta_description', 'textarea', [
-                'name'  => 'meta_description',
+                'name' => 'meta_description',
                 'label' => __('Meta Description'),
                 'title' => __('Meta Description'),
             ]
         );
-
         $fieldset->addField('meta_keywords', 'textarea', [
-                'name'  => 'meta_keywords',
+                'name' => 'meta_keywords',
                 'label' => __('Meta Keywords'),
                 'title' => __('Meta Keywords'),
             ]
         );
-
         $fieldset->addField('meta_robots', 'select', [
-                'name'   => 'meta_robots',
-                'label'  => __('Meta Robots'),
-                'title'  => __('Meta Robots'),
+                'name' => 'meta_robots',
+                'label' => __('Meta Robots'),
+                'title' => __('Meta Robots'),
                 'values' => $this->metaRobotsOptions->toOptionArray(),
             ]
         );
 
         if (!$topic->getId()) {
             $topic->addData([
-                'meta_title'       => $this->_scopeConfig->getValue('blog/seo/meta_title'),
+                'meta_title' => $this->_scopeConfig->getValue('blog/seo/meta_title'),
                 'meta_description' => $this->_scopeConfig->getValue('blog/seo/meta_description'),
-                'meta_keywords'    => $this->_scopeConfig->getValue('blog/seo/meta_keywords'),
-                'meta_robots'      => $this->_scopeConfig->getValue('blog/seo/meta_robots'),
+                'meta_keywords' => $this->_scopeConfig->getValue('blog/seo/meta_keywords'),
+                'meta_robots' => $this->_scopeConfig->getValue('blog/seo/meta_robots'),
             ]);
         }
 

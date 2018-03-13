@@ -29,7 +29,6 @@ use Magento\Framework\Escaper;
 use Magento\Framework\UrlInterface;
 use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory as BlogTagCollectionFactory;
 
-
 /**
  * Class Tag
  * @package Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer

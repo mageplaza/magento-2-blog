@@ -33,13 +33,13 @@ define([
             if (label !== '') {
                 switch (record.status) {
                     case '1':
-                        label = '<span style="color:green;"><span>' + label + '</span></span>';
+                        label = '<span class="grid-severity-notice"><span>' + label + '</span></span>';
                         break;
                     case '2':
-                        label = '<span style="color:red;"><span>' + label + '</span></span>';
+                        label = '<span class="grid-severity-critical"><span>' + label + '</span></span>';
                         break;
                     case '3':
-                        label = '<span style="color:#f08c0a;"><span>' + label + '</span></span>';
+                        label = '<span class="grid-severity-minor"><span>' + label + '</span></span>';
                         break;
                 }
             }

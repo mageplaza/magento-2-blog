@@ -116,7 +116,6 @@ class Tag extends Generic implements TabInterface
                 'class' => 'fieldset-wide'
             ]
         );
-
         if ($tag->getId()) {
             $fieldset->addField('tag_id', 'hidden', ['name' => 'tag_id']);
         }
@@ -128,7 +127,6 @@ class Tag extends Generic implements TabInterface
                 'required' => true,
             ]
         );
-
         $fieldset->addField('enabled', 'select', [
                 'name' => 'enabled',
                 'label' => __('Status'),
@@ -180,21 +178,18 @@ class Tag extends Generic implements TabInterface
                 'title' => __('Meta Title'),
             ]
         );
-
         $fieldset->addField('meta_description', 'textarea', [
                 'name' => 'meta_description',
                 'label' => __('Meta Description'),
                 'title' => __('Meta Description'),
             ]
         );
-
         $fieldset->addField('meta_keywords', 'textarea', [
                 'name' => 'meta_keywords',
                 'label' => __('Meta Keywords'),
                 'title' => __('Meta Keywords'),
             ]
         );
-
         $fieldset->addField('meta_robots', 'select', [
                 'name' => 'meta_robots',
                 'label' => __('Meta Robots'),

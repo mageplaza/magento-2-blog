@@ -24,13 +24,14 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\LayoutFactory;
+use Mageplaza\Blog\Controller\Adminhtml\Topic;
 use Mageplaza\Blog\Model\TopicFactory;
 
 /**
  * Class Posts
  * @package Mageplaza\Blog\Controller\Adminhtml\Topic
  */
-class Posts extends \Mageplaza\Blog\Controller\Adminhtml\Topic
+class Posts extends Topic
 {
     /**
      * Result layout factory

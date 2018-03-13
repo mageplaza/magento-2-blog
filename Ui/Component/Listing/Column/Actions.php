@@ -77,8 +77,8 @@ class Actions extends Column
                     }
 
                     $item[$this->getData('name')][$key] = [
-                        'href'   => $this->urlBuilder->getUrl($action['path'], ['id' => $item[$action['params']['id']]]),
-                        'label'  => $action['label'],
+                        'href' => $this->urlBuilder->getUrl($action['path'], ['id' => $item[$action['params']['id']]]),
+                        'label' => $action['label'],
                         'hidden' => false,
                     ];
                 }

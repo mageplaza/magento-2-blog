@@ -147,7 +147,6 @@ class Post extends Generic implements TabInterface
                 'required' => true
             ]
         );
-
         $fieldset->addField('enabled', 'select', [
                 'name' => 'enabled',
                 'label' => __('Status'),
@@ -155,7 +154,6 @@ class Post extends Generic implements TabInterface
                 'values' => $this->enabledisable->toOptionArray()
             ]
         );
-
         if (!$post->hasData('enabled')) {
             $post->setEnabled(1);
         }
@@ -166,7 +164,6 @@ class Post extends Generic implements TabInterface
                 'title' => __('Short Description')
             ]
         );
-
         $fieldset->addField('post_content', 'editor', [
                 'name' => 'post_content',
                 'label' => __('Content'),
@@ -202,7 +199,6 @@ class Post extends Generic implements TabInterface
                 'path' => $this->imageHelper->getBaseMediaPath(Image::TEMPLATE_MEDIA_TYPE_POST)
             ]
         );
-
         $fieldset->addField('categories_ids', '\Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category', [
                 'name' => 'categories_ids',
                 'label' => __('Categories'),
@@ -240,7 +236,6 @@ class Post extends Generic implements TabInterface
                 'values' => $this->booleanOptions->toOptionArray(),
             ]
         );
-
         $fieldset->addField('allow_comment', 'select', [
                 'name' => 'allow_comment',
                 'label' => __('Allow Comment'),
@@ -248,7 +243,6 @@ class Post extends Generic implements TabInterface
                 'values' => $this->booleanOptions->toOptionArray(),
             ]
         );
-
         $fieldset->addField('publish_date', 'date', array(
                 'name' => 'publish_date',
                 'label' => __('Publish Date'),
@@ -264,21 +258,18 @@ class Post extends Generic implements TabInterface
                 'class' => 'fieldset-wide'
             ]
         );
-
         $seoFieldset->addField('url_key', 'text', [
                 'name' => 'url_key',
                 'label' => __('URL Key'),
                 'title' => __('URL Key')
             ]
         );
-
         $seoFieldset->addField('meta_title', 'text', [
                 'name' => 'meta_title',
                 'label' => __('Meta Title'),
                 'title' => __('Meta Title')
             ]
         );
-
         $seoFieldset->addField('meta_description', 'textarea', [
                 'name' => 'meta_description',
                 'label' => __('Meta Description'),
@@ -291,7 +282,6 @@ class Post extends Generic implements TabInterface
                 'title' => __('Meta Keywords')
             ]
         );
-
         $seoFieldset->addField('meta_robots', 'select', [
                 'name' => 'meta_robots',
                 'label' => __('Meta Robots'),

@@ -59,6 +59,7 @@ class Save extends Author
 
     /**
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\ResultInterface
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function execute()
     {

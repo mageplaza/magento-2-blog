@@ -30,8 +30,7 @@ use Magento\Backend\Block\Widget\Form\Generic;
 class Form extends Generic
 {
     /**
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @inheritdoc
      */
     protected function _prepareForm()
     {

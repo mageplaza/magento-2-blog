@@ -21,29 +21,33 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Post;
 
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Block\Widget\Form\Container;
+use Magento\Framework\Registry;
+
 /**
  * Class Edit
  * @package Mageplaza\Blog\Block\Adminhtml\Post
  */
-class Edit extends \Magento\Backend\Block\Widget\Form\Container
+class Edit extends Container
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
      * constructor
      *
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param Registry $coreRegistry
+     * @param Context $context
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Block\Widget\Context $context,
+        Registry $coreRegistry,
+        Context $context,
         array $data = []
     )
     {

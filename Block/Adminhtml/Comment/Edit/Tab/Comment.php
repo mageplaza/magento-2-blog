@@ -24,12 +24,12 @@ namespace Mageplaza\Blog\Block\Adminhtml\Comment\Edit\Tab;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
 use Mageplaza\Blog\Model\PostFactory;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Class Comment

@@ -73,8 +73,8 @@ class Tag extends AbstractDb
         Data $helperData
     )
     {
-        $this->helperData   = $helperData;
-        $this->date         = $date;
+        $this->helperData = $helperData;
+        $this->date = $date;
         $this->eventManager = $eventManager;
 
         parent::__construct($context);
@@ -102,10 +102,10 @@ class Tag extends AbstractDb
     public function getTagNameById($id)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()
+        $select = $adapter->select()
             ->from($this->getMainTable(), 'name')
             ->where('tag_id = :tag_id');
-        $binds   = ['tag_id' => (int)$id];
+        $binds = ['tag_id' => (int)$id];
 
         return $adapter->fetchOne($select, $binds);
     }
@@ -163,22 +163,22 @@ class Tag extends AbstractDb
     protected function savePostRelation(\Mageplaza\Blog\Model\Tag $tag)
     {
         $tag->setIsChangedPostList(false);
-        $id    = $tag->getId();
+        $id = $tag->getId();
         $posts = $tag->getPostsData();
         if ($posts === null) {
             return $this;
         }
         $oldPosts = $tag->getPostsPosition();
-        $insert   = array_diff_key($posts, $oldPosts);
-        $delete   = array_diff_key($oldPosts, $posts);
-        $update   = array_intersect_key($posts, $oldPosts);
-        $_update  = [];
+        $insert = array_diff_key($posts, $oldPosts);
+        $delete = array_diff_key($oldPosts, $posts);
+        $update = array_intersect_key($posts, $oldPosts);
+        $_update = [];
         foreach ($update as $key => $settings) {
             if (isset($oldPosts[$key]) && $oldPosts[$key] != $settings['position']) {
                 $_update[$key] = $settings;
             }
         }
-        $update  = $_update;
+        $update = $_update;
         $adapter = $this->getConnection();
         if (!empty($delete)) {
             $condition = ['post_id IN(?)' => array_keys($delete), 'tag_id=?' => $id];
@@ -188,8 +188,8 @@ class Tag extends AbstractDb
             $data = [];
             foreach ($insert as $postId => $position) {
                 $data[] = [
-                    'tag_id'   => (int)$id,
-                    'post_id'  => (int)$postId,
+                    'tag_id' => (int)$id,
+                    'post_id' => (int)$postId,
                     'position' => (int)$position['position']
                 ];
             }
@@ -198,7 +198,7 @@ class Tag extends AbstractDb
         if (!empty($update)) {
             foreach ($update as $postId => $position) {
                 $where = ['tag_id = ?' => (int)$id, 'post_id = ?' => (int)$postId];
-                $bind  = ['position' => (int)$position['position']];
+                $bind = ['position' => (int)$position['position']];
                 $adapter->update($this->tagPostTable, $bind, $where);
             }
         }

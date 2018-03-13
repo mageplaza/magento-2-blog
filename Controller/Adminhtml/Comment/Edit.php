@@ -22,7 +22,6 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Comment;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Cms\Block\Page;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Comment;

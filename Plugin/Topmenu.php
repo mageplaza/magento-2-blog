@@ -69,6 +69,7 @@ class Topmenu
      * @param string $outermostClass
      * @param string $childrenWrapClass
      * @param int $limit
+     * @return array
      */
     public function beforeGetHtml(
         \Magento\Theme\Block\Html\Topmenu $subject,
@@ -87,6 +88,8 @@ class Topmenu
                     )
                 );
         }
+
+        return [$outermostClass, $childrenWrapClass, $limit];
     }
 
     /**

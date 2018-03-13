@@ -21,14 +21,15 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Comment;
 
-use Magento\Framework\Registry;
 use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Block\Widget\Form\Container;
+use Magento\Framework\Registry;
 
 /**
  * Class Edit
  * @package Mageplaza\Blog\Block\Adminhtml\Comment
  */
-class Edit extends \Magento\Backend\Block\Widget\Form\Container
+class Edit extends Container
 {
     /**
      * Core registry

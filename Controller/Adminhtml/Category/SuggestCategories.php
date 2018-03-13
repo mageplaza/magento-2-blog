@@ -25,13 +25,14 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutFactory;
+use Mageplaza\Blog\Controller\Adminhtml\Category;
 use Mageplaza\Blog\Model\CategoryFactory;
 
 /**
  * Class SuggestCategories
  * @package Mageplaza\Blog\Controller\Adminhtml\Category
  */
-class SuggestCategories extends \Mageplaza\Blog\Controller\Adminhtml\Category
+class SuggestCategories extends Category
 {
     /**
      * Json result factory

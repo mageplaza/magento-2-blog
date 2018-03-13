@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Setup;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 
@@ -30,17 +31,14 @@ use Magento\Framework\Setup\SchemaSetupInterface;
  * Class InstallSchema
  * @package Mageplaza\Blog\Setup
  */
-class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
+class InstallSchema implements InstallSchemaInterface
 {
     /**
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
      * @throws \Zend_Db_Exception
      */
-    public function install(
-        SchemaSetupInterface $setup,
-        ModuleContextInterface $context
-    )
+    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $installer = $setup;
 
