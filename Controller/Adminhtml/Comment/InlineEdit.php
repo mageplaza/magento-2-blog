@@ -31,7 +31,7 @@ use Mageplaza\Blog\Model\CommentFactory;
  * Class InlineEdit
  * @package Mageplaza\Blog\Controller\Adminhtml\Comment
  */
-abstract class InlineEdit extends Action
+class InlineEdit extends Action
 {
     /**
      * JSON Factory
