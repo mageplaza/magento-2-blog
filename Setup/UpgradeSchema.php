@@ -187,6 +187,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ->addColumn('reply_id', Table::TYPE_INTEGER, null, ['unsigned' => true, 'nullable' => true, 'default' => 0], 'Reply ID')
                     ->addColumn('content', Table::TYPE_TEXT, 255, [], 'Comment content')
                     ->addColumn('created_at', Table::TYPE_TEXT, null, [], 'Comment Created At')
+                    ->addColumn('status',Table::TYPE_SMALLINT, 3,['unsigned' => true, 'nullable' => false, 'default' => 3], 'Status')
+                    ->addColumn('store_ids',Table::TYPE_TEXT, null, ['nullable' => false, 'unsigned' => true,], 'Store Id')
                     ->addIndex($installer->getIdxName('mageplaza_blog_comment', ['comment_id']), ['comment_id'])
                     ->addIndex($installer->getIdxName('mageplaza_blog_comment', ['entity_id']), ['entity_id'])
                     ->addForeignKey(
@@ -361,17 +363,19 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
 
             if ($installer->tableExists('mageplaza_blog_comment')) {
-                $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'status', [
-                    'type' => Table::TYPE_INTEGER, null, [],
-                    'comment' => 'Post Name',
-                ]);
-                $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'store_ids', [
-                    'type' => Table::TYPE_TEXT, null, ['nullable' => false, 'unsigned' => true,],
-                    'comment' => 'Store Id',
-                ]);
-
+                if (!$connection->tableColumnExists($installer->getTable('mageplaza_blog_comment'), 'status')) {
+                    $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'status', [
+                        'type' => Table::TYPE_INTEGER, 3, ['unsigned' => true, 'nullable' => false, 'default' => 3],
+                        'comment' => 'status',
+                    ]);
+                }
+                if (!$connection->tableColumnExists($installer->getTable('mageplaza_blog_comment'), 'store_ids')) {
+                    $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'store_ids', [
+                        'type' => Table::TYPE_TEXT, null, ['nullable' => false, 'unsigned' => true,],
+                        'comment' => 'Store Id',
+                    ]);
+                }
             }
-
         }
 
         $installer->endSetup();
