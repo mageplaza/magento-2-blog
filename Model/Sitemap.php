@@ -23,7 +23,7 @@ namespace Mageplaza\Blog\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Sitemap\Helper\Data;
+use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Image;
 
 /**
