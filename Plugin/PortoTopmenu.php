@@ -21,11 +21,6 @@
 
 namespace Mageplaza\Blog\Plugin;
 
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Data\Tree\Node;
-use Magento\Framework\Data\TreeFactory;
-use Mageplaza\Blog\Helper\Data;
-
 /**
  * Class PortoTopmenu
  * @package Mageplaza\Blog\Plugin
@@ -33,67 +28,17 @@ use Mageplaza\Blog\Helper\Data;
 class PortoTopmenu
 {
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @param \Smartwave\Megamenu\Block\Topmenu $topmenu
+     * @param $html
+     * @return string
      */
-    protected $helper;
-
-    /**
-     * @var \Magento\Framework\Data\TreeFactory
-     */
-    protected $treeFactory;
-
-    /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $request;
-
-    /**
-     * Topmenu constructor.
-     * @param \Mageplaza\Blog\Helper\Data $helper
-     * @param \Magento\Framework\Data\TreeFactory $treeFactory
-     * @param \Magento\Framework\App\RequestInterface $request
-     */
-    public function __construct(
-        Data $helper,
-        TreeFactory $treeFactory,
-        RequestInterface $request
-    )
+    public function afterGetMegamenuHtml(\Smartwave\Megamenu\Block\Topmenu $topmenu, $html)
     {
-        $this->helper = $helper;
-        $this->treeFactory = $treeFactory;
-        $this->request = $request;
-    }
+        $html .= $topmenu->getLayout()
+            ->createBlock('Mageplaza\Blog\Block\Frontend')
+            ->setTemplate('Mageplaza_Blog::position/topmenuporto.phtml')
+            ->toHtml();
 
-    /**
-     * @param \Smartwave\Megamenu\Block\Topmenu $subject
-     * @param $categories
-     * @return mixed
-     */
-    public function afterGetStoreCategories(\Smartwave\Megamenu\Block\Topmenu $subject, $categories)
-    {
-        if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
-            $categories->add(
-                new Node(
-                    $this->getMenuAsArray(),
-                    'id',
-                    $this->treeFactory->create()
-                )
-            );
-        }
-        return $categories;
-    }
-
-    /**
-     * @return array
-     */
-    private function getMenuAsArray()
-    {
-        return [
-            'name' => $this->helper->getBlogConfig('general/name') ?: __('Blog'),
-            'id' => 'mpblog-node',
-            'url' => $this->helper->getBlogUrl(''),
-            'is_active' => 1,
-            'include_in_menu' => 1
-        ];
+        return $html;
     }
 }
