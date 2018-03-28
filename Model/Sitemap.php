@@ -66,6 +66,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogPostsSiteMapCollection()
     {
+        $urlSuffix = $this->blogDataHelper->getUrlSuffix();
         $postCollection = $this->blogDataHelper->postFactory->create()->getCollection();
         $postSiteMapCollection = [];
         if (!$this->router) {
@@ -86,7 +87,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
                 endif;
                 $postSiteMapCollection[$item->getId()] = new DataObject([
                     'id' => $item->getId(),
-                    'url' => $this->router . '/post/' . $item->getUrlKey(),
+                    'url' => $this->router . '/post/' . $item->getUrlKey() . $urlSuffix,
                     'images' => $images,
                     'updated_at' => $item->getUpdatedAt(),
                 ]);
@@ -101,13 +102,14 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogCategoriesSiteMapCollection()
     {
+        $urlSuffix = $this->blogDataHelper->getUrlSuffix();
         $categoryCollection = $this->blogDataHelper->categoryFactory->create()->getCollection();
         $categorySiteMapCollection = [];
         foreach ($categoryCollection as $item) {
             if (!is_null($item->getEnabled())) {
                 $categorySiteMapCollection[$item->getId()] = new DataObject([
                     'id' => $item->getId(),
-                    'url' => $this->router . '/category/' . $item->getUrlKey(),
+                    'url' => $this->router . '/category/' . $item->getUrlKey() . $urlSuffix,
                     'updated_at' => $item->getUpdatedAt(),
                 ]);
             }
@@ -121,13 +123,14 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogTagsSiteMapCollection()
     {
+        $urlSuffix = $this->blogDataHelper->getUrlSuffix();
         $tagCollection = $this->blogDataHelper->tagFactory->create()->getCollection();
         $tagSiteMapCollection = [];
         foreach ($tagCollection as $item) {
             if (!is_null($item->getEnabled())) {
                 $tagSiteMapCollection[$item->getId()] = new DataObject([
                     'id' => $item->getId(),
-                    'url' => $this->router . '/tag/' . $item->getUrlKey(),
+                    'url' => $this->router . '/tag/' . $item->getUrlKey() . $urlSuffix,
                     'updated_at' => $item->getUpdatedAt(),
                 ]);
             }
@@ -141,13 +144,14 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogTopicsSiteMapCollection()
     {
+        $urlSuffix = $this->blogDataHelper->getUrlSuffix();
         $topicCollection = $this->blogDataHelper->topicFactory->create()->getCollection();
         $topicSiteMapCollection = [];
         foreach ($topicCollection as $item) {
             if (!is_null($item->getEnabled())) {
                 $topicSiteMapCollection[$item->getId()] = new DataObject([
                     'id' => $item->getId(),
-                    'url' => $this->router . '/topic/' . $item->getUrlKey(),
+                    'url' => $this->router . '/topic/' . $item->getUrlKey() . $urlSuffix,
                     'updated_at' => $item->getUpdatedAt(),
                 ]);
             }
