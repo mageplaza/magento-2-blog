@@ -1,0 +1,97 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+<script>
+    require([
+        'jquery'
+    ], function ($) {
+
+        mpBlogImport = {
+
+            importName: '#word_press_import_name',
+            dbName: '#word_press_db_name',
+            userName: '#word_press_user_name',
+            pwd: '#word_press_db_password',
+            host: '#word_press_db_host',
+            tablePrefix: '#word_press_table_prefix',
+            typeSelector: <?php echo $block->getTypeSelector();?>,
+
+            initImportFieldsSet: function () {
+                for (var i = 0; i < this.typeSelector.length; i++) {
+
+                    if ($('#import_type').attr("value") == this.typeSelector[i]) {
+                        this.showFieldSet('#' + this.typeSelector[i] + '_fieldset');
+                    } else {
+                        this.hideFieldSet('#' + this.typeSelector[i] + '_fieldset');
+                    }
+                }
+            },
+
+            showFieldSet: function (selector) {
+                $(selector).show();
+            },
+
+            hideFieldSet: function (selector) {
+                $(selector).hide();
+            },
+
+            initImportCheckConnection: function () {
+                if ($('#edit_form').valid()) {
+                    $('body').loader('show');
+                    $.ajax({
+                        url: '<?php echo $block->getUrl('mageplaza_blog/import/validate', ['form_key' => $block->getFormKey()]);?>',
+                        data: {
+                            importName: $(this.importName).val(),
+                            database: $(this.dbName).val(),
+                            userName: $(this.userName).val(),
+                            passWord: $(this.pwd).val(),
+                            host: $(this.host).val(),
+                            tablePrefix: $(this.tablePrefix).val()
+                        },
+                        cache: false,
+                        success: function (result) {
+                            var messageHtml;
+                            if (result.status == 'false') {
+                                messageHtml = '<?php echo $block->getMessagesHtml('adderror', 'False connection. Please check the credentials and try again!') ?>';
+                                $(".message-error").hide();
+                                $(messageHtml).appendTo($(".page-columns"));
+                                $(".message-success").hide();
+                            } else {
+                                messageHtml = '<?php echo $block->getMessagesHtml('addsuccess', 'Connect successfully. To start import process press "Import" button' . $block->getImportButtonHtml()) ?>';
+
+                                $(".message-success").hide();
+                                $(messageHtml).appendTo($(".page-columns"));
+                                $("#word-press-import").click(function () {
+                                    alert('clicked import');
+
+                                });
+                                $(".message-error").hide();
+                            }
+                        },
+                        complete: function () {
+                            $('body').loader('hide');
+                        }
+                    });
+                }
+            }
+        };
+    });
+</script>
