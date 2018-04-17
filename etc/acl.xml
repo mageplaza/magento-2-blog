@@ -31,6 +31,7 @@
                     <resource id="Mageplaza_Blog::category" title="Categories" sortOrder="40"/>
                     <resource id="Mageplaza_Blog::author" title="Author Information" sortOrder="50"/>
                     <resource id="Mageplaza_Blog::comment" title="Manage Comments" sortOrder="60"/>
+                    <resource id="Mageplaza_Blog::import" title="Import" sortOrder="65"/>
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">

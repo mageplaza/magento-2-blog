@@ -65,6 +65,7 @@ abstract class Author extends Action
 
     /**
      * @return \Mageplaza\Blog\Model\Author
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function initAuthor()
     {
