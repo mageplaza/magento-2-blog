@@ -24,6 +24,8 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Import;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\Import\WordPress;
+use Mageplaza\Blog\Helper\Data as BlogHelper;
 
 /**
  * Class Import
@@ -31,34 +33,91 @@ use Magento\Framework\Registry;
  */
 class Import extends Action
 {
+    /**
+     * @var WordPress
+     */
+    public $importModel;
+
+    /**
+     * @var BlogHelper
+     */
+    public $blogHelper;
+
+    /**
+     * @var Registry
+     */
+    public $registry;
+
+    /**
+     * Import constructor.
+     * @param Context $context
+     * @param WordPress $wordPress
+     * @param BlogHelper $blogHelper
+     * @param Registry $registry
+     */
+    public function __construct(
+        Action\Context $context,
+        WordPress $wordPress,
+        BlogHelper $blogHelper,
+        Registry $registry
+    )
+    {
+        $this->blogHelper = $blogHelper;
+        $this->importModel = $wordPress;
+        $this->registry = $registry;
+        parent::__construct($context);
+    }
+
+    /**
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     */
     public function execute()
     {
+        $data = $this->_getSession()->getData('mageplaza_blog_import_data');
 
-        $resultRedirect = $this->resultRedirectFactory->create();
-        die("Here!");
-        $data = $this->getRequest()->getPost('import');
-
-        try {
-            mysqli_connect($data["db_host"],$data["user_name"],$data["db_password"],$data["db_name"]);
-            $this->messageManager->addSuccess(__('You connected to %1 successfully',$data["import_name"]));
-            $resultRedirect->setPath('mageplaza_blog/*/edit');
-            $this->_getSession()->setData('mageplaza_blog_import_data', $data);
-
-            return $resultRedirect;
-
-
-        } catch (LocalizedException $e) {
-            echo ($e->getMessage());
-        } catch (\RuntimeException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('False connection to %1',$data["import_name"]));
-            $this->_getSession()->setData('mageplaza_blog_import_data', $data);
+        $connection = mysqli_connect($data["host"], $data["user_name"], $data["password"], $data["database"]);
+        $this->importModel->runImport($data, $connection);
+        $postStatistic = $this->registry->registry('mageplaza_import_post_statistic');
+        $tagStatistic = $this->registry->registry('mageplaza_import_tag_statistic');
+        $messagesBlock = $this->_view->getLayout()->createBlock(\Magento\Framework\View\Element\Messages::class);
+        if ($postStatistic["delete_count"] > 0) {
+            $statisticHtml = $messagesBlock
+                ->{'addsuccess'}(__('You have imported %1 %2 successful. Replaced %4 %2. Skipped %3 %2.',
+                    $postStatistic['success_count'],
+                    $postStatistic['type'],
+                    $postStatistic['error_count'],
+                    $postStatistic['delete_count']
+                ))
+                ->toHtml();
+        } else {
+            $statisticHtml = $messagesBlock
+                ->{'addsuccess'}(__('You have imported %1 %2 successful. Skipped %3 %2.',
+                    $postStatistic['success_count'],
+                    $postStatistic['type'],
+                    $postStatistic['error_count']
+                ))
+                ->toHtml();
         }
 
-        $resultRedirect->setPath('mageplaza_blog/*/edit');
-
-        return $resultRedirect;
-
+        if ($tagStatistic["delete_count"] > 0) {
+            $statisticHtml = $messagesBlock
+                ->{'addsuccess'}(__('You have imported %1 %2 successful. Replaced %4 %2. Skipped %3 %2.',
+                    $postStatistic['success_count'],
+                    $postStatistic['type'],
+                    $postStatistic['error_count'],
+                    $postStatistic['delete_count']
+                ))
+                ->toHtml();
+        } else {
+            $statisticHtml = $messagesBlock
+                ->{'addsuccess'}(__('You have imported %1 %2 successful. Skipped %3 %2.',
+                    $postStatistic['success_count'],
+                    $postStatistic['type'],
+                    $postStatistic['error_count']
+                ))
+                ->toHtml();
+        }
+        $result = ['statistic' => $statisticHtml, 'status' => 'ok'];
+        return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
     }
 }

@@ -33,6 +33,7 @@
             host: '#word_press_db_host',
             tablePrefix: '#word_press_table_prefix',
             typeSelector: <?php echo $block->getTypeSelector();?>,
+            behaviourSelector: '#word_press_import_behaviour',
 
             initImportFieldsSet: function () {
                 for (var i = 0; i < this.typeSelector.length; i++) {
@@ -59,12 +60,13 @@
                     $.ajax({
                         url: '<?php echo $block->getUrl('mageplaza_blog/import/validate', ['form_key' => $block->getFormKey()]);?>',
                         data: {
-                            importName: $(this.importName).val(),
+                            import_name: $(this.importName).val(),
                             database: $(this.dbName).val(),
-                            userName: $(this.userName).val(),
-                            passWord: $(this.pwd).val(),
+                            user_name: $(this.userName).val(),
+                            password: $(this.pwd).val(),
                             host: $(this.host).val(),
-                            tablePrefix: $(this.tablePrefix).val()
+                            table_prefix: $(this.tablePrefix).val(),
+                            behaviour: $(this.behaviourSelector).val()
                         },
                         cache: false,
                         success: function (result) {
@@ -79,10 +81,7 @@
 
                                 $(".message-success").hide();
                                 $(messageHtml).appendTo($(".page-columns"));
-                                $("#word-press-import").click(function () {
-                                    alert('clicked import');
 
-                                });
                                 $(".message-error").hide();
                             }
                         },
@@ -91,6 +90,24 @@
                         }
                     });
                 }
+            },
+
+            importAction: function () {
+
+                $('body').loader('show');
+                $.ajax({
+                    url: '<?php echo $block->getUrl('mageplaza_blog/import/import', ['form_key' => $block->getFormKey()]);?>',
+                    cache:false,
+                    success: function (result) {
+                        var statisticMessage = result.statistic;
+                            $(".message-success").hide();
+                            $(statisticMessage).appendTo($(".page-columns"));
+                            $(".message-error").hide();
+                    },
+                    complete: function () {
+                        $('body').loader('hide');
+                    }
+                });
             }
         };
     });

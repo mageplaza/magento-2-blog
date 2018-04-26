@@ -22,15 +22,13 @@
 namespace Mageplaza\Blog\Block\Adminhtml\Import\Edit;
 
 use Magento\Backend\Block\Template\Context;
-use Magento\Backend\Block\Widget\Form\Generic;
-use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
 use Mageplaza\Blog\Helper\Image as ImageHelper;
-use Mageplaza\Core\Block\Adminhtml\Renderer\Image;
 use Mageplaza\Blog\Model\Config\Source\Import\Type;
+use Mageplaza\Blog\Model\Config\Source\Import\Behaviour;
 
 /**
  * Class Form
@@ -51,13 +49,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var ImageHelper
      */
-    protected $imageHelper;
+    protected $_imageHelper;
 
     /**
      * @var Type
      */
-    protected $importType;
+    protected $_importType;
 
+    protected $_importBehaviour;
     /**
      * Form constructor.
      * @param Config $wysiwygConfig
@@ -77,13 +76,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         FormFactory $formFactory,
         ImageHelper $imageHelper,
         Type $importType,
+        Behaviour $importBehaviour,
         array $data = []
     )
     {
         $this->wysiwygConfig = $wysiwygConfig;
         $this->systemStore = $systemStore;
-        $this->imageHelper = $imageHelper;
-        $this->importType = $importType;
+        $this->_imageHelper = $imageHelper;
+        $this->_importType = $importType;
+        $this->_importBehaviour = $importBehaviour;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -118,13 +119,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'import_type',
                 'label' => __('Import Type'),
                 'title' => __('Import Type'),
-                'values' => $this->importType->toOptionArray(),
+                'values' => $this->_importType->toOptionArray(),
                 'required' => true,
                 'onchange' => 'mpBlogImport.initImportFieldsSet();'
             ]
         );
 
-        $fieldsetList = $this->importType->toOptionArray();
+        $fieldsetList = $this->_importType->toOptionArray();
         array_shift($fieldsetList);
 
         foreach ($fieldsetList as $item){
@@ -206,8 +207,19 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'label' => __('Table Prefix'),
                     'required' => true,
                     'class' => $item["value"],
-                    'value' => '_wp',
+                    'value' => 'wp_',
                     'note' => __('Your table prefix name')
+                ]
+            );
+
+            $fieldsets[$item["value"]]->addField(
+                $item["value"].'_import_behaviour',
+                'select',
+                [
+                    'name' => 'import_behaviour',
+                    'label' => __('Import Behaviour'),
+                    'title' => __('Import Behaviour'),
+                    'values' => $this->_importBehaviour->toOptionArray(),
                 ]
             );
         }
