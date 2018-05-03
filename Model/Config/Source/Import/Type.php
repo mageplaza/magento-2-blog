@@ -58,8 +58,8 @@ class Type implements ArrayInterface
     {
         return [
             "" => __('-- Please Select --'),
-            self::WORDPRESS => __('Wordpress'),
-            self::AHEADWORK => __('AheadWork')
+            self::WORDPRESS => __('Wordpress')
+//            self::AHEADWORK => __('AheadWork')
         ];
     }
 }

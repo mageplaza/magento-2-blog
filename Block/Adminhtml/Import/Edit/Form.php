@@ -29,12 +29,13 @@ use Magento\Store\Model\System\Store;
 use Mageplaza\Blog\Helper\Image as ImageHelper;
 use Mageplaza\Blog\Model\Config\Source\Import\Type;
 use Mageplaza\Blog\Model\Config\Source\Import\Behaviour;
+use Magento\Backend\Block\Widget\Form\Generic;
 
 /**
  * Class Form
  * @package Mageplaza\Blog\Block\Adminhtml\Import\Edit
  */
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Form extends Generic
 {
     /**
      * @var Store
@@ -56,7 +57,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected $_importType;
 
+    /**
+     * @var Behaviour
+     */
     protected $_importBehaviour;
+
     /**
      * Form constructor.
      * @param Config $wysiwygConfig
@@ -66,6 +71,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param FormFactory $formFactory
      * @param ImageHelper $imageHelper
      * @param Type $importType
+     * @param Behaviour $importBehaviour
      * @param array $data
      */
     public function __construct(
@@ -220,6 +226,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'label' => __('Import Behaviour'),
                     'title' => __('Import Behaviour'),
                     'values' => $this->_importBehaviour->toOptionArray(),
+                    'note' => __('This action is applied to all data')
                 ]
             );
         }

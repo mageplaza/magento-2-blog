@@ -97,12 +97,12 @@
                 $('body').loader('show');
                 $.ajax({
                     url: '<?php echo $block->getUrl('mageplaza_blog/import/import', ['form_key' => $block->getFormKey()]);?>',
-                    cache:false,
+                    cache: false,
                     success: function (result) {
                         var statisticMessage = result.statistic;
-                            $(".message-success").hide();
-                            $(statisticMessage).appendTo($(".page-columns"));
-                            $(".message-error").hide();
+                        $(".message-success").hide();
+                        $(".message-error").hide();
+                        $(statisticMessage).appendTo($(".page-columns"));
                     },
                     complete: function () {
                         $('body').loader('hide');

@@ -43,8 +43,8 @@ class Validate extends Action
      * @param BlogHelper $blogHelper
      */
     public function __construct(
-       Context $context,
-       BlogHelper $blogHelper
+        Context $context,
+        BlogHelper $blogHelper
     )
     {
         $this->blogHelper = $blogHelper;
@@ -59,20 +59,22 @@ class Validate extends Action
         $data = $this->getRequest()->getParams();
 
         try {
-            mysqli_connect($data["host"],$data["user_name"],$data["password"],$data["database"]);
+            $connect = mysqli_connect($data["host"], $data["user_name"], $data["password"], $data["database"]);
             $importName = $data["import_name"];
 
-            $this->_getSession()->setData('mageplaza_blog_import_data',$data);
-            $result = ['import_name' => $importName,'status' => 'ok'];
+            $this->_getSession()->setData('mageplaza_blog_import_data', $data);
+            $result = ['import_name' => $importName, 'status' => 'ok'];
+
+            mysqli_close($connect);
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         } catch (LocalizedException $e) {
-            $result = ['import_name' => $data["import_name"],'status' => 'false'];
+            $result = ['import_name' => $data["import_name"], 'status' => 'false'];
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         } catch (\RuntimeException $e) {
-            $result = ['import_name' => $data["import_name"],'status' => 'false'];
+            $result = ['import_name' => $data["import_name"], 'status' => 'false'];
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         } catch (\Exception $e) {
-            $result = ['import_name' => $data["import_name"],'status' => 'false'];
+            $result = ['import_name' => $data["import_name"], 'status' => 'false'];
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         }
 

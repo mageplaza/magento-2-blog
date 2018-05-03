@@ -74,50 +74,65 @@ class Import extends Action
     public function execute()
     {
         $data = $this->_getSession()->getData('mageplaza_blog_import_data');
-
+        $statisticHtml = '';
         $connection = mysqli_connect($data["host"], $data["user_name"], $data["password"], $data["database"]);
         $this->importModel->runImport($data, $connection);
-        $postStatistic = $this->registry->registry('mageplaza_import_post_statistic');
-        $tagStatistic = $this->registry->registry('mageplaza_import_tag_statistic');
         $messagesBlock = $this->_view->getLayout()->createBlock(\Magento\Framework\View\Element\Messages::class);
-        if ($postStatistic["delete_count"] > 0) {
+        $postStatistic = $this->registry->registry('mageplaza_import_post_statistic');
+        if ($postStatistic["has_data"]) {
+            $statisticHtml = $this->getStatistic($postStatistic, $messagesBlock);
+        }
+
+        $tagStatistic = $this->registry->registry('mageplaza_import_tag_statistic');
+
+        if ($tagStatistic["has_data"]) {
+            $statisticHtml = $this->getStatistic($tagStatistic, $messagesBlock);
+        }
+        $categoryStatistic = $this->registry->registry('mageplaza_import_category_statistic');
+
+        if ($categoryStatistic["has_data"]) {
+            $statisticHtml = $this->getStatistic($categoryStatistic, $messagesBlock);
+        }
+        $result = ['statistic' => $statisticHtml, 'status' => 'ok'];
+        mysqli_close($connection);
+        return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
+    }
+
+    /**
+     * @param $data
+     * @param $messagesBlock
+     * @return mixed
+     */
+    public function getStatistic($data, $messagesBlock)
+    {
+
+        if ($data["delete_count"] > 0) {
             $statisticHtml = $messagesBlock
                 ->{'addsuccess'}(__('You have imported %1 %2 successful. Replaced %4 %2. Skipped %3 %2.',
-                    $postStatistic['success_count'],
-                    $postStatistic['type'],
-                    $postStatistic['error_count'],
-                    $postStatistic['delete_count']
+                    $data['success_count'],
+                    $data['type'],
+                    $data['error_count'],
+                    $data['delete_count']
+                ))
+                ->toHtml();
+        } elseif ($data["success_count"] > 0) {
+            $statisticHtml = $messagesBlock
+                ->{'addsuccess'}(__('You have imported %1 %2 successful. Skipped %3 %2.',
+                    $data['success_count'],
+                    $data['type'],
+                    $data['error_count']
                 ))
                 ->toHtml();
         } else {
             $statisticHtml = $messagesBlock
-                ->{'addsuccess'}(__('You have imported %1 %2 successful. Skipped %3 %2.',
-                    $postStatistic['success_count'],
-                    $postStatistic['type'],
-                    $postStatistic['error_count']
+                ->{'adderror'}(__('There are something wrong while importing %2. Skipped %3 %2.',
+                    $data['success_count'],
+                    $data['type'],
+                    $data['error_count']
                 ))
                 ->toHtml();
         }
 
-        if ($tagStatistic["delete_count"] > 0) {
-            $statisticHtml = $messagesBlock
-                ->{'addsuccess'}(__('You have imported %1 %2 successful. Replaced %4 %2. Skipped %3 %2.',
-                    $postStatistic['success_count'],
-                    $postStatistic['type'],
-                    $postStatistic['error_count'],
-                    $postStatistic['delete_count']
-                ))
-                ->toHtml();
-        } else {
-            $statisticHtml = $messagesBlock
-                ->{'addsuccess'}(__('You have imported %1 %2 successful. Skipped %3 %2.',
-                    $postStatistic['success_count'],
-                    $postStatistic['type'],
-                    $postStatistic['error_count']
-                ))
-                ->toHtml();
-        }
-        $result = ['statistic' => $statisticHtml, 'status' => 'ok'];
-        return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
+        return $statisticHtml;
     }
 }
