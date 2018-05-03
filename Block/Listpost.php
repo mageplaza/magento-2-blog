@@ -136,6 +136,9 @@ class Listpost extends Frontend
         $robots = $object ? $object->getMetaRobots() : $this->helperData->getSeoConfig('meta_robots');
         $this->pageConfig->setRobots($robots);
 
+        if ($this->getRequest()->getFullActionName() == 'mpblog_post_view') {
+            $this->pageConfig->addRemotePageAsset($object->getUrl(), 'canonical', ['attributes' => ['rel' => 'canonical']]);
+        }
         $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle) {
             $pageMainTitle->setPageTitle($this->getBlogTitle());
