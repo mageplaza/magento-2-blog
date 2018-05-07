@@ -27,10 +27,10 @@ use Mageplaza\Blog\Helper\Data as BlogHelper;
 use Mageplaza\Blog\Model\Config\Source\Import\Type;
 
 /**
- * Class Before
+ * Class Import
  * @package Mageplaza\Blog\Block\Adminhtml\Import\Edit
  */
-class Before extends Template
+class Import extends Template
 {
     /**
      * @var BlogHelper
@@ -91,10 +91,13 @@ class Before extends Template
         return $messagesBlock->toHtml();
     }
 
+    /**
+     * @return string
+     */
     public function getImportButtonHtml()
     {
         $importUrl = $this->getUrl('mageplaza_blog/import/import');
-        $html = '&nbsp;&nbsp;<button id="word-press-import" href="' . $importUrl . '" class="" type=""><span><span><span>Import</span></span></span></button>';
+        $html = '&nbsp;&nbsp;<button id="word-press-import" href="' . $importUrl . '" class="" type="" onclick="mpBlogImport.importAction();"><span><span><span>Import</span></span></span></button>';
         return $html;
     }
 }

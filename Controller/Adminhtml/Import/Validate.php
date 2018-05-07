@@ -23,8 +23,8 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Import;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Registry;
 use Mageplaza\Blog\Helper\Data as BlogHelper;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Import
@@ -43,38 +43,40 @@ class Validate extends Action
      * @param BlogHelper $blogHelper
      */
     public function __construct(
-       Context $context,
-       BlogHelper $blogHelper
+        Context $context,
+        BlogHelper $blogHelper
     )
     {
         $this->blogHelper = $blogHelper;
         parent::__construct($context);
     }
 
+    /**
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     */
     public function execute()
     {
         $data = $this->getRequest()->getParams();
-//        $connect = mysqli_connect($data["host"],$data["userName"],$data["passWord"],$data["database"]);
-//        if (!$connect){
-////            $result = true;
-//            return $this->getResponse()->representJson("false");
-//        }else{
-//            return $this->getResponse()->representJson("true");
-//        }
+
         try {
-            mysqli_connect($data["host"],$data["userName"],$data["passWord"],$data["database"]);
-            $importName = $data["importName"];
-            $result = ['importName' => $importName,'status' => 'ok'];
+            $connect = mysqli_connect($data["host"], $data["user_name"], $data["password"], $data["database"]);
+            $importName = $data["import_name"];
+
+            $this->_getSession()->setData('mageplaza_blog_import_data', $data);
+            $result = ['import_name' => $importName, 'status' => 'ok'];
+
+            mysqli_close($connect);
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         } catch (LocalizedException $e) {
-            $result = ['importName' => $data["importName"],'status' => 'false'];
+            $result = ['import_name' => $data["import_name"], 'status' => 'false'];
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         } catch (\RuntimeException $e) {
-            $result = ['importName' => $data["importName"],'status' => 'false'];
+            $result = ['import_name' => $data["import_name"], 'status' => 'false'];
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         } catch (\Exception $e) {
-            $result = ['importName' => $data["importName"],'status' => 'false'];
+            $result = ['import_name' => $data["import_name"], 'status' => 'false'];
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         }
+
     }
 }

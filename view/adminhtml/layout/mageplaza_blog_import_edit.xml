@@ -23,7 +23,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Adminhtml\Import\Edit\Before" template="Mageplaza_Blog::import/form/before.phtml" name="mp.import.form.before" as="mp_form_before"/>
+            <block class="Mageplaza\Blog\Block\Adminhtml\Import\Edit\Import" template="Mageplaza_Blog::import/form/import.phtml" name="mp.import.form.before" as="mp_form_before"/>
             <block class="Mageplaza\Blog\Block\Adminhtml\Import\Edit" name="mageplaza_blog_import_edit"/>
         </referenceContainer>
     </body>

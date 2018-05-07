@@ -139,11 +139,6 @@ class Post extends AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        //set default Update At and Create At time post
-        $object->setUpdatedAt($this->date->date());
-        if ($object->isObjectNew()) {
-            $object->setCreatedAt($this->date->date());
-        }
 
         if (is_array($object->getStoreIds())) {
             $object->setStoreIds(implode(',', $object->getStoreIds()));

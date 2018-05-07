@@ -24,14 +24,13 @@ namespace Mageplaza\Blog\Model\Config\Source\Import;
 use Magento\Framework\Option\ArrayInterface;
 
 /**
- * Class Type
+ * Class Behaviour
  * @package Mageplaza\Blog\Model\Config\Source\Import
  */
-class Type implements ArrayInterface
+class Behaviour implements ArrayInterface
 {
-    const WORDPRESS = "word_press";
-    const AHEADWORK = "ahead_work";
-    const MAGEFAN = "mage_fan";
+    const UPDATE = "update";
+    const REPLACE = "replace";
 
     /**
      * @return array
@@ -57,9 +56,8 @@ class Type implements ArrayInterface
     public function toArray()
     {
         return [
-            "" => __('-- Please Select --'),
-            self::WORDPRESS => __('Wordpress')
-//            self::AHEADWORK => __('AheadWork')
+            self::UPDATE => __('Add / Update'),
+            self::REPLACE => __('Replace')
         ];
     }
 }

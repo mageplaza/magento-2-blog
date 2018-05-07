@@ -28,6 +28,7 @@ use Magento\Framework\Registry;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\PostFactory;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
  * Class Save
@@ -43,29 +44,35 @@ class Save extends Post
     public $jsHelper;
 
     /**
+     * @var DateTime
+     */
+    public $date;
+    /**
      * @var \Mageplaza\Blog\Helper\Image
      */
     protected $imageHelper;
 
     /**
      * Save constructor.
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Model\PostFactory $postFactory
-     * @param \Magento\Backend\Helper\Js $jsHelper
-     * @param \Mageplaza\Blog\Helper\Image $imageHelper
+     * @param Context $context
+     * @param Registry $registry
+     * @param PostFactory $postFactory
+     * @param Js $jsHelper
+     * @param Image $imageHelper
+     * @param DateTime $date
      */
     public function __construct(
         Context $context,
         Registry $registry,
         PostFactory $postFactory,
         Js $jsHelper,
-        Image $imageHelper
+        Image $imageHelper,
+        DateTime $date
     )
     {
         $this->jsHelper = $jsHelper;
         $this->imageHelper = $imageHelper;
-
+        $this->date = $date;
         parent::__construct($postFactory, $registry, $context);
     }
 
@@ -134,6 +141,11 @@ class Save extends Post
         $data['categories_ids'] = (isset($data['categories_ids']) && $data['categories_ids']) ? explode(',', $data['categories_ids']) : [];
         $data['tags_ids'] = (isset($data['tags_ids']) && $data['tags_ids']) ? explode(',', $data['tags_ids']) : [];
         $data['topics_ids'] = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(',', $data['topics_ids']) : [];
+
+        if ($post->getCreatedAt() == null) {
+            $data['created_at'] = $this->date->date();
+        }
+        $data['updated_at'] = $this->date->date();
 
         $post->addData($data);
 

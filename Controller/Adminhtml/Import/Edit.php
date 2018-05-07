@@ -34,11 +34,15 @@ use Magento\Framework\Registry;
 class Edit extends Action
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     public $resultPageFactory;
 
+    /**
+     * @var Registry
+     */
     public $registry;
+
     /**
      * Edit constructor.
      * @param Context $context

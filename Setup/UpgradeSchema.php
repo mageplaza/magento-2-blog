@@ -378,6 +378,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
 
+        if(version_compare($context->getVersion(),'2.4.5', '<')){
+            if($installer->tableExists('mageplaza_blog_post_traffic')){
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_post_traffic'),'numbers_view', ['type' => Table::TYPE_INTEGER]);
+            }
+        }
+
         $installer->endSetup();
     }
 }
