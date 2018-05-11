@@ -70,6 +70,7 @@ class Import extends Action
 
     /**
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
@@ -96,6 +97,11 @@ class Import extends Action
         $authorStatistic = $this->registry->registry('mageplaza_import_user_statistic');
         if ($authorStatistic["has_data"]) {
             $statisticHtml = $this->getStatistic($authorStatistic, $messagesBlock);
+        }
+
+        $commentStatistic = $this->registry->registry('mageplaza_import_comment_statistic');
+        if ($commentStatistic["has_data"]) {
+            $statisticHtml = $this->getStatistic($commentStatistic, $messagesBlock);
         }
 
         $result = ['statistic' => $statisticHtml, 'status' => 'ok'];
