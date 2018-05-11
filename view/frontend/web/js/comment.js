@@ -27,7 +27,6 @@ require([
         defaultCmt = $('ul.default-cmt__content__cmt-content:first'),
         likeBtn = defaultCmt.find('.btn-like'),
         replyBtn = defaultCmt.find('.btn-reply');
-
     submitComment();
     likeComment(likeBtn);
     showReply(replyBtn);
@@ -42,19 +41,43 @@ require([
         }
     });
 
-    //submit comment
+    /**
+     * Check the guest name and email input is valid
+     *
+     * @returns {boolean}
+     */
+    function checkGuestFormValidate() {
+        if (isLogged == 'No') {
+            if ($("#default-cmt__content__cmt-block__guest-form").valid()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * The comment submit button action
+     */
     function submitComment() {
         submitCmt.click(function () {
-            var cmtText = cmtBox.val();
-            if (cmtText.trim().length) {
-                $('.default-cmt_loading').show();
-                $(this).prop('disabled', true);
-                var ajaxRequest = ajaxCommentActions(cmtText, submitCmt);
-                ajaxRequest.done(function () {
-                    cmtBox.val('');
-                    $('.default-cmt_loading').hide();
-                    $(this).prop('disabled', false);
-                }.bind(this));
+            $(".default-cmt__content__cmt-block__cmt-box").find('.messages').hide();
+            if (checkGuestFormValidate()) {
+                var cmtText = cmtBox.val();
+                if (cmtText.trim().length) {
+                    $('.default-cmt_loading').show();
+                    $(this).prop('disabled', true);
+                    var ajaxRequest = ajaxCommentActions(cmtText, submitCmt);
+                    ajaxRequest.done(function () {
+                        cmtBox.val('');
+                        $('.default-cmt_loading').hide();
+                        $(this).prop('disabled', false);
+                    }.bind(this));
+                } else {
+                    $('.default-cmt__content__cmt-block__cmt-box__cmt-input').parent().append(messengerBox.cmt_warning);
+                }
             }
         });
     }
@@ -97,7 +120,7 @@ require([
                     $(this).attr('click', '0');
 
                 } else {
-                    cmtRowContainer.append(loginWarning);
+                    cmtRowContainer.append(messengerBox.login_warning);
                     jQuery.fn.fadeOutAndRemove = function (speed) {
                         $(this).fadeOut(speed, function () {
                             $(this).remove();
@@ -140,7 +163,7 @@ require([
                         submitReply(input, cmtId, cmtRowContainer);
                     }
                 } else {
-                    cmtRowContainer.append(loginWarning);
+                    cmtRowContainer.append(messengerBox.login_warning);
                     jQuery.fn.fadeOutAndRemove = function (speed) {
                         $(this).fadeOut(speed, function () {
                             $(this).remove();
@@ -180,23 +203,31 @@ require([
         var isReply = (typeof checkReply !== 'undefined') ? 1 : 0,
             replyId = (typeof cmtId !== 'undefined') ? cmtId : 0,
             displayReply = (typeof checkReply !== 'undefined');
-
+        var guestName = $('#default-cmt__content__cmt-block__guest-box__name-input').val();
+        var guestEmail = $('#default-cmt__content__cmt-block__guest-box__email-input').val();
         return $.ajax({
             type: 'POST',
             url: window.location.href,
-            data: {cmt_text: cmtText, isReply: isReply, replyId: replyId},
+            data: {cmt_text: cmtText, isReply: isReply, replyId: replyId, guestName: guestName, guestEmail: guestEmail},
             success: function (response) {
-                if (parseInt(response.status) === 3) {
-                    $('.default-cmt__content__cmt-block').prepend('<div class="message success message-success row">Your comment has been sent successfully. Please wait admin approve !</div>')
-                } else if (parseInt(response.status) === 1) {
-                    displayComment(response, displayReply);
-                    inputEl.val('');
-                } else if (response.status === 'error' && response.hasOwnProperty(error)) {
-                    if (checkReply !== 'undefined') {
-                        parentComment.append(response.error);
-                    } else {
-                        defaultCmt.append(response.error);
-                    }
+                switch (response.status) {
+                    case 'duplicated':
+                        $('.default-cmt__content__cmt-block__cmt-box__cmt-input').parent().append(messengerBox.exist_email_warning);
+                        break;
+                    case 3:
+                        $('.default-cmt__content__cmt-block').prepend(messengerBox.comment_approve);
+                        break;
+                    case 1:
+                        displayComment(response, displayReply);
+                        inputEl.val('');
+                        break;
+                    case 'error':
+                        if (checkReply !== 'undefined') {
+                            parentComment.append(response.error);
+                        } else {
+                            defaultCmt.append(response.error);
+                        }
+                        break;
                 }
             }
         });
@@ -204,7 +235,14 @@ require([
 
     // display comment
     function displayComment(cmt, isReply) {
-        var cmtRow = '<li id="cmt-id-' + cmt.cmt_id + '" class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12 ' + (isReply ? ('reply-row') : '') + '" data-cmt-id="' + cmt.cmt_id + '"' + (isReply ? ('data-reply-id="' + cmt.reply_cmt + '"') : '') + '> <div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username">' + cmt.user_cmt + '</span> </div> <div class="cmt-row__cmt-content"> <p>' + cmt.cmt_text + '</p> </div> <div class="cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> <a class="interactions__btn-actions action btn-like mpblog-like" data-cmt-id="' + cmt.cmt_id + '" click="1"><i class="fa fa-thumbs-up" aria-hidden="true" style="margin-right: 3px"></i><span class="count-like__like-text"></span></a> <a class="interactions__btn-actions action btn-reply" data-cmt-id="' + cmt.cmt_id + '">' + reply + '</a>  </div> <div class="interactions__cmt-createdat"> <span>' + cmt.created_at + '</span> </div> </div> </li>';
+        var cmtRow = '<li id="cmt-id-' + cmt.cmt_id + '" class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12 '
+            + (isReply ? ('reply-row') : '') + '" data-cmt-id="' + cmt.cmt_id + '"' + (isReply ? ('data-reply-id="' + cmt.reply_cmt + '"') : '')
+            + '> <div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username">' + cmt.user_cmt
+            + '</span> </div> <div class="cmt-row__cmt-content"> <p>' + cmt.cmt_text
+            + '</p> </div> <div class="cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> <a class="interactions__btn-actions action btn-like mpblog-like" data-cmt-id="'
+            + cmt.cmt_id + '" click="1"><i class="fa fa-thumbs-up" aria-hidden="true" style="margin-right: 3px"></i><span class="count-like__like-text"></span></a> <a class="interactions__btn-actions action btn-reply" data-cmt-id="'
+            + cmt.cmt_id + '">' + reply + '</a>  </div> <div class="interactions__cmt-createdat"> <span>' + cmt.created_at + '</span> </div> </div> </li>';
+
         if (isReply) {
             var replyCmtId = cmt.reply_cmt;
             var replyCmt = defaultCmt.find('.default-cmt__content__cmt-content__cmt-row');

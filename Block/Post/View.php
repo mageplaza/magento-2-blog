@@ -264,9 +264,13 @@ class View extends \Mageplaza\Blog\Block\Listpost
             if ($comment['reply_id'] == $cmtId && $comment['status'] == 1) {
                 $isReply = (bool)$comment['is_reply'];
                 $replyId = $isReply ? $comment['reply_id'] : '';
-                $userCmt = $this->getUserComment($comment['entity_id']);
-                $userName = $userCmt->getFirstName() . ' '
-                    . $userCmt->getLastName();
+                if ($comment['entity_id'] == 0) {
+                    $userName = $comment['user_name'];
+                } else {
+                    $userCmt = $this->getUserComment($comment['entity_id']);
+                    $userName = $userCmt->getFirstName() . ' '
+                        . $userCmt->getLastName();
+                }
                 $countLikes = $this->getCommentLikes($comment['comment_id']);
                 $isLiked = ($this->isLiked($comment['comment_id'])) ? "mpblog-liked" : "mpblog-like";
                 $this->commentTree .= '<li id="cmt-id-' . $comment['comment_id'] . '" class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12'
@@ -302,7 +306,6 @@ class View extends \Mageplaza\Blog\Block\Listpost
                 }
                 $this->commentTree .= '</li>';
             }
-
         }
         $this->commentTree .= '</ul>';
     }
@@ -396,5 +399,20 @@ class View extends \Mageplaza\Blog\Block\Listpost
         }
 
         return ucfirst($post->getName());
+    }
+
+    /**
+     * @param $priority
+     * @param $message
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getMessagesHtml($priority, $message)
+    {
+        /** @var $messagesBlock \Magento\Framework\View\Element\Messages */
+        $messagesBlock = $this->_layout->createBlock(\Magento\Framework\View\Element\Messages::class);
+        $messagesBlock->{$priority}(__($message));
+
+        return $messagesBlock->toHtml();
     }
 }

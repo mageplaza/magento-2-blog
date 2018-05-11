@@ -84,15 +84,20 @@ class Import extends Action
         }
 
         $tagStatistic = $this->registry->registry('mageplaza_import_tag_statistic');
-
         if ($tagStatistic["has_data"]) {
             $statisticHtml = $this->getStatistic($tagStatistic, $messagesBlock);
         }
-        $categoryStatistic = $this->registry->registry('mageplaza_import_category_statistic');
 
+        $categoryStatistic = $this->registry->registry('mageplaza_import_category_statistic');
         if ($categoryStatistic["has_data"]) {
             $statisticHtml = $this->getStatistic($categoryStatistic, $messagesBlock);
         }
+
+        $authorStatistic = $this->registry->registry('mageplaza_import_user_statistic');
+        if ($authorStatistic["has_data"]) {
+            $statisticHtml = $this->getStatistic($authorStatistic, $messagesBlock);
+        }
+
         $result = ['statistic' => $statisticHtml, 'status' => 'ok'];
         mysqli_close($connection);
         return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));

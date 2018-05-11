@@ -187,8 +187,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ->addColumn('reply_id', Table::TYPE_INTEGER, null, ['unsigned' => true, 'nullable' => true, 'default' => 0], 'Reply ID')
                     ->addColumn('content', Table::TYPE_TEXT, 255, [], 'Comment content')
                     ->addColumn('created_at', Table::TYPE_TEXT, null, [], 'Comment Created At')
-                    ->addColumn('status',Table::TYPE_SMALLINT, 3,['unsigned' => true, 'nullable' => false, 'default' => 3], 'Status')
-                    ->addColumn('store_ids',Table::TYPE_TEXT, null, ['nullable' => false, 'unsigned' => true,], 'Store Id')
+                    ->addColumn('status', Table::TYPE_SMALLINT, 3, ['unsigned' => true, 'nullable' => false, 'default' => 3], 'Status')
+                    ->addColumn('store_ids', Table::TYPE_TEXT, null, ['nullable' => false, 'unsigned' => true,], 'Store Id')
                     ->addIndex($installer->getIdxName('mageplaza_blog_comment', ['comment_id']), ['comment_id'])
                     ->addIndex($installer->getIdxName('mageplaza_blog_comment', ['entity_id']), ['entity_id'])
                     ->addForeignKey(
@@ -378,12 +378,37 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
 
-        if(version_compare($context->getVersion(),'2.4.5', '<')){
-            if($installer->tableExists('mageplaza_blog_post_traffic')){
-                $connection->modifyColumn($installer->getTable('mageplaza_blog_post_traffic'),'numbers_view', ['type' => Table::TYPE_INTEGER]);
+        if (version_compare($context->getVersion(), '2.4.5', '<')) {
+            if ($installer->tableExists('mageplaza_blog_post_traffic')) {
+                $connection->modifyColumn($installer->getTable('mageplaza_blog_post_traffic'), 'numbers_view', ['type' => Table::TYPE_INTEGER]);
             }
         }
 
+        if (version_compare($context->getVersion(), '2.4.6', '<')) {
+            if ($installer->tableExists('mageplaza_blog_comment')) {
+                $connection->dropForeignKey(
+                    $installer->getTable('mageplaza_blog_comment'),
+                    $installer->getFkName('mageplaza_blog_comment', 'entity_id', 'customer_entity', 'entity_id')
+                );
+            }
+        }
+
+        if (version_compare($context->getVersion(), '2.4.7', '<')) {
+            if ($installer->tableExists('mageplaza_blog_comment')) {
+                if (!$connection->tableColumnExists($installer->getTable('mageplaza_blog_comment'), 'user_name')) {
+                    $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'user_name', [
+                        'type' => Table::TYPE_TEXT, null, ['unsigned' => true, 'nullable' => true],
+                        'comment' => 'User Name',
+                    ]);
+                }
+                if (!$connection->tableColumnExists($installer->getTable('mageplaza_blog_comment'), 'user_email')) {
+                    $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'user_email', [
+                        'type' => Table::TYPE_TEXT, null, ['unsigned' => true, 'nullable' => true],
+                        'comment' => 'User Email',
+                    ]);
+                }
+            }
+        }
         $installer->endSetup();
     }
 }
