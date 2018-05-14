@@ -77,36 +77,44 @@ class Import extends Action
         $data = $this->_getSession()->getData('mageplaza_blog_import_data');
         $statisticHtml = '';
         $connection = mysqli_connect($data["host"], $data["user_name"], $data["password"], $data["database"]);
-        $this->importModel->runImport($data, $connection);
         $messagesBlock = $this->_view->getLayout()->createBlock(\Magento\Framework\View\Element\Messages::class);
-        $postStatistic = $this->registry->registry('mageplaza_import_post_statistic');
-        if ($postStatistic["has_data"]) {
-            $statisticHtml = $this->getStatistic($postStatistic, $messagesBlock);
+        if ($this->importModel->runImport($data, $connection)) {
+
+            $postStatistic = $this->registry->registry('mageplaza_import_post_statistic');
+            if ($postStatistic["has_data"]) {
+                $statisticHtml = $this->getStatistic($postStatistic, $messagesBlock);
+            }
+
+            $tagStatistic = $this->registry->registry('mageplaza_import_tag_statistic');
+            if ($tagStatistic["has_data"]) {
+                $statisticHtml = $this->getStatistic($tagStatistic, $messagesBlock);
+            }
+
+            $categoryStatistic = $this->registry->registry('mageplaza_import_category_statistic');
+            if ($categoryStatistic["has_data"]) {
+                $statisticHtml = $this->getStatistic($categoryStatistic, $messagesBlock);
+            }
+
+            $authorStatistic = $this->registry->registry('mageplaza_import_user_statistic');
+            if ($authorStatistic["has_data"]) {
+                $statisticHtml = $this->getStatistic($authorStatistic, $messagesBlock);
+            }
+
+            $commentStatistic = $this->registry->registry('mageplaza_import_comment_statistic');
+            if ($commentStatistic["has_data"]) {
+                $statisticHtml = $this->getStatistic($commentStatistic, $messagesBlock);
+            }
+            $result = ['statistic' => $statisticHtml, 'status' => 'ok'];
+            mysqli_close($connection);
+            return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
+        } else {
+            $statisticHtml = $messagesBlock
+                ->{'adderror'}(__('Can not make import, please chekck your table prefix and try again.'))
+                ->toHtml();
+            $result = ['statistic' => $statisticHtml, 'status' => 'ok'];
+            return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         }
 
-        $tagStatistic = $this->registry->registry('mageplaza_import_tag_statistic');
-        if ($tagStatistic["has_data"]) {
-            $statisticHtml = $this->getStatistic($tagStatistic, $messagesBlock);
-        }
-
-        $categoryStatistic = $this->registry->registry('mageplaza_import_category_statistic');
-        if ($categoryStatistic["has_data"]) {
-            $statisticHtml = $this->getStatistic($categoryStatistic, $messagesBlock);
-        }
-
-        $authorStatistic = $this->registry->registry('mageplaza_import_user_statistic');
-        if ($authorStatistic["has_data"]) {
-            $statisticHtml = $this->getStatistic($authorStatistic, $messagesBlock);
-        }
-
-        $commentStatistic = $this->registry->registry('mageplaza_import_comment_statistic');
-        if ($commentStatistic["has_data"]) {
-            $statisticHtml = $this->getStatistic($commentStatistic, $messagesBlock);
-        }
-
-        $result = ['statistic' => $statisticHtml, 'status' => 'ok'];
-        mysqli_close($connection);
-        return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
     }
 
     /**

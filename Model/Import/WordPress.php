@@ -163,71 +163,82 @@ class WordPress extends AbstractModel
     /**
      * @param $data
      * @param $connection
+     * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function runImport($data, $connection)
     {
         mysqli_query($connection, 'SET NAMES "utf8"');
-        $this->importPosts($data, $connection);
-        $this->importTags($data, $connection);
-        $this->importCategories($data, $connection);
-        $this->importAuthors($data, $connection);
-        $this->importComments($data, $connection);
+
+        if ($this->importPosts($data, $connection)) {
+            $this->importTags($data, $connection);
+            $this->importCategories($data, $connection);
+            $this->importAuthors($data, $connection);
+            $this->importComments($data, $connection);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
      * @param $data
      * @param $connection
+     * @return bool
      */
     public function importPosts($data, $connection)
     {
         $tablePrefix = $data["table_prefix"];
         $sqlString = "SELECT * FROM `" . $tablePrefix . "posts` WHERE post_type = 'post' AND post_status <> 'auto-draft'";
         $result = mysqli_query($connection, $sqlString);
-        $errorCount = 0;
-        $successCount = 0;
-        $hasData = false;
-        $postModel = $this->_postFactory->create();
-        $deleteCount = $this->behaviour($postModel, $data);
-        $oldPostIds = [];
-        while ($post = mysqli_fetch_assoc($result)) {
-            $createDate = (strtotime($post["post_date_gmt"]) > strtotime($this->date->date())) ? strtotime($this->date->date()) : strtotime($post["post_date_gmt"]);
-            $modifyDate = strtotime($post["post_modified_gmt"]);
-            $publicDate = strtotime($post["post_date_gmt"]);
-            $content = $post["post_content"];
-            $content = preg_replace("/(http:\/\/)(.+?)(\/wp-content\/)/", $this->_helperImage->getBaseMediaUrl() . "/wysiwyg/", $content);
+        if ($result) {
+            $errorCount = 0;
+            $successCount = 0;
+            $hasData = false;
+            $postModel = $this->_postFactory->create();
+            $deleteCount = $this->behaviour($postModel, $data);
+            $oldPostIds = [];
+            while ($post = mysqli_fetch_assoc($result)) {
+                $createDate = (strtotime($post["post_date_gmt"]) > strtotime($this->date->date())) ? strtotime($this->date->date()) : strtotime($post["post_date_gmt"]);
+                $modifyDate = strtotime($post["post_modified_gmt"]);
+                $publicDate = strtotime($post["post_date_gmt"]);
+                $content = $post["post_content"];
+                $content = preg_replace("/(http:\/\/)(.+?)(\/wp-content\/)/", $this->_helperImage->getBaseMediaUrl() . "/wysiwyg/", $content);
 
-            try {
-                $postModel->setData([
-                    "name" => $post["post_title"],
-                    "short_description" => "",
-                    "post_content" => $content,
-                    "created_at" => $createDate,
-                    "updated_at" => $modifyDate,
-                    "publish_date" => $publicDate,
-                    "enabled" => 1,
-                    "in_rss" => 0,
-                    "allow_comment" => 1,
-                    "store_ids" => $this->_storeManager->getStore()->getId(),
-                    "meta_robots" => "INDEX,FOLLOW",
+                try {
+                    $postModel->setData([
+                        "name" => $post["post_title"],
+                        "short_description" => "",
+                        "post_content" => $content,
+                        "created_at" => $createDate,
+                        "updated_at" => $modifyDate,
+                        "publish_date" => $publicDate,
+                        "enabled" => 1,
+                        "in_rss" => 0,
+                        "allow_comment" => 1,
+                        "store_ids" => $this->_storeManager->getStore()->getId(),
+                        "meta_robots" => "INDEX,FOLLOW",
 
-                ])->save();
-                $successCount++;
-                $hasData = true;
-                $oldPostIds [$postModel->getId()] = $post["ID"];
+                    ])->save();
+                    $successCount++;
+                    $hasData = true;
+                    $oldPostIds [$postModel->getId()] = $post["ID"];
 
-            } catch (\Exception $e) {
-                $errorCount++;
-                $hasData = true;
-                continue;
+                } catch (\Exception $e) {
+                    $errorCount++;
+                    $hasData = true;
+                    continue;
+                }
             }
+
+            mysqli_free_result($result);
+            $statistics = $this->getStatistics("posts", $successCount, $errorCount, $deleteCount, $hasData);
+            $this->_registry->register('mageplaza_import_post_ids_collection', $oldPostIds);
+            $this->_registry->register('mageplaza_import_post_statistic', $statistics);
+            return true;
+        } else {
+            return false;
         }
-
-        mysqli_free_result($result);
-        $statistics = $this->getStatistics("posts", $successCount, $errorCount, $deleteCount, $hasData);
-        $this->_registry->register('mageplaza_import_post_ids_collection', $oldPostIds);
-        $this->_registry->register('mageplaza_import_post_statistic', $statistics);
-
     }
 
     /**
@@ -413,7 +424,8 @@ class WordPress extends AbstractModel
         }
         foreach ($updateData as $postId => $authorId) {
             $where = ['post_id = ?' => (int)$postId];
-            $this->_resourceConnection->update($this->_resourceConnection->getTableName('mageplaza_blog_post'), ['author_id' => $authorId], $where);
+            $this->_resourceConnection->getConnection()
+                ->update($this->_resourceConnection->getTableName('mageplaza_blog_post'), ['author_id' => $authorId], $where);
         }
         mysqli_free_result($result);
         $statistics = $this->getStatistics("authors", $successCount, $errorCount, 0, $hasData);
@@ -510,11 +522,15 @@ class WordPress extends AbstractModel
         }
         foreach ($upgradeChildData as $commentId => $commentParentId) {
             $where = ['comment_id = ?' => (int)$commentId];
-            $this->_resourceConnection->update($this->_resourceConnection->getTableName('mageplaza_blog_comment'), ['reply_id' => $commentParentId], $where);
+            $this->_resourceConnection->getConnection()
+                ->update($this->_resourceConnection
+                    ->getTableName('mageplaza_blog_comment'), ['reply_id' => $commentParentId], $where);
         }
         foreach ($upgradeParentData as $commentId => $commentHasReply) {
             $where = ['comment_id = ?' => (int)$commentId];
-            $this->_resourceConnection->update($this->_resourceConnection->getTableName('mageplaza_blog_comment'), ['has_reply' => $commentHasReply], $where);
+            $this->_resourceConnection->getConnection()
+                ->update($this->_resourceConnection
+                    ->getTableName('mageplaza_blog_comment'), ['has_reply' => $commentHasReply], $where);
         }
         mysqli_free_result($result);
         $statistics = $this->getStatistics("comments", $successCount, $errorCount, $deleteCount, $hasData);
@@ -589,7 +605,7 @@ class WordPress extends AbstractModel
                 ];
             }
         }
-        $this->_resourceConnection->insertMultiple($categoryPostTable, $data);
+        $this->_resourceConnection->getConnection()->insertMultiple($categoryPostTable, $data);
     }
 
     /**
