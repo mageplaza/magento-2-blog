@@ -195,8 +195,8 @@ class Form extends Generic
                 'text',
                 [
                     'name' => 'db_host',
-                    'title' => __('Database Password'),
-                    'label' => __('Database Password'),
+                    'title' => __('Database Host'),
+                    'label' => __('Database Host'),
                     'required' => true,
                     'class' => $item["value"],
                     'value' => 'localhost',
@@ -211,9 +211,7 @@ class Form extends Generic
                     'name' => 'table_prefix',
                     'title' => __('Table Prefix'),
                     'label' => __('Table Prefix'),
-                    'required' => true,
                     'class' => $item["value"],
-                    'value' => 'wp_',
                     'note' => __('Your table prefix name')
                 ]
             );

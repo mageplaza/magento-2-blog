@@ -23,25 +23,40 @@
     require([
         'jquery'
     ], function ($) {
-
+        var dataImport = {};
+        var defaultTablePrefix = ['wp_','m1_'];
         mpBlogImport = {
 
-            importName: '#word_press_import_name',
-            dbName: '#word_press_db_name',
-            userName: '#word_press_user_name',
-            pwd: '#word_press_db_password',
-            host: '#word_press_db_host',
-            tablePrefix: '#word_press_table_prefix',
             typeSelector: <?php echo $block->getTypeSelector();?>,
-            behaviourSelector: '#word_press_import_behaviour',
 
             initImportFieldsSet: function () {
+
                 for (var i = 0; i < this.typeSelector.length; i++) {
 
                     if ($('#import_type').attr("value") == this.typeSelector[i]) {
                         this.showFieldSet('#' + this.typeSelector[i] + '_fieldset');
+                        $("#"+this.typeSelector[i]+"_table_prefix").val(defaultTablePrefix[i]);
+                        $("#"+this.typeSelector[i]+"_db_name").addClass('required-entry');
+                        $("#"+this.typeSelector[i]+"_user_name").addClass('required-entry');
+                        $("#"+this.typeSelector[i]+"_db_password").addClass('required-entry');
+                        $("#"+this.typeSelector[i]+"_db_host").addClass('required-entry');
+                        dataImport = {
+                            type: this.typeSelector[i],
+                            importName: '#' + this.typeSelector[i] + '_import_name',
+                            dbName: '#' + this.typeSelector[i] + '_db_name',
+                            userName: '#' + this.typeSelector[i] + '_user_name',
+                            pwd: '#' + this.typeSelector[i] + '_db_password',
+                            host: '#' + this.typeSelector[i] + '_db_host',
+                            tablePrefix: '#' + this.typeSelector[i] + '_table_prefix',
+                            behaviourSelector: '#' + this.typeSelector[i] + '_import_behaviour'
+                        };
+
                     } else {
                         this.hideFieldSet('#' + this.typeSelector[i] + '_fieldset');
+                        $("#"+this.typeSelector[i]+"_db_name").removeClass('required-entry');
+                        $("#"+this.typeSelector[i]+"_user_name").removeClass('required-entry');
+                        $("#"+this.typeSelector[i]+"_db_password").removeClass('required-entry');
+                        $("#"+this.typeSelector[i]+"_db_host").removeClass('required-entry');
                     }
                 }
             },
@@ -55,18 +70,20 @@
             },
 
             initImportCheckConnection: function () {
+
                 if ($('#edit_form').valid()) {
                     $('body').loader('show');
                     $.ajax({
                         url: '<?php echo $block->getUrl('mageplaza_blog/import/validate', ['form_key' => $block->getFormKey()]);?>',
                         data: {
-                            import_name: $(this.importName).val(),
-                            database: $(this.dbName).val(),
-                            user_name: $(this.userName).val(),
-                            password: $(this.pwd).val(),
-                            host: $(this.host).val(),
-                            table_prefix: $(this.tablePrefix).val(),
-                            behaviour: $(this.behaviourSelector).val()
+                            type: dataImport.type,
+                            import_name: $(dataImport.importName).val(),
+                            database: $(dataImport.dbName).val(),
+                            user_name: $(dataImport.userName).val(),
+                            password: $(dataImport.pwd).val(),
+                            host: $(dataImport.host).val(),
+                            table_prefix: $(dataImport.tablePrefix).val(),
+                            behaviour: $(dataImport.behaviourSelector).val()
                         },
                         cache: false,
                         success: function (result) {
@@ -78,10 +95,8 @@
                                 $(".message-success").hide();
                             } else {
                                 messageHtml = '<?php echo $block->getMessagesHtml('addsuccess', 'Connect successfully. To start import process press "Import" button' . $block->getImportButtonHtml()) ?>';
-
                                 $(".message-success").hide();
                                 $(messageHtml).appendTo($(".page-columns"));
-
                                 $(".message-error").hide();
                             }
                         },
