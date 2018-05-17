@@ -38,7 +38,6 @@
                         $("#"+this.typeSelector[i]+"_table_prefix").val(defaultTablePrefix[i]);
                         $("#"+this.typeSelector[i]+"_db_name").addClass('required-entry');
                         $("#"+this.typeSelector[i]+"_user_name").addClass('required-entry');
-                        $("#"+this.typeSelector[i]+"_db_password").addClass('required-entry');
                         $("#"+this.typeSelector[i]+"_db_host").addClass('required-entry');
                         dataImport = {
                             type: this.typeSelector[i],
@@ -55,7 +54,6 @@
                         this.hideFieldSet('#' + this.typeSelector[i] + '_fieldset');
                         $("#"+this.typeSelector[i]+"_db_name").removeClass('required-entry');
                         $("#"+this.typeSelector[i]+"_user_name").removeClass('required-entry');
-                        $("#"+this.typeSelector[i]+"_db_password").removeClass('required-entry');
                         $("#"+this.typeSelector[i]+"_db_host").removeClass('required-entry');
                     }
                 }

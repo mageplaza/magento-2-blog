@@ -184,7 +184,6 @@ class Form extends Generic
                     'name' => 'db_password',
                     'title' => __('Database Password'),
                     'label' => __('Database Password'),
-                    'required' => true,
                     'class' => $item["value"],
                     'note' => __('Your SQL database Password')
                 ]
