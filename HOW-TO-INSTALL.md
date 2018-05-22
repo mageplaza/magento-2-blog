@@ -1,6 +1,6 @@
 # How to install Blog for Magento 2
 
-There are 3 different solutions to install Mageplaza extensions:
+There are 2 different solutions to install Mageplaza extensions:
 
 - Solution #1. Install via Composer (Recommend)
 - Solution #2: Ready to paste (Not recommend)
