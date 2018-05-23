@@ -127,7 +127,7 @@ require([
                         })
                     };
                     var removeNotification = function () {
-                        $('.message.error.message-error.row').fadeOutAndRemove('normal');
+                        $('.message.error.message-error').fadeOutAndRemove('normal');
                     };
                     setTimeout(removeNotification, 3000);
                 }
@@ -170,7 +170,7 @@ require([
                         })
                     };
                     var removeNotification = function () {
-                        $('.message.error.message-error.row').fadeOutAndRemove('normal');
+                        $('.message.error.message-error').fadeOutAndRemove('normal');
                     };
                     setTimeout(removeNotification, 3000);
                 }

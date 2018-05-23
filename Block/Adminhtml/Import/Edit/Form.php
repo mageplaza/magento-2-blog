@@ -226,6 +226,17 @@ class Form extends Generic
                     'note' => __('This action is applied to all data')
                 ]
             );
+
+            $fieldsets[$item["value"]]->addField(
+                $item["value"].'_import_image_path',
+                'note',
+                [
+                    'name' => 'import_image_path',
+                    'label' => __('Image Path Hint'),
+                    'title' => __('Image Path Hint'),
+                    'text' => '<div class="image-path"></div>',
+                ]
+            );
         }
 
         $form->setUseContainer(true);

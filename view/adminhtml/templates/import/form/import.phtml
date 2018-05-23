@@ -24,7 +24,10 @@
         'jquery'
     ], function ($) {
         var dataImport = {};
-        var defaultTablePrefix = ['wp_','m1_'];
+        var defaultTablePrefix = ['wp_', 'm1_'];
+        var imagePathHint = ['*Please copy the <b>wp_content/uploads</b> folder to <b>pub/media/wysiwyg/</b> folder for post image content <br>' +
+        '*Please copy the <b>wp_content/uploads</b> folder to <b>pub/media/mageplaza/blog/post/</b> folder for post image banner <br>', '*Please copy the <b>media</b> folder to <b>pub/media/</b> folder'];
+
         mpBlogImport = {
 
             typeSelector: <?php echo $block->getTypeSelector();?>,
@@ -35,10 +38,11 @@
 
                     if ($('#import_type').attr("value") == this.typeSelector[i]) {
                         this.showFieldSet('#' + this.typeSelector[i] + '_fieldset');
-                        $("#"+this.typeSelector[i]+"_table_prefix").val(defaultTablePrefix[i]);
-                        $("#"+this.typeSelector[i]+"_db_name").addClass('required-entry');
-                        $("#"+this.typeSelector[i]+"_user_name").addClass('required-entry');
-                        $("#"+this.typeSelector[i]+"_db_host").addClass('required-entry');
+                        $("#" + this.typeSelector[i] + "_table_prefix").val(defaultTablePrefix[i]);
+                        $("#" + this.typeSelector[i] + "_import_image_path").html(imagePathHint[i]);
+                        $("#" + this.typeSelector[i] + "_db_name").addClass('required-entry');
+                        $("#" + this.typeSelector[i] + "_user_name").addClass('required-entry');
+                        $("#" + this.typeSelector[i] + "_db_host").addClass('required-entry');
                         dataImport = {
                             type: this.typeSelector[i],
                             importName: '#' + this.typeSelector[i] + '_import_name',
@@ -52,9 +56,9 @@
 
                     } else {
                         this.hideFieldSet('#' + this.typeSelector[i] + '_fieldset');
-                        $("#"+this.typeSelector[i]+"_db_name").removeClass('required-entry');
-                        $("#"+this.typeSelector[i]+"_user_name").removeClass('required-entry');
-                        $("#"+this.typeSelector[i]+"_db_host").removeClass('required-entry');
+                        $("#" + this.typeSelector[i] + "_db_name").removeClass('required-entry');
+                        $("#" + this.typeSelector[i] + "_user_name").removeClass('required-entry');
+                        $("#" + this.typeSelector[i] + "_db_host").removeClass('required-entry');
                     }
                 }
             },

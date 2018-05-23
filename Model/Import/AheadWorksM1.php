@@ -35,6 +35,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Backend\Model\Auth\Session;
 
 /**
  * Class AheadWorksM1
@@ -88,7 +89,12 @@ class AheadWorksM1 extends AbstractModel
     protected $_resourceConnection;
 
     /**
-     * WordPress constructor.
+     * @var Session
+     */
+    protected $_authSession;
+
+    /**
+     * AheadWorksM1 constructor.
      * @param Context $context
      * @param Registry $registry
      * @param PostFactory $postFactory
@@ -97,6 +103,7 @@ class AheadWorksM1 extends AbstractModel
      * @param CommentFactory $commentFactory
      * @param CustomerFactory $customerFactory
      * @param ObjectManagerInterface $objectManager
+     * @param Session $authSession
      * @param ResourceConnection $resourceConnection
      * @param DateTime $date
      * @param StoreManagerInterface $storeManager
@@ -113,6 +120,7 @@ class AheadWorksM1 extends AbstractModel
         CommentFactory $commentFactory,
         CustomerFactory $customerFactory,
         ObjectManagerInterface $objectManager,
+        Session $authSession,
         ResourceConnection $resourceConnection,
         DateTime $date,
         StoreManagerInterface $storeManager,
@@ -129,6 +137,7 @@ class AheadWorksM1 extends AbstractModel
         $this->_customerFactory = $customerFactory;
         $this->_objectManager = $objectManager;
         $this->_resourceConnection = $resourceConnection;
+        $this->_authSession = $authSession;
         $this->_storeManager = $storeManager;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -160,6 +169,7 @@ class AheadWorksM1 extends AbstractModel
      */
     public function importPosts($data, $connection)
     {
+        $authorId = $this->_authSession->getUser()->getId();
         $tablePrefix = $data["table_prefix"];
         $sqlString = "SELECT * FROM `" . $tablePrefix . "aw_blog`";
 
@@ -195,7 +205,7 @@ class AheadWorksM1 extends AbstractModel
                         "meta_robots" => "INDEX,FOLLOW",
                         "meta_keywords" => $post["meta_keywords"],
                         "meta_description" => $post["meta_description"],
-                        "author_id" => 1
+                        "author_id" => (int)$authorId
 
                     ])->save();
                     $successCount++;

@@ -186,7 +186,7 @@ class WordPress extends AbstractModel
      * @param $connection
      * @return bool
      */
-    public function importPosts($data, $connection)
+    protected function importPosts($data, $connection)
     {
         $tablePrefix = $data["table_prefix"];
         $sqlString = "SELECT * FROM `" . $tablePrefix . "posts` WHERE post_type = 'post' AND post_status <> 'auto-draft'";
@@ -230,8 +230,36 @@ class WordPress extends AbstractModel
                     continue;
                 }
             }
+            //import post image banner
+            $oldPostMetaIds = [];
+            $updateData = [];
+            foreach ($oldPostIds as $newPostId => $oldPostId) {
+                $postMetaSqlString = "SELECT * FROM `" . $tablePrefix . "posts` WHERE `post_type` = 'attachment' and `post_parent` = '" . $oldPostId . "'";
+
+                $result = mysqli_query($connection, $postMetaSqlString);
+                if ($result) {
+                    while ($postMeta = mysqli_fetch_assoc($result)) {
+                        $oldPostMetaIds [$newPostId] = $postMeta['ID'];
+                    }
+                }
+            }
+            foreach ($oldPostMetaIds as $newPostId => $oldPostMetaId) {
+                $postMetaSqlString = "SELECT * FROM `" . $tablePrefix . "postmeta` WHERE `meta_key` = '_wp_attached_file' and `post_id` = '" . $oldPostMetaId . "'";
+                $result = mysqli_query($connection, $postMetaSqlString);
+                if ($result) {
+                    while ($postMeta = mysqli_fetch_assoc($result)) {
+                        $updateData [$newPostId] = 'uploads/' . $postMeta['meta_value'];
+                    }
+                }
+            }
+            foreach ($updateData as $postId => $postImage) {
+                $where = ['post_id = ?' => (int)$postId];
+                $this->_resourceConnection->getConnection()
+                    ->update($this->_resourceConnection->getTableName('mageplaza_blog_post'), ['image' => $postImage], $where);
+            }
 
             mysqli_free_result($result);
+
             $statistics = $this->getStatistics("posts", $successCount, $errorCount, $deleteCount, $hasData);
             $this->_registry->register('mageplaza_import_post_ids_collection', $oldPostIds);
             $this->_registry->register('mageplaza_import_post_statistic', $statistics);
@@ -245,7 +273,7 @@ class WordPress extends AbstractModel
      * @param $data
      * @param $connection
      */
-    public function importTags($data, $connection)
+    protected function importTags($data, $connection)
     {
         $tablePrefix = $data["table_prefix"];
         $sqlString = "SELECT * FROM `" . $tablePrefix . "terms` 
@@ -292,7 +320,7 @@ class WordPress extends AbstractModel
      * @param $data
      * @param $connection
      */
-    public function importCategories($data, $connection)
+    protected function importCategories($data, $connection)
     {
         $tablePrefix = $data["table_prefix"];
         $sqlString = "SELECT * FROM `" . $tablePrefix . "terms` 
@@ -363,7 +391,7 @@ class WordPress extends AbstractModel
      * @param $data
      * @param $connection
      */
-    public function importAuthors($data, $connection)
+    protected function importAuthors($data, $connection)
     {
         $tablePrefix = $data["table_prefix"];
         $sqlString = "SELECT * FROM `" . $tablePrefix . "users`";
@@ -437,7 +465,7 @@ class WordPress extends AbstractModel
      * @param $connection
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function importComments($data, $connection)
+    protected function importComments($data, $connection)
     {
         $tablePrefix = $data["table_prefix"];
         $accountManage = $this->_objectManager->create('\Magento\Customer\Model\AccountManagement');
@@ -506,7 +534,7 @@ class WordPress extends AbstractModel
                 continue;
             }
         }
-        mysqli_free_result($result);
+
         $upgradeParentData = [];
         $upgradeChildData = [];
         foreach ($oldCommentIds as $newCommentId => $oldCommentId) {
@@ -543,7 +571,7 @@ class WordPress extends AbstractModel
      * @param null $isCategory
      * @return int
      */
-    public function behaviour($objectType, $data, $isCategory = null)
+    protected function behaviour($objectType, $data, $isCategory = null)
     {
         $count = 0;
         if ($data["behaviour"] == "replace") {
@@ -571,7 +599,7 @@ class WordPress extends AbstractModel
      * @param $termType
      * @param null $isCategory
      */
-    public function importRelationships($data, $connection, $oldTermIds, $relationTable, $termType, $isCategory = null)
+    protected function importRelationships($data, $connection, $oldTermIds, $relationTable, $termType, $isCategory = null)
     {
         $tablePrefix = $data["table_prefix"];
         $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
@@ -618,7 +646,7 @@ class WordPress extends AbstractModel
      * @param $hasData
      * @return array
      */
-    public function getStatistics($type, $successCount, $errorCount, $deleteCount, $hasData)
+    protected function getStatistics($type, $successCount, $errorCount, $deleteCount, $hasData)
     {
         $statistics = [
             "type" => $type,
@@ -636,7 +664,7 @@ class WordPress extends AbstractModel
      * @param string $available_sets
      * @return bool|string
      */
-    function generatePassword($length = 9, $add_dashes = false, $available_sets = 'luds')
+    protected function generatePassword($length = 9, $add_dashes = false, $available_sets = 'luds')
     {
         $sets = array();
         if (strpos($available_sets, 'l') !== false)
