@@ -7,10 +7,10 @@ There are 2 different solutions to install Mageplaza extensions:
 
 ## Important:
 - We recommend you to duplicate your live store on a staging/test site and try installation on it in advanced.
-- Backup magento files and the store database.
-- This extension requires [Mageplaza_Core](https://github.com/mageplaza/module-core) installed first.
+- Back up Magento files and the store database.
+- This extension requires [Mageplaza_Core](https://github.com/mageplaza/module-core) to be installed first.
 
-You will get an error, if **Mageplaza_Core** not installed.
+You will get an error, if **Mageplaza_Core** is not installed.
 
 ## Solution #1. Install via Composer (Recommend)
 
@@ -29,7 +29,7 @@ Please make sure that you've [installed Mageplaza_Core module](https://github.co
 If you don't want to install via composer, you can use this way. 
 
 - Download [the latest version here](https://github.com/mageplaza/magento-2-blog/archive/master.zip) 
-- Extract `master.zip` file to `app/code/Mageplaza/Blog` ; You should create a folder path `app/code/Mageplaza/Blog` if not exist.
+- Extract `master.zip` file to `app/code/Mageplaza/Blog`; You should create a folder path `app/code/Mageplaza/Blog` if not exist.
 - Go to Magento root folder and run upgrade command line to install `Mageplaza_Blog`:
 
 ```
