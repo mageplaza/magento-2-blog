@@ -36,3 +36,33 @@ If you don't want to install via composer, you can use this way.
 php bin/magento setup:upgrade
 php bin/magento setup:static-content:deploy
 ```
+
+## FAQs
+
+Q: I got this error message: 
+```
+Fatal error: Uncaught Error: Call to undefined method Mageplaza\\Blog\\Helper\\Data::isEnabled()
+```
+A: Your store installed Mageplaza Core old version, please [upgrade it](https://github.com/mageplaza/module-core#12-upgrade).
+
+Q: I got an error message:
+
+```
+Mageplaza_Core has been already defined
+```
+A: Mageplaza Core need to be installed, [learn more](ttps://github.com/mageplaza/module-core#how-to-install--upgrade-mageplaza_core).
+
+
+Q: Install Core Module.
+
+A: Our Core module is updated frequently so make sure that you are using [the latest version](https://github.com/mageplaza/module-core) of it.
+
+
+Other messages that indicate missing Core module are: 
+
+```
+- Mageplaza\Core\Helper\AbstractData does not exist.
+- Class Mageplaza\<extension_name>\Helper\Data does not exist.
+- Specified invalid parent id (Mageplaza_Core::menu)
+- Call to undefined method Mageplaza\\PdfInvoice\\Helper\\Config::jsonEncode
+```
