@@ -27,6 +27,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
+use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory as TagCollectionFactory;
 
 /**
  * @method Tag setName($name)
@@ -84,25 +85,32 @@ class Tag extends AbstractModel
     public $postCollectionFactory;
 
     /**
+     * @var TagCollectionFactory
+     */
+    public $tagCollectionFactory;
+
+    /**
      * Tag constructor.
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param CollectionFactory $postCollectionFactory
+     * @param TagCollectionFactory $tagCollectionFactory
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
         Context $context,
         Registry $registry,
         CollectionFactory $postCollectionFactory,
+        TagCollectionFactory $tagCollectionFactory,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     )
     {
         $this->postCollectionFactory = $postCollectionFactory;
-
+        $this->tagCollectionFactory = $tagCollectionFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -162,4 +170,34 @@ class Tag extends AbstractModel
 
         return $this->postCollection;
     }
+
+    /**
+     * @param $importSource
+     * @param $tagId
+     * @return bool
+     */
+    public function isImportedTag($importSource, $tagId)
+    {
+        $collection = $this->tagCollectionFactory->create();
+        $tagCount = $collection->addFieldToFilter('import_source', $importSource . '-' . $tagId)->getSize();
+        if ($tagCount) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param $urlKey
+     * @return null
+     */
+    public function isDuplicateUrlKey($urlKey)
+    {
+        $collection = $this->tagCollectionFactory->create();
+        $tagId = $collection->addFieldToFilter('url_key', $urlKey)->getFirstItem()->getId();
+        if ($tagId) {
+            return $tagId;
+        }
+        return null;
+    }
+
 }

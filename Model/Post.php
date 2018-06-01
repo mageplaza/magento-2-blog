@@ -524,4 +524,43 @@ class Post extends AbstractModel
 
         return $this->nextPostCollection;
     }
+
+    /**
+     * @param $importSource
+     * @param $postId
+     * @return bool
+     */
+    public function isImportedPost($importSource, $postId)
+    {
+        if ($this->getPostIdByImportSource($importSource, $postId)) {
+            return false;
+        }
+        return $postId;
+    }
+
+    /**
+     * @param $urlKey
+     * @return bool
+     */
+    public function isDuplicateUrlKey($urlKey)
+    {
+        $collection = $this->postCollectionFactory->create();
+        $postId = $collection->addFieldToFilter('url_key', $urlKey)->getFirstItem()->getId();
+        if ($postId) {
+            return $postId;
+        }
+        return null;
+    }
+
+    /**
+     * @param $importSource
+     * @param $postId
+     * @return mixed
+     */
+    public function getPostIdByImportSource($importSource, $postId)
+    {
+        $collection = $this->postCollectionFactory->create();
+        $postId = $collection->addFieldToFilter('import_source', $importSource . '-' . $postId)->getFirstItem()->getId();
+        return $postId;
+    }
 }

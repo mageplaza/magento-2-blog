@@ -97,35 +97,37 @@ class Import extends Action
     }
 
     /**
-     * @param $data
+     * @param $statisticData
      * @param $messagesBlock
      * @return mixed
      */
-    protected function getStatistic($data, $messagesBlock)
+    protected function getStatistic($statisticData, $messagesBlock, $data)
     {
-        if ($data["delete_count"] > 0) {
+        $actionText = ($data['behaviour'] == 'update') ? 'updated' : 'imported';
+        if ($statisticData["delete_count"] > 0) {
             $statisticHtml = $messagesBlock
                 ->{'addsuccess'}(__('You have imported %1 %2 successful. Replaced %4 %2. Skipped %3 %2.',
-                    $data['success_count'],
-                    $data['type'],
-                    $data['error_count'],
-                    $data['delete_count']
+                    $statisticData['success_count'],
+                    $statisticData['type'],
+                    $statisticData['error_count'],
+                    $statisticData['delete_count']
                 ))
                 ->toHtml();
-        } elseif ($data["success_count"] > 0) {
+        } elseif ($statisticData["success_count"] > 0) {
             $statisticHtml = $messagesBlock
-                ->{'addsuccess'}(__('You have imported %1 %2 successful. Skipped %3 %2.',
-                    $data['success_count'],
-                    $data['type'],
-                    $data['error_count']
+                ->{'addsuccess'}(__('You have %4 %1 %2 successful. Skipped %3 %2.',
+                    $statisticData['success_count'],
+                    $statisticData['type'],
+                    $statisticData['error_count'],
+                    $actionText
                 ))
                 ->toHtml();
         } else {
             $statisticHtml = $messagesBlock
                 ->{'adderror'}(__('There are something wrong while importing %2. Skipped %3 %2.',
-                    $data['success_count'],
-                    $data['type'],
-                    $data['error_count']
+                    $statisticData['success_count'],
+                    $statisticData['type'],
+                    $statisticData['error_count']
                 ))
                 ->toHtml();
         }
@@ -140,34 +142,41 @@ class Import extends Action
     protected function processImport($object, $data)
     {
         $statisticHtml = '';
-        $connection = mysqli_connect($data["host"], $data["user_name"], $data["password"], $data["database"]);
+        $connection = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
         $messagesBlock = $this->_view->getLayout()->createBlock(\Magento\Framework\View\Element\Messages::class);
-        if ($object->runImport($data, $connection)) {
+        if ($object->run($data, $connection)) {
 
             $postStatistic = $this->registry->registry('mageplaza_import_post_statistic');
-            if ($postStatistic["has_data"]) {
-                $statisticHtml = $this->getStatistic($postStatistic, $messagesBlock);
+            if ($postStatistic['has_data']) {
+                $statisticHtml = $this->getStatistic($postStatistic, $messagesBlock, $data);
             }
 
             $tagStatistic = $this->registry->registry('mageplaza_import_tag_statistic');
-            if ($tagStatistic["has_data"]) {
-                $statisticHtml = $this->getStatistic($tagStatistic, $messagesBlock);
+            if ($tagStatistic['has_data']) {
+                $statisticHtml = $this->getStatistic($tagStatistic, $messagesBlock, $data);
             }
 
             $categoryStatistic = $this->registry->registry('mageplaza_import_category_statistic');
-            if ($categoryStatistic["has_data"]) {
-                $statisticHtml = $this->getStatistic($categoryStatistic, $messagesBlock);
+            if ($categoryStatistic['has_data']) {
+                $statisticHtml = $this->getStatistic($categoryStatistic, $messagesBlock, $data);
             }
 
             $authorStatistic = $this->registry->registry('mageplaza_import_user_statistic');
-            if ($authorStatistic["has_data"]) {
-                $statisticHtml = $this->getStatistic($authorStatistic, $messagesBlock);
+            if ($authorStatistic['has_data']) {
+                $statisticHtml = $this->getStatistic($authorStatistic, $messagesBlock, $data);
             }
 
             $commentStatistic = $this->registry->registry('mageplaza_import_comment_statistic');
-            if ($commentStatistic["has_data"]) {
-                $statisticHtml = $this->getStatistic($commentStatistic, $messagesBlock);
+            if ($commentStatistic['has_data']) {
+                $statisticHtml = $this->getStatistic($commentStatistic, $messagesBlock, $data);
             }
+
+            if ($statisticHtml == '' && $data['behaviour'] == 'update') {
+                $statisticHtml = $messagesBlock
+                    ->{'addsuccess'}(__('There are no records are updated.'))
+                    ->toHtml();
+            }
+
             $result = ['statistic' => $statisticHtml, 'status' => 'ok'];
             mysqli_close($connection);
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));

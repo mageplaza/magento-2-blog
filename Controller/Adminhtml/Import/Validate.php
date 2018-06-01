@@ -59,8 +59,8 @@ class Validate extends Action
         $data = $this->getRequest()->getParams();
 
         try {
-            $connect = mysqli_connect($data["host"], $data["user_name"], $data["password"], $data["database"]);
-            $importName = $data["import_name"];
+            $connect = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
+            $importName = $data['import_name'];
 
             $this->_getSession()->setData('mageplaza_blog_import_data', $data);
             $result = ['import_name' => $importName, 'status' => 'ok'];
@@ -77,6 +77,5 @@ class Validate extends Action
             $result = ['import_name' => $data["import_name"], 'status' => 'false'];
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         }
-
     }
 }

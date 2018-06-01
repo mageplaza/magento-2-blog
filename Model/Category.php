@@ -28,6 +28,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
+use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 
 /**
  * @method Category setName($name)
@@ -112,14 +113,19 @@ class Category extends AbstractModel
     public $postCollectionFactory;
 
     /**
-     * constructor
-     *
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @var CategoryCollectionFactory
+     */
+    public $categoryCollectionFactory;
+
+    /**
+     * Category constructor.
+     * @param Context $context
+     * @param Registry $registry
+     * @param CategoryFactory $categoryFactory
+     * @param CollectionFactory $postCollectionFactory
+     * @param CategoryCollectionFactory $categoryCollectionFactory
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -127,6 +133,7 @@ class Category extends AbstractModel
         Registry $registry,
         CategoryFactory $categoryFactory,
         CollectionFactory $postCollectionFactory,
+        CategoryCollectionFactory $categoryCollectionFactory,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
@@ -134,7 +141,7 @@ class Category extends AbstractModel
     {
         $this->categoryFactory = $categoryFactory;
         $this->postCollectionFactory = $postCollectionFactory;
-
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -291,5 +298,34 @@ class Category extends AbstractModel
         }
 
         return $this->postCollection;
+    }
+
+    /**
+     * @param $importSource
+     * @param $categoryId
+     * @return bool
+     */
+    public function isImportedCategory($importSource, $categoryId)
+    {
+        $collection = $this->categoryCollectionFactory->create();
+        $categoryCount = $collection->addFieldToFilter('import_source', $importSource . '-' . $categoryId)->getSize();
+        if ($categoryCount) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param $urlKey
+     * @return null
+     */
+    public function isDuplicateUrlKey($urlKey)
+    {
+        $collection = $this->categoryCollectionFactory->create();
+        $catId = $collection->addFieldToFilter('url_key', $urlKey)->getFirstItem()->getId();
+        if ($catId) {
+            return $catId;
+        }
+        return null;
     }
 }

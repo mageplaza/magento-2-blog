@@ -409,6 +409,41 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 }
             }
         }
+
+        if (version_compare($context->getVersion(), '2.4.8', '<')) {
+            if ($installer->tableExists('mageplaza_blog_post')) {
+
+                if (!$connection->tableColumnExists($installer->getTable('mageplaza_blog_post'), 'import_source')) {
+                    $connection->addColumn($installer->getTable('mageplaza_blog_post'), 'import_source', [
+                        'type' => Table::TYPE_TEXT, null, ['unsigned' => true, 'nullable' => true],
+                        'comment' => 'Import Source',
+                    ]);
+                }
+
+                if (!$connection->tableColumnExists($installer->getTable('mageplaza_blog_tag'), 'import_source')) {
+                    $connection->addColumn($installer->getTable('mageplaza_blog_tag'), 'import_source', [
+                        'type' => Table::TYPE_TEXT, null, ['unsigned' => true, 'nullable' => true],
+                        'comment' => 'Import Source',
+                    ]);
+                }
+
+                if (!$connection->tableColumnExists($installer->getTable('mageplaza_blog_category'), 'import_source')) {
+                    $connection->addColumn($installer->getTable('mageplaza_blog_category'), 'import_source', [
+                        'type' => Table::TYPE_TEXT, null, ['unsigned' => true, 'nullable' => true],
+                        'comment' => 'Import Source',
+                    ]);
+                }
+
+                if (!$connection->tableColumnExists($installer->getTable('mageplaza_blog_comment'), 'import_source')) {
+                    $connection->addColumn($installer->getTable('mageplaza_blog_comment'), 'import_source', [
+                        'type' => Table::TYPE_TEXT, null, ['unsigned' => true, 'nullable' => true],
+                        'comment' => 'Import Source',
+                    ]);
+                }
+
+            }
+        }
+
         $installer->endSetup();
     }
 }

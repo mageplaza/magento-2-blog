@@ -38,11 +38,6 @@
 
                     if ($('#import_type').attr("value") == this.typeSelector[i]) {
                         this.showFieldSet('#' + this.typeSelector[i] + '_fieldset');
-                        $("#" + this.typeSelector[i] + "_table_prefix").val(defaultTablePrefix[i]);
-                        $("#" + this.typeSelector[i] + "_import_image_path").html(imagePathHint[i]);
-                        $("#" + this.typeSelector[i] + "_db_name").addClass('required-entry');
-                        $("#" + this.typeSelector[i] + "_user_name").addClass('required-entry');
-                        $("#" + this.typeSelector[i] + "_db_host").addClass('required-entry');
                         dataImport = {
                             type: this.typeSelector[i],
                             importName: '#' + this.typeSelector[i] + '_import_name',
@@ -51,8 +46,16 @@
                             pwd: '#' + this.typeSelector[i] + '_db_password',
                             host: '#' + this.typeSelector[i] + '_db_host',
                             tablePrefix: '#' + this.typeSelector[i] + '_table_prefix',
-                            behaviourSelector: '#' + this.typeSelector[i] + '_import_behaviour'
+                            behaviourSelector: '#' + this.typeSelector[i] + '_import_behaviour',
+                            expandBehaviourSelector: '#' + this.typeSelector[i] + '_import_behaviour_expand'
                         };
+
+                        $(dataImport.tablePrefix).val(defaultTablePrefix[i]);
+                        $("#" + this.typeSelector[i] + "_import_image_path").html(imagePathHint[i]);
+                        $("#" + this.typeSelector[i] + "_db_name").addClass('required-entry');
+                        $("#" + this.typeSelector[i] + "_user_name").addClass('required-entry');
+                        $("#" + this.typeSelector[i] + "_db_host").addClass('required-entry');
+
 
                     } else {
                         this.hideFieldSet('#' + this.typeSelector[i] + '_fieldset');
@@ -61,6 +64,16 @@
                         $("#" + this.typeSelector[i] + "_db_host").removeClass('required-entry');
                     }
                 }
+            },
+
+            initExpandBehaviour: function () {
+
+                if ($(dataImport.behaviourSelector).attr("value") == 'replace') {
+                    $(dataImport.expandBehaviourSelector).parent().parent().addClass('hidden');
+                } else {
+                    $(dataImport.expandBehaviourSelector).parent().parent().removeClass('hidden');
+                }
+
             },
 
             showFieldSet: function (selector) {
@@ -85,7 +98,8 @@
                             password: $(dataImport.pwd).val(),
                             host: $(dataImport.host).val(),
                             table_prefix: $(dataImport.tablePrefix).val(),
-                            behaviour: $(dataImport.behaviourSelector).val()
+                            behaviour: $(dataImport.behaviourSelector).val(),
+                            expand_behaviour: $(dataImport.expandBehaviourSelector).val()
                         },
                         cache: false,
                         success: function (result) {
