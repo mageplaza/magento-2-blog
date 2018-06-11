@@ -38,7 +38,7 @@ class WordPress extends AbstractImport
     {
         mysqli_query($connection, 'SET NAMES "utf8"');
 
-        if ($this->_importPosts($data, $connection) && $data['type'] == 'word_press') {
+        if ($this->_importPosts($data, $connection) && $data['type'] == 'wordpress') {
             $this->_importTags($data, $connection);
             $this->_importCategories($data, $connection);
             $this->_importAuthors($data, $connection);
@@ -131,7 +131,7 @@ class WordPress extends AbstractImport
                 if ($item->getImportSource() != null) {
                     $postImportSource = explode('-', $item->getImportSource());
                     $importType = array_shift($postImportSource);
-                    if ($importType == 'WORD_PRESS') {
+                    if ($importType == 'WORDPRESS') {
                         $oldPostId = array_pop($postImportSource);
                         $oldPostIds[$item->getId()] = $oldPostId;
                     }
@@ -240,7 +240,7 @@ class WordPress extends AbstractImport
             if ($item->getImportSource() != null) {
                 $tagImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($tagImportSource);
-                if ($importType == 'WORD_PRESS') {
+                if ($importType == 'WORDPRESS') {
                     $oldTagId = array_pop($tagImportSource);
                     $oldTagIds[$item->getId()] = $oldTagId;
                 }
@@ -323,7 +323,7 @@ class WordPress extends AbstractImport
             if ($item->getImportSource() != null) {
                 $catImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($catImportSource);
-                if ($importType == 'WORD_PRESS') {
+                if ($importType == 'WORDPRESS') {
                     $oldCategoryId = array_pop($catImportSource);
                     $oldCategoryIds[$item->getId()] = $oldCategoryId;
                 }
