@@ -29,7 +29,7 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class Type implements ArrayInterface
 {
-    const WORDPRESS = "word_press";
+    const WORDPRESS = "wordpress";
     const AHEADWORK = "aheadworksm1";
     const MAGEFAN = "magefan";
 
