@@ -29,9 +29,9 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class Type implements ArrayInterface
 {
-    const WORDPRESS = "wordpress";
-    const AHEADWORK = "aheadworksm1";
-    const MAGEFAN = "magefan";
+    const WORDPRESS = "word_press";
+    const AHEADWORK = "ahead_work_m1";
+    const MAGEFAN = "mage_fan";
 
     /**
      * @return array
@@ -59,7 +59,8 @@ class Type implements ArrayInterface
         return [
             "" => __('-- Please Select --'),
             self::WORDPRESS => __('Wordpress'),
-            self::AHEADWORK => __('AheadWorks Blog [Magento 1]')
+            self::AHEADWORK => __('AheadWorks Blog [Magento 1]'),
+            self::MAGEFAN => __('MageFan Blog [Magento 2]')
         ];
     }
 }

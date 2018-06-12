@@ -38,7 +38,7 @@ class WordPress extends AbstractImport
     {
         mysqli_query($connection, 'SET NAMES "utf8"');
 
-        if ($this->_importPosts($data, $connection) && $data['type'] == 'wordpress') {
+        if ($this->_importPosts($data, $connection) && $data['type'] == 'word_press') {
             $this->_importTags($data, $connection);
             $this->_importCategories($data, $connection);
             $this->_importAuthors($data, $connection);
@@ -52,7 +52,8 @@ class WordPress extends AbstractImport
     /**
      * @param $data
      * @param $connection
-     * @return bool
+     * @return bool|mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _importPosts($data, $connection)
     {
@@ -63,7 +64,7 @@ class WordPress extends AbstractImport
             $postModel = $this->_postFactory->create();
             $this->_deleteCount = $this->_behaviour($postModel, $data);
             $oldPostIds = [];
-            $importSource = strtoupper($data['type']) . '-' . $data['database'];
+            $importSource = $data['type'] . '-' . $data['database'];
 
             while ($post = mysqli_fetch_assoc($result)) {
                 $createDate = (strtotime($post['post_date_gmt']) > strtotime($this->date->date())) ? strtotime($this->date->date()) : strtotime($post['post_date_gmt']);
@@ -131,7 +132,7 @@ class WordPress extends AbstractImport
                 if ($item->getImportSource() != null) {
                     $postImportSource = explode('-', $item->getImportSource());
                     $importType = array_shift($postImportSource);
-                    if ($importType == 'WORDPRESS') {
+                    if ($importType == 'word_press') {
                         $oldPostId = array_pop($postImportSource);
                         $oldPostIds[$item->getId()] = $oldPostId;
                     }
@@ -191,7 +192,7 @@ class WordPress extends AbstractImport
         $this->_resetRecords();
         $tagModel = $this->_tagFactory->create();
         $this->_deleteCount = $this->_behaviour($tagModel, $data);
-        $importSource = strtoupper($data['type']) . '-' . $data['database'];
+        $importSource = $data['type'] . '-' . $data['database'];
         while ($tag = mysqli_fetch_assoc($result)) {
             if ($tagModel->isImportedTag($importSource, $tag['term_id'])) {
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tagModel->isDuplicateUrlKey($tag['slug']) != null) {
@@ -240,7 +241,7 @@ class WordPress extends AbstractImport
             if ($item->getImportSource() != null) {
                 $tagImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($tagImportSource);
-                if ($importType == 'WORDPRESS') {
+                if ($importType == 'word_press') {
                     $oldTagId = array_pop($tagImportSource);
                     $oldTagIds[$item->getId()] = $oldTagId;
                 }
@@ -271,7 +272,7 @@ class WordPress extends AbstractImport
         $oldCategoryIds = [];
         $this->_resetRecords();
         $this->_deleteCount = $this->_behaviour($categoryModel, $data, 1);
-        $importSource = strtoupper($data['type']) . '-' . $data['database'];
+        $importSource = $data['type'] . '-' . $data['database'];
         while ($category = mysqli_fetch_assoc($result)) {
             if ($categoryModel->isImportedCategory($importSource, $category['term_id'])) {
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->isDuplicateUrlKey($category['slug']) != null && $category['slug'] != 'root') {
@@ -323,7 +324,7 @@ class WordPress extends AbstractImport
             if ($item->getImportSource() != null) {
                 $catImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($catImportSource);
-                if ($importType == 'WORDPRESS') {
+                if ($importType == 'word_press') {
                     $oldCategoryId = array_pop($catImportSource);
                     $oldCategoryIds[$item->getId()] = $oldCategoryId;
                 }
@@ -437,7 +438,7 @@ class WordPress extends AbstractImport
         $websiteId = $this->_storeManager->getWebsite()->getId();
         $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
         $oldCommentIds = [];
-        $importSource = strtoupper($data['type']) . '-' . $data['database'];
+        $importSource = $data['type'] . '-' . $data['database'];
         while ($comment = mysqli_fetch_assoc($result)) {
             if ($commentModel->isImportedComment($importSource, $comment['comment_ID'])) {
                 $createDate = strtotime($comment['comment_date_gmt']);

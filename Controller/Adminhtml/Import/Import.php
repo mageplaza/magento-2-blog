@@ -26,6 +26,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\Import\WordPress;
 use Mageplaza\Blog\Model\Import\AheadWorksM1;
+use Mageplaza\Blog\Model\Import\MageFanM2;
 use Mageplaza\Blog\Helper\Data as BlogHelper;
 
 /**
@@ -45,6 +46,11 @@ class Import extends Action
     protected $_aheadWorksM1Model;
 
     /**
+     * @var MageFanM2
+     */
+    protected $_mageFanM2Model;
+
+    /**
      * @var BlogHelper
      */
     public $blogHelper;
@@ -59,6 +65,7 @@ class Import extends Action
      * @param Context $context
      * @param WordPress $wordPress
      * @param AheadWorksM1 $aheadWorksM1
+     * @param MageFanM2 $mageFanM2
      * @param BlogHelper $blogHelper
      * @param Registry $registry
      */
@@ -66,6 +73,7 @@ class Import extends Action
         Action\Context $context,
         WordPress $wordPress,
         AheadWorksM1 $aheadWorksM1,
+        MageFanM2 $mageFanM2,
         BlogHelper $blogHelper,
         Registry $registry
     )
@@ -73,6 +81,7 @@ class Import extends Action
         $this->blogHelper = $blogHelper;
         $this->_wordpressModel = $wordPress;
         $this->_aheadWorksM1Model = $aheadWorksM1;
+        $this->_mageFanM2Model = $mageFanM2;
         $this->registry = $registry;
         parent::__construct($context);
     }
@@ -84,11 +93,14 @@ class Import extends Action
     {
         $data = $this->_getSession()->getData('mageplaza_blog_import_data');
         switch ($data['type']) {
-            case 'wordpress':
+            case 'word_press':
                 $response = $this->processImport($this->_wordpressModel, $data);
                 break;
-            case 'aheadworksm1':
+            case 'ahead_work_m1':
                 $response = $this->processImport($this->_aheadWorksM1Model, $data);
+                break;
+            case 'mage_fan':
+                $response = $this->processImport($this->_mageFanM2Model, $data);
                 break;
             default:
                 $response = $this->processImport($this->_wordpressModel, $data);

@@ -24,9 +24,13 @@
         'jquery'
     ], function ($) {
         var dataImport = {};
-        var defaultTablePrefix = ['wp_', 'm1_'];
-        var imagePathHint = ['*Please copy the <b>wp_content/uploads</b> folder to <b>pub/media/wysiwyg/</b> folder for post image content <br>' +
-        '*Please copy the <b>wp_content/uploads</b> folder to <b>pub/media/mageplaza/blog/post/</b> folder for post image banner <br>', '*Please copy the <b>media</b> folder to <b>pub/media/</b> folder'];
+        var defaultTablePrefix = ['wp_', 'm1_','m2_'];
+        var imagePathHint = [
+            '*Please copy the <b>wp_content/uploads</b> folder to <b>pub/media/wysiwyg/</b> folder for post image content <br>' +
+            '*Please copy the <b>wp_content/uploads</b> folder to <b>pub/media/mageplaza/blog/post/</b> folder for post image banner <br>',
+            '*Please copy the <b>media</b> folder to <b>pub/media/</b> folder',
+            '*Please copy the <b>pub/media/magefan_blog</b> folder to <b>pub/media/mageplaza/blog/post/</b> folder for post image banner '
+        ];
 
         mpBlogImport = {
 
