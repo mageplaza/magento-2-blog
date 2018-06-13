@@ -25,6 +25,7 @@
     <body>
         <referenceContainer name="content">
             <block class="Mageplaza\Blog\Block\Post\Listpost" name="mpblog.post.list" as="mpblog_post"  template="post/list.phtml"/>
+            <block class="Magento\Framework\View\Element\Template" name="mpblog.copy.right" after="-" template="Mageplaza_Blog::html/copyright.phtml"/>
         </referenceContainer>
     </body>
 </page>
