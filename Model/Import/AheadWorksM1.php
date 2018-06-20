@@ -56,11 +56,12 @@ class AheadWorksM1 extends AbstractImport
     protected function _importPosts($data, $connection)
     {
         $authorId = $this->_authSession->getUser()->getId();
-        $sqlString = "SELECT * FROM `" . $data["table_prefix"] . "aw_blog`";
+        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "aw_blog`";
 
         $result = mysqli_query($connection, $sqlString);
         if ($result) {
             $this->_resetRecords();
+            /** @var \Mageplaza\Blog\Model\PostFactory */
             $postModel = $this->_postFactory->create();
             $this->_deleteCount = $this->_behaviour($postModel, $data);
             $oldPostIds = [];
@@ -74,7 +75,8 @@ class AheadWorksM1 extends AbstractImport
                 $content = $post['post_content'];
                 $postTag = $post['tags'];
                 if ($postModel->isImportedPost($importSource, $post['post_id'])) {
-                    //update post
+
+                    /** Update posts */
                     if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $postModel->isDuplicateUrlKey($post['identifier']) != null) {
                         $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['identifier'])];
                         $this->_resourceConnection->getConnection()
@@ -105,7 +107,8 @@ class AheadWorksM1 extends AbstractImport
                             ->delete($this->_resourceConnection
                                 ->getTableName('mageplaza_blog_post_tag'), $where);
                     } else {
-                        //re-import the existing posts
+
+                        /** Re-import existing posts */
                         try {
                             $postModel->setData([
                                 'name' => $post['title'],
@@ -124,7 +127,6 @@ class AheadWorksM1 extends AbstractImport
                                 'meta_description' => $post['meta_description'],
                                 'author_id' => (int)$authorId,
                                 'import_source' => $importSource . '-' . $post['post_id']
-
                             ])->save();
                             $this->_successCount++;
                             $this->_hasData = true;
@@ -135,11 +137,13 @@ class AheadWorksM1 extends AbstractImport
                         }
                     }
                 }
+
+                /** Store post-tags */
                 if (!empty($postTag)) {
-                    $tagNames = explode(",", $postTag);
+                    $tagNames = explode(',', $postTag);
                     $id = [];
                     foreach ($tagNames as $name) {
-                        $tagTableSql = "SELECT * FROM `" . $data["table_prefix"] . "aw_blog_tags` WHERE `tag` = '" . $name . "'";
+                        $tagTableSql = "SELECT * FROM `" . $data['table_prefix'] . "aw_blog_tags` WHERE `tag` = '" . $name . "'";
                         $tagResult = mysqli_query($connection, $tagTableSql);
                         $tag = mysqli_fetch_assoc($tagResult);
                         $id [] = $tag['id'];
@@ -148,6 +152,7 @@ class AheadWorksM1 extends AbstractImport
                 }
             }
 
+            /** Get old post ids */
             foreach ($postModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
                     $postImportSource = explode('-', $item->getImportSource());
@@ -159,7 +164,7 @@ class AheadWorksM1 extends AbstractImport
                 }
             }
             mysqli_free_result($result);
-            $statistics = $this->_getStatistics("posts", $this->_successCount, $this->_errorCount, $this->_deleteCount, $this->_hasData);
+            $statistics = $this->_getStatistics('posts', $this->_successCount, $this->_errorCount, $this->_deleteCount, $this->_hasData);
             $this->_registry->register('mageplaza_import_post_ids_collection', $oldPostIds);
             $this->_registry->register('mageplaza_import_post_tags_collection', $tags);
             $this->_registry->register('mageplaza_import_post_statistic', $statistics);
@@ -176,16 +181,19 @@ class AheadWorksM1 extends AbstractImport
      */
     protected function _importTags($data, $connection)
     {
-        $sqlString = "SELECT * FROM `" . $data["table_prefix"] . "aw_blog_tags`";
+        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "aw_blog_tags`";
         $result = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
         $oldTagIds = [];
+
+        /** @var \Mageplaza\Blog\Model\TagFactory */
         $tagModel = $this->_tagFactory->create();
         $this->_deleteCount = $this->_behaviour($tagModel, $data);
         $importSource = $data['type'] . '-' . $data['database'];
         while ($tag = mysqli_fetch_assoc($result)) {
             if ($tagModel->isImportedTag($importSource, $tag['id'])) {
-                //update tags
+
+                /** Update tags */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tagModel->isDuplicateUrlKey($tag['tag']) != null) {
                     try {
                         $where = ['tag_id = ?' => (int)$tagModel->isDuplicateUrlKey($tag['tag'])];
@@ -206,7 +214,8 @@ class AheadWorksM1 extends AbstractImport
                         continue;
                     }
                 } else {
-                    //re-import the existing tags
+
+                    /** Re-import the existing tags */
                     try {
                         $tagModel->setData([
                             'name' => $tag['tag'],
@@ -228,6 +237,7 @@ class AheadWorksM1 extends AbstractImport
         }
         mysqli_free_result($result);
 
+        /** Store old tag ids */
         foreach ($tagModel->getCollection() as $item) {
             if ($item->getImportSource() != null) {
                 $tagImportSource = explode('-', $item->getImportSource());
@@ -240,6 +250,7 @@ class AheadWorksM1 extends AbstractImport
         }
         $tags = $this->_registry->registry('mageplaza_import_post_tags_collection');
 
+        /** Insert post tag relations */
         foreach ($tags as $postId => $tagIds) {
             foreach ($tagIds as $id) {
                 try {
@@ -265,6 +276,8 @@ class AheadWorksM1 extends AbstractImport
     {
         $sqlString = "SELECT * FROM `" . $data["table_prefix"] . "aw_blog_cat`";
         $result = mysqli_query($connection, $sqlString);
+
+        /** @var \Mageplaza\Blog\Model\CategoryFactory */
         $categoryModel = $this->_categoryFactory->create();
         $oldCategoryIds = [];
         $this->_resetRecords();
@@ -272,7 +285,8 @@ class AheadWorksM1 extends AbstractImport
         $importSource = $data['type'] . '-' . $data['database'];
         while ($category = mysqli_fetch_assoc($result)) {
             if ($categoryModel->isImportedCategory($importSource, $category['cat_id'])) {
-                //update categories
+
+                /** Update categories */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->isDuplicateUrlKey($category['identifier']) != null && $category['identifier'] != 'root') {
                     try {
                         $where = ['category_id = ?' => (int)$categoryModel->isDuplicateUrlKey($category['identifier'])];
@@ -295,7 +309,8 @@ class AheadWorksM1 extends AbstractImport
                         continue;
                     }
                 } else {
-                    //re-import the existing categories
+
+                    /** Re-import the existing categories */
                     try {
                         $categoryModel->setData([
                             'name' => $category['title'],
@@ -319,6 +334,7 @@ class AheadWorksM1 extends AbstractImport
             }
         }
 
+        /** Store old category ids */
         foreach ($categoryModel->getCollection() as $item) {
             if ($item->getImportSource() != null) {
                 $catImportSource = explode('-', $item->getImportSource());
@@ -349,6 +365,8 @@ class AheadWorksM1 extends AbstractImport
         $sqlString = "SELECT * FROM `" . $data["table_prefix"] . "aw_blog_comment`";
         $result = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
+
+        /** @var \Mageplaza\Blog\Model\CommentFactory */
         $commentModel = $this->_commentFactory->create();
         $this->_deleteCount = $this->_behaviour($commentModel, $data);
         $customerModel = $this->_customerFactory->create();

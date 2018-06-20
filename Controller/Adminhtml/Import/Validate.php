@@ -62,6 +62,7 @@ class Validate extends Action
             $connect = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
             $importName = $data['import_name'];
 
+            /** @var \Magento\Backend\Model\Session */
             $this->_getSession()->setData('mageplaza_blog_import_data', $data);
             $result = ['import_name' => $importName, 'status' => 'ok'];
 

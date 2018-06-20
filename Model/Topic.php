@@ -184,4 +184,17 @@ class Topic extends AbstractModel
 
         return $this->postCollection;
     }
+
+    /**
+     * @param $importSource
+     * @param $topicId
+     * @return bool
+     */
+    public function isImportedTopic($importSource, $topicId)
+    {
+        if ($this->getPostIdByImportSource($importSource, $topicId)) {
+            return false;
+        }
+        return $topicId;
+    }
 }

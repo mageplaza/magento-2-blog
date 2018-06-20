@@ -30,6 +30,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\TagFactory;
 use Mageplaza\Blog\Model\CategoryFactory;
+use Mageplaza\Blog\Model\TopicFactory;
 use Mageplaza\Blog\Model\CommentFactory;
 use Magento\User\Model\UserFactory;
 use Magento\Customer\Model\CustomerFactory;
@@ -65,6 +66,10 @@ abstract class AbstractImport extends AbstractModel
      */
     protected $_categoryFactory;
 
+    /**
+     * @var TopicFactory
+     */
+    protected $_topicFactory;
     /**
      * @var CommentFactory
      */
@@ -134,6 +139,7 @@ abstract class AbstractImport extends AbstractModel
      * @param PostFactory $postFactory
      * @param TagFactory $tagFactory
      * @param CategoryFactory $categoryFactory
+     * @param TopicFactory $topicFactory
      * @param CommentFactory $commentFactory
      * @param UserFactory $userFactory
      * @param CustomerFactory $customerFactory
@@ -153,6 +159,7 @@ abstract class AbstractImport extends AbstractModel
         PostFactory $postFactory,
         TagFactory $tagFactory,
         CategoryFactory $categoryFactory,
+        TopicFactory $topicFactory,
         CommentFactory $commentFactory,
         UserFactory $userFactory,
         CustomerFactory $customerFactory,
@@ -171,6 +178,7 @@ abstract class AbstractImport extends AbstractModel
         $this->_postFactory = $postFactory;
         $this->_tagFactory = $tagFactory;
         $this->_categoryFactory = $categoryFactory;
+        $this->_topicFactory = $topicFactory;
         $this->_commentFactory = $commentFactory;
         $this->_userFactory = $userFactory;
         $this->_customerFactory = $customerFactory;
@@ -283,6 +291,7 @@ abstract class AbstractImport extends AbstractModel
         $this->_deleteCount = 0;
         $this->_hasData = false;
     }
+
     /**
      * @param int $length
      * @param bool $add_dashes
