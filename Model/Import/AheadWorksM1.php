@@ -37,6 +37,9 @@ class AheadWorksM1 extends AbstractImport
     {
         mysqli_query($connection, 'SET NAMES "utf8"');
 
+        /**
+         * TODO: @kenny  ahead_work_m1 -> dung 1 bien o model thoi Model/Config/Source/Import/Type.php:37
+         */
         if ($this->_importPosts($data, $connection) && $data['type'] == 'ahead_work_m1') {
             $this->_importTags($data, $connection);
             $this->_importCategories($data, $connection);
@@ -56,6 +59,10 @@ class AheadWorksM1 extends AbstractImport
     protected function _importPosts($data, $connection)
     {
         $authorId = $this->_authSession->getUser()->getId();
+        /**
+         * TODO: E chua tinh truong hop table_subfix
+         * Author: @kenny
+         */
         $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "aw_blog`";
 
         $result = mysqli_query($connection, $sqlString);
@@ -76,7 +83,9 @@ class AheadWorksM1 extends AbstractImport
                 $postTag = $post['tags'];
                 if ($postModel->isImportedPost($importSource, $post['post_id'])) {
 
-                    /** Update posts */
+                    /**
+                     * Update posts
+                     */
                     if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $postModel->isDuplicateUrlKey($post['identifier']) != null) {
                         $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['identifier'])];
                         $this->_resourceConnection->getConnection()
@@ -92,7 +101,7 @@ class AheadWorksM1 extends AbstractImport
                                 'in_rss' => 0,
                                 'allow_comment' => 1,
                                 'store_ids' => $this->_storeManager->getStore()->getId(),
-                                'meta_robots' => 'INDEX,FOLLOW',
+                                'meta_robots' => 'INDEX,FOLLOW', //Default value
                                 'meta_keywords' => $post['meta_keywords'],
                                 'meta_description' => $post['meta_description'],
                                 'author_id' => (int)$authorId,
@@ -108,7 +117,9 @@ class AheadWorksM1 extends AbstractImport
                                 ->getTableName('mageplaza_blog_post_tag'), $where);
                     } else {
 
-                        /** Re-import existing posts */
+                        /**
+                         * Replace existing posts
+                         */
                         try {
                             $postModel->setData([
                                 'name' => $post['title'],
@@ -143,6 +154,10 @@ class AheadWorksM1 extends AbstractImport
                     $tagNames = explode(',', $postTag);
                     $id = [];
                     foreach ($tagNames as $name) {
+                        /**
+                         * TODO: aw_blog_tags nen dua len CONSTANT, sau update se de dang
+                         * @kenny
+                         */
                         $tagTableSql = "SELECT * FROM `" . $data['table_prefix'] . "aw_blog_tags` WHERE `tag` = '" . $name . "'";
                         $tagResult = mysqli_query($connection, $tagTableSql);
                         $tag = mysqli_fetch_assoc($tagResult);
@@ -157,6 +172,10 @@ class AheadWorksM1 extends AbstractImport
                 if ($item->getImportSource() != null) {
                     $postImportSource = explode('-', $item->getImportSource());
                     $importType = array_shift($postImportSource);
+                    /**
+                     * TODO: sua name cho chuan
+                     * @kenny
+                     */
                     if ($importType == 'ahead_work_m1') {
                         $oldPostId = array_pop($postImportSource);
                         $oldPostIds[$item->getId()] = $oldPostId;
@@ -242,6 +261,10 @@ class AheadWorksM1 extends AbstractImport
             if ($item->getImportSource() != null) {
                 $tagImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($tagImportSource);
+                /**
+                 * TODO: sua name cho chuan
+                 * @kenny
+                 */
                 if ($importType == 'ahead_work_m1') {
                     $oldTagId = array_pop($tagImportSource);
                     $oldTagIds[$item->getId()] = $oldTagId;
@@ -274,10 +297,16 @@ class AheadWorksM1 extends AbstractImport
      */
     protected function _importCategories($data, $connection)
     {
+        /**
+         * TODO: table nen de CONSTANT
+         * @kenny
+         */
         $sqlString = "SELECT * FROM `" . $data["table_prefix"] . "aw_blog_cat`";
         $result = mysqli_query($connection, $sqlString);
 
-        /** @var \Mageplaza\Blog\Model\CategoryFactory */
+        /**
+         * @var \Mageplaza\Blog\Model\CategoryFactory
+         */
         $categoryModel = $this->_categoryFactory->create();
         $oldCategoryIds = [];
         $this->_resetRecords();
@@ -286,7 +315,9 @@ class AheadWorksM1 extends AbstractImport
         while ($category = mysqli_fetch_assoc($result)) {
             if ($categoryModel->isImportedCategory($importSource, $category['cat_id'])) {
 
-                /** Update categories */
+                /**
+                 * Update categories
+                 */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->isDuplicateUrlKey($category['identifier']) != null && $category['identifier'] != 'root') {
                     try {
                         $where = ['category_id = ?' => (int)$categoryModel->isDuplicateUrlKey($category['identifier'])];
@@ -310,7 +341,9 @@ class AheadWorksM1 extends AbstractImport
                     }
                 } else {
 
-                    /** Re-import the existing categories */
+                    /**
+                     * Re-import the existing categories
+                     */
                     try {
                         $categoryModel->setData([
                             'name' => $category['title'],
@@ -339,6 +372,10 @@ class AheadWorksM1 extends AbstractImport
             if ($item->getImportSource() != null) {
                 $catImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($catImportSource);
+                /**
+                 * TODO: sua name cho chuan
+                 * @kenny
+                 */
                 if ($importType == 'ahead_work_m1') {
                     $oldCategoryId = array_pop($catImportSource);
                     $oldCategoryIds[$item->getId()] = $oldCategoryId;
@@ -362,6 +399,10 @@ class AheadWorksM1 extends AbstractImport
     protected function _importComments($data, $connection)
     {
         $accountManage = $this->_objectManager->create('\Magento\Customer\Model\AccountManagement');
+        /**
+         * TODO: TABLE = CONSTANT
+         * @kenny
+         */
         $sqlString = "SELECT * FROM `" . $data["table_prefix"] . "aw_blog_comment`";
         $result = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
@@ -449,6 +490,10 @@ class AheadWorksM1 extends AbstractImport
         $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
         $categoryPostTable = $this->_resourceConnection->getTableName($relationTable);
         foreach ($oldPostIds as $newPostId => $oldPostId) {
+            /**
+             * TODO: TABLE = CONSTANT
+             * @kenny
+             */
             $sqlRelation = "SELECT * FROM `" . $data["table_prefix"] . "aw_blog_post_cat` WHERE `post_id` = " . $oldPostId;
             $result = mysqli_query($connection, $sqlRelation);
             while ($categoryPost = mysqli_fetch_assoc($result)) {

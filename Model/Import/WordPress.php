@@ -38,6 +38,10 @@ class WordPress extends AbstractImport
     {
         mysqli_query($connection, 'SET NAMES "utf8"');
 
+        /**
+         * TODO: sua name cho chuan
+         * @kenny
+         */
         if ($this->_importPosts($data, $connection) && $data['type'] == 'word_press') {
             $this->_importTags($data, $connection);
             $this->_importCategories($data, $connection);
@@ -57,11 +61,17 @@ class WordPress extends AbstractImport
      */
     protected function _importPosts($data, $connection)
     {
+        /**
+         * TODO: TABLE = CONTANT
+         * @kenny
+         */
         $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "posts` WHERE post_type = 'post' AND post_status <> 'auto-draft'";
         $result = mysqli_query($connection, $sqlString);
         if ($result) {
             $this->_resetRecords();
-            /** @var \Mageplaza\Blog\Model\PostFactory */
+            /**
+             * @var \Mageplaza\Blog\Model\PostFactory
+             */
             $postModel = $this->_postFactory->create();
             $this->_deleteCount = $this->_behaviour($postModel, $data);
             $oldPostIds = [];
@@ -73,11 +83,16 @@ class WordPress extends AbstractImport
                 $modifyDate = strtotime($post['post_modified_gmt']);
                 $publicDate = strtotime($post['post_date_gmt']);
                 $content = $post['post_content'];
+                /**
+                 * TODO: doan nay phai huong dan How to copy media folder
+                 */
                 $content = preg_replace("/(http:\/\/)(.+?)(\/wp-content\/)/", $this->_helperImage->getBaseMediaUrl() . "/wysiwyg/", $content);
                 $isEnable = ($post['post_status'] == 'trash') ? 0 : 1;
                 if ($postModel->isImportedPost($importSource, $post['ID'])) {
 
-                    /** Update posts */
+                    /**
+                     * Update posts
+                     */
                     if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $postModel->isDuplicateUrlKey($post['post_name']) != null) {
 
                         $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['post_name'])];
@@ -107,7 +122,9 @@ class WordPress extends AbstractImport
                                 ->getTableName('mageplaza_blog_post_tag'), $where);
                     } else {
 
-                        /** Re-import existing posts */
+                        /**
+                         * replace existing posts
+                         */
                         try {
                             $postModel->setData([
                                 'name' => $post['post_title'],
@@ -138,6 +155,11 @@ class WordPress extends AbstractImport
                 if ($item->getImportSource() != null) {
                     $postImportSource = explode('-', $item->getImportSource());
                     $importType = array_shift($postImportSource);
+
+                    /**
+                     * TODO: sua name
+                     * @kenny
+                     */
                     if ($importType == 'word_press') {
                         $oldPostId = array_pop($postImportSource);
                         $oldPostIds[$item->getId()] = $oldPostId;
@@ -148,6 +170,11 @@ class WordPress extends AbstractImport
             $oldPostMetaIds = [];
             $updateData = [];
             foreach ($oldPostIds as $newPostId => $oldPostId) {
+
+                /**
+                 * TODO: TABLE = CONTANT
+                 * @kenny
+                 */
                 $postMetaSqlString = "SELECT * FROM `" . $data['table_prefix'] . "posts` WHERE `post_type` = 'attachment' and `post_parent` = '" . $oldPostId . "'";
 
                 $result = mysqli_query($connection, $postMetaSqlString);
@@ -158,6 +185,10 @@ class WordPress extends AbstractImport
                 }
             }
             foreach ($oldPostMetaIds as $newPostId => $oldPostMetaId) {
+                /**
+                 * TODO: TABLE = CONTANT
+                 * @kenny
+                 */
                 $postMetaSqlString = "SELECT * FROM `" . $data['table_prefix'] . "postmeta` WHERE `meta_key` = '_wp_attached_file' and `post_id` = '" . $oldPostMetaId . "'";
                 $result = mysqli_query($connection, $postMetaSqlString);
                 if ($result) {
@@ -189,6 +220,11 @@ class WordPress extends AbstractImport
      */
     protected function _importTags($data, $connection)
     {
+        /**
+         * TODO: TABLE = CONTANT
+         * @kenny
+         */
+
         $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "terms` 
                           INNER JOIN `" . $data['table_prefix'] . "term_taxonomy` 
                           ON " . $data['table_prefix'] . "terms.term_id=" . $data['table_prefix'] . "term_taxonomy.term_id 
@@ -197,14 +233,18 @@ class WordPress extends AbstractImport
         $oldTagIds = [];
         $this->_resetRecords();
 
-        /** @var \Mageplaza\Blog\Model\TagFactory */
+        /**
+         * @var \Mageplaza\Blog\Model\TagFactory
+         */
         $tagModel = $this->_tagFactory->create();
         $this->_deleteCount = $this->_behaviour($tagModel, $data);
         $importSource = $data['type'] . '-' . $data['database'];
         while ($tag = mysqli_fetch_assoc($result)) {
             if ($tagModel->isImportedTag($importSource, $tag['term_id'])) {
 
-                /** Update tags */
+                /**
+                 * Update tags
+                 */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tagModel->isDuplicateUrlKey($tag['slug']) != null) {
                     try {
                         $where = ['tag_id = ?' => (int)$tagModel->isDuplicateUrlKey($tag['slug'])];
@@ -227,7 +267,9 @@ class WordPress extends AbstractImport
                     }
                 } else {
 
-                    /** Re-import the existing tags */
+                    /**
+                     * Re-import the existing tags
+                     */
                     try {
                         $tagModel->setData([
                             'name' => $tag['name'],
@@ -250,7 +292,9 @@ class WordPress extends AbstractImport
         }
         mysqli_free_result($result);
 
-        /** Store old tag ids */
+        /**
+         * Store old tag ids
+         */
         foreach ($tagModel->getCollection() as $item) {
             if ($item->getImportSource() != null) {
                 $tagImportSource = explode('-', $item->getImportSource());
@@ -292,7 +336,9 @@ class WordPress extends AbstractImport
         while ($category = mysqli_fetch_assoc($result)) {
             if ($categoryModel->isImportedCategory($importSource, $category['term_id'])) {
 
-                /** Update categories */
+                /**
+                 * Update categories
+                 */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->isDuplicateUrlKey($category['slug']) != null && $category['slug'] != 'root') {
                     try {
                         $where = ['category_id = ?' => (int)$categoryModel->isDuplicateUrlKey($category['slug'])];
@@ -315,7 +361,9 @@ class WordPress extends AbstractImport
                     }
                 } else {
 
-                    /** Re-import the existing categories */
+                    /**
+                     * Re-import the existing categories
+                     */
                     try {
                         $categoryModel->setData([
                             'name' => $category['name'],
@@ -340,7 +388,9 @@ class WordPress extends AbstractImport
             $oldCategories[$category['term_id']] = $category;
         }
 
-        /** Store old category ids */
+        /**
+         * Store old category ids
+         */
         foreach ($categoryModel->getCollection() as $item) {
             if ($item->getImportSource() != null) {
                 $catImportSource = explode('-', $item->getImportSource());
@@ -352,7 +402,9 @@ class WordPress extends AbstractImport
             }
         }
 
-        /** Import parent-child category */
+        /**
+         * Import parent-child category
+         */
         foreach ($newCategories as $newCatId => $newCategory) {
             if ($newCategory['parent'] != '0') {
                 if (isset($oldCategories[$newCategory['parent']])) {
@@ -374,6 +426,7 @@ class WordPress extends AbstractImport
     }
 
     /**
+     * Import authors
      * @param $data
      * @param $connection
      */
@@ -385,7 +438,9 @@ class WordPress extends AbstractImport
         $oldUserIds = [];
         $magentoUserEmail = [];
 
-        /** @var \Magento\User\Model\UserFactory */
+        /**
+         * @var \Magento\User\Model\UserFactory
+         */
         $userModel = $this->_userFactory->create();
 
         foreach ($userModel->getCollection() as $user) {
@@ -421,7 +476,9 @@ class WordPress extends AbstractImport
 
         mysqli_free_result($result);
 
-        /** Import post author relation */
+        /**
+         * Import post author relation
+         */
         $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
         $updateData = [];
         foreach ($oldUserIds as $newUserId => $oldUserId) {
@@ -446,6 +503,7 @@ class WordPress extends AbstractImport
     }
 
     /**
+     * Import comments
      * @param $data
      * @param $connection
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -457,7 +515,9 @@ class WordPress extends AbstractImport
         $result = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
 
-        /** @var \Mageplaza\Blog\Model\CommentFactory */
+        /**
+         * @var \Mageplaza\Blog\Model\CommentFactory
+         */
         $commentModel = $this->_commentFactory->create();
         $this->_deleteCount = $this->_behaviour($commentModel, $data);
         $customerModel = $this->_customerFactory->create();
@@ -524,7 +584,9 @@ class WordPress extends AbstractImport
         $upgradeParentData = [];
         $upgradeChildData = [];
 
-        /** Insert child-parent comments */
+        /**
+         * Insert child-parent comments
+         */
         foreach ($oldCommentIds as $newCommentId => $oldCommentId) {
             $relationshipSql = "SELECT `comment_ID`,`comment_parent` FROM `" . $data['table_prefix'] . "comments` WHERE `comment_parent` <> 0";
             $result = mysqli_query($connection, $relationshipSql);

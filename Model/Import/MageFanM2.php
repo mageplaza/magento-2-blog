@@ -37,6 +37,10 @@ class MageFanM2 extends AbstractImport
     {
         mysqli_query($connection, 'SET NAMES "utf8"');
 
+        /**
+         * TODO: sua name cho chuan
+         * @kenny
+         */
         if ($this->_importPosts($data, $connection) && $data['type'] == 'mage_fan') {
             $this->_importTags($data, $connection);
             $this->_importCategories($data, $connection);
@@ -56,6 +60,10 @@ class MageFanM2 extends AbstractImport
      */
     protected function _importPosts($data, $connection)
     {
+        /**
+         * TODO: TABLE = CONSTANT
+         * @kenny
+         */
         $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "magefan_blog_post`";
         $result = mysqli_query($connection, $sqlString);
         if ($result) {
@@ -74,7 +82,9 @@ class MageFanM2 extends AbstractImport
                 $content = $post['content'];
                 if ($postModel->isImportedPost($importSource, $post['post_id'])) {
 
-                    /** Update posts */
+                    /**
+                     * Update posts
+                     */
                     if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $postModel->isDuplicateUrlKey($post['identifier']) != null) {
                         $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['identifier'])];
                         $this->_resourceConnection->getConnection()
@@ -105,8 +115,9 @@ class MageFanM2 extends AbstractImport
                             ->delete($this->_resourceConnection
                                 ->getTableName('mageplaza_blog_post_tag'), $where);
                     } else {
-
-                        /** Re-import existing posts */
+                        /**
+                         * Re-import existing posts
+                         */
                         try {
                             $postModel->setData([
                                 'name' => $post['title'],
@@ -138,7 +149,9 @@ class MageFanM2 extends AbstractImport
                 }
             }
 
-            /** Store old post ids */
+            /**
+             * Store old post ids
+             */
             foreach ($postModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
                     $postImportSource = explode('-', $item->getImportSource());
@@ -151,12 +164,16 @@ class MageFanM2 extends AbstractImport
             }
             mysqli_free_result($result);
 
-            /** Insert topics */
+            /**
+             * Insert topics
+             */
             $topicSql = "SELECT post_id FROM " . $data['table_prefix'] . " `magefan_blog_post_relatedpost` GROUP BY post_id";
             $topicCount = 1;
             $oldTopicIds = [];
 
-            /** @var \Mageplaza\Blog\Model\TopicFactory */
+            /**
+             * @var \Mageplaza\Blog\Model\TopicFactory
+             */
             $topicModel = $this->_topicFactory->create();
             $this->_deleteCount = $this->_behaviour($topicModel, $data);
             $result = mysqli_query($connection, $topicSql);
@@ -178,7 +195,9 @@ class MageFanM2 extends AbstractImport
             }
             mysqli_free_result($result);
 
-            /** Insert related posts */
+            /**
+             * Insert related posts
+             */
             $topicPostTable = $this->_resourceConnection->getTableName('mageplaza_blog_post_topic');
             $topicPostSql = "SELECT * FROM " . $data['table_prefix'] . " `magefan_blog_post_relatedpost`";
             $result = mysqli_query($connection, $topicPostSql);
@@ -218,14 +237,18 @@ class MageFanM2 extends AbstractImport
         $this->_resetRecords();
         $oldTagIds = [];
 
-        /** @var \Mageplaza\Blog\Model\TagFactory */
+        /**
+         * @var \Mageplaza\Blog\Model\TagFactory
+         */
         $tagModel = $this->_tagFactory->create();
         $this->_deleteCount = $this->_behaviour($tagModel, $data);
         $importSource = $data['type'] . '-' . $data['database'];
         while ($tag = mysqli_fetch_assoc($result)) {
             if ($tagModel->isImportedTag($importSource, $tag['tag_id'])) {
 
-                /** Update tags */
+                /**
+                 * Update tags
+                 */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tagModel->isDuplicateUrlKey($tag['identifier']) != null) {
                     try {
                         $where = ['tag_id = ?' => (int)$tagModel->isDuplicateUrlKey($tag['identifier'])];
@@ -250,7 +273,9 @@ class MageFanM2 extends AbstractImport
                     }
                 } else {
 
-                    /** Re-import the existing tags */
+                    /**
+                     * Re-import the existing tags
+                     */
                     try {
                         $tagModel->setData([
                             'name' => $tag['title'],
@@ -281,6 +306,10 @@ class MageFanM2 extends AbstractImport
             if ($item->getImportSource() != null) {
                 $tagImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($tagImportSource);
+                /**
+                 * TODO: sua name cho chuan, CONSTANT
+                 * @kenny
+                 */
                 if ($importType == 'mage_fan') {
                     $oldTagId = array_pop($tagImportSource);
                     $oldTagIds[$item->getId()] = $oldTagId;
@@ -319,10 +348,16 @@ class MageFanM2 extends AbstractImport
      */
     protected function _importCategories($data, $connection)
     {
+        /**
+         * TODO: TABLE CONTANT
+         * @kenny
+         */
         $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "magefan_blog_category`";
         $result = mysqli_query($connection, $sqlString);
 
-        /** @var \Mageplaza\Blog\Model\CategoryFactory */
+        /**
+         * @var \Mageplaza\Blog\Model\CategoryFactory
+         */
         $categoryModel = $this->_categoryFactory->create();
         $oldCategoryIds = [];
         $newCategories = [];
@@ -334,7 +369,9 @@ class MageFanM2 extends AbstractImport
 
             if ($categoryModel->isImportedCategory($importSource, $category['category_id'])) {
 
-                /** Update categories */
+                /**
+                 * Update categories
+                 */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->isDuplicateUrlKey($category['identifier']) != null && $category['identifier'] != 'root') {
                     try {
                         $where = ['category_id = ?' => (int)$categoryModel->isDuplicateUrlKey($category['identifier'])];
@@ -359,7 +396,9 @@ class MageFanM2 extends AbstractImport
                     }
                 } else {
 
-                    /** Re-import the existing categories */
+                    /**
+                     * Re-import the existing categories
+                     */
                     try {
                         $categoryModel->setData([
                             'name' => $category['title'],
@@ -386,11 +425,17 @@ class MageFanM2 extends AbstractImport
             $oldCategories[$category['category_id']] = $category;
         }
 
-        /** Store old category ids */
+        /**
+         * Store old category ids
+         */
         foreach ($categoryModel->getCollection() as $item) {
             if ($item->getImportSource() != null) {
                 $catImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($catImportSource);
+                /**
+                 * TODO: sua name cho chuan
+                 * @kenny
+                 */
                 if ($importType == 'mage_fan') {
                     $oldCategoryId = array_pop($catImportSource);
                     $oldCategoryIds[$item->getId()] = $oldCategoryId;
@@ -414,7 +459,9 @@ class MageFanM2 extends AbstractImport
         }
         mysqli_free_result($result);
 
-        /** Import category post relation */
+        /**
+         * Import category post relation
+         */
         $categoryPostTable = $this->_resourceConnection->getTableName('mageplaza_blog_post_category');
         $sqlCategoryPost = "SELECT * FROM " . $data['table_prefix'] . "`magefan_blog_post_category` ";
         $result = mysqli_query($connection, $sqlCategoryPost);
@@ -464,6 +511,9 @@ class MageFanM2 extends AbstractImport
         while ($comment = mysqli_fetch_assoc($result)) {
             if ($commentModel->isImportedComment($importSource, $comment['comment_id'])) {
                 $createDate = strtotime($comment['creation_time']);
+                /**
+                 * mapping status
+                 */
                 switch ($comment['status']) {
                     case '2':
                         $status = 2;
@@ -522,6 +572,10 @@ class MageFanM2 extends AbstractImport
             if ($item->getImportSource() != null) {
                 $commentImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($commentImportSource);
+                /**
+                 * TODO: sua name cho chuan
+                 * @kenny
+                 */
                 if ($importType == 'mage_fan') {
                     $oldCommentId = array_pop($commentImportSource);
                     $oldCommentIds[$item->getId()] = $oldCommentId;
@@ -548,12 +602,17 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
+     * Import Author
      * @param $data
      * @param $connection
      * @return mixed|void
      */
     protected function _importAuthors($data, $connection)
     {
+        /**
+         * TODO: TABLE = CONTANT
+         * @kenny
+         */
         $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "admin_user`";
         $result = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
@@ -596,10 +655,16 @@ class MageFanM2 extends AbstractImport
         }
         mysqli_free_result($result);
 
-        /** Import post author relation */
+        /**
+         * Import post author relation
+         */
         $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
         $updateData = [];
         foreach ($oldUserIds as $newUserId => $oldUserId) {
+            /**
+             * TODO: TABLE = CONTANT
+             * @kenny
+             */
             $relationshipSql = "SELECT * FROM `" . $data['table_prefix'] . "magefan_blog_post` 
                                 WHERE author_id = " . $oldUserId;
             $result = mysqli_query($connection, $relationshipSql);
