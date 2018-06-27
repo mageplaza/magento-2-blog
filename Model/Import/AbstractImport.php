@@ -39,6 +39,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Backend\Model\Auth\Session;
 use Mageplaza\Blog\Helper\Image as HelperImage;
+use Mageplaza\Blog\Model\Config\Source\Import\Type;
 
 /**
  * Class Author
@@ -50,6 +51,11 @@ abstract class AbstractImport extends AbstractModel
      * @var DateTime
      */
     public $date;
+
+    /**
+     * @var Type
+     */
+    public $importType;
 
     /**
      * @var PostFactory
@@ -132,6 +138,8 @@ abstract class AbstractImport extends AbstractModel
      */
     protected $_hasData = false;
 
+    protected $_type;
+
     /**
      * AbstractImport constructor.
      * @param Context $context
@@ -147,6 +155,7 @@ abstract class AbstractImport extends AbstractModel
      * @param Session $authSession
      * @param ResourceConnection $resourceConnection
      * @param DateTime $date
+     * @param Type $importType
      * @param StoreManagerInterface $storeManager
      * @param HelperImage $helperImage
      * @param AbstractResource|null $resource
@@ -167,6 +176,7 @@ abstract class AbstractImport extends AbstractModel
         Session $authSession,
         ResourceConnection $resourceConnection,
         DateTime $date,
+        Type $importType,
         StoreManagerInterface $storeManager,
         HelperImage $helperImage,
         AbstractResource $resource = null,
@@ -175,6 +185,8 @@ abstract class AbstractImport extends AbstractModel
     )
     {
         $this->date = $date;
+        $this->importType = $importType;
+        $this->_type = $this->_getImportType();
         $this->_postFactory = $postFactory;
         $this->_tagFactory = $tagFactory;
         $this->_categoryFactory = $categoryFactory;
@@ -329,5 +341,20 @@ abstract class AbstractImport extends AbstractModel
         }
         $dash_str .= $password;
         return $dash_str;
+    }
+
+    /**
+     * Get import types
+     * @return array
+     */
+    protected function _getImportType()
+    {
+        $types = [];
+        foreach ($this->importType->toOptionArray() as $item) {
+            $types[] = $item['value'];
+        }
+        array_shift($types);
+
+        return $types;
     }
 }

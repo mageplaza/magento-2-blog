@@ -93,13 +93,13 @@ class Import extends Action
     {
         $data = $this->_getSession()->getData('mageplaza_blog_import_data');
         switch ($data['type']) {
-            case 'word_press':
+            case 'wordpress':
                 $response = $this->processImport($this->_wordpressModel, $data);
                 break;
-            case 'ahead_work_m1':
+            case 'aheadworksm1':
                 $response = $this->processImport($this->_aheadWorksM1Model, $data);
                 break;
-            case 'mage_fan':
+            case 'magefan':
                 $response = $this->processImport($this->_mageFanM2Model, $data);
                 break;
             default:

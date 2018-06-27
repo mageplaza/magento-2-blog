@@ -27,6 +27,54 @@ namespace Mageplaza\Blog\Model\Import;
  */
 class WordPress extends AbstractImport
 {
+    /**
+     * Wordpress Post table name
+     *
+     * @var string
+     */
+    const POST_TABLE = 'posts';
+
+    /**
+     * Wordpress Post meta table name
+     *
+     * @var string
+     */
+    const POSTMETA_TABLE = 'postmeta';
+
+    /**
+     * Wordpress Category/Tag table name
+     *
+     * @var string
+     */
+    const TERMS_TABLE = 'terms';
+
+    /**
+     * Wordpress Category/Tag identify table name
+     *
+     * @var string
+     */
+    const TERMTAXONOMY_TABLE = 'term_taxonomy';
+
+    /**
+     * Wordpress Category/Tag relationship table name
+     *
+     * @var string
+     */
+    const TERMRELATIONSHIP_TABLE = 'term_relationships';
+
+    /**
+     * Magento User table name
+     *
+     * @var string
+     */
+    const USERS_TABLE = 'users';
+
+    /**
+     * Wordpress Comment table name
+     *
+     * @var string
+     */
+    const COMMENT_TABLE = 'comments';
 
     /**
      * @param $data
@@ -38,11 +86,7 @@ class WordPress extends AbstractImport
     {
         mysqli_query($connection, 'SET NAMES "utf8"');
 
-        /**
-         * TODO: sua name cho chuan
-         * @kenny
-         */
-        if ($this->_importPosts($data, $connection) && $data['type'] == 'word_press') {
+        if ($this->_importPosts($data, $connection) && $data['type'] == $this->_type[0]) {
             $this->_importTags($data, $connection);
             $this->_importCategories($data, $connection);
             $this->_importAuthors($data, $connection);
@@ -61,11 +105,7 @@ class WordPress extends AbstractImport
      */
     protected function _importPosts($data, $connection)
     {
-        /**
-         * TODO: TABLE = CONTANT
-         * @kenny
-         */
-        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "posts` WHERE post_type = 'post' AND post_status <> 'auto-draft'";
+        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::POST_TABLE . "` WHERE post_type = 'post' AND post_status <> 'auto-draft'";
         $result = mysqli_query($connection, $sqlString);
         if ($result) {
             $this->_resetRecords();
@@ -83,9 +123,6 @@ class WordPress extends AbstractImport
                 $modifyDate = strtotime($post['post_modified_gmt']);
                 $publicDate = strtotime($post['post_date_gmt']);
                 $content = $post['post_content'];
-                /**
-                 * TODO: doan nay phai huong dan How to copy media folder
-                 */
                 $content = preg_replace("/(http:\/\/)(.+?)(\/wp-content\/)/", $this->_helperImage->getBaseMediaUrl() . "/wysiwyg/", $content);
                 $isEnable = ($post['post_status'] == 'trash') ? 0 : 1;
                 if ($postModel->isImportedPost($importSource, $post['ID'])) {
@@ -156,11 +193,7 @@ class WordPress extends AbstractImport
                     $postImportSource = explode('-', $item->getImportSource());
                     $importType = array_shift($postImportSource);
 
-                    /**
-                     * TODO: sua name
-                     * @kenny
-                     */
-                    if ($importType == 'word_press') {
+                    if ($importType == $this->_type[0]) {
                         $oldPostId = array_pop($postImportSource);
                         $oldPostIds[$item->getId()] = $oldPostId;
                     }
@@ -170,12 +203,7 @@ class WordPress extends AbstractImport
             $oldPostMetaIds = [];
             $updateData = [];
             foreach ($oldPostIds as $newPostId => $oldPostId) {
-
-                /**
-                 * TODO: TABLE = CONTANT
-                 * @kenny
-                 */
-                $postMetaSqlString = "SELECT * FROM `" . $data['table_prefix'] . "posts` WHERE `post_type` = 'attachment' and `post_parent` = '" . $oldPostId . "'";
+                $postMetaSqlString = "SELECT * FROM `" . $data['table_prefix'] . self::POST_TABLE . "` WHERE `post_type` = 'attachment' and `post_parent` = '" . $oldPostId . "'";
 
                 $result = mysqli_query($connection, $postMetaSqlString);
                 if ($result) {
@@ -185,11 +213,7 @@ class WordPress extends AbstractImport
                 }
             }
             foreach ($oldPostMetaIds as $newPostId => $oldPostMetaId) {
-                /**
-                 * TODO: TABLE = CONTANT
-                 * @kenny
-                 */
-                $postMetaSqlString = "SELECT * FROM `" . $data['table_prefix'] . "postmeta` WHERE `meta_key` = '_wp_attached_file' and `post_id` = '" . $oldPostMetaId . "'";
+                $postMetaSqlString = "SELECT * FROM `" . $data['table_prefix'] . self::POSTMETA_TABLE . "` WHERE `meta_key` = '_wp_attached_file' and `post_id` = '" . $oldPostMetaId . "'";
                 $result = mysqli_query($connection, $postMetaSqlString);
                 if ($result) {
                     while ($postMeta = mysqli_fetch_assoc($result)) {
@@ -220,15 +244,10 @@ class WordPress extends AbstractImport
      */
     protected function _importTags($data, $connection)
     {
-        /**
-         * TODO: TABLE = CONTANT
-         * @kenny
-         */
-
-        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "terms` 
-                          INNER JOIN `" . $data['table_prefix'] . "term_taxonomy` 
-                          ON " . $data['table_prefix'] . "terms.term_id=" . $data['table_prefix'] . "term_taxonomy.term_id 
-                          WHERE " . $data['table_prefix'] . "term_taxonomy.taxonomy = 'post_tag'";
+        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::TERMS_TABLE . "` 
+                          INNER JOIN `" . $data['table_prefix'] . self::TERMTAXONOMY_TABLE . "` 
+                          ON " . $data['table_prefix'] . self::TERMS_TABLE . ".term_id=" . $data['table_prefix'] . self::TERMTAXONOMY_TABLE . ".term_id 
+                          WHERE " . $data['table_prefix'] . self::TERMTAXONOMY_TABLE . ".taxonomy = 'post_tag'";
         $result = mysqli_query($connection, $sqlString);
         $oldTagIds = [];
         $this->_resetRecords();
@@ -299,7 +318,7 @@ class WordPress extends AbstractImport
             if ($item->getImportSource() != null) {
                 $tagImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($tagImportSource);
-                if ($importType == 'word_press') {
+                if ($importType == $this->_type[0]) {
                     $oldTagId = array_pop($tagImportSource);
                     $oldTagIds[$item->getId()] = $oldTagId;
                 }
@@ -318,11 +337,11 @@ class WordPress extends AbstractImport
      */
     protected function _importCategories($data, $connection)
     {
-        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "terms` 
-                          INNER JOIN `" . $data['table_prefix'] . "term_taxonomy` 
-                          ON " . $data['table_prefix'] . "terms.term_id=" . $data['table_prefix'] . "term_taxonomy.term_id 
-                          WHERE " . $data['table_prefix'] . "term_taxonomy.taxonomy = 'category' 
-                          AND " . $data['table_prefix'] . "terms.name <> 'uncategorized' ";
+        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::TERMS_TABLE . "` 
+                          INNER JOIN `" . $data['table_prefix'] . self::TERMTAXONOMY_TABLE . "` 
+                          ON " . $data['table_prefix'] . self::TERMS_TABLE . ".term_id=" . $data['table_prefix'] . self::TERMTAXONOMY_TABLE . ".term_id 
+                          WHERE " . $data['table_prefix'] . self::TERMTAXONOMY_TABLE . ".taxonomy = 'category' 
+                          AND " . $data['table_prefix'] . self::TERMS_TABLE . ".name <> 'uncategorized' ";
         $result = mysqli_query($connection, $sqlString);
 
         /** @var \Mageplaza\Blog\Model\CategoryFactory */
@@ -395,7 +414,7 @@ class WordPress extends AbstractImport
             if ($item->getImportSource() != null) {
                 $catImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($catImportSource);
-                if ($importType == 'word_press') {
+                if ($importType == $this->_type[0]) {
                     $oldCategoryId = array_pop($catImportSource);
                     $oldCategoryIds[$item->getId()] = $oldCategoryId;
                 }
@@ -432,7 +451,7 @@ class WordPress extends AbstractImport
      */
     protected function _importAuthors($data, $connection)
     {
-        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "users`";
+        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::USERS_TABLE . "`";
         $result = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
         $oldUserIds = [];
@@ -482,7 +501,7 @@ class WordPress extends AbstractImport
         $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
         $updateData = [];
         foreach ($oldUserIds as $newUserId => $oldUserId) {
-            $relationshipSql = "SELECT ID FROM `" . $data['table_prefix'] . "posts` 
+            $relationshipSql = "SELECT ID FROM `" . $data['table_prefix'] . self::POST_TABLE . "` 
                                   WHERE post_author = " . $oldUserId . " 
                                   AND post_type = 'post' 
                                   AND post_status <> 'auto-draft'";
@@ -511,7 +530,7 @@ class WordPress extends AbstractImport
     protected function _importComments($data, $connection)
     {
         $accountManage = $this->_objectManager->create('\Magento\Customer\Model\AccountManagement');
-        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "comments`";
+        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::COMMENT_TABLE . "`";
         $result = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
 
@@ -588,7 +607,7 @@ class WordPress extends AbstractImport
          * Insert child-parent comments
          */
         foreach ($oldCommentIds as $newCommentId => $oldCommentId) {
-            $relationshipSql = "SELECT `comment_ID`,`comment_parent` FROM `" . $data['table_prefix'] . "comments` WHERE `comment_parent` <> 0";
+            $relationshipSql = "SELECT `comment_ID`,`comment_parent` FROM `" . $data['table_prefix'] . self::COMMENT_TABLE . "` WHERE `comment_parent` <> 0";
             $result = mysqli_query($connection, $relationshipSql);
 
             while ($commentParent = mysqli_fetch_assoc($result)) {
@@ -628,14 +647,14 @@ class WordPress extends AbstractImport
         $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
         $categoryPostTable = $this->_resourceConnection->getTableName($relationTable);
         foreach ($oldPostIds as $newPostId => $oldPostId) {
-            $sqlRelation = "SELECT `" . $data['table_prefix'] . "term_taxonomy`.`term_id` 
-                      FROM `" . $data['table_prefix'] . "term_taxonomy` 
-                      INNER JOIN `" . $data['table_prefix'] . "term_relationships` 
-                      ON " . $data['table_prefix'] . "term_taxonomy.`term_taxonomy_id`=" . $data['table_prefix'] . "term_relationships.`term_taxonomy_id` 
-                      RIGHT JOIN `" . $data['table_prefix'] . "terms` 
-                      ON " . $data['table_prefix'] . "term_taxonomy.`term_id` = " . $data['table_prefix'] . "terms.`term_id`
-                      WHERE " . $data['table_prefix'] . "term_taxonomy.taxonomy = '" . $termType . "' 
-                      AND `" . $data['table_prefix'] . "term_relationships`.`object_id` = " . $oldPostId;
+            $sqlRelation = "SELECT `" . $data['table_prefix'] . self::TERMTAXONOMY_TABLE . "`.`term_id` 
+                      FROM `" . $data['table_prefix'] . self::TERMTAXONOMY_TABLE . "` 
+                      INNER JOIN `" . $data['table_prefix'] . self::TERMRELATIONSHIP_TABLE . "` 
+                      ON " . $data['table_prefix'] . self::TERMTAXONOMY_TABLE . ".`term_taxonomy_id`=" . $data['table_prefix'] . self::TERMRELATIONSHIP_TABLE . ".`term_taxonomy_id` 
+                      RIGHT JOIN `" . $data['table_prefix'] . self::TERMS_TABLE . "` 
+                      ON " . $data['table_prefix'] . self::TERMTAXONOMY_TABLE . ".`term_id` = " . $data['table_prefix'] . self::TERMS_TABLE . ".`term_id`
+                      WHERE " . $data['table_prefix'] . self::TERMTAXONOMY_TABLE . ".taxonomy = '" . $termType . "' 
+                      AND `" . $data['table_prefix'] . self::TERMRELATIONSHIP_TABLE . "`.`object_id` = " . $oldPostId;
             $result = mysqli_query($connection, $sqlRelation);
             while ($categoryPost = mysqli_fetch_assoc($result)) {
                 if ($isCategory) {

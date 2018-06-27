@@ -28,6 +28,41 @@ namespace Mageplaza\Blog\Model\Import;
 class AheadWorksM1 extends AbstractImport
 {
     /**
+     * AheadworksM1 Post table name
+     *
+     * @var string
+     */
+    const POST_TABLE = 'aw_blog';
+
+    /**
+     * AheadworksM1 Tag table name
+     *
+     * @var string
+     */
+    const TAG_TABLE = 'aw_blog_tags';
+
+    /**
+     * AheadworksM1 Category table name
+     *
+     * @var string
+     */
+    const CATEGORY_TABLE = 'aw_blog_cat';
+
+    /**
+     * AheadworksM1 Comment table name
+     *
+     * @var string
+     */
+    const COMMENT_TABLE = 'aw_blog_comment';
+
+    /**
+     * AheadworksM1 Category-Post Relationship table name
+     *
+     * @var string
+     */
+    const CATEGORY_POST_TABLE = 'aw_blog_post_cat';
+
+    /**
      * @param $data
      * @param $connection
      * @return bool
@@ -37,10 +72,7 @@ class AheadWorksM1 extends AbstractImport
     {
         mysqli_query($connection, 'SET NAMES "utf8"');
 
-        /**
-         * TODO: @kenny  ahead_work_m1 -> dung 1 bien o model thoi Model/Config/Source/Import/Type.php:37
-         */
-        if ($this->_importPosts($data, $connection) && $data['type'] == 'ahead_work_m1') {
+        if ($this->_importPosts($data, $connection) && $data['type'] == $this->_type[1]) {
             $this->_importTags($data, $connection);
             $this->_importCategories($data, $connection);
             $this->_importComments($data, $connection);
@@ -59,12 +91,7 @@ class AheadWorksM1 extends AbstractImport
     protected function _importPosts($data, $connection)
     {
         $authorId = $this->_authSession->getUser()->getId();
-        /**
-         * TODO: E chua tinh truong hop table_subfix
-         * Author: @kenny
-         */
-        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "aw_blog`";
-
+        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::POST_TABLE . "`";
         $result = mysqli_query($connection, $sqlString);
         if ($result) {
             $this->_resetRecords();
@@ -154,11 +181,7 @@ class AheadWorksM1 extends AbstractImport
                     $tagNames = explode(',', $postTag);
                     $id = [];
                     foreach ($tagNames as $name) {
-                        /**
-                         * TODO: aw_blog_tags nen dua len CONSTANT, sau update se de dang
-                         * @kenny
-                         */
-                        $tagTableSql = "SELECT * FROM `" . $data['table_prefix'] . "aw_blog_tags` WHERE `tag` = '" . $name . "'";
+                        $tagTableSql = "SELECT * FROM `" . $data['table_prefix'] . self::TAG_TABLE . "` WHERE `tag` = '" . $name . "'";
                         $tagResult = mysqli_query($connection, $tagTableSql);
                         $tag = mysqli_fetch_assoc($tagResult);
                         $id [] = $tag['id'];
@@ -172,11 +195,7 @@ class AheadWorksM1 extends AbstractImport
                 if ($item->getImportSource() != null) {
                     $postImportSource = explode('-', $item->getImportSource());
                     $importType = array_shift($postImportSource);
-                    /**
-                     * TODO: sua name cho chuan
-                     * @kenny
-                     */
-                    if ($importType == 'ahead_work_m1') {
+                    if ($importType == $this->_type[1]) {
                         $oldPostId = array_pop($postImportSource);
                         $oldPostIds[$item->getId()] = $oldPostId;
                     }
@@ -200,7 +219,7 @@ class AheadWorksM1 extends AbstractImport
      */
     protected function _importTags($data, $connection)
     {
-        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . "aw_blog_tags`";
+        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::TAG_TABLE . "`";
         $result = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
         $oldTagIds = [];
@@ -261,11 +280,7 @@ class AheadWorksM1 extends AbstractImport
             if ($item->getImportSource() != null) {
                 $tagImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($tagImportSource);
-                /**
-                 * TODO: sua name cho chuan
-                 * @kenny
-                 */
-                if ($importType == 'ahead_work_m1') {
+                if ($importType == $this->_type[1]) {
                     $oldTagId = array_pop($tagImportSource);
                     $oldTagIds[$item->getId()] = $oldTagId;
                 }
@@ -297,11 +312,7 @@ class AheadWorksM1 extends AbstractImport
      */
     protected function _importCategories($data, $connection)
     {
-        /**
-         * TODO: table nen de CONSTANT
-         * @kenny
-         */
-        $sqlString = "SELECT * FROM `" . $data["table_prefix"] . "aw_blog_cat`";
+        $sqlString = "SELECT * FROM `" . $data["table_prefix"] . self::CATEGORY_TABLE . "`";
         $result = mysqli_query($connection, $sqlString);
 
         /**
@@ -372,11 +383,7 @@ class AheadWorksM1 extends AbstractImport
             if ($item->getImportSource() != null) {
                 $catImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($catImportSource);
-                /**
-                 * TODO: sua name cho chuan
-                 * @kenny
-                 */
-                if ($importType == 'ahead_work_m1') {
+                if ($importType == $this->_type[1]) {
                     $oldCategoryId = array_pop($catImportSource);
                     $oldCategoryIds[$item->getId()] = $oldCategoryId;
                 }
@@ -399,11 +406,7 @@ class AheadWorksM1 extends AbstractImport
     protected function _importComments($data, $connection)
     {
         $accountManage = $this->_objectManager->create('\Magento\Customer\Model\AccountManagement');
-        /**
-         * TODO: TABLE = CONSTANT
-         * @kenny
-         */
-        $sqlString = "SELECT * FROM `" . $data["table_prefix"] . "aw_blog_comment`";
+        $sqlString = "SELECT * FROM `" . $data["table_prefix"] . self::COMMENT_TABLE . "`";
         $result = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
 
@@ -490,11 +493,7 @@ class AheadWorksM1 extends AbstractImport
         $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
         $categoryPostTable = $this->_resourceConnection->getTableName($relationTable);
         foreach ($oldPostIds as $newPostId => $oldPostId) {
-            /**
-             * TODO: TABLE = CONSTANT
-             * @kenny
-             */
-            $sqlRelation = "SELECT * FROM `" . $data["table_prefix"] . "aw_blog_post_cat` WHERE `post_id` = " . $oldPostId;
+            $sqlRelation = "SELECT * FROM `" . $data["table_prefix"] . self::CATEGORY_POST_TABLE . "` WHERE `post_id` = " . $oldPostId;
             $result = mysqli_query($connection, $sqlRelation);
             while ($categoryPost = mysqli_fetch_assoc($result)) {
                 $newCategoryId = (array_search($categoryPost['cat_id'], $oldCatIds)) ?: '1';

@@ -29,13 +29,9 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class Type implements ArrayInterface
 {
-    /**
-     * TODO: @kenny doi: wordpress, aheadworksm1, magefan
-     * Status: Pending
-     */
-    const WORDPRESS = "word_press";
-    const AHEADWORK = "ahead_work_m1";
-    const MAGEFAN = "mage_fan";
+    const WORDPRESS = "wordpress";
+    const AHEADWORK = "aheadworksm1";
+    const MAGEFAN = "magefan";
 
     /**
      * @return array
