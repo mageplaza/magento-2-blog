@@ -95,7 +95,9 @@ class AheadWorksM1 extends AbstractImport
         $result = mysqli_query($connection, $sqlString);
         if ($result) {
             $this->_resetRecords();
-            /** @var \Mageplaza\Blog\Model\PostFactory */
+            /**
+             * @var \Mageplaza\Blog\Model\PostFactory
+             */
             $postModel = $this->_postFactory->create();
             $this->_deleteCount = $this->_behaviour($postModel, $data);
             $oldPostIds = [];
@@ -176,7 +178,9 @@ class AheadWorksM1 extends AbstractImport
                     }
                 }
 
-                /** Store post-tags */
+                /**
+                 * Store post-tags
+                 */
                 if (!empty($postTag)) {
                     $tagNames = explode(',', $postTag);
                     $id = [];
@@ -190,7 +194,9 @@ class AheadWorksM1 extends AbstractImport
                 }
             }
 
-            /** Get old post ids */
+            /**
+             * Get old post ids
+             */
             foreach ($postModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
                     $postImportSource = explode('-', $item->getImportSource());
@@ -213,6 +219,7 @@ class AheadWorksM1 extends AbstractImport
     }
 
     /**
+     * Import tags
      * @param $data
      * @param $connection
      * @return mixed|void
@@ -306,6 +313,7 @@ class AheadWorksM1 extends AbstractImport
     }
 
     /**
+     * Import categories
      * @param $data
      * @param $connection
      * @return mixed|void
@@ -399,6 +407,7 @@ class AheadWorksM1 extends AbstractImport
     }
 
     /**
+     * Import comments
      * @param $data
      * @param $connection
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -483,6 +492,7 @@ class AheadWorksM1 extends AbstractImport
     }
 
     /**
+     * Import category posts relationships
      * @param $data
      * @param $connection
      * @param $oldCatIds
