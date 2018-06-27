@@ -351,10 +351,8 @@ abstract class AbstractImport extends AbstractModel
     {
         $types = [];
         foreach ($this->importType->toOptionArray() as $item) {
-            $types[] = $item['value'];
+            $types[$item['value']] = $item['value'];
         }
-        array_shift($types);
-
         return $types;
     }
 }

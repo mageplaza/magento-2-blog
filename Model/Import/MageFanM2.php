@@ -91,6 +91,8 @@ class MageFanM2 extends AbstractImport
     const ADMIN_USER_TABLE = 'admin_user';
 
     /**
+     * Run imports
+     * 
      * @param $data
      * @param $connection
      * @return bool
@@ -100,7 +102,7 @@ class MageFanM2 extends AbstractImport
     {
         mysqli_query($connection, 'SET NAMES "utf8"');
 
-        if ($this->_importPosts($data, $connection) && $data['type'] == $this->_type[2]) {
+        if ($this->_importPosts($data, $connection) && $data['type'] == $this->_type['magefan']) {
             $this->_importTags($data, $connection);
             $this->_importCategories($data, $connection);
             $this->_importComments($data, $connection);
@@ -112,6 +114,8 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
+     * Import posts
+     *
      * @param $data
      * @param $connection
      * @return bool|mixed
@@ -211,7 +215,7 @@ class MageFanM2 extends AbstractImport
                 if ($item->getImportSource() != null) {
                     $postImportSource = explode('-', $item->getImportSource());
                     $importType = array_shift($postImportSource);
-                    if ($importType == $this->_type[2]) {
+                    if ($importType == $this->_type['magefan']) {
                         $oldPostId = array_pop($postImportSource);
                         $oldPostIds[$item->getId()] = $oldPostId;
                     }
@@ -281,6 +285,8 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
+     * Import tags
+     *
      * @param $data
      * @param $connection
      * @return mixed|void
@@ -361,7 +367,7 @@ class MageFanM2 extends AbstractImport
             if ($item->getImportSource() != null) {
                 $tagImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($tagImportSource);
-                if ($importType == $this->_type[2]) {
+                if ($importType == $this->_type['magefan']) {
                     $oldTagId = array_pop($tagImportSource);
                     $oldTagIds[$item->getId()] = $oldTagId;
                 }
@@ -393,6 +399,8 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
+     * Import categories
+     *
      * @param $data
      * @param $connection
      * @return mixed|void
@@ -478,7 +486,7 @@ class MageFanM2 extends AbstractImport
             if ($item->getImportSource() != null) {
                 $catImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($catImportSource);
-                if ($importType == $this->_type[2]) {
+                if ($importType == $this->_type['magefan']) {
                     $oldCategoryId = array_pop($catImportSource);
                     $oldCategoryIds[$item->getId()] = $oldCategoryId;
                 }
@@ -528,6 +536,8 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
+     * Import comments
+     *
      * @param $data
      * @param $connection
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -614,7 +624,7 @@ class MageFanM2 extends AbstractImport
             if ($item->getImportSource() != null) {
                 $commentImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($commentImportSource);
-                if ($importType == $this->_type[2]) {
+                if ($importType == $this->_type['magefan']) {
                     $oldCommentId = array_pop($commentImportSource);
                     $oldCommentIds[$item->getId()] = $oldCommentId;
                 }
@@ -641,6 +651,7 @@ class MageFanM2 extends AbstractImport
 
     /**
      * Import Author
+     *
      * @param $data
      * @param $connection
      * @return mixed|void

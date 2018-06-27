@@ -63,6 +63,8 @@ class AheadWorksM1 extends AbstractImport
     const CATEGORY_POST_TABLE = 'aw_blog_post_cat';
 
     /**
+     * Run imports
+     *
      * @param $data
      * @param $connection
      * @return bool
@@ -72,7 +74,7 @@ class AheadWorksM1 extends AbstractImport
     {
         mysqli_query($connection, 'SET NAMES "utf8"');
 
-        if ($this->_importPosts($data, $connection) && $data['type'] == $this->_type[1]) {
+        if ($this->_importPosts($data, $connection) && $data['type'] == $this->_type['aheadworksm1']) {
             $this->_importTags($data, $connection);
             $this->_importCategories($data, $connection);
             $this->_importComments($data, $connection);
@@ -83,6 +85,8 @@ class AheadWorksM1 extends AbstractImport
     }
 
     /**
+     * Import posts
+     *
      * @param $data
      * @param $connection
      * @return bool|mixed
@@ -201,7 +205,7 @@ class AheadWorksM1 extends AbstractImport
                 if ($item->getImportSource() != null) {
                     $postImportSource = explode('-', $item->getImportSource());
                     $importType = array_shift($postImportSource);
-                    if ($importType == $this->_type[1]) {
+                    if ($importType == $this->_type['aheadworksm1']) {
                         $oldPostId = array_pop($postImportSource);
                         $oldPostIds[$item->getId()] = $oldPostId;
                     }
@@ -220,6 +224,7 @@ class AheadWorksM1 extends AbstractImport
 
     /**
      * Import tags
+     *
      * @param $data
      * @param $connection
      * @return mixed|void
@@ -287,7 +292,7 @@ class AheadWorksM1 extends AbstractImport
             if ($item->getImportSource() != null) {
                 $tagImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($tagImportSource);
-                if ($importType == $this->_type[1]) {
+                if ($importType == $this->_type['aheadworksm1']) {
                     $oldTagId = array_pop($tagImportSource);
                     $oldTagIds[$item->getId()] = $oldTagId;
                 }
@@ -314,6 +319,7 @@ class AheadWorksM1 extends AbstractImport
 
     /**
      * Import categories
+     *
      * @param $data
      * @param $connection
      * @return mixed|void
@@ -391,7 +397,7 @@ class AheadWorksM1 extends AbstractImport
             if ($item->getImportSource() != null) {
                 $catImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($catImportSource);
-                if ($importType == $this->_type[1]) {
+                if ($importType == $this->_type['aheadworksm1']) {
                     $oldCategoryId = array_pop($catImportSource);
                     $oldCategoryIds[$item->getId()] = $oldCategoryId;
                 }
@@ -408,6 +414,7 @@ class AheadWorksM1 extends AbstractImport
 
     /**
      * Import comments
+     *
      * @param $data
      * @param $connection
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -493,6 +500,7 @@ class AheadWorksM1 extends AbstractImport
 
     /**
      * Import category posts relationships
+     *
      * @param $data
      * @param $connection
      * @param $oldCatIds

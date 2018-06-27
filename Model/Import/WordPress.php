@@ -77,6 +77,8 @@ class WordPress extends AbstractImport
     const COMMENT_TABLE = 'comments';
 
     /**
+     * Run imports
+     *
      * @param $data
      * @param $connection
      * @return bool
@@ -86,7 +88,7 @@ class WordPress extends AbstractImport
     {
         mysqli_query($connection, 'SET NAMES "utf8"');
 
-        if ($this->_importPosts($data, $connection) && $data['type'] == $this->_type[0]) {
+        if ($this->_importPosts($data, $connection) && $data['type'] == $this->_type['wordpress']) {
             $this->_importTags($data, $connection);
             $this->_importCategories($data, $connection);
             $this->_importAuthors($data, $connection);
@@ -98,6 +100,8 @@ class WordPress extends AbstractImport
     }
 
     /**
+     * Import posts
+     *
      * @param $data
      * @param $connection
      * @return bool|mixed
@@ -193,7 +197,7 @@ class WordPress extends AbstractImport
                     $postImportSource = explode('-', $item->getImportSource());
                     $importType = array_shift($postImportSource);
 
-                    if ($importType == $this->_type[0]) {
+                    if ($importType == $this->_type['wordpress']) {
                         $oldPostId = array_pop($postImportSource);
                         $oldPostIds[$item->getId()] = $oldPostId;
                     }
@@ -239,6 +243,8 @@ class WordPress extends AbstractImport
     }
 
     /**
+     * Import tags
+     *
      * @param $data
      * @param $connection
      */
@@ -318,7 +324,7 @@ class WordPress extends AbstractImport
             if ($item->getImportSource() != null) {
                 $tagImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($tagImportSource);
-                if ($importType == $this->_type[0]) {
+                if ($importType == $this->_type['wordpress']) {
                     $oldTagId = array_pop($tagImportSource);
                     $oldTagIds[$item->getId()] = $oldTagId;
                 }
@@ -332,6 +338,7 @@ class WordPress extends AbstractImport
     }
 
     /**
+     * Import categories
      * @param $data
      * @param $connection
      */
@@ -414,7 +421,7 @@ class WordPress extends AbstractImport
             if ($item->getImportSource() != null) {
                 $catImportSource = explode('-', $item->getImportSource());
                 $importType = array_shift($catImportSource);
-                if ($importType == $this->_type[0]) {
+                if ($importType == $this->_type['wordpress']) {
                     $oldCategoryId = array_pop($catImportSource);
                     $oldCategoryIds[$item->getId()] = $oldCategoryId;
                 }
@@ -446,6 +453,7 @@ class WordPress extends AbstractImport
 
     /**
      * Import authors
+     *
      * @param $data
      * @param $connection
      */
@@ -523,6 +531,7 @@ class WordPress extends AbstractImport
 
     /**
      * Import comments
+     *
      * @param $data
      * @param $connection
      * @throws \Magento\Framework\Exception\LocalizedException
