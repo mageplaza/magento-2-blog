@@ -22,22 +22,22 @@ New Root Category,Neue Wurzelkategorie
 Category Information,Kategorie Informationen
 Name,Name
 Status,Status
-Store Views,Ansichten speichern
+Store Views,Store Views
 Meta Title,Meta-Titel
 Meta Description,Meta Beschreibung
 Meta Keywords,Meta Schlüsselwörter
-Meta Robots,Meta-Roboter
+Meta Robots,Meta Robots
 Category,Kategorie
 ID,ID
 Position,Position
-Posts,Pfosten
+Posts,Posts
 Category Data,Kategorie Daten
 Category information,Informationen zur Kategorie
 New Comment,Neuer Kommentar
 Save and Continue Edit,Speichern und weiter bearbeiten
 Edit Comment,Kommentar bearbeiten
 Comment Details,Kommentar-Details
-Post,Pfosten
+Post,Post
 Customer,Kunde
 Content,Inhalt
 View On Front End,Ansicht am Frontend
@@ -49,9 +49,9 @@ New Post,Neuer Beitrag
 Post Information,Informationen eintragen
 Image,Bild
 Topics,Themen
-Tags,Stichworte
+Tags,Tags
 In RSS,In RSS
-Allow Comment,Kommentar zulassen
+Allow Comment,Erlaube Kommentare
 Publish Date,Veröffentlichungsdatum
 Search Engine Optimization,Suchmaschinen-Optimierung
 Sku,Sku
@@ -71,10 +71,10 @@ Create Topic,Thema erstellen
 Topic Information,Informationen zum Thema
 Topic,Thema
 Author,Autor
-No Categories.,Keine Kategorien
-Posted on %1,Veröffentlicht in %1
-| Posted in %1,Veröffentlicht in %1
-| By: %1,Von: %1
+No Categories.,Keine Kategorien.
+Posted on %1,Veröffentlicht am %1
+| Posted in %1, | Veröffentlicht in %1
+| By: %1, | Von: %1
 Blog,Blog
 Home,Heim
 Go to Home Page,Zur Startseite
@@ -184,7 +184,7 @@ Read more,Lesen Sie mehr
 Warning message,Warnmeldung
 Ok,Ok
 Cancel,Abbrechen
-Better Blog,Besserer Blog
+Better Blog,Better Blog
 General,Allgemeines
 Enable,Aktivieren
 Blog name,Blog-Name
@@ -228,7 +228,7 @@ Facebook: AppID,Facebook: AppID
 Facebook: Number of comment,Facebook: Nummer des Kommentars
 Facebook: Color scheme,Facebook: Farbschema
 Facebook: Order by,Facebook: Sortieren nach
-SEO,SUCHMASCHINENOPTIMIERUNG
+SEO,SEO
 Meta title,Meta-Titel
 Meta description,Metabeschreibung
 Meta keywords,Meta-Schlüsselwörter
