@@ -1,0 +1,270 @@
+Save Change,Änderung speichern
+Edit Author '%1',Autor '%1' bearbeiten
+New Author,Neuer Autor
+Author Information,Informationen zum Autor
+Display Name,Anzeigename
+This name will be displayed on frontend,Dieser Name wird am Frontend angezeigt.
+Short Description,Kurzbeschreibung
+Avatar,Avatar
+URL Key,URL-Schlüssel
+Facebook,Facebook
+Facebook URL,Facebook-URL
+Twitter,Zwitschern
+Twitter URL,Twitter-URL
+Author Info,Autorinfo
+Categories,Kategorien
+Create New Blog Category,Neue Blog-Kategorie erstellen
+Save Category,Kategorie speichern
+Delete Category,Kategorie löschen
+Reset,Zurücksetzen
+New Child Category,Neue Kinder-Kategorie
+New Root Category,Neue Wurzelkategorie
+Category Information,Kategorie Informationen
+Name,Name
+Status,Status
+Store Views,Store Views
+Meta Title,Meta-Titel
+Meta Description,Meta Beschreibung
+Meta Keywords,Meta Schlüsselwörter
+Meta Robots,Meta Robots
+Category,Kategorie
+ID,ID
+Position,Position
+Posts,Posts
+Category Data,Kategorie Daten
+Category information,Informationen zur Kategorie
+New Comment,Neuer Kommentar
+Save and Continue Edit,Speichern und weiter bearbeiten
+Edit Comment,Kommentar bearbeiten
+Comment Details,Kommentar-Details
+Post,Post
+Customer,Kunde
+Content,Inhalt
+View On Front End,Ansicht am Frontend
+Comment,Kommentar
+Comment Information,Kommentar-Informationen
+Create New Post,Neuen Beitrag erstellen
+Edit Post '%1',Beitrag bearbeiten '%1''.
+New Post,Neuer Beitrag
+Post Information,Informationen eintragen
+Image,Bild
+Topics,Themen
+Tags,Tags
+In RSS,In RSS
+Allow Comment,Erlaube Kommentare
+Publish Date,Veröffentlichungsdatum
+Search Engine Optimization,Suchmaschinen-Optimierung
+Sku,Sku
+Products,Produkte
+New Category,Neue Kategorie
+New Tag,Neuer Tag
+New Topic,Neues Thema
+Create New Tag,Neues Tag erstellen
+Edit Tag '%1',Tag '%1' bearbeiten
+Create Tag,Tag erstellen
+Tag Information,Tag-Informationen
+Description,Beschreibung
+Tag,Tag
+Create New Topic,Neues Thema erstellen
+Edit Topic '%1',Thema '%1' bearbeiten
+Create Topic,Thema erstellen
+Topic Information,Informationen zum Thema
+Topic,Thema
+Author,Autor
+No Categories.,Keine Kategorien.
+Posted on %1,Veröffentlicht am %1
+| Posted in %1, | Veröffentlicht in %1
+| By: %1, | Von: %1
+Blog,Blog
+Home,Heim
+Go to Home Page,Zur Startseite
+Monthy Archive,Monatliches Archiv
+Related Posts %1,Ähnliche Beiträge %1
+Related Posts,Verwandte Beiträge
+List Posts from %1,Beiträge auflisten von %1
+Reply,Antwort
+Site Map,Sitemap
+Author Management,Autorenverwaltung
+The Author has been saved.,Der Autor wurde gespeichert.
+Something went wrong while saving the Author.,"Etwas ging schief, als der Autor gerettet wurde."
+This category no longer exists.,Diese Kategorie existiert nicht mehr.
+The Blog Category has been deleted.,Die Blog-Kategorie wurde gelöscht.
+Blog Category to delete was not found.,Die zu löschende Blog-Kategorie wurde nicht gefunden.
+%1 (ID: %2),%1 (ID: %2)
+Manage Categories,Kategorien verwalten
+Blog category is not available.,Blog-Kategorie ist nicht verfügbar.
+There was a Blog category move error.,Es gab einen Fehler beim Verschieben einer Blog-Kategorie.
+You moved the Blog category,Sie haben die Kategorie Blog verschoben
+You saved the category.,Sie haben die Kategorie gespeichert.
+Something went wrong while saving the category.,Beim Speichern der Kategorie ist etwas schief gelaufen.
+You saved the Blog Category.,Sie haben die Blog-Kategorie gespeichert.
+This comment no longer exists.,Dieser Kommentar existiert nicht mehr.
+The Comment has been deleted.,Der Kommentar wurde gelöscht.
+Comment to delete was not found.,Der zu löschende Kommentar wurde nicht gefunden.
+Comments,Kommentare
+Please correct the data sent.,Bitte korrigieren Sie die gesendeten Daten.
+Something went wrong while saving the Comment.,Beim Speichern des Kommentars ist etwas schief gelaufen.
+Total of %1 comments has been deleted.,Insgesamt wurden %1 Kommentare gelöscht.
+Something wrong when delete Comments.,Fehler beim Löschen der Kommentare
+Something went wrong while updating status,Beim Aktualisieren des Status ist etwas schief gelaufen.
+A total of %1 record(s) have been updated.,Es wurden insgesamt %1 Datensätze aktualisiert.
+The comment has been saved.,Der Kommentar wurde gespeichert.
+This post no longer exists.,Dieser Beitrag existiert nicht mehr.
+The Post has been deleted.,Der Beitrag wurde gelöscht.
+Post to delete was not found.,Zu löschender Beitrag wurde nicht gefunden.
+Something went wrong while saving the Post.,"Etwas lief schief, als die Post gerettet wurde."
+Posts has been deleted.,Beiträge wurden gelöscht.
+Something wrong when delete Posts.,"Etwas falsch, wenn Sie Beiträge löschen."
+Something went wrong while updating status for %1.,Beim Aktualisieren des Status für %1 ist etwas schiefgelaufen.
+The post has been saved.,Der Beitrag wurde gespeichert.
+This tag no longer exists.,Dieser Tag existiert nicht mehr.
+The Tag has been deleted.,Der Tag wurde gelöscht.
+Tag to delete was not found.,Tag zum Löschen wurde nicht gefunden.
+Something went wrong while saving the Tag.,Beim Speichern des Tags ist etwas schief gelaufen.
+Tags has been deleted.,Tags wurde gelöscht.
+Something wrong when delete Tag.,Etwas falsch beim Löschen von Tag.
+You saved the tag.,Du hast das Schild gerettet.
+Something went wrong while saving the tag.,Beim Speichern des Tags ist etwas schief gelaufen.
+The Tag has been saved.,Der Tag wurde gespeichert.
+This topic no longer exists.,Dieses Thema existiert nicht mehr.
+The Topic has been deleted.,Das Thema wurde gelöscht.
+Topic to delete was not found.,Das zu löschende Thema wurde nicht gefunden.
+Something went wrong while saving the Topic.,Beim Speichern des Themas ist etwas schief gelaufen.
+Topics has been deleted.,Themen wurden gelöscht.
+Something wrong when delete Topics.,"Etwas falsch, wenn Sie Themen löschen."
+You saved the topic.,Sie haben das Thema gespeichert.
+Something went wrong while saving the topic.,Beim Speichern des Themas ist etwas schief gelaufen.
+The Topic has been saved.,Das Thema wurde gespeichert.
+Just now,Gerade eben
+Action not found.,Aktion nicht gefunden.
+Unable to generate url key. Please check the setting and try again.,Url-Schlüssel kann nicht generiert werden. Bitte überprüfen Sie die Einstellung und versuchen Sie es erneut.
+"Sorry, but we can't move the Blog Category because we can't find the new parent Blog Category you selected.","Sorry, aber wir können die Blog-Kategorie nicht verschieben, weil wir die neue übergeordnete Blog-Kategorie, die Sie ausgewählt haben, nicht finden können."
+We can't perform this Blog Category move operation because the parent Blog Category matches the child Blog Category.,"Wir können diese Blog-Kategorie nicht verschieben, da die übergeordnete Blog-Kategorie mit der untergeordneten Blog-Kategorie übereinstimmt."
+Light,Licht
+Dark,Dunkel
+Social,Soziale
+Reverse time,Umkehrzeit
+Time,Zeit
+Approved,Genehmigt
+Pending,Anhängig
+Spam,Spam
+Default Comment,Standard-Kommentar
+Disqus Comment,Disqus Kommentar
+Facebook Comment,Facebook-Kommentar
+Disable Completely,Vollständig deaktivieren
+List View,Listenansicht
+Grid View,Grid-Ansicht
+Left,Links
+Right,Rechts
+New,Neu
+"If there are no custom parent categories, please use the default parent category. You can reassign the category at any time in <a href=""%1"" target=""_blank"">Blogs &gt; Categories</a>.","Wenn es keine benutzerdefinierten übergeordneten Kategorien gibt, verwenden Sie bitte die standardmäßige übergeordnete Kategorie. Sie können die Kategorie jederzeit in <a href=""%1"" target=""_blank"">Blogs &gt; Kategorien</a> neu zuordnen."
+Are you sure you want to delete this Category?,"Sind Sie sicher, dass Sie diese Kategorie löschen möchten?"
+This operation can take a long time,Dieser Vorgang kann sehr lange dauern.
+Sitemap,Sitemap
+Monthly Archive,Monatliches Archiv
+Read More,Lesen Sie mehr
+There are no posts at this moment,Zur Zeit sind keine Beiträge vorhanden.
+No Related Posts,Keine verwandten Beiträge
+Categories: %1,Kategorien: %1
+Tags: %1,Tags: %1
+By: %1,Von: %1
+Modify By: %1 at %2,Ändern von: %1 bei %2
+"Share this post, Hit on social buttons!","Teilen Sie diesen Beitrag, Hit on social buttons!"
+About the Author,Über den Autor
+Related Products,Verwandte Produkte
+Login,Anmeldung
+Type comments here...,Kommentare hier eingeben....
+Like,Wie zum Beispiel
+Popular,Beliebt
+No Posts,Keine Beiträge
+Latest,Neueste
+Search,Suche
+Search blogs here...,Blogs hier durchsuchen....
+Read more,Lesen Sie mehr
+Warning message,Warnmeldung
+Ok,Ok
+Cancel,Abbrechen
+Better Blog,Better Blog
+General,Allgemeines
+Enable,Aktivieren
+Blog name,Blog-Name
+Route name,Name der Route
+Url Suffix,Url Suffix
+Show Blog Link in Top Menu,Blog-Link im Top-Menü anzeigen
+Show Blog Link in Footer links,Blog-Link in der Fußzeile anzeigen
+Display author,Autor anzeigen
+Display sitemap,Sitemap anzeigen
+Date format,Datumsformat
+Limit related post,Limitbezogener Beitrag
+Number of related post in post view page,Anzahl der verwandten Beiträge in der Beitragsansicht
+Display Blogs Mode,Anzeige des Blogs-Modus
+Blogs per Page Allowed Values,Blogs pro Seite Erlaubte Werte
+Comma-separated.,Komma-separiert.
+Choose blog's color,Farbe des Blogs wählen
+Related Products Content,Verwandte Produkte Inhalt
+Product Detail Page,Produkt-Detailseite
+Enable Related Posts,Verwandte Beiträge aktivieren
+Limit of Related Posts,Begrenzung der verwandten Beiträge
+Post View Page,Beitragsansicht Seite
+Enable Related Products,Verwandte Produkte aktivieren
+Limit of Related Products,Grenze der verwandten Produkte
+Title of Related Products,Titel der verwandten Produkte
+Sidebar,Seitenleiste
+Number of recent posts,Anzahl der letzten Beiträge
+Number of most view posts,Anzahl der meisten Beiträge
+Sidebar Location,Sidebar Standort
+Enable Search Box,Suchfeld aktivieren
+Maximum Query Result,Maximales Abfrageergebnis
+Min Chars,Min Zeichen
+Visible Image,Sichtbares Bild
+Description length,Beschreibung Länge
+Enable Monthly Archive,Monatsarchiv aktivieren
+Number of records,Anzahl der Datensätze
+Type of Datetime,Art der Datumszeit
+Type of comment,Art des Kommentars
+Need for Approval,Genehmigungsbedarf
+Disqus unique name,Disqus eindeutiger Name
+Facebook: AppID,Facebook: AppID
+Facebook: Number of comment,Facebook: Nummer des Kommentars
+Facebook: Color scheme,Facebook: Farbschema
+Facebook: Order by,Facebook: Sortieren nach
+SEO,SEO
+Meta title,Meta-Titel
+Meta description,Metabeschreibung
+Meta keywords,Meta-Schlüsselwörter
+Meta robots,Meta-Roboter
+Article Snippet,Artikel Snippet
+Organize or Website name,Organisieren oder Website-Name
+Logo,Logo
+"Choose your website or organize logo. (jpeg, gif, png)","Wählen Sie Ihre Website oder organisieren Sie Ihr Logo. (jpeg, gif, png)"
+Social Sharing,Soziales Teilen
+Addthis.com PubId,Addthis.com PubId
+Mageplaza Blog,Mageplaza-Blog
+Title,Titel
+Numbers of Posts Display,Anzahl der Beiträge anzeigen
+Show Type,Zeige Typ
+Category ID,Kategorie-ID
+Template,Vorlage
+Default Posts Template,Standard-Beitragsvorlage
+Category Name,Name der Kategorie
+Parent Category,Übergeordnete Kategorie
+Tag Name,Tag-Name
+Topic Name,Name des Themas
+Delete,Löschen
+Delete Comments,Kommentare löschen
+Are you sure you wan't to delete selected Comments?,"Sind Sie sicher, dass Sie ausgewählte Kommentare nicht löschen möchten?"
+Change status,Status ändern
+Created,Erstellt
+Edit,Bearbeiten
+Add New Post,Neuen Beitrag hinzufügen
+Delete Posts,Beiträge löschen
+Are you sure you wan't to delete selected Posts?,"Sind Sie sicher, dass Sie ausgewählte Beiträge nicht löschen möchten?"
+Disable,Deaktivieren
+Modified,Modifiziert
+Published,Veröffentlicht
+Add New Tag,Neues Tag hinzufügen
+Delete Tags,Tags löschen
+Are you sure you wan't to delete selected Tags?,"Sind Sie sicher, dass Sie ausgewählte Tags nicht löschen möchten?"
+Add New Topic,Neues Thema hinzufügen
+Delete Topics,Themen löschen
+Are you sure you wan't to delete selected Topics?,"Sind Sie sicher, dass Sie ausgewählte Themen nicht löschen möchten?"
