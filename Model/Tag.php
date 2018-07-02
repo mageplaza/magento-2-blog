@@ -173,17 +173,17 @@ class Tag extends AbstractModel
 
     /**
      * @param $importSource
-     * @param $tagId
+     * @param $oldTagId
      * @return bool
      */
-    public function isImportedTag($importSource, $tagId)
+    public function isImportedTag($importSource, $oldTagId)
     {
         $collection = $this->tagCollectionFactory->create();
-        $tagCount = $collection->addFieldToFilter('import_source', $importSource . '-' . $tagId)->getSize();
-        if ($tagCount) {
-            return false;
+        $newTagId = $collection->addFieldToFilter('import_source', $importSource . '-' . $oldTagId)->getFirstItem()->getId();
+        if ($newTagId) {
+            return $newTagId;
         }
-        return true;
+        return false;
     }
 
     /**

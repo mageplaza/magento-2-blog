@@ -302,17 +302,17 @@ class Category extends AbstractModel
 
     /**
      * @param $importSource
-     * @param $categoryId
+     * @param $oldCategoryId
      * @return bool
      */
-    public function isImportedCategory($importSource, $categoryId)
+    public function isImportedCategory($importSource, $oldCategoryId)
     {
         $collection = $this->categoryCollectionFactory->create();
-        $categoryCount = $collection->addFieldToFilter('import_source', $importSource . '-' . $categoryId)->getSize();
-        if ($categoryCount) {
-            return false;
+        $newCategoryId = $collection->addFieldToFilter('import_source', $importSource . '-' . $oldCategoryId)->getFirstItem()->getId();
+        if ($newCategoryId) {
+            return $newCategoryId;
         }
-        return true;
+        return false;
     }
 
     /**

@@ -527,15 +527,17 @@ class Post extends AbstractModel
 
     /**
      * @param $importSource
-     * @param $postId
+     * @param $oldPostId
      * @return bool
      */
-    public function isImportedPost($importSource, $postId)
+    public function isImportedPost($importSource, $oldPostId)
     {
-        if ($this->getPostIdByImportSource($importSource, $postId)) {
-            return false;
+        $collection = $this->postCollectionFactory->create();
+        $newPostId = $collection->addFieldToFilter('import_source', $importSource . '-' . $oldPostId)->getFirstItem()->getId();
+        if ($newPostId) {
+            return $newPostId;
         }
-        return $postId;
+        return false;
     }
 
     /**

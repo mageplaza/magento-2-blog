@@ -115,16 +115,16 @@ class Comment extends AbstractModel
 
     /**
      * @param $importSource
-     * @param $commentId
+     * @param $oldCommentId
      * @return bool
      */
-    public function isImportedComment($importSource, $commentId)
+    public function isImportedComment($importSource, $oldCommentId)
     {
         $collection = $this->commentCollectionFactory->create();
-        $commentCount = $collection->addFieldToFilter('import_source', $importSource . '-' . $commentId)->getSize();
-        if ($commentCount) {
-            return false;
+        $newCommentId = $collection->addFieldToFilter('import_source', $importSource . '-' . $oldCommentId)->getFirstItem()->getId();
+        if ($newCommentId) {
+            return $newCommentId;
         }
-        return true;
+        return false;
     }
 }
