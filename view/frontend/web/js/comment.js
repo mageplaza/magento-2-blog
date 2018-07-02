@@ -141,21 +141,38 @@ require([
         btn.each(function () {
 
             $(this).click(function () {
-                var cmtId = $(this).attr('data-cmt-id'),
-                    cmtRowContainer = $(this).closest('.default-cmt__content__cmt-content__cmt-row'),
-                    cmtRow = cmtRowContainer.find('.cmt-row__reply-row');
+                // if($("li.default-cmt__content__cmt-content__cmt-row").children("ul.default-cmt__content__cmt-content").length) {
+                //     var cmtRowContainer = $("#cmt-id-"+cmtId+" ul:last-child");
+                // } else {
+                //     var cmtRowContainer = $(this).closest('.default-cmt__content__cmt-content__cmt-row');
+                // }
+                // var cmtRowContainer = $("#cmt-id-"+cmtId+" ul:last-child");
+                var cmtId = (typeof $(this).closest('.default-cmt__content__cmt-content__cmt-row').parent().parent().attr('data-cmt-id') !== 'undefined') ? $(this).closest('.default-cmt__content__cmt-content__cmt-row').parent().parent().attr('data-cmt-id') : $(this).attr('data-cmt-id'),
+                    inputCmtID =  $(this).attr('data-cmt-id'),
+                    cmtRowCmt = $("div").find('#cmt-row');
+                var cmtRowContainer = $(this).closest('.default-cmt__content__cmt-content__cmt-row');
+                if($("li.cmt-row-"+cmtId).find("ul").length) {
+                    var cmtRowContainer = $("#cmt-id-"+cmtId+" ul:last-child");
+                }
+                var cmtRow = cmtRowContainer.find('.row__'+inputCmtID);
+                var cmtName = $(".username__"+inputCmtID).text();
 
                 if (isLogged === 'Yes') {
+                    if(cmtRowCmt.length) {
+                        cmtRowCmt.toggle();
+                        $("#cmt-row").remove();
+                    }
                     if (cmtRow.length) {
                         cmtRow.toggle();
+                        $("#cmt-row").remove();
                     } else {
-                        cmtRowContainer.append('<div class="cmt-row__reply-row row">' +
+                        cmtRowContainer.append('<div id="cmt-row" class="cmt-row__reply-row row row__'+inputCmtID+'">' +
                             '<div class="reply-form__form-input form-group col-xs-8 col-md-6">' +
-                            '<label for="reply_cmt' + cmtId + '"></label>' +
-                            '<input type="text" id="reply_cmt' + cmtId + '" class="form-group__input form-control" placeholder="Press enter to submit reply" autofocus />' +
+                            '<label for="reply_cmt' + inputCmtID + '"></label>' +
+                            '<input type="text" id="reply_cmt' + inputCmtID + '" class="form-group__input form-control" placeholder="Press enter to submit reply" value="'+ cmtName +' " autofocus onfocus="this.setSelectionRange(1000,1001);"/>' +
                             '</div>' +
                             '</div>');
-                        var input = $('#reply_cmt' + cmtId);
+                        var input = $('#reply_cmt' + inputCmtID);
                         input.closest('.form-group').append(
                             $('.default-cmt__content__cmt-block__cmt-box__cmt-btn .default-cmt_loading').clone()
                         );
@@ -186,12 +203,12 @@ require([
                 if (e.keyCode === 13) {
                     input.siblings('.default-cmt_loading').show();
                     input.prop('disabled', true);
-
                     var ajaxRequest = ajaxCommentActions(text, input, true, replyId, parentComment);
                     ajaxRequest.done(function () {
                         input.closest('.cmt-row__reply-row').hide();
                         input.siblings('.default-cmt_loading').hide();
                         input.prop('disabled', false);
+                        $("#cmt-row").remove();
                     });
                 }
             }
@@ -208,6 +225,7 @@ require([
         return $.ajax({
             type: 'POST',
             url: window.location.href,
+            // async: false,
             data: {cmt_text: cmtText, isReply: isReply, replyId: replyId, guestName: guestName, guestEmail: guestEmail},
             success: function (response) {
                 switch (response.status) {
@@ -235,9 +253,9 @@ require([
 
     // display comment
     function displayComment(cmt, isReply) {
-        var cmtRow = '<li id="cmt-id-' + cmt.cmt_id + '" class="default-cmt__content__cmt-content__cmt-row cmt-row col-xs-12 '
+        var cmtRow = '<li id="cmt-id-' + cmt.cmt_id + '" class="default-cmt__content__cmt-content__cmt-row cmt-row-'+cmt.cmt_id+' cmt-row col-xs-12 '
             + (isReply ? ('reply-row') : '') + '" data-cmt-id="' + cmt.cmt_id + '"' + (isReply ? ('data-reply-id="' + cmt.reply_cmt + '"') : '')
-            + '> <div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username">' + cmt.user_cmt
+            + '> <div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username username__' + cmt.cmt_id + '">' + cmt.user_cmt
             + '</span> </div> <div class="cmt-row__cmt-content"> <p>' + cmt.cmt_text
             + '</p> </div> <div class="cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> <a class="interactions__btn-actions action btn-like mpblog-like" data-cmt-id="'
             + cmt.cmt_id + '" click="1"><i class="fa fa-thumbs-up" aria-hidden="true" style="margin-right: 3px"></i><span class="count-like__like-text"></span></a> <a class="interactions__btn-actions action btn-reply" data-cmt-id="'
