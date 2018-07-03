@@ -126,7 +126,7 @@ class WordPress extends AbstractImport
                 if ($postModel->isImportedPost($importSource, $post['ID'])) {
                     /** update post that has duplicate URK key */
                     if ($postModel->isDuplicateUrlKey($post['url_key']) != null || $data['expand_behaviour'] == '1') {
-                        $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['url_key'])];
+                        $where = ['post_id = ?' => (int)$postModel->isImportedPost($importSource, $post['post_name'])];
                         $this->_updatePosts($post, $importSource, $content, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
@@ -148,7 +148,7 @@ class WordPress extends AbstractImport
                      * Update posts
                      */
                     if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $postModel->isDuplicateUrlKey($post['post_name']) != null) {
-                        $where = ['post_id = ?' => (int)$postModel->isImportedPost($importSource, $post['post_name'])];
+                        $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['url_key'])];
                         $this->_updatePosts($post, $importSource, $content, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
@@ -244,7 +244,7 @@ class WordPress extends AbstractImport
                 /** update tag that has duplicate URK key */
                 if ($tagModel->isDuplicateUrlKey($tag['slug']) != null || $data['expand_behaviour'] == '1') {
                     try {
-                        $where = ['tag_id = ?' => (int)$tagModel->isDuplicateUrlKey($tag['slug'])];
+                        $where = ['tag_id = ?' => (int)$tagModel->isImportedTag($importSource, $tag['term_id'])];
                         $this->_updateTags($tag, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
@@ -272,7 +272,7 @@ class WordPress extends AbstractImport
                  */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tagModel->isDuplicateUrlKey($tag['slug']) != null) {
                     try {
-                        $where = ['tag_id = ?' => (int)$tagModel->isImportedTag($importSource, $tag['term_id'])];
+                        $where = ['tag_id = ?' => (int)$tagModel->isDuplicateUrlKey($tag['slug'])];
                         $this->_updateTags($tag, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
@@ -346,7 +346,7 @@ class WordPress extends AbstractImport
                 /** update category that has duplicate URK key */
                 if (($categoryModel->isDuplicateUrlKey($category['slug']) != null || $data['expand_behaviour'] == '1') && $category['slug'] != 'root') {
                     try {
-                        $where = ['category_id = ?' => (int)$categoryModel->isDuplicateUrlKey($category['slug'])];
+                        $where = ['category_id = ?' => (int)$categoryModel->isImportedCategory($importSource, $category['term_id'])];
                         $this->_updateCategories($category, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
@@ -375,7 +375,7 @@ class WordPress extends AbstractImport
                  */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->isDuplicateUrlKey($category['slug']) != null && $category['slug'] != 'root') {
                     try {
-                        $where = ['category_id = ?' => (int)$categoryModel->isImportedCategory($importSource, $category['term_id'])];
+                        $where = ['category_id = ?' => (int)$categoryModel->isDuplicateUrlKey($category['slug'])];
                         $this->_updateCategories($category, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;

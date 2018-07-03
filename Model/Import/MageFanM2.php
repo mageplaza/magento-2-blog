@@ -139,7 +139,7 @@ class MageFanM2 extends AbstractImport
                 if ($postModel->isImportedPost($importSource, $post['post_id'])) {
                     /** update post that has duplicate URK key */
                     if ($postModel->isDuplicateUrlKey($post['identifier']) != null || $data['expand_behaviour'] == '1') {
-                        $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['identifier'])];
+                        $where = ['post_id = ?' => (int)$postModel->isImportedPost($importSource, $post['post_id'])];
                         $this->_updatePosts($post, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
@@ -163,7 +163,7 @@ class MageFanM2 extends AbstractImport
                      * Update posts
                      */
                     if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $postModel->isDuplicateUrlKey($post['identifier']) != null) {
-                        $where = ['post_id = ?' => (int)$postModel->isImportedPost($importSource, $post['post_id'])];
+                        $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['identifier'])];
                         $this->_updatePosts($post, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
@@ -284,7 +284,7 @@ class MageFanM2 extends AbstractImport
                 /** update tag that has duplicate URK key */
                 if ($tagModel->isDuplicateUrlKey($tag['identifier']) != null || $data['expand_behaviour'] == '1') {
                     try {
-                        $where = ['tag_id = ?' => (int)$tagModel->isDuplicateUrlKey($tag['identifier'])];
+                        $where = ['tag_id = ?' => (int)$tagModel->isImportedTag($importSource, $tag['tag_id'])];
                         $this->_updateTags($tag, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
@@ -313,7 +313,7 @@ class MageFanM2 extends AbstractImport
                  */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tagModel->isDuplicateUrlKey($tag['identifier']) != null) {
                     try {
-                        $where = ['tag_id = ?' => (int)$tagModel->isImportedTag($importSource, $tag['tag_id'])];
+                        $where = ['tag_id = ?' => (int)$tagModel->isDuplicateUrlKey($tag['identifier'])];
                         $this->_updateTags($tag, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
@@ -400,7 +400,7 @@ class MageFanM2 extends AbstractImport
                 /** update category that has duplicate URK key */
                 if (($categoryModel->isDuplicateUrlKey($category['identifier']) != null || $data['expand_behaviour'] == '1') && $category['identifier'] != 'root') {
                     try {
-                        $where = ['category_id = ?' => (int)$categoryModel->isDuplicateUrlKey($category['identifier'])];
+                        $where = ['category_id = ?' => (int)$categoryModel->isImportedCategory($importSource, $category['category_id'])];
                         $this->_updateCategories($category, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
@@ -429,7 +429,7 @@ class MageFanM2 extends AbstractImport
                  */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->isDuplicateUrlKey($category['identifier']) != null && $category['identifier'] != 'root') {
                     try {
-                        $where = ['category_id = ?' => (int)$categoryModel->isImportedCategory($importSource, $category['category_id'])];
+                        $where = ['category_id = ?' => (int)$categoryModel->isDuplicateUrlKey($category['identifier'])];
                         $this->_updateCategories($category, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
