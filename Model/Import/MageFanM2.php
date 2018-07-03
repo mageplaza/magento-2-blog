@@ -212,7 +212,7 @@ class MageFanM2 extends AbstractImport
             $this->_deleteCount = $this->_behaviour($topicModel, $data);
             $result = mysqli_query($connection, $topicSql);
             while ($topic = mysqli_fetch_assoc($result)) {
-                if ($topicModel->isImportedTopic($importSource, $topic['post_id'])) {
+                if ($topicModel->isImportedTopic($importSource, $topic['post_id']) == false) {
                     try {
                         $topicModel->setData([
                             'name' => 'magefan-topic-' . $topicCount,

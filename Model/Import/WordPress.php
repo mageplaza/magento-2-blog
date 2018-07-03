@@ -125,8 +125,8 @@ class WordPress extends AbstractImport
                 $content = preg_replace("/(http:\/\/)(.+?)(\/wp-content\/)/", $this->_helperImage->getBaseMediaUrl() . "/wysiwyg/", $content);
                 if ($postModel->isImportedPost($importSource, $post['ID'])) {
                     /** update post that has duplicate URK key */
-                    if ($postModel->isDuplicateUrlKey($post['url_key']) != null || $data['expand_behaviour'] == '1') {
-                        $where = ['post_id = ?' => (int)$postModel->isImportedPost($importSource, $post['post_name'])];
+                    if ($postModel->isDuplicateUrlKey($post['post_name']) != null || $data['expand_behaviour'] == '1') {
+                        $where = ['post_id = ?' => (int)$postModel->isImportedPost($importSource, $post['ID'])];
                         $this->_updatePosts($post, $importSource, $content, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
@@ -148,7 +148,7 @@ class WordPress extends AbstractImport
                      * Update posts
                      */
                     if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $postModel->isDuplicateUrlKey($post['post_name']) != null) {
-                        $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['url_key'])];
+                        $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['post_name'])];
                         $this->_updatePosts($post, $importSource, $content, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
