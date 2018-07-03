@@ -107,71 +107,44 @@ class AheadWorksM1 extends AbstractImport
             $oldPostIds = [];
             $tags = [];
             $importSource = $data['type'] . '-' . $data['database'];
-
             while ($post = mysqli_fetch_assoc($result)) {
-                $createDate = (strtotime($post['created_time']) > strtotime($this->date->date())) ? strtotime($this->date->date()) : strtotime($post['created_time']);
-                $modifyDate = strtotime($post['update_time']);
-                $publicDate = strtotime($post['created_time']);
-                $content = $post['post_content'];
                 $postTag = $post['tags'];
                 if ($postModel->isImportedPost($importSource, $post['post_id'])) {
-
+                    /** update post that has duplicate URK key */
+                    if ($postModel->isDuplicateUrlKey($post['identifier']) != null || $data['expand_behaviour'] == '1') {
+                        $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['identifier'])];
+                        $this->_updatePosts($post, $importSource, $authorId, $where);
+                        $this->_successCount++;
+                        $this->_hasData = true;
+                    } else {
+                        /** Add new posts */
+                        $postModel->load($postModel->isImportedPost($importSource, $post['post_id']))->setImportSource('')->save();
+                        try {
+                            $this->_addPosts($postModel, $post, $importSource, $authorId);
+                            $this->_successCount++;
+                            $this->_hasData = true;
+                        } catch (\Exception $e) {
+                            $this->_errorCount++;
+                            $this->_hasData = true;
+                            continue;
+                        }
+                    }
+                } else {
                     /**
+                     * check the posts isn't imported
                      * Update posts
                      */
                     if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $postModel->isDuplicateUrlKey($post['identifier']) != null) {
-                        $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['identifier'])];
-                        $this->_resourceConnection->getConnection()
-                            ->update($this->_resourceConnection
-                                ->getTableName('mageplaza_blog_post'), [
-                                'name' => $post['title'],
-                                'short_description' => $post['short_content'],
-                                'post_content' => $content,
-                                'created_at' => $createDate,
-                                'updated_at' => $modifyDate,
-                                'publish_date' => $publicDate,
-                                "enabled" => 1,
-                                'in_rss' => 0,
-                                'allow_comment' => 1,
-                                'store_ids' => $this->_storeManager->getStore()->getId(),
-                                'meta_robots' => 'INDEX,FOLLOW', //Default value
-                                'meta_keywords' => $post['meta_keywords'],
-                                'meta_description' => $post['meta_description'],
-                                'author_id' => (int)$authorId,
-                                'import_source' => $importSource . '-' . $post['post_id']
-                            ], $where);
+                        $where = ['post_id = ?' => (int)$postModel->isImportedPost($importSource, $post['post_id'])];
+                        $this->_updatePosts($post, $importSource, $authorId, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
-                        $this->_resourceConnection->getConnection()
-                            ->delete($this->_resourceConnection
-                                ->getTableName('mageplaza_blog_post_category'), $where);
-                        $this->_resourceConnection->getConnection()
-                            ->delete($this->_resourceConnection
-                                ->getTableName('mageplaza_blog_post_tag'), $where);
                     } else {
-
                         /**
-                         * Replace existing posts
+                         * Add new posts
                          */
                         try {
-                            $postModel->setData([
-                                'name' => $post['title'],
-                                'short_description' => $post['short_content'],
-                                'post_content' => $content,
-                                'url_key' => $post['identifier'],
-                                'created_at' => $createDate,
-                                'updated_at' => $modifyDate,
-                                'publish_date' => $publicDate,
-                                'enabled' => 1,
-                                'in_rss' => 0,
-                                'allow_comment' => 1,
-                                'store_ids' => $this->_storeManager->getStore()->getId(),
-                                'meta_robots' => 'INDEX,FOLLOW',
-                                'meta_keywords' => $post['meta_keywords'],
-                                'meta_description' => $post['meta_description'],
-                                'author_id' => (int)$authorId,
-                                'import_source' => $importSource . '-' . $post['post_id']
-                            ])->save();
+                            $this->_addPosts($postModel, $post, $importSource, $authorId);
                             $this->_successCount++;
                             $this->_hasData = true;
                         } catch (\Exception $e) {
@@ -242,20 +215,38 @@ class AheadWorksM1 extends AbstractImport
         $importSource = $data['type'] . '-' . $data['database'];
         while ($tag = mysqli_fetch_assoc($result)) {
             if ($tagModel->isImportedTag($importSource, $tag['id'])) {
+                /** update tag that has duplicate URK key */
+                if ($tagModel->isDuplicateUrlKey($tag['tag']) != null || $data['expand_behaviour'] == '1') {
+                    try {
+                        $where = ['tag_id = ?' => (int)$tagModel->isDuplicateUrlKey($tag['tag'])];
+                        $this->_updateTags($tag, $importSource, $where);
+                        $this->_successCount++;
+                        $this->_hasData = true;
+                    } catch (\Exception $e) {
+                        $this->_errorCount++;
+                        $this->_hasData = true;
+                        continue;
+                    }
+                } else {
+                    /** Add new tags */
+                    $tagModel->load($tagModel->isImportedTag($importSource, $tag['id']))->setImportSource('')->save();
+                    try {
+                        $this->_addTags($tagModel, $tag, $importSource);
+                        $this->_successCount++;
+                        $this->_hasData = true;
+                    } catch (\Exception $e) {
+                        $this->_errorCount++;
+                        $this->_hasData = true;
+                        continue;
+                    }
+                }
+            } else {
 
                 /** Update tags */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tagModel->isDuplicateUrlKey($tag['tag']) != null) {
                     try {
-                        $where = ['tag_id = ?' => (int)$tagModel->isDuplicateUrlKey($tag['tag'])];
-                        $this->_resourceConnection->getConnection()
-                            ->update($this->_resourceConnection
-                                ->getTableName('mageplaza_blog_tag'), [
-                                'name' => $tag['tag'],
-                                'meta_robots' => 'INDEX,FOLLOW',
-                                'store_ids' => $this->_storeManager->getStore()->getId(),
-                                'enabled' => 1,
-                                'import_source' => $importSource . '-' . $tag['id']
-                            ], $where);
+                        $where = ['tag_id = ?' => (int)$tagModel->isImportedTag($importSource, $tag['id'])];
+                        $this->_updateTags($tag, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -265,18 +256,11 @@ class AheadWorksM1 extends AbstractImport
                     }
                 } else {
 
-                    /** Re-import the existing tags */
+                    /** Add new tags */
                     try {
-                        $tagModel->setData([
-                            'name' => $tag['tag'],
-                            'meta_robots' => 'INDEX,FOLLOW',
-                            'store_ids' => $this->_storeManager->getStore()->getId(),
-                            'enabled' => 1,
-                            'import_source' => $importSource . '-' . $tag['id']
-                        ])->save();
+                        $this->_addTags($tagModel, $tag, $importSource);
                         $this->_successCount++;
                         $this->_hasData = true;
-
                     } catch (\Exception $e) {
                         $this->_errorCount++;
                         $this->_hasData = true;
@@ -339,24 +323,41 @@ class AheadWorksM1 extends AbstractImport
         $importSource = $data['type'] . '-' . $data['database'];
         while ($category = mysqli_fetch_assoc($result)) {
             if ($categoryModel->isImportedCategory($importSource, $category['cat_id'])) {
+                /** update category that has duplicate URK key */
+                if (($categoryModel->isDuplicateUrlKey($category['identifier']) != null || $data['expand_behaviour'] == '1') && $category['identifier'] != 'root') {
+                    try {
+                        $where = ['category_id = ?' => (int)$categoryModel->isDuplicateUrlKey($category['identifier'])];
+                        $this->_updateCategories($category, $importSource, $where);
+                        $this->_successCount++;
+                        $this->_hasData = true;
+                    } catch (\Exception $e) {
+                        $this->_errorCount++;
+                        $this->_hasData = true;
+                        continue;
+                    }
+                } else {
+                    /** Add new categories */
+                    $categoryModel->load($categoryModel->isImportedCategory($importSource, $category['category_id']))->setImportSource('')->save();
+                    try {
+                        $this->_addCategories($categoryModel, $category, $importSource);
+                        $newCategories[$categoryModel->getId()] = $category;
+                        $this->_successCount++;
+                        $this->_hasData = true;
+                    } catch (\Exception $e) {
+                        $this->_errorCount++;
+                        $this->_hasData = true;
+                        continue;
+                    }
+                }
+            }else{
 
                 /**
                  * Update categories
                  */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->isDuplicateUrlKey($category['identifier']) != null && $category['identifier'] != 'root') {
                     try {
-                        $where = ['category_id = ?' => (int)$categoryModel->isDuplicateUrlKey($category['identifier'])];
-                        $this->_resourceConnection->getConnection()
-                            ->update($this->_resourceConnection
-                                ->getTableName('mageplaza_blog_category'), [
-                                'name' => $category['title'],
-                                'meta_robots' => 'INDEX,FOLLOW',
-                                'store_ids' => $this->_storeManager->getStore()->getId(),
-                                'enabled' => 1,
-                                'meta_description' => $category['meta_description'],
-                                'meta_keywords' => $category['meta_keywords'],
-                                'import_source' => $importSource . '-' . $category['cat_id']
-                            ], $where);
+                        $where = ['category_id = ?' => (int)$categoryModel->isImportedCategory($importSource, $category['cat_id'])];
+                        $this->_updateCategories($category,$importSource,$where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -367,20 +368,10 @@ class AheadWorksM1 extends AbstractImport
                 } else {
 
                     /**
-                     * Re-import the existing categories
+                     * Add new categories
                      */
                     try {
-                        $categoryModel->setData([
-                            'name' => $category['title'],
-                            'url_key' => $category['identifier'],
-                            'meta_robots' => 'INDEX,FOLLOW',
-                            'store_ids' => $this->_storeManager->getStore()->getId(),
-                            'enabled' => 1,
-                            'path' => '1',
-                            'meta_description' => $category['meta_description'],
-                            'meta_keywords' => $category['meta_keywords'],
-                            'import_source' => $importSource . '-' . $category['cat_id']
-                        ])->save();
+                        $this->_addCategories($categoryModel,$category,$importSource);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -458,27 +449,53 @@ class AheadWorksM1 extends AbstractImport
                     $userName = "";
                     $userEmail = "";
                 }
-                try {
-                    $commentModel->setData([
-                        'post_id' => $newPostId,
-                        'entity_id' => $entityId,
-                        'has_reply' => 0,
-                        'is_reply' => 0,
-                        'reply_id' => 0,
-                        'content' => $comment['comment'],
-                        'created_at' => $createDate,
-                        'status' => $status,
-                        'store_ids' => $this->_storeManager->getStore()->getId(),
-                        'user_name' => $userName,
-                        'user_email' => $userEmail,
-                        'import_source' => $importSource . '-' . $comment['comment_id']
-                    ])->save();
+
+                /** import actions */
+                if ($commentModel->isImportedComment($importSource, $comment['comment_id'])) {
+                    /** update comments */
+                    $where = ['comment_id = ?' => (int)$commentModel->isImportedComment($importSource, $comment['comment_id'])];
+                    $this->_resourceConnection->getConnection()
+                        ->update($this->_resourceConnection
+                            ->getTableName('mageplaza_blog_comment'), [
+                            'post_id' => $newPostId,
+                            'entity_id' => $entityId,
+                            'has_reply' => 0,
+                            'is_reply' => 0,
+                            'reply_id' => 0,
+                            'content' => $comment['comment'],
+                            'created_at' => $createDate,
+                            'status' => $status,
+                            'store_ids' => $this->_storeManager->getStore()->getId(),
+                            'user_name' => $userName,
+                            'user_email' => $userEmail,
+                            'import_source' => $importSource . '-' . $comment['comment_id']
+                        ], $where);
                     $this->_successCount++;
                     $this->_hasData = true;
-                } catch (\Exception $e) {
-                    $this->_errorCount++;
-                    $this->_hasData = true;
-                    continue;
+                }else{
+                    /** add new comments */
+                    try {
+                        $commentModel->setData([
+                            'post_id' => $newPostId,
+                            'entity_id' => $entityId,
+                            'has_reply' => 0,
+                            'is_reply' => 0,
+                            'reply_id' => 0,
+                            'content' => $comment['comment'],
+                            'created_at' => $createDate,
+                            'status' => $status,
+                            'store_ids' => $this->_storeManager->getStore()->getId(),
+                            'user_name' => $userName,
+                            'user_email' => $userEmail,
+                            'import_source' => $importSource . '-' . $comment['comment_id']
+                        ])->save();
+                        $this->_successCount++;
+                        $this->_hasData = true;
+                    } catch (\Exception $e) {
+                        $this->_errorCount++;
+                        $this->_hasData = true;
+                        continue;
+                    }
                 }
             }
         }
@@ -528,4 +545,146 @@ class AheadWorksM1 extends AbstractImport
         }
     }
 
+    /**
+     * @param $postModel
+     * @param $post
+     * @param $importSource
+     * @param $authorId
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function _addPosts($postModel, $post, $importSource, $authorId)
+    {
+        $postModel->setData([
+            'name' => $post['title'],
+            'short_description' => $post['short_content'],
+            'post_content' => $post['post_content'],
+            'url_key' => $post['identifier'],
+            'created_at' => (strtotime($post['created_time']) > strtotime($this->date->date())) ? strtotime($this->date->date()) : strtotime($post['created_time']),
+            'updated_at' => strtotime($post['update_time']),
+            'publish_date' => strtotime($post['created_time']),
+            'enabled' => 1,
+            'in_rss' => 0,
+            'allow_comment' => 1,
+            'store_ids' => $this->_storeManager->getStore()->getId(),
+            'meta_robots' => 'INDEX,FOLLOW',
+            'meta_keywords' => $post['meta_keywords'],
+            'meta_description' => $post['meta_description'],
+            'author_id' => (int)$authorId,
+            'import_source' => $importSource . '-' . $post['post_id']
+        ])->save();
+    }
+
+    /**
+     * @param $post
+     * @param $importSource
+     * @param $authorId
+     * @param $where
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function _updatePosts($post, $importSource, $authorId, $where)
+    {
+        $this->_resourceConnection->getConnection()
+            ->update($this->_resourceConnection
+                ->getTableName('mageplaza_blog_post'), [
+                'name' => $post['title'],
+                'short_description' => $post['short_content'],
+                'post_content' => $post['post_content'],
+                'created_at' => (strtotime($post['created_time']) > strtotime($this->date->date())) ? strtotime($this->date->date()) : strtotime($post['created_time']),
+                'updated_at' => strtotime($post['update_time']),
+                'publish_date' => strtotime($post['created_time']),
+                "enabled" => 1,
+                'in_rss' => 0,
+                'allow_comment' => 1,
+                'store_ids' => $this->_storeManager->getStore()->getId(),
+                'meta_robots' => 'INDEX,FOLLOW', //Default value
+                'meta_keywords' => $post['meta_keywords'],
+                'meta_description' => $post['meta_description'],
+                'author_id' => (int)$authorId,
+                'import_source' => $importSource . '-' . $post['post_id']
+            ], $where);
+        $this->_resourceConnection->getConnection()
+            ->delete($this->_resourceConnection
+                ->getTableName('mageplaza_blog_post_category'), $where);
+        $this->_resourceConnection->getConnection()
+            ->delete($this->_resourceConnection
+                ->getTableName('mageplaza_blog_post_tag'), $where);
+    }
+
+    /**
+     * @param $tagModel
+     * @param $tag
+     * @param $importSource
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function _addTags($tagModel, $tag, $importSource)
+    {
+        $tagModel->setData([
+            'name' => $tag['tag'],
+            'meta_robots' => 'INDEX,FOLLOW',
+            'store_ids' => $this->_storeManager->getStore()->getId(),
+            'enabled' => 1,
+            'import_source' => $importSource . '-' . $tag['id']
+        ])->save();
+    }
+
+    /**
+     * @param $tag
+     * @param $importSource
+     * @param $where
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function _updateTags($tag, $importSource, $where)
+    {
+        $this->_resourceConnection->getConnection()
+            ->update($this->_resourceConnection
+                ->getTableName('mageplaza_blog_tag'), [
+                'name' => $tag['tag'],
+                'meta_robots' => 'INDEX,FOLLOW',
+                'store_ids' => $this->_storeManager->getStore()->getId(),
+                'enabled' => 1,
+                'import_source' => $importSource . '-' . $tag['id']
+            ], $where);
+    }
+
+    /**
+     * @param $categoryModel
+     * @param $category
+     * @param $importSource
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function _addCategories($categoryModel,$category,$importSource)
+    {
+        $categoryModel->setData([
+            'name' => $category['title'],
+            'url_key' => $category['identifier'],
+            'meta_robots' => 'INDEX,FOLLOW',
+            'store_ids' => $this->_storeManager->getStore()->getId(),
+            'enabled' => 1,
+            'path' => '1',
+            'meta_description' => $category['meta_description'],
+            'meta_keywords' => $category['meta_keywords'],
+            'import_source' => $importSource . '-' . $category['cat_id']
+        ])->save();
+    }
+
+    /**
+     * @param $category
+     * @param $importSource
+     * @param $where
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function _updateCategories($category,$importSource,$where)
+    {
+        $this->_resourceConnection->getConnection()
+            ->update($this->_resourceConnection
+                ->getTableName('mageplaza_blog_category'), [
+                'name' => $category['title'],
+                'meta_robots' => 'INDEX,FOLLOW',
+                'store_ids' => $this->_storeManager->getStore()->getId(),
+                'enabled' => 1,
+                'meta_description' => $category['meta_description'],
+                'meta_keywords' => $category['meta_keywords'],
+                'import_source' => $importSource . '-' . $category['cat_id']
+            ], $where);
+    }
 }
