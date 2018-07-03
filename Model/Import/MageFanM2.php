@@ -139,7 +139,8 @@ class MageFanM2 extends AbstractImport
                 if ($postModel->isImportedPost($importSource, $post['post_id'])) {
                     /** update post that has duplicate URK key */
                     if ($postModel->isDuplicateUrlKey($post['identifier']) != null || $data['expand_behaviour'] == '1') {
-                        $this->_updatePosts($postModel, $post, $importSource);
+                        $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['identifier'])];
+                        $this->_updatePosts($post, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } else {
@@ -162,7 +163,8 @@ class MageFanM2 extends AbstractImport
                      * Update posts
                      */
                     if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $postModel->isDuplicateUrlKey($post['identifier']) != null) {
-                        $this->_updatePosts($postModel, $post, $importSource);
+                        $where = ['post_id = ?' => (int)$postModel->isImportedPost($importSource, $post['post_id'])];
+                        $this->_updatePosts($post, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } else {
@@ -282,7 +284,8 @@ class MageFanM2 extends AbstractImport
                 /** update tag that has duplicate URK key */
                 if ($tagModel->isDuplicateUrlKey($tag['identifier']) != null || $data['expand_behaviour'] == '1') {
                     try {
-                        $this->_updateTags($tagModel, $tag, $importSource);
+                        $where = ['tag_id = ?' => (int)$tagModel->isDuplicateUrlKey($tag['identifier'])];
+                        $this->_updateTags($tag, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -310,7 +313,8 @@ class MageFanM2 extends AbstractImport
                  */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tagModel->isDuplicateUrlKey($tag['identifier']) != null) {
                     try {
-                        $this->_updateTags($tagModel, $tag, $importSource);
+                        $where = ['tag_id = ?' => (int)$tagModel->isImportedTag($importSource, $tag['tag_id'])];
+                        $this->_updateTags($tag, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -396,7 +400,8 @@ class MageFanM2 extends AbstractImport
                 /** update category that has duplicate URK key */
                 if (($categoryModel->isDuplicateUrlKey($category['identifier']) != null || $data['expand_behaviour'] == '1') && $category['identifier'] != 'root') {
                     try {
-                        $this->_updateCategories($categoryModel, $category, $importSource);
+                        $where = ['category_id = ?' => (int)$categoryModel->isDuplicateUrlKey($category['identifier'])];
+                        $this->_updateCategories($category, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -424,7 +429,8 @@ class MageFanM2 extends AbstractImport
                  */
                 if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->isDuplicateUrlKey($category['identifier']) != null && $category['identifier'] != 'root') {
                     try {
-                        $this->_updateCategories($categoryModel, $category, $importSource);
+                        $where = ['category_id = ?' => (int)$categoryModel->isImportedCategory($importSource, $category['category_id'])];
+                        $this->_updateCategories($category, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -586,9 +592,9 @@ class MageFanM2 extends AbstractImport
                         'user_email' => $userEmail,
                         'import_source' => $importSource . '-' . $comment['comment_id']
                     ], $where);
-                    $this->_successCount++;
-                    $this->_hasData = true;
-            }else{
+                $this->_successCount++;
+                $this->_hasData = true;
+            } else {
                 /** add new comments */
                 try {
                     $commentModel->setData([
@@ -752,14 +758,13 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $postModel
      * @param $post
      * @param $importSource
+     * @param $where
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function _updatePosts($postModel, $post, $importSource)
+    private function _updatePosts($post, $importSource, $where)
     {
-        $where = ['post_id = ?' => (int)$postModel->isImportedPost($importSource,$post['post_id'])];
         $this->_resourceConnection->getConnection()
             ->update($this->_resourceConnection
                 ->getTableName('mageplaza_blog_post'), [
@@ -810,14 +815,14 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $tagModel
      * @param $tag
      * @param $importSource
+     * @param $where
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function _updateTags($tagModel, $tag, $importSource)
+    private function _updateTags($tag, $importSource, $where)
     {
-        $where = ['tag_id = ?' => (int)$tagModel->isImportedTag($importSource,$tag['tag_id'])];
+
         $this->_resourceConnection->getConnection()
             ->update($this->_resourceConnection
                 ->getTableName('mageplaza_blog_tag'), [
@@ -856,14 +861,13 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $categoryModel
      * @param $category
      * @param $importSource
+     * @param $where
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function _updateCategories($categoryModel, $category, $importSource)
+    private function _updateCategories($category, $importSource, $where)
     {
-        $where = ['category_id = ?' => (int)$categoryModel->isImportedCategory($importSource,$category['category_id'])];
         $this->_resourceConnection->getConnection()
             ->update($this->_resourceConnection
                 ->getTableName('mageplaza_blog_category'), [

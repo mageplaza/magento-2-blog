@@ -120,68 +120,44 @@ class WordPress extends AbstractImport
             $this->_deleteCount = $this->_behaviour($postModel, $data);
             $oldPostIds = [];
             $importSource = $data['type'] . '-' . $data['database'];
-
             while ($post = mysqli_fetch_assoc($result)) {
-
-                $createDate = (strtotime($post['post_date_gmt']) > strtotime($this->date->date())) ? strtotime($this->date->date()) : strtotime($post['post_date_gmt']);
-                $modifyDate = strtotime($post['post_modified_gmt']);
-                $publicDate = strtotime($post['post_date_gmt']);
                 $content = $post['post_content'];
                 $content = preg_replace("/(http:\/\/)(.+?)(\/wp-content\/)/", $this->_helperImage->getBaseMediaUrl() . "/wysiwyg/", $content);
-                $isEnable = ($post['post_status'] == 'trash') ? 0 : 1;
                 if ($postModel->isImportedPost($importSource, $post['ID'])) {
-
+                    /** update post that has duplicate URK key */
+                    if ($postModel->isDuplicateUrlKey($post['url_key']) != null || $data['expand_behaviour'] == '1') {
+                        $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['url_key'])];
+                        $this->_updatePosts($post, $importSource, $content, $where);
+                        $this->_successCount++;
+                        $this->_hasData = true;
+                    } else {
+                        /** Add new posts */
+                        $postModel->load($postModel->isImportedPost($importSource, $post['ID']))->setImportSource('')->save();
+                        try {
+                            $this->_addPosts($postModel, $post, $importSource, $content);
+                            $this->_successCount++;
+                            $this->_hasData = true;
+                        } catch (\Exception $e) {
+                            $this->_errorCount++;
+                            $this->_hasData = true;
+                            continue;
+                        }
+                    }
+                } else {
                     /**
                      * Update posts
                      */
                     if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $postModel->isDuplicateUrlKey($post['post_name']) != null) {
-
-                        $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['post_name'])];
-                        $this->_resourceConnection->getConnection()
-                            ->update($this->_resourceConnection
-                                ->getTableName('mageplaza_blog_post'), [
-                                'name' => $post['post_title'],
-                                'short_description' => '',
-                                'post_content' => $content,
-                                'created_at' => $createDate,
-                                'updated_at' => $modifyDate,
-                                'publish_date' => $publicDate,
-                                'enabled' => $isEnable,
-                                'in_rss' => 0,
-                                'allow_comment' => 1,
-                                'store_ids' => $this->_storeManager->getStore()->getId(),
-                                'meta_robots' => 'INDEX,FOLLOW',
-                                'import_source' => $importSource . '-' . $post['ID']
-                            ], $where);
+                        $where = ['post_id = ?' => (int)$postModel->isImportedPost($importSource, $post['post_name'])];
+                        $this->_updatePosts($post, $importSource, $content, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
-                        $this->_resourceConnection->getConnection()
-                            ->delete($this->_resourceConnection
-                                ->getTableName('mageplaza_blog_post_category'), $where);
-                        $this->_resourceConnection->getConnection()
-                            ->delete($this->_resourceConnection
-                                ->getTableName('mageplaza_blog_post_tag'), $where);
                     } else {
-
                         /**
-                         * replace existing posts
+                         * Add new posts
                          */
                         try {
-                            $postModel->setData([
-                                'name' => $post['post_title'],
-                                'short_description' => '',
-                                'post_content' => $content,
-                                'url_key' => $post['post_name'],
-                                'created_at' => $createDate,
-                                'updated_at' => $modifyDate,
-                                'publish_date' => $publicDate,
-                                'enabled' => $isEnable,
-                                'in_rss' => 0,
-                                'allow_comment' => 1,
-                                'store_ids' => $this->_storeManager->getStore()->getId(),
-                                'meta_robots' => 'INDEX,FOLLOW',
-                                'import_source' => $importSource . '-' . $post['ID']
-                            ])->save();
+                            $this->_addPosts($postModel, $post, $importSource, $content);
                             $this->_successCount++;
                             $this->_hasData = true;
                         } catch (\Exception $e) {
@@ -257,7 +233,6 @@ class WordPress extends AbstractImport
         $result = mysqli_query($connection, $sqlString);
         $oldTagIds = [];
         $this->_resetRecords();
-
         /**
          * @var \Mageplaza\Blog\Model\TagFactory
          */
@@ -266,23 +241,11 @@ class WordPress extends AbstractImport
         $importSource = $data['type'] . '-' . $data['database'];
         while ($tag = mysqli_fetch_assoc($result)) {
             if ($tagModel->isImportedTag($importSource, $tag['term_id'])) {
-
-                /**
-                 * Update tags
-                 */
-                if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tagModel->isDuplicateUrlKey($tag['slug']) != null) {
+                /** update tag that has duplicate URK key */
+                if ($tagModel->isDuplicateUrlKey($tag['slug']) != null || $data['expand_behaviour'] == '1') {
                     try {
                         $where = ['tag_id = ?' => (int)$tagModel->isDuplicateUrlKey($tag['slug'])];
-                        $this->_resourceConnection->getConnection()
-                            ->update($this->_resourceConnection
-                                ->getTableName('mageplaza_blog_tag'), [
-                                'name' => $tag['name'],
-                                'description' => $tag['description'],
-                                'meta_robots' => 'INDEX,FOLLOW',
-                                'store_ids' => $this->_storeManager->getStore()->getId(),
-                                'enabled' => 1,
-                                'import_source' => $importSource . '-' . $tag['term_id']
-                            ], $where);
+                        $this->_updateTags($tag, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -291,20 +254,39 @@ class WordPress extends AbstractImport
                         continue;
                     }
                 } else {
-
+                    /** Add new tags */
+                    $tagModel->load($tagModel->isImportedTag($importSource, $tag['term_id']))->setImportSource('')->save();
+                    try {
+                        $this->_addTags($tagModel, $tag, $importSource);
+                        $this->_successCount++;
+                        $this->_hasData = true;
+                    } catch (\Exception $e) {
+                        $this->_errorCount++;
+                        $this->_hasData = true;
+                        continue;
+                    }
+                }
+            } else {
+                /**
+                 * Update tags
+                 */
+                if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tagModel->isDuplicateUrlKey($tag['slug']) != null) {
+                    try {
+                        $where = ['tag_id = ?' => (int)$tagModel->isImportedTag($importSource, $tag['term_id'])];
+                        $this->_updateTags($tag, $importSource, $where);
+                        $this->_successCount++;
+                        $this->_hasData = true;
+                    } catch (\Exception $e) {
+                        $this->_errorCount++;
+                        $this->_hasData = true;
+                        continue;
+                    }
+                } else {
                     /**
                      * Re-import the existing tags
                      */
                     try {
-                        $tagModel->setData([
-                            'name' => $tag['name'],
-                            'url_key' => $tag['slug'],
-                            'description' => $tag['description'],
-                            'meta_robots' => 'INDEX,FOLLOW',
-                            'store_ids' => $this->_storeManager->getStore()->getId(),
-                            'enabled' => 1,
-                            'import_source' => $importSource . '-' . $tag['term_id']
-                        ])->save();
+                        $this->_addTags($tagModel, $tag, $importSource);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -361,23 +343,11 @@ class WordPress extends AbstractImport
         $importSource = $data['type'] . '-' . $data['database'];
         while ($category = mysqli_fetch_assoc($result)) {
             if ($categoryModel->isImportedCategory($importSource, $category['term_id'])) {
-
-                /**
-                 * Update categories
-                 */
-                if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->isDuplicateUrlKey($category['slug']) != null && $category['slug'] != 'root') {
+                /** update category that has duplicate URK key */
+                if (($categoryModel->isDuplicateUrlKey($category['slug']) != null || $data['expand_behaviour'] == '1') && $category['slug'] != 'root') {
                     try {
                         $where = ['category_id = ?' => (int)$categoryModel->isDuplicateUrlKey($category['slug'])];
-                        $this->_resourceConnection->getConnection()
-                            ->update($this->_resourceConnection
-                                ->getTableName('mageplaza_blog_category'), [
-                                'name' => $category['name'],
-                                'description' => $category['description'],
-                                'meta_robots' => 'INDEX,FOLLOW',
-                                'store_ids' => $this->_storeManager->getStore()->getId(),
-                                'enabled' => 1,
-                                'import_source' => $importSource . '-' . $category['term_id']
-                            ], $where);
+                        $this->_updateCategories($category, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -386,21 +356,10 @@ class WordPress extends AbstractImport
                         continue;
                     }
                 } else {
-
-                    /**
-                     * Re-import the existing categories
-                     */
+                    /** Add new categories */
+                    $categoryModel->load($categoryModel->isImportedCategory($importSource, $category['term_id']))->setImportSource('')->save();
                     try {
-                        $categoryModel->setData([
-                            'name' => $category['name'],
-                            'url_key' => $category['slug'],
-                            'description' => $category['description'],
-                            'meta_robots' => 'INDEX,FOLLOW',
-                            'store_ids' => $this->_storeManager->getStore()->getId(),
-                            'enabled' => 1,
-                            'path' => '1',
-                            'import_source' => $importSource . '-' . $category['term_id']
-                        ])->save();
+                        $this->_addCategories($categoryModel, $category, $importSource);
                         $newCategories[$categoryModel->getId()] = $category;
                         $this->_successCount++;
                         $this->_hasData = true;
@@ -410,6 +369,37 @@ class WordPress extends AbstractImport
                         continue;
                     }
                 }
+            } else {
+                /**
+                 * Update categories
+                 */
+                if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->isDuplicateUrlKey($category['slug']) != null && $category['slug'] != 'root') {
+                    try {
+                        $where = ['category_id = ?' => (int)$categoryModel->isImportedCategory($importSource, $category['term_id'])];
+                        $this->_updateCategories($category, $importSource, $where);
+                        $this->_successCount++;
+                        $this->_hasData = true;
+                    } catch (\Exception $e) {
+                        $this->_errorCount++;
+                        $this->_hasData = true;
+                        continue;
+                    }
+                } else {
+                    /**
+                     * Re-import the existing categories
+                     */
+                    try {
+                        $this->_addCategories($categoryModel, $category, $importSource);
+                        $newCategories[$categoryModel->getId()] = $category;
+                        $this->_successCount++;
+                        $this->_hasData = true;
+                    } catch (\Exception $e) {
+                        $this->_errorCount++;
+                        $this->_hasData = true;
+                        continue;
+                    }
+                }
+
             }
             $oldCategories[$category['term_id']] = $category;
         }
@@ -582,29 +572,54 @@ class WordPress extends AbstractImport
                     $userName = '';
                     $userEmail = '';
                 }
-                try {
-                    $commentModel->setData([
-                        'post_id' => $newPostId,
-                        'entity_id' => $entityId,
-                        'has_reply' => 0,
-                        'is_reply' => 0,
-                        'reply_id' => 0,
-                        'content' => $comment['comment_content'],
-                        'created_at' => $createDate,
-                        'status' => $status,
-                        'store_ids' => $this->_storeManager->getStore()->getId(),
-                        'user_name' => $userName,
-                        'user_email' => $userEmail,
-                        'import_source' => $importSource . '-' . $comment['comment_ID']
-                    ])->save();
+
+                if ($commentModel->isImportedComment($importSource, $comment['comment_id'])) {
+                    /** update comments */
+                    $where = ['comment_id = ?' => (int)$commentModel->isImportedComment($importSource, $comment['comment_ID'])];
+                    $this->_resourceConnection->getConnection()
+                        ->update($this->_resourceConnection
+                            ->getTableName('mageplaza_blog_comment'), [
+                            'post_id' => $newPostId,
+                            'entity_id' => $entityId,
+                            'has_reply' => 0,
+                            'is_reply' => 0,
+                            'reply_id' => 0,
+                            'content' => $comment['comment_content'],
+                            'created_at' => $createDate,
+                            'status' => $status,
+                            'store_ids' => $this->_storeManager->getStore()->getId(),
+                            'user_name' => $userName,
+                            'user_email' => $userEmail,
+                            'import_source' => $importSource . '-' . $comment['comment_ID']
+                        ], $where);
                     $this->_successCount++;
                     $this->_hasData = true;
-                    $oldCommentIds [$commentModel->getId()] = $comment['comment_ID'];
+                } else {
+                    /** add new comments */
+                    try {
+                        $commentModel->setData([
+                            'post_id' => $newPostId,
+                            'entity_id' => $entityId,
+                            'has_reply' => 0,
+                            'is_reply' => 0,
+                            'reply_id' => 0,
+                            'content' => $comment['comment_content'],
+                            'created_at' => $createDate,
+                            'status' => $status,
+                            'store_ids' => $this->_storeManager->getStore()->getId(),
+                            'user_name' => $userName,
+                            'user_email' => $userEmail,
+                            'import_source' => $importSource . '-' . $comment['comment_ID']
+                        ])->save();
+                        $this->_successCount++;
+                        $this->_hasData = true;
+                        $oldCommentIds [$commentModel->getId()] = $comment['comment_ID'];
 
-                } catch (\Exception $e) {
-                    $this->_errorCount++;
-                    $this->_hasData = true;
-                    continue;
+                    } catch (\Exception $e) {
+                        $this->_errorCount++;
+                        $this->_hasData = true;
+                        continue;
+                    }
                 }
             }
         }
@@ -684,5 +699,144 @@ class WordPress extends AbstractImport
                 }
             }
         }
+    }
+
+    /**
+     * @param $postModel
+     * @param $post
+     * @param $importSource
+     * @param $content
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function _addPosts($postModel, $post, $importSource, $content)
+    {
+        $postModel->setData([
+            'name' => $post['post_title'],
+            'short_description' => '',
+            'post_content' => $content,
+            'url_key' => $post['post_name'],
+            'created_at' => (strtotime($post['post_date_gmt']) > strtotime($this->date->date())) ? strtotime($this->date->date()) : strtotime($post['post_date_gmt']),
+            'updated_at' => strtotime($post['post_modified_gmt']),
+            'publish_date' => strtotime($post['post_date_gmt']),
+            'enabled' => ($post['post_status'] == 'trash') ? 0 : 1,
+            'in_rss' => 0,
+            'allow_comment' => 1,
+            'store_ids' => $this->_storeManager->getStore()->getId(),
+            'meta_robots' => 'INDEX,FOLLOW',
+            'import_source' => $importSource . '-' . $post['ID']
+        ])->save();
+    }
+
+    /**
+     * @param $post
+     * @param $importSource
+     * @param $content
+     * @param $where
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function _updatePosts($post, $importSource, $content, $where)
+    {
+        $this->_resourceConnection->getConnection()
+            ->update($this->_resourceConnection
+                ->getTableName('mageplaza_blog_post'), [
+                'name' => $post['post_title'],
+                'short_description' => '',
+                'post_content' => $content,
+                'url_key' => $post['post_name'],
+                'created_at' => (strtotime($post['post_date_gmt']) > strtotime($this->date->date())) ? strtotime($this->date->date()) : strtotime($post['post_date_gmt']),
+                'updated_at' => strtotime($post['post_modified_gmt']),
+                'publish_date' => strtotime($post['post_date_gmt']),
+                'enabled' => ($post['post_status'] == 'trash') ? 0 : 1,
+                'in_rss' => 0,
+                'allow_comment' => 1,
+                'store_ids' => $this->_storeManager->getStore()->getId(),
+                'meta_robots' => 'INDEX,FOLLOW',
+                'import_source' => $importSource . '-' . $post['ID']
+            ], $where);
+        $this->_resourceConnection->getConnection()
+            ->delete($this->_resourceConnection
+                ->getTableName('mageplaza_blog_post_category'), $where);
+        $this->_resourceConnection->getConnection()
+            ->delete($this->_resourceConnection
+                ->getTableName('mageplaza_blog_post_tag'), $where);
+    }
+
+    /**
+     * @param $tagModel
+     * @param $tag
+     * @param $importSource
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function _addTags($tagModel, $tag, $importSource)
+    {
+        $tagModel->setData([
+            'name' => $tag['name'],
+            'url_key' => $tag['slug'],
+            'description' => $tag['description'],
+            'meta_robots' => 'INDEX,FOLLOW',
+            'store_ids' => $this->_storeManager->getStore()->getId(),
+            'enabled' => 1,
+            'import_source' => $importSource . '-' . $tag['term_id']
+        ])->save();
+    }
+
+    /**
+     * @param $tag
+     * @param $importSource
+     * @param $where
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function _updateTags($tag, $importSource, $where)
+    {
+        $this->_resourceConnection->getConnection()
+            ->update($this->_resourceConnection
+                ->getTableName('mageplaza_blog_tag'), [
+                'name' => $tag['name'],
+                'description' => $tag['description'],
+                'meta_robots' => 'INDEX,FOLLOW',
+                'store_ids' => $this->_storeManager->getStore()->getId(),
+                'enabled' => 1,
+                'import_source' => $importSource . '-' . $tag['term_id']
+            ], $where);
+    }
+
+    /**
+     * @param $categoryModel
+     * @param $category
+     * @param $importSource
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function _addCategories($categoryModel, $category, $importSource)
+    {
+        $categoryModel->setData([
+            'name' => $category['name'],
+            'url_key' => $category['slug'],
+            'description' => $category['description'],
+            'meta_robots' => 'INDEX,FOLLOW',
+            'store_ids' => $this->_storeManager->getStore()->getId(),
+            'enabled' => 1,
+            'path' => '1',
+            'import_source' => $importSource . '-' . $category['term_id']
+        ])->save();
+    }
+
+    /**
+     * @param $category
+     * @param $importSource
+     * @param $where
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function _updateCategories($category, $importSource, $where)
+    {
+        $this->_resourceConnection->getConnection()
+            ->update($this->_resourceConnection
+                ->getTableName('mageplaza_blog_category'), [
+                'name' => $category['name'],
+                'description' => $category['description'],
+                'meta_robots' => 'INDEX,FOLLOW',
+                'store_ids' => $this->_storeManager->getStore()->getId(),
+                'enabled' => 1,
+                'import_source' => $importSource . '-' . $category['term_id']
+            ], $where);
     }
 }
