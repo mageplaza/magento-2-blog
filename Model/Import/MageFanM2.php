@@ -119,6 +119,7 @@ class MageFanM2 extends AbstractImport
      * @param $data
      * @param $connection
      * @return bool|mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _importPosts($data, $connection)
@@ -136,16 +137,16 @@ class MageFanM2 extends AbstractImport
             while ($post = mysqli_fetch_assoc($result)) {
 
                 /** check the posts is imported */
-                if ($postModel->isImportedPost($importSource, $post['post_id'])) {
+                if ($postModel->getResource()->isImported($importSource, $post['post_id'])) {
                     /** update post that has duplicate URK key */
-                    if ($postModel->isDuplicateUrlKey($post['identifier']) != null || $data['expand_behaviour'] == '1') {
-                        $where = ['post_id = ?' => (int)$postModel->isImportedPost($importSource, $post['post_id'])];
-                        $this->_updatePosts($post, $importSource, $where);
+                    if ($postModel->getResource()->isDuplicateUrlKey($post['identifier']) != null || $data['expand_behaviour'] == '1') {
+                        $where = ['post_id = ?' => (int)$postModel->getResource()->isImported($importSource, $post['post_id'])];
+                        $this->_updatePosts($postModel, $post, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } else {
                         /** Add new posts */
-                        $postModel->load($postModel->isImportedPost($importSource, $post['post_id']))->setImportSource('')->save();
+                        $postModel->load($postModel->getResource()->isImported($importSource, $post['post_id']))->setImportSource('')->save();
                         try {
                             $this->_addPosts($postModel, $post, $importSource);
                             $this->_successCount++;
@@ -156,15 +157,14 @@ class MageFanM2 extends AbstractImport
                             continue;
                         }
                     }
-
                 } else {
                     /**
                      * check the posts isn't imported
                      * Update posts
                      */
-                    if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $postModel->isDuplicateUrlKey($post['identifier']) != null) {
-                        $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['identifier'])];
-                        $this->_updatePosts($post, $importSource, $where);
+                    if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $postModel->getResource()->isDuplicateUrlKey($post['identifier']) != null) {
+                        $where = ['post_id = ?' => (int)$postModel->getResource()->isDuplicateUrlKey($post['identifier'])];
+                        $this->_updatePosts($postModel, $post, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } else {
@@ -212,7 +212,7 @@ class MageFanM2 extends AbstractImport
             $this->_deleteCount = $this->_behaviour($topicModel, $data);
             $result = mysqli_query($connection, $topicSql);
             while ($topic = mysqli_fetch_assoc($result)) {
-                if ($topicModel->isImportedTopic($importSource, $topic['post_id']) == false) {
+                if ($topicModel->getResource()->isImported($importSource, $topic['post_id']) == false) {
                     try {
                         $topicModel->setData([
                             'name' => 'magefan-topic-' . $topicCount,
@@ -280,12 +280,12 @@ class MageFanM2 extends AbstractImport
         $this->_deleteCount = $this->_behaviour($tagModel, $data);
         $importSource = $data['type'] . '-' . $data['database'];
         while ($tag = mysqli_fetch_assoc($result)) {
-            if ($tagModel->isImportedTag($importSource, $tag['tag_id'])) {
+            if ($tagModel->getResource()->isImported($importSource, $tag['tag_id'])) {
                 /** update tag that has duplicate URK key */
-                if ($tagModel->isDuplicateUrlKey($tag['identifier']) != null || $data['expand_behaviour'] == '1') {
+                if ($tagModel->getResource()->isDuplicateUrlKey($tag['identifier']) != null || $data['expand_behaviour'] == '1') {
                     try {
-                        $where = ['tag_id = ?' => (int)$tagModel->isImportedTag($importSource, $tag['tag_id'])];
-                        $this->_updateTags($tag, $importSource, $where);
+                        $where = ['tag_id = ?' => (int)$tagModel->getResource()->isImported($importSource, $tag['tag_id'])];
+                        $this->_updateTags($tagModel, $tag, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -295,7 +295,7 @@ class MageFanM2 extends AbstractImport
                     }
                 } else {
                     /** Add new tags */
-                    $tagModel->load($tagModel->isImportedTag($importSource, $tag['tag_id']))->setImportSource('')->save();
+                    $tagModel->load($tagModel->getResource()->isImported($importSource, $tag['tag_id']))->setImportSource('')->save();
                     try {
                         $this->_addTags($tagModel, $tag, $importSource);
                         $this->_successCount++;
@@ -311,10 +311,10 @@ class MageFanM2 extends AbstractImport
                  * check the posts isn't imported
                  * Update tags
                  */
-                if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tagModel->isDuplicateUrlKey($tag['identifier']) != null) {
+                if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tagModel->getResource()->isDuplicateUrlKey($tag['identifier']) != null) {
                     try {
-                        $where = ['tag_id = ?' => (int)$tagModel->isDuplicateUrlKey($tag['identifier'])];
-                        $this->_updateTags($tag, $importSource, $where);
+                        $where = ['tag_id = ?' => (int)$tagModel->getResource()->isDuplicateUrlKey($tag['identifier'])];
+                        $this->_updateTags($tagModel, $tag, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -396,12 +396,12 @@ class MageFanM2 extends AbstractImport
         $this->_deleteCount = $this->_behaviour($categoryModel, $data, 1);
         $importSource = $data['type'] . '-' . $data['database'];
         while ($category = mysqli_fetch_assoc($result)) {
-            if ($categoryModel->isImportedCategory($importSource, $category['category_id'])) {
+            if ($categoryModel->getResource()->isImported($importSource, $category['category_id'])) {
                 /** update category that has duplicate URK key */
-                if (($categoryModel->isDuplicateUrlKey($category['identifier']) != null || $data['expand_behaviour'] == '1') && $category['identifier'] != 'root') {
+                if (($categoryModel->getResource()->isDuplicateUrlKey($category['identifier']) != null || $data['expand_behaviour'] == '1') && $category['identifier'] != 'root') {
                     try {
-                        $where = ['category_id = ?' => (int)$categoryModel->isImportedCategory($importSource, $category['category_id'])];
-                        $this->_updateCategories($category, $importSource, $where);
+                        $where = ['category_id = ?' => (int)$categoryModel->getResource()->isImported($importSource, $category['category_id'])];
+                        $this->_updateCategories($categoryModel, $category, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -411,7 +411,7 @@ class MageFanM2 extends AbstractImport
                     }
                 } else {
                     /** Add new categories */
-                    $categoryModel->load($categoryModel->isImportedCategory($importSource, $category['category_id']))->setImportSource('')->save();
+                    $categoryModel->load($categoryModel->getResource()->isImported($importSource, $category['category_id']))->setImportSource('')->save();
                     try {
                         $this->_addCategories($categoryModel, $category, $importSource);
                         $newCategories[$categoryModel->getId()] = $category;
@@ -427,10 +427,10 @@ class MageFanM2 extends AbstractImport
                 /**
                  * Update categories
                  */
-                if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->isDuplicateUrlKey($category['identifier']) != null && $category['identifier'] != 'root') {
+                if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->getResource()->isDuplicateUrlKey($category['identifier']) != null && $category['identifier'] != 'root') {
                     try {
-                        $where = ['category_id = ?' => (int)$categoryModel->isDuplicateUrlKey($category['identifier'])];
-                        $this->_updateCategories($category, $importSource, $where);
+                        $where = ['category_id = ?' => (int)$categoryModel->getResource()->isDuplicateUrlKey($category['identifier'])];
+                        $this->_updateCategories($categoryModel, $category, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -573,9 +573,9 @@ class MageFanM2 extends AbstractImport
             }
 
             /** import actions */
-            if ($commentModel->isImportedComment($importSource, $comment['comment_id'])) {
+            if ($commentModel->getResource()->isImported($importSource, $comment['comment_id'])) {
                 /** update comments */
-                $where = ['comment_id = ?' => (int)$commentModel->isImportedComment($importSource, $comment['comment_id'])];
+                $where = ['comment_id = ?' => (int)$commentModel->getResource()->isImported($importSource, $comment['comment_id'])];
                 $this->_resourceConnection->getConnection()
                     ->update($this->_resourceConnection
                         ->getTableName('mageplaza_blog_comment'), [
@@ -758,12 +758,14 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
+     * @param $postModel
      * @param $post
      * @param $importSource
      * @param $where
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function _updatePosts($post, $importSource, $where)
+    private function _updatePosts($postModel, $post, $importSource, $where)
     {
         $this->_resourceConnection->getConnection()
             ->update($this->_resourceConnection
@@ -771,7 +773,7 @@ class MageFanM2 extends AbstractImport
                 'name' => $post['title'],
                 'short_description' => $post['short_content'],
                 'post_content' => $post['content'],
-                'url_key' => $post['identifier'],
+                'url_key' => $this->helperData->generateUrlKey($postModel->getResource(), $postModel, $post['identifier']),
                 'image' => $post['featured_img'],
                 'created_at' => (strtotime($post['creation_time']) > strtotime($this->date->date())) ? strtotime($this->date->date()) : strtotime($post['creation_time']),
                 'updated_at' => strtotime($post['update_time']),
@@ -815,19 +817,21 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
+     * @param $tagModel
      * @param $tag
      * @param $importSource
      * @param $where
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function _updateTags($tag, $importSource, $where)
+    private function _updateTags($tagModel, $tag, $importSource, $where)
     {
 
         $this->_resourceConnection->getConnection()
             ->update($this->_resourceConnection
                 ->getTableName('mageplaza_blog_tag'), [
                 'name' => $tag['title'],
-                'url_key' => $tag['identifier'],
+                'url_key' => $this->helperData->generateUrlKey($tagModel->getResource(), $tagModel, $tag['identifier']),
                 'meta_robots' => 'INDEX,FOLLOW',
                 'meta_description' => $tag['meta_description'],
                 'meta_keywords' => $tag['meta_keywords'],
@@ -861,18 +865,20 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
+     * @param $categoryModel
      * @param $category
      * @param $importSource
      * @param $where
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function _updateCategories($category, $importSource, $where)
+    private function _updateCategories($categoryModel, $category, $importSource, $where)
     {
         $this->_resourceConnection->getConnection()
             ->update($this->_resourceConnection
                 ->getTableName('mageplaza_blog_category'), [
                 'name' => $category['title'],
-                'url_key' => $category['identifier'],
+                'url_key' => $this->helperData->generateUrlKey($categoryModel->getResource(), $categoryModel, $category['identifier']),
                 'meta_robots' => 'INDEX,FOLLOW',
                 'store_ids' => $this->_storeManager->getStore()->getId(),
                 'enabled' => (int)$category['is_active'],

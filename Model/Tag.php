@@ -170,34 +170,4 @@ class Tag extends AbstractModel
 
         return $this->postCollection;
     }
-
-    /**
-     * @param $importSource
-     * @param $oldTagId
-     * @return bool
-     */
-    public function isImportedTag($importSource, $oldTagId)
-    {
-        $collection = $this->tagCollectionFactory->create();
-        $newTagId = $collection->addFieldToFilter('import_source', $importSource . '-' . $oldTagId)->getFirstItem()->getId();
-        if ($newTagId) {
-            return $newTagId;
-        }
-        return false;
-    }
-
-    /**
-     * @param $urlKey
-     * @return null
-     */
-    public function isDuplicateUrlKey($urlKey)
-    {
-        $collection = $this->tagCollectionFactory->create();
-        $tagId = $collection->addFieldToFilter('url_key', $urlKey)->getFirstItem()->getId();
-        if ($tagId) {
-            return $tagId;
-        }
-        return null;
-    }
-
 }

@@ -194,19 +194,4 @@ class Topic extends AbstractModel
 
         return $this->postCollection;
     }
-
-    /**
-     * @param $importSource
-     * @param $oldTopicId
-     * @return bool
-     */
-    public function isImportedTopic($importSource, $oldTopicId)
-    {
-        $collection = $this->topicCollectionFactory->create();
-        $newTopicId = $collection->addFieldToFilter('import_source', $importSource . '-' . $oldTopicId)->getFirstItem()->getId();
-        if ($newTopicId) {
-            return $newTopicId;
-        }
-        return false;
-    }
 }

@@ -224,4 +224,23 @@ class Topic extends AbstractDb
 
         return $this;
     }
+
+    /**
+     * Check is import topic
+     *
+     * @param $importSource
+     * @param $oldId
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function isImported($importSource, $oldId)
+    {
+        $adapter = $this->getConnection();
+        $select = $adapter->select()
+            ->from($this->getMainTable(), 'topic_id')
+            ->where('import_source = :import_source');
+        $binds = ['import_source' => $importSource.'-'.$oldId];
+
+        return $adapter->fetchOne($select, $binds);
+    }
 }

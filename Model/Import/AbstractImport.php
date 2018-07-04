@@ -39,6 +39,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Backend\Model\Auth\Session;
 use Mageplaza\Blog\Helper\Image as HelperImage;
+use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Model\Config\Source\Import\Type;
 
 /**
@@ -56,6 +57,11 @@ abstract class AbstractImport extends AbstractModel
      * @var Type
      */
     public $importType;
+
+    /**
+     * @var HelperData
+     */
+    public $helperData;
 
     /**
      * @var PostFactory
@@ -138,6 +144,9 @@ abstract class AbstractImport extends AbstractModel
      */
     protected $_hasData = false;
 
+    /**
+     * @var array
+     */
     protected $_type;
 
     /**
@@ -156,6 +165,7 @@ abstract class AbstractImport extends AbstractModel
      * @param ResourceConnection $resourceConnection
      * @param DateTime $date
      * @param Type $importType
+     * @param HelperData $helperData
      * @param StoreManagerInterface $storeManager
      * @param HelperImage $helperImage
      * @param AbstractResource|null $resource
@@ -177,6 +187,7 @@ abstract class AbstractImport extends AbstractModel
         ResourceConnection $resourceConnection,
         DateTime $date,
         Type $importType,
+        HelperData $helperData,
         StoreManagerInterface $storeManager,
         HelperImage $helperImage,
         AbstractResource $resource = null,
@@ -187,6 +198,7 @@ abstract class AbstractImport extends AbstractModel
         $this->date = $date;
         $this->importType = $importType;
         $this->_type = $this->_getImportType();
+        $this->helperData = $helperData;
         $this->_postFactory = $postFactory;
         $this->_tagFactory = $tagFactory;
         $this->_categoryFactory = $categoryFactory;
@@ -274,6 +286,8 @@ abstract class AbstractImport extends AbstractModel
     }
 
     /**
+     * Get import statistics
+     *
      * @param $type
      * @param $successCount
      * @param $errorCount
@@ -305,6 +319,8 @@ abstract class AbstractImport extends AbstractModel
     }
 
     /**
+     * Auto generate password
+     *
      * @param int $length
      * @param bool $add_dashes
      * @param string $available_sets
@@ -345,6 +361,7 @@ abstract class AbstractImport extends AbstractModel
 
     /**
      * Get import types
+     *
      * @return array
      */
     protected function _getImportType()

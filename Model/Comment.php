@@ -112,19 +112,4 @@ class Comment extends AbstractModel
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
     }
-
-    /**
-     * @param $importSource
-     * @param $oldCommentId
-     * @return bool
-     */
-    public function isImportedComment($importSource, $oldCommentId)
-    {
-        $collection = $this->commentCollectionFactory->create();
-        $newCommentId = $collection->addFieldToFilter('import_source', $importSource . '-' . $oldCommentId)->getFirstItem()->getId();
-        if ($newCommentId) {
-            return $newCommentId;
-        }
-        return false;
-    }
 }

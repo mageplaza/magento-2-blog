@@ -101,10 +101,11 @@ class WordPress extends AbstractImport
 
     /**
      * Import posts
-     *
+     * 
      * @param $data
      * @param $connection
      * @return bool|mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _importPosts($data, $connection)
@@ -123,16 +124,16 @@ class WordPress extends AbstractImport
             while ($post = mysqli_fetch_assoc($result)) {
                 $content = $post['post_content'];
                 $content = preg_replace("/(http:\/\/)(.+?)(\/wp-content\/)/", $this->_helperImage->getBaseMediaUrl() . "/wysiwyg/", $content);
-                if ($postModel->isImportedPost($importSource, $post['ID'])) {
+                if ($postModel->getResource()->isImported($importSource, $post['ID'])) {
                     /** update post that has duplicate URK key */
-                    if ($postModel->isDuplicateUrlKey($post['post_name']) != null || $data['expand_behaviour'] == '1') {
-                        $where = ['post_id = ?' => (int)$postModel->isImportedPost($importSource, $post['ID'])];
-                        $this->_updatePosts($post, $importSource, $content, $where);
+                    if ($postModel->getResource()->isDuplicateUrlKey($post['post_name']) != null || $data['expand_behaviour'] == '1') {
+                        $where = ['post_id = ?' => (int)$postModel->getResource()->isImported($importSource, $post['ID'])];
+                        $this->_updatePosts($postModel, $post, $importSource, $content, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } else {
                         /** Add new posts */
-                        $postModel->load($postModel->isImportedPost($importSource, $post['ID']))->setImportSource('')->save();
+                        $postModel->load($postModel->getResource()->isImported($importSource, $post['ID']))->setImportSource('')->save();
                         try {
                             $this->_addPosts($postModel, $post, $importSource, $content);
                             $this->_successCount++;
@@ -147,9 +148,9 @@ class WordPress extends AbstractImport
                     /**
                      * Update posts
                      */
-                    if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $postModel->isDuplicateUrlKey($post['post_name']) != null) {
-                        $where = ['post_id = ?' => (int)$postModel->isDuplicateUrlKey($post['post_name'])];
-                        $this->_updatePosts($post, $importSource, $content, $where);
+                    if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $postModel->getResource()->isDuplicateUrlKey($post['post_name']) != null) {
+                        $where = ['post_id = ?' => (int)$postModel->getResource()->isDuplicateUrlKey($post['post_name'])];
+                        $this->_updatePosts($postModel, $post, $importSource, $content, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } else {
@@ -240,12 +241,12 @@ class WordPress extends AbstractImport
         $this->_deleteCount = $this->_behaviour($tagModel, $data);
         $importSource = $data['type'] . '-' . $data['database'];
         while ($tag = mysqli_fetch_assoc($result)) {
-            if ($tagModel->isImportedTag($importSource, $tag['term_id'])) {
+            if ($tagModel->getResource()->isImported($importSource, $tag['term_id'])) {
                 /** update tag that has duplicate URK key */
-                if ($tagModel->isDuplicateUrlKey($tag['slug']) != null || $data['expand_behaviour'] == '1') {
+                if ($tagModel->getResource()->isDuplicateUrlKey($tag['slug']) != null || $data['expand_behaviour'] == '1') {
                     try {
-                        $where = ['tag_id = ?' => (int)$tagModel->isImportedTag($importSource, $tag['term_id'])];
-                        $this->_updateTags($tag, $importSource, $where);
+                        $where = ['tag_id = ?' => (int)$tagModel->getResource()->isImported($importSource, $tag['term_id'])];
+                        $this->_updateTags($tagModel, $tag, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -255,7 +256,7 @@ class WordPress extends AbstractImport
                     }
                 } else {
                     /** Add new tags */
-                    $tagModel->load($tagModel->isImportedTag($importSource, $tag['term_id']))->setImportSource('')->save();
+                    $tagModel->load($tagModel->getResource()->isImported($importSource, $tag['term_id']))->setImportSource('')->save();
                     try {
                         $this->_addTags($tagModel, $tag, $importSource);
                         $this->_successCount++;
@@ -270,10 +271,10 @@ class WordPress extends AbstractImport
                 /**
                  * Update tags
                  */
-                if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tagModel->isDuplicateUrlKey($tag['slug']) != null) {
+                if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tagModel->getResource()->isDuplicateUrlKey($tag['slug']) != null) {
                     try {
-                        $where = ['tag_id = ?' => (int)$tagModel->isDuplicateUrlKey($tag['slug'])];
-                        $this->_updateTags($tag, $importSource, $where);
+                        $where = ['tag_id = ?' => (int)$tagModel->getResource()->isDuplicateUrlKey($tag['slug'])];
+                        $this->_updateTags($tagModel, $tag, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -342,12 +343,12 @@ class WordPress extends AbstractImport
         $this->_deleteCount = $this->_behaviour($categoryModel, $data, 1);
         $importSource = $data['type'] . '-' . $data['database'];
         while ($category = mysqli_fetch_assoc($result)) {
-            if ($categoryModel->isImportedCategory($importSource, $category['term_id'])) {
+            if ($categoryModel->getResource()->isImported($importSource, $category['term_id'])) {
                 /** update category that has duplicate URK key */
-                if (($categoryModel->isDuplicateUrlKey($category['slug']) != null || $data['expand_behaviour'] == '1') && $category['slug'] != 'root') {
+                if (($categoryModel->getResource()->isDuplicateUrlKey($category['slug']) != null || $data['expand_behaviour'] == '1') && $category['slug'] != 'root') {
                     try {
-                        $where = ['category_id = ?' => (int)$categoryModel->isImportedCategory($importSource, $category['term_id'])];
-                        $this->_updateCategories($category, $importSource, $where);
+                        $where = ['category_id = ?' => (int)$categoryModel->getResource()->isImported($importSource, $category['term_id'])];
+                        $this->_updateCategories($categoryModel, $category, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -357,7 +358,7 @@ class WordPress extends AbstractImport
                     }
                 } else {
                     /** Add new categories */
-                    $categoryModel->load($categoryModel->isImportedCategory($importSource, $category['term_id']))->setImportSource('')->save();
+                    $categoryModel->load($categoryModel->getResource()->isImported($importSource, $category['term_id']))->setImportSource('')->save();
                     try {
                         $this->_addCategories($categoryModel, $category, $importSource);
                         $newCategories[$categoryModel->getId()] = $category;
@@ -373,10 +374,10 @@ class WordPress extends AbstractImport
                 /**
                  * Update categories
                  */
-                if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->isDuplicateUrlKey($category['slug']) != null && $category['slug'] != 'root') {
+                if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $categoryModel->getResource()->isDuplicateUrlKey($category['slug']) != null && $category['slug'] != 'root') {
                     try {
-                        $where = ['category_id = ?' => (int)$categoryModel->isDuplicateUrlKey($category['slug'])];
-                        $this->_updateCategories($category, $importSource, $where);
+                        $where = ['category_id = ?' => (int)$categoryModel->getResource()->isDuplicateUrlKey($category['slug'])];
+                        $this->_updateCategories($categoryModel, $category, $importSource, $where);
                         $this->_successCount++;
                         $this->_hasData = true;
                     } catch (\Exception $e) {
@@ -508,13 +509,13 @@ class WordPress extends AbstractImport
                 $newPostId = array_search($postAuthor['ID'], $oldPostIds);
                 $updateData[$newPostId] = $newUserId;
             }
+            mysqli_free_result($result);
         }
         foreach ($updateData as $postId => $authorId) {
             $where = ['post_id = ?' => (int)$postId];
             $this->_resourceConnection->getConnection()
                 ->update($this->_resourceConnection->getTableName('mageplaza_blog_post'), ['author_id' => $authorId], $where);
         }
-        mysqli_free_result($result);
         $statistics = $this->_getStatistics('authors', $this->_successCount, $this->_errorCount, 0, $this->_hasData);
         $this->_registry->register('mageplaza_import_user_statistic', $statistics);
     }
@@ -544,7 +545,7 @@ class WordPress extends AbstractImport
         $oldCommentIds = [];
         $importSource = $data['type'] . '-' . $data['database'];
         while ($comment = mysqli_fetch_assoc($result)) {
-            if ($commentModel->isImportedComment($importSource, $comment['comment_ID'])) {
+            if ($commentModel->getResource()->isImported($importSource, $comment['comment_ID'])) {
                 $createDate = strtotime($comment['comment_date_gmt']);
                 switch ($comment['comment_approved']) {
                     case '1':
@@ -573,9 +574,9 @@ class WordPress extends AbstractImport
                     $userEmail = '';
                 }
 
-                if ($commentModel->isImportedComment($importSource, $comment['comment_id'])) {
+                if ($commentModel->getResource()->isImported($importSource, $comment['comment_id'])) {
                     /** update comments */
-                    $where = ['comment_id = ?' => (int)$commentModel->isImportedComment($importSource, $comment['comment_ID'])];
+                    $where = ['comment_id = ?' => (int)$commentModel->getResource()->isImported($importSource, $comment['comment_ID'])];
                     $this->_resourceConnection->getConnection()
                         ->update($this->_resourceConnection
                             ->getTableName('mageplaza_blog_comment'), [
@@ -728,13 +729,15 @@ class WordPress extends AbstractImport
     }
 
     /**
+     * @param $postModel
      * @param $post
      * @param $importSource
      * @param $content
      * @param $where
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function _updatePosts($post, $importSource, $content, $where)
+    private function _updatePosts($postModel, $post, $importSource, $content, $where)
     {
         $this->_resourceConnection->getConnection()
             ->update($this->_resourceConnection
@@ -742,7 +745,7 @@ class WordPress extends AbstractImport
                 'name' => $post['post_title'],
                 'short_description' => '',
                 'post_content' => $content,
-                'url_key' => $post['post_name'],
+                'url_key' => $this->helperData->generateUrlKey($postModel->getResource(), $postModel, $post['post_name']),
                 'created_at' => (strtotime($post['post_date_gmt']) > strtotime($this->date->date())) ? strtotime($this->date->date()) : strtotime($post['post_date_gmt']),
                 'updated_at' => strtotime($post['post_modified_gmt']),
                 'publish_date' => strtotime($post['post_date_gmt']),
@@ -781,17 +784,20 @@ class WordPress extends AbstractImport
     }
 
     /**
+     * @param $tagModel
      * @param $tag
      * @param $importSource
      * @param $where
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function _updateTags($tag, $importSource, $where)
+    private function _updateTags($tagModel, $tag, $importSource, $where)
     {
         $this->_resourceConnection->getConnection()
             ->update($this->_resourceConnection
                 ->getTableName('mageplaza_blog_tag'), [
                 'name' => $tag['name'],
+                'url_key' => $this->helperData->generateUrlKey($tagModel->getResource(), $tagModel, $tag['slug']),
                 'description' => $tag['description'],
                 'meta_robots' => 'INDEX,FOLLOW',
                 'store_ids' => $this->_storeManager->getStore()->getId(),
@@ -821,17 +827,20 @@ class WordPress extends AbstractImport
     }
 
     /**
+     * @param $categoryModel
      * @param $category
      * @param $importSource
      * @param $where
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function _updateCategories($category, $importSource, $where)
+    private function _updateCategories($categoryModel, $category, $importSource, $where)
     {
         $this->_resourceConnection->getConnection()
             ->update($this->_resourceConnection
                 ->getTableName('mageplaza_blog_category'), [
                 'name' => $category['name'],
+                'url_key' => $this->helperData->generateUrlKey($categoryModel->getResource(), $categoryModel, $category['slug']),
                 'description' => $category['description'],
                 'meta_robots' => 'INDEX,FOLLOW',
                 'store_ids' => $this->_storeManager->getStore()->getId(),

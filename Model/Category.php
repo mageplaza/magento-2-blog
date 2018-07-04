@@ -299,33 +299,4 @@ class Category extends AbstractModel
 
         return $this->postCollection;
     }
-
-    /**
-     * @param $importSource
-     * @param $oldCategoryId
-     * @return bool
-     */
-    public function isImportedCategory($importSource, $oldCategoryId)
-    {
-        $collection = $this->categoryCollectionFactory->create();
-        $newCategoryId = $collection->addFieldToFilter('import_source', $importSource . '-' . $oldCategoryId)->getFirstItem()->getId();
-        if ($newCategoryId) {
-            return $newCategoryId;
-        }
-        return false;
-    }
-
-    /**
-     * @param $urlKey
-     * @return null
-     */
-    public function isDuplicateUrlKey($urlKey)
-    {
-        $collection = $this->categoryCollectionFactory->create();
-        $catId = $collection->addFieldToFilter('url_key', $urlKey)->getFirstItem()->getId();
-        if ($catId) {
-            return $catId;
-        }
-        return null;
-    }
 }
