@@ -115,33 +115,32 @@ class Import extends Action
      */
     protected function getStatistic($statisticData, $messagesBlock, $data)
     {
-        $actionText = ($data['behaviour'] == 'update') ? 'updated' : 'imported';
-        if ($statisticData["delete_count"] > 0) {
-            $statisticHtml = $messagesBlock
-                ->{'addsuccess'}(__('You have imported %1 %2 successful. Replaced %4 %2. Skipped %3 %2.',
-                    $statisticData['success_count'],
-                    $statisticData['type'],
-                    $statisticData['error_count'],
-                    $statisticData['delete_count']
-                ))
-                ->toHtml();
-        } elseif ($statisticData["success_count"] > 0) {
-            $statisticHtml = $messagesBlock
-                ->{'addsuccess'}(__('You have %4 %1 %2 successful. Skipped %3 %2.',
-                    $statisticData['success_count'],
-                    $statisticData['type'],
-                    $statisticData['error_count'],
-                    $actionText
-                ))
-                ->toHtml();
-        } else {
-            $statisticHtml = $messagesBlock
-                ->{'adderror'}(__('There are something wrong while importing %2. Skipped %3 %2.',
-                    $statisticData['success_count'],
-                    $statisticData['type'],
-                    $statisticData['error_count']
-                ))
-                ->toHtml();
+        switch ($data['behaviour']) {
+            case 'replace':
+                $statisticHtml = $messagesBlock
+                    ->{'addsuccess'}(__('You have replaced and updated %1 %2 successful. Skipped %3 %2.',
+                        $statisticData['success_count'],
+                        $statisticData['type'],
+                        $statisticData['error_count']
+                    ))
+                    ->toHtml();
+                break;
+
+            case 'delete':
+                $statisticHtml = $messagesBlock
+                    ->{'addsuccess'}(__('You have deleted %1 successful.',
+                        $statisticData['type']
+                    ))
+                    ->toHtml();
+                break;
+            default:
+                $statisticHtml = $messagesBlock
+                    ->{'addsuccess'}(__('You have imported %1 %2 successful. Skipped %3 %2.',
+                        $statisticData['success_count'],
+                        $statisticData['type'],
+                        $statisticData['error_count']
+                    ))
+                    ->toHtml();
         }
         return $statisticHtml;
     }

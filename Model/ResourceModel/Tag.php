@@ -250,8 +250,18 @@ class Tag extends AbstractDb
         $select = $adapter->select()
             ->from($this->getMainTable(), 'tag_id')
             ->where('import_source = :import_source');
-        $binds = ['import_source' => $importSource.'-'.$oldId];
+        $binds = ['import_source' => $importSource . '-' . $oldId];
 
         return $adapter->fetchOne($select, $binds);
+    }
+
+    /**
+     * @param $importType
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function deleteImportItems($importType)
+    {
+        $adapter = $this->getConnection();
+        $adapter->delete($this->getMainTable(), "`import_source` LIKE '" . $importType . "%'");
     }
 }

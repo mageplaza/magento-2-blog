@@ -72,10 +72,10 @@
 
             initExpandBehaviour: function () {
 
-                if ($(dataImport.behaviourSelector).attr("value") == 'replace') {
-                    $(dataImport.expandBehaviourSelector).parent().parent().addClass('hidden');
-                } else {
+                if ($(dataImport.behaviourSelector).attr("value") == 'update') {
                     $(dataImport.expandBehaviourSelector).parent().parent().removeClass('hidden');
+                } else {
+                    $(dataImport.expandBehaviourSelector).parent().parent().addClass('hidden');
                 }
 
             },

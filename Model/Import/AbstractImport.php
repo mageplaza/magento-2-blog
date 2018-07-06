@@ -135,11 +135,6 @@ abstract class AbstractImport extends AbstractModel
     protected $_successCount = 0;
 
     /**
-     * @var int
-     */
-    protected $_deleteCount = 0;
-
-    /**
      * @var bool
      */
     protected $_hasData = false;
@@ -260,48 +255,20 @@ abstract class AbstractImport extends AbstractModel
     abstract protected function _importAuthors($data, $connection);
 
     /**
-     * @param $objectType
-     * @param $data
-     * @param null $isCategory
-     * @return int
-     */
-    protected function _behaviour($objectType, $data, $isCategory = null)
-    {
-        $count = 0;
-        if ($data["behaviour"] == "replace") {
-            $collection = $objectType->getCollection();
-            foreach ($collection as $item) {
-                if ($isCategory) {
-                    if ($item->getId() != "1") {
-                        $item->delete();
-                        $count++;
-                    }
-                } else {
-                    $item->delete();
-                    $count++;
-                }
-            }
-        }
-        return $count;
-    }
-
-    /**
      * Get import statistics
      *
      * @param $type
      * @param $successCount
      * @param $errorCount
-     * @param $deleteCount
      * @param $hasData
      * @return array
      */
-    protected function _getStatistics($type, $successCount, $errorCount, $deleteCount, $hasData)
+    protected function _getStatistics($type, $successCount, $errorCount, $hasData)
     {
         $statistics = [
             "type" => $type,
             "success_count" => $successCount,
             "error_count" => $errorCount,
-            "delete_count" => $deleteCount,
             "has_data" => $hasData
         ];
         return $statistics;
@@ -314,7 +281,6 @@ abstract class AbstractImport extends AbstractModel
     {
         $this->_errorCount = 0;
         $this->_successCount = 0;
-        $this->_deleteCount = 0;
         $this->_hasData = false;
     }
 
