@@ -502,7 +502,7 @@ class MageFanM2 extends AbstractImport
             foreach ($sourceItems as $category) {
                 if ($category['is_imported']) {
                     /** update category that has duplicate URK key */
-                    if (($category['is_duplicated_url'] != null || $data['expand_behaviour'] == '1') && $category['identifier'] != 'root') {
+                    if (($category['is_duplicated_url'] != null || $data['expand_behaviour'] == '1') && $category['url_key'] != 'root') {
                         try {
                             $where = ['category_id = ?' => (int)$category['is_imported']];
                             $this->_updateCategories($category, $where);
@@ -531,7 +531,7 @@ class MageFanM2 extends AbstractImport
                     /**
                      * Update categories
                      */
-                    if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $category['is_duplicated_url'] != null && $category['identifier'] != 'root') {
+                    if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $category['is_duplicated_url'] != null && $category['url_key'] != 'root') {
                         try {
                             $where = ['category_id = ?' => (int)$category['is_duplicated_url']];
                             $this->_updateCategories($category, $where);
