@@ -440,6 +440,7 @@ class WordPress extends AbstractImport
                 'store_ids' => $this->_storeManager->getStore()->getId(),
                 'enabled' => 1,
                 'path' => '1',
+                'parent' => $category['parent'],
                 'import_source' => $importSource . '-' . $category['term_id']
             ];
         }
@@ -449,7 +450,7 @@ class WordPress extends AbstractImport
             foreach ($sourceItems as $category) {
                 if ($category['is_imported']) {
                     /** update category that has duplicate URK key */
-                    if (($category['is_duplicated_url'] != null || $data['expand_behaviour'] == '1') && $category['slug'] != 'root') {
+                    if (($category['is_duplicated_url'] != null || $data['expand_behaviour'] == '1') && $category['url_key'] != 'root') {
                         try {
                             $where = ['category_id = ?' => (int)$category['is_imported']];
                             $this->_updateCategories($category, $where);
@@ -478,7 +479,7 @@ class WordPress extends AbstractImport
                     /**
                      * Update categories
                      */
-                    if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $category['is_duplicated_url'] != null && $category['slug'] != 'root') {
+                    if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $category['is_duplicated_url'] != null && $category['url_key'] != 'root') {
                         try {
                             $where = ['category_id = ?' => (int)$category['is_duplicated_url']];
                             $this->_updateCategories($category, $where);

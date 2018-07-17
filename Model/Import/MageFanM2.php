@@ -703,6 +703,7 @@ class MageFanM2 extends AbstractImport
                 'store_ids' => $this->_storeManager->getStore()->getId(),
                 'user_name' => $userName,
                 'user_email' => $userEmail,
+                'parent_id' => $comment['parent_id'],
                 'import_source' => $importSource . '-' . $comment['comment_id']
             ];
         }
