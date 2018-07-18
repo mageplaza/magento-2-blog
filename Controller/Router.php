@@ -97,16 +97,13 @@ class Router implements RouterInterface
         $urlSuffix = $this->helper->getUrlSuffix();
 
         if ($length = strlen($urlSuffix)) {
-
             if (substr($identifier, -$length) == $urlSuffix && !$this->isRss($identifier)) {
-
                 $identifier = substr($identifier, 0, strlen($identifier) - $length);
             } else {
                 $identifier = $this->checkRssIdentifier($identifier);
             }
         } else {
-
-            if (strpos($identifier, $rssAction)) {
+            if (strpos($identifier, $rssAction) != false) {
                 $identifier = $this->checkRssIdentifier($identifier);
             }
         }
