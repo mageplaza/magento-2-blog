@@ -103,7 +103,7 @@ class Router implements RouterInterface
                 $identifier = $this->checkRssIdentifier($identifier);
             }
         } else {
-            if (strpos($identifier, $rssAction) != false) {
+            if (strpos($identifier, $rssAction) !== false) {
                 $identifier = $this->checkRssIdentifier($identifier);
             }
         }
