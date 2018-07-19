@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Blog\Model\Import;
 
+use Mageplaza\Blog\Model\Config\Source\Comments\Status;
+
 /**
  * Class AheadWorksM1
  * @package Mageplaza\Blog\Model\Import
@@ -429,7 +431,7 @@ class AheadWorksM1 extends AbstractImport
             foreach ($sourceItems as $category) {
                 if ($category['is_imported']) {
                     /** update category that has duplicate URK key */
-                    if (($category['is_duplicated_url'] != null || $data['expand_behaviour'] == '1') && $category['identifier'] != 'root') {
+                    if (($category['is_duplicated_url'] != null || $data['expand_behaviour'] == '1') && $category['url_key'] != 'root') {
                         try {
                             $where = ['category_id = ?' => (int)$category['is_imported']];
                             $this->_updateCategories($category, $where);
@@ -459,7 +461,7 @@ class AheadWorksM1 extends AbstractImport
                     /**
                      * Update categories
                      */
-                    if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $category['is_duplicated_url'] != null && $category['identifier'] != 'root') {
+                    if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $category['is_duplicated_url'] != null && $category['url_key'] != 'root') {
                         try {
                             $where = ['category_id = ?' => (int)$category['is_duplicated_url']];
                             $this->_updateCategories($category, $where);
@@ -547,13 +549,13 @@ class AheadWorksM1 extends AbstractImport
             /** mapping status */
             switch ($comment['status']) {
                 case '2':
-                    $status = 1;
+                    $status = Status::APPROVED;
                     break;
                 case '1':
-                    $status = 3;
+                    $status = Status::PENDING;
                     break;
                 default:
-                    $status = 1;
+                    $status = Status::APPROVED;
             }
             /** search for new post id */
             $newPostId = array_search($comment['post_id'], $oldPostIds);

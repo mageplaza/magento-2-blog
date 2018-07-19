@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Blog\Model\Import;
 
+use Mageplaza\Blog\Model\Config\Source\Comments\Status;
+
 /**
  * Class MageFanM2
  * @package Mageplaza\Blog\Model\Import
@@ -658,16 +660,16 @@ class MageFanM2 extends AbstractImport
              */
             switch ($comment['status']) {
                 case '2':
-                    $status = 2;
+                    $status = Status::SPAM;
                     break;
                 case '1':
-                    $status = 1;
+                    $status = Status::APPROVED;
                     break;
                 case '0':
-                    $status = 3;
+                    $status = Status::PENDING;
                     break;
                 default:
-                    $status = 1;
+                    $status = Status::APPROVED;
             }
             /** search for new post id */
             $newPostId = array_search($comment['post_id'], $oldPostIds);

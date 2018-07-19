@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Blog\Model\Import;
 
+use Mageplaza\Blog\Model\Config\Source\Comments\Status;
+
 /**
  * Class WordPress
  * @package Mageplaza\Blog\Model
@@ -263,7 +265,6 @@ class WordPress extends AbstractImport
      * @param $connection
      * @return mixed|void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _importTags($data, $connection)
     {
@@ -667,16 +668,16 @@ class WordPress extends AbstractImport
             /** mapping status */
             switch ($comment['comment_approved']) {
                 case '1':
-                    $status = 1;
+                    $status = Status::APPROVED;
                     break;
                 case '0':
-                    $status = 2;
+                    $status = Status::PENDING;
                     break;
                 case 'spam':
-                    $status = 3;
+                    $status = Status::SPAM;
                     break;
                 default:
-                    $status = 3;
+                    $status = Status::SPAM;
 
             }
             $newPostId = array_search($comment['comment_post_ID'], $oldPostIds);
