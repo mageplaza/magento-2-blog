@@ -676,7 +676,7 @@ class WordPress extends AbstractImport
                     $status = 3;
                     break;
                 default:
-                    $status = 1;
+                    $status = 3;
 
             }
             $newPostId = array_search($comment['comment_post_ID'], $oldPostIds);
