@@ -92,22 +92,19 @@ class Router implements RouterInterface
             return null;
         }
 
+        $rssAction = "rss.xml";
         $identifier = trim($request->getPathInfo(), '/');
         $urlSuffix = $this->helper->getUrlSuffix();
 
         if ($length = strlen($urlSuffix)) {
-
             if (substr($identifier, -$length) == $urlSuffix && !$this->isRss($identifier)) {
-
                 $identifier = substr($identifier, 0, strlen($identifier) - $length);
             } else {
-                if ($length = strlen(self::URL_SUFFIX_RSS_XML)) {
-                    if (substr($identifier, -$length) == self::URL_SUFFIX_RSS_XML && $this->isRss($identifier)) {
-                        $identifier = substr($identifier, 0, strlen($identifier) - $length);
-                    } else {
-                        return null;
-                    }
-                }
+                $identifier = $this->checkRssIdentifier($identifier);
+            }
+        } else {
+            if (strpos($identifier, $rssAction) !== false) {
+                $identifier = $this->checkRssIdentifier($identifier);
             }
         }
 
@@ -194,5 +191,20 @@ class Router implements RouterInterface
         $action = array_shift($routePath);
 
         return ($action == "rss");
+    }
+
+    /**
+     * @param $identifier
+     * @return bool|null|string
+     */
+    public function checkRssIdentifier($identifier)
+    {
+        $length = strlen(self::URL_SUFFIX_RSS_XML);
+        if (substr($identifier, -$length) == self::URL_SUFFIX_RSS_XML && $this->isRss($identifier)) {
+            $identifier = substr($identifier, 0, strlen($identifier) - $length);
+            return $identifier;
+        } else {
+            return null;
+        }
     }
 }

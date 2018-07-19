@@ -112,9 +112,12 @@ class Comment extends Generic implements TabInterface
         $postText = '<a href="' . $this->getUrl('mageplaza_blog/post/edit', ['id' => $comment->getPostId()]) . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($post->getName()) . '</a>';
         $fieldset->addField('post_name', 'note', ['text' => $postText, 'label' => __('Post'), 'name' => 'post_name']);
 
-        $customer = $this->_customerRepository->getById($comment->getEntityId());
-
-        $customerText = '<a href="' . $this->getUrl('customer/index/edit', ['id' => $customer->getId(), 'active_tab' => 'review']) . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($customer->getFirstname() . ' ' . $customer->getLastname()) . '</a> <a href="mailto:%4">(' . $customer->getEmail() . ')</a>';
+        if ($comment->getEntityId() >0){
+            $customer = $this->_customerRepository->getById($comment->getEntityId());
+            $customerText = '<a href="' . $this->getUrl('customer/index/edit', ['id' => $customer->getId(), 'active_tab' => 'review']) . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($customer->getFirstname() . ' ' . $customer->getLastname()) . '</a> <a href="mailto:%4">(' . $customer->getEmail() . ')</a>';
+        }else{
+            $customerText = 'Guest';
+        }
 
         $fieldset->addField('customer_name', 'note', ['text' => $customerText, 'label' => __('Customer'), 'name' => 'customer_name']);
 

@@ -410,6 +410,11 @@ textarea.default-cmt__content__cmt-block__cmt-box__cmt-input {
   resize: none;
   min-height: 80px;
   border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.default-cmt__content__cmt-block__guest-box {
+  margin-bottom: 20px;
 }
 
 .show-cmt__cmt-row.is-reply {
@@ -437,7 +442,9 @@ textarea.default-cmt__content__cmt-block__cmt-box__cmt-input {
 }
 
 div.default-cmt__content__cmt-content {
+  width: 100%;
   margin-top: 50px;
+  float: left;
 }
 
 ul.default-cmt__content__cmt-content {
@@ -525,9 +532,7 @@ li.default-cmt__content__cmt-content__cmt-row.cmt-row {
   width: 50%;
 }
 
-/*===================================================================
-|                  	      Post View CSS                  	        |
-====================================================================*/
+/*post view css*/
 .page-layout-1column .column.main {
   width: 100% !important;
 }
@@ -587,14 +592,16 @@ li.default-cmt__content__cmt-content__cmt-row.cmt-row {
   padding: 10px !important;
 }
 
-.post-item-list {
-  .post-image {
-    min-width: 250px;
-    display: table-cell;
-  }
-  .post-info-wraper {
-    display: table-cell;
-    vertical-align: top;
+@media only screen and (min-width: 600px) {
+  .post-item-list {
+    .post-image {
+      min-width: 250px;
+      display: table-cell;
+    }
+    .post-info-wraper {
+      display: table-cell;
+      vertical-align: top;
+    }
   }
 }
 

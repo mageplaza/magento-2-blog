@@ -58,7 +58,8 @@ class Edit extends Author
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {

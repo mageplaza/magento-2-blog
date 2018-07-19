@@ -27,6 +27,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
+use Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory as TopicCollectionFactory;
 
 /**
  * @method Topic setName($name)
@@ -94,25 +95,34 @@ class Topic extends AbstractModel
     public $postCollectionFactory;
 
     /**
+     * Topic Collection Factory
+     *
+     * @var TopicCollectionFactory
+     */
+    public $topicCollectionFactory;
+
+    /**
      * Topic constructor.
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param CollectionFactory $postCollectionFactory
+     * @param TopicCollectionFactory $topicCollectionFactory
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
         Context $context,
         Registry $registry,
         CollectionFactory $postCollectionFactory,
+        TopicCollectionFactory $topicCollectionFactory,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     )
     {
         $this->postCollectionFactory = $postCollectionFactory;
-
+        $this->topicCollectionFactory = $topicCollectionFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
