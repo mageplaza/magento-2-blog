@@ -146,9 +146,9 @@ class WordPress extends AbstractImport
                     'short_description' => '',
                     'post_content' => $content,
                     'url_key' => $this->helperData->generateUrlKey($postModel->getResource(), $postModel, $post['post_name']),
-                    'created_at' => (strtotime($post['post_date_gmt']) > strtotime($this->date->date())) ? strtotime($this->date->date()) : strtotime($post['post_date_gmt']),
-                    'updated_at' => strtotime($post['post_modified_gmt']),
-                    'publish_date' => strtotime($post['post_date_gmt']),
+                    'created_at' => ($post['post_date_gmt'] > $this->date->date() || !$post['post_date_gmt']) ? $this->date->date() : ($post['post_date_gmt']),
+                    'updated_at' => ($post['post_modified_gmt']) ?: $this->date->date(),
+                    'publish_date' => ($post['post_date_gmt']) ?: $this->date->date(),
                     'enabled' => ($post['post_status'] == 'trash') ? 0 : 1,
                     'in_rss' => 0,
                     'allow_comment' => 1,
@@ -572,7 +572,7 @@ class WordPress extends AbstractImport
         }
         while ($user = mysqli_fetch_assoc($result)) {
             if (!in_array($user['user_email'], $magentoUserEmail)) {
-                $createDate = strtotime($user['user_registered']);
+                $createDate = ($user['user_registered']) ?: $this->date->date();
                 try {
                     $userModel->setData([
                         'username' => $user['user_login'],
@@ -702,7 +702,7 @@ class WordPress extends AbstractImport
                 'is_reply' => 0,
                 'reply_id' => 0,
                 'content' => $comment['comment_content'],
-                'created_at' => strtotime($comment['comment_date_gmt']),
+                'created_at' => ($comment['comment_date_gmt']) ?: $this->date->date(),
                 'status' => $status,
                 'store_ids' => $this->_storeManager->getStore()->getId(),
                 'user_name' => $userName,

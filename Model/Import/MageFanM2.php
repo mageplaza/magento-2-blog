@@ -147,7 +147,6 @@ class MageFanM2 extends AbstractImport
                     $isReplace = true;
                 }
             }
-
             /** fetch all items from import source */
             while ($post = mysqli_fetch_assoc($result)) {
                 /** store the source item */
@@ -160,9 +159,9 @@ class MageFanM2 extends AbstractImport
                     'post_content' => $post['content'],
                     'url_key' => $this->helperData->generateUrlKey($postModel->getResource(), $postModel, $post['identifier']),
                     'image' => $post['featured_img'],
-                    'created_at' => (strtotime($post['creation_time']) > strtotime($this->date->date())) ? strtotime($this->date->date()) : strtotime($post['creation_time']),
-                    'updated_at' => strtotime($post['update_time']),
-                    'publish_date' => strtotime($post['publish_time']),
+                    'created_at' => ($post['creation_time'] > $this->date->date() || !$post['creation_time']) ? $this->date->date() : $post['creation_time'],
+                    'updated_at' => ($post['update_time']) ?: $this->date->date(),
+                    'publish_date' => ($post['publish_time']) ?: $this->date->date(),
                     'enabled' => (int)$post['is_active'],
                     'in_rss' => 0,
                     'allow_comment' => 1,
@@ -697,7 +696,7 @@ class MageFanM2 extends AbstractImport
                 'is_reply' => 0,
                 'reply_id' => 0,
                 'content' => $comment['text'],
-                'created_at' => strtotime($comment['creation_time']),
+                'created_at' => ($comment['creation_time']) ?: $this->date->date(),
                 'status' => $status,
                 'store_ids' => $this->_storeManager->getStore()->getId(),
                 'user_name' => $userName,
@@ -817,16 +816,16 @@ class MageFanM2 extends AbstractImport
             if (!in_array($user['email'], $magentoUserEmail)) {
                 try {
                     $userModel->setData([
-                        'username' => $user['username'],
+                        'username' => $importSource = $data['type'] . '-' . $data['database'] . $user['username'],
                         'firstname' => $user['firstname'],
                         'lastname' => $user['lastname'],
                         'password' => $this->_generatePassword(12),
                         'email' => $user['email'],
                         'is_active' => (int)$user['is_active'],
                         'interface_locale' => $user['interface_locale'],
-                        'created' => strtotime($user['created']),
-                        'modified' => strtotime($user['modified']),
-                        'logdate' => strtotime($user['logdate']),
+                        'created' => ($user['created']) ?: $this->date->date(),
+                        'modified' => ($user['modified']) ?: $this->date->date(),
+                        'logdate' => ($user['logdate']) ?: $this->date->date(),
                         'lognum' => (int)$user['lognum']
                     ])->setRoleId(1)->save();
                     $this->_successCount++;
