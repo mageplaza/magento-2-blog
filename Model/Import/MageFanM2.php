@@ -241,11 +241,12 @@ class MageFanM2 extends AbstractImport
                 /**
                  * Insert topics
                  */
-                $topicSql = "SELECT post_id FROM " . $data['table_prefix'] . " `" . self::TABLE_POST_RELATED . "` GROUP BY post_id";
+                $topicSql = "SELECT post_id FROM `" . $data['table_prefix'] . self::TABLE_POST_RELATED . "` GROUP BY post_id";
                 $topicCount = 1;
                 $oldTopicIds = [];
 
                 $result = mysqli_query($connection, $topicSql);
+
                 while ($topic = mysqli_fetch_assoc($result)) {
                     if ($topicModel->getResource()->isImported($importSource, $topic['post_id']) == false) {
                         try {
@@ -268,7 +269,7 @@ class MageFanM2 extends AbstractImport
                  * Insert related posts
                  */
                 $topicPostTable = $this->_resourceConnection->getTableName('mageplaza_blog_post_topic');
-                $topicPostSql = "SELECT * FROM " . $data['table_prefix'] . " `" . self::TABLE_POST_RELATED . "`";
+                $topicPostSql = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POST_RELATED . "`";
                 $result = mysqli_query($connection, $topicPostSql);
                 while ($topicPost = mysqli_fetch_assoc($result)) {
                     $newPostId = array_search($topicPost['related_id'], $oldPostIds);
@@ -300,7 +301,6 @@ class MageFanM2 extends AbstractImport
      * @param $connection
      * @return mixed|void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _importTags($data, $connection)
     {
@@ -421,7 +421,7 @@ class MageFanM2 extends AbstractImport
 
             /** Insert post tag relation */
             $tagPostTable = $this->_resourceConnection->getTableName('mageplaza_blog_post_tag');
-            $sqlTagPost = "SELECT * FROM " . $data['table_prefix'] . "`" . self::TABLE_POST_TAG . "` ";
+            $sqlTagPost = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POST_TAG . "` ";
             $result = mysqli_query($connection, $sqlTagPost);
             $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
             while ($tagPost = mysqli_fetch_assoc($result)) {
@@ -449,7 +449,6 @@ class MageFanM2 extends AbstractImport
      * @param $connection
      * @return mixed|void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _importCategories($data, $connection)
     {
@@ -595,7 +594,7 @@ class MageFanM2 extends AbstractImport
              * Import category post relation
              */
             $categoryPostTable = $this->_resourceConnection->getTableName('mageplaza_blog_post_category');
-            $sqlCategoryPost = "SELECT * FROM " . $data['table_prefix'] . "`" . self::TABLE_POST_CATEGORY . "` ";
+            $sqlCategoryPost = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POST_CATEGORY . "` ";
             $result = mysqli_query($connection, $sqlCategoryPost);
             $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
             while ($categoryPost = mysqli_fetch_assoc($result)) {
@@ -857,13 +856,13 @@ class MageFanM2 extends AbstractImport
                 $newPostId = array_search($postAuthor['post_id'], $oldPostIds);
                 $updateData[$newPostId] = $newUserId;
             }
+            mysqli_free_result($result);
         }
         foreach ($updateData as $postId => $authorId) {
             $where = ['post_id = ?' => (int)$postId];
             $this->_resourceConnection->getConnection()
                 ->update($this->_resourceConnection->getTableName('mageplaza_blog_post'), ['author_id' => $authorId], $where);
         }
-        mysqli_free_result($result);
         $statistics = $this->_getStatistics('authors', $this->_successCount, $this->_errorCount, $this->_hasData);
         $this->_registry->register('mageplaza_import_user_statistic', $statistics);
     }
