@@ -694,8 +694,8 @@ class WordPress extends AbstractImport
 
             /** store the source item */
             $sourceItems[] = [
-                'is_imported' => $commentModel->getResource()->isImported($importSource, $comment['comment_id']),
-                'id' => $comment['comment_id'],
+                'is_imported' => $commentModel->getResource()->isImported($importSource, $comment['comment_ID']),
+                'id' => $comment['comment_ID'],
                 'post_id' => $newPostId,
                 'entity_id' => $entityId,
                 'has_reply' => 0,
