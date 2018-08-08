@@ -34,9 +34,8 @@
                     <comment><![CDATA[
                         <ul class="mageplaza-head">
                             <li><a href="https://docs.mageplaza.com/blog-m2/" target="_blank">User Guide</a>    </li>
-                            <li><a href="https://mageplaza.freshdesk.com/support/discussions/forums/6000241382" target="_blank">Ask Community</a> </li>
-                            <li><a href="https://mageplaza.freshdesk.com/" target="_blank">Ask Mageplaza</a> </li>
-                            <li><strong><a href="https://www.mageplaza.com/?utm_source=magento2&utm_medium=documents&utm_campaign=layered-navigation" target="_blank">Find more extensions</a></strong> </li>
+                            <li><a href="https://github.com/mageplaza/magento-2-blog/issues" target="_blank">Technical Support</a> </li>
+                            <li><strong><a href="https://www.mageplaza.com/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">Find more extensions</a></strong> </li>
                         </ul>
                         ]]></comment>
                 </field>
@@ -111,7 +110,12 @@
                     <field id="enable_product" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Enable Related Products</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <comment>Show/Hide related products in post view page</comment>
+                        <comment><![CDATA[Show/Hide related products in post view page. Setup related products, up-sell, cross-sell products with ease, 
+                        <a href="https://www.mageplaza.com/magento-2-automatic-related-products/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">explore now</a>
+                        ]]>
+                            
+                        </comment>
+
                     </field>
                     <field id="product_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Limit of Related Products</label>
@@ -140,6 +144,11 @@
                     <field id="enable_search" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Enable Search Box</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment><![CDATA[This feature is using Ajax Search technology, same as  
+                        <a href="https://www.mageplaza.com/magento-2-search-extension/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">Mageplaza Search</a>.
+                        ]]>
+                            
+                        </comment>
                     </field>
                     <field id="search_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Maximum Query Result</label>
@@ -189,7 +198,7 @@
                 </field>
                 <field id="facebook_appid" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Facebook: AppID</label>
-                    <comment><![CDATA[Regiter AppID <a href="https://developers.facebook.com/apps/" target="_blank">here</a>]]></comment>
+                    <comment><![CDATA[Regiter AppID <a href="https://developers.facebook.com/apps/" target="_blank">here</a>. Let visitors login via Facebook account <a href="https://www.mageplaza.com/magento-2-social-login-extension/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">explore now</a>]]></comment>
                     <depends><field id="type">2</field></depends>
                 </field>
                 <field id="facebook_number_comment" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -214,6 +223,9 @@
                 <label>SEO</label>
                 <field id="meta_title" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Meta title</label>
+                    <comment><![CDATA[Fully compatible with  
+                    <a href="https://www.mageplaza.com/magento-2-seo-extension/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">Mageplaza SEO</a>.
+                    ]]></comment>
                 </field>
                 <field id="meta_description" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Meta description</label>
