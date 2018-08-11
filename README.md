@@ -8,20 +8,20 @@
 
 ## 1. Documentation
 
-- Installation guide: https://www.mageplaza.com/install-magento-2-extension/
-- User guide: https://docs.mageplaza.com/blog-m2/index.html
-- Download from our Live site: https://www.mageplaza.com/magento-2-blog-extension/
-- Marketplace: https://marketplace.magento.com/mageplaza-magento-2-blog-extension.html
-- Get Support: https://github.com/mageplaza/magento-2-blog-extension/issues
-- Contribute on Github: https://github.com/mageplaza/magento-2-blog/
-- Changelog: https://www.mageplaza.com/changelog/m2-blog.txt
-- License https://www.mageplaza.com/LICENSE.txt
+- [Installation guide](https://www.mageplaza.com/install-magento-2-extension/)
+- [User guide](https://docs.mageplaza.com/blog-m2/index.html)
+- [Download from our Live site](https://www.mageplaza.com/magento-2-blog-extension/)
+- Mageplaza Blog has been verified on [Magento Marketplace](https://marketplace.magento.com/mageplaza-magento-2-blog-extension.html)
+- [Get Free Support](https://github.com/mageplaza/magento-2-blog-extension/issues)
+- Get premium support from Mageplaza: [Purchase Support package](https://www.mageplaza.com/magento-2-extension-support-package/)
+- [Contribute on Github](https://github.com/mageplaza/magento-2-blog/)
+- [Releases](https://github.com/mageplaza/magento-2-blog/releases)
+- [License](https://www.mageplaza.com/LICENSE.txt)
 
 ## 2. FAQs
 
 #### Q: I got error: `Mageplaza_Core has been already defined`
 A: Read solution: https://github.com/mageplaza/module-core/issues/3
-
 
 
 ## 3. How to install
@@ -87,8 +87,10 @@ Writing a blog enables you to interact with your website visitors. You can accom
 - RSS Optimization
 - WYSIWYG editor in admin
 - Blog breadcrumbs
+- Import from AW M1 Blog, Magefan Blog, Wordpress
 - Integrate Magento Sitemap or Blog sitemap
 - Multistores support
+
 
 ## Blog features for Magento 2
 A better blog for your e-commerce store without adding any 3rd-party framework. Better blog extension allows you manage categories, posts, comments on Magento 2 back-end. The system will update you when there is a new comment submit. This is a great solution for building relevant SEO-friendly text links, and serves as assistance in building sales strategy.
@@ -113,6 +115,10 @@ Better blog is integrated with Addthis, that why your customers can share posts 
 
 ### RSS Optimization
 Full RSS integration into Magento 2. The blog RSS feed appears right next to the standard product and Magento 2 RSS feeds, allowing users that are familiar with your website to easily find all the blog RSS feeds easily and simply.
+
+### Importer (NEW)
+
+Import Blog Posts, Categories, Tags from [Wordpress](https://wordpress.org/), AW M1 Blog, Magefan M2 Blog
 
 
 ---------
