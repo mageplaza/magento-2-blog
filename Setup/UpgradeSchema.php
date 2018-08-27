@@ -457,6 +457,49 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
 
+        if (version_compare($context->getVersion(), '2.4.9', '<')) {
+            if ($installer->tableExists('mageplaza_blog_post')) {
+                if ($connection->tableColumnExists($installer->getTable('mageplaza_blog_post'), 'created_at')) {
+                    $connection->modifyColumn($installer->getTable('mageplaza_blog_post'), 'created_at', ['type' => Table::TYPE_TIMESTAMP]);
+                }
+                if ($connection->tableColumnExists($installer->getTable('mageplaza_blog_post'), 'updated_at')) {
+                    $connection->modifyColumn($installer->getTable('mageplaza_blog_post'), 'updated_at', ['type' => Table::TYPE_TIMESTAMP]);
+                }
+                if ($connection->tableColumnExists($installer->getTable('mageplaza_blog_post'), 'publish_date')) {
+                    $connection->modifyColumn($installer->getTable('mageplaza_blog_post'), 'publish_date', ['type' => Table::TYPE_TIMESTAMP]);
+                }
+            }
+            if ($installer->tableExists('mageplaza_blog_category')) {
+                if ($connection->tableColumnExists($installer->getTable('mageplaza_blog_category'), 'created_at')) {
+                    $connection->modifyColumn($installer->getTable('mageplaza_blog_category'), 'created_at', ['type' => Table::TYPE_TIMESTAMP]);
+                }
+                if ($connection->tableColumnExists($installer->getTable('mageplaza_blog_category'), 'updated_at')) {
+                    $connection->modifyColumn($installer->getTable('mageplaza_blog_category'), 'updated_at', ['type' => Table::TYPE_TIMESTAMP]);
+                }
+            }
+            if ($installer->tableExists('mageplaza_blog_tag')) {
+                if ($connection->tableColumnExists($installer->getTable('mageplaza_blog_tag'), 'created_at')) {
+                    $connection->modifyColumn($installer->getTable('mageplaza_blog_tag'), 'created_at', ['type' => Table::TYPE_TIMESTAMP]);
+                }
+                if ($connection->tableColumnExists($installer->getTable('mageplaza_blog_tag'), 'updated_at')) {
+                    $connection->modifyColumn($installer->getTable('mageplaza_blog_tag'), 'updated_at', ['type' => Table::TYPE_TIMESTAMP]);
+                }
+            }
+            if ($installer->tableExists('mageplaza_blog_topic')) {
+                if ($connection->tableColumnExists($installer->getTable('mageplaza_blog_topic'), 'created_at')) {
+                    $connection->modifyColumn($installer->getTable('mageplaza_blog_topic'), 'created_at', ['type' => Table::TYPE_TIMESTAMP]);
+                }
+                if ($connection->tableColumnExists($installer->getTable('mageplaza_blog_topic'), 'updated_at')) {
+                    $connection->modifyColumn($installer->getTable('mageplaza_blog_topic'), 'updated_at', ['type' => Table::TYPE_TIMESTAMP]);
+                }
+            }
+            if ($installer->tableExists('mageplaza_blog_comment')) {
+                if ($connection->tableColumnExists($installer->getTable('mageplaza_blog_comment'), 'created_at')) {
+                    $connection->modifyColumn($installer->getTable('mageplaza_blog_comment'), 'created_at', ['type' => Table::TYPE_TIMESTAMP]);
+                }
+            }
+        }
+
         $installer->endSetup();
     }
 }

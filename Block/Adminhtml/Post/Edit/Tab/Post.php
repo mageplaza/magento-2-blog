@@ -29,6 +29,7 @@ use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Config\Model\Config\Source\Design\Robots;
 use Magento\Config\Model\Config\Source\Enabledisable;
 use Magento\Config\Model\Config\Source\Yesno;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
@@ -55,11 +56,6 @@ class Post extends Generic implements TabInterface
     public $booleanOptions;
 
     /**
-     * @var \Magento\Config\Model\Config\Source\Enabledisable
-     */
-    protected $enabledisable;
-
-    /**
      * @var \Magento\Config\Model\Config\Source\Design\Robots
      */
     public $metaRobotsOptions;
@@ -80,23 +76,36 @@ class Post extends Generic implements TabInterface
     protected $imageHelper;
 
     /**
+     * @var \Magento\Config\Model\Config\Source\Enabledisable
+     */
+    protected $enabledisable;
+
+    /**
+     * @var DateTime
+     */
+    protected $_date;
+
+    /**
      * Post constructor.
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
-     * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
-     * @param \Magento\Config\Model\Config\Source\Enabledisable $enableDisable
-     * @param \Magento\Config\Model\Config\Source\Design\Robots $metaRobotsOptions
-     * @param \Magento\Store\Model\System\Store $systemStore
-     * @param \Mageplaza\Blog\Helper\Image $imageHelper
+     *
+     * @param Context $context
+     * @param Registry $registry
+     * @param Session $authSession
+     * @param DateTime $dateTime
+     * @param FormFactory $formFactory
+     * @param Config $wysiwygConfig
+     * @param Yesno $booleanOptions
+     * @param Enabledisable $enableDisable
+     * @param Robots $metaRobotsOptions
+     * @param Store $systemStore
+     * @param Image $imageHelper
      * @param array $data
      */
     public function __construct(
         Context $context,
         Registry $registry,
         Session $authSession,
+        DateTime $dateTime,
         FormFactory $formFactory,
         Config $wysiwygConfig,
         Yesno $booleanOptions,
@@ -113,6 +122,7 @@ class Post extends Generic implements TabInterface
         $this->metaRobotsOptions = $metaRobotsOptions;
         $this->systemStore = $systemStore;
         $this->authSession = $authSession;
+        $this->_date = $dateTime;
         $this->imageHelper = $imageHelper;
 
         parent::__construct($context, $registry, $formFactory, $data);
@@ -247,9 +257,24 @@ class Post extends Generic implements TabInterface
                 'name' => 'publish_date',
                 'label' => __('Publish Date'),
                 'title' => __('Publish Date'),
-                'date_format' => $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT),
-                'time_format' => $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT),
-                'timezone' => false
+                'date_format' => 'M/d/yyyy',
+                'timezone' => false,
+                'value' => $this->_date->date('m/d/Y')
+            )
+        );
+
+        /** get current time for public_time field */
+        $currentTime = new \DateTime($this->_date->date(), new \DateTimeZone('UTC'));
+        $currentTime->setTimezone(new \DateTimeZone($this->_localeDate->getConfigTimezone()));
+        $time = $currentTime->format('H,i,s');
+
+        $fieldset->addField('publish_time', 'time', array(
+                'name' => 'publish_time',
+                'label' => __('Publish Time'),
+                'title' => __('Publish Time'),
+                'format' => $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT),
+                'timezone' => false,
+                'value' => $time
             )
         );
 
@@ -300,11 +325,16 @@ class Post extends Generic implements TabInterface
             ]);
         }
 
+        /** Get the public_date from database */
         if ($post->getData('publish_date')) {
-            $date = $post->getData('publish_date');
-            $date = new \DateTime($date, new \DateTimeZone('UTC'));
-            $date->setTimezone(new \DateTimeZone($this->_localeDate->getConfigTimezone()));
+            $publicDateTime = new \DateTime($post->getData('publish_date'), new \DateTimeZone('UTC'));
+            $publicDateTime->setTimezone(new \DateTimeZone($this->_localeDate->getConfigTimezone()));
+            $publicDateTime = $publicDateTime->format('m/d/Y H:i:s');
+            $date = explode(' ',$publicDateTime)[0];
+            $time = explode(' ', $publicDateTime)[1];
+            $time = str_replace(':', ',', $time);
             $post->setData('publish_date', $date);
+            $post->setData('publish_time', $time);
         }
 
         $form->addValues($post->getData());
