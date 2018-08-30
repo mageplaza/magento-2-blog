@@ -24,10 +24,10 @@ namespace Mageplaza\Blog\Ui\Component\Listing\Columns;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
- * Class CommentContent
+ * Class CustomerName
  * @package Mageplaza\Blog\Ui\Component\Listing\Columns
  */
-class CommentContent extends Column
+class CustomerName extends Column
 {
     /**
      * Prepare Data Source
@@ -37,15 +37,10 @@ class CommentContent extends Column
      */
     public function prepareDataSource(array $dataSource)
     {
-        $limitContent = 150;
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                if (isset($item[$this->getData('name')])) {
-                    $content = $item['content'];
-                    if (strlen($content) > $limitContent) {
-                        $content = mb_substr($content, 0, $limitContent, 'UTF-8') . '.....';
-                    }
-                    $item[$this->getData('name')] = '<span>' . $content . '</span>';
+                if ($item['entity_id'] == 0) {
+                    $item['customer_name'] = '<span>' . $item['user_name'] . ' (Guest)</span>';
                 }
             }
         }

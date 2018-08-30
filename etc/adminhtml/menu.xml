@@ -22,7 +22,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Mageplaza_Blog::blog" title="Better Blog" module="Mageplaza_Blog" sortOrder="110" resource="Mageplaza_Blog::blog" parent="Mageplaza_Core::menu"/>
+        <add id="Mageplaza_Blog::blog" title="Better Blog" module="Mageplaza_Blog" sortOrder="110" resource="Mageplaza_Blog::blog" parent="Magento_Backend::content"/>
         <add id="Mageplaza_Blog::post" title="Manage Posts" module="Mageplaza_Blog" sortOrder="10" action="mageplaza_blog/post" resource="Mageplaza_Blog::post" parent="Mageplaza_Blog::blog"/>
         <add id="Mageplaza_Blog::tag" title="Manage Tags" module="Mageplaza_Blog" sortOrder="20" action="mageplaza_blog/tag" resource="Mageplaza_Blog::tag" parent="Mageplaza_Blog::blog"/>
         <add id="Mageplaza_Blog::topic" title="Manage Topics" module="Mageplaza_Blog" sortOrder="30" action="mageplaza_blog/topic" resource="Mageplaza_Blog::topic" parent="Mageplaza_Blog::blog"/>
@@ -30,6 +30,6 @@
         <add id="Mageplaza_Blog::author" title="Author Information" module="Mageplaza_Blog" sortOrder="50" action="mageplaza_blog/author/edit" resource="Mageplaza_Blog::author" parent="Mageplaza_Blog::blog"/>
         <add id="Mageplaza_Blog::comment" title="Manage Comments" module="Mageplaza_Blog" sortOrder="60" action="mageplaza_blog/comment" resource="Mageplaza_Blog::comment" parent="Mageplaza_Blog::blog"/>
         <add id="Mageplaza_Blog::import" title="Import" module="Mageplaza_Blog" sortOrder="65" action="mageplaza_blog/import/edit" resource="Mageplaza_Blog::import" parent="Mageplaza_Blog::blog"/>
-        <add id="Mageplaza_Blog::configuration" title="Configuration" module="Mageplaza_Blog" sortOrder="70" action="adminhtml/system_config/edit/section/blog" resource="Mageplaza_Blog::configuration" parent="Mageplaza_Blog::blog"/>
+        <add id="Mageplaza_Blog::configuration" title="Configuration" module="Mageplaza_Blog" sortOrder="1000" action="adminhtml/system_config/edit/section/blog" resource="Mageplaza_Blog::configuration" parent="Mageplaza_Blog::blog"/>
     </menu>
 </config>

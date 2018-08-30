@@ -29,6 +29,7 @@ use Magento\Store\Model\System\Store;
 use Mageplaza\Blog\Helper\Image as ImageHelper;
 use Mageplaza\Blog\Model\Config\Source\Import\Type;
 use Mageplaza\Blog\Model\Config\Source\Import\Behaviour;
+use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Backend\Block\Widget\Form\Generic;
 
 /**
@@ -46,6 +47,11 @@ class Form extends Generic
      * @var Config
      */
     public $wysiwygConfig;
+
+    /**
+     * @var Yesno
+     */
+    public $booleanOptions;
 
     /**
      * @var ImageHelper
@@ -72,6 +78,7 @@ class Form extends Generic
      * @param ImageHelper $imageHelper
      * @param Type $importType
      * @param Behaviour $importBehaviour
+     * @param Yesno $booleanOptions
      * @param array $data
      */
     public function __construct(
@@ -83,6 +90,7 @@ class Form extends Generic
         ImageHelper $imageHelper,
         Type $importType,
         Behaviour $importBehaviour,
+        Yesno $booleanOptions,
         array $data = []
     )
     {
@@ -91,6 +99,7 @@ class Form extends Generic
         $this->_imageHelper = $imageHelper;
         $this->_importType = $importType;
         $this->_importBehaviour = $importBehaviour;
+        $this->booleanOptions = $booleanOptions;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -184,7 +193,6 @@ class Form extends Generic
                     'name' => 'db_password',
                     'title' => __('Database Password'),
                     'label' => __('Database Password'),
-                    'required' => true,
                     'class' => $item["value"],
                     'note' => __('Your SQL database Password')
                 ]
@@ -195,8 +203,8 @@ class Form extends Generic
                 'text',
                 [
                     'name' => 'db_host',
-                    'title' => __('Database Password'),
-                    'label' => __('Database Password'),
+                    'title' => __('Database Host'),
+                    'label' => __('Database Host'),
                     'required' => true,
                     'class' => $item["value"],
                     'value' => 'localhost',
@@ -211,9 +219,7 @@ class Form extends Generic
                     'name' => 'table_prefix',
                     'title' => __('Table Prefix'),
                     'label' => __('Table Prefix'),
-                    'required' => true,
                     'class' => $item["value"],
-                    'value' => 'wp_',
                     'note' => __('Your table prefix name')
                 ]
             );
@@ -226,7 +232,32 @@ class Form extends Generic
                     'label' => __('Import Behaviour'),
                     'title' => __('Import Behaviour'),
                     'values' => $this->_importBehaviour->toOptionArray(),
-                    'note' => __('This action is applied to all data')
+                    'note' => __('This action is applied to all data'),
+                    'onchange' => 'mpBlogImport.initExpandBehaviour();'
+                ]
+            );
+
+            $fieldsets[$item["value"]]->addField(
+                $item["value"].'_import_behaviour_expand',
+                'select',
+                [
+                    'name' => 'import_behaviour_expand',
+                    'label' => __('Allow update content on existing URL-key'),
+                    'title' => __('Allow update content on existing URL-key'),
+                    'values' => $this->booleanOptions->toOptionArray(),
+                    'note' => __('If <b>Yes</b>, content will be updated on posts with existing url-key. Select <b>No</b> to add a new post'),
+                    'value' => 1,
+                ]
+            );
+
+            $fieldsets[$item["value"]]->addField(
+                $item["value"].'_import_image_path',
+                'note',
+                [
+                    'name' => 'import_image_path',
+                    'label' => __('Image Path Hint'),
+                    'title' => __('Image Path Hint'),
+                    'text' => '<div class="image-path"></div>',
                 ]
             );
         }

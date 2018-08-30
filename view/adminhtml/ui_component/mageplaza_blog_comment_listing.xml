@@ -180,9 +180,10 @@
                 </item>
             </argument>
         </column>
-        <column name="customer_name">
+        <column name="customer_name" class="Mageplaza\Blog\Ui\Component\Listing\Columns\CustomerName">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Customer</item>
                 </item>

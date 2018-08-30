@@ -36,7 +36,6 @@ $modifier = $helper->getAuthorByPost($_post, true);
 $modifierName = $modifier !== null ? $modifier->getName() : '';
 $isLogged = ($block->isLoggedIn()) ? 'Yes' : 'No';
 $color = $helper->getBlogConfig('general/font_color');
-$loginWarning = '<div class="message error message-error row" style="margin-top: 5px;">You are not logged in. Please <a href="' . $block->getLoginUrl() . '"> Login </a> or <a href="' . $block->getRegisterUrl() . '"> Signup </a> to comment.</div>';
 ?>
 <div class="mp-blog-view">
     <div class="mp-blog-rss">
@@ -206,26 +205,53 @@ $loginWarning = '<div class="message error message-error row" style="margin-top:
             <?php elseif ($typeComment == Type::DEFAULT_COMMENT): ?>
                 <div class="related-content-container container default-cmt">
                     <?php if (!$block->isLoggedIn()): ?>
-                        <div class="default-cmt__cmt-login">
+                        <div class="col-mp default-cmt__cmt-login">
                             <button class="primary btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
                         </div>
                     <?php endif; ?>
-                    <div class="mp-12">
+                    <div class="col-mp mp-12" style="float: left;">
                         <div class="default-cmt__content">
                             <div class="default-cmt__content__cmt-block">
+                                <?php if (!$block->isLoggedIn()): ?>
+                                    <form id="default-cmt__content__cmt-block__guest-form"
+                                          data-mage-init='{"validation":{}}'>
+                                        <div class="col-mp mp-6 default-cmt__content__cmt-block__guest-box">
+                                            <label for="default-cmt__content__cmt-block__guest-box__name-input">Name
+                                                *</label>
+                                            <input id="default-cmt__content__cmt-block__guest-box__name-input"
+                                                   type="text"
+                                                   name="default-cmt__content__cmt-block__guest-box__name-input"
+                                                   placeholder="<?php echo __('Your display name') ?>"
+                                                   data-validate="{required:true}">
+                                        </div>
+                                        <div class="col-mp mp-6 default-cmt__content__cmt-block__guest-box">
+                                            <label for="default-cmt__content__cmt-block__guest-box__email-input">Email
+                                                *</label>
+                                            <input id="default-cmt__content__cmt-block__guest-box__email-input"
+                                                   type="text"
+                                                   name="default-cmt__content__cmt-block__guest-box__email-input"
+                                                   placeholder="<?php echo __('Your email') ?> "
+                                                   data-validate="{required:true, 'validate-email':true}">
+                                        </div>
+                                    </form>
+                                <?php endif; ?>
                                 <div class="default-cmt__content__cmt-block__cmt-box">
-                                    <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input"
-                                              maxlength="255"
-                                              placeholder="<?php echo __('Type comments here...') ?>"></textarea>
+                                    <div class="col-mp mp-12">
+                                        <label for="mp-guest-cmt-commentbox">Comment</label>
+                                        <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input"
+                                                  maxlength="255"
+                                                  placeholder="<?php echo __('Type comments here...') ?>"></textarea>
+                                    </div>
                                     <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
                                         <div class="default-cmt_loading" style="display: none">
                                             <img src="<?php echo $block->getViewFileUrl('images/loader-1.gif'); ?>"
                                                  alt="Loading...">
                                         </div>
-                                        <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit primary btn-primary" <?php echo !$block->isLoggedIn() ? 'disabled' : '' ?>>
+                                        <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit primary btn-primary">
                                             <?php echo __('Comment') ?>
                                         </button>
                                     </div>
+
                                 </div>
                             </div>
                             <div class="default-cmt__content__cmt-content">
@@ -245,7 +271,13 @@ $loginWarning = '<div class="message error message-error row" style="margin-top:
                         reply = '<?php echo __('Reply') ?>',
                         isLogged = '<?php echo $isLogged ?>',
                         likedColor = '<?php echo $color;?>',
-                        loginWarning = '<?php echo $loginWarning;?>';
+                        messengerBox = {
+                            cmt_warning: '<?php echo $block->getMessagesHtml('adderror', 'Please write the comment.')?>',
+                            exist_email_warning: '<?php echo $block->getMessagesHtml('adderror', 'This email is exist. Please <a href="' . $block->getLoginUrl() . '"> Login </a> as our customer.')?>',
+                            login_warning: '<?php echo $block->getMessagesHtml('adderror', 'You are not logged in. Please <a href="' . $block->getLoginUrl() . '"> Login </a> or <a href="' . $block->getRegisterUrl() . '"> Signup </a> to like or send a reply.</div>')?>',
+                            comment_approve: '<?php echo $block->getMessagesHtml('addsuccess', 'Your comment has been sent successfully. Please wait admin approve !')?>'
+                        };
+
                     require(['comment']);
                 </script>
             <?php endif; ?>
@@ -293,15 +325,3 @@ $loginWarning = '<div class="message error message-error row" style="margin-top:
         </script>
     <?php endif; ?>
 </div>
-
-<style type="text/css">
-    .cmt-row__alert-row {
-        font-size: 13px;
-        color: red;
-        margin-top: 10px;
-    }
-
-    .cmt-row__alert-row p {
-        margin: 3px 0 !important;
-    }
-</style>

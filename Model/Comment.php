@@ -27,6 +27,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
+use Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory as CommentCollectionFactory;
 
 /**
  * Class Comment
@@ -67,25 +68,32 @@ class Comment extends AbstractModel
     public $postCollectionFactory;
 
     /**
+     * @var CommentCollectionFactory
+     */
+    public $commentCollectionFactory;
+
+    /**
      * Comment constructor.
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param CollectionFactory $postCollectionFactory
+     * @param CommentCollectionFactory $commentCollectionFactory
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
         Context $context,
         Registry $registry,
         CollectionFactory $postCollectionFactory,
+        CommentCollectionFactory $commentCollectionFactory,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     )
     {
         $this->postCollectionFactory = $postCollectionFactory;
-
+        $this->commentCollectionFactory = $commentCollectionFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 

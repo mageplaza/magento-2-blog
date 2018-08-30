@@ -31,6 +31,7 @@ class Behaviour implements ArrayInterface
 {
     const UPDATE = "update";
     const REPLACE = "replace";
+    const DELETE = "delete";
 
     /**
      * @return array
@@ -57,7 +58,8 @@ class Behaviour implements ArrayInterface
     {
         return [
             self::UPDATE => __('Add / Update'),
-            self::REPLACE => __('Replace')
+            self::REPLACE => __('Replace'),
+            self::DELETE => __('Delete')
         ];
     }
 }

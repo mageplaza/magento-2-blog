@@ -41,8 +41,8 @@
         <referenceBlock name="head.additional">
             <block class="Mageplaza\Blog\Block\Design" name="mpblog.design" template="Mageplaza_Blog::design.phtml"/>
         </referenceBlock>
-        <referenceContainer name="content">
-            <block class="Magento\Framework\View\Element\Template" name="mpblog.copy.right" after="-" template="Mageplaza_Blog::html/copyright.phtml"/>
-        </referenceContainer>
+        <!--<referenceContainer name="content">-->
+            <!--<block class="Magento\Framework\View\Element\Template" name="mpblog.copy.right" after="-" template="Mageplaza_Blog::html/copyright.phtml"/>-->
+        <!--</referenceContainer>-->
     </body>
 </page>

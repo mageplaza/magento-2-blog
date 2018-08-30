@@ -194,38 +194,59 @@ class View extends Action
             $traffic->addData(['post_id' => $id, 'numbers_view' => 1])->save();
         }
 
-        if ($this->getRequest()->isAjax() && $this->session->isLoggedIn()) {
+        if ($this->getRequest()->isAjax()) {
             $params = $this->getRequest()->getParams();
-            $customerData = $this->session->getCustomerData();
             $result = [];
+            if ($this->session->isLoggedIn()) {
+                $customerData = $this->session->getCustomerData();
+                $user = [
+                    "user_id" => $customerData->getId(),
+                    "first_name" => $customerData->getFirstname(),
+                    "last_name" => $customerData->getLastname()
+                ];
+            } else {
+                $user = [
+                    "user_id" => 0,
+                    "first_name" => $params["guestName"],
+                    "last_name" => "",
+                    "email" => $params["guestEmail"]
+                ];
+                if (!$this->accountManagement->isEmailAvailable($user["email"], $this->storeManager->getWebsite()->getId())) {
+                    $result = ['status' => 'duplicated'];
+                    return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
+                }
+            }
             if (isset($params['cmt_text'])) {
                 $cmtText = $params['cmt_text'];
                 $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
                 $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
                 $commentData = [
                     'post_id' => $id, '',
-                    'entity_id' => $customerData->getId(),
+                    'entity_id' => $user["user_id"],
                     'is_reply' => $isReply,
                     'reply_id' => $replyId,
                     'content' => $cmtText,
                     'created_at' => $this->dateTime->date(),
                     'status' => $this->helperBlog->getBlogConfig('comment/need_approve') ? Status::PENDING : Status::APPROVED,
-                    'store_ids' => $this->storeManager->getStore()->getId()
+                    'store_ids' => $this->storeManager->getStore()->getId(),
                 ];
-
+                if ($user["user_id"] == '0') {
+                    $commentData['user_name'] = $user['first_name'];
+                    $commentData['user_email'] = $user['email'];
+                }
                 $commentModel = $this->cmtFactory->create();
-                $result = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
+                $result = $this->commentActions(self::COMMENT, $user, $commentData, $commentModel);
             }
 
             if (isset($params['cmtId'])) {
                 $cmtId = $params['cmtId'];
                 $likeData = [
                     'comment_id' => $cmtId,
-                    'entity_id' => $customerData->getId()
+                    'entity_id' => $user["user_id"]
                 ];
 
                 $likeModel = $this->likeFactory->create();
-                $result = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
+                $result = $this->commentActions(self::LIKE, $user, $likeData, $likeModel, $cmtId);
             }
 
             return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
@@ -261,7 +282,7 @@ class View extends Action
                     $result = [
                         'cmt_id' => $lastCmtId,
                         'cmt_text' => $data['content'],
-                        'user_cmt' => $user->getFirstname() . ' ' . $user->getLastname(),
+                        'user_cmt' => $user['first_name'] . ' ' . $user['last_name'],
                         'is_reply' => $data['is_reply'],
                         'reply_cmt' => $data['reply_id'],
                         'created_at' => __('Just now'),
@@ -270,7 +291,7 @@ class View extends Action
                     break;
                 //like action
                 case self::LIKE:
-                    $checkLike = $this->isLikedComment($cmtId, $user->getId(), $model);
+                    $checkLike = $this->isLikedComment($cmtId, $user['user_id'], $model);
                     if (!$checkLike) {
                         $model->addData($data)->save();
                     }
@@ -309,7 +330,6 @@ class View extends Action
             if ($item->getEntityId() == $userId) {
                 try {
                     $item->delete();
-
                     return true;
                 } catch (\Exception $e) {
                     return false;
