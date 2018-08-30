@@ -8,20 +8,20 @@
 
 ## 1. Documentation
 
-- Installation guide: https://www.mageplaza.com/install-magento-2-extension/
-- User guide: https://docs.mageplaza.com/blog-m2/index.html
-- Download from our Live site: https://www.mageplaza.com/magento-2-blog-extension/
-- Marketplace: https://marketplace.magento.com/mageplaza-magento-2-blog-extension.html
-- Get Support: https://github.com/mageplaza/magento-2-blog-extension/issues
-- Contribute on Github: https://github.com/mageplaza/magento-2-blog/
-- Changelog: https://www.mageplaza.com/changelog/m2-blog.txt
-- License https://www.mageplaza.com/LICENSE.txt
+- [Installation guide](https://www.mageplaza.com/install-magento-2-extension/)
+- [User guide](https://docs.mageplaza.com/blog-m2/index.html)
+- [Download from our Live site](https://www.mageplaza.com/magento-2-blog-extension/)
+- Mageplaza Blog has been verified on [Magento Marketplace](https://marketplace.magento.com/mageplaza-magento-2-blog-extension.html)
+- [Get Free Support](https://github.com/mageplaza/magento-2-blog-extension/issues)
+- Get premium support from Mageplaza: [Purchase Support package](https://www.mageplaza.com/magento-2-extension-support-package/)
+- [Contribute on Github](https://github.com/mageplaza/magento-2-blog/)
+- [Releases](https://github.com/mageplaza/magento-2-blog/releases)
+- [License](https://www.mageplaza.com/LICENSE.txt)
 
 ## 2. FAQs
 
 #### Q: I got error: `Mageplaza_Core has been already defined`
 A: Read solution: https://github.com/mageplaza/module-core/issues/3
-
 
 
 ## 3. How to install
@@ -50,91 +50,10 @@ Feel free to **Fork** and contrinute to this module and create a pull request so
 Thanks [the contributors](https://github.com/mageplaza/magento-2-blog/graphs/contributors)
 
 --------
-## 5. SWEET MAGEPLAZA EXTENSIONS TO BRING YOU MORE MONEY
-
-### [✓ One Step Checkout](https://www.mageplaza.com/magento-2-one-step-checkout-extension/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
-
-☞ ↑30% INCREASE CONVERSION RATE 
-
-☞ ↓66% DECREASE ABANDONMENT CART
-
-☞ ↓80% REDUCE CHECKOUT TIME
-
-### [✓ Layered Navigation](https://www.mageplaza.com/magento-2-layered-navigation-extension/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
-
-☞ ↑84% USER'S FILTERING EXPERIENCE
-
-☞ ↑25% CONVERSION RATE
-
-☞ ↓67% SHOPPING TIME
-
-### [✓ Frequently Bought Together](https://www.mageplaza.com/magento-2-frequently-bought-together/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
-
-☞ Amazon Product Recommendation Solution
- 
-☞ AJAX loading for better performance
-
-☞ Support Custom Options and all product types
-
-
-
-### [✓ Gift Card](https://www.mageplaza.com/magento-2-gift-card-extension/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
-
-☞ Physical, virtual or combined gift cards
- 
-☞ Different gift card values from prices
-
-☞ Send cards via email, SMS, post office or messenger
-
-
-### [✓ Who Bought This Also Bought](https://www.mageplaza.com/magento-2-who-bought-this-also-bought/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
-
-☞ Display on Product Page, Category Page, Shopping Cart page
-
-☞ AJAX loading for better performance.
-
-☞ Flexible layout and design.
-
-
-### [✓ Social Login](https://www.mageplaza.com/magento-2-social-login-extension/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
-
-☞ Increase signup rate up-to 30%
-
-☞ Supports 11 Types: Facebook, Google Plus, Twitter, Linkedin, Instagram, Yahoo, Github, Foursquare, VK, Live, Amazon
-
-☞ Easy custom design fit with your store design
-
-☞ [Social Login on Github](https://github.com/mageplaza/magento-2-social-login)
-
-
-
-### [✓ Shop By Brand](https://www.mageplaza.com/magento-2-shop-by-brand/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
-
-☞ Fully Compatible with Layered Navigation
-
-☞ Instant Search brands
-
-☞ Import brands
 
 
 
 
-### [✓ Affiliate](https://www.mageplaza.com/magento-2-affiliate-extension/?utm_source=github.com&utm_medium=link&utm_campaign=related-extension)
-
-☞ Multiple Affiliate Campaigns
-
-☞ Smart Referral Links
-
-☞ Affiliate Report
-
-
-
-
-
-
-
-
---------
 
 ## 6. Blog benefits
 
@@ -168,8 +87,10 @@ Writing a blog enables you to interact with your website visitors. You can accom
 - RSS Optimization
 - WYSIWYG editor in admin
 - Blog breadcrumbs
+- Import from AW M1 Blog, Magefan Blog, Wordpress
 - Integrate Magento Sitemap or Blog sitemap
 - Multistores support
+
 
 ## Blog features for Magento 2
 A better blog for your e-commerce store without adding any 3rd-party framework. Better blog extension allows you manage categories, posts, comments on Magento 2 back-end. The system will update you when there is a new comment submit. This is a great solution for building relevant SEO-friendly text links, and serves as assistance in building sales strategy.
@@ -194,6 +115,10 @@ Better blog is integrated with Addthis, that why your customers can share posts 
 
 ### RSS Optimization
 Full RSS integration into Magento 2. The blog RSS feed appears right next to the standard product and Magento 2 RSS feeds, allowing users that are familiar with your website to easily find all the blog RSS feeds easily and simply.
+
+### Importer (NEW)
+
+Import Blog Posts, Categories, Tags from [Wordpress](https://wordpress.org/), AW M1 Blog, Magefan M2 Blog
 
 
 ---------
