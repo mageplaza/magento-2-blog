@@ -73,14 +73,6 @@ class Design extends Template
     }
 
     /**
-     * @return mixed
-     */
-    public function isSidebarRight()
-    {
-        return $this->helperData->getBlogConfig('sidebar/sidebar_left_right');
-    }
-
-    /**
      * Get Current Theme Name Function
      * @return string
      */

@@ -76,7 +76,9 @@ class View extends Action
     {
         $id = $this->getRequest()->getParam('id');
         $topic = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_TOPIC)->create()->load($id);
+        $page = $this->resultPageFactory->create();
+        $page->getConfig()->setPageLayout($this->helperBlog->getBlogConfig('sidebar/sidebar_left_right'));
 
-        return ($topic->getEnabled()) ? $this->resultPageFactory->create() : $this->resultForwardFactory->create()->forward('noroute');
+        return ($topic->getEnabled()) ? $page : $this->resultForwardFactory->create()->forward('noroute');
     }
 }

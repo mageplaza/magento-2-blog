@@ -26,6 +26,7 @@ use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Cms\Model\Wysiwyg\Config;
+use Magento\Cms\Model\Page\Source\PageLayout as BasePageLayout;
 use Magento\Config\Model\Config\Source\Design\Robots;
 use Magento\Config\Model\Config\Source\Enabledisable;
 use Magento\Config\Model\Config\Source\Yesno;
@@ -86,12 +87,18 @@ class Post extends Generic implements TabInterface
     protected $_date;
 
     /**
+     * @var BasePageLayout
+     */
+    protected $_layoutOptions;
+
+    /**
      * Post constructor.
      *
      * @param Context $context
      * @param Registry $registry
      * @param Session $authSession
      * @param DateTime $dateTime
+     * @param BasePageLayout $layoutOption
      * @param FormFactory $formFactory
      * @param Config $wysiwygConfig
      * @param Yesno $booleanOptions
@@ -106,6 +113,7 @@ class Post extends Generic implements TabInterface
         Registry $registry,
         Session $authSession,
         DateTime $dateTime,
+        BasePageLayout $layoutOption,
         FormFactory $formFactory,
         Config $wysiwygConfig,
         Yesno $booleanOptions,
@@ -123,6 +131,7 @@ class Post extends Generic implements TabInterface
         $this->systemStore = $systemStore;
         $this->authSession = $authSession;
         $this->_date = $dateTime;
+        $this->_layoutOptions = $layoutOption;
         $this->imageHelper = $imageHelper;
 
         parent::__construct($context, $registry, $formFactory, $data);
@@ -312,6 +321,20 @@ class Post extends Generic implements TabInterface
                 'label' => __('Meta Robots'),
                 'title' => __('Meta Robots'),
                 'values' => $this->metaRobotsOptions->toOptionArray()
+            ]
+        );
+
+        $designFieldset = $form->addFieldset('design_fieldset', [
+                'legend' => __('Design'),
+                'class' => 'fieldset-wide'
+            ]
+        );
+
+        $designFieldset->addField('layout', 'select', [
+                'name' => 'layout',
+                'label' => __('Layout'),
+                'title' => __('Layout'),
+                'values' => $this->_layoutOptions->toOptionArray()
             ]
         );
 

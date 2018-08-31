@@ -85,6 +85,7 @@ class Save extends Post
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if ($data = $this->getRequest()->getPost('post')) {
+
             /** @var \Mageplaza\Blog\Model\Post $post */
             $post = $this->initPost();
             $this->prepareData($post, $data);

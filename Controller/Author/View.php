@@ -25,6 +25,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class View
@@ -43,17 +44,27 @@ class View extends Action
     protected $resultForwardFactory;
 
     /**
+     * @var Data
+     */
+    protected $_helperBlog;
+
+    /**
      * View constructor.
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
+     *
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
+     * @param ForwardFactory $resultForwardFactory
+     * @param Data $helperData
      */
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
-        ForwardFactory $resultForwardFactory
+        ForwardFactory $resultForwardFactory,
+        Data $helperData
     )
     {
+        $this->_helperBlog = $helperData;
+
         parent::__construct($context);
 
         $this->resultPageFactory = $resultPageFactory;
@@ -66,9 +77,11 @@ class View extends Action
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
+        $page = $this->resultPageFactory->create();
+        $page->getConfig()->setPageLayout($this->_helperBlog->getBlogConfig('sidebar/sidebar_left_right'));
 
         return ($id)
-            ? $this->resultPageFactory->create()
+            ? $page
             : $this->resultForwardFactory->create()->forward('noroute');
     }
 }

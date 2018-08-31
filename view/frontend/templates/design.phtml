@@ -24,16 +24,11 @@
 
 <script type="text/javascript">
     require(['jquery'], function ($) {
-        var isSidebarRight = <?php echo $block->isSidebarRight(); ?>,
-            body = $('body');
+        var body = $('body');
 
-        body.removeClass('page-layout-1column');
-        if (isSidebarRight) {
-            body.addClass('page-layout-2columns-right');
-        } else {
-            body.addClass('page-layout-2columns-left');
+        if (body.hasClass('page-layout-1column')) {
+            $('.columns').find('.sidebar.sidebar-main').remove();
         }
-
         <?php if ($block->getCurrentTheme() == "Etheme/yourstore") :?>
         body.addClass('mpblog-etheme-yourstore');
         <?php endif; ?>
@@ -42,7 +37,7 @@
 
 <?php $color = $block->getHelper()->getBlogConfig('general/font_color'); ?>
 <style type="text/css">
-    #mpblog-list-container a{
+    #mpblog-list-container a {
         text-decoration: none;
     }
 
@@ -54,7 +49,7 @@
     ul.menu-categories a.list-categories:hover,
     .products-same-post a.product-item-link:hover,
     a.mp-relate-link,
-    .mpblog-product-name{
+    .mpblog-product-name {
         color: <?php echo $color ?> !important;
     }
 
@@ -64,7 +59,7 @@
         color: #fff !important;
     }
 
-    .list-post-tabs a{
+    .list-post-tabs a {
         background: #fbfbfb;
         color: <?php echo $color ?>;
     }
@@ -87,18 +82,19 @@
         font-weight: 600;
         color: <?php echo $color ?>;
     }
-    a.interactions__btn-actions.mpblog-like{
+
+    a.interactions__btn-actions.mpblog-like {
         color: #333333
     }
-    a.interactions__btn-actions.mpblog-liked{
-        color: <?php echo $color ?> ;
+
+    a.interactions__btn-actions.mpblog-liked {
+        color: <?php echo $color ?>;
     }
+
     a.interactions__btn-actions {
         color: <?php echo $color ?>;
 
     }
-
-
 
     /*Widget CSS*/
     .widget-title a {

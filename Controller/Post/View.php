@@ -181,6 +181,10 @@ class View extends Action
     {
         $id = $this->getRequest()->getParam('id');
         $post = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($id);
+        $page = $this->resultPageFactory->create();
+        $pageLayout = ($post->getLayout() == 'empty') ? $this->helperBlog->getBlogConfig('sidebar/sidebar_left_right') : $post->getLayout();
+        $page->getConfig()->setPageLayout($pageLayout);
+
         if (!$post->getEnabled()) {
             return $this->resultForwardFactory->create()->forward('noroute');
         }
@@ -252,7 +256,7 @@ class View extends Action
             return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
         }
 
-        return $this->resultPageFactory->create();
+        return $page;
     }
 
     /**
@@ -267,7 +271,7 @@ class View extends Action
     {
         try {
             switch ($action) {
-                //comment action
+                /** Comment action */
                 case self::COMMENT:
                     $model->addData($data)->save();
                     $cmtHasReply = $model->getCollection()
@@ -289,7 +293,7 @@ class View extends Action
                         'status' => $data['status']
                     ];
                     break;
-                //like action
+                /** Like action */
                 case self::LIKE:
                     $checkLike = $this->isLikedComment($cmtId, $user['user_id'], $model);
                     if (!$checkLike) {

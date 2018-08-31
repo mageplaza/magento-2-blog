@@ -500,6 +500,17 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
 
+        if (version_compare($context->getVersion(), '2.5.0', '<')) {
+            if ($installer->tableExists('mageplaza_blog_post')) {
+                if (!$connection->tableColumnExists($installer->getTable('mageplaza_blog_post'), 'layout')) {
+                    $connection->addColumn($installer->getTable('mageplaza_blog_post'), 'layout', [
+                        'type' => Table::TYPE_TEXT, null, ['unsigned' => true, 'nullable' => true],
+                        'comment' => 'Post Layout',
+                    ]);
+                }
+            }
+        }
+
         $installer->endSetup();
     }
 }

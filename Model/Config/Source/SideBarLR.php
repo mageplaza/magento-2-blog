@@ -29,8 +29,8 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class SideBarLR implements ArrayInterface
 {
-    const LEFT = 0;
-    const RIGHT = 1;
+    const LEFT = '2columns-left';
+    const RIGHT = '2columns-right';
 
     /**
      * Options getter
