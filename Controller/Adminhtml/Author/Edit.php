@@ -65,8 +65,14 @@ class Edit extends Author
     {
         /** @var \Mageplaza\Blog\Model\Author $author */
         $author = $this->initAuthor();
+        if (!$author) {
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('*');
 
-        //Set entered data if was error when we do save
+            return $resultRedirect;
+        }
+
+        /** Set entered data if was error when we do save */
         $data = $this->_session->getData('mageplaza_blog_author_data', true);
         if (!empty($data)) {
             $author->addData($data);

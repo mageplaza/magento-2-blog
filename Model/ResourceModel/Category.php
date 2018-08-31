@@ -415,6 +415,9 @@ class Category extends AbstractDb
             } else {
                 /** Move up */
                 $positionNew++;
+                if (empty($afterCategoryId)) {
+                    $positionNew = 1;
+                }
                 $sql = "UPDATE `" . $table . "` SET `position`= (`position`+1) WHERE `parent_id`= " . $newParent->getId() . " AND `position` >= " . $positionNew;
                 $connect->query($sql);
                 $sql = "UPDATE `" . $table . "` SET `position`= (`position`-1) WHERE `parent_id`= " . $newParent->getId() . " AND `position` > " . $positionOld;

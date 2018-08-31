@@ -93,7 +93,7 @@ class Edit extends Container
      */
     public function getHeaderText()
     {
-        /** @var \Mageplaza\Blog\Model\Post $post */
+        /** @var \Mageplaza\Blog\Model\Author $author */
         $author = $this->coreRegistry->registry('mageplaza_blog_author');
         if ($author->getId()) {
             return __("Edit Author '%1'", $this->escapeHtml($author->getName()));

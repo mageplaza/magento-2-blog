@@ -64,8 +64,7 @@ abstract class Author extends Action
     }
 
     /**
-     * @return \Mageplaza\Blog\Model\Author
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return bool|\Mageplaza\Blog\Model\Author
      */
     public function initAuthor()
     {
@@ -77,8 +76,9 @@ abstract class Author extends Action
             ->load($userId);
 
         if (!$author->getId()) {
-            $author->setId($userId)
-                ->setName($user->getName());
+            $this->messageManager->addErrorMessage(__('This author no longer exists. Please create the post to access the author management session.'));
+
+            return false;
         }
 
         return $author;

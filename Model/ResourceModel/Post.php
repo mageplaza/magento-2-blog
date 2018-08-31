@@ -25,7 +25,9 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Backend\Model\Auth;
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\AuthorFactory;
 
 /**
  * Class Post
@@ -79,22 +81,39 @@ class Post extends AbstractDb
     public $helperData;
 
     /**
+     * @var AuthorFactory
+     */
+    protected $_authorFactory;
+
+    /**
+     * @var Auth
+     */
+    protected $_auth;
+
+    /**
      * Post constructor.
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Mageplaza\Blog\Helper\Data $helperData
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     *
+     * @param Context $context
+     * @param DateTime $date
+     * @param ManagerInterface $eventManager
+     * @param Auth $auth
+     * @param Data $helperData
+     * @param AuthorFactory $authorFactory
      */
     public function __construct(
         Context $context,
         DateTime $date,
         ManagerInterface $eventManager,
-        Data $helperData
+        Auth $auth,
+        Data $helperData,
+        AuthorFactory $authorFactory
     )
     {
         $this->date = $date;
         $this->eventManager = $eventManager;
+        $this->_auth = $auth;
         $this->helperData = $helperData;
+        $this->_authorFactory = $authorFactory;
 
         parent::__construct($context);
 
@@ -160,6 +179,7 @@ class Post extends AbstractDb
         $this->saveTopicRelation($object);
         $this->saveCategoryRelation($object);
         $this->saveProductRelation($object);
+        $this->saveAuthor();
 
         return parent::_afterSave($object);
     }
@@ -465,6 +485,23 @@ class Post extends AbstractDb
         return $adapter->fetchOne($select, $binds);
     }
 
+    /**
+     * Save the post autho when creating post
+     */
+    public function saveAuthor()
+    {
+        $currentUser = $this->_auth->getUser();
+        $currentUserId = $currentUser->getId();
+
+        /** @var \Mageplaza\Blog\Model\Author $author */
+        $author = $this->_authorFactory->create()->load($currentUserId);
+
+        /** Create the new author if that author isn't exist */
+        if (!$author->getId()) {
+            $author->setId($currentUserId)
+                ->setName($currentUser->getName())->save();
+        }
+    }
     /**
      * Check is imported post
      *
