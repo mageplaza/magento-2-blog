@@ -250,6 +250,14 @@ class View extends \Mageplaza\Blog\Block\Listpost
         return $result;
     }
 
+    public function commentHtml($comment){
+        $html= '';
+        foreach (explode("\n",trim($comment)) as $value){
+            $html.= '<p>'.$value.'</p>';
+        }
+        return $html;
+    }
+
     /**
      * @param $comments
      * @param $cmtId
@@ -282,7 +290,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
                     . $userName . '</span>
                                 </div>
                                 <div class="cmt-row__cmt-content">
-                                    <p>' . $comment['content'] . '</p>
+                                   ' . $this->commentHtml($comment['content']) .'
                                 </div>
                                 <div class="cmt-row__cmt-interactions interactions">
                                     <div class="interactions__btn-actions">
