@@ -200,7 +200,7 @@ class Data extends CoreHelper
         }
 
         /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $collection */
-        $collection = $this->getPostList();
+        $collection = $this->getPostList($storeId);
 
         switch ($type) {
             case self::TYPE_AUTHOR:

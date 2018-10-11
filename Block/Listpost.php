@@ -60,7 +60,7 @@ class Listpost extends Frontend
      */
     protected function getCollection()
     {
-        return $this->helperData->getPostCollection();
+        return $this->helperData->getPostCollection(null,null,$this->store->getStore()->getId());
     }
 
     /**
