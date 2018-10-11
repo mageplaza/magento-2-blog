@@ -412,8 +412,10 @@ class Post extends AbstractDb
         $update = $_update;
         $adapter = $this->getConnection();
         if (!empty($delete)) {
-            $condition = ['entity_id IN(?)' => array_keys($delete), 'post_id=?' => $id];
-            $adapter->delete($this->postProductTable, $condition);
+            foreach (array_keys($delete) as $value){
+                $condition = ['entity_id =?' => $value, 'post_id=?' => $id];
+                $adapter->delete($this->postProductTable, $condition);
+            }
         }
         if (!empty($insert)) {
             $data = [];

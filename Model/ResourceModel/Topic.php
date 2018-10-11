@@ -188,8 +188,10 @@ class Topic extends AbstractDb
         $update = $_update;
         $adapter = $this->getConnection();
         if (!empty($delete)) {
-            $condition = ['post_id IN(?)' => array_keys($delete), 'topic_id=?' => $id];
-            $adapter->delete($this->topicPostTable, $condition);
+            foreach (array_keys($delete) as $value){
+                $condition = ['post_id =?' => $value, 'topic_id=?' => $id];
+                $adapter->delete($this->topicPostTable, $condition);
+            }
         }
         if (!empty($insert)) {
             $data = [];

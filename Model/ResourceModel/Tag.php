@@ -181,8 +181,10 @@ class Tag extends AbstractDb
         $update = $_update;
         $adapter = $this->getConnection();
         if (!empty($delete)) {
-            $condition = ['post_id IN(?)' => array_keys($delete), 'tag_id=?' => $id];
-            $adapter->delete($this->tagPostTable, $condition);
+            foreach (array_keys($delete) as $value){
+                $condition = ['post_id =?' => $value, 'tag_id=?' => $id];
+                $adapter->delete($this->tagPostTable, $condition);
+            }
         }
         if (!empty($insert)) {
             $data = [];
