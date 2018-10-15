@@ -189,7 +189,7 @@ class Topic extends AbstractDb
         $adapter = $this->getConnection();
         if (!empty($delete)) {
             foreach (array_keys($delete) as $value){
-                $condition = ['post_id =?' => $value, 'topic_id=?' => $id];
+                $condition = ['post_id =?' => (int)$value, 'topic_id=?' => (int)$id];
                 $adapter->delete($this->topicPostTable, $condition);
             }
         }

@@ -413,7 +413,7 @@ class Post extends AbstractDb
         $adapter = $this->getConnection();
         if (!empty($delete)) {
             foreach (array_keys($delete) as $value){
-                $condition = ['entity_id =?' => $value, 'post_id=?' => $id];
+                $condition = ['entity_id =?' => (int)$value, 'post_id=?' => (int)$id];
                 $adapter->delete($this->postProductTable, $condition);
             }
         }
