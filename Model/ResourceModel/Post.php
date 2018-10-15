@@ -396,21 +396,27 @@ class Post extends AbstractDb
         $post->setIsChangedProductList(false);
         $id = $post->getId();
         $products = $post->getProductsData();
+        $oldProducts = $post->getProductsPosition();
+        if (is_array($products)) {
+            $insert = array_diff_key($products, $oldProducts);
+            $delete = array_diff_key($oldProducts, $products);
+            $update = array_intersect_key($products, $oldProducts);
+            $_update = [];
+            foreach ($update as $key => $settings) {
+                if (isset($oldProducts[$key]) && $oldProducts[$key] != $settings['position']) {
+                    $_update[$key] = $settings;
+                }
+            }
+            $update = $_update;
+        }
+        $adapter = $this->getConnection();
         if ($products === null) {
+            foreach (array_keys($oldProducts) as $value){
+                $condition = ['entity_id =?' => (int)$value, 'post_id=?' => (int)$id];
+                $adapter->delete($this->postProductTable, $condition);
+            }
             return $this;
         }
-        $oldProducts = $post->getProductsPosition();
-        $insert = array_diff_key($products, $oldProducts);
-        $delete = array_diff_key($oldProducts, $products);
-        $update = array_intersect_key($products, $oldProducts);
-        $_update = [];
-        foreach ($update as $key => $settings) {
-            if (isset($oldProducts[$key]) && $oldProducts[$key] != $settings['position']) {
-                $_update[$key] = $settings;
-            }
-        }
-        $update = $_update;
-        $adapter = $this->getConnection();
         if (!empty($delete)) {
             foreach (array_keys($delete) as $value){
                 $condition = ['entity_id =?' => (int)$value, 'post_id=?' => (int)$id];

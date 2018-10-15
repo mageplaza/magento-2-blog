@@ -165,21 +165,27 @@ class Tag extends AbstractDb
         $tag->setIsChangedPostList(false);
         $id = $tag->getId();
         $posts = $tag->getPostsData();
+        $oldPosts = $tag->getPostsPosition();
+        if (is_array($posts)){
+            $insert = array_diff_key($posts, $oldPosts);
+            $delete = array_diff_key($oldPosts, $posts);
+            $update = array_intersect_key($posts, $oldPosts);
+            $_update = [];
+            foreach ($update as $key => $settings) {
+                if (isset($oldPosts[$key]) && $oldPosts[$key] != $settings['position']) {
+                    $_update[$key] = $settings;
+                }
+            }
+            $update = $_update;
+        }
+        $adapter = $this->getConnection();
         if ($posts === null) {
+            foreach (array_keys($oldPosts) as $value){
+                $condition = ['post_id =?' => (int)$value, 'tag_id=?' => (int)$id];
+                $adapter->delete($this->tagPostTable, $condition);
+            }
             return $this;
         }
-        $oldPosts = $tag->getPostsPosition();
-        $insert = array_diff_key($posts, $oldPosts);
-        $delete = array_diff_key($oldPosts, $posts);
-        $update = array_intersect_key($posts, $oldPosts);
-        $_update = [];
-        foreach ($update as $key => $settings) {
-            if (isset($oldPosts[$key]) && $oldPosts[$key] != $settings['position']) {
-                $_update[$key] = $settings;
-            }
-        }
-        $update = $_update;
-        $adapter = $this->getConnection();
         if (!empty($delete)) {
             foreach (array_keys($delete) as $value){
                 $condition = ['post_id =?' => (int)$value, 'tag_id=?' => (int)$id];
