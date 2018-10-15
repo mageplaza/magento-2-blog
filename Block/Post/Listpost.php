@@ -29,13 +29,11 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
 {
     public function maxShortDescription($description){
         if(is_string($description)){
-            $sub= explode(' ',$description);
-            foreach ($sub as $key=>$value){
-                if (strlen($value)>30){
-                    $sub[$key]= substr($value,0,round(strlen($value)/2)).' '.substr($value,round(strlen($value)/2),strlen($value));
-                }
+            $html= '';
+            foreach (explode("\n",trim($description)) as $value){
+                $html.= '<p>'.$value.'</p>';
             }
-            return implode(' ',$sub);
+            return $html;
         }
         return $description;
     }
