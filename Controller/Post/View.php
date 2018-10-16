@@ -185,6 +185,9 @@ class View extends Action
         $pageLayout = ($post->getLayout() == 'empty') ? $this->helperBlog->getBlogConfig('sidebar/sidebar_left_right') : $post->getLayout();
         $page->getConfig()->setPageLayout($pageLayout);
 
+        if ($post->getStoreIds()!=$this->storeManager->getStore()->getId()&&$post->getStoreIds()!=0) {
+            return $this->resultForwardFactory->create()->forward('noroute');
+        }
         if (!$post->getEnabled()) {
             return $this->resultForwardFactory->create()->forward('noroute');
         }
