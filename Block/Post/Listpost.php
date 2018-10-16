@@ -27,14 +27,4 @@ namespace Mageplaza\Blog\Block\Post;
  */
 class Listpost extends \Mageplaza\Blog\Block\Listpost
 {
-    public function maxShortDescription($description){
-        if(is_string($description)){
-            $html= '';
-            foreach (explode("\n",trim($description)) as $value){
-                $html.= '<p>'.$value.'</p>';
-            }
-            return $html;
-        }
-        return $description;
-    }
 }

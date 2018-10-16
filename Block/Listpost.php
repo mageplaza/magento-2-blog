@@ -54,6 +54,23 @@ class Listpost extends Frontend
     }
 
     /**
+     * find /n in text
+     *
+     * @param $description
+     * @return string
+     */
+    public function maxShortDescription($description){
+        if(is_string($description)){
+            $html= '';
+            foreach (explode("\n",trim($description)) as $value){
+                $html.= '<p>'.$value.'</p>';
+            }
+            return $html;
+        }
+        return $description;
+    }
+
+    /**
      * Override this function to apply collection for each type
      *
      * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
