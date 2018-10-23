@@ -24,14 +24,16 @@
 
 <script type="text/javascript">
     require(['jquery'], function ($) {
-        var body = $('body');
+        $(window).load(function(){
+            var body = $('body');
 
-        if (body.hasClass('page-layout-1column')) {
-            $('.columns').find('.sidebar.sidebar-main').remove();
-        }
-        <?php if ($block->getCurrentTheme() == "Etheme/yourstore") :?>
-        body.addClass('mpblog-etheme-yourstore');
-        <?php endif; ?>
+            if (body.hasClass('page-layout-1column')) {
+                $('.columns').find('.sidebar.sidebar-main').remove();
+            }
+            <?php if ($block->getCurrentTheme() == "Etheme/yourstore") :?>
+            body.addClass('mpblog-etheme-yourstore');
+            <?php endif; ?>
+        });
     });
 </script>
 
