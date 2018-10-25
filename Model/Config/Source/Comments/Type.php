@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -30,9 +30,9 @@ use Magento\Framework\Option\ArrayInterface;
 class Type implements ArrayInterface
 {
     const DEFAULT_COMMENT = 1;
-    const FACEBOOK = 2;
-    const DISQUS = 3;
-    const DISABLE = 4;
+    const FACEBOOK        = 2;
+    const DISQUS          = 3;
+    const DISABLE         = 4;
 
     /**
      * @return array
@@ -59,9 +59,9 @@ class Type implements ArrayInterface
     {
         return [
             self::DEFAULT_COMMENT => __('Default Comment'),
-            self::DISQUS => __('Disqus Comment'),
-            self::FACEBOOK => __('Facebook Comment'),
-            self::DISABLE => __('Disable Completely')
+            self::DISQUS          => __('Disqus Comment'),
+            self::FACEBOOK        => __('Facebook Comment'),
+            self::DISABLE         => __('Disable Completely')
         ];
     }
 }

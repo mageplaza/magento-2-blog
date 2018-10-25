@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -31,7 +31,7 @@ class Type implements ArrayInterface
 {
     const WORDPRESS = "wordpress";
     const AHEADWORK = "aheadworksm1";
-    const MAGEFAN = "magefan";
+    const MAGEFAN   = "magefan";
 
     /**
      * @return array
@@ -57,10 +57,10 @@ class Type implements ArrayInterface
     public function toArray()
     {
         return [
-            "" => __('-- Please Select --'),
+            ""              => __('-- Please Select --'),
             self::WORDPRESS => __('Wordpress'),
             self::AHEADWORK => __('AheadWorks Blog [Magento 1]'),
-            self::MAGEFAN => __('MageFan Blog [Magento 2]')
+            self::MAGEFAN   => __('MageFan Blog [Magento 2]')
         ];
     }
 }

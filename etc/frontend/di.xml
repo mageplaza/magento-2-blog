@@ -16,7 +16,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
@@ -34,12 +34,12 @@
     </type>
     <!--Plugin List-->
     <type name="Magento\Theme\Block\Html\Topmenu">
-        <plugin name="blog-topmenu" type="Mageplaza\Blog\Plugin\Topmenu" />
+        <plugin name="blog-topmenu" type="Mageplaza\Blog\Plugin\Topmenu"/>
     </type>
     <type name="Smartwave\Megamenu\Block\Topmenu">
-        <plugin name="blog-porto-theme-topmenu" type="Mageplaza\Blog\Plugin\PortoTopmenu" />
+        <plugin name="blog-porto-theme-topmenu" type="Mageplaza\Blog\Plugin\PortoTopmenu"/>
     </type>
     <type name="Infortis\UltraMegamenu\Block\Navigation">
-        <plugin name="blog-topmenu-infortis" type="Mageplaza\Blog\Plugin\InfortisTopmenu" />
+        <plugin name="blog-topmenu-infortis" type="Mageplaza\Blog\Plugin\InfortisTopmenu"/>
     </type>
 </config>

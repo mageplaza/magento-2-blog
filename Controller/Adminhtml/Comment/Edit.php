@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -83,7 +83,6 @@ class Edit extends Comment
         }
 
         $this->coreRegistry->register('mageplaza_blog_comment', $comment);
-
 
         /** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

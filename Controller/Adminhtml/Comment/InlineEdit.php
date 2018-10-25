@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -59,7 +59,7 @@ class InlineEdit extends Action
         CommentFactory $commentFactory
     )
     {
-        $this->jsonFactory = $jsonFactory;
+        $this->jsonFactory    = $jsonFactory;
         $this->commentFactory = $commentFactory;
 
         parent::__construct($context);
@@ -71,19 +71,21 @@ class InlineEdit extends Action
     public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-        $resultJson = $this->jsonFactory->create();
-        $error = false;
-        $messages = [];
+        $resultJson   = $this->jsonFactory->create();
+        $error        = false;
+        $messages     = [];
         $commentItems = $this->getRequest()->getParam('items', []);
 
         if (!($this->getRequest()->getParam('isAjax') && !empty($commentItems))) {
             return $resultJson->setData([
-                'messages' => [__('Please correct the data sent.')],
-                'error' => true,
+                'messages' => [
+                    __('Please correct the data sent.')
+                ],
+                'error'    => true,
             ]);
         }
 
-        $key = array_keys($commentItems);
+        $key       = array_keys($commentItems);
         $commentId = !empty($key) ? (int)$key[0] : '';
 
         /** @var \Mageplaza\Blog\Model\Post $post */
@@ -94,21 +96,21 @@ class InlineEdit extends Action
             $comment->save();
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithCommentId($comment, $e->getMessage());
-            $error = true;
+            $error      = true;
         } catch (\RuntimeException $e) {
             $messages[] = $this->getErrorWithCommentId($comment, $e->getMessage());
-            $error = true;
+            $error      = true;
         } catch (\Exception $e) {
             $messages[] = $this->getErrorWithCommentId(
                 $comment,
                 __('Something went wrong while saving the Comment.')
             );
-            $error = true;
+            $error      = true;
         }
 
         return $resultJson->setData([
             'messages' => $messages,
-            'error' => $error
+            'error'    => $error
         ]);
     }
 

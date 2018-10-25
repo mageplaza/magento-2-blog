@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_GiftCard
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -68,7 +68,7 @@ class Options implements OptionSourceInterface
 
             $categoryById = [
                 Category::TREE_ROOT_ID => [
-                    'value' => Category::TREE_ROOT_ID,
+                    'value'    => Category::TREE_ROOT_ID,
                     'optgroup' => []
                 ],
             ];
@@ -80,8 +80,8 @@ class Options implements OptionSourceInterface
                     }
                 }
 
-                $categoryById[$category->getId()]['is_active'] = 1;
-                $categoryById[$category->getId()]['label'] = $category->getName();
+                $categoryById[$category->getId()]['is_active']        = 1;
+                $categoryById[$category->getId()]['label']            = $category->getName();
                 $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
             }
 

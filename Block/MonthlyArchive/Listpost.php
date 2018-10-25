@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -64,10 +64,9 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
 
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
             $breadcrumbs->addCrumb($this->getMonthKey(), [
-                    'label' => __('Monthy Archive'),
-                    'title' => __('Monthy Archive')
-                ]
-            );
+                'label' => __('Monthy Archive'),
+                'title' => __('Monthy Archive')
+            ]);
         }
     }
 

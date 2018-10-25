@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -74,8 +74,8 @@ class Post extends Extended implements TabInterface
         array $data = []
     )
     {
-        $this->coreRegistry = $coreRegistry;
-        $this->postFactory = $postFactory;
+        $this->coreRegistry          = $coreRegistry;
+        $this->postFactory           = $postFactory;
         $this->postCollectionFactory = $postCollectionFactory;
 
         parent::__construct($context, $backendHelper, $data);
@@ -121,49 +121,37 @@ class Post extends Extended implements TabInterface
      */
     protected function _prepareColumns()
     {
-        $this->addColumn(
-            'in_posts',
-            [
-                'header_css_class' => 'a-center',
-                'type' => 'checkbox',
-                'name' => 'in_post',
-                'values' => $this->_getSelectedPosts(),
-                'align' => 'center',
-                'index' => 'post_id'
-            ]
-        );
-        $this->addColumn(
-            'post_id',
-            [
-                'header' => __('ID'),
-                'sortable' => true,
-                'index' => 'post_id',
-                'type' => 'number',
-                'header_css_class' => 'col-id',
-                'column_css_class' => 'col-id'
-            ]
-        );
-        $this->addColumn(
-            'title',
-            [
-                'header' => __('Name'),
-                'index' => 'name',
-                'header_css_class' => 'col-name',
-                'column_css_class' => 'col-name'
-            ]
-        );
-        $this->addColumn(
-            'position',
-            [
-                'header' => __('Position'),
-                'name' => 'position',
-                'width' => 60,
-                'type' => 'number',
-                'validate_class' => 'validate-number',
-                'index' => 'position',
-                'editable' => true,
-            ]
-        );
+        $this->addColumn('in_posts', [
+            'header_css_class' => 'a-center',
+            'type'             => 'checkbox',
+            'name'             => 'in_post',
+            'values'           => $this->_getSelectedPosts(),
+            'align'            => 'center',
+            'index'            => 'post_id'
+        ]);
+        $this->addColumn('post_id', [
+            'header'           => __('ID'),
+            'sortable'         => true,
+            'index'            => 'post_id',
+            'type'             => 'number',
+            'header_css_class' => 'col-id',
+            'column_css_class' => 'col-id'
+        ]);
+        $this->addColumn('title', [
+            'header'           => __('Name'),
+            'index'            => 'name',
+            'header_css_class' => 'col-name',
+            'column_css_class' => 'col-name'
+        ]);
+        $this->addColumn('position', [
+            'header'         => __('Position'),
+            'name'           => 'position',
+            'width'          => 60,
+            'type'           => 'number',
+            'validate_class' => 'validate-number',
+            'index'          => 'position',
+            'editable'       => true,
+        ]);
 
         return $this;
     }
@@ -243,10 +231,8 @@ class Post extends Extended implements TabInterface
             }
             if ($column->getFilter()->getValue()) {
                 $this->getCollection()->addFieldToFilter('main_table.post_id', ['in' => $postIds]);
-            } else {
-                if ($postIds) {
-                    $this->getCollection()->addFieldToFilter('main_table.post_id', ['nin' => $postIds]);
-                }
+            } else if ($postIds) {
+                $this->getCollection()->addFieldToFilter('main_table.post_id', ['nin' => $postIds]);
             }
         } else {
             parent::_addColumnFilterToCollection($column);

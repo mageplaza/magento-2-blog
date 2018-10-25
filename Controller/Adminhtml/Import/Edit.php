@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -23,9 +23,8 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Import;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Registry;
-
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Class Edit
@@ -55,8 +54,9 @@ class Edit extends Action
         Registry $registry
     )
     {
-        $this->registry = $registry;
+        $this->registry          = $registry;
         $this->resultPageFactory = $resultPageFactory;
+
         parent::__construct($context);
     }
 

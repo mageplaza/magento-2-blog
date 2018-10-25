@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -158,9 +158,9 @@ class Collection extends AbstractCollection
             if (!empty($categoryIds)) {
                 $condition = ['in' => $categoryIds];
             }
-        } elseif (is_numeric($categoryIds)) {
+        } else if (is_numeric($categoryIds)) {
             $condition = $categoryIds;
-        } elseif (is_string($categoryIds)) {
+        } else if (is_string($categoryIds)) {
             $ids = explode(',', $categoryIds);
             if (empty($ids)) {
                 $condition = $categoryIds;

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -97,8 +97,8 @@ class View extends \Mageplaza\Blog\Block\Listpost
     {
         $this->customerSession = $customerSession;
         $this->categoryFactory = $categoryFactory;
-        $this->postFactory = $postFactory;
-        $this->customerUrl = $customerUrl;
+        $this->postFactory     = $postFactory;
+        $this->customerUrl     = $customerUrl;
 
         parent::__construct($context, $filterProvider, $commentFactory, $likeFactory, $customerRepository, $helperData, $data);
     }
@@ -222,8 +222,8 @@ class View extends \Mageplaza\Blog\Block\Listpost
     {
         if ($this->customerSession->isLoggedIn()) {
             $customerData = $this->customerSession->getCustomerData();
-            $customerId = $customerData->getId();
-            $likes = $this->likeFactory->create()->getCollection();
+            $customerId   = $customerData->getId();
+            $likes        = $this->likeFactory->create()->getCollection();
             foreach ($likes as $like) {
                 if ($like->getEntityId() == $customerId && $like->getCommentId() == $cmtId) {
                     return true;
@@ -240,7 +240,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
      */
     public function getPostComments($postId)
     {
-        $result = [];
+        $result   = [];
         $comments = $this->cmtFactory->create()->getCollection()
             ->addFieldToFilter('main_table.post_id', $postId);
         foreach ($comments as $comment) {
@@ -250,11 +250,13 @@ class View extends \Mageplaza\Blog\Block\Listpost
         return $result;
     }
 
-    public function commentHtml($comment){
-        $html= '';
-        foreach (explode("\n",trim($comment)) as $value){
-            $html.= '<p>'.$value.'</p>';
+    public function commentHtml($comment)
+    {
+        $html = '';
+        foreach (explode("\n", trim($comment)) as $value) {
+            $html .= '<p>' . $value . '</p>';
         }
+
         return $html;
     }
 
@@ -268,29 +270,28 @@ class View extends \Mageplaza\Blog\Block\Listpost
     {
         $this->commentTree .= '<ul class="default-cmt__content__cmt-content row">';
         foreach ($comments as $comment) {
-
             if ($comment['reply_id'] == $cmtId && $comment['status'] == 1) {
                 $isReply = (bool)$comment['is_reply'];
                 $replyId = $isReply ? $comment['reply_id'] : '';
                 if ($comment['entity_id'] == 0) {
                     $userName = $comment['user_name'];
                 } else {
-                    $userCmt = $this->getUserComment($comment['entity_id']);
+                    $userCmt  = $this->getUserComment($comment['entity_id']);
                     $userName = $userCmt->getFirstName() . ' '
                         . $userCmt->getLastName();
                 }
-                $countLikes = $this->getCommentLikes($comment['comment_id']);
-                $isLiked = ($this->isLiked($comment['comment_id'])) ? "mpblog-liked" : "mpblog-like";
-                $this->commentTree .= '<li id="cmt-id-' . $comment['comment_id'] . '" class="default-cmt__content__cmt-content__cmt-row cmt-row-'.$comment['comment_id'].' cmt-row col-xs-12'
+                $countLikes        = $this->getCommentLikes($comment['comment_id']);
+                $isLiked           = ($this->isLiked($comment['comment_id'])) ? "mpblog-liked" : "mpblog-like";
+                $this->commentTree .= '<li id="cmt-id-' . $comment['comment_id'] . '" class="default-cmt__content__cmt-content__cmt-row cmt-row-' . $comment['comment_id'] . ' cmt-row col-xs-12'
                     . ($isReply ? ' reply-row' : '') . '" data-cmt-id="'
                     . $comment['comment_id'] . '" ' . ($replyId
                         ? 'data-reply-id="' . $replyId . '"' : '') . '>
                                 <div class="cmt-row__cmt-username">
-                                    <span class="cmt-row__cmt-username username username__'.$comment['comment_id'].'">'
+                                    <span class="cmt-row__cmt-username username username__' . $comment['comment_id'] . '">'
                     . $userName . '</span>
                                 </div>
                                 <div class="cmt-row__cmt-content">
-                                   ' . $this->commentHtml($comment['content']) .'
+                                   ' . $this->commentHtml($comment['content']) . '
                                 </div>
                                 <div class="cmt-row__cmt-interactions interactions">
                                     <div class="interactions__btn-actions">
@@ -326,7 +327,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
     public function getTagList($post)
     {
         $tagCollection = $post->getSelectedTagsCollection();
-        $result = '';
+        $result        = '';
         if (!empty($tagCollection)) {
             $listTags = [];
             foreach ($tagCollection as $tag) {
@@ -367,20 +368,18 @@ class View extends \Mageplaza\Blog\Block\Listpost
                     ->load($catId);
                 if ($category->getId()) {
                     $breadcrumbs->addCrumb($category->getUrlKey(), [
-                            'label' => $category->getName(),
-                            'title' => $category->getName(),
-                            'link' => $this->helperData->getBlogUrl($category, Data::TYPE_CATEGORY)
-                        ]
-                    );
+                        'label' => $category->getName(),
+                        'title' => $category->getName(),
+                        'link'  => $this->helperData->getBlogUrl($category, Data::TYPE_CATEGORY)
+                    ]);
                 }
             }
 
             $post = $this->getPost();
             $breadcrumbs->addCrumb($post->getUrlKey(), [
-                    'label' => $post->getName(),
-                    'title' => $post->getName()
-                ]
-            );
+                'label' => $post->getName(),
+                'title' => $post->getName()
+            ]);
         }
     }
 
@@ -391,7 +390,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
     public function getBlogTitle($meta = false)
     {
         $blogTitle = parent::getBlogTitle($meta);
-        $post = $this->getBlogObject();
+        $post      = $this->getBlogObject();
         if (!$post) {
             return $blogTitle;
         }
@@ -413,7 +412,6 @@ class View extends \Mageplaza\Blog\Block\Listpost
      * @param $priority
      * @param $message
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getMessagesHtml($priority, $message)
     {

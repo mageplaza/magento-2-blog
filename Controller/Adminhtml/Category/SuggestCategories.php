@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -65,7 +65,7 @@ class SuggestCategories extends Category
     )
     {
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory = $layoutFactory;
+        $this->layoutFactory     = $layoutFactory;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }
@@ -79,7 +79,7 @@ class SuggestCategories extends Category
     {
         /** @var \Mageplaza\Blog\Block\Adminhtml\Category\Tree $treeBlock */
         $treeBlock = $this->layoutFactory->create()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Tree');
-        $data = $treeBlock->getSuggestedCategoriesJson($this->getRequest()->getParam('label_part'));
+        $data      = $treeBlock->getSuggestedCategoriesJson($this->getRequest()->getParam('label_part'));
 
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();

@@ -15,16 +15,14 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 ?>
 <script>
-    require([
-        'jquery'
-    ], function ($) {
+    require(['jquery'], function ($) {
         var dataImport = {};
-        var defaultTablePrefix = ['wp_', 'm1_','m2_'];
+        var defaultTablePrefix = ['wp_', 'm1_', 'm2_'];
         var imagePathHint = [
             '*Please copy the <b>wp_content/uploads</b> folder to <b>pub/media/wysiwyg/</b> folder for post image content <br>' +
             '*Please copy the <b>wp_content/uploads</b> folder to <b>pub/media/mageplaza/blog/post/</b> folder for post image banner <br>',
@@ -33,13 +31,9 @@
         ];
 
         mpBlogImport = {
-
             typeSelector: <?php echo $block->getTypeSelector();?>,
-
             initImportFieldsSet: function () {
-
                 for (var i = 0; i < this.typeSelector.length; i++) {
-
                     if ($('#import_type').attr("value") == this.typeSelector[i]) {
                         this.showFieldSet('#' + this.typeSelector[i] + '_fieldset');
                         dataImport = {
@@ -59,8 +53,6 @@
                         $("#" + this.typeSelector[i] + "_db_name").addClass('required-entry');
                         $("#" + this.typeSelector[i] + "_user_name").addClass('required-entry');
                         $("#" + this.typeSelector[i] + "_db_host").addClass('required-entry');
-
-
                     } else {
                         this.hideFieldSet('#' + this.typeSelector[i] + '_fieldset');
                         $("#" + this.typeSelector[i] + "_db_name").removeClass('required-entry');
@@ -71,13 +63,11 @@
             },
 
             initExpandBehaviour: function () {
-
                 if ($(dataImport.behaviourSelector).attr("value") == 'update') {
                     $(dataImport.expandBehaviourSelector).parent().parent().removeClass('hidden');
                 } else {
                     $(dataImport.expandBehaviourSelector).parent().parent().addClass('hidden');
                 }
-
             },
 
             showFieldSet: function (selector) {
@@ -89,7 +79,6 @@
             },
 
             initImportCheckConnection: function () {
-
                 if ($('#edit_form').valid()) {
                     $('body').loader('show');
                     $.ajax({
@@ -128,7 +117,6 @@
             },
 
             importAction: function () {
-
                 $('body').loader('show');
                 $.ajax({
                     url: '<?php echo $block->getUrl('mageplaza_blog/import/import', ['form_key' => $block->getFormKey()]);?>',

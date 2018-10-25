@@ -15,24 +15,25 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 $tree = $block->getTree();
-if($tree):
-?>
-<div class="mp-sidebar mpcss">
-    <div class="row">
-        <div class="block-title col-xs-12 sidebar-categories">
-            <p class="block-mp-sidebar-heading" role="heading" aria-label="2"><?php echo __('Categories') ?></p>
-        </div>
-        <div class="col-xs-12">
+if ($tree):
+    ?>
+    <div class="mp-sidebar mpcss">
+        <div class="row">
+            <div class="block-title col-xs-12 sidebar-categories">
+                <p class="block-mp-sidebar-heading" role="heading" aria-label="2"><?php echo __('Categories') ?></p>
+            </div>
+            <div class="col-xs-12">
                 <?php echo $block->getCategoryTreeHtml($tree) ?>
+            </div>
         </div>
     </div>
-</div>
-<script type="text/javascript">
-    require(['Mageplaza_Blog/js/categorytree'], function () {});
-</script>
+    <script type="text/javascript">
+        require(['Mageplaza_Blog/js/categorytree'], function () {
+        });
+    </script>
 <?php endif; ?>

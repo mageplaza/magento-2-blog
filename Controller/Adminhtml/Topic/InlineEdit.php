@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -59,7 +59,7 @@ class InlineEdit extends Action
         TopicFactory $topicFactory
     )
     {
-        $this->jsonFactory = $jsonFactory;
+        $this->jsonFactory  = $jsonFactory;
         $this->topicFactory = $topicFactory;
 
         parent::__construct($context);
@@ -72,18 +72,18 @@ class InlineEdit extends Action
     {
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->jsonFactory->create();
-        $error = false;
-        $messages = [];
-        $postItems = $this->getRequest()->getParam('items', []);
+        $error      = false;
+        $messages   = [];
+        $postItems  = $this->getRequest()->getParam('items', []);
 
         if (!($this->getRequest()->getParam('isAjax') && !empty($postItems))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
-                'error' => true,
+                'error'    => true,
             ]);
         }
 
-        $key = array_keys($postItems);
+        $key     = array_keys($postItems);
         $topicId = !empty($key) ? (int)$key[0] : '';
         /** @var \Mageplaza\Blog\Model\Topic $topic */
         $topic = $this->topicFactory->create()->load($topicId);
@@ -92,21 +92,21 @@ class InlineEdit extends Action
                 ->save();
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithTopicId($topic, $e->getMessage());
-            $error = true;
+            $error      = true;
         } catch (\RuntimeException $e) {
             $messages[] = $this->getErrorWithTopicId($topic, $e->getMessage());
-            $error = true;
+            $error      = true;
         } catch (\Exception $e) {
             $messages[] = $this->getErrorWithTopicId(
                 $topic,
                 __('Something went wrong while saving the Topic.')
             );
-            $error = true;
+            $error      = true;
         }
 
         return $resultJson->setData([
             'messages' => $messages,
-            'error' => $error
+            'error'    => $error
         ]);
     }
 

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -34,7 +34,7 @@ class Edit extends Container
      */
     protected function _construct()
     {
-        $this->_objectId = 'id';
+        $this->_objectId   = 'id';
         $this->_blockGroup = 'Mageplaza_Blog';
         $this->_controller = 'adminhtml_category';
 

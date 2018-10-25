@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -32,7 +32,8 @@
     <?php if ($postCollection && $postCollection->getSize()) : ?>
         <div class="post-list-body">
             <?php $i = 1 ?>
-             <?php /** @var \Mageplaza\Blog\Model\Post $post */ foreach ($postCollection as $post) :?>
+            <?php /** @var \Mageplaza\Blog\Model\Post $post */
+            foreach ($postCollection as $post) : ?>
                 <div class="post-list-item col-mp<?php echo $block->isGridView() ? ' post-item-grid mp-6 mp-xs-12' : ' post-item-list mp-12'; ?>">
                     <div class="post-item-wraper">
                         <?php if ($post->getImage()) : ?>
@@ -46,8 +47,9 @@
                         <?php endif; ?>
                         <div class="post-info-wraper">
                             <h2 class="mp-post-title">
-                                <a class="post-link-title" title="<?php echo $block->escapeHtml($post->getName()); ?>" href="<?php echo $post->getUrl() ?>">
-                                    <?php echo $post->getName();?>
+                                <a class="post-link-title" title="<?php echo $block->escapeHtml($post->getName()); ?>"
+                                   href="<?php echo $post->getUrl() ?>">
+                                    <?php echo $post->getName(); ?>
                                 </a>
                             </h2>
                             <div class="mp-post-info">
@@ -59,7 +61,8 @@
                             <div class="mp-clearfix"></div>
                             <div class="mp-post-meta-info mp-alignright">
                                 <div class="actions">
-                                    <a class="mp-read-more" href="<?php echo $post->getUrl(); ?>" title="<?php echo __('Read More'); ?>">
+                                    <a class="mp-read-more" href="<?php echo $post->getUrl(); ?>"
+                                       title="<?php echo __('Read More'); ?>">
                                         <?php echo __('Read More'); ?>
                                     </a>
                                 </div>
@@ -67,7 +70,7 @@
                         </div>
                     </div>
                 </div>
-                <?php if($i++ % 2 == 0): ?>
+                <?php if ($i++ % 2 == 0): ?>
                     <div class="mp-clear"></div>
                 <?php endif; ?>
             <?php endforeach; ?>
@@ -77,6 +80,6 @@
     <?php else: ?>
         <?php echo __('There are no posts at this moment'); ?>
     <?php endif; ?>
-    <?php echo $this->getChildHtml('additional');?>
+    <?php echo $this->getChildHtml('additional'); ?>
 </div>
 

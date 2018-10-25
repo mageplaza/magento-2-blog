@@ -43,6 +43,26 @@ Content,Content
 "View On Front End","View On Front End"
 Comment,Comment
 "Comment Information","Comment Information"
+"Check Connection","Check Connection"
+"Import Setting","Import Setting"
+"Import Settings","Import Settings"
+"Import Type","Import Type"
+" Import"," Import"
+"Database Name","Database Name"
+"Your SQL database name","Your SQL database name"
+"Database User Name","Database User Name"
+"Your SQL database User name","Your SQL database User name"
+"Database Password","Database Password"
+"Your SQL database Password","Your SQL database Password"
+"Database Host","Database Host"
+"Your SQL database Hostname","Your SQL database Hostname"
+"Table Prefix","Table Prefix"
+"Your table prefix name","Your table prefix name"
+"Import Behaviour","Import Behaviour"
+"This action is applied to all data","This action is applied to all data"
+"Allow update content on existing URL-key","Allow update content on existing URL-key"
+"If <b>Yes</b>, content will be updated on posts with existing url-key. Select <b>No</b> to add a new post","If <b>Yes</b>, content will be updated on posts with existing url-key. Select <b>No</b> to add a new post"
+"Image Path Hint","Image Path Hint"
 "Create New Post","Create New Post"
 "Edit Post '%1'","Edit Post '%1'"
 "New Post","New Post"
@@ -53,7 +73,10 @@ Tags,Tags
 "In RSS","In RSS"
 "Allow Comment","Allow Comment"
 "Publish Date","Publish Date"
+"Publish Time","Publish Time"
 "Search Engine Optimization","Search Engine Optimization"
+Design,Design
+Layout,Layout
 Sku,Sku
 Products,Products
 "New Category","New Category"
@@ -84,6 +107,7 @@ Home,Home
 "List Posts from %1","List Posts from %1"
 Reply,Reply
 "Site Map","Site Map"
+"This author no longer exists. Please create the post to access the author management session.","This author no longer exists. Please create the post to access the author management session."
 "Author Management","Author Management"
 "The Author has been saved.","The Author has been saved."
 "Something went wrong while saving the Author.","Something went wrong while saving the Author."
@@ -109,6 +133,12 @@ Comments,Comments
 "Something went wrong while updating status","Something went wrong while updating status"
 "A total of %1 record(s) have been updated.","A total of %1 record(s) have been updated."
 "The comment has been saved.","The comment has been saved."
+Import,Import
+"You have replaced and updated %1 %2 successful. Skipped %3 %2.","You have replaced and updated %1 %2 successful. Skipped %3 %2."
+"You have deleted %1 successful.","You have deleted %1 successful."
+"You have imported %1 %2 successful. Skipped %3 %2.","You have imported %1 %2 successful. Skipped %3 %2."
+"There are no records are updated.","There are no records are updated."
+"Can not make import, please check your table prefix OR import type and try again.","Can not make import, please check your table prefix OR import type and try again."
 "This post no longer exists.","This post no longer exists."
 "The Post has been deleted.","The Post has been deleted."
 "Post to delete was not found.","Post to delete was not found."
@@ -154,6 +184,13 @@ Spam,Spam
 "Disable Completely","Disable Completely"
 "List View","List View"
 "Grid View","Grid View"
+"Add / Update","Add / Update"
+Replace,Replace
+Delete,Delete
+"-- Please Select --","-- Please Select --"
+Wordpress,Wordpress
+"AheadWorks Blog [Magento 1]","AheadWorks Blog [Magento 1]"
+"MageFan Blog [Magento 2]","MageFan Blog [Magento 2]"
 Left,Left
 Right,Right
 New,New
@@ -169,10 +206,12 @@ Sitemap,Sitemap
 "Tags: %1","Tags: %1"
 "By: %1","By: %1"
 "Modify By: %1 at %2","Modify By: %1 at %2"
-"Share this post, Hit on social buttons!","Share this post, Hit on social buttons!"
+"Share this post","Share this post"
 "About the Author","About the Author"
 "Related Products","Related Products"
 Login,Login
+"Your display name","Your display name"
+"Your email","Your email"
 "Type comments here...","Type comments here..."
 Like,Like
 Popular,Popular
@@ -190,6 +229,7 @@ Enable,Enable
 "Blog name","Blog name"
 "Route name","Route name"
 "Url Suffix","Url Suffix"
+"Leave empty for no suffix. Default: .html","Leave empty for no suffix. Default: .html"
 "Show Blog Link in Top Menu","Show Blog Link in Top Menu"
 "Show Blog Link in Footer links","Show Blog Link in Footer links"
 "Display author","Display author"
@@ -204,11 +244,15 @@ Comma-separated.,Comma-separated.
 "Related Products Content","Related Products Content"
 "Product Detail Page","Product Detail Page"
 "Enable Related Posts","Enable Related Posts"
+"Show/Hide related posts tab in product page","Show/Hide related posts tab in product page"
 "Limit of Related Posts","Limit of Related Posts"
+"Limit number of related posts in product page tab","Limit number of related posts in product page tab"
 "Post View Page","Post View Page"
 "Enable Related Products","Enable Related Products"
 "Limit of Related Products","Limit of Related Products"
+"Limit number of related products in post view page","Limit number of related products in post view page"
 "Title of Related Products","Title of Related Products"
+"Title of related products in post view page","Title of related products in post view page"
 Sidebar,Sidebar
 "Number of recent posts","Number of recent posts"
 "Number of most view posts","Number of most view posts"
@@ -223,11 +267,15 @@ Sidebar,Sidebar
 "Type of Datetime","Type of Datetime"
 "Type of comment","Type of comment"
 "Need for Approval","Need for Approval"
+"If yes, the comment will not be shown until approved by Admin.","If yes, the comment will not be shown until approved by Admin."
 "Disqus unique name","Disqus unique name"
 "Facebook: AppID","Facebook: AppID"
 "Facebook: Number of comment","Facebook: Number of comment"
+"The number of comments to show by default. The minimum value is 1.","The number of comments to show by default. The minimum value is 1."
 "Facebook: Color scheme","Facebook: Color scheme"
+Light/Dark,Light/Dark
 "Facebook: Order by","Facebook: Order by"
+"The order to use when displaying comments. Can be ""social"", ""reverse_time"", or ""time"".","The order to use when displaying comments. Can be ""social"", ""reverse_time"", or ""time""."
 SEO,SEO
 "Meta title","Meta title"
 "Meta description","Meta description"
@@ -240,6 +288,7 @@ Logo,Logo
 "Social Sharing","Social Sharing"
 "Addthis.com PubId","Addthis.com PubId"
 "Mageplaza Blog","Mageplaza Blog"
+"Mageplaza Blog Widget","Mageplaza Blog Widget"
 Title,Title
 "Numbers of Posts Display","Numbers of Posts Display"
 "Show Type","Show Type"
@@ -250,7 +299,6 @@ Template,Template
 "Parent Category","Parent Category"
 "Tag Name","Tag Name"
 "Topic Name","Topic Name"
-Delete,Delete
 "Delete Comments","Delete Comments"
 "Are you sure you wan't to delete selected Comments?","Are you sure you wan't to delete selected Comments?"
 "Change status","Change status"

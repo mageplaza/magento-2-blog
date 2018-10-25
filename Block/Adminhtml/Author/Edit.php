@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -60,28 +60,24 @@ class Edit extends Container
      */
     protected function _construct()
     {
-        $this->_objectId = 'user_id';
+        $this->_objectId   = 'user_id';
         $this->_blockGroup = 'Mageplaza_Blog';
         $this->_controller = 'adminhtml_author';
 
         parent::_construct();
 
-        $this->buttonList->add(
-            'save-and-continue',
-            [
-                'label' => __('Save Change'),
-                'class' => 'save primary',
-                'data_attribute' => [
-                    'mage-init' => [
-                        'button' => [
-                            'event' => 'saveAndContinueEdit',
-                            'target' => '#edit_form'
-                        ]
+        $this->buttonList->add('save-and-continue', [
+            'label'          => __('Save Change'),
+            'class'          => 'save primary',
+            'data_attribute' => [
+                'mage-init' => [
+                    'button' => [
+                        'event'  => 'saveAndContinueEdit',
+                        'target' => '#edit_form'
                     ]
                 ]
-            ],
-            -100
-        );
+            ]
+        ], -100);
         $this->buttonList->remove('back');
         $this->buttonList->remove('save');
     }

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -25,10 +25,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Js;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\PostFactory;
-use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
  * Class Save
@@ -47,6 +47,7 @@ class Save extends Post
      * @var DateTime
      */
     public $date;
+
     /**
      * @var \Mageplaza\Blog\Helper\Image
      */
@@ -70,9 +71,10 @@ class Save extends Post
         DateTime $date
     )
     {
-        $this->jsHelper = $jsHelper;
+        $this->jsHelper    = $jsHelper;
         $this->imageHelper = $imageHelper;
-        $this->date = $date;
+        $this->date        = $date;
+
         parent::__construct($postFactory, $registry, $context);
     }
 
@@ -85,7 +87,6 @@ class Save extends Post
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if ($data = $this->getRequest()->getPost('post')) {
-
             /** @var \Mageplaza\Blog\Model\Post $post */
             $post = $this->initPost();
             $this->prepareData($post, $data);
@@ -136,13 +137,13 @@ class Save extends Post
         $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_POST, $post->getImage());
 
         /** Set specify field data */
-        $timezone = $this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $data['publish_date'] .= ' '.$data['publish_time'][0].':'.$data['publish_time'][1].':'.$data['publish_time'][2];
-        $data['publish_date'] = $timezone->convertConfigTimeToUtc(isset($data['publish_date']) ? $data['publish_date'] : null);
-        $data['modifier_id'] = $this->_auth->getUser()->getId();
+        $timezone               = $this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $data['publish_date']   .= ' ' . $data['publish_time'][0] . ':' . $data['publish_time'][1] . ':' . $data['publish_time'][2];
+        $data['publish_date']   = $timezone->convertConfigTimeToUtc(isset($data['publish_date']) ? $data['publish_date'] : null);
+        $data['modifier_id']    = $this->_auth->getUser()->getId();
         $data['categories_ids'] = (isset($data['categories_ids']) && $data['categories_ids']) ? explode(',', $data['categories_ids']) : [];
-        $data['tags_ids'] = (isset($data['tags_ids']) && $data['tags_ids']) ? explode(',', $data['tags_ids']) : [];
-        $data['topics_ids'] = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(',', $data['topics_ids']) : [];
+        $data['tags_ids']       = (isset($data['tags_ids']) && $data['tags_ids']) ? explode(',', $data['tags_ids']) : [];
+        $data['topics_ids']     = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(',', $data['topics_ids']) : [];
 
         if ($post->getCreatedAt() == null) {
             $data['created_at'] = $this->date->date();

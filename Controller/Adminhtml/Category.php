@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -62,7 +62,7 @@ abstract class Category extends Action
     )
     {
         $this->categoryFactory = $categoryFactory;
-        $this->coreRegistry = $coreRegistry;
+        $this->coreRegistry    = $coreRegistry;
 
         parent::__construct($context);
     }
@@ -76,7 +76,7 @@ abstract class Category extends Action
         $categoryId = null;
         if ($this->getRequest()->getParam('id')) {
             $categoryId = (int)$this->getRequest()->getParam('id');
-        } elseif ($this->getRequest()->getParam('category_id')) {
+        } else if ($this->getRequest()->getParam('category_id')) {
             $categoryId = (int)$this->getRequest()->getParam('category_id');
         }
 

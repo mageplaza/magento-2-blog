@@ -16,7 +16,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
@@ -65,10 +65,10 @@
                 <item name="stickyTmpl" xsi:type="string">ui/grid/sticky/toolbar</item>
             </item>
         </argument>
-        <bookmark name="bookmarks" />
-        <columnsControls name="columns_controls" />
-        <exportButton name="export_button" />
-        <filters name="listing_filters" />
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <exportButton name="export_button"/>
+        <filters name="listing_filters"/>
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -113,7 +113,7 @@
                 </argument>
             </action>
         </massaction>
-        <paging name="listing_paging" />
+        <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="mageplaza_blog_topic_columns">
         <argument name="data" xsi:type="array">

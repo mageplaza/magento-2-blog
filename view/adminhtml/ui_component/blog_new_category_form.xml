@@ -16,7 +16,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
@@ -102,7 +102,7 @@
                     <item name="sortOrder" xsi:type="number">20</item>
                     <!--<item name="required" xsi:type="boolean">true</item>-->
                     <!--<item name="validation" xsi:type="array">-->
-                        <!--<item name="required-entry" xsi:type="boolean">true</item>-->
+                    <!--<item name="required-entry" xsi:type="boolean">true</item>-->
                     <!--</item>-->
                     <item name="listens" xsi:type="array">
                         <item name="${ $.namespace }.${ $.namespace }:responseData" xsi:type="string">setParsed</item>

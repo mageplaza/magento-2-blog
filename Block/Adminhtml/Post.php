@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -36,10 +36,10 @@ class Post extends Container
      */
     protected function _construct()
     {
-        $this->_controller = 'adminhtml_post';
-        $this->_blockGroup = 'Mageplaza_Blog';
-        $this->_headerText = __('Posts');
-        $this->_headerText = __('Posts');
+        $this->_controller     = 'adminhtml_post';
+        $this->_blockGroup     = 'Mageplaza_Blog';
+        $this->_headerText     = __('Posts');
+        $this->_headerText     = __('Posts');
         $this->_addButtonLabel = __('Create New Post');
 
         parent::_construct();

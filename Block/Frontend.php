@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -93,12 +93,12 @@ class Frontend extends Template
         array $data = []
     )
     {
-        $this->filterProvider = $filterProvider;
-        $this->cmtFactory = $commentFactory;
-        $this->likeFactory = $likeFactory;
+        $this->filterProvider     = $filterProvider;
+        $this->cmtFactory         = $commentFactory;
+        $this->likeFactory        = $likeFactory;
         $this->customerRepository = $customerRepository;
-        $this->helperData = $helperData;
-        $this->store = $context->getStoreManager();
+        $this->helperData         = $helperData;
+        $this->store              = $context->getStoreManager();
 
         parent::__construct($context, $data);
     }
@@ -121,7 +121,7 @@ class Frontend extends Template
     public function getImageUrl($image, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
     {
         $imageHelper = $this->helperData->getImageHelper();
-        $imageFile = $imageHelper->getMediaPath($image, $type);
+        $imageFile   = $imageHelper->getMediaPath($image, $type);
 
         return $this->helperData->getImageHelper()->getMediaUrl($imageFile);
     }
@@ -138,7 +138,7 @@ class Frontend extends Template
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url = $this->helperData->getUrl($this->helperData->getRoute() . '/' . $urlKey);
+        $url    = $this->helperData->getUrl($this->helperData->getRoute() . '/' . $urlKey);
 
         return rtrim($url, '/') . '.xml';
     }
@@ -175,7 +175,7 @@ class Frontend extends Template
             return null;
         }
 
-        $categories = $this->helperData->getCategoryCollection($post->getCategoryIds());
+        $categories   = $this->helperData->getCategoryCollection($post->getCategoryIds());
         $categoryHtml = [];
         foreach ($categories as $_cat) {
             $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl($_cat, Data::TYPE_CATEGORY) . '">' . $_cat->getName() . '</a>';

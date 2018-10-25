@@ -16,15 +16,15 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="mpblog_design" />
+    <update handle="mpblog_design"/>
     <body>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Post\Listpost" name="mpblog.post.list" as="mpblog_post"  template="post/list.phtml"/>
+            <block class="Mageplaza\Blog\Block\Post\Listpost" name="mpblog.post.list" as="mpblog_post" template="post/list.phtml"/>
             <block class="Magento\Framework\View\Element\Template" name="mpblog.copy.right" after="-" template="Mageplaza_Blog::html/copyright.phtml"/>
         </referenceContainer>
     </body>

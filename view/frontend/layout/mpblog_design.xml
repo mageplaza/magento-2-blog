@@ -16,7 +16,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
@@ -29,7 +29,7 @@
         <referenceContainer name="columns">
             <container name="div.sidebar.main" htmlTag="div" htmlClass="sidebar sidebar-main" after="main">
                 <container name="blog.sidebar.main" as="sidebar_main" label="Sidebar Main">
-                    <block class="Mageplaza\Blog\Block\Sidebar\Search" name="mpblog.sidebar.search" template="sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search" />
+                    <block class="Mageplaza\Blog\Block\Sidebar\Search" name="mpblog.sidebar.search" template="sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search"/>
                     <block class="Mageplaza\Blog\Block\Sidebar\MostView" name="mpblog.sidebar.mostview" template="sidebar/mostview.phtml"/>
                     <block class="Mageplaza\Blog\Block\Category\Widget" name="mpblog.sidebar.category" template="category/widget.phtml"/>
                     <block class="Mageplaza\Blog\Block\MonthlyArchive\Widget" name="mpblog.sidebar.monthly" template="monthly/widget.phtml"/>
@@ -41,8 +41,5 @@
         <referenceBlock name="head.additional">
             <block class="Mageplaza\Blog\Block\Design" name="mpblog.design" template="Mageplaza_Blog::design.phtml"/>
         </referenceBlock>
-        <!--<referenceContainer name="content">-->
-            <!--<block class="Magento\Framework\View\Element\Template" name="mpblog.copy.right" after="-" template="Mageplaza_Blog::html/copyright.phtml"/>-->
-        <!--</referenceContainer>-->
     </body>
 </page>

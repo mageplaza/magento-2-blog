@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -41,12 +41,12 @@ class InstallData implements InstallDataInterface
 
         /** Add root category */
         $sampleTemplates = [
-            'path' => '1',
-            'position' => 0,
+            'path'           => '1',
+            'position'       => 0,
             'children_count' => 0,
-            'level' => 0,
-            'name' => 'ROOT',
-            'url_key' => 'root'
+            'level'          => 0,
+            'name'           => 'ROOT',
+            'url_key'        => 'root'
         ];
         $setup->getConnection()->insert($setup->getTable('mageplaza_blog_category'), $sampleTemplates);
 

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -73,8 +73,8 @@ class Tag extends Multiselect
     )
     {
         $this->collectionFactory = $collectionFactory;
-        $this->authorization = $authorization;
-        $this->_urlBuilder = $urlBuilder;
+        $this->authorization     = $authorization;
+        $this->_urlBuilder       = $urlBuilder;
 
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
@@ -123,12 +123,11 @@ class Tag extends Multiselect
     {
         /* @var $collection \Mageplaza\Blog\Model\ResourceModel\Tag\Collection */
         $collection = $this->collectionFactory->create();
-        $tagById = [];
+        $tagById    = [];
         foreach ($collection as $tag) {
-            $tagById[$tag->getId()]['value'] = $tag->getId();
+            $tagById[$tag->getId()]['value']     = $tag->getId();
             $tagById[$tag->getId()]['is_active'] = 1;
-            $tagById[$tag->getId()]['label'] = $tag->getName();
-
+            $tagById[$tag->getId()]['label']     = $tag->getName();
         }
 
         return $tagById;

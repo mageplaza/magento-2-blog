@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -72,8 +72,8 @@ class Category extends Multiselect
     )
     {
         $this->collectionFactory = $collectionFactory;
-        $this->authorization = $authorization;
-        $this->_urlBuilder = $urlBuilder;
+        $this->authorization     = $authorization;
+        $this->_urlBuilder       = $urlBuilder;
 
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
@@ -125,7 +125,7 @@ class Category extends Multiselect
 
         $categoryById = [
             CategoryModel::TREE_ROOT_ID => [
-                'value' => CategoryModel::TREE_ROOT_ID,
+                'value'    => CategoryModel::TREE_ROOT_ID,
                 'optgroup' => null,
             ],
         ];
@@ -137,8 +137,8 @@ class Category extends Multiselect
                 }
             }
 
-            $categoryById[$category->getId()]['is_active'] = 1;
-            $categoryById[$category->getId()]['label'] = $category->getName();
+            $categoryById[$category->getId()]['is_active']        = 1;
+            $categoryById[$category->getId()]['label']            = $category->getName();
             $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
         }
 

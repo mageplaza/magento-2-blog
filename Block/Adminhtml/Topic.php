@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -36,9 +36,9 @@ class Topic extends Container
      */
     protected function _construct()
     {
-        $this->_controller = 'adminhtml_topic';
-        $this->_blockGroup = 'Mageplaza_Blog';
-        $this->_headerText = __('Topics');
+        $this->_controller     = 'adminhtml_topic';
+        $this->_blockGroup     = 'Mageplaza_Blog';
+        $this->_headerText     = __('Topics');
         $this->_addButtonLabel = __('Create New Topic');
 
         parent::_construct();

@@ -16,7 +16,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
@@ -43,14 +43,14 @@
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="name" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="name" translate="label comment" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Blog name</label>
                     <comment>Blog name</comment>
                 </field>
                 <field id="url_prefix" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Route name</label>
                 </field>
-                <field id="url_suffix" translate="label" type="text" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="url_suffix" translate="label comment" type="text" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Url Suffix</label>
                     <comment>Leave empty for no suffix. Default: .html</comment>
                 </field>
@@ -95,12 +95,12 @@
                 <label>Related Products Content</label>
                 <group id="product_detail" translate="label" showInDefault="1" sortOrder="10" showInWebsite="1" showInStore="1">
                     <label>Product Detail Page</label>
-                    <field id="enable_post" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="enable_post" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Enable Related Posts</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <comment>Show/Hide related posts tab in product page</comment>
                     </field>
-                    <field id="post_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="post_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Limit of Related Posts</label>
                         <comment>Limit number of related posts in product page tab</comment>
                     </field>
@@ -113,15 +113,15 @@
                         <comment><![CDATA[Show/Hide related products in post view page. Setup related products, up-sell, cross-sell products with ease, 
                         <a href="https://www.mageplaza.com/magento-2-automatic-related-products/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">explore now</a>
                         ]]>
-                            
+
                         </comment>
 
                     </field>
-                    <field id="product_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="product_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Limit of Related Products</label>
                         <comment>Limit number of related products in post view page</comment>
                     </field>
-                    <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="title" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Title of Related Products</label>
                         <comment>Title of related products in post view page</comment>
                     </field>
@@ -147,7 +147,7 @@
                         <comment><![CDATA[This feature is using Ajax Search technology, same as  
                         <a href="https://www.mageplaza.com/magento-2-search-extension/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">Mageplaza Search</a>.
                         ]]>
-                            
+
                         </comment>
                     </field>
                     <field id="search_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -185,36 +185,48 @@
                     <label>Type of comment</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Type</source_model>
                 </field>
-                <field id="need_approve" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="need_approve" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Need for Approval</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>If yes, the comment will not be shown until approved by Admin.</comment>
-                    <depends><field id="type">1</field></depends>
+                    <depends>
+                        <field id="type">1</field>
+                    </depends>
                 </field>
                 <field id="disqus" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Disqus unique name</label>
                     <comment><![CDATA[Create at <a href="https://disqus.com/admin/create/" target="_blank">Disqus</a>]]></comment>
-                    <depends><field id="type">3</field></depends>
+                    <depends>
+                        <field id="type">3</field>
+                    </depends>
                 </field>
                 <field id="facebook_appid" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Facebook: AppID</label>
                     <comment><![CDATA[Regiter AppID <a href="https://developers.facebook.com/apps/" target="_blank">here</a>. Let visitors login via Facebook account <a href="https://www.mageplaza.com/magento-2-social-login-extension/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">explore now</a>]]></comment>
-                    <depends><field id="type">2</field></depends>
+                    <depends>
+                        <field id="type">2</field>
+                    </depends>
                 </field>
-                <field id="facebook_number_comment" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="facebook_number_comment" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Facebook: Number of comment</label>
                     <comment><![CDATA[The number of comments to show by default. The minimum value is 1.]]></comment>
-                    <depends><field id="type">2</field></depends>
+                    <depends>
+                        <field id="type">2</field>
+                    </depends>
                 </field>
-                <field id="facebook_colorscheme" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="facebook_colorscheme" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Facebook: Color scheme</label>
-                    <depends><field id="type">2</field></depends>
+                    <depends>
+                        <field id="type">2</field>
+                    </depends>
                     <comment><![CDATA[Light/Dark]]></comment>
                     <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Facebook\Colorscheme</source_model>
                 </field>
-                <field id="facebook_order_by" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="facebook_order_by" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Facebook: Order by</label>
-                    <depends><field id="type">2</field></depends>
+                    <depends>
+                        <field id="type">2</field>
+                    </depends>
                     <comment><![CDATA[The order to use when displaying comments. Can be "social", "reverse_time", or "time".]]></comment>
                     <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Facebook\Orderby</source_model>
                 </field>

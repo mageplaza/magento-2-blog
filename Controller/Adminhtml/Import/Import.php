@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -24,10 +24,10 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Import;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
-use Mageplaza\Blog\Model\Import\WordPress;
+use Mageplaza\Blog\Helper\Data as BlogHelper;
 use Mageplaza\Blog\Model\Import\AheadWorksM1;
 use Mageplaza\Blog\Model\Import\MageFanM2;
-use Mageplaza\Blog\Helper\Data as BlogHelper;
+use Mageplaza\Blog\Model\Import\WordPress;
 
 /**
  * Class Import
@@ -78,11 +78,12 @@ class Import extends Action
         Registry $registry
     )
     {
-        $this->blogHelper = $blogHelper;
-        $this->_wordpressModel = $wordPress;
+        $this->blogHelper         = $blogHelper;
+        $this->_wordpressModel    = $wordPress;
         $this->_aheadWorksM1Model = $aheadWorksM1;
-        $this->_mageFanM2Model = $mageFanM2;
-        $this->registry = $registry;
+        $this->_mageFanM2Model    = $mageFanM2;
+        $this->registry           = $registry;
+
         parent::__construct($context);
     }
 
@@ -105,6 +106,7 @@ class Import extends Action
             default:
                 $response = $this->processImport($this->_wordpressModel, $data);
         }
+
         return $response;
     }
 
@@ -142,6 +144,7 @@ class Import extends Action
                     ))
                     ->toHtml();
         }
+
         return $statisticHtml;
     }
 
@@ -153,10 +156,9 @@ class Import extends Action
     protected function processImport($object, $data)
     {
         $statisticHtml = '';
-        $connection = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
+        $connection    = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
         $messagesBlock = $this->_view->getLayout()->createBlock(\Magento\Framework\View\Element\Messages::class);
         if ($object->run($data, $connection)) {
-
             $postStatistic = $this->registry->registry('mageplaza_import_post_statistic');
             if ($postStatistic['has_data']) {
                 $statisticHtml = $this->getStatistic($postStatistic, $messagesBlock, $data);
@@ -190,12 +192,14 @@ class Import extends Action
 
             $result = ['statistic' => $statisticHtml, 'status' => 'ok'];
             mysqli_close($connection);
+
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         } else {
             $statisticHtml = $messagesBlock
                 ->{'adderror'}(__('Can not make import, please check your table prefix OR import type and try again.'))
                 ->toHtml();
-            $result = ['statistic' => $statisticHtml, 'status' => 'ok'];
+            $result        = ['statistic' => $statisticHtml, 'status' => 'ok'];
+
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         }
     }

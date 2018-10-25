@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -76,8 +76,8 @@ class Save extends Tag
         TagFactory $tagFactory
     )
     {
-        $this->jsHelper = $jsHelper;
-        $this->layoutFactory = $layoutFactory;
+        $this->jsHelper          = $jsHelper;
+        $this->layoutFactory     = $layoutFactory;
         $this->resultJsonFactory = $resultJsonFactory;
 
         parent::__construct($context, $registry, $tagFactory);
@@ -89,10 +89,10 @@ class Save extends Tag
     public function execute()
     {
         if ($this->getRequest()->getPost('return_session_messages_only')) {
-            $tag = $this->initTag();
-            $tagPostData = $this->getRequest()->getPostValue();
+            $tag                      = $this->initTag();
+            $tagPostData              = $this->getRequest()->getPostValue();
             $tagPostData['store_ids'] = 0;
-            $tagPostData['enabled'] = 1;
+            $tagPostData['enabled']   = 1;
 
             $tag->addData($tagPostData);
 
@@ -116,10 +116,10 @@ class Save extends Tag
 
             $tag->load($tag->getId());
             $tag->addData([
-                'level' => 1,
+                'level'     => 1,
                 'entity_id' => $tag->getId(),
                 'is_active' => $tag->getEnabled(),
-                'parent' => 0
+                'parent'    => 0
             ]);
 
             // to obtain truncated category name
@@ -131,11 +131,10 @@ class Save extends Tag
             $resultJson = $this->resultJsonFactory->create();
 
             return $resultJson->setData([
-                    'messages' => $block->getGroupedHtml(),
-                    'error' => $hasError,
-                    'category' => $tag->toArray(),
-                ]
-            );
+                'messages' => $block->getGroupedHtml(),
+                'error'    => $hasError,
+                'category' => $tag->toArray(),
+            ]);
         }
 
         $resultRedirect = $this->resultRedirectFactory->create();

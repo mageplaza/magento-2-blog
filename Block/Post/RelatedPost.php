@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -69,7 +69,7 @@ class RelatedPost extends Template
     )
     {
         $this->_coreRegistry = $registry;
-        $this->helperData = $helperData;
+        $this->helperData    = $helperData;
 
         parent::__construct($context, $data);
 
@@ -129,7 +129,7 @@ class RelatedPost extends Template
     public function setTabTitle()
     {
         $relatedSize = min($this->getRelatedPostList()->getSize(), $this->getLimitPosts());
-        $title = $relatedSize
+        $title       = $relatedSize
             ? __('Related Posts %1', '<span class="counter">' . $relatedSize . '</span>')
             : __('Related Posts');
 

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -37,7 +37,7 @@ class TypeMonth implements ArrayInterface
     public function toOptionArray()
     {
         $dateArray = [];
-        $type = ['F , Y', 'Y - m', 'm / Y', 'M  Y'];
+        $type      = ['F , Y', 'Y - m', 'm / Y', 'M  Y'];
         foreach ($type as $item) {
             $dateArray [] = [
                 'value' => $item,

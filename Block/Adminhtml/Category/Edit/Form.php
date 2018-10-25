@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -76,8 +76,8 @@ class Form extends AbstractCategory
     {
         parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
 
-        $this->jsonEncoder = $jsonEncoder;
-        $this->_categoryTree = $blogCategoryTree;
+        $this->jsonEncoder      = $jsonEncoder;
+        $this->_categoryTree    = $blogCategoryTree;
         $this->_categoryFactory = $blogCategoryFactory;
     }
 
@@ -86,56 +86,47 @@ class Form extends AbstractCategory
      */
     protected function _prepareLayout()
     {
-        $category = $this->getCategory();
+        $category   = $this->getCategory();
         $categoryId = (int)$category->getId(); // 0 when we create Blog Category, otherwise some value for editing Blog Category
 
         $this->setChild('tabs', $this->getLayout()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tabs', 'tabs'));
 
         // Save button
-        $this->addButton(
-            'save',
-            [
-                'id' => 'save',
-                'label' => __('Save Category'),
-                'class' => 'save primary save-category',
-                'data_attribute' => [
-                    'mage-init' => [
-                        'Mageplaza_Blog/category/edit' => [
-                            'url' => $this->getSaveUrl(),
-                            'ajax' => true
-                        ]
+        $this->addButton('save', [
+            'id'             => 'save',
+            'label'          => __('Save Category'),
+            'class'          => 'save primary save-category',
+            'data_attribute' => [
+                'mage-init' => [
+                    'Mageplaza_Blog/category/edit' => [
+                        'url'  => $this->getSaveUrl(),
+                        'ajax' => true
                     ]
                 ]
             ]
-        );
+        ]);
 
         // Delete button
         if ($categoryId && !in_array($categoryId, $this->getRootIds())) {
-            $this->addButton(
-                'delete',
-                [
-                    'id' => 'delete',
-                    'label' => __('Delete Category'),
-                    'onclick' => "categoryDelete('" . $this->getUrl(
-                            'mageplaza_blog/*/delete',
-                            ['_current' => true]
-                        ) . "')",
-                    'class' => 'delete'
-                ]
-            );
+            $this->addButton('delete', [
+                'id'      => 'delete',
+                'label'   => __('Delete Category'),
+                'onclick' => "categoryDelete('" . $this->getUrl(
+                        'mageplaza_blog/*/delete',
+                        ['_current' => true]
+                    ) . "')",
+                'class'   => 'delete'
+            ]);
         }
 
         // Reset button
         $resetPath = $categoryId ? 'mageplaza_blog/*/edit' : 'mageplaza_blog/*/add';
-        $this->addButton(
-            'reset',
-            [
-                'id' => 'reset',
-                'label' => __('Reset'),
-                'onclick' => "categoryReset('" . $this->getUrl($resetPath, ['_current' => true]) . "',false)",
-                'class' => 'reset'
-            ]
-        );
+        $this->addButton('reset', [
+            'id'      => 'reset',
+            'label'   => __('Reset'),
+            'onclick' => "categoryReset('" . $this->getUrl($resetPath, ['_current' => true]) . "',false)",
+            'class'   => 'reset'
+        ]);
 
         return parent::_prepareLayout();
     }
@@ -302,7 +293,7 @@ class Form extends AbstractCategory
     public function addButton($buttonId, array $data)
     {
         $childBlockId = $buttonId . '_button';
-        $button = $this->getButtonChildBlock($childBlockId);
+        $button       = $this->getButtonChildBlock($childBlockId);
         $button->setData($data);
         $block = $this->getLayout()->getBlock('page.actions.toolbar');
         if ($block) {

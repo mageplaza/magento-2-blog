@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -35,8 +35,8 @@ class Search extends Frontend
      */
     public function getSearchBlogData()
     {
-        $result = [];
-        $posts = $this->helperData->getPostList();
+        $result    = [];
+        $posts     = $this->helperData->getPostList();
         $limitDesc = (int)$this->getSidebarConfig('search/description');
         if (!empty($posts)) {
             foreach ($posts as $item) {
@@ -47,9 +47,9 @@ class Search extends Frontend
 
                 $result[] = [
                     'value' => $item->getName(),
-                    'url' => $item->getUrl(),
+                    'url'   => $item->getUrl(),
                     'image' => $this->resizeImage($item->getImage(), '100x'),
-                    'desc' => $shortDescription
+                    'desc'  => $shortDescription
                 ];
             }
         }

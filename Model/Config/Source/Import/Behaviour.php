@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -29,9 +29,9 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class Behaviour implements ArrayInterface
 {
-    const UPDATE = "update";
+    const UPDATE  = "update";
     const REPLACE = "replace";
-    const DELETE = "delete";
+    const DELETE  = "delete";
 
     /**
      * @return array
@@ -57,9 +57,9 @@ class Behaviour implements ArrayInterface
     public function toArray()
     {
         return [
-            self::UPDATE => __('Add / Update'),
+            self::UPDATE  => __('Add / Update'),
             self::REPLACE => __('Replace'),
-            self::DELETE => __('Delete')
+            self::DELETE  => __('Delete')
         ];
     }
 }

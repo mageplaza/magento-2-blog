@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -43,19 +43,15 @@ class Delete extends Topic
 
                 $this->messageManager->addSuccess(__('The Topic has been deleted.'));
             } catch (\Exception $e) {
-                // display error message
                 $this->messageManager->addError($e->getMessage());
-                // go back to edit form
                 $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $id]);
 
                 return $resultRedirect;
             }
         } else {
-            // display error message
             $this->messageManager->addError(__('Topic to delete was not found.'));
         }
 
-        // go to grid
         $resultRedirect->setPath('mageplaza_blog/*/');
 
         return $resultRedirect;

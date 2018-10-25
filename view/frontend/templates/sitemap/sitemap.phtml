@@ -15,18 +15,18 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 use Mageplaza\Blog\Helper\Data;
 
 /** @var Data $helper */
-$helper = $this->helper(Data::class);
-$posts = $helper->getPostList();
+$helper     = $this->helper(Data::class);
+$posts      = $helper->getPostList();
 $categories = $helper->getObjectList(Data::TYPE_CATEGORY);
-$tags = $helper->getObjectList(Data::TYPE_TAG);
-$topics = $helper->getObjectList(Data::TYPE_TOPIC);
+$tags       = $helper->getObjectList(Data::TYPE_TAG);
+$topics     = $helper->getObjectList(Data::TYPE_TOPIC);
 ?>
 
 <?php if ($size = $posts->getSize()): ?>

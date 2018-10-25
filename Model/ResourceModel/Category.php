@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -73,8 +73,8 @@ class Category extends AbstractDb
         Data $helperData
     )
     {
-        $this->helperData = $helperData;
-        $this->date = $date;
+        $this->helperData   = $helperData;
+        $this->date         = $date;
         $this->eventManager = $eventManager;
 
         parent::__construct($context);
@@ -102,10 +102,10 @@ class Category extends AbstractDb
     public function getCategoryNameById($id)
     {
         $adapter = $this->getConnection();
-        $select = $adapter->select()
+        $select  = $adapter->select()
             ->from($this->getMainTable(), 'name')
             ->where('category_id = :category_id');
-        $binds = ['category_id' => (int)$id];
+        $binds   = ['category_id' => (int)$id];
 
         return $adapter->fetchOne($select, $binds);
     }
@@ -134,8 +134,8 @@ class Category extends AbstractDb
             if ($object->getPosition() === null) {
                 $object->setPosition($this->getMaxPosition($object->getPath()) + 1);
             }
-            $path = explode('/', $object->getPath());
-            $level = count($path) - ($object->getId() ? 1 : 0);
+            $path          = explode('/', $object->getPath());
+            $level         = count($path) - ($object->getId() ? 1 : 0);
             $toUpdateChild = array_diff($path, [$object->getId()]);
 
             if (!$object->hasPosition()) {
@@ -194,11 +194,11 @@ class Category extends AbstractDb
      */
     protected function getMaxPosition($path)
     {
-        $adapter = $this->getConnection();
+        $adapter       = $this->getConnection();
         $positionField = $adapter->quoteIdentifier('position');
-        $level = count(explode('/', $path));
-        $bind = ['c_level' => $level, 'c_path' => $path . '/%'];
-        $select = $adapter->select()->from(
+        $level         = count(explode('/', $path));
+        $bind          = ['c_level' => $level, 'c_path' => $path . '/%'];
+        $select        = $adapter->select()->from(
             $this->getTable('mageplaza_blog_category'),
             'MAX(' . $positionField . ')'
         )->where(
@@ -252,7 +252,7 @@ class Category extends AbstractDb
         if ($parentIds) {
             $childDecrease = $object->getChildrenCount() + 1;
             // +1 is itself
-            $data = ['children_count' => 'children_count - ' . $childDecrease];
+            $data  = ['children_count' => 'children_count - ' . $childDecrease];
             $where = ['category_id IN(?)' => $parentIds];
             $this->getConnection()->update($this->getMainTable(), $data, $where);
         }
@@ -268,7 +268,7 @@ class Category extends AbstractDb
      */
     public function deleteChildren(\Magento\Framework\DataObject $object)
     {
-        $adapter = $this->getConnection();
+        $adapter   = $this->getConnection();
         $pathField = $adapter->quoteIdentifier('path');
 
         $select = $adapter->select()->from(
@@ -307,10 +307,10 @@ class Category extends AbstractDb
     )
     {
         $childrenCount = $this->getChildrenCount($category->getId()) + 1;
-        $table = $this->getMainTable();
-        $adapter = $this->getConnection();
-        $levelFiled = $adapter->quoteIdentifier('level');
-        $pathField = $adapter->quoteIdentifier('path');
+        $table         = $this->getMainTable();
+        $adapter       = $this->getConnection();
+        $levelFiled    = $adapter->quoteIdentifier('level');
+        $pathField     = $adapter->quoteIdentifier('path');
 
         /**
          * Decrease children count for all old Blog Category parent Categories
@@ -330,9 +330,9 @@ class Category extends AbstractDb
             ['category_id IN(?)' => $newParent->getPathIds()]
         );
 
-        $position = $this->processPositions($category, $newParent, $afterCategoryId);
-        $newPath = sprintf('%s/%s', $newParent->getPath(), $category->getId());
-        $newLevel = $newParent->getLevel() + 1;
+        $position         = $this->processPositions($category, $newParent, $afterCategoryId);
+        $newPath          = sprintf('%s/%s', $newParent->getPath(), $category->getId());
+        $newLevel         = $newParent->getLevel() + 1;
         $levelDisposition = $newLevel - $category->getLevel();
 
         /**
@@ -341,7 +341,7 @@ class Category extends AbstractDb
         $adapter->update(
             $table,
             [
-                'path' => 'REPLACE(' . $pathField . ',' . $adapter->quote(
+                'path'  => 'REPLACE(' . $pathField . ',' . $adapter->quote(
                         $category->getPath() . '/'
                     ) . ', ' . $adapter->quote(
                         $newPath . '/'
@@ -354,9 +354,9 @@ class Category extends AbstractDb
          * Update moved Blog Category data
          */
         $data = [
-            'path' => $newPath,
-            'level' => $newLevel,
-            'position' => $position,
+            'path'      => $newPath,
+            'level'     => $newLevel,
+            'position'  => $position,
             'parent_id' => $newParent->getId(),
         ];
         $adapter->update($table, $data, ['category_id = ?' => $category->getId()]);
@@ -381,7 +381,7 @@ class Category extends AbstractDb
         $afterCategoryId
     )
     {
-        $table = $this->getMainTable();
+        $table   = $this->getMainTable();
         $connect = $this->getConnection();
         /** Get old category position */
         $positionOld = $category->getPosition();
@@ -389,7 +389,7 @@ class Category extends AbstractDb
         if (empty($afterCategoryId)) {
             $positionNew = 1;
         } else {
-            $select = $connect->select()->from($table, 'position')->where('category_id = :category_id');
+            $select      = $connect->select()->from($table, 'position')->where('category_id = :category_id');
             $positionNew = $connect->fetchOne($select, ['category_id' => $afterCategoryId]);
         }
 
@@ -441,7 +441,7 @@ class Category extends AbstractDb
         )->where(
             'category_id = :category_id'
         );
-        $bind = ['category_id' => $categoryId];
+        $bind   = ['category_id' => $categoryId];
 
         return $this->getConnection()->fetchOne($select, $bind);
     }
@@ -459,7 +459,7 @@ class Category extends AbstractDb
             ->where(
                 'category_id = :category_id'
             );
-        $bind = ['category_id' => (int)$category->getId()];
+        $bind   = ['category_id' => (int)$category->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);
     }
@@ -471,22 +471,22 @@ class Category extends AbstractDb
     public function savePostRelation(\Mageplaza\Blog\Model\Category $category)
     {
         $category->setIsChangedPostList(false);
-        $id = $category->getId();
+        $id    = $category->getId();
         $posts = $category->getPostsData();
         if ($posts === null) {
             return $this;
         }
         $oldPosts = $category->getPostsPosition();
-        $insert = array_diff_key($posts, $oldPosts);
-        $delete = array_diff_key($oldPosts, $posts);
-        $update = array_intersect_key($posts, $oldPosts);
-        $_update = [];
+        $insert   = array_diff_key($posts, $oldPosts);
+        $delete   = array_diff_key($oldPosts, $posts);
+        $update   = array_intersect_key($posts, $oldPosts);
+        $_update  = [];
         foreach ($update as $key => $position) {
             if (isset($oldPosts[$key]) && $oldPosts[$key] != $position) {
                 $_update[$key] = $position;
             }
         }
-        $update = $_update;
+        $update  = $_update;
         $adapter = $this->getConnection();
         if (!empty($delete)) {
             $condition = ['post_id IN(?)' => array_keys($delete), 'category_id=?' => $id];
@@ -497,8 +497,8 @@ class Category extends AbstractDb
             foreach ($insert as $postId => $position) {
                 $data[] = [
                     'category_id' => (int)$id,
-                    'post_id' => (int)$postId,
-                    'position' => (int)$position
+                    'post_id'     => (int)$postId,
+                    'position'    => (int)$position
                 ];
             }
             $adapter->insertMultiple($this->categoryPostTable, $data);
@@ -506,7 +506,7 @@ class Category extends AbstractDb
         if (!empty($update)) {
             foreach ($update as $postId => $position) {
                 $where = ['category_id = ?' => (int)$id, 'post_id = ?' => (int)$postId];
-                $bind = ['position' => (int)$position];
+                $bind  = ['position' => (int)$position];
                 $adapter->update($this->categoryPostTable, $bind, $where);
             }
         }

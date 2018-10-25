@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -61,7 +61,7 @@ class MassStatus extends Action
         CollectionFactory $collectionFactory
     )
     {
-        $this->filter = $filter;
+        $this->filter            = $filter;
         $this->collectionFactory = $collectionFactory;
 
         parent::__construct($context);
@@ -74,7 +74,7 @@ class MassStatus extends Action
     public function execute()
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
-        $status = (int)$this->getRequest()->getParam('status');
+        $status     = (int)$this->getRequest()->getParam('status');
 
         $postUpdated = 0;
         foreach ($collection as $post) {

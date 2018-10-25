@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -92,19 +92,17 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     protected function _prepareLayout()
     {
         $this->addTab('category', [
-                'label' => __('Category information'),
-                'content' => $this->getLayout()
-                    ->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Category', 'mageplaza_blog_category_edit_tab_category')
-                    ->toHtml()
-            ]
-        );
+            'label'   => __('Category information'),
+            'content' => $this->getLayout()
+                ->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Category', 'mageplaza_blog_category_edit_tab_category')
+                ->toHtml()
+        ]);
         $this->addTab('post', [
-                'label' => __('Posts'),
-                'content' => $this->getLayout()
-                    ->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Post', 'mageplaza_blog_category_edit_tab_post')
-                    ->toHtml()
-            ]
-        );
+            'label'   => __('Posts'),
+            'content' => $this->getLayout()
+                ->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Post', 'mageplaza_blog_category_edit_tab_post')
+                ->toHtml()
+        ]);
 
         // dispatch event add custom tabs
         $this->_eventManager->dispatch('adminhtml_mageplaza_blog_category_tabs', ['tabs' => $this]);

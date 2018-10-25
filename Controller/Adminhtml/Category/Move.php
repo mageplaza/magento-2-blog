@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -74,8 +74,8 @@ class Move extends Category
     )
     {
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory = $layoutFactory;
-        $this->logger = $logger;
+        $this->layoutFactory     = $layoutFactory;
+        $this->logger            = $logger;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }
@@ -118,7 +118,7 @@ class Move extends Category
         $resultJson = $this->resultJsonFactory->create();
         $resultJson->setData([
             'messages' => $block->getGroupedHtml(),
-            'error' => $error
+            'error'    => $error
         ]);
 
         return $resultJson;

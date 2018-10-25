@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -23,7 +23,7 @@
 
 $posts = $block->getCollection();
 ?>
-<div class="blog-widget-title"><a ></a></div>
+<div class="blog-widget-title"><a></a></div>
 <div class="post-list-container mpcss" id="mpblog-list-container">
     <div class="widget-title">
         <a href="<?php echo $block->getBlogUrl(''); ?>"><?php echo $block->getTitle(); ?></a>
@@ -43,8 +43,9 @@ $posts = $block->getCollection();
                     <?php endif; ?>
                     <div class="post-info-wraper">
                         <h2 class="mp-post-title" style="font-size: 22px">
-                            <a class="post-link-title" title="<?php echo $post->getName(); ?>" href="<?php echo $post->getUrl() ?>">
-                                <?php echo $post->getName();?>
+                            <a class="post-link-title" title="<?php echo $post->getName(); ?>"
+                               href="<?php echo $post->getUrl() ?>">
+                                <?php echo $post->getName(); ?>
                             </a>
                         </h2>
                         <div class="mp-post-info">
@@ -56,7 +57,8 @@ $posts = $block->getCollection();
                         <div class="mp-clearfix"></div>
                         <div class="mp-post-meta-info mp-alignright">
                             <div class="actions">
-                                <a class="mp-read-more" href="<?php echo $post->getUrl(); ?>" title="<?php echo __('Read More'); ?>"><?php echo __('Read more'); ?></a>
+                                <a class="mp-read-more" href="<?php echo $post->getUrl(); ?>"
+                                   title="<?php echo __('Read More'); ?>"><?php echo __('Read more'); ?></a>
                             </div>
                         </div>
                     </div>

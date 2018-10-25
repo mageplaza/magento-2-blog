@@ -15,30 +15,30 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 $topics = $block->getTopicList();
 if ($topics && $topics->getSize()):
-?>
-<div class="mp-sidebar mpcss">
-	<div class="row">
-		<div class="block-title col-xs-12 sidebar-categories">
-            <p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Topics') ?></p>
-		</div>
-        <div class="col-xs-12">
-            <ul class="block-content menu-categories">
-            <?php foreach ($topics as $topic): ?>
-                <li class="category-item">
-                    <a class="list-categories" href="<?php echo $block->getTopicUrl($topic) ?>">
-                        <i class="fa fa-folder-o" aria-hidden="true">&nbsp;</i>
-                        <?php echo ucfirst($topic->getName()) ?>
-                    </a>
-                </li>
-            <?php endforeach; ?>
-            </ul>
+    ?>
+    <div class="mp-sidebar mpcss">
+        <div class="row">
+            <div class="block-title col-xs-12 sidebar-categories">
+                <p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Topics') ?></p>
+            </div>
+            <div class="col-xs-12">
+                <ul class="block-content menu-categories">
+                    <?php foreach ($topics as $topic): ?>
+                        <li class="category-item">
+                            <a class="list-categories" href="<?php echo $block->getTopicUrl($topic) ?>">
+                                <i class="fa fa-folder-o" aria-hidden="true">&nbsp;</i>
+                                <?php echo ucfirst($topic->getName()) ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 <?php endif; ?>

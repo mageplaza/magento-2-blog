@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -35,28 +35,24 @@ class AheadWorksM1 extends AbstractImport
      * @var string
      */
     const TABLE_POST = 'aw_blog';
-
     /**
      * AheadworksM1 Tag table name
      *
      * @var string
      */
     const TABLE_TAG = 'aw_blog_tags';
-
     /**
      * AheadworksM1 Category table name
      *
      * @var string
      */
     const TABLE_CATEGORY = 'aw_blog_cat';
-
     /**
      * AheadworksM1 Comment table name
      *
      * @var string
      */
     const TABLE_COMMENT = 'aw_blog_comment';
-
     /**
      * AheadworksM1 Category-Post Relationship table name
      *
@@ -80,10 +76,11 @@ class AheadWorksM1 extends AbstractImport
             $this->_importTags($data, $connection);
             $this->_importCategories($data, $connection);
             $this->_importComments($data, $connection);
+
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -91,22 +88,21 @@ class AheadWorksM1 extends AbstractImport
      * @param $connection
      * @return bool|mixed
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _importPosts($data, $connection)
     {
-        $authorId = $this->_authSession->getUser()->getId();
+        $authorId  = $this->_authSession->getUser()->getId();
         $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POST . "`";
-        $result = mysqli_query($connection, $sqlString);
+        $result    = mysqli_query($connection, $sqlString);
         $isReplace = true;
         if ($result) {
             $this->_resetRecords();
             /**
              * @var \Mageplaza\Blog\Model\PostFactory
              */
-            $postModel = $this->_postFactory->create();
-            $oldPostIds = [];
-            $tags = [];
+            $postModel    = $this->_postFactory->create();
+            $oldPostIds   = [];
+            $tags         = [];
             $importSource = $data['type'] . '-' . $data['database'];
 
             /** delete behaviour action */
@@ -124,26 +120,26 @@ class AheadWorksM1 extends AbstractImport
             while ($post = mysqli_fetch_assoc($result)) {
                 /** store the source item */
                 $sourceItems[] = [
-                    'is_imported' => $postModel->getResource()->isImported($importSource, $post['post_id']),
+                    'is_imported'       => $postModel->getResource()->isImported($importSource, $post['post_id']),
                     'is_duplicated_url' => $postModel->getResource()->isDuplicateUrlKey($post['identifier']),
-                    'id' => $post['post_id'],
-                    'name' => $post['title'],
+                    'id'                => $post['post_id'],
+                    'name'              => $post['title'],
                     'short_description' => $post['short_content'],
-                    'post_content' => $post['post_content'],
-                    'url_key' => $this->helperData->generateUrlKey($postModel->getResource(), $postModel, $post['identifier']),
-                    'created_at' => ($post['created_time'] > $this->date->date() || !$post['created_time']) ? ($this->date->date()) : ($post['created_time']),
-                    'updated_at' => ($post['update_time']) ?: $this->date->date(),
-                    'publish_date' => ($post['created_time']) ?: $this->date->date(),
-                    'enabled' => 1,
-                    'in_rss' => 0,
-                    'allow_comment' => 1,
-                    'store_ids' => $this->_storeManager->getStore()->getId(),
-                    'meta_robots' => 'INDEX,FOLLOW', //Default value
-                    'meta_keywords' => $post['meta_keywords'],
-                    'meta_description' => $post['meta_description'],
-                    'author_id' => (int)$authorId,
-                    'import_source' => $importSource . '-' . $post['post_id'],
-                    'tags' => $post['tags']
+                    'post_content'      => $post['post_content'],
+                    'url_key'           => $this->helperData->generateUrlKey($postModel->getResource(), $postModel, $post['identifier']),
+                    'created_at'        => ($post['created_time'] > $this->date->date() || !$post['created_time']) ? ($this->date->date()) : ($post['created_time']),
+                    'updated_at'        => ($post['update_time']) ?: $this->date->date(),
+                    'publish_date'      => ($post['created_time']) ?: $this->date->date(),
+                    'enabled'           => 1,
+                    'in_rss'            => 0,
+                    'allow_comment'     => 1,
+                    'store_ids'         => $this->_storeManager->getStore()->getId(),
+                    'meta_robots'       => 'INDEX,FOLLOW', //Default value
+                    'meta_keywords'     => $post['meta_keywords'],
+                    'meta_description'  => $post['meta_description'],
+                    'author_id'         => (int)$authorId,
+                    'import_source'     => $importSource . '-' . $post['post_id'],
+                    'tags'              => $post['tags']
                 ];
             }
 
@@ -202,12 +198,12 @@ class AheadWorksM1 extends AbstractImport
                      */
                     if (!empty($postTag)) {
                         $tagNames = explode(',', $postTag);
-                        $id = [];
+                        $id       = [];
                         foreach ($tagNames as $name) {
                             $tagTableSql = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_TAG . "` WHERE `tag` = '" . $name . "'";
-                            $tagResult = mysqli_query($connection, $tagTableSql);
-                            $tag = mysqli_fetch_assoc($tagResult);
-                            $id [] = $tag['id'];
+                            $tagResult   = mysqli_query($connection, $tagTableSql);
+                            $tag         = mysqli_fetch_assoc($tagResult);
+                            $id []       = $tag['id'];
                         }
                         if ($post['is_imported']) {
                             $tags[$post['is_imported']] = $id;
@@ -221,9 +217,9 @@ class AheadWorksM1 extends AbstractImport
                 foreach ($postModel->getCollection() as $item) {
                     if ($item->getImportSource() != null) {
                         $postImportSource = explode('-', $item->getImportSource());
-                        $importType = array_shift($postImportSource);
+                        $importType       = array_shift($postImportSource);
                         if ($importType == $this->_type['aheadworksm1']) {
-                            $oldPostId = array_pop($postImportSource);
+                            $oldPostId                  = array_pop($postImportSource);
                             $oldPostIds[$item->getId()] = $oldPostId;
                         }
                     }
@@ -235,28 +231,28 @@ class AheadWorksM1 extends AbstractImport
             $this->_registry->register('mageplaza_import_post_ids_collection', $oldPostIds);
             $this->_registry->register('mageplaza_import_post_tags_collection', $tags);
             $this->_registry->register('mageplaza_import_post_statistic', $statistics);
+
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
      * @param $data
      * @param $connection
      * @return mixed|void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _importTags($data, $connection)
     {
         $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_TAG . "`";
-        $result = mysqli_query($connection, $sqlString);
+        $result    = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
         $isReplace = true;
         $oldTagIds = [];
 
         /** @var \Mageplaza\Blog\Model\TagFactory */
-        $tagModel = $this->_tagFactory->create();
+        $tagModel     = $this->_tagFactory->create();
         $importSource = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
@@ -274,14 +270,14 @@ class AheadWorksM1 extends AbstractImport
         while ($tag = mysqli_fetch_assoc($result)) {
             /** store the source item */
             $sourceItems[] = [
-                'is_imported' => $tagModel->getResource()->isImported($importSource, $tag['id']),
+                'is_imported'       => $tagModel->getResource()->isImported($importSource, $tag['id']),
                 'is_duplicated_url' => $tagModel->getResource()->isDuplicateUrlKey($tag['tag']),
-                'id' => $tag['id'],
-                'name' => $tag['tag'],
-                'meta_robots' => 'INDEX,FOLLOW',
-                'store_ids' => $this->_storeManager->getStore()->getId(),
-                'enabled' => 1,
-                'import_source' => $importSource . '-' . $tag['id']
+                'id'                => $tag['id'],
+                'name'              => $tag['tag'],
+                'meta_robots'       => 'INDEX,FOLLOW',
+                'store_ids'         => $this->_storeManager->getStore()->getId(),
+                'enabled'           => 1,
+                'import_source'     => $importSource . '-' . $tag['id']
             ];
         }
 
@@ -315,7 +311,6 @@ class AheadWorksM1 extends AbstractImport
                         }
                     }
                 } else {
-
                     /** Update tags */
                     if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tag['is_duplicated_url'] != null) {
                         try {
@@ -329,7 +324,6 @@ class AheadWorksM1 extends AbstractImport
                             continue;
                         }
                     } else {
-
                         /** Add new tags */
                         try {
                             $this->_addTags($tagModel, $tag);
@@ -349,9 +343,9 @@ class AheadWorksM1 extends AbstractImport
             foreach ($tagModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
                     $tagImportSource = explode('-', $item->getImportSource());
-                    $importType = array_shift($tagImportSource);
+                    $importType      = array_shift($tagImportSource);
                     if ($importType == $this->_type['aheadworksm1']) {
-                        $oldTagId = array_pop($tagImportSource);
+                        $oldTagId                  = array_pop($tagImportSource);
                         $oldTagIds[$item->getId()] = $oldTagId;
                     }
                 }
@@ -381,17 +375,16 @@ class AheadWorksM1 extends AbstractImport
      * @param $connection
      * @return mixed|void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _importCategories($data, $connection)
     {
         $sqlString = "SELECT * FROM `" . $data["table_prefix"] . self::TABLE_CATEGORY . "`";
-        $result = mysqli_query($connection, $sqlString);
+        $result    = mysqli_query($connection, $sqlString);
         $isReplace = true;
         /**
          * @var \Mageplaza\Blog\Model\CategoryFactory
          */
-        $categoryModel = $this->_categoryFactory->create();
+        $categoryModel  = $this->_categoryFactory->create();
         $oldCategoryIds = [];
         $this->_resetRecords();
         $importSource = $data['type'] . '-' . $data['database'];
@@ -411,18 +404,18 @@ class AheadWorksM1 extends AbstractImport
         while ($category = mysqli_fetch_assoc($result)) {
             /** store the source item */
             $sourceItems[] = [
-                'is_imported' => $categoryModel->getResource()->isImported($importSource, $category['cat_id']),
+                'is_imported'       => $categoryModel->getResource()->isImported($importSource, $category['cat_id']),
                 'is_duplicated_url' => $categoryModel->getResource()->isDuplicateUrlKey($category['identifier']),
-                'id' => $category['cat_id'],
-                'name' => $category['title'],
-                'url_key' => $this->helperData->generateUrlKey($categoryModel->getResource(), $categoryModel, $category['identifier']),
-                'meta_robots' => 'INDEX,FOLLOW',
-                'store_ids' => $this->_storeManager->getStore()->getId(),
-                'enabled' => 1,
-                'path' => '1',
-                'meta_description' => $category['meta_description'],
-                'meta_keywords' => $category['meta_keywords'],
-                'import_source' => $importSource . '-' . $category['cat_id']
+                'id'                => $category['cat_id'],
+                'name'              => $category['title'],
+                'url_key'           => $this->helperData->generateUrlKey($categoryModel->getResource(), $categoryModel, $category['identifier']),
+                'meta_robots'       => 'INDEX,FOLLOW',
+                'store_ids'         => $this->_storeManager->getStore()->getId(),
+                'enabled'           => 1,
+                'path'              => '1',
+                'meta_description'  => $category['meta_description'],
+                'meta_keywords'     => $category['meta_keywords'],
+                'import_source'     => $importSource . '-' . $category['cat_id']
             ];
         }
 
@@ -457,7 +450,6 @@ class AheadWorksM1 extends AbstractImport
                         }
                     }
                 } else {
-
                     /**
                      * Update categories
                      */
@@ -473,7 +465,6 @@ class AheadWorksM1 extends AbstractImport
                             continue;
                         }
                     } else {
-
                         /**
                          * Add new categories
                          */
@@ -494,9 +485,9 @@ class AheadWorksM1 extends AbstractImport
             foreach ($categoryModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
                     $catImportSource = explode('-', $item->getImportSource());
-                    $importType = array_shift($catImportSource);
+                    $importType      = array_shift($catImportSource);
                     if ($importType == $this->_type['aheadworksm1']) {
-                        $oldCategoryId = array_pop($catImportSource);
+                        $oldCategoryId                  = array_pop($catImportSource);
                         $oldCategoryIds[$item->getId()] = $oldCategoryId;
                     }
                 }
@@ -521,16 +512,16 @@ class AheadWorksM1 extends AbstractImport
     protected function _importComments($data, $connection)
     {
         $accountManage = $this->_objectManager->create('\Magento\Customer\Model\AccountManagement');
-        $sqlString = "SELECT * FROM `" . $data["table_prefix"] . self::TABLE_COMMENT . "`";
-        $result = mysqli_query($connection, $sqlString);
+        $sqlString     = "SELECT * FROM `" . $data["table_prefix"] . self::TABLE_COMMENT . "`";
+        $result        = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
         $isReplace = true;
         /** @var \Mageplaza\Blog\Model\CommentFactory */
-        $commentModel = $this->_commentFactory->create();
+        $commentModel  = $this->_commentFactory->create();
         $customerModel = $this->_customerFactory->create();
-        $websiteId = $this->_storeManager->getWebsite()->getId();
-        $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
-        $importSource = $data['type'] . '-' . $data['database'];
+        $websiteId     = $this->_storeManager->getWebsite()->getId();
+        $oldPostIds    = $this->_registry->registry('mageplaza_import_post_ids_collection');
+        $importSource  = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
         if ($data['behaviour'] == 'delete' || $data['behaviour'] == 'replace') {
@@ -545,7 +536,6 @@ class AheadWorksM1 extends AbstractImport
 
         /** fetch all items from import source */
         while ($comment = mysqli_fetch_assoc($result)) {
-
             /** mapping status */
             switch ($comment['status']) {
                 case '2':
@@ -561,33 +551,33 @@ class AheadWorksM1 extends AbstractImport
             $newPostId = array_search($comment['post_id'], $oldPostIds);
             /** check if comment author is customer */
             if ($accountManage->isEmailAvailable($comment['email'], $websiteId)) {
-                $entityId = 0;
-                $userName = $comment['user'];
+                $entityId  = 0;
+                $userName  = $comment['user'];
                 $userEmail = $comment['email'];
             } else {
                 /** comment author is guest */
                 $customerModel->setWebsiteId($websiteId);
                 $customerModel->loadByEmail($comment['email']);
-                $entityId = $customerModel->getEntityId();
-                $userName = "";
+                $entityId  = $customerModel->getEntityId();
+                $userName  = "";
                 $userEmail = "";
             }
 
             /** store the source item */
             $sourceItems[] = [
-                'is_imported' => $commentModel->getResource()->isImported($importSource, $comment['comment_id']),
-                'id' => $comment['comment_id'],
-                'post_id' => $newPostId,
-                'entity_id' => $entityId,
-                'has_reply' => 0,
-                'is_reply' => 0,
-                'reply_id' => 0,
-                'content' => $comment['comment'],
-                'created_at' => ($comment['created_time']) ?: $this->date->date(),
-                'status' => $status,
-                'store_ids' => $this->_storeManager->getStore()->getId(),
-                'user_name' => $userName,
-                'user_email' => $userEmail,
+                'is_imported'   => $commentModel->getResource()->isImported($importSource, $comment['comment_id']),
+                'id'            => $comment['comment_id'],
+                'post_id'       => $newPostId,
+                'entity_id'     => $entityId,
+                'has_reply'     => 0,
+                'is_reply'      => 0,
+                'reply_id'      => 0,
+                'content'       => $comment['comment'],
+                'created_at'    => ($comment['created_time']) ?: $this->date->date(),
+                'status'        => $status,
+                'store_ids'     => $this->_storeManager->getStore()->getId(),
+                'user_name'     => $userName,
+                'user_email'    => $userEmail,
                 'import_source' => $importSource . '-' . $comment['comment_id']
             ];
         }
@@ -602,17 +592,17 @@ class AheadWorksM1 extends AbstractImport
                     $this->_resourceConnection->getConnection()
                         ->update($this->_resourceConnection
                             ->getTableName('mageplaza_blog_comment'), [
-                            'post_id' => $comment['post_id'],
-                            'entity_id' => $comment['entity_id'],
-                            'has_reply' => $comment['has_reply'],
-                            'is_reply' => $comment['is_reply'],
-                            'reply_id' => $comment['reply_id'],
-                            'content' => $comment['content'],
-                            'created_at' => $comment['created_at'],
-                            'status' => $comment['status'],
-                            'store_ids' => $comment['store_ids'],
-                            'user_name' => $comment['user_name'],
-                            'user_email' => $comment['user_email'],
+                            'post_id'       => $comment['post_id'],
+                            'entity_id'     => $comment['entity_id'],
+                            'has_reply'     => $comment['has_reply'],
+                            'is_reply'      => $comment['is_reply'],
+                            'reply_id'      => $comment['reply_id'],
+                            'content'       => $comment['content'],
+                            'created_at'    => $comment['created_at'],
+                            'status'        => $comment['status'],
+                            'store_ids'     => $comment['store_ids'],
+                            'user_name'     => $comment['user_name'],
+                            'user_email'    => $comment['user_email'],
                             'import_source' => $comment['import_source']
                         ], $where);
                     $this->_successCount++;
@@ -621,17 +611,17 @@ class AheadWorksM1 extends AbstractImport
                     /** add new comments */
                     try {
                         $commentModel->setData([
-                            'post_id' => $comment['post_id'],
-                            'entity_id' => $comment['entity_id'],
-                            'has_reply' => $comment['has_reply'],
-                            'is_reply' => $comment['is_reply'],
-                            'reply_id' => $comment['reply_id'],
-                            'content' => $comment['content'],
-                            'created_at' => $comment['created_at'],
-                            'status' => $comment['status'],
-                            'store_ids' => $comment['store_ids'],
-                            'user_name' => $comment['user_name'],
-                            'user_email' => $comment['user_email'],
+                            'post_id'       => $comment['post_id'],
+                            'entity_id'     => $comment['entity_id'],
+                            'has_reply'     => $comment['has_reply'],
+                            'is_reply'      => $comment['is_reply'],
+                            'reply_id'      => $comment['reply_id'],
+                            'content'       => $comment['content'],
+                            'created_at'    => $comment['created_at'],
+                            'status'        => $comment['status'],
+                            'store_ids'     => $comment['store_ids'],
+                            'user_name'     => $comment['user_name'],
+                            'user_email'    => $comment['user_email'],
                             'import_source' => $comment['import_source']
                         ])->save();
                         $this->_successCount++;
@@ -670,18 +660,18 @@ class AheadWorksM1 extends AbstractImport
      */
     protected function _importCategoryPost($data, $connection, $oldCatIds, $relationTable)
     {
-        $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
+        $oldPostIds        = $this->_registry->registry('mageplaza_import_post_ids_collection');
         $categoryPostTable = $this->_resourceConnection->getTableName($relationTable);
         foreach ($oldPostIds as $newPostId => $oldPostId) {
             $sqlRelation = "SELECT * FROM `" . $data["table_prefix"] . self::TABLE_CATEGORY_POST . "` WHERE `post_id` = " . $oldPostId;
-            $result = mysqli_query($connection, $sqlRelation);
+            $result      = mysqli_query($connection, $sqlRelation);
             while ($categoryPost = mysqli_fetch_assoc($result)) {
                 $newCategoryId = (array_search($categoryPost['cat_id'], $oldCatIds)) ?: '1';
                 try {
                     $this->_resourceConnection->getConnection()->insert($categoryPostTable, [
                         'category_id' => $newCategoryId,
-                        'post_id' => $newPostId,
-                        'position' => 0
+                        'post_id'     => $newPostId,
+                        'position'    => 0
                     ]);
                 } catch (\Exception $e) {
                     continue;
@@ -699,22 +689,22 @@ class AheadWorksM1 extends AbstractImport
     private function _addPosts($postModel, $post)
     {
         $postModel->setData([
-            'name' => $post['name'],
+            'name'              => $post['name'],
             'short_description' => $post['short_description'],
-            'post_content' => $post['post_content'],
-            'url_key' => $post['url_key'],
-            'created_at' => $post['created_at'],
-            'updated_at' => $post['updated_at'],
-            'publish_date' => $post['publish_date'],
-            "enabled" => $post['enabled'],
-            'in_rss' => $post['in_rss'],
-            'allow_comment' => $post['allow_comment'],
-            'store_ids' => $post['store_ids'],
-            'meta_robots' => $post['meta_robots'],
-            'meta_keywords' => $post['meta_keywords'],
-            'meta_description' => $post['meta_description'],
-            'author_id' => $post['author_id'],
-            'import_source' => $post['import_source']
+            'post_content'      => $post['post_content'],
+            'url_key'           => $post['url_key'],
+            'created_at'        => $post['created_at'],
+            'updated_at'        => $post['updated_at'],
+            'publish_date'      => $post['publish_date'],
+            "enabled"           => $post['enabled'],
+            'in_rss'            => $post['in_rss'],
+            'allow_comment'     => $post['allow_comment'],
+            'store_ids'         => $post['store_ids'],
+            'meta_robots'       => $post['meta_robots'],
+            'meta_keywords'     => $post['meta_keywords'],
+            'meta_description'  => $post['meta_description'],
+            'author_id'         => $post['author_id'],
+            'import_source'     => $post['import_source']
         ])->save();
     }
 
@@ -729,22 +719,22 @@ class AheadWorksM1 extends AbstractImport
         $this->_resourceConnection->getConnection()
             ->update($this->_resourceConnection
                 ->getTableName('mageplaza_blog_post'), [
-                'name' => $post['name'],
+                'name'              => $post['name'],
                 'short_description' => $post['short_description'],
-                'post_content' => $post['post_content'],
-                'url_key' => $post['url_key'],
-                'created_at' => $post['created_at'],
-                'updated_at' => $post['updated_at'],
-                'publish_date' => $post['publish_date'],
-                "enabled" => $post['enabled'],
-                'in_rss' => $post['in_rss'],
-                'allow_comment' => $post['allow_comment'],
-                'store_ids' => $post['store_ids'],
-                'meta_robots' => $post['meta_robots'],
-                'meta_keywords' => $post['meta_keywords'],
-                'meta_description' => $post['meta_description'],
-                'author_id' => $post['author_id'],
-                'import_source' => $post['import_source']
+                'post_content'      => $post['post_content'],
+                'url_key'           => $post['url_key'],
+                'created_at'        => $post['created_at'],
+                'updated_at'        => $post['updated_at'],
+                'publish_date'      => $post['publish_date'],
+                "enabled"           => $post['enabled'],
+                'in_rss'            => $post['in_rss'],
+                'allow_comment'     => $post['allow_comment'],
+                'store_ids'         => $post['store_ids'],
+                'meta_robots'       => $post['meta_robots'],
+                'meta_keywords'     => $post['meta_keywords'],
+                'meta_description'  => $post['meta_description'],
+                'author_id'         => $post['author_id'],
+                'import_source'     => $post['import_source']
             ], $where);
         $this->_resourceConnection->getConnection()
             ->delete($this->_resourceConnection
@@ -761,10 +751,10 @@ class AheadWorksM1 extends AbstractImport
     private function _addTags($tagModel, $tag)
     {
         $tagModel->setData([
-            'name' => $tag['name'],
-            'meta_robots' => $tag['meta_robots'],
-            'store_ids' => $tag['store_ids'],
-            'enabled' => $tag['enabled'],
+            'name'          => $tag['name'],
+            'meta_robots'   => $tag['meta_robots'],
+            'store_ids'     => $tag['store_ids'],
+            'enabled'       => $tag['enabled'],
             'import_source' => $tag['import_source']
         ])->save();
     }
@@ -778,10 +768,10 @@ class AheadWorksM1 extends AbstractImport
         $this->_resourceConnection->getConnection()
             ->update($this->_resourceConnection
                 ->getTableName('mageplaza_blog_tag'), [
-                'name' => $tag['name'],
-                'meta_robots' => $tag['meta_robots'],
-                'store_ids' => $tag['store_ids'],
-                'enabled' => $tag['enabled'],
+                'name'          => $tag['name'],
+                'meta_robots'   => $tag['meta_robots'],
+                'store_ids'     => $tag['store_ids'],
+                'enabled'       => $tag['enabled'],
                 'import_source' => $tag['import_source']
             ], $where);
     }
@@ -793,15 +783,15 @@ class AheadWorksM1 extends AbstractImport
     private function _addCategories($categoryModel, $category)
     {
         $categoryModel->setData([
-            'name' => $category['name'],
-            'url_key' => $category['url_key'],
-            'meta_robots' => $category['meta_robots'],
-            'store_ids' => $category['store_ids'],
-            'enabled' => $category['enabled'],
-            'path' => $category['path'],
+            'name'             => $category['name'],
+            'url_key'          => $category['url_key'],
+            'meta_robots'      => $category['meta_robots'],
+            'store_ids'        => $category['store_ids'],
+            'enabled'          => $category['enabled'],
+            'path'             => $category['path'],
             'meta_description' => $category['meta_description'],
-            'meta_keywords' => $category['meta_keywords'],
-            'import_source' => $category['import_source']
+            'meta_keywords'    => $category['meta_keywords'],
+            'import_source'    => $category['import_source']
         ])->save();
     }
 
@@ -814,14 +804,14 @@ class AheadWorksM1 extends AbstractImport
         $this->_resourceConnection->getConnection()
             ->update($this->_resourceConnection
                 ->getTableName('mageplaza_blog_category'), [
-                'name' => $category['name'],
-                'url_key' => $category['url_key'],
-                'meta_robots' => $category['meta_robots'],
-                'store_ids' => $category['store_ids'],
-                'enabled' => $category['enabled'],
+                'name'             => $category['name'],
+                'url_key'          => $category['url_key'],
+                'meta_robots'      => $category['meta_robots'],
+                'store_ids'        => $category['store_ids'],
+                'enabled'          => $category['enabled'],
                 'meta_description' => $category['meta_description'],
-                'meta_keywords' => $category['meta_keywords'],
-                'import_source' => $category['import_source']
+                'meta_keywords'    => $category['meta_keywords'],
+                'import_source'    => $category['import_source']
             ], $where);
     }
 }

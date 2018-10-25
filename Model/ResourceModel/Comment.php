@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -63,10 +63,10 @@ class Comment extends AbstractDb
     public function isImported($importSource, $oldId)
     {
         $adapter = $this->getConnection();
-        $select = $adapter->select()
+        $select  = $adapter->select()
             ->from($this->getMainTable(), 'comment_id')
             ->where('import_source = :import_source');
-        $binds = ['import_source' => $importSource . '-' . $oldId];
+        $binds   = ['import_source' => $importSource . '-' . $oldId];
 
         return $adapter->fetchOne($select, $binds);
     }

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -240,14 +240,14 @@ class Post extends AbstractModel
         array $data = []
     )
     {
-        $this->tagCollectionFactory = $tagCollectionFactory;
-        $this->topicCollectionFactory = $topicCollectionFactory;
+        $this->tagCollectionFactory      = $tagCollectionFactory;
+        $this->topicCollectionFactory    = $topicCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
-        $this->postCollectionFactory = $postCollectionFactory;
-        $this->productCollectionFactory = $productCollectionFactory;
-        $this->helperData = $helperData;
-        $this->dateTime = $dateTime;
-        $this->trafficFactory = $trafficFactory;
+        $this->postCollectionFactory     = $postCollectionFactory;
+        $this->productCollectionFactory  = $productCollectionFactory;
+        $this->helperData                = $helperData;
+        $this->dateTime                  = $dateTime;
+        $this->trafficFactory            = $trafficFactory;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -272,7 +272,7 @@ class Post extends AbstractModel
                 ->load($this->getId(), 'post_id');
             if (!$trafficModel->getId()) {
                 $trafficModel->setData([
-                    'post_id' => $this->getId(),
+                    'post_id'      => $this->getId(),
                     'numbers_view' => 0
                 ])->save();
             }
@@ -322,11 +322,11 @@ class Post extends AbstractModel
      */
     public function getDefaultValues()
     {
-        $values = [];
-        $values['in_rss'] = '1';
-        $values['enabled'] = '1';
+        $values                  = [];
+        $values['in_rss']        = '1';
+        $values['enabled']       = '1';
         $values['allow_comment'] = '1';
-        $values['store_ids'] = '1';
+        $values['store_ids']     = '1';
 
         return $values;
     }
@@ -428,6 +428,7 @@ class Post extends AbstractModel
 
             $this->setData('topic_ids', $ids);
         }
+
         return (array)$this->_getData('topic_ids');
     }
 

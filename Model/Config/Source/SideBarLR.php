@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -29,7 +29,7 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class SideBarLR implements ArrayInterface
 {
-    const LEFT = '2columns-left';
+    const LEFT  = '2columns-left';
     const RIGHT = '2columns-right';
 
     /**
@@ -58,7 +58,7 @@ class SideBarLR implements ArrayInterface
     public function toArray()
     {
         return [
-            self::LEFT => __('Left'),
+            self::LEFT  => __('Left'),
             self::RIGHT => __('Right')
         ];
     }

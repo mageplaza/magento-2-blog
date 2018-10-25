@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -64,6 +64,7 @@ class Collection extends SearchResult
 
         $this->addPostName();
         $this->addCustomerName();
+
         return $this;
     }
 
@@ -95,6 +96,7 @@ class Collection extends SearchResult
             "main_table.post_id = mp.post_id",
             ['post_name' => 'name']
         );
+
         return $this;
     }
 

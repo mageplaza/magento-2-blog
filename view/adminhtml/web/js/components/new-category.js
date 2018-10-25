@@ -14,7 +14,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -64,7 +64,7 @@ define([
          */
         setOption: function (option, options) {
             var parent = parseInt(option.parent);
-            if(_.contains([0, 1], parent)){
+            if (_.contains([0, 1], parent)) {
                 options = options || this.cacheOptions.tree;
                 options.push(option);
 

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -59,14 +59,17 @@ class Listpost extends Frontend
      * @param $description
      * @return string
      */
-    public function maxShortDescription($description){
-        if(is_string($description)){
-            $html= '';
-            foreach (explode("\n",trim($description)) as $value){
-                $html.= '<p>'.$value.'</p>';
+    public function maxShortDescription($description)
+    {
+        if (is_string($description)) {
+            $html = '';
+            foreach (explode("\n", trim($description)) as $value) {
+                $html .= '<p>' . $value . '</p>';
             }
+
             return $html;
         }
+
         return $description;
     }
 
@@ -77,7 +80,7 @@ class Listpost extends Frontend
      */
     protected function getCollection()
     {
-        return $this->helperData->getPostCollection(null,null,$this->store->getStore()->getId());
+        return $this->helperData->getPostCollection(null, null, $this->store->getStore()->getId());
     }
 
     /**
@@ -105,7 +108,7 @@ class Listpost extends Frontend
             $breadcrumbs->addCrumb('home', [
                 'label' => __('Home'),
                 'title' => __('Go to Home Page'),
-                'link' => $this->_storeManager->getStore()->getBaseUrl()
+                'link'  => $this->_storeManager->getStore()->getBaseUrl()
             ])
                 ->addCrumb($this->helperData->getRoute(), $this->getBreadcrumbsData());
         }

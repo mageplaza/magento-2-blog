@@ -16,7 +16,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
@@ -58,7 +58,7 @@
             <sidebar>
                 <number_recent_posts>5</number_recent_posts>
                 <number_mostview_posts>5</number_mostview_posts>
-                <sidebar_left_right>1</sidebar_left_right>
+                <sidebar_left_right>2columns-right</sidebar_left_right>
                 <search>
                     <enable_search>1</enable_search>
                     <search_limit>10</search_limit>

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -72,8 +72,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     {
         parent::__construct($context, $categoryTree, $registry, $categoryFactory, $jsonEncoder, $resourceHelper, $backendSession, $data);
 
-        $this->_categoryTree = $blogCategoryTree;
-        $this->_categoryFactory = $blogCategoryFactory;
+        $this->_categoryTree     = $blogCategoryTree;
+        $this->_categoryFactory  = $blogCategoryFactory;
         $this->_withProductCount = false;
     }
 
@@ -152,10 +152,10 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         $node->setIsActive(true);
 
         if ($item = parent::_getNodeJson($node, $level)) {
-            $item['url'] = $node->getData('url_key');
-            $item['storeIds'] = $node->getData('store_ids');
+            $item['url']       = $node->getData('url_key');
+            $item['storeIds']  = $node->getData('store_ids');
             $item['allowDrag'] = $this->_isCategoryMoveable($node) && ($node->getLevel() == 0 ? false : true);
-            $item['enabled'] = $node->getData('enabled');
+            $item['enabled']   = $node->getData('enabled');
 
             return $item;
         }

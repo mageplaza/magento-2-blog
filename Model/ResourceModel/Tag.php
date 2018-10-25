@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -73,8 +73,8 @@ class Tag extends AbstractDb
         Data $helperData
     )
     {
-        $this->helperData = $helperData;
-        $this->date = $date;
+        $this->helperData   = $helperData;
+        $this->date         = $date;
         $this->eventManager = $eventManager;
 
         parent::__construct($context);
@@ -102,10 +102,10 @@ class Tag extends AbstractDb
     public function getTagNameById($id)
     {
         $adapter = $this->getConnection();
-        $select = $adapter->select()
+        $select  = $adapter->select()
             ->from($this->getMainTable(), 'name')
             ->where('tag_id = :tag_id');
-        $binds = ['tag_id' => (int)$id];
+        $binds   = ['tag_id' => (int)$id];
 
         return $adapter->fetchOne($select, $binds);
     }
@@ -163,13 +163,13 @@ class Tag extends AbstractDb
     protected function savePostRelation(\Mageplaza\Blog\Model\Tag $tag)
     {
         $tag->setIsChangedPostList(false);
-        $id = $tag->getId();
-        $posts = $tag->getPostsData();
+        $id       = $tag->getId();
+        $posts    = $tag->getPostsData();
         $oldPosts = $tag->getPostsPosition();
-        if (is_array($posts)){
-            $insert = array_diff_key($posts, $oldPosts);
-            $delete = array_diff_key($oldPosts, $posts);
-            $update = array_intersect_key($posts, $oldPosts);
+        if (is_array($posts)) {
+            $insert  = array_diff_key($posts, $oldPosts);
+            $delete  = array_diff_key($oldPosts, $posts);
+            $update  = array_intersect_key($posts, $oldPosts);
             $_update = [];
             foreach ($update as $key => $settings) {
                 if (isset($oldPosts[$key]) && $oldPosts[$key] != $settings['position']) {
@@ -180,14 +180,15 @@ class Tag extends AbstractDb
         }
         $adapter = $this->getConnection();
         if ($posts === null) {
-            foreach (array_keys($oldPosts) as $value){
+            foreach (array_keys($oldPosts) as $value) {
                 $condition = ['post_id =?' => (int)$value, 'tag_id=?' => (int)$id];
                 $adapter->delete($this->tagPostTable, $condition);
             }
+
             return $this;
         }
         if (!empty($delete)) {
-            foreach (array_keys($delete) as $value){
+            foreach (array_keys($delete) as $value) {
                 $condition = ['post_id =?' => (int)$value, 'tag_id=?' => (int)$id];
                 $adapter->delete($this->tagPostTable, $condition);
             }
@@ -196,8 +197,8 @@ class Tag extends AbstractDb
             $data = [];
             foreach ($insert as $postId => $position) {
                 $data[] = [
-                    'tag_id' => (int)$id,
-                    'post_id' => (int)$postId,
+                    'tag_id'   => (int)$id,
+                    'post_id'  => (int)$postId,
                     'position' => (int)$position['position']
                 ];
             }
@@ -206,7 +207,7 @@ class Tag extends AbstractDb
         if (!empty($update)) {
             foreach ($update as $postId => $position) {
                 $where = ['tag_id = ?' => (int)$id, 'post_id = ?' => (int)$postId];
-                $bind = ['position' => (int)$position['position']];
+                $bind  = ['position' => (int)$position['position']];
                 $adapter->update($this->tagPostTable, $bind, $where);
             }
         }
@@ -236,10 +237,10 @@ class Tag extends AbstractDb
     public function isDuplicateUrlKey($urlKey)
     {
         $adapter = $this->getConnection();
-        $select = $adapter->select()
+        $select  = $adapter->select()
             ->from($this->getMainTable(), 'tag_id')
             ->where('url_key = :url_key');
-        $binds = ['url_key' => $urlKey];
+        $binds   = ['url_key' => $urlKey];
 
         return $adapter->fetchOne($select, $binds);
     }
@@ -255,10 +256,10 @@ class Tag extends AbstractDb
     public function isImported($importSource, $oldId)
     {
         $adapter = $this->getConnection();
-        $select = $adapter->select()
+        $select  = $adapter->select()
             ->from($this->getMainTable(), 'tag_id')
             ->where('import_source = :import_source');
-        $binds = ['import_source' => $importSource . '-' . $oldId];
+        $binds   = ['import_source' => $importSource . '-' . $oldId];
 
         return $adapter->fetchOne($select, $binds);
     }

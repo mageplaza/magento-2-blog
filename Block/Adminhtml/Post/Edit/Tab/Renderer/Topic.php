@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -73,8 +73,8 @@ class Topic extends Multiselect
     )
     {
         $this->collectionFactory = $collectionFactory;
-        $this->authorization = $authorization;
-        $this->_urlBuilder = $urlBuilder;
+        $this->authorization     = $authorization;
+        $this->_urlBuilder       = $urlBuilder;
 
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
@@ -123,12 +123,11 @@ class Topic extends Multiselect
     {
         /* @var $collection \Mageplaza\Blog\Model\ResourceModel\Topic\Collection */
         $collection = $this->collectionFactory->create();
-        $topicById = [];
+        $topicById  = [];
         foreach ($collection as $topic) {
-            $topicById[$topic->getId()]['value'] = $topic->getId();
+            $topicById[$topic->getId()]['value']     = $topic->getId();
             $topicById[$topic->getId()]['is_active'] = 1;
-            $topicById[$topic->getId()]['label'] = $topic->getName();
-
+            $topicById[$topic->getId()]['label']     = $topic->getName();
         }
 
         return $topicById;

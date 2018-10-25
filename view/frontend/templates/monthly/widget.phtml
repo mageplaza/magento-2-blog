@@ -1,4 +1,3 @@
-
 <?php
 /**
  * Mageplaza
@@ -16,34 +15,36 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 /** @var \Mageplaza\Blog\Block\MonthlyArchive\Widget $block */
 
-$dateArrayCount = $block->getDateArrayCount();
+$dateArrayCount  = $block->getDateArrayCount();
 $dateArrayUnique = $block->getDateArrayUnique();
-$dateLabel = $block->getDateLabel();
+$dateLabel       = $block->getDateLabel();
 
 if ($block->isEnable() && $dateArrayUnique): ?>
-<div class="mp-sidebar mpcss">
-	<div class="row">
-		<div class="block-title col-xs-12 sidebar-archives">
-            <p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Monthly Archive') ?></p>
-		</div>
-        <div class="col-xs-12">
-            <ul class="menu-archives">
-             <?php for ($i=0; $i<$block->getDateCount(); $i++): ?>
-                <li class="archive-item" >
-                    <a class="list-archives" href="<?php echo $block->getMonthlyUrl(date("Y-m",$this->dateTime->timestamp($dateArrayUnique[$i]))) ?>">
-                         <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;
-                        <?php echo $dateLabel[$i].'   ('.$dateArrayCount[$i].')'; ?>
-                    </a>
-                </li>
-              <?php endfor; ?>
-            </ul>
+    <div class="mp-sidebar mpcss">
+        <div class="row">
+            <div class="block-title col-xs-12 sidebar-archives">
+                <p class="block-mp-sidebar-heading" role="heading"
+                   aria-level="2"><?php echo __('Monthly Archive') ?></p>
+            </div>
+            <div class="col-xs-12">
+                <ul class="menu-archives">
+                    <?php for ($i = 0; $i < $block->getDateCount(); $i++): ?>
+                        <li class="archive-item">
+                            <a class="list-archives"
+                               href="<?php echo $block->getMonthlyUrl(date("Y-m", $this->dateTime->timestamp($dateArrayUnique[$i]))) ?>">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;
+                                <?php echo $dateLabel[$i] . '   (' . $dateArrayCount[$i] . ')'; ?>
+                            </a>
+                        </li>
+                    <?php endfor; ?>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 <?php endif; ?>

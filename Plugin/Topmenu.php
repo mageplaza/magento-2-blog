@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -59,9 +59,9 @@ class Topmenu
         RequestInterface $request
     )
     {
-        $this->helper = $helper;
+        $this->helper      = $helper;
         $this->treeFactory = $treeFactory;
-        $this->request = $request;
+        $this->request     = $request;
     }
 
     /**
@@ -98,15 +98,15 @@ class Topmenu
     private function getMenuAsArray()
     {
         $identifier = trim($this->request->getPathInfo(), '/');
-        $routePath = explode('/', $identifier);
-        $routeSize = sizeof($routePath);
+        $routePath  = explode('/', $identifier);
+        $routeSize  = sizeof($routePath);
 
         return [
-            'name' => $this->helper->getBlogConfig('general/name') ?: __('Blog'),
-            'id' => 'mpblog-node',
-            'url' => $this->helper->getBlogUrl(''),
+            'name'       => $this->helper->getBlogConfig('general/name') ?: __('Blog'),
+            'id'         => 'mpblog-node',
+            'url'        => $this->helper->getBlogUrl(''),
             'has_active' => ($identifier == 'mpblog/post/index'),
-            'is_active' => ('mpblog' == array_shift($routePath)) && ($routeSize == 3)
+            'is_active'  => ('mpblog' == array_shift($routePath)) && ($routeSize == 3)
         ];
     }
 }

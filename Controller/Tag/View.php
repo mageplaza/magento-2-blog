@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -62,11 +62,11 @@ class View extends Action
         HelperBlog $helperBlog
     )
     {
-        parent::__construct($context);
-
-        $this->resultPageFactory = $resultPageFactory;
+        $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->helperBlog = $helperBlog;
+        $this->helperBlog           = $helperBlog;
+
+        parent::__construct($context);
     }
 
     /**
@@ -74,8 +74,8 @@ class View extends Action
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('id');
-        $tag = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_TAG)->create()->load($id);
+        $id   = $this->getRequest()->getParam('id');
+        $tag  = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_TAG)->create()->load($id);
         $page = $this->resultPageFactory->create();
         $page->getConfig()->setPageLayout($this->helperBlog->getBlogConfig('sidebar/sidebar_left_right'));
 

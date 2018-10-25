@@ -16,15 +16,14 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
-
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
     <widget id="mageplaza_blog_posts" class="Mageplaza\Blog\Block\Widget\Posts">
         <label translate="true">Mageplaza Blog</label>
-        <description>Mageplaza Blog Widget </description>
+        <description translate="true">Mageplaza Blog Widget</description>
         <parameters>
             <parameter name="title" xsi:type="text" required="false" visible="true">
                 <label translate="true">Title</label>
@@ -40,7 +39,7 @@
             <parameter name="category_id" xsi:type="text" required="true" visible="true">
                 <label translate="true">Category ID</label>
                 <depends>
-                    <parameter name="show_type" value="category" />
+                    <parameter name="show_type" value="category"/>
                 </depends>
                 <value>2</value>
             </parameter>
@@ -55,7 +54,7 @@
         </parameters>
         <containers>
             <container name="content">
-                <template name="posts" value="posts" />
+                <template name="posts" value="posts"/>
             </container>
         </containers>
     </widget>

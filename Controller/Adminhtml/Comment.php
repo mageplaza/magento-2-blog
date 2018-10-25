@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -60,7 +60,7 @@ abstract class Comment extends Action
     )
     {
         $this->commentFactory = $commentFactory;
-        $this->coreRegistry = $coreRegistry;
+        $this->coreRegistry   = $coreRegistry;
 
         parent::__construct($context);
     }

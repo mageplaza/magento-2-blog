@@ -15,13 +15,12 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 /** @var \Mageplaza\Blog\Block\Sidebar\MostView $block */
-?>
-<?php
+
 $posts       = $block->getMostViewPosts();
 $postsRecent = $block->getRecentPost();
 ?>
@@ -38,7 +37,8 @@ $postsRecent = $block->getRecentPost();
                     <div class="list-post-tabs">
                         <div class="post-left">
                             <a href="<?php echo $post->getUrl() ?>">
-                                <img class="img-responsive" src="<?php echo $block->resizeImage($post->getImage(), '100x'); ?>">
+                                <img class="img-responsive"
+                                     src="<?php echo $block->resizeImage($post->getImage(), '100x'); ?>">
                             </a>
                         </div>
                         <div class="post-right">
@@ -66,7 +66,8 @@ $postsRecent = $block->getRecentPost();
                     <div class="list-post-tabs" href="<?php echo $post->getUrl() ?>">
                         <div class="post-left">
                             <a href="<?php echo $post->getUrl() ?>">
-                                <img class="img-responsive" src="<?php echo $block->resizeImage($post->getImage(), '100x') ?>">
+                                <img class="img-responsive"
+                                     src="<?php echo $block->resizeImage($post->getImage(), '100x') ?>">
                             </a>
                         </div>
                         <div class="post-right">
@@ -85,20 +86,20 @@ $postsRecent = $block->getRecentPost();
     </div>
 </div>
 <script>
-require([
-    'jquery'
-], function ($) {
-    $("#popular-tab").click(function () {
-        $("#tab-1").addClass('active');
-        $("#tab-2").removeClass('active');
-        $('#mostview').show();
-        $('#mostrecent').hide();
+    require([
+        'jquery'
+    ], function ($) {
+        $("#popular-tab").click(function () {
+            $("#tab-1").addClass('active');
+            $("#tab-2").removeClass('active');
+            $('#mostview').show();
+            $('#mostrecent').hide();
+        });
+        $("#recent-tab").click(function () {
+            $("#tab-1").removeClass('active');
+            $("#tab-2").addClass('active');
+            $('#mostview').hide();
+            $('#mostrecent').show();
+        });
     });
-    $("#recent-tab").click(function () {
-        $("#tab-1").removeClass('active');
-        $("#tab-2").addClass('active');
-        $('#mostview').hide();
-        $('#mostrecent').show();
-    });
-});
 </script>

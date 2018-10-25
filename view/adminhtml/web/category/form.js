@@ -14,7 +14,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -30,8 +30,8 @@ define([
 
     $.widget("mage.categoryForm", $.mage.form, {
         options: {
-            categoryIdSelector : 'input[name="category[category_id]"]',
-            categoryPathSelector : 'input[name="category[path]"]'
+            categoryIdSelector: 'input[name="category[category_id]"]',
+            categoryPathSelector: 'input[name="category[path]"]'
         },
 
         /**

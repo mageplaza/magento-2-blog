@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -79,10 +79,10 @@ class Comment extends Generic implements TabInterface
         array $data = []
     )
     {
-        $this->_commentStatus = $commentStatus;
+        $this->_commentStatus      = $commentStatus;
         $this->_customerRepository = $customerRepository;
-        $this->_postFactory = $postFactory;
-        $this->systemStore = $systemStore;
+        $this->_postFactory        = $postFactory;
+        $this->systemStore         = $systemStore;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -108,36 +108,32 @@ class Comment extends Generic implements TabInterface
             $fieldset->addField('comment_id', 'hidden', ['name' => 'comment_id']);
         }
 
-        $post = $this->_postFactory->create()->load($comment->getPostId());
+        $post     = $this->_postFactory->create()->load($comment->getPostId());
         $postText = '<a href="' . $this->getUrl('mageplaza_blog/post/edit', ['id' => $comment->getPostId()]) . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($post->getName()) . '</a>';
         $fieldset->addField('post_name', 'note', ['text' => $postText, 'label' => __('Post'), 'name' => 'post_name']);
 
-        if ($comment->getEntityId() >0){
-            $customer = $this->_customerRepository->getById($comment->getEntityId());
+        if ($comment->getEntityId() > 0) {
+            $customer     = $this->_customerRepository->getById($comment->getEntityId());
             $customerText = '<a href="' . $this->getUrl('customer/index/edit', ['id' => $customer->getId(), 'active_tab' => 'review']) . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($customer->getFirstname() . ' ' . $customer->getLastname()) . '</a> <a href="mailto:%4">(' . $customer->getEmail() . ')</a>';
-        }else{
+        } else {
             $customerText = 'Guest';
         }
 
         $fieldset->addField('customer_name', 'note', ['text' => $customerText, 'label' => __('Customer'), 'name' => 'customer_name']);
 
-        $fieldset->addField(
-            'status',
-            'select',
-            [
-                'label' => __('Status'),
-                'required' => true,
-                'name' => 'status',
-                'values' => $this->_commentStatus->toArray()
-            ]
-        );
-        $fieldset->addField(
-            'content',
-            'textarea',
-            ['label' => __('Content'), 'required' => true, 'name' => 'content', 'style' => 'height:24em;']
-        );
+        $fieldset->addField('status', 'select', [
+            'label'    => __('Status'),
+            'required' => true,
+            'name'     => 'status',
+            'values'   => $this->_commentStatus->toArray()
+        ]);
+        $fieldset->addField('content', 'textarea', [
+            'label'    => __('Content'),
+            'required' => true,
+            'name'     => 'content',
+            'style'    => 'height:24em;'
+        ]);
         $post = $this->_postFactory->create()->load($comment->getPostId());
-
 
         $viewText = '<a href="' . $post->getUrl() . '#cmt-id-' . $comment->getId() . '" onclick="this.target=\'blank\'">View</a>';
 

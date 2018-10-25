@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -27,8 +27,8 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
-use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
 use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
 
 /**
  * @method Category setName($name)
@@ -139,9 +139,10 @@ class Category extends AbstractModel
         array $data = []
     )
     {
-        $this->categoryFactory = $categoryFactory;
-        $this->postCollectionFactory = $postCollectionFactory;
+        $this->categoryFactory           = $categoryFactory;
+        $this->postCollectionFactory     = $postCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
+
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -172,9 +173,9 @@ class Category extends AbstractModel
      */
     public function getDefaultValues()
     {
-        $values = [];
+        $values              = [];
         $values['store_ids'] = '1';
-        $values['enabled'] = '1';
+        $values['enabled']   = '1';
 
         return $values;
     }
@@ -229,7 +230,7 @@ class Category extends AbstractModel
             throw new LocalizedException(
                 __('Sorry, but we can\'t move the Blog Category because we can\'t find the new parent Blog Category you selected.')
             );
-        } elseif ($parent->getId() == $this->getId()) {
+        } else if ($parent->getId() == $this->getId()) {
             throw new LocalizedException(
                 __('We can\'t perform this Blog Category move operation because the parent Blog Category matches the child Blog Category.')
             );
@@ -240,10 +241,10 @@ class Category extends AbstractModel
 
         $eventParams = [
             $this->_eventObject => $this,
-            'parent' => $parent,
-            'category_id' => $this->getId(),
-            'prev_parent_id' => $oldParentId,
-            'parent_id' => $parentId,
+            'parent'            => $parent,
+            'category_id'       => $this->getId(),
+            'prev_parent_id'    => $oldParentId,
+            'parent_id'         => $parentId,
         ];
 
         $this->_getResource()->beginTransaction();

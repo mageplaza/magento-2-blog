@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -35,16 +35,14 @@ class Form extends Generic
     protected function _prepareForm()
     {
         /** @var \Magento\Framework\Data\Form $form */
-        $form = $this->_formFactory->create(
-            [
-                'data' => [
-                    'id' => 'edit_form',
-                    'action' => $this->getData('action'),
-                    'method' => 'post',
-                    'enctype' => 'multipart/form-data'
-                ]
+        $form = $this->_formFactory->create([
+            'data' => [
+                'id'      => 'edit_form',
+                'action'  => $this->getData('action'),
+                'method'  => 'post',
+                'enctype' => 'multipart/form-data'
             ]
-        );
+        ]);
         $form->setUseContainer(true);
         $this->setForm($form);
 

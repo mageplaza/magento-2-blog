@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -46,11 +46,6 @@ class Router implements RouterInterface
     public $helper;
 
     /**
-     * @var
-     */
-    protected $_request;
-
-    /**
      * @param \Magento\Framework\App\ActionFactory $actionFactory
      * @param \Mageplaza\Blog\Helper\Data $helper
      */
@@ -60,26 +55,7 @@ class Router implements RouterInterface
     )
     {
         $this->actionFactory = $actionFactory;
-        $this->helper = $helper;
-    }
-
-    /**
-     * @param $controller
-     * @param $action
-     * @param array $params
-     * @return \Magento\Framework\App\ActionInterface
-     */
-    public function _forward($controller, $action, $params = [])
-    {
-        $this->_request->setControllerName($controller)
-            ->setActionName($action)
-            ->setPathInfo('/mpblog/' . $controller . '/' . $action);
-
-        foreach ($params as $key => $value) {
-            $this->_request->setParam($key, $value);
-        }
-
-        return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+        $this->helper        = $helper;
     }
 
     /**
@@ -92,9 +68,9 @@ class Router implements RouterInterface
             return null;
         }
 
-        $rssAction = "rss.xml";
+        $rssAction  = "rss.xml";
         $identifier = trim($request->getPathInfo(), '/');
-        $urlSuffix = $this->helper->getUrlSuffix();
+        $urlSuffix  = $this->helper->getUrlSuffix();
 
         if ($length = strlen($urlSuffix)) {
             if (substr($identifier, -$length) == $urlSuffix && !$this->isRss($identifier)) {
@@ -168,7 +144,7 @@ class Router implements RouterInterface
                 $post = $this->helper->getObjectByParam($controller, 'url_key');
                 $request->setParam('id', $post->getId());
                 $controller = 'post';
-                $action = 'view';
+                $action     = 'view';
         }
 
         $request->setControllerName($controller)
@@ -188,7 +164,7 @@ class Router implements RouterInterface
         $routePath = explode('/', $identifier);
         $routePath = array_pop($routePath);
         $routePath = explode('.', $routePath);
-        $action = array_shift($routePath);
+        $action    = array_shift($routePath);
 
         return ($action == "rss");
     }
@@ -202,6 +178,7 @@ class Router implements RouterInterface
         $length = strlen(self::URL_SUFFIX_RSS_XML);
         if (substr($identifier, -$length) == self::URL_SUFFIX_RSS_XML && $this->isRss($identifier)) {
             $identifier = substr($identifier, 0, strlen($identifier) - $length);
+
             return $identifier;
         } else {
             return null;

@@ -15,16 +15,16 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 ?>
 <?php
 /** @var \Mageplaza\Blog\Block\Adminhtml\Category\Edit\Form $block */
-$parentId = $block->getParentCategoryId();
+$parentId   = $block->getParentCategoryId();
 $categoryId = $block->getCategoryId();
 
-$blockGrid = $block->getLayout()->getBlock('mageplaza_blog_category_edit_tab_post');
+$blockGrid        = $block->getLayout()->getBlock('mageplaza_blog_category_edit_tab_post');
 $gridJsObjectName = $blockGrid->getJsObjectName();
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
@@ -50,8 +50,8 @@ $gridJsObjectName = $blockGrid->getJsObjectName();
             {
                 "*": {
                     "Magento_Catalog/catalog/category/assign-products": {
-                        "selectedProducts": <?php /* @escapeNotVerified */ echo $block->getPostsJson(); ?>,
-                        "gridJsObjectName": <?php /* @escapeNotVerified */ echo '"' . $gridJsObjectName . '"' ?: '{}'; ?>
+                        "selectedProducts": <?php echo $block->getPostsJson(); ?>,
+                        "gridJsObjectName": <?php echo '"' . $gridJsObjectName . '"' ?: '{}'; ?>
                     }
                 }
             }
@@ -67,114 +67,115 @@ $gridJsObjectName = $blockGrid->getJsObjectName();
 </div>
 
 <script>
-require(['jquery', 'jquery/ui', "mage/mage", "mage/translate"], function($){
-    var mageDialog = (function($) {
-        var self = {dialogOpened: false, callback: [], needShow: false};
+    require(['jquery', 'jquery/ui', "mage/mage", "mage/translate"], function ($) {
+        var mageDialog = (function ($) {
+            var self = {dialogOpened: false, callback: [], needShow: false};
 
-        self.callback = {ok: [], cancel: []};
-        self.createDialog = function () {
-            var onEvent = function (type, dialog) {
-                self.callback[type].forEach(function(call) {
-                    call();
+            self.callback = {ok: [], cancel: []};
+            self.createDialog = function () {
+                var onEvent = function (type, dialog) {
+                    self.callback[type].forEach(function (call) {
+                        call();
+                    });
+                    $(dialog).dialog("close");
+                };
+
+                self.dialog = $('[data-id="information-dialog-category"]').dialog({
+                    autoOpen: false,
+                    modal: true,
+                    dialogClass: 'popup-window',
+                    resizable: false,
+                    width: '75%',
+                    title: $.mage.__('Warning message'),
+                    buttons: [{
+                        text: $.mage.__('Ok'),
+                        'class': 'action-primary',
+                        click: function () {
+                            onEvent('ok', this);
+                        }
+                    }, {
+                        text: $.mage.__('Cancel'),
+                        'class': 'action-close',
+                        click: function () {
+                            onEvent('cancel', this);
+                        }
+                    }],
+                    open: function () {
+                        $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+
+                        var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 30;
+                        $(this).closest('.ui-dialog').css('margin-top', topMargin);
+
+                        self.dialogOpened = true;
+                        self.callback.ok.push(function () {
+                            self.needShow = false;
+                        });
+                    },
+                    close: function (event, ui) {
+                        $(this).dialog('destroy');
+                        self.dialogOpened = false;
+                        self.callback = {ok: [], cancel: []};
+                        delete self.dialog;
+                    }
                 });
-                $(dialog).dialog( "close" );
             };
 
-            self.dialog = $('[data-id="information-dialog-category"]').dialog({
-                autoOpen:   false,
-                modal:      true,
-                dialogClass: 'popup-window',
-                resizable: false,
-                width: '75%',
-                title: $.mage.__('Warning message'),
-                buttons: [{
-                    text: $.mage.__('Ok'),
-                    'class': 'action-primary',
-                    click: function () {
-                        onEvent('ok', this);
-                    }
-                }, {
-                    text: $.mage.__('Cancel'),
-                    'class': 'action-close',
-                    click: function () {
-                        onEvent('cancel', this);
-                    }
-                }],
-                open: function () {
-                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
-
-                    var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 30;
-                    $(this).closest('.ui-dialog').css('margin-top', topMargin);
-
-                    self.dialogOpened = true;
-                    self.callback.ok.push(function() {
-                        self.needShow = false;
-                    });
+            return {
+                needToShow: function () {
+                    self.needShow = true && !!$('[data-ui-id="tabs-tab-general-information-fieldset-element-hidden-general-id"]').length;
+                    return this;
                 },
-                close: function(event, ui) {
-                    $(this).dialog('destroy');
-                    self.dialogOpened = false;
-                    self.callback = {ok: [], cancel: []};
-                    delete self.dialog;
+                isNeedShow: function () {
+                    return self.needShow;
+                },
+                onOk: function (call) {
+                    self.callback.ok.push(call);
+                    return this;
+                },
+                onCancel: function (call) {
+                    self.callback.cancel.push(call);
+                    return this;
+                },
+                show: function () {
+                    if (self.dialog == undefined) {
+                        self.createDialog();
+                    }
+                    if (self.dialogOpened == false) {
+                        self.dialog.dialog('open');
+                    }
+                    return this;
+                }
+            };
+        })(jQuery);
+        $(document).on('change', '[data-ui-id="urlkeyrenderer-text-general-url-key"]', function () {
+            mageDialog.needToShow();
+        });
+        $('#category_edit_form')
+            .mage('categoryForm', {refreshUrl: '<?php echo $block->getRefreshPathUrl() ?>'})
+            .mage('validation', {
+                submitHandler: function (form) {
+                    if (mageDialog.isNeedShow()) {
+                        mageDialog.onOk(function () {
+                            form.submit();
+                            displayLoadingMask();
+                        }).show();
+                    } else {
+                        form.submit();
+                        displayLoadingMask();
+                    }
                 }
             });
-        };
-
-        return {
-            needToShow: function() {
-                self.needShow = true &&
-                    !!$('[data-ui-id="tabs-tab-general-information-fieldset-element-hidden-general-id"]').length;
-                return this;
-            },
-            isNeedShow: function() {
-                return self.needShow;
-            },
-            onOk: function(call) {
-                self.callback.ok.push(call);
-                return this;
-            },
-            onCancel: function(call) {
-                self.callback.cancel.push(call);
-                return this;
-            },
-            show: function() {
-                if (self.dialog == undefined) {
-                    self.createDialog();
-                }
-                if (self.dialogOpened ==  false) {
-                    self.dialog.dialog('open');
-                }
-                return this;
-            }
-        };
-    })(jQuery);
-    $(document).on('change', '[data-ui-id="urlkeyrenderer-text-general-url-key"]', function() {
-        mageDialog.needToShow();
     });
-    $('#category_edit_form')
-        .mage('categoryForm', {refreshUrl: '<?php echo $block->getRefreshPathUrl() ?>'})
-        .mage('validation', {submitHandler: function(form){
-            if (mageDialog.isNeedShow()) {
-                mageDialog.onOk(function() {
-                    form.submit();
-                    displayLoadingMask();
-                }).show();
-            } else {
-                form.submit();
-                displayLoadingMask();
-            }
-        }});
-});
 
-<?php if ($block->isAjax() && ($tabsBlock = $block->getLayout()->getBlock('tabs')) && ($_tabsJsObject = $tabsBlock->getJsObjectName())): ?>
+    <?php if ($block->isAjax() && ($tabsBlock = $block->getLayout()->getBlock('tabs')) && ($_tabsJsObject = $tabsBlock->getJsObjectName())): ?>
     // Temporary solution, will be replaced after refactoring of manage category functionality
     <?php $tabsBlock = $block->getLayout()->getBlock('tabs'); ?>
-    require(["jquery","mage/backend/tabs"],function($){
+    require(["jquery", "mage/backend/tabs"], function ($) {
         var activeAnchor = $('#<?php echo $tabsBlock->getId() ?>').tabs('activeAnchor');
         if (activeAnchor.length) {
             $('active_tab_id').value = activeAnchor.prop('id');
         }
         $('active_tab_id').tabsJsObject = $('#<?php echo $tabsBlock->getId() ?>');
     });
-<?php endif; ?>
+    <?php endif; ?>
 </script>

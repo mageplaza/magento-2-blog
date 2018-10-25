@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -121,8 +121,9 @@ class Topic extends AbstractModel
         array $data = []
     )
     {
-        $this->postCollectionFactory = $postCollectionFactory;
+        $this->postCollectionFactory  = $postCollectionFactory;
         $this->topicCollectionFactory = $topicCollectionFactory;
+
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -153,8 +154,8 @@ class Topic extends AbstractModel
      */
     public function getDefaultValues()
     {
-        $values = [];
-        $values['enabled'] = '1';
+        $values              = [];
+        $values['enabled']   = '1';
         $values['store_ids'] = '1';
 
         return $values;

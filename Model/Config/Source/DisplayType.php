@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -30,7 +30,7 @@ use Magento\Framework\Option\ArrayInterface;
 class DisplayType implements ArrayInterface
 {
     const LIST_VIEW = 1;
-    const GRID = 2;
+    const GRID      = 2;
 
     /**
      * @return array

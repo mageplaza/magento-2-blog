@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -29,7 +29,7 @@ use Mageplaza\Core\Helper\Media;
  */
 class Image extends Media
 {
-    const TEMPLATE_MEDIA_PATH = 'mageplaza/blog';
+    const TEMPLATE_MEDIA_PATH      = 'mageplaza/blog';
     const TEMPLATE_MEDIA_TYPE_AUTH = 'auth';
     const TEMPLATE_MEDIA_TYPE_POST = 'post';
 }

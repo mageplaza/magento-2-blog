@@ -15,29 +15,28 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 /** @var \Mageplaza\Blog\Model\ResourceModel\Tag\Collection $tags */
 $tags = $block->getTagList();
 
-if ($tags && $tags->getSize()):
-?>
-<div class="mp-sidebar mpcss">
-	<div class="row">
-		<div class="block-title col-xs-12 sidebar-tags">
-            <p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Tags') ?></p>
-		</div>
-		<div class="col-xs-12">
-        <?php foreach ($tags as $tag): ?>
-            <a class="label label-default tags-list"
-               style="font-size:<?php echo $block->getTagSize($tag) . 'px'; ?>"
-               href="<?php echo $block->getTagUrl($tag) ?>">
-                <?php echo $tag->getName(); ?>
-            </a>
-        <?php endforeach; ?>
-		</div>
+if ($tags && $tags->getSize()): ?>
+    <div class="mp-sidebar mpcss">
+        <div class="row">
+            <div class="block-title col-xs-12 sidebar-tags">
+                <p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?php echo __('Tags') ?></p>
+            </div>
+            <div class="col-xs-12">
+                <?php foreach ($tags as $tag): ?>
+                    <a class="label label-default tags-list"
+                       style="font-size:<?php echo $block->getTagSize($tag) . 'px'; ?>"
+                       href="<?php echo $block->getTagUrl($tag) ?>">
+                        <?php echo $tag->getName(); ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
     </div>
-</div>
 <?php endif; ?>

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -42,13 +42,12 @@ use Mageplaza\Core\Helper\AbstractData as CoreHelper;
 class Data extends CoreHelper
 {
     const CONFIG_MODULE_PATH = 'blog';
-
-    const TYPE_POST = 'post';
-    const TYPE_CATEGORY = 'category';
-    const TYPE_TAG = 'tag';
-    const TYPE_TOPIC = 'topic';
-    const TYPE_AUTHOR = 'author';
-    const TYPE_MONTHLY = 'month';
+    const TYPE_POST          = 'post';
+    const TYPE_CATEGORY      = 'category';
+    const TYPE_TAG           = 'tag';
+    const TYPE_TOPIC         = 'topic';
+    const TYPE_AUTHOR        = 'author';
+    const TYPE_MONTHLY       = 'month';
 
     /**
      * @var \Mageplaza\Blog\Model\PostFactory
@@ -111,13 +110,13 @@ class Data extends CoreHelper
         DateTime $dateTime
     )
     {
-        $this->postFactory = $postFactory;
+        $this->postFactory     = $postFactory;
         $this->categoryFactory = $categoryFactory;
-        $this->tagFactory = $tagFactory;
-        $this->topicFactory = $topicFactory;
-        $this->authorFactory = $authorFactory;
-        $this->translitUrl = $translitUrl;
-        $this->dateTime = $dateTime;
+        $this->tagFactory      = $tagFactory;
+        $this->topicFactory    = $topicFactory;
+        $this->authorFactory   = $authorFactory;
+        $this->translitUrl     = $translitUrl;
+        $this->dateTime        = $dateTime;
 
         parent::__construct($context, $objectManager, $storeManager);
     }
@@ -331,9 +330,10 @@ class Data extends CoreHelper
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url = $this->getUrl($this->getRoute() . '/' . $urlKey);
-        $url = explode('?', $url);
-        $url = $url[0];
+        $url    = $this->getUrl($this->getRoute() . '/' . $urlKey);
+        $url    = explode('?', $url);
+        $url    = $url[0];
+
         return rtrim($url, '/') . $this->getUrlSuffix();
     }
 
@@ -417,7 +417,7 @@ class Data extends CoreHelper
         }
 
         $adapter = $resource->getConnection();
-        $select = $adapter->select()
+        $select  = $adapter->select()
             ->from($resource->getMainTable(), '*')
             ->where('url_key = :url_key');
 
@@ -444,7 +444,7 @@ class Data extends CoreHelper
         $dateTime = (new \DateTime($date, new \DateTimeZone('UTC')));
         $dateTime->setTimezone(new \DateTimeZone($this->getTimezone()));
 
-        $dateType = $this->getBlogConfig($monthly ? 'monthly_archive/date_type_monthly' : 'general/date_type');
+        $dateType   = $this->getBlogConfig($monthly ? 'monthly_archive/date_type_monthly' : 'general/date_type');
         $dateFormat = $dateTime->format($dateType);
 
         return $dateFormat;

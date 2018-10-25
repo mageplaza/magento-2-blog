@@ -16,14 +16,14 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="product.info.details">
-            <block class="Mageplaza\Blog\Block\Post\RelatedPost" name="related.post.tab" template="post/relatedpost.phtml" group="detailed_info" ifconfig="blog/product_post/product_detail/enable_post" />
+            <block class="Mageplaza\Blog\Block\Post\RelatedPost" name="related.post.tab" template="post/relatedpost.phtml" group="detailed_info" ifconfig="blog/product_post/product_detail/enable_post"/>
         </referenceBlock>
     </body>
 </page>

@@ -5,10 +5,14 @@
     "mageplaza/module-core": "^1.3.13"
   },
   "type": "magento2-module",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "license": "proprietary",
   "keywords": [
-      "magento 2", "mageplaza", "blog", "magento 2 blog", "magento2"
+    "magento 2",
+    "mageplaza",
+    "blog",
+    "magento 2 blog",
+    "magento2"
   ],
   "authors": [
     {

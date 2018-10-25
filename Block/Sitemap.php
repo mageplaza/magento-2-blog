@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -37,10 +37,9 @@ class Sitemap extends Frontend
 
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
             $breadcrumbs->addCrumb('sitemap', [
-                    'label' => __('Site Map'),
-                    'title' => __('Site Map')
-                ]
-            );
+                'label' => __('Site Map'),
+                'title' => __('Site Map')
+            ]);
         }
     }
 
