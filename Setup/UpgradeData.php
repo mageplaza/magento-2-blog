@@ -103,11 +103,10 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
-     * Method maps old 'sidebar_left_right' values to 2.5.0 equivalents.
+     * Method maps old 'sidebar_left_right' values to 3.0.3 equivalents.
      * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
      */
-    private function upgradeSidebarConstants(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    private function upgradeSidebarConstants(ModuleDataSetupInterface $setup)
     {
         $configPath = BlogHelper::CONFIG_MODULE_PATH . '/sidebar/sidebar_left_right';
         $select = $setup->getConnection()->select()
