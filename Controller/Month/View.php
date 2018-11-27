@@ -67,7 +67,7 @@ class View extends Action
     public function execute()
     {
         $page = $this->resultPageFactory->create();
-        $page->getConfig()->setPageLayout($this->_helperBlog->getBlogConfig('sidebar/sidebar_left_right'));
+        $page->getConfig()->setPageLayout($this->_helperBlog->getSidebarLayout());
 
         return $page;
     }

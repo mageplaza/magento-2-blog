@@ -182,7 +182,7 @@ class View extends Action
         $id         = $this->getRequest()->getParam('id');
         $post       = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($id);
         $page       = $this->resultPageFactory->create();
-        $pageLayout = ($post->getLayout() == 'empty') ? $this->helperBlog->getBlogConfig('sidebar/sidebar_left_right') : $post->getLayout();
+        $pageLayout = ($post->getLayout() == 'empty') ? $this->helperBlog->getSidebarLayout() : $post->getLayout();
         $page->getConfig()->setPageLayout($pageLayout);
 
         if ($post->getStoreIds() != $this->storeManager->getStore()->getId() && $post->getStoreIds() != 0) {

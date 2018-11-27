@@ -77,7 +77,7 @@ class View extends Action
     {
         $id   = $this->getRequest()->getParam('id');
         $page = $this->resultPageFactory->create();
-        $page->getConfig()->setPageLayout($this->_helperBlog->getBlogConfig('sidebar/sidebar_left_right'));
+        $page->getConfig()->setPageLayout($this->_helperBlog->getSidebarLayout());
 
         return ($id)
             ? $page
