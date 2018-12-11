@@ -216,6 +216,43 @@ class Category extends AbstractDb
     }
 
     /**
+     * Check category url key is exists
+     *
+     * @param $urlKey
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function isDuplicateUrlKey($urlKey)
+    {
+        $adapter = $this->getConnection();
+        $select  = $adapter->select()
+            ->from($this->getMainTable(), 'category_id')
+            ->where('url_key = :url_key');
+        $binds   = ['url_key' => $urlKey];
+
+        return $adapter->fetchOne($select, $binds);
+    }
+
+    /**
+     * Check is imported category
+     *
+     * @param $importSource
+     * @param $oldId
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function isImported($importSource, $oldId)
+    {
+        $adapter = $this->getConnection();
+        $select  = $adapter->select()
+            ->from($this->getMainTable(), 'category_id')
+            ->where('import_source = :import_source');
+        $binds   = ['import_source' => $importSource . '-' . $oldId];
+
+        return $adapter->fetchOne($select, $binds);
+    }
+
+    /**
      * Update path field
      *
      * @param $object
