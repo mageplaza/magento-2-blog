@@ -168,6 +168,12 @@ class Save extends Post
             $post->setProductsData(
                 $this->jsHelper->decodeGridSerializedInput($products)
             );
+        }else{
+            $prodcutData= [];
+            foreach ($post->getProductsPosition() as $key=>$value){
+                $prodcutData[$key] = ['position'=>$value];
+            }
+            $post->setProductsData($prodcutData);
         }
 
         return $this;
