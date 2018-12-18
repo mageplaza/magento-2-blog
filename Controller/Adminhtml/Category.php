@@ -59,8 +59,7 @@ abstract class Category extends Action
         Context $context,
         Registry $coreRegistry,
         CategoryFactory $categoryFactory
-    )
-    {
+    ) {
         $this->categoryFactory = $categoryFactory;
         $this->coreRegistry    = $coreRegistry;
 
@@ -76,8 +75,10 @@ abstract class Category extends Action
         $categoryId = null;
         if ($this->getRequest()->getParam('id')) {
             $categoryId = (int)$this->getRequest()->getParam('id');
-        } else if ($this->getRequest()->getParam('category_id')) {
-            $categoryId = (int)$this->getRequest()->getParam('category_id');
+        } else {
+            if ($this->getRequest()->getParam('category_id')) {
+                $categoryId = (int)$this->getRequest()->getParam('category_id');
+            }
         }
 
         /** @var \Mageplaza\Blog\Model\Post $post */

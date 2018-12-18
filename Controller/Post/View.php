@@ -153,8 +153,7 @@ class View extends Action
         Session $customerSession,
         TrafficFactory $trafficFactory,
         PostFactory $postFactory
-    )
-    {
+    ) {
         $this->storeManager         = $storeManager;
         $this->helperBlog           = $helperBlog;
         $this->resultPageFactory    = $resultPageFactory;
@@ -218,7 +217,8 @@ class View extends Action
                     "last_name"  => "",
                     "email"      => $params["guestEmail"]
                 ];
-                if (!$this->accountManagement->isEmailAvailable($user["email"], $this->storeManager->getWebsite()->getId())) {
+                if (!$this->accountManagement->isEmailAvailable($user["email"],
+                    $this->storeManager->getWebsite()->getId())) {
                     $result = ['status' => 'duplicated'];
 
                     return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
@@ -229,7 +229,8 @@ class View extends Action
                 $isReply     = isset($params['isReply']) ? $params['isReply'] : 0;
                 $replyId     = isset($params['replyId']) ? $params['replyId'] : 0;
                 $commentData = [
-                    'post_id'    => $id, '',
+                    'post_id'    => $id,
+                    '',
                     'entity_id'  => $user["user_id"],
                     'is_reply'   => $isReply,
                     'reply_id'   => $replyId,

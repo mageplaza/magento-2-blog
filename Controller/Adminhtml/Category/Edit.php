@@ -71,8 +71,7 @@ class Edit extends Category
         DataObject $dataObject,
         PageFactory $resultPageFactory,
         JsonFactory $resultJsonFactory
-    )
-    {
+    ) {
         $this->dataObject        = $dataObject;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;

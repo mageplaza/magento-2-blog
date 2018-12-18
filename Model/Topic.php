@@ -119,8 +119,7 @@ class Topic extends AbstractModel
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
+    ) {
         $this->postCollectionFactory  = $postCollectionFactory;
         $this->topicCollectionFactory = $topicCollectionFactory;
 

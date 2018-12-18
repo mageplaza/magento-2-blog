@@ -56,8 +56,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         EncoderInterface $jsonEncoder,
         Session $authSession,
         array $data = []
-    )
-    {
+    ) {
         $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context, $jsonEncoder, $authSession, $data);
@@ -94,13 +93,15 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         $this->addTab('category', [
             'label'   => __('Category information'),
             'content' => $this->getLayout()
-                ->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Category', 'mageplaza_blog_category_edit_tab_category')
+                ->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Category',
+                    'mageplaza_blog_category_edit_tab_category')
                 ->toHtml()
         ]);
         $this->addTab('post', [
             'label'   => __('Posts'),
             'content' => $this->getLayout()
-                ->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Post', 'mageplaza_blog_category_edit_tab_post')
+                ->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Post',
+                    'mageplaza_blog_category_edit_tab_post')
                 ->toHtml()
         ]);
 

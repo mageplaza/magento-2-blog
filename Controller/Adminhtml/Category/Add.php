@@ -46,8 +46,7 @@ class Add extends Action
     public function __construct(
         Context $context,
         ForwardFactory $resultForwardFactory
-    )
-    {
+    ) {
         $this->resultForwardFactory = $resultForwardFactory;
 
         parent::__construct($context);

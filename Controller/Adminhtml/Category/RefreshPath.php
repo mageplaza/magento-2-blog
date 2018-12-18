@@ -52,8 +52,7 @@ class RefreshPath extends Category
         Registry $coreRegistry,
         CategoryFactory $categoryFactory,
         JsonFactory $resultJsonFactory
-    )
-    {
+    ) {
         $this->resultJsonFactory = $resultJsonFactory;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);

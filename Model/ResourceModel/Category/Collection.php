@@ -158,14 +158,18 @@ class Collection extends AbstractCollection
             if (!empty($categoryIds)) {
                 $condition = ['in' => $categoryIds];
             }
-        } else if (is_numeric($categoryIds)) {
-            $condition = $categoryIds;
-        } else if (is_string($categoryIds)) {
-            $ids = explode(',', $categoryIds);
-            if (empty($ids)) {
+        } else {
+            if (is_numeric($categoryIds)) {
                 $condition = $categoryIds;
             } else {
-                $condition = ['in' => $ids];
+                if (is_string($categoryIds)) {
+                    $ids = explode(',', $categoryIds);
+                    if (empty($ids)) {
+                        $condition = $categoryIds;
+                    } else {
+                        $condition = ['in' => $ids];
+                    }
+                }
             }
         }
 

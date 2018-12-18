@@ -72,8 +72,7 @@ class Form extends AbstractCategory
         BlogCategoryFactory $blogCategoryFactory,
         EncoderInterface $jsonEncoder,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
 
         $this->jsonEncoder      = $jsonEncoder;
@@ -89,7 +88,8 @@ class Form extends AbstractCategory
         $category   = $this->getCategory();
         $categoryId = (int)$category->getId(); // 0 when we create Blog Category, otherwise some value for editing Blog Category
 
-        $this->setChild('tabs', $this->getLayout()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tabs', 'tabs'));
+        $this->setChild('tabs',
+            $this->getLayout()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tabs', 'tabs'));
 
         // Save button
         $this->addButton('save', [

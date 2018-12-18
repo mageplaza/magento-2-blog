@@ -52,8 +52,7 @@ class Edit extends Tag
         Registry $registry,
         TagFactory $tagFactory,
         PageFactory $resultPageFactory
-    )
-    {
+    ) {
         $this->resultPageFactory = $resultPageFactory;
 
         parent::__construct($context, $registry, $tagFactory);

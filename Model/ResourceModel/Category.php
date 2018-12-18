@@ -71,8 +71,7 @@ class Category extends AbstractDb
         DateTime $date,
         ManagerInterface $eventManager,
         Data $helperData
-    )
-    {
+    ) {
         $this->helperData   = $helperData;
         $this->date         = $date;
         $this->eventManager = $eventManager;
@@ -341,8 +340,7 @@ class Category extends AbstractDb
         \Mageplaza\Blog\Model\Category $category,
         \Mageplaza\Blog\Model\Category $newParent,
         $afterCategoryId = null
-    )
-    {
+    ) {
         $childrenCount = $this->getChildrenCount($category->getId()) + 1;
         $table         = $this->getMainTable();
         $adapter       = $this->getConnection();
@@ -416,8 +414,7 @@ class Category extends AbstractDb
         \Mageplaza\Blog\Model\Category $category,
         \Mageplaza\Blog\Model\Category $newParent,
         $afterCategoryId
-    )
-    {
+    ) {
         $table   = $this->getMainTable();
         $connect = $this->getConnection();
         /** Get old category position */

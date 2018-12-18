@@ -67,11 +67,11 @@ class Widget extends Frontend
         DataHelper $helperData,
         DateTime $dateTime,
         array $data = []
-    )
-    {
+    ) {
         $this->dateTime = $dateTime;
 
-        parent::__construct($context, $filterProvider, $commentFactory, $likeFactory, $customerRepository, $helperData, $data);
+        parent::__construct($context, $filterProvider, $commentFactory, $likeFactory, $customerRepository, $helperData,
+            $data);
     }
 
     /**

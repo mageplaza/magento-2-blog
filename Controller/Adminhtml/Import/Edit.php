@@ -52,8 +52,7 @@ class Edit extends Action
         Action\Context $context,
         PageFactory $resultPageFactory,
         Registry $registry
-    )
-    {
+    ) {
         $this->registry          = $registry;
         $this->resultPageFactory = $resultPageFactory;
 

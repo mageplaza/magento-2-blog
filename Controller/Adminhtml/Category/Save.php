@@ -87,8 +87,7 @@ class Save extends Category
         JsonFactory $resultJsonFactory,
         LayoutFactory $layoutFactory,
         Js $jsHelper
-    )
-    {
+    ) {
         $this->resultRawFactory  = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory     = $layoutFactory;

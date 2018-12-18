@@ -71,8 +71,7 @@ class Tag extends AbstractDb
         ManagerInterface $eventManager,
         DateTime $date,
         Data $helperData
-    )
-    {
+    ) {
         $this->helperData   = $helperData;
         $this->date         = $date;
         $this->eventManager = $eventManager;

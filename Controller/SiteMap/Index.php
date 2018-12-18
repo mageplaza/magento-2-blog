@@ -53,9 +53,8 @@ class Index extends Action
         Context $context,
         PageFactory $resultPageFactory,
         Data $helperData
-    )
-    {
-        $this->_helperBlog = $helperData;
+    ) {
+        $this->_helperBlog       = $helperData;
         $this->resultPageFactory = $resultPageFactory;
 
         parent::__construct($context);

@@ -74,8 +74,7 @@ class Save extends Tag
         LayoutFactory $layoutFactory,
         JsonFactory $resultJsonFactory,
         TagFactory $tagFactory
-    )
-    {
+    ) {
         $this->jsHelper          = $jsHelper;
         $this->layoutFactory     = $layoutFactory;
         $this->resultJsonFactory = $resultJsonFactory;
@@ -147,7 +146,8 @@ class Save extends Tag
                 $tag->setPostsData($this->jsHelper->decodeGridSerializedInput($posts));
             }
 
-            $this->_eventManager->dispatch('mageplaza_blog_tag_prepare_save', ['tag' => $tag, 'request' => $this->getRequest()]);
+            $this->_eventManager->dispatch('mageplaza_blog_tag_prepare_save',
+                ['tag' => $tag, 'request' => $this->getRequest()]);
 
             try {
                 $tag->save();

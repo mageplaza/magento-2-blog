@@ -44,8 +44,7 @@ class NewAction extends Action
     public function __construct(
         ForwardFactory $resultForwardFactory,
         Context $context
-    )
-    {
+    ) {
         $this->resultForwardFactory = $resultForwardFactory;
 
         parent::__construct($context);

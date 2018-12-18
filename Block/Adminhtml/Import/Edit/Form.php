@@ -92,8 +92,7 @@ class Form extends Generic
         Behaviour $importBehaviour,
         Yesno $booleanOptions,
         array $data = []
-    )
-    {
+    ) {
         $this->wysiwygConfig    = $wysiwygConfig;
         $this->systemStore      = $systemStore;
         $this->_imageHelper     = $imageHelper;

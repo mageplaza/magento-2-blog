@@ -69,8 +69,7 @@ class Save extends Post
         Js $jsHelper,
         Image $imageHelper,
         DateTime $date
-    )
-    {
+    ) {
         $this->jsHelper    = $jsHelper;
         $this->imageHelper = $imageHelper;
         $this->date        = $date;
@@ -91,7 +90,8 @@ class Save extends Post
             $post = $this->initPost();
             $this->prepareData($post, $data);
 
-            $this->_eventManager->dispatch('mageplaza_blog_post_prepare_save', ['post' => $post, 'request' => $this->getRequest()]);
+            $this->_eventManager->dispatch('mageplaza_blog_post_prepare_save',
+                ['post' => $post, 'request' => $this->getRequest()]);
 
             try {
                 $post->save();
@@ -141,9 +141,12 @@ class Save extends Post
         $data['publish_date']   .= ' ' . $data['publish_time'][0] . ':' . $data['publish_time'][1] . ':' . $data['publish_time'][2];
         $data['publish_date']   = $timezone->convertConfigTimeToUtc(isset($data['publish_date']) ? $data['publish_date'] : null);
         $data['modifier_id']    = $this->_auth->getUser()->getId();
-        $data['categories_ids'] = (isset($data['categories_ids']) && $data['categories_ids']) ? explode(',', $data['categories_ids']) : [];
-        $data['tags_ids']       = (isset($data['tags_ids']) && $data['tags_ids']) ? explode(',', $data['tags_ids']) : [];
-        $data['topics_ids']     = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(',', $data['topics_ids']) : [];
+        $data['categories_ids'] = (isset($data['categories_ids']) && $data['categories_ids']) ? explode(',',
+            $data['categories_ids']) : [];
+        $data['tags_ids']       = (isset($data['tags_ids']) && $data['tags_ids']) ? explode(',',
+            $data['tags_ids']) : [];
+        $data['topics_ids']     = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(',',
+            $data['topics_ids']) : [];
 
         if ($post->getCreatedAt() == null) {
             $data['created_at'] = $this->date->date();
@@ -168,10 +171,10 @@ class Save extends Post
             $post->setProductsData(
                 $this->jsHelper->decodeGridSerializedInput($products)
             );
-        }else{
-            $prodcutData= [];
-            foreach ($post->getProductsPosition() as $key=>$value){
-                $prodcutData[$key] = ['position'=>$value];
+        } else {
+            $prodcutData = [];
+            foreach ($post->getProductsPosition() as $key => $value) {
+                $prodcutData[$key] = ['position' => $value];
             }
             $post->setProductsData($prodcutData);
         }

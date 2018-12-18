@@ -69,8 +69,7 @@ class Category extends Multiselect
         AuthorizationInterface $authorization,
         UrlInterface $urlBuilder,
         array $data = []
-    )
-    {
+    ) {
         $this->collectionFactory = $collectionFactory;
         $this->authorization     = $authorization;
         $this->_urlBuilder       = $urlBuilder;
@@ -256,7 +255,8 @@ class Category extends Multiselect
                                         "component": "Magento_Ui/js/form/components/insert-form",
                                         "dataScope": "",
                                         "update_url": "' . $this->_urlBuilder->getUrl('mui/index/render') . '",
-                                        "render_url": "' . $this->_urlBuilder->getUrl('mui/index/render_handle', ['handle' => 'mageplaza_blog_category_create', 'buttons' => 1]) . '",
+                                        "render_url": "' . $this->_urlBuilder->getUrl('mui/index/render_handle',
+                ['handle' => 'mageplaza_blog_category_create', 'buttons' => 1]) . '",
                                         "autoRender": false,
                                         "ns": "blog_new_category_form",
                                         "externalProvider": "blog_new_category_form.new_category_form_data_source",

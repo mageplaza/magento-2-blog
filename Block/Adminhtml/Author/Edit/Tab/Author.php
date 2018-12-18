@@ -70,8 +70,7 @@ class Author extends Generic implements TabInterface
         FormFactory $formFactory,
         ImageHelper $imageHelper,
         array $data = []
-    )
-    {
+    ) {
         $this->wysiwygConfig = $wysiwygConfig;
         $this->systemStore   = $systemStore;
         $this->imageHelper   = $imageHelper;

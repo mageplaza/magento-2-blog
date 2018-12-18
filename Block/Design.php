@@ -56,8 +56,7 @@ class Design extends Template
         HelperData $helperData,
         ThemeProviderInterface $_themeProvider,
         array $data = []
-    )
-    {
+    ) {
         $this->helperData     = $helperData;
         $this->_themeProvider = $_themeProvider;
 

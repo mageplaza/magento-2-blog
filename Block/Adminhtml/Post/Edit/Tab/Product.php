@@ -58,8 +58,7 @@ class Product extends Extended implements TabInterface
         Data $backendHelper,
         CollectionFactory $productCollectionFactory,
         array $data = []
-    )
-    {
+    ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->coreRegistry             = $coreRegistry;
 

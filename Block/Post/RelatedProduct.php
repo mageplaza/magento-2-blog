@@ -75,8 +75,7 @@ class RelatedProduct extends ListProduct
         HelperData $helperData,
         Data $urlHelper,
         array $data = []
-    )
-    {
+    ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->helper                    = $helperData;
 

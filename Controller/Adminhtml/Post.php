@@ -59,8 +59,7 @@ abstract class Post extends Action
         PostFactory $postFactory,
         Registry $coreRegistry,
         Context $context
-    )
-    {
+    ) {
         $this->postFactory  = $postFactory;
         $this->coreRegistry = $coreRegistry;
 

@@ -126,7 +126,8 @@ class AheadWorksM1 extends AbstractImport
                     'name'              => $post['title'],
                     'short_description' => $post['short_content'],
                     'post_content'      => $post['post_content'],
-                    'url_key'           => $this->helperData->generateUrlKey($postModel->getResource(), $postModel, $post['identifier']),
+                    'url_key'           => $this->helperData->generateUrlKey($postModel->getResource(), $postModel,
+                        $post['identifier']),
                     'created_at'        => ($post['created_time'] > $this->date->date() || !$post['created_time']) ? ($this->date->date()) : ($post['created_time']),
                     'updated_at'        => ($post['update_time']) ?: $this->date->date(),
                     'publish_date'      => ($post['created_time']) ?: $this->date->date(),
@@ -358,7 +359,8 @@ class AheadWorksM1 extends AbstractImport
                     try {
                         $newTagId = array_search($id, $oldTagIds);
                         $this->_resourceConnection->getConnection()
-                            ->insert($this->_resourceConnection->getTableName('mageplaza_blog_post_tag'), ['tag_id' => $newTagId, 'post_id' => $postId, 'position' => 0]);
+                            ->insert($this->_resourceConnection->getTableName('mageplaza_blog_post_tag'),
+                                ['tag_id' => $newTagId, 'post_id' => $postId, 'position' => 0]);
                     } catch (\Exception $e) {
                         continue;
                     }
@@ -408,7 +410,8 @@ class AheadWorksM1 extends AbstractImport
                 'is_duplicated_url' => $categoryModel->getResource()->isDuplicateUrlKey($category['identifier']),
                 'id'                => $category['cat_id'],
                 'name'              => $category['title'],
-                'url_key'           => $this->helperData->generateUrlKey($categoryModel->getResource(), $categoryModel, $category['identifier']),
+                'url_key'           => $this->helperData->generateUrlKey($categoryModel->getResource(), $categoryModel,
+                    $category['identifier']),
                 'meta_robots'       => 'INDEX,FOLLOW',
                 'store_ids'         => $this->_storeManager->getStore()->getId(),
                 'enabled'           => 1,

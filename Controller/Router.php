@@ -52,8 +52,7 @@ class Router implements RouterInterface
     public function __construct(
         ActionFactory $actionFactory,
         Data $helper
-    )
-    {
+    ) {
         $this->actionFactory = $actionFactory;
         $this->helper        = $helper;
     }

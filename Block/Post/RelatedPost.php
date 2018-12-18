@@ -66,8 +66,7 @@ class RelatedPost extends Template
         Registry $registry,
         Data $helperData,
         array $data = []
-    )
-    {
+    ) {
         $this->_coreRegistry = $registry;
         $this->helperData    = $helperData;
 
@@ -98,7 +97,8 @@ class RelatedPost extends Template
             $collection = $this->helperData->getPostList();
             $collection->getSelect()
                 ->join([
-                    'related' => $collection->getTable('mageplaza_blog_post_product')],
+                    'related' => $collection->getTable('mageplaza_blog_post_product')
+                ],
                     'related.post_id=main_table.post_id AND related.entity_id=' . $this->getProductId()
                 )
                 ->limit($this->getLimitPosts());

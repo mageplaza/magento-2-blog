@@ -52,8 +52,7 @@ class Edit extends Post
         Registry $registry,
         PostFactory $postFactory,
         PageFactory $resultPageFactory
-    )
-    {
+    ) {
         $this->resultPageFactory = $resultPageFactory;
 
         parent::__construct($postFactory, $registry, $context);

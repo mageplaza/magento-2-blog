@@ -50,8 +50,7 @@ class Posts extends Tag
         Registry $registry,
         LayoutFactory $resultLayoutFactory,
         TagFactory $postFactory
-    )
-    {
+    ) {
         $this->resultLayoutFactory = $resultLayoutFactory;
 
         parent::__construct($context, $registry, $postFactory);

@@ -45,8 +45,7 @@ class Validate extends Action
     public function __construct(
         Context $context,
         BlogHelper $blogHelper
-    )
-    {
+    ) {
         $this->blogHelper = $blogHelper;
 
         parent::__construct($context);

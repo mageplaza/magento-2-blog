@@ -57,8 +57,7 @@ abstract class Comment extends Action
         CommentFactory $commentFactory,
         Registry $coreRegistry,
         Context $context
-    )
-    {
+    ) {
         $this->commentFactory = $commentFactory;
         $this->coreRegistry   = $coreRegistry;
 

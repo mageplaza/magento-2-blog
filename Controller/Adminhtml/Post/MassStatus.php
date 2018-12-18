@@ -59,8 +59,7 @@ class MassStatus extends Action
         Context $context,
         Filter $filter,
         CollectionFactory $collectionFactory
-    )
-    {
+    ) {
         $this->filter            = $filter;
         $this->collectionFactory = $collectionFactory;
 
@@ -86,7 +85,8 @@ class MassStatus extends Action
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addException($e, __('Something went wrong while updating status for %1.', $post->getName()));
+                $this->_getSession()->addException($e,
+                    __('Something went wrong while updating status for %1.', $post->getName()));
             }
         }
 

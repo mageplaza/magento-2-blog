@@ -55,8 +55,7 @@ abstract class Author extends Action
         Context $context,
         Registry $coreRegistry,
         AuthorFactory $authorFactory
-    )
-    {
+    ) {
         $this->authorFactory = $authorFactory;
         $this->coreRegistry  = $coreRegistry;
 

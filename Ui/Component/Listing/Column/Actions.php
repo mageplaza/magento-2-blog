@@ -52,8 +52,7 @@ class Actions extends Column
         UrlInterface $urlBuilder,
         array $components = [],
         array $data = []
-    )
-    {
+    ) {
         $this->urlBuilder = $urlBuilder;
 
         parent::__construct($context, $uiComponentFactory, $components, $data);
@@ -77,7 +76,8 @@ class Actions extends Column
                     }
 
                     $item[$this->getData('name')][$key] = [
-                        'href'   => $this->urlBuilder->getUrl($action['path'], ['id' => $item[$action['params']['id']]]),
+                        'href'   => $this->urlBuilder->getUrl($action['path'],
+                            ['id' => $item[$action['params']['id']]]),
                         'label'  => $action['label'],
                         'hidden' => false,
                     ];

@@ -54,8 +54,7 @@ class Import extends Template
         BlogHelper $blogHelper,
         Type $importType,
         array $data = []
-    )
-    {
+    ) {
         $this->blogHelper = $blogHelper;
         $this->importType = $importType;
 

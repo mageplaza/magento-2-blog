@@ -57,8 +57,7 @@ class Topmenu
         Data $helper,
         TreeFactory $treeFactory,
         RequestInterface $request
-    )
-    {
+    ) {
         $this->helper      = $helper;
         $this->treeFactory = $treeFactory;
         $this->request     = $request;
@@ -76,8 +75,7 @@ class Topmenu
         $outermostClass = '',
         $childrenWrapClass = '',
         $limit = 0
-    )
-    {
+    ) {
         if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
             $subject->getMenu()
                 ->addChild(

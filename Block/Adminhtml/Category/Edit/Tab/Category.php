@@ -89,8 +89,7 @@ class Category extends Generic implements TabInterface
         Robots $metaRobotsOptions,
         Store $systemStore,
         array $data = []
-    )
-    {
+    ) {
         $this->wysiwygConfig     = $wysiwygConfig;
         $this->booleanOptions    = $booleanOptions;
         $this->enableDisable     = $enableDisable;
@@ -118,7 +117,8 @@ class Category extends Generic implements TabInterface
         ]);
 
         if (!$category->getId()) {
-            $fieldset->addField('path', 'hidden', ['name' => 'path', 'value' => $this->getRequest()->getParam('parent') ?: 1]);
+            $fieldset->addField('path', 'hidden',
+                ['name' => 'path', 'value' => $this->getRequest()->getParam('parent') ?: 1]);
         } else {
             $fieldset->addField('category_id', 'hidden', ['name' => 'id', 'value' => $category->getId()]);
             $fieldset->addField('path', 'hidden', ['name' => 'path', 'value' => $category->getPath()]);

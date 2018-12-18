@@ -71,8 +71,7 @@ class Move extends Category
         JsonFactory $resultJsonFactory,
         LayoutFactory $layoutFactory,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory     = $layoutFactory;
         $this->logger            = $logger;

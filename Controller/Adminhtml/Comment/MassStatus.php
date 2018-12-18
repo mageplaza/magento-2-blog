@@ -58,8 +58,7 @@ class MassStatus extends Action
         Context $context,
         Filter $filter,
         CollectionFactory $collectionFactory
-    )
-    {
+    ) {
         $this->filter            = $filter;
         $this->collectionFactory = $collectionFactory;
 

@@ -54,8 +54,7 @@ class Edit extends Comment
         CommentFactory $commentFactory,
         Registry $coreRegistry,
         Context $context
-    )
-    {
+    ) {
         $this->resultPageFactory = $pageFactory;
 
         parent::__construct($commentFactory, $coreRegistry, $context);

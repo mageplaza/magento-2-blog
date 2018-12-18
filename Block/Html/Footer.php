@@ -51,8 +51,7 @@ class Footer extends Link
         Context $context,
         Data $helper,
         array $data = []
-    )
-    {
+    ) {
         $this->helper = $helper;
 
         parent::__construct($context, $data);

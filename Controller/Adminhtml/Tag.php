@@ -59,8 +59,7 @@ abstract class Tag extends Action
         Context $context,
         Registry $coreRegistry,
         TagFactory $tagFactory
-    )
-    {
+    ) {
         $this->tagFactory   = $tagFactory;
         $this->coreRegistry = $coreRegistry;
 

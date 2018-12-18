@@ -91,8 +91,7 @@ class Frontend extends Template
         CustomerRepositoryInterface $customerRepository,
         HelperData $helperData,
         array $data = []
-    )
-    {
+    ) {
         $this->filterProvider     = $filterProvider;
         $this->cmtFactory         = $commentFactory;
         $this->likeFactory        = $likeFactory;
@@ -178,7 +177,8 @@ class Frontend extends Template
         $categories   = $this->helperData->getCategoryCollection($post->getCategoryIds());
         $categoryHtml = [];
         foreach ($categories as $_cat) {
-            $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl($_cat, Data::TYPE_CATEGORY) . '">' . $_cat->getName() . '</a>';
+            $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl($_cat,
+                    Data::TYPE_CATEGORY) . '">' . $_cat->getName() . '</a>';
         }
         $result = implode(', ', $categoryHtml);
 

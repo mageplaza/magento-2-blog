@@ -61,9 +61,8 @@ class View extends Action
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
         Data $helperData
-    )
-    {
-        $this->_helperBlog = $helperData;
+    ) {
+        $this->_helperBlog          = $helperData;
         $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
 

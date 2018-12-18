@@ -134,8 +134,7 @@ class Tree extends Dbp
         CacheInterface $cache,
         StoreManagerInterface $storeManager,
         ResourceConnection $coreResource
-    )
-    {
+    ) {
         $this->eventManager      = $eventManager;
         $this->collectionFactory = $collectionFactory;
         $this->categoryResource  = $categoryResource;
@@ -172,8 +171,7 @@ class Tree extends Dbp
         $exclude = [],
         $toLoad = true,
         $onlyActive = false
-    )
-    {
+    ) {
         if ($collection === null) {
             $collection = $this->getCollection($sorted);
         } else {

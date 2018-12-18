@@ -137,8 +137,7 @@ class Category extends AbstractModel
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
+    ) {
         $this->categoryFactory           = $categoryFactory;
         $this->postCollectionFactory     = $postCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
@@ -230,10 +229,12 @@ class Category extends AbstractModel
             throw new LocalizedException(
                 __('Sorry, but we can\'t move the Blog Category because we can\'t find the new parent Blog Category you selected.')
             );
-        } else if ($parent->getId() == $this->getId()) {
-            throw new LocalizedException(
-                __('We can\'t perform this Blog Category move operation because the parent Blog Category matches the child Blog Category.')
-            );
+        } else {
+            if ($parent->getId() == $this->getId()) {
+                throw new LocalizedException(
+                    __('We can\'t perform this Blog Category move operation because the parent Blog Category matches the child Blog Category.')
+                );
+            }
         }
 
         $this->setMovedCategoryId($this->getId());

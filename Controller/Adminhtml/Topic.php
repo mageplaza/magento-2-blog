@@ -59,8 +59,7 @@ abstract class Topic extends Action
         Context $context,
         Registry $coreRegistry,
         TopicFactory $topicFactory
-    )
-    {
+    ) {
         $this->topicFactory = $topicFactory;
         $this->coreRegistry = $coreRegistry;
 

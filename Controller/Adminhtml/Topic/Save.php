@@ -76,8 +76,7 @@ class Save extends Topic
         LayoutFactory $layoutFactory,
         JsonFactory $resultJsonFactory,
         TopicFactory $topicFactory
-    )
-    {
+    ) {
         $this->jsHelper          = $jsHelper;
         $this->layoutFactory     = $layoutFactory;
         $this->resultJsonFactory = $resultJsonFactory;

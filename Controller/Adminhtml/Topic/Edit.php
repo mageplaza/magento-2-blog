@@ -55,8 +55,7 @@ class Edit extends Topic
         PageFactory $resultPageFactory,
         JsonFactory $resultJsonFactory,
         TopicFactory $topicFactory
-    )
-    {
+    ) {
         $this->resultPageFactory = $resultPageFactory;
 
         parent::__construct($context, $registry, $topicFactory);

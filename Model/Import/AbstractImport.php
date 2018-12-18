@@ -189,8 +189,7 @@ abstract class AbstractImport extends AbstractModel
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
+    ) {
         $this->date                = $date;
         $this->importType          = $importType;
         $this->_type               = $this->_getImportType();

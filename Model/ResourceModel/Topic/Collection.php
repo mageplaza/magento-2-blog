@@ -97,14 +97,18 @@ class Collection extends AbstractCollection
             if (!empty($topicIds)) {
                 $condition = ['in' => $topicIds];
             }
-        } else if (is_numeric($topicIds)) {
-            $condition = $topicIds;
-        } else if (is_string($topicIds)) {
-            $ids = explode(',', $topicIds);
-            if (empty($ids)) {
+        } else {
+            if (is_numeric($topicIds)) {
                 $condition = $topicIds;
             } else {
-                $condition = ['in' => $ids];
+                if (is_string($topicIds)) {
+                    $ids = explode(',', $topicIds);
+                    if (empty($ids)) {
+                        $condition = $topicIds;
+                    } else {
+                        $condition = ['in' => $ids];
+                    }
+                }
             }
         }
 

@@ -72,8 +72,7 @@ class Topic extends AbstractDb
         DateTime $date,
         ManagerInterface $eventManager,
         Data $helperData
-    )
-    {
+    ) {
         $this->helperData   = $helperData;
         $this->date         = $date;
         $this->eventManager = $eventManager;

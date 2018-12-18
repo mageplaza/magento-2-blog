@@ -50,8 +50,7 @@ class Edit extends Author
         Registry $registry,
         AuthorFactory $authorFactory,
         PageFactory $resultPageFactory
-    )
-    {
+    ) {
         $this->resultPageFactory = $resultPageFactory;
 
         parent::__construct($context, $registry, $authorFactory);

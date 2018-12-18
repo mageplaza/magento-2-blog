@@ -50,8 +50,7 @@ class Collection extends SearchResult
         EventManager $eventManager,
         $mainTable = 'mageplaza_blog_comment',
         $resourceModel = '\Mageplaza\Blog\Model\ResourceModel\Comment'
-    )
-    {
+    ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }
 
@@ -77,10 +76,14 @@ class Collection extends SearchResult
     {
         if ($field == 'customer_name') {
             return parent::addFieldToFilter(['firstname', 'lastname'], [$condition, $condition]);
-        } else if ($field == 'post_name') {
-            $field = 'mp.name';
-        } else if ($field == 'created_at') {
-            $field = 'main_table.created_at';
+        } else {
+            if ($field == 'post_name') {
+                $field = 'mp.name';
+            } else {
+                if ($field == 'created_at') {
+                    $field = 'main_table.created_at';
+                }
+            }
         }
 
         return parent::addFieldToFilter($field, $condition);

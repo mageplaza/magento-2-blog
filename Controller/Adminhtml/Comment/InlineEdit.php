@@ -57,8 +57,7 @@ class InlineEdit extends Action
         Context $context,
         JsonFactory $jsonFactory,
         CommentFactory $commentFactory
-    )
-    {
+    ) {
         $this->jsonFactory    = $jsonFactory;
         $this->commentFactory = $commentFactory;
 

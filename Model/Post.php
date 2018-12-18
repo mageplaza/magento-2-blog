@@ -238,8 +238,7 @@ class Post extends AbstractModel
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
+    ) {
         $this->tagCollectionFactory      = $tagCollectionFactory;
         $this->topicCollectionFactory    = $topicCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
@@ -445,7 +444,8 @@ class Post extends AbstractModel
             $collection->getSelect()
                 ->join(
                     ['topic' => $this->getResource()->getTable('mageplaza_blog_post_topic')],
-                    'main_table.post_id=topic.post_id AND topic.post_id != "' . $this->getId() . '" AND topic.topic_id IN (' . implode(',', $topicIds) . ')',
+                    'main_table.post_id=topic.post_id AND topic.post_id != "' . $this->getId() . '" AND topic.topic_id IN (' . implode(',',
+                        $topicIds) . ')',
                     ['position']
                 )->group('main_table.post_id');
 
@@ -504,7 +504,8 @@ class Post extends AbstractModel
     {
         if ($this->prevPostCollection === null) {
             $collection = $this->postCollectionFactory->create();
-            $collection->addFieldToFilter('post_id', ['lt' => $this->getId()])->setOrder('post_id', 'DESC')->setPageSize(1)->setCurPage(1);
+            $collection->addFieldToFilter('post_id', ['lt' => $this->getId()])->setOrder('post_id',
+                'DESC')->setPageSize(1)->setCurPage(1);
             $this->prevPostCollection = $collection;
         }
 
@@ -519,7 +520,8 @@ class Post extends AbstractModel
     {
         if ($this->nextPostCollection === null) {
             $collection = $this->postCollectionFactory->create();
-            $collection->addFieldToFilter('post_id', ['gt' => $this->getId()])->setOrder('post_id', 'ASC')->setPageSize(1)->setCurPage(1);
+            $collection->addFieldToFilter('post_id', ['gt' => $this->getId()])->setOrder('post_id',
+                'ASC')->setPageSize(1)->setCurPage(1);
             $this->nextPostCollection = $collection;
         }
 

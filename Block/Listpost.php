@@ -157,7 +157,8 @@ class Listpost extends Frontend
         $this->pageConfig->setRobots($robots);
 
         if ($this->getRequest()->getFullActionName() == 'mpblog_post_view') {
-            $this->pageConfig->addRemotePageAsset($object->getUrl(), 'canonical', ['attributes' => ['rel' => 'canonical']]);
+            $this->pageConfig->addRemotePageAsset($object->getUrl(), 'canonical',
+                ['attributes' => ['rel' => 'canonical']]);
         }
         $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle) {

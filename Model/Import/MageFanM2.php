@@ -147,7 +147,8 @@ class MageFanM2 extends AbstractImport
                     'name'              => $post['title'],
                     'short_description' => $post['short_content'],
                     'post_content'      => $post['content'],
-                    'url_key'           => $this->helperData->generateUrlKey($postModel->getResource(), $postModel, $post['identifier']),
+                    'url_key'           => $this->helperData->generateUrlKey($postModel->getResource(), $postModel,
+                        $post['identifier']),
                     'image'             => $post['featured_img'],
                     'created_at'        => ($post['creation_time'] > $this->date->date() || !$post['creation_time']) ? $this->date->date() : $post['creation_time'],
                     'updated_at'        => ($post['update_time']) ?: $this->date->date(),
@@ -324,7 +325,8 @@ class MageFanM2 extends AbstractImport
                 'is_duplicated_url' => $tagModel->getResource()->isDuplicateUrlKey($tag['identifier']),
                 'id'                => $tag['tag_id'],
                 'name'              => $tag['title'],
-                'url_key'           => $this->helperData->generateUrlKey($tagModel->getResource(), $tagModel, $tag['identifier']),
+                'url_key'           => $this->helperData->generateUrlKey($tagModel->getResource(), $tagModel,
+                    $tag['identifier']),
                 'meta_robots'       => 'INDEX,FOLLOW',
                 'meta_description'  => $tag['meta_description'],
                 'meta_keywords'     => $tag['meta_keywords'],
@@ -469,11 +471,13 @@ class MageFanM2 extends AbstractImport
         while ($category = mysqli_fetch_assoc($result)) {
             /** store the source item */
             $sourceItems[] = [
-                'is_imported'       => $categoryModel->getResource()->isImported($importSource, $category['category_id']),
+                'is_imported'       => $categoryModel->getResource()->isImported($importSource,
+                    $category['category_id']),
                 'is_duplicated_url' => $categoryModel->getResource()->isDuplicateUrlKey($category['identifier']),
                 'id'                => $category['category_id'],
                 'name'              => $category['title'],
-                'url_key'           => $this->helperData->generateUrlKey($categoryModel->getResource(), $categoryModel, $category['identifier']),
+                'url_key'           => $this->helperData->generateUrlKey($categoryModel->getResource(), $categoryModel,
+                    $category['identifier']),
                 'path'              => '1',
                 'meta_robots'       => 'INDEX,FOLLOW',
                 'store_ids'         => $this->_storeManager->getStore()->getId(),
@@ -849,7 +853,8 @@ class MageFanM2 extends AbstractImport
         foreach ($updateData as $postId => $authorId) {
             $where = ['post_id = ?' => (int)$postId];
             $this->_resourceConnection->getConnection()
-                ->update($this->_resourceConnection->getTableName('mageplaza_blog_post'), ['author_id' => $authorId], $where);
+                ->update($this->_resourceConnection->getTableName('mageplaza_blog_post'), ['author_id' => $authorId],
+                    $where);
         }
         $statistics = $this->_getStatistics('authors', $this->_successCount, $this->_errorCount, $this->_hasData);
         $this->_registry->register('mageplaza_import_user_statistic', $statistics);

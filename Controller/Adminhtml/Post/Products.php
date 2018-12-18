@@ -50,8 +50,7 @@ class Products extends Post
         Registry $registry,
         PostFactory $productFactory,
         LayoutFactory $resultLayoutFactory
-    )
-    {
+    ) {
         parent::__construct($productFactory, $registry, $context);
 
         $this->resultLayoutFactory = $resultLayoutFactory;

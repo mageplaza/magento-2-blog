@@ -70,8 +70,7 @@ class Topic extends Multiselect
         AuthorizationInterface $authorization,
         UrlInterface $urlBuilder,
         array $data = []
-    )
-    {
+    ) {
         $this->collectionFactory = $collectionFactory;
         $this->authorization     = $authorization;
         $this->_urlBuilder       = $urlBuilder;
@@ -245,7 +244,8 @@ class Topic extends Multiselect
                                         "component": "Magento_Ui/js/form/components/insert-form",
                                         "dataScope": "",
                                         "update_url": "' . $this->_urlBuilder->getUrl('mui/index/render') . '",
-                                        "render_url": "' . $this->_urlBuilder->getUrl('mui/index/render_handle', ['handle' => 'mageplaza_blog_topic_create', 'buttons' => 1]) . '",
+                                        "render_url": "' . $this->_urlBuilder->getUrl('mui/index/render_handle',
+                ['handle' => 'mageplaza_blog_topic_create', 'buttons' => 1]) . '",
                                         "autoRender": false,
                                         "ns": "blog_new_topic_form",
                                         "externalProvider": "blog_new_topic_form.new_topic_form_data_source",

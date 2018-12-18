@@ -107,8 +107,7 @@ class Post extends AbstractDb
         Auth $auth,
         Data $helperData,
         AuthorFactory $authorFactory
-    )
-    {
+    ) {
         $this->date           = $date;
         $this->eventManager   = $eventManager;
         $this->_auth          = $auth;

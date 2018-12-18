@@ -68,9 +68,9 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         BlogTreeResource $blogCategoryTree,
         CategoryFactory $blogCategoryFactory,
         array $data = []
-    )
-    {
-        parent::__construct($context, $categoryTree, $registry, $categoryFactory, $jsonEncoder, $resourceHelper, $backendSession, $data);
+    ) {
+        parent::__construct($context, $categoryTree, $registry, $categoryFactory, $jsonEncoder, $resourceHelper,
+            $backendSession, $data);
 
         $this->_categoryTree     = $blogCategoryTree;
         $this->_categoryFactory  = $blogCategoryFactory;
@@ -145,7 +145,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         }
 
         $storeIds = $node->getStoreIds() ? explode(',', $node->getStoreIds()) : [];
-        if (!empty($storeIds) && !in_array(0, $storeIds) && !is_null($this->_blogStore) && !in_array($this->_blogStore, $storeIds)) {
+        if (!empty($storeIds) && !in_array(0, $storeIds) && !is_null($this->_blogStore) && !in_array($this->_blogStore,
+                $storeIds)) {
             return null;
         }
 

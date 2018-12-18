@@ -49,8 +49,7 @@ class Author extends AbstractDb
     public function __construct(
         Context $context,
         Data $helperData
-    )
-    {
+    ) {
         $this->helperData = $helperData;
         parent::__construct($context);
     }

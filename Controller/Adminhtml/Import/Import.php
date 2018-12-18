@@ -76,8 +76,7 @@ class Import extends Action
         MageFanM2 $mageFanM2,
         BlogHelper $blogHelper,
         Registry $registry
-    )
-    {
+    ) {
         $this->blogHelper         = $blogHelper;
         $this->_wordpressModel    = $wordPress;
         $this->_aheadWorksM1Model = $aheadWorksM1;

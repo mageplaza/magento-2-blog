@@ -60,8 +60,7 @@ class View extends Action
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
         HelperBlog $helperBlog
-    )
-    {
+    ) {
         $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->helperBlog           = $helperBlog;

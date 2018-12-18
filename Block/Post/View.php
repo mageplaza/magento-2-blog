@@ -93,14 +93,14 @@ class View extends \Mageplaza\Blog\Block\Listpost
         CategoryFactory $categoryFactory,
         PostFactory $postFactory,
         array $data = []
-    )
-    {
+    ) {
         $this->customerSession = $customerSession;
         $this->categoryFactory = $categoryFactory;
         $this->postFactory     = $postFactory;
         $this->customerUrl     = $customerUrl;
 
-        parent::__construct($context, $filterProvider, $commentFactory, $likeFactory, $customerRepository, $helperData, $data);
+        parent::__construct($context, $filterProvider, $commentFactory, $likeFactory, $customerRepository, $helperData,
+            $data);
     }
 
     /**

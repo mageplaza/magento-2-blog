@@ -132,7 +132,8 @@ class WordPress extends AbstractImport
             /** fetch all items from import source */
             while ($post = mysqli_fetch_assoc($result)) {
                 $content = $post['post_content'];
-                $content = preg_replace("/(http:\/\/)(.+?)(\/wp-content\/)/", $this->_helperImage->getBaseMediaUrl() . "/wysiwyg/", $content);
+                $content = preg_replace("/(http:\/\/)(.+?)(\/wp-content\/)/",
+                    $this->_helperImage->getBaseMediaUrl() . "/wysiwyg/", $content);
                 /** store the source item */
                 $sourceItems[] = [
                     'is_imported'       => $postModel->getResource()->isImported($importSource, $post['ID']),
@@ -141,7 +142,8 @@ class WordPress extends AbstractImport
                     'name'              => $post['post_title'],
                     'short_description' => '',
                     'post_content'      => $content,
-                    'url_key'           => $this->helperData->generateUrlKey($postModel->getResource(), $postModel, $post['post_name']),
+                    'url_key'           => $this->helperData->generateUrlKey($postModel->getResource(), $postModel,
+                        $post['post_name']),
                     'created_at'        => ($post['post_date_gmt'] > $this->date->date() || !$post['post_date_gmt']) ? $this->date->date() : ($post['post_date_gmt']),
                     'updated_at'        => ($post['post_modified_gmt']) ?: $this->date->date(),
                     'publish_date'      => ($post['post_date_gmt']) ?: $this->date->date(),
@@ -238,7 +240,8 @@ class WordPress extends AbstractImport
                 foreach ($updateData as $postId => $postImage) {
                     $where = ['post_id = ?' => (int)$postId];
                     $this->_resourceConnection->getConnection()
-                        ->update($this->_resourceConnection->getTableName('mageplaza_blog_post'), ['image' => $postImage], $where);
+                        ->update($this->_resourceConnection->getTableName('mageplaza_blog_post'),
+                            ['image' => $postImage], $where);
                 }
 
                 mysqli_free_result($result);
@@ -295,7 +298,8 @@ class WordPress extends AbstractImport
                 'is_duplicated_url' => $tagModel->getResource()->isDuplicateUrlKey($tag['slug']),
                 'id'                => $tag['term_id'],
                 'name'              => $tag['name'],
-                'url_key'           => $this->helperData->generateUrlKey($tagModel->getResource(), $tagModel, $tag['slug']),
+                'url_key'           => $this->helperData->generateUrlKey($tagModel->getResource(), $tagModel,
+                    $tag['slug']),
                 'description'       => $tag['description'],
                 'meta_robots'       => 'INDEX,FOLLOW',
                 'store_ids'         => $this->_storeManager->getStore()->getId(),
@@ -428,7 +432,8 @@ class WordPress extends AbstractImport
                 'is_duplicated_url' => $categoryModel->getResource()->isDuplicateUrlKey($category['slug']),
                 'id'                => $category['term_id'],
                 'name'              => $category['name'],
-                'url_key'           => $this->helperData->generateUrlKey($categoryModel->getResource(), $categoryModel, $category['slug']),
+                'url_key'           => $this->helperData->generateUrlKey($categoryModel->getResource(), $categoryModel,
+                    $category['slug']),
                 'description'       => $category['description'],
                 'meta_robots'       => 'INDEX,FOLLOW',
                 'store_ids'         => $this->_storeManager->getStore()->getId(),
@@ -534,7 +539,8 @@ class WordPress extends AbstractImport
                 }
             }
             mysqli_free_result($result);
-            $this->_importRelationships($data, $connection, $oldCategoryIds, 'mageplaza_blog_post_category', 'category', 1);
+            $this->_importRelationships($data, $connection, $oldCategoryIds, 'mageplaza_blog_post_category', 'category',
+                1);
         }
 
         $statistics = $this->_getStatistics('categories', $this->_successCount, $this->_errorCount, $this->_hasData);
@@ -612,7 +618,8 @@ class WordPress extends AbstractImport
         foreach ($updateData as $postId => $authorId) {
             $where = ['post_id = ?' => (int)$postId];
             $this->_resourceConnection->getConnection()
-                ->update($this->_resourceConnection->getTableName('mageplaza_blog_post'), ['author_id' => $authorId], $where);
+                ->update($this->_resourceConnection->getTableName('mageplaza_blog_post'), ['author_id' => $authorId],
+                    $where);
         }
         $statistics = $this->_getStatistics('authors', $this->_successCount, $this->_errorCount, $this->_hasData);
         $this->_registry->register('mageplaza_import_user_statistic', $statistics);
@@ -765,8 +772,10 @@ class WordPress extends AbstractImport
                 $result          = mysqli_query($connection, $relationshipSql);
 
                 while ($commentParent = mysqli_fetch_assoc($result)) {
-                    $newCommentParentId                     = array_search($commentParent['comment_parent'], $oldCommentIds);
-                    $newCommentChildId                      = array_search($commentParent['comment_ID'], $oldCommentIds);
+                    $newCommentParentId                     = array_search($commentParent['comment_parent'],
+                        $oldCommentIds);
+                    $newCommentChildId                      = array_search($commentParent['comment_ID'],
+                        $oldCommentIds);
                     $upgradeChildData[$newCommentChildId]   = $newCommentParentId;
                     $upgradeParentData[$newCommentParentId] = 1;
                 }
@@ -798,8 +807,14 @@ class WordPress extends AbstractImport
      * @param $termType
      * @param null $isCategory
      */
-    protected function _importRelationships($data, $connection, $oldTermIds, $relationTable, $termType, $isCategory = null)
-    {
+    protected function _importRelationships(
+        $data,
+        $connection,
+        $oldTermIds,
+        $relationTable,
+        $termType,
+        $isCategory = null
+    ) {
         $oldPostIds        = $this->_registry->registry('mageplaza_import_post_ids_collection');
         $categoryPostTable = $this->_resourceConnection->getTableName($relationTable);
         foreach ($oldPostIds as $newPostId => $oldPostId) {

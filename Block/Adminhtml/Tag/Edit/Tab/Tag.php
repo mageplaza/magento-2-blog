@@ -89,8 +89,7 @@ class Tag extends Generic implements TabInterface
         Store $systemStore,
         Robots $metaRobotsOptions,
         array $data = []
-    )
-    {
+    ) {
         $this->wysiwygConfig  = $wysiwygConfig;
         $this->booleanOptions = $booleanOptions;
         $this->enableDisable  = $enableDisable;

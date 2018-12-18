@@ -52,8 +52,7 @@ class Posts extends Category
         Registry $coreRegistry,
         CategoryFactory $categoryFactory,
         LayoutFactory $resultLayoutFactory
-    )
-    {
+    ) {
         $this->resultLayoutFactory = $resultLayoutFactory;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);

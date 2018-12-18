@@ -89,8 +89,7 @@ class Topic extends Generic implements TabInterface
         Robots $metaRobotsOptions,
         Store $systemStore,
         array $data = []
-    )
-    {
+    ) {
         $this->wysiwygConfig     = $wysiwygConfig;
         $this->booleanOptions    = $booleanOptions;
         $this->enableDisable     = $enableDisable;

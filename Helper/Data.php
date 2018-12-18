@@ -108,8 +108,7 @@ class Data extends CoreHelper
         AuthorFactory $authorFactory,
         TranslitUrl $translitUrl,
         DateTime $dateTime
-    )
-    {
+    ) {
         $this->postFactory     = $postFactory;
         $this->categoryFactory = $categoryFactory;
         $this->tagFactory      = $tagFactory;
@@ -140,18 +139,19 @@ class Data extends CoreHelper
 
         return $this->getConfigValue(self::CONFIG_MODULE_PATH . $code, $storeId);
     }
-    
+
     /**
      * @param null $storeId
      * @return array|mixed|string
      */
-    public function getSidebarLayout( $storeId = null){
+    public function getSidebarLayout($storeId = null)
+    {
         $sideBarConfig = $this->getConfigValue(self::CONFIG_MODULE_PATH . '/sidebar/sidebar_left_right', $storeId);
-        if($sideBarConfig == 0){
-                return \Mageplaza\Blog\Model\Config\Source\SideBarLR::LEFT;
-            } elseif($sideBarConfig == 1) {
-                return \Mageplaza\Blog\Model\Config\Source\SideBarLR::RIGHT;
-            }
+        if ($sideBarConfig == 0) {
+            return \Mageplaza\Blog\Model\Config\Source\SideBarLR::LEFT;
+        } elseif ($sideBarConfig == 1) {
+            return \Mageplaza\Blog\Model\Config\Source\SideBarLR::RIGHT;
+        }
         return $sideBarConfig;
     }
 

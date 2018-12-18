@@ -62,8 +62,7 @@ class SuggestCategories extends Category
         CategoryFactory $categoryFactory,
         JsonFactory $resultJsonFactory,
         LayoutFactory $layoutFactory
-    )
-    {
+    ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory     = $layoutFactory;
 

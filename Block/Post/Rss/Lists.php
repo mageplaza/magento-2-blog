@@ -60,8 +60,7 @@ class Lists extends AbstractBlock implements DataProviderInterface
         UrlBuilderInterface $rssUrlBuilder,
         Data $helper,
         array $data = []
-    )
-    {
+    ) {
         $this->rssUrlBuilder = $rssUrlBuilder;
         $this->helper        = $helper;
         $this->storeManager  = $context->getStoreManager();

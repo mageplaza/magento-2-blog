@@ -52,8 +52,7 @@ class NewTagDataProvider extends AbstractDataProvider
         UrlInterface $urlBuilder,
         array $meta = [],
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
 
         $this->collection = $collectionFactory->create();

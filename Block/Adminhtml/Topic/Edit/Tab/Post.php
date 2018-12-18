@@ -62,8 +62,7 @@ class Post extends Extended implements TabInterface
         Context $context,
         Data $backendHelper,
         array $data = []
-    )
-    {
+    ) {
         $this->coreRegistry = $coreRegistry;
         $this->postFactory  = $postFactory;
 
@@ -219,8 +218,10 @@ class Post extends Extended implements TabInterface
             }
             if ($column->getFilter()->getValue()) {
                 $this->getCollection()->addFieldToFilter('main_table.post_id', ['in' => $postIds]);
-            } else if ($postIds) {
-                $this->getCollection()->addFieldToFilter('main_table.post_id', ['nin' => $postIds]);
+            } else {
+                if ($postIds) {
+                    $this->getCollection()->addFieldToFilter('main_table.post_id', ['nin' => $postIds]);
+                }
             }
         } else {
             parent::_addColumnFilterToCollection($column);
