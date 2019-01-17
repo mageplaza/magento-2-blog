@@ -38,7 +38,8 @@ $postsRecent = $block->getRecentPost();
                         <div class="post-left">
                             <a href="<?php echo $post->getUrl() ?>">
                                 <img class="img-responsive"
-                                     src="<?php echo $block->resizeImage($post->getImage(), '100x'); ?>">
+                                     src="<?php echo $block->resizeImage($post->getImage(), '100x'); ?>"
+                                     alt="<?php echo $block->escapeHtml($post->getName()); ?>">
                             </a>
                         </div>
                         <div class="post-right">
@@ -63,11 +64,12 @@ $postsRecent = $block->getRecentPost();
         <div class="data item content" id="tab-content-mostview" data-role="content">
             <?php if ($postsRecent->getSize()): ?>
                 <?php foreach ($postsRecent as $post): ?>
-                    <div class="list-post-tabs" href="<?php echo $post->getUrl() ?>">
+                    <div class="list-post-tabs">
                         <div class="post-left">
                             <a href="<?php echo $post->getUrl() ?>">
                                 <img class="img-responsive"
-                                     src="<?php echo $block->resizeImage($post->getImage(), '100x') ?>">
+                                     src="<?php echo $block->resizeImage($post->getImage(), '100x') ?>"
+                                     alt="<?php echo $block->escapeHtml($post->getName()); ?>">
                             </a>
                         </div>
                         <div class="post-right">
