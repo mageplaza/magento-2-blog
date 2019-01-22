@@ -24,6 +24,7 @@ namespace Mageplaza\Blog\Model\ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Mageplaza\Blog\Helper\Data;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
  * Class Author
@@ -42,16 +43,24 @@ class Author extends AbstractDb
     protected $_isPkAutoIncrement = false;
 
     /**
+     * @var DateTime
+     */
+    protected $date;
+
+    /**
      * Author constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Mageplaza\Blog\Helper\Data $helperData
+     * @param DateTime $date
      */
     public function __construct(
         Context $context,
-        Data $helperData
+        Data $helperData,
+        DateTime $date
     )
     {
         $this->helperData = $helperData;
+        $this->date = $date;
         parent::__construct($context);
     }
 
@@ -73,7 +82,7 @@ class Author extends AbstractDb
         );
 
         if (!$object->isObjectNew()) {
-            $object->setUpdatedAt(\Zend_Date::now());
+            $object->setUpdatedAt($this->date->date());
         }
 
         return $this;
