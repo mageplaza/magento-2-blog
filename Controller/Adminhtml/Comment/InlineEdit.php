@@ -49,6 +49,7 @@ class InlineEdit extends Action
 
     /**
      * InlineEdit constructor.
+     *
      * @param Context $context
      * @param JsonFactory $jsonFactory
      * @param CommentFactory $commentFactory
@@ -57,9 +58,8 @@ class InlineEdit extends Action
         Context $context,
         JsonFactory $jsonFactory,
         CommentFactory $commentFactory
-    )
-    {
-        $this->jsonFactory    = $jsonFactory;
+    ) {
+        $this->jsonFactory = $jsonFactory;
         $this->commentFactory = $commentFactory;
 
         parent::__construct($context);
@@ -71,9 +71,9 @@ class InlineEdit extends Action
     public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-        $resultJson   = $this->jsonFactory->create();
-        $error        = false;
-        $messages     = [];
+        $resultJson = $this->jsonFactory->create();
+        $error = false;
+        $messages = [];
         $commentItems = $this->getRequest()->getParam('items', []);
 
         if (!($this->getRequest()->getParam('isAjax') && !empty($commentItems))) {
@@ -85,7 +85,7 @@ class InlineEdit extends Action
             ]);
         }
 
-        $key       = array_keys($commentItems);
+        $key = array_keys($commentItems);
         $commentId = !empty($key) ? (int)$key[0] : '';
 
         /** @var \Mageplaza\Blog\Model\Post $post */
@@ -96,16 +96,16 @@ class InlineEdit extends Action
             $comment->save();
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithCommentId($comment, $e->getMessage());
-            $error      = true;
+            $error = true;
         } catch (\RuntimeException $e) {
             $messages[] = $this->getErrorWithCommentId($comment, $e->getMessage());
-            $error      = true;
+            $error = true;
         } catch (\Exception $e) {
             $messages[] = $this->getErrorWithCommentId(
                 $comment,
                 __('Something went wrong while saving the Comment.')
             );
-            $error      = true;
+            $error = true;
         }
 
         return $resultJson->setData([
@@ -117,6 +117,7 @@ class InlineEdit extends Action
     /**
      * @param \Mageplaza\Blog\Model\Comment $comment
      * @param $errorText
+     *
      * @return string
      */
     public function getErrorWithCommentId(\Mageplaza\Blog\Model\Comment $comment, $errorText)

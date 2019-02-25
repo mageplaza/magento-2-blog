@@ -60,6 +60,7 @@ class Save extends Tag
 
     /**
      * Save constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param Js $jsHelper
@@ -74,10 +75,9 @@ class Save extends Tag
         LayoutFactory $layoutFactory,
         JsonFactory $resultJsonFactory,
         TagFactory $tagFactory
-    )
-    {
-        $this->jsHelper          = $jsHelper;
-        $this->layoutFactory     = $layoutFactory;
+    ) {
+        $this->jsHelper = $jsHelper;
+        $this->layoutFactory = $layoutFactory;
         $this->resultJsonFactory = $resultJsonFactory;
 
         parent::__construct($context, $registry, $tagFactory);
@@ -89,10 +89,10 @@ class Save extends Tag
     public function execute()
     {
         if ($this->getRequest()->getPost('return_session_messages_only')) {
-            $tag                      = $this->initTag();
-            $tagPostData              = $this->getRequest()->getPostValue();
+            $tag = $this->initTag();
+            $tagPostData = $this->getRequest()->getPostValue();
             $tagPostData['store_ids'] = 0;
-            $tagPostData['enabled']   = 1;
+            $tagPostData['enabled'] = 1;
 
             $tag->addData($tagPostData);
 

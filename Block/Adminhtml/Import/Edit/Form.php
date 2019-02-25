@@ -70,6 +70,7 @@ class Form extends Generic
 
     /**
      * Form constructor.
+     *
      * @param Config $wysiwygConfig
      * @param Store $systemStore
      * @param Context $context
@@ -92,14 +93,13 @@ class Form extends Generic
         Behaviour $importBehaviour,
         Yesno $booleanOptions,
         array $data = []
-    )
-    {
-        $this->wysiwygConfig    = $wysiwygConfig;
-        $this->systemStore      = $systemStore;
-        $this->_imageHelper     = $imageHelper;
-        $this->_importType      = $importType;
+    ) {
+        $this->wysiwygConfig = $wysiwygConfig;
+        $this->systemStore = $systemStore;
+        $this->_imageHelper = $imageHelper;
+        $this->_importType = $importType;
         $this->_importBehaviour = $importBehaviour;
-        $this->booleanOptions   = $booleanOptions;
+        $this->booleanOptions = $booleanOptions;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }

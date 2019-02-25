@@ -57,6 +57,7 @@ class RelatedProduct extends ListProduct
 
     /**
      * RelatedProduct constructor.
+     *
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
@@ -75,10 +76,9 @@ class RelatedProduct extends ListProduct
         HelperData $helperData,
         Data $urlHelper,
         array $data = []
-    )
-    {
+    ) {
         $this->_productCollectionFactory = $productCollectionFactory;
-        $this->helper                    = $helperData;
+        $this->helper = $helperData;
 
         parent::__construct($context, $postDataHelper, $layerResolver, $categoryRepository, $urlHelper, $data);
     }
@@ -100,7 +100,7 @@ class RelatedProduct extends ListProduct
     public function _getProductCollection()
     {
         if ($this->_productCollection === null) {
-            $postId     = $this->getRequest()->getParam('id');
+            $postId = $this->getRequest()->getParam('id');
             $collection = $this->_productCollectionFactory->create()
                 ->addAttributeToSelect('*')
                 ->addStoreFilter();

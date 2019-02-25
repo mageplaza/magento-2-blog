@@ -62,6 +62,7 @@ class Save extends Topic
 
     /**
      * Save constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param Js $jsHelper
@@ -76,10 +77,9 @@ class Save extends Topic
         LayoutFactory $layoutFactory,
         JsonFactory $resultJsonFactory,
         TopicFactory $topicFactory
-    )
-    {
-        $this->jsHelper          = $jsHelper;
-        $this->layoutFactory     = $layoutFactory;
+    ) {
+        $this->jsHelper = $jsHelper;
+        $this->layoutFactory = $layoutFactory;
         $this->resultJsonFactory = $resultJsonFactory;
 
         parent::__construct($context, $registry, $topicFactory);
@@ -91,10 +91,10 @@ class Save extends Topic
     public function execute()
     {
         if ($this->getRequest()->getPost('return_session_messages_only')) {
-            $topic                      = $this->initTopic();
-            $topicPostData              = $this->getRequest()->getPostValue();
+            $topic = $this->initTopic();
+            $topicPostData = $this->getRequest()->getPostValue();
             $topicPostData['store_ids'] = 0;
-            $topicPostData['enabled']   = 1;
+            $topicPostData['enabled'] = 1;
 
             $topic->addData($topicPostData);
 

@@ -44,6 +44,7 @@ class Import extends Template
 
     /**
      * Before constructor.
+     *
      * @param Context $context
      * @param BlogHelper $blogHelper
      * @param Type $importType
@@ -54,8 +55,7 @@ class Import extends Template
         BlogHelper $blogHelper,
         Type $importType,
         array $data = []
-    )
-    {
+    ) {
         $this->blogHelper = $blogHelper;
         $this->importType = $importType;
 
@@ -79,6 +79,7 @@ class Import extends Template
     /**
      * @param $priority
      * @param $message
+     *
      * @return string
      */
     public function getMessagesHtml($priority, $message)
@@ -96,7 +97,7 @@ class Import extends Template
     public function getImportButtonHtml()
     {
         $importUrl = $this->getUrl('mageplaza_blog/import/import');
-        $html      = '&nbsp;&nbsp;<button id="word-press-import" href="' . $importUrl . '" class="" type="button" onclick="mpBlogImport.importAction();"><span><span><span>Import</span></span></span></button>';
+        $html = '&nbsp;&nbsp;<button id="word-press-import" href="' . $importUrl . '" class="" type="button" onclick="mpBlogImport.importAction();"><span><span><span>Import</span></span></span></button>';
 
         return $html;
     }

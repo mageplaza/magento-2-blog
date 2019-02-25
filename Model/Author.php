@@ -46,6 +46,7 @@ class Author extends AbstractModel
 
     /**
      * Author constructor.
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Mageplaza\Blog\Helper\Data $helperData
@@ -60,8 +61,7 @@ class Author extends AbstractModel
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
+    ) {
         $this->helperData = $helperData;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

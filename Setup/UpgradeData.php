@@ -43,16 +43,16 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * UpgradeData constructor.
+     *
      * @param DateTime $date
      * @param CommentFactory $commentFactory
      */
     public function __construct(
         DateTime $date,
         CommentFactory $commentFactory
-    )
-    {
+    ) {
         $this->comment = $commentFactory;
-        $this->date    = $date;
+        $this->date = $date;
     }
 
     /**

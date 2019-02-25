@@ -57,6 +57,7 @@ class Edit extends Category
 
     /**
      * Edit constructor.
+     *
      * @param \Magento\Framework\DataObject $dataObject
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
@@ -71,9 +72,8 @@ class Edit extends Category
         DataObject $dataObject,
         PageFactory $resultPageFactory,
         JsonFactory $resultJsonFactory
-    )
-    {
-        $this->dataObject        = $dataObject;
+    ) {
+        $this->dataObject = $dataObject;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
 
@@ -132,10 +132,10 @@ class Edit extends Category
                 }
             }
 
-            $layout        = $resultPage->getLayout();
-            $content       = $layout->getBlock('mageplaza.blog.category.edit')->getFormHtml()
-                . $layout->getBlock('mageplaza.blog.category.tree')
-                    ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs');
+            $layout = $resultPage->getLayout();
+            $content = $layout->getBlock('mageplaza.blog.category.edit')->getFormHtml()
+                       . $layout->getBlock('mageplaza.blog.category.tree')
+                           ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs');
             $eventResponse = $this->dataObject->addData([
                 'content'  => $content,
                 'messages' => $layout->getMessagesBlock()->getGroupedHtml(),

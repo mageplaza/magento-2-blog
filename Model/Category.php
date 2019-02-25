@@ -119,6 +119,7 @@ class Category extends AbstractModel
 
     /**
      * Category constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param CategoryFactory $categoryFactory
@@ -137,10 +138,9 @@ class Category extends AbstractModel
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
-        $this->categoryFactory           = $categoryFactory;
-        $this->postCollectionFactory     = $postCollectionFactory;
+    ) {
+        $this->categoryFactory = $categoryFactory;
+        $this->postCollectionFactory = $postCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -173,9 +173,9 @@ class Category extends AbstractModel
      */
     public function getDefaultValues()
     {
-        $values              = [];
+        $values = [];
         $values['store_ids'] = '1';
-        $values['enabled']   = '1';
+        $values['enabled'] = '1';
 
         return $values;
     }
@@ -211,6 +211,7 @@ class Category extends AbstractModel
      *
      * @param $parentId
      * @param $afterCategoryId
+     *
      * @return $this
      * @throws LocalizedException
      * @throws \Exception
@@ -230,7 +231,7 @@ class Category extends AbstractModel
             throw new LocalizedException(
                 __('Sorry, but we can\'t move the Blog Category because we can\'t find the new parent Blog Category you selected.')
             );
-        } else if ($parent->getId() == $this->getId()) {
+        } elseif ($parent->getId() == $this->getId()) {
             throw new LocalizedException(
                 __('We can\'t perform this Blog Category move operation because the parent Blog Category matches the child Blog Category.')
             );

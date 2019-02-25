@@ -78,6 +78,7 @@ class Collection extends AbstractCollection
      * @param string $valueField
      * @param string $labelField
      * @param array $additional
+     *
      * @return array
      */
     protected function _toOptionArray($valueField = 'tag_id', $labelField = 'name', $additional = [])
@@ -89,6 +90,7 @@ class Collection extends AbstractCollection
      * add if filter
      *
      * @param $tagIds
+     *
      * @return $this
      */
     public function addIdFilter($tagIds)
@@ -99,9 +101,9 @@ class Collection extends AbstractCollection
             if (!empty($tagIds)) {
                 $condition = ['in' => $tagIds];
             }
-        } else if (is_numeric($tagIds)) {
+        } elseif (is_numeric($tagIds)) {
             $condition = $tagIds;
-        } else if (is_string($tagIds)) {
+        } elseif (is_string($tagIds)) {
             $ids = explode(',', $tagIds);
             if (empty($ids)) {
                 $condition = $tagIds;

@@ -6,7 +6,7 @@
 - Download from our Live site: https://www.mageplaza.com/magento-2-blog-extension/
 - Get Support: https://github.com/mageplaza/magento-2-blog-extension/issues
 - Contribute on Github: https://github.com/mageplaza/magento-2-blog/
-- Changelog: https://www.mageplaza.com/changelog/m2-blog.txt
+- Changelog: https://www.mageplaza.com/releases/blog
 - License https://www.mageplaza.com/LICENSE.txt
 
 

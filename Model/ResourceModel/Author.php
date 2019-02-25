@@ -43,14 +43,14 @@ class Author extends AbstractDb
 
     /**
      * Author constructor.
+     *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Mageplaza\Blog\Helper\Data $helperData
      */
     public function __construct(
         Context $context,
         Data $helperData
-    )
-    {
+    ) {
         $this->helperData = $helperData;
         parent::__construct($context);
     }

@@ -122,17 +122,16 @@ class Post extends Generic implements TabInterface
         Store $systemStore,
         Image $imageHelper,
         array $data = []
-    )
-    {
-        $this->wysiwygConfig     = $wysiwygConfig;
-        $this->booleanOptions    = $booleanOptions;
-        $this->enabledisable     = $enableDisable;
+    ) {
+        $this->wysiwygConfig = $wysiwygConfig;
+        $this->booleanOptions = $booleanOptions;
+        $this->enabledisable = $enableDisable;
         $this->metaRobotsOptions = $metaRobotsOptions;
-        $this->systemStore       = $systemStore;
-        $this->authSession       = $authSession;
-        $this->_date             = $dateTime;
-        $this->_layoutOptions    = $layoutOption;
-        $this->imageHelper       = $imageHelper;
+        $this->systemStore = $systemStore;
+        $this->authSession = $authSession;
+        $this->_date = $dateTime;
+        $this->_layoutOptions = $layoutOption;
+        $this->imageHelper = $imageHelper;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -258,8 +257,7 @@ class Post extends Generic implements TabInterface
                 'date_format' => 'M/d/yyyy',
                 'timezone'    => false,
                 'value'       => $this->_date->date('m/d/Y')
-            ]
-        );
+            ]);
 
         /** get current time for public_time field */
         $currentTime = new \DateTime($this->_date->date(), new \DateTimeZone('UTC'));
@@ -333,9 +331,9 @@ class Post extends Generic implements TabInterface
             $publicDateTime = new \DateTime($post->getData('publish_date'), new \DateTimeZone('UTC'));
             $publicDateTime->setTimezone(new \DateTimeZone($this->_localeDate->getConfigTimezone()));
             $publicDateTime = $publicDateTime->format('m/d/Y H:i:s');
-            $date           = explode(' ', $publicDateTime)[0];
-            $time           = explode(' ', $publicDateTime)[1];
-            $time           = str_replace(':', ',', $time);
+            $date = explode(' ', $publicDateTime)[0];
+            $time = explode(' ', $publicDateTime)[1];
+            $time = str_replace(':', ',', $time);
             $post->setData('publish_date', $date);
             $post->setData('publish_time', $time);
         }

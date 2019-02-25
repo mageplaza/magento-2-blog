@@ -43,6 +43,7 @@ class Footer extends Link
 
     /**
      * Footer constructor.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Mageplaza\Blog\Helper\Data $helper
      * @param array $data
@@ -51,8 +52,7 @@ class Footer extends Link
         Context $context,
         Data $helper,
         array $data = []
-    )
-    {
+    ) {
         $this->helper = $helper;
 
         parent::__construct($context, $data);

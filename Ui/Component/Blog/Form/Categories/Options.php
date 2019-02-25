@@ -42,6 +42,7 @@ class Options implements OptionSourceInterface
 
     /**
      * Options constructor.
+     *
      * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      */
     public function __construct(CategoryCollectionFactory $categoryCollectionFactory)
@@ -80,8 +81,8 @@ class Options implements OptionSourceInterface
                     }
                 }
 
-                $categoryById[$category->getId()]['is_active']        = 1;
-                $categoryById[$category->getId()]['label']            = $category->getName();
+                $categoryById[$category->getId()]['is_active'] = 1;
+                $categoryById[$category->getId()]['label'] = $category->getName();
                 $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
             }
 

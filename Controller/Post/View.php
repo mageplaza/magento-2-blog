@@ -121,6 +121,7 @@ class View extends Action
 
     /**
      * View constructor.
+     *
      * @param Context $context
      * @param ForwardFactory $resultForwardFactory
      * @param StoreManagerInterface $storeManager
@@ -153,22 +154,21 @@ class View extends Action
         Session $customerSession,
         TrafficFactory $trafficFactory,
         PostFactory $postFactory
-    )
-    {
-        $this->storeManager         = $storeManager;
-        $this->helperBlog           = $helperBlog;
-        $this->resultPageFactory    = $resultPageFactory;
-        $this->accountManagement    = $accountManagement;
-        $this->customerUrl          = $customerUrl;
-        $this->session              = $customerSession;
-        $this->timeZone             = $timezone;
-        $this->trafficFactory       = $trafficFactory;
+    ) {
+        $this->storeManager = $storeManager;
+        $this->helperBlog = $helperBlog;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->accountManagement = $accountManagement;
+        $this->customerUrl = $customerUrl;
+        $this->session = $customerSession;
+        $this->timeZone = $timezone;
+        $this->trafficFactory = $trafficFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->jsonHelper           = $jsonHelper;
-        $this->cmtFactory           = $commentFactory;
-        $this->likeFactory          = $likeFactory;
-        $this->dateTime             = $dateTime;
-        $this->postFactory          = $postFactory;
+        $this->jsonHelper = $jsonHelper;
+        $this->cmtFactory = $commentFactory;
+        $this->likeFactory = $likeFactory;
+        $this->dateTime = $dateTime;
+        $this->postFactory = $postFactory;
 
         parent::__construct($context);
     }
@@ -179,10 +179,10 @@ class View extends Action
      */
     public function execute()
     {
-        $id         = $this->getRequest()->getParam('id');
-        $post       = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($id);
-        $page       = $this->resultPageFactory->create();
-        $pageLayout = ($post->getLayout() == 'empty') ? $this->helperBlog->getBlogConfig('sidebar/sidebar_left_right') : $post->getLayout();
+        $id = $this->getRequest()->getParam('id');
+        $post = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($id);
+        $page = $this->resultPageFactory->create();
+        $pageLayout = ($post->getLayout() == 'empty') ? $this->helperBlog->getSidebarLayout() : $post->getLayout();
         $page->getConfig()->setPageLayout($pageLayout);
 
         if ($post->getStoreIds() != $this->storeManager->getStore()->getId() && $post->getStoreIds() != 0) {
@@ -206,7 +206,7 @@ class View extends Action
             $result = [];
             if ($this->session->isLoggedIn()) {
                 $customerData = $this->session->getCustomerData();
-                $user         = [
+                $user = [
                     "user_id"    => $customerData->getId(),
                     "first_name" => $customerData->getFirstname(),
                     "last_name"  => $customerData->getLastname()
@@ -225,9 +225,9 @@ class View extends Action
                 }
             }
             if (isset($params['cmt_text'])) {
-                $cmtText     = $params['cmt_text'];
-                $isReply     = isset($params['isReply']) ? $params['isReply'] : 0;
-                $replyId     = isset($params['replyId']) ? $params['replyId'] : 0;
+                $cmtText = $params['cmt_text'];
+                $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
+                $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
                 $commentData = [
                     'post_id'    => $id, '',
                     'entity_id'  => $user["user_id"],
@@ -239,22 +239,22 @@ class View extends Action
                     'store_ids'  => $this->storeManager->getStore()->getId(),
                 ];
                 if ($user["user_id"] == '0') {
-                    $commentData['user_name']  = $user['first_name'];
+                    $commentData['user_name'] = $user['first_name'];
                     $commentData['user_email'] = $user['email'];
                 }
                 $commentModel = $this->cmtFactory->create();
-                $result       = $this->commentActions(self::COMMENT, $user, $commentData, $commentModel);
+                $result = $this->commentActions(self::COMMENT, $user, $commentData, $commentModel);
             }
 
             if (isset($params['cmtId'])) {
-                $cmtId    = $params['cmtId'];
+                $cmtId = $params['cmtId'];
                 $likeData = [
                     'comment_id' => $cmtId,
                     'entity_id'  => $user["user_id"]
                 ];
 
                 $likeModel = $this->likeFactory->create();
-                $result    = $this->commentActions(self::LIKE, $user, $likeData, $likeModel, $cmtId);
+                $result = $this->commentActions(self::LIKE, $user, $likeData, $likeModel, $cmtId);
             }
 
             return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
@@ -269,6 +269,7 @@ class View extends Action
      * @param $data
      * @param $model
      * @param null $cmtId
+     *
      * @return array
      */
     public function commentActions($action, $user, $data, $model, $cmtId = null)
@@ -285,9 +286,9 @@ class View extends Action
                         $cmtHasReply->setHasReply(1)->save();
                     }
 
-                    $lastCmt   = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
+                    $lastCmt = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
                     $lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
-                    $result    = [
+                    $result = [
                         'cmt_id'     => $lastCmtId,
                         'cmt_text'   => $data['content'],
                         'user_cmt'   => $user['first_name'] . ' ' . $user['last_name'],
@@ -303,10 +304,10 @@ class View extends Action
                     if (!$checkLike) {
                         $model->addData($data)->save();
                     }
-                    $likes      = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
+                    $likes = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
                     $countLikes = ($likes->getSize()) ? $likes->getSize() : '';
-                    $isLiked    = ($checkLike) ? "yes" : "no";
-                    $result     = [
+                    $isLiked = ($checkLike) ? "yes" : "no";
+                    $result = [
                         'liked'      => $isLiked,
                         'comment_id' => $cmtId,
                         'count_like' => $countLikes,
@@ -326,9 +327,11 @@ class View extends Action
 
     /**
      * check if user like a comment
+     *
      * @param $cmtId
      * @param $userId
      * @param $model
+     *
      * @return bool
      */
     public function isLikedComment($cmtId, $userId, $model)

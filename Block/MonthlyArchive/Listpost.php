@@ -72,6 +72,7 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
 
     /**
      * @param bool $meta
+     *
      * @return array|false|string
      */
     public function getBlogTitle($meta = false)

@@ -50,6 +50,7 @@ class Lists extends AbstractBlock implements DataProviderInterface
 
     /**
      * Lists constructor.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Mageplaza\Blog\Helper\Data $helper
      * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
@@ -60,11 +61,10 @@ class Lists extends AbstractBlock implements DataProviderInterface
         UrlBuilderInterface $rssUrlBuilder,
         Data $helper,
         array $data = []
-    )
-    {
+    ) {
         $this->rssUrlBuilder = $rssUrlBuilder;
-        $this->helper        = $helper;
-        $this->storeManager  = $context->getStoreManager();
+        $this->helper = $helper;
+        $this->storeManager = $context->getStoreManager();
 
         parent::__construct($context, $data);
     }
@@ -93,8 +93,8 @@ class Lists extends AbstractBlock implements DataProviderInterface
     public function getRssData()
     {
         $storeModel = $this->storeManager->getStore($this->getStoreId());
-        $title      = __('List Posts from %1', $storeModel->getFrontendName());
-        $data       = [
+        $title = __('List Posts from %1', $storeModel->getFrontendName());
+        $data = [
             'title'       => $title,
             'description' => $title,
             'link'        => $this->rssUrlBuilder->getUrl(['store_id' => $this->getStoreId(), 'type' => 'blog_posts']),
@@ -111,7 +111,7 @@ class Lists extends AbstractBlock implements DataProviderInterface
             $item->setAllowedInRss(true);
             $item->setAllowedPriceInRss(true);
 
-            $description       = '<table><tr><td style="text-decoration:none;"> ' . $item->getShortDescription() . '</td></tr></table>';
+            $description = '<table><tr><td style="text-decoration:none;"> ' . $item->getShortDescription() . '</td></tr></table>';
             $data['entries'][] = [
                 'title'       => $item->getName(),
                 'link'        => $item->getUrl(),
@@ -151,7 +151,7 @@ class Lists extends AbstractBlock implements DataProviderInterface
     {
         $data = [];
         if ($this->isAllowed()) {
-            $url  = $this->rssUrlBuilder->getUrl(['type' => 'blog_posts']);
+            $url = $this->rssUrlBuilder->getUrl(['type' => 'blog_posts']);
             $data = ['label' => __('Posts'), 'link' => $url];
         }
 

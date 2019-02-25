@@ -54,6 +54,7 @@ class Tag extends Multiselect
 
     /**
      * Tag constructor.
+     *
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
@@ -70,11 +71,10 @@ class Tag extends Multiselect
         AuthorizationInterface $authorization,
         UrlInterface $urlBuilder,
         array $data = []
-    )
-    {
+    ) {
         $this->collectionFactory = $collectionFactory;
-        $this->authorization     = $authorization;
-        $this->_urlBuilder       = $urlBuilder;
+        $this->authorization = $authorization;
+        $this->_urlBuilder = $urlBuilder;
 
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
@@ -123,11 +123,11 @@ class Tag extends Multiselect
     {
         /* @var $collection \Mageplaza\Blog\Model\ResourceModel\Tag\Collection */
         $collection = $this->collectionFactory->create();
-        $tagById    = [];
+        $tagById = [];
         foreach ($collection as $tag) {
-            $tagById[$tag->getId()]['value']     = $tag->getId();
+            $tagById[$tag->getId()]['value'] = $tag->getId();
             $tagById[$tag->getId()]['is_active'] = 1;
-            $tagById[$tag->getId()]['label']     = $tag->getName();
+            $tagById[$tag->getId()]['label'] = $tag->getName();
         }
 
         return $tagById;

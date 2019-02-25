@@ -42,6 +42,7 @@ class Widget extends Frontend
 
     /**
      * @param $topic
+     *
      * @return string
      */
     public function getTopicUrl($topic)

@@ -34,7 +34,7 @@ class Edit extends Container
      */
     protected function _construct()
     {
-        $this->_objectId   = 'id';
+        $this->_objectId = 'id';
         $this->_blockGroup = 'Mageplaza_Blog';
         $this->_controller = 'adminhtml_category';
 

@@ -69,6 +69,7 @@ class Topic extends Generic implements TabInterface
 
     /**
      * Topic constructor.
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -89,13 +90,12 @@ class Topic extends Generic implements TabInterface
         Robots $metaRobotsOptions,
         Store $systemStore,
         array $data = []
-    )
-    {
-        $this->wysiwygConfig     = $wysiwygConfig;
-        $this->booleanOptions    = $booleanOptions;
-        $this->enableDisable     = $enableDisable;
+    ) {
+        $this->wysiwygConfig = $wysiwygConfig;
+        $this->booleanOptions = $booleanOptions;
+        $this->enableDisable = $enableDisable;
         $this->metaRobotsOptions = $metaRobotsOptions;
-        $this->systemStore       = $systemStore;
+        $this->systemStore = $systemStore;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }

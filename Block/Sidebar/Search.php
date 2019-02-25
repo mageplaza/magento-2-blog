@@ -35,8 +35,8 @@ class Search extends Frontend
      */
     public function getSearchBlogData()
     {
-        $result    = [];
-        $posts     = $this->helperData->getPostList();
+        $result = [];
+        $posts = $this->helperData->getPostList();
         $limitDesc = (int)$this->getSidebarConfig('search/description');
         if (!empty($posts)) {
             foreach ($posts as $item) {

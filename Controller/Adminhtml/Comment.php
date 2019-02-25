@@ -49,6 +49,7 @@ abstract class Comment extends Action
 
     /**
      * Comment constructor.
+     *
      * @param CommentFactory $commentFactory
      * @param Registry $coreRegistry
      * @param Context $context
@@ -57,16 +58,16 @@ abstract class Comment extends Action
         CommentFactory $commentFactory,
         Registry $coreRegistry,
         Context $context
-    )
-    {
+    ) {
         $this->commentFactory = $commentFactory;
-        $this->coreRegistry   = $coreRegistry;
+        $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);
     }
 
     /**
      * @param bool $register
+     *
      * @return bool|\Mageplaza\Blog\Model\Comment
      */
     protected function initComment($register = false)

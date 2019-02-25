@@ -40,6 +40,7 @@ class Save extends Author
 
     /**
      * Save constructor.
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
@@ -50,8 +51,7 @@ class Save extends Author
         Registry $registry,
         AuthorFactory $authorFactory,
         Image $imageHelper
-    )
-    {
+    ) {
         $this->imageHelper = $imageHelper;
 
         parent::__construct($context, $registry, $authorFactory);

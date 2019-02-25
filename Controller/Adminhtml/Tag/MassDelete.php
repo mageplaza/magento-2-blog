@@ -45,6 +45,7 @@ class MassDelete extends Action
 
     /**
      * MassDelete constructor.
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Ui\Component\MassAction\Filter $filter
      * @param \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $collectionFactory
@@ -53,9 +54,8 @@ class MassDelete extends Action
         Context $context,
         Filter $filter,
         CollectionFactory $collectionFactory
-    )
-    {
-        $this->filter            = $filter;
+    ) {
+        $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
 
         parent::__construct($context);

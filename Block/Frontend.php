@@ -75,6 +75,7 @@ class Frontend extends Template
 
     /**
      * Frontend constructor.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
      * @param \Mageplaza\Blog\Model\CommentFactory $commentFactory
@@ -91,20 +92,20 @@ class Frontend extends Template
         CustomerRepositoryInterface $customerRepository,
         HelperData $helperData,
         array $data = []
-    )
-    {
-        $this->filterProvider     = $filterProvider;
-        $this->cmtFactory         = $commentFactory;
-        $this->likeFactory        = $likeFactory;
+    ) {
+        $this->filterProvider = $filterProvider;
+        $this->cmtFactory = $commentFactory;
+        $this->likeFactory = $likeFactory;
         $this->customerRepository = $customerRepository;
-        $this->helperData         = $helperData;
-        $this->store              = $context->getStoreManager();
+        $this->helperData = $helperData;
+        $this->store = $context->getStoreManager();
 
         parent::__construct($context, $data);
     }
 
     /**
      * @param $content
+     *
      * @return string
      * @throws \Exception
      */
@@ -116,12 +117,13 @@ class Frontend extends Template
     /**
      * @param $image
      * @param string $type
+     *
      * @return string
      */
     public function getImageUrl($image, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
     {
         $imageHelper = $this->helperData->getImageHelper();
-        $imageFile   = $imageHelper->getMediaPath($image, $type);
+        $imageFile = $imageHelper->getMediaPath($image, $type);
 
         return $this->helperData->getImageHelper()->getMediaUrl($imageFile);
     }
@@ -129,6 +131,7 @@ class Frontend extends Template
     /**
      * @param $urlKey
      * @param null $type
+     *
      * @return string
      */
     public function getRssUrl($urlKey, $type = null)
@@ -138,13 +141,14 @@ class Frontend extends Template
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url    = $this->helperData->getUrl($this->helperData->getRoute() . '/' . $urlKey);
+        $url = $this->helperData->getUrl($this->helperData->getRoute() . '/' . $urlKey);
 
         return rtrim($url, '/') . '.xml';
     }
 
     /**
      * @param $post
+     *
      * @return \Magento\Framework\Phrase|string
      */
     public function getPostInfo($post)
@@ -166,7 +170,9 @@ class Frontend extends Template
 
     /**
      * get list category html of post
+     *
      * @param $post
+     *
      * @return null|string
      */
     public function getPostCategoryHtml($post)
@@ -175,7 +181,7 @@ class Frontend extends Template
             return null;
         }
 
-        $categories   = $this->helperData->getCategoryCollection($post->getCategoryIds());
+        $categories = $this->helperData->getCategoryCollection($post->getCategoryIds());
         $categoryHtml = [];
         foreach ($categories as $_cat) {
             $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl($_cat, Data::TYPE_CATEGORY) . '">' . $_cat->getName() . '</a>';
@@ -188,6 +194,7 @@ class Frontend extends Template
     /**
      * @param $date
      * @param bool $monthly
+     *
      * @return false|string
      */
     public function getDateFormat($date, $monthly = false)
@@ -201,6 +208,7 @@ class Frontend extends Template
      * @param $image
      * @param null $size
      * @param string $type
+     *
      * @return string
      */
     public function resizeImage($image, $size = null, $type = Image::TEMPLATE_MEDIA_TYPE_POST)

@@ -20,7 +20,7 @@
  */
 
 $topics = $block->getTopicList();
-if ($topics && $topics->getSize()):
+if ($topics && $topics->getSize()) :
     ?>
     <div class="mp-sidebar mpcss">
         <div class="row">
@@ -29,7 +29,7 @@ if ($topics && $topics->getSize()):
             </div>
             <div class="col-xs-12">
                 <ul class="block-content menu-categories">
-                    <?php foreach ($topics as $topic): ?>
+                    <?php foreach ($topics as $topic) : ?>
                         <li class="category-item">
                             <a class="list-categories" href="<?php echo $block->getTopicUrl($topic) ?>">
                                 <i class="fa fa-folder-o" aria-hidden="true">&nbsp;</i>

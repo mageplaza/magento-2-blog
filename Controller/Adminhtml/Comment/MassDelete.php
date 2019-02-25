@@ -47,6 +47,7 @@ class MassDelete extends Action
 
     /**
      * MassDelete constructor.
+     *
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
@@ -55,9 +56,8 @@ class MassDelete extends Action
         Context $context,
         Filter $filter,
         CollectionFactory $collectionFactory
-    )
-    {
-        $this->filter            = $filter;
+    ) {
+        $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
         parent::__construct($context);
     }

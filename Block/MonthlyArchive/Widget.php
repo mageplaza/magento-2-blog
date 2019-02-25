@@ -49,6 +49,7 @@ class Widget extends Frontend
 
     /**
      * Widget constructor.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
      * @param \Mageplaza\Blog\Model\CommentFactory $commentFactory
@@ -67,8 +68,7 @@ class Widget extends Frontend
         DataHelper $helperData,
         DateTime $dateTime,
         array $data = []
-    )
-    {
+    ) {
         $this->dateTime = $dateTime;
 
         parent::__construct($context, $filterProvider, $commentFactory, $likeFactory, $customerRepository, $helperData, $data);
@@ -118,7 +118,7 @@ class Widget extends Frontend
     protected function getPostDate()
     {
         if (!$this->_postDate) {
-            $posts     = $this->helperData->getPostList();
+            $posts = $this->helperData->getPostList();
             $postDates = [];
             if ($posts->getSize()) {
                 foreach ($posts as $post) {
@@ -136,16 +136,17 @@ class Widget extends Frontend
      */
     public function getDateCount()
     {
-        $limit          = $this->helperData->getBlogConfig('monthly_archive/number_records') ?: 5;
+        $limit = $this->helperData->getBlogConfig('monthly_archive/number_records') ?: 5;
         $dateArrayCount = $this->getDateArrayCount();
-        $count          = count($dateArrayCount);
-        $result         = ($count < $limit) ? $count : $limit;
+        $count = count($dateArrayCount);
+        $result = ($count < $limit) ? $count : $limit;
 
         return $result;
     }
 
     /**
      * @param $month
+     *
      * @return string
      */
     public function getMonthlyUrl($month)
@@ -158,7 +159,7 @@ class Widget extends Frontend
      */
     public function getDateLabel()
     {
-        $postDates      = $this->getPostDate();
+        $postDates = $this->getPostDate();
         $postDatesLabel = [];
         if (sizeof($postDates)) {
             foreach ($postDates as $date) {

@@ -44,6 +44,7 @@ class Edit extends Action
 
     /**
      * Edit constructor.
+     *
      * @param Context $context
      * @param PageFactory $resultPageFactory
      * @param Registry $registry
@@ -52,9 +53,8 @@ class Edit extends Action
         Action\Context $context,
         PageFactory $resultPageFactory,
         Registry $registry
-    )
-    {
-        $this->registry          = $registry;
+    ) {
+        $this->registry = $registry;
         $this->resultPageFactory = $resultPageFactory;
 
         parent::__construct($context);

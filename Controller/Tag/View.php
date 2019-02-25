@@ -50,6 +50,7 @@ class View extends Action
 
     /**
      * View constructor.
+     *
      * @param Context $context
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
@@ -60,11 +61,10 @@ class View extends Action
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
         HelperBlog $helperBlog
-    )
-    {
-        $this->resultPageFactory    = $resultPageFactory;
+    ) {
+        $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->helperBlog           = $helperBlog;
+        $this->helperBlog = $helperBlog;
 
         parent::__construct($context);
     }
@@ -74,10 +74,10 @@ class View extends Action
      */
     public function execute()
     {
-        $id   = $this->getRequest()->getParam('id');
-        $tag  = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_TAG)->create()->load($id);
+        $id = $this->getRequest()->getParam('id');
+        $tag = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_TAG)->create()->load($id);
         $page = $this->resultPageFactory->create();
-        $page->getConfig()->setPageLayout($this->helperBlog->getBlogConfig('sidebar/sidebar_left_right'));
+        $page->getConfig()->setPageLayout($this->helperBlog->getSidebarLayout());
 
         return ($tag->getEnabled()) ? $page : $this->resultForwardFactory->create()->forward('noroute');
     }

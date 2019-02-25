@@ -46,6 +46,7 @@ class Design extends Template
 
     /**
      * Design constructor.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Mageplaza\Blog\Helper\Data $helperData
      * @param \Magento\Framework\View\Design\Theme\ThemeProviderInterface $_themeProvider
@@ -56,9 +57,8 @@ class Design extends Template
         HelperData $helperData,
         ThemeProviderInterface $_themeProvider,
         array $data = []
-    )
-    {
-        $this->helperData     = $helperData;
+    ) {
+        $this->helperData = $helperData;
         $this->_themeProvider = $_themeProvider;
 
         parent::__construct($context, $data);

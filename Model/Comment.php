@@ -74,6 +74,7 @@ class Comment extends AbstractModel
 
     /**
      * Comment constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param CollectionFactory $postCollectionFactory
@@ -90,9 +91,8 @@ class Comment extends AbstractModel
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
-        $this->postCollectionFactory    = $postCollectionFactory;
+    ) {
+        $this->postCollectionFactory = $postCollectionFactory;
         $this->commentCollectionFactory = $commentCollectionFactory;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

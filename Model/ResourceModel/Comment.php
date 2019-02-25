@@ -41,6 +41,7 @@ class Comment extends AbstractDb
 
     /**
      * @param \Magento\Framework\Model\AbstractModel $object
+     *
      * @return $this
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
@@ -57,22 +58,24 @@ class Comment extends AbstractDb
      *
      * @param $importSource
      * @param $oldId
+     *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function isImported($importSource, $oldId)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()
+        $select = $adapter->select()
             ->from($this->getMainTable(), 'comment_id')
             ->where('import_source = :import_source');
-        $binds   = ['import_source' => $importSource . '-' . $oldId];
+        $binds = ['import_source' => $importSource . '-' . $oldId];
 
         return $adapter->fetchOne($select, $binds);
     }
 
     /**
      * @param $importType
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function deleteImportItems($importType)

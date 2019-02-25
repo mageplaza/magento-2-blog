@@ -53,6 +53,7 @@ class Category extends Multiselect
 
     /**
      * Category constructor.
+     *
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
@@ -69,11 +70,10 @@ class Category extends Multiselect
         AuthorizationInterface $authorization,
         UrlInterface $urlBuilder,
         array $data = []
-    )
-    {
+    ) {
         $this->collectionFactory = $collectionFactory;
-        $this->authorization     = $authorization;
-        $this->_urlBuilder       = $urlBuilder;
+        $this->authorization = $authorization;
+        $this->_urlBuilder = $urlBuilder;
 
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
@@ -137,8 +137,8 @@ class Category extends Multiselect
                 }
             }
 
-            $categoryById[$category->getId()]['is_active']        = 1;
-            $categoryById[$category->getId()]['label']            = $category->getName();
+            $categoryById[$category->getId()]['is_active'] = 1;
+            $categoryById[$category->getId()]['label'] = $category->getName();
             $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
         }
 

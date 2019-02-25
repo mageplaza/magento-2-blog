@@ -103,6 +103,7 @@ class Topic extends AbstractModel
 
     /**
      * Topic constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param CollectionFactory $postCollectionFactory
@@ -119,9 +120,8 @@ class Topic extends AbstractModel
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
-        $this->postCollectionFactory  = $postCollectionFactory;
+    ) {
+        $this->postCollectionFactory = $postCollectionFactory;
         $this->topicCollectionFactory = $topicCollectionFactory;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -154,8 +154,8 @@ class Topic extends AbstractModel
      */
     public function getDefaultValues()
     {
-        $values              = [];
-        $values['enabled']   = '1';
+        $values = [];
+        $values['enabled'] = '1';
         $values['store_ids'] = '1';
 
         return $values;

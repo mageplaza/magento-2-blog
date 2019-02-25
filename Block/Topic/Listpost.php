@@ -87,12 +87,13 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
 
     /**
      * @param bool $meta
+     *
      * @return array
      */
     public function getBlogTitle($meta = false)
     {
         $blogTitle = parent::getBlogTitle($meta);
-        $topic     = $this->getBlogObject();
+        $topic = $this->getBlogObject();
         if (!$topic) {
             return $blogTitle;
         }

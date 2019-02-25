@@ -52,14 +52,14 @@ class Router implements RouterInterface
     public function __construct(
         ActionFactory $actionFactory,
         Data $helper
-    )
-    {
+    ) {
         $this->actionFactory = $actionFactory;
-        $this->helper        = $helper;
+        $this->helper = $helper;
     }
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
+     *
      * @return \Magento\Framework\App\ActionInterface|null
      */
     public function match(RequestInterface $request)
@@ -68,9 +68,9 @@ class Router implements RouterInterface
             return null;
         }
 
-        $rssAction  = "rss.xml";
+        $rssAction = "rss.xml";
         $identifier = trim($request->getPathInfo(), '/');
-        $urlSuffix  = $this->helper->getUrlSuffix();
+        $urlSuffix = $this->helper->getUrlSuffix();
 
         if ($length = strlen($urlSuffix)) {
             if (substr($identifier, -$length) == $urlSuffix && !$this->isRss($identifier)) {
@@ -144,7 +144,7 @@ class Router implements RouterInterface
                 $post = $this->helper->getObjectByParam($controller, 'url_key');
                 $request->setParam('id', $post->getId());
                 $controller = 'post';
-                $action     = 'view';
+                $action = 'view';
         }
 
         $request->setControllerName($controller)
@@ -156,7 +156,9 @@ class Router implements RouterInterface
 
     /**
      * check if action = rss
+     *
      * @param $identifier
+     *
      * @return bool
      */
     public function isRss($identifier)
@@ -164,13 +166,14 @@ class Router implements RouterInterface
         $routePath = explode('/', $identifier);
         $routePath = array_pop($routePath);
         $routePath = explode('.', $routePath);
-        $action    = array_shift($routePath);
+        $action = array_shift($routePath);
 
         return ($action == "rss");
     }
 
     /**
      * @param $identifier
+     *
      * @return bool|null|string
      */
     public function checkRssIdentifier($identifier)

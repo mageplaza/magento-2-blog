@@ -43,6 +43,7 @@ class Edit extends Topic
 
     /**
      * Edit constructor.
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
@@ -55,8 +56,7 @@ class Edit extends Topic
         PageFactory $resultPageFactory,
         JsonFactory $resultJsonFactory,
         TopicFactory $topicFactory
-    )
-    {
+    ) {
         $this->resultPageFactory = $resultPageFactory;
 
         parent::__construct($context, $registry, $topicFactory);

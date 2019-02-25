@@ -38,6 +38,7 @@ class Edit extends Container
 
     /**
      * Edit constructor.
+     *
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
@@ -46,8 +47,7 @@ class Edit extends Container
         Context $context,
         Registry $coreRegistry,
         array $data = []
-    )
-    {
+    ) {
         $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context, $data);
@@ -60,7 +60,7 @@ class Edit extends Container
      */
     protected function _construct()
     {
-        $this->_objectId   = 'user_id';
+        $this->_objectId = 'user_id';
         $this->_blockGroup = 'Mageplaza_Blog';
         $this->_controller = 'adminhtml_author';
 

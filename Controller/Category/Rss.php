@@ -35,7 +35,7 @@ class Rss extends Feed
      */
     public function execute()
     {
-        $type       = 'blog_categories';
+        $type = 'blog_categories';
         $categoryId = $this->getRequest()->getParam('category_id');
         if (!$categoryId) {
             return;

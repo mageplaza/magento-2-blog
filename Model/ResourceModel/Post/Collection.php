@@ -78,6 +78,7 @@ class Collection extends AbstractCollection
      * @param string $valueField
      * @param string $labelField
      * @param array $additional
+     *
      * @return array
      */
     protected function _toOptionArray($valueField = 'post_id', $labelField = 'name', $additional = [])

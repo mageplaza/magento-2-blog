@@ -47,6 +47,7 @@ abstract class Author extends Action
 
     /**
      * Author constructor.
+     *
      * @param Context $context
      * @param Registry $coreRegistry
      * @param AuthorFactory $authorFactory
@@ -55,10 +56,9 @@ abstract class Author extends Action
         Context $context,
         Registry $coreRegistry,
         AuthorFactory $authorFactory
-    )
-    {
+    ) {
         $this->authorFactory = $authorFactory;
-        $this->coreRegistry  = $coreRegistry;
+        $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);
     }
@@ -68,7 +68,7 @@ abstract class Author extends Action
      */
     public function initAuthor()
     {
-        $user   = $this->_auth->getUser();
+        $user = $this->_auth->getUser();
         $userId = $user->getId();
 
         /** @var \Mageplaza\Blog\Model\Author $author */
