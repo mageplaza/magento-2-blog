@@ -86,6 +86,7 @@ class Data extends CoreHelper
 
     /**
      * Data constructor.
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -108,15 +109,14 @@ class Data extends CoreHelper
         AuthorFactory $authorFactory,
         TranslitUrl $translitUrl,
         DateTime $dateTime
-    )
-    {
-        $this->postFactory     = $postFactory;
+    ) {
+        $this->postFactory = $postFactory;
         $this->categoryFactory = $categoryFactory;
-        $this->tagFactory      = $tagFactory;
-        $this->topicFactory    = $topicFactory;
-        $this->authorFactory   = $authorFactory;
-        $this->translitUrl     = $translitUrl;
-        $this->dateTime        = $dateTime;
+        $this->tagFactory = $tagFactory;
+        $this->topicFactory = $topicFactory;
+        $this->authorFactory = $authorFactory;
+        $this->translitUrl = $translitUrl;
+        $this->dateTime = $dateTime;
 
         parent::__construct($context, $objectManager, $storeManager);
     }
@@ -132,6 +132,7 @@ class Data extends CoreHelper
     /**
      * @param $code
      * @param null $storeId
+     *
      * @return mixed
      */
     public function getBlogConfig($code, $storeId = null)
@@ -140,24 +141,28 @@ class Data extends CoreHelper
 
         return $this->getConfigValue(self::CONFIG_MODULE_PATH . $code, $storeId);
     }
-    
+
     /**
      * @param null $storeId
+     *
      * @return array|mixed|string
      */
-    public function getSidebarLayout( $storeId = null){
+    public function getSidebarLayout($storeId = null)
+    {
         $sideBarConfig = $this->getConfigValue(self::CONFIG_MODULE_PATH . '/sidebar/sidebar_left_right', $storeId);
-        if($sideBarConfig == 0){
-                return \Mageplaza\Blog\Model\Config\Source\SideBarLR::LEFT;
-            } elseif($sideBarConfig == 1) {
-                return \Mageplaza\Blog\Model\Config\Source\SideBarLR::RIGHT;
-            }
+        if ($sideBarConfig == 0) {
+            return \Mageplaza\Blog\Model\Config\Source\SideBarLR::LEFT;
+        } elseif ($sideBarConfig == 1) {
+            return \Mageplaza\Blog\Model\Config\Source\SideBarLR::RIGHT;
+        }
+
         return $sideBarConfig;
     }
 
     /**
      * @param $code
      * @param null $storeId
+     *
      * @return mixed
      */
     public function getSeoConfig($code, $storeId = null)
@@ -175,6 +180,7 @@ class Data extends CoreHelper
 
     /**
      * @param null $store
+     *
      * @return string
      */
     public function getBlogName($store = null)
@@ -184,6 +190,7 @@ class Data extends CoreHelper
 
     /**
      * @param null $store
+     *
      * @return string
      */
     public function getRoute($store = null)
@@ -193,6 +200,7 @@ class Data extends CoreHelper
 
     /**
      * @param null $store
+     *
      * @return mixed
      */
     public function getUrlSuffix($store = null)
@@ -204,6 +212,7 @@ class Data extends CoreHelper
      * @param null $type
      * @param null $id
      * @param null $storeId
+     *
      * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
     public function getPostCollection($type = null, $id = null, $storeId = null)
@@ -243,8 +252,6 @@ class Data extends CoreHelper
             case self::TYPE_MONTHLY:
                 $collection->addFieldToFilter('publish_date', ['like' => $id . '%']);
                 break;
-            default:
-                break;
         }
 
         return $collection;
@@ -252,6 +259,7 @@ class Data extends CoreHelper
 
     /**
      * @param null $storeId
+     *
      * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
      */
     public function getPostList($storeId = null)
@@ -266,7 +274,9 @@ class Data extends CoreHelper
 
     /**
      * get category collection
+     *
      * @param $array
+     *
      * @return array|string
      */
     public function getCategoryCollection($array)
@@ -282,10 +292,12 @@ class Data extends CoreHelper
      *
      * @param null $type
      * @param null $storeId
+     *
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getObjectList($type = null, $storeId = null)
     {
+        /** @var \Mageplaza\Blog\Model\ResourceModel\Author\Collection|\Mageplaza\Blog\Model\ResourceModel\Category\Collection|\Mageplaza\Blog\Model\ResourceModel\Post\Collection|\Mageplaza\Blog\Model\ResourceModel\Tag\Collection|\Mageplaza\Blog\Model\ResourceModel\Topic\Collection $collection */
         $collection = $this->getFactoryByType($type)
             ->create()
             ->getCollection()
@@ -299,6 +311,7 @@ class Data extends CoreHelper
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection
      * @param null $storeId
+     *
      * @return mixed
      */
     public function addStoreFilter($collection, $storeId = null)
@@ -318,6 +331,7 @@ class Data extends CoreHelper
     /**
      * @param $post
      * @param bool $modify
+     *
      * @return \Mageplaza\Blog\Model\Author
      */
     public function getAuthorByPost($post, $modify = false)
@@ -335,6 +349,7 @@ class Data extends CoreHelper
     /**
      * @param null $urlKey
      * @param null $type
+     *
      * @return string
      */
     public function getBlogUrl($urlKey = null, $type = null)
@@ -344,9 +359,9 @@ class Data extends CoreHelper
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url    = $this->getUrl($this->getRoute() . '/' . $urlKey);
-        $url    = explode('?', $url);
-        $url    = $url[0];
+        $url = $this->getUrl($this->getRoute() . '/' . $urlKey);
+        $url = explode('?', $url);
+        $url = $url[0];
 
         return rtrim($url, '/') . $this->getUrlSuffix();
     }
@@ -355,6 +370,7 @@ class Data extends CoreHelper
      * @param $value
      * @param null $code
      * @param null $type
+     *
      * @return \Mageplaza\Blog\Model\Author|\Mageplaza\Blog\Model\Category|\Mageplaza\Blog\Model\Post|\Mageplaza\Blog\Model\Tag|\Mageplaza\Blog\Model\Topic
      */
     public function getObjectByParam($value, $code = null, $type = null)
@@ -368,6 +384,7 @@ class Data extends CoreHelper
 
     /**
      * @param $type
+     *
      * @return \Mageplaza\Blog\Model\AuthorFactory|\Mageplaza\Blog\Model\CategoryFactory|\Mageplaza\Blog\Model\PostFactory|\Mageplaza\Blog\Model\TagFactory|\Mageplaza\Blog\Model\TopicFactory
      */
     public function getFactoryByType($type = null)
@@ -398,6 +415,7 @@ class Data extends CoreHelper
      * @param $resource
      * @param $object
      * @param $name
+     *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -422,6 +440,7 @@ class Data extends CoreHelper
      * @param $resource
      * @param $object
      * @param $urlKey
+     *
      * @return bool
      */
     public function checkUrlKey($resource, $object, $urlKey)
@@ -431,7 +450,7 @@ class Data extends CoreHelper
         }
 
         $adapter = $resource->getConnection();
-        $select  = $adapter->select()
+        $select = $adapter->select()
             ->from($resource->getMainTable(), '*')
             ->where('url_key = :url_key');
 
@@ -449,8 +468,10 @@ class Data extends CoreHelper
 
     /**
      * get date formatted
+     *
      * @param $date
      * @param bool $monthly
+     *
      * @return false|string
      */
     public function getDateFormat($date, $monthly = false)
@@ -458,7 +479,7 @@ class Data extends CoreHelper
         $dateTime = (new \DateTime($date, new \DateTimeZone('UTC')));
         $dateTime->setTimezone(new \DateTimeZone($this->getTimezone()));
 
-        $dateType   = $this->getBlogConfig($monthly ? 'monthly_archive/date_type_monthly' : 'general/date_type');
+        $dateType = $this->getBlogConfig($monthly ? 'monthly_archive/date_type_monthly' : 'general/date_type');
         $dateFormat = $dateTime->format($dateType);
 
         return $dateFormat;
@@ -476,6 +497,7 @@ class Data extends CoreHelper
     /**
      * @param $route
      * @param array $params
+     *
      * @return string
      */
     public function getUrl($route, $params = [])

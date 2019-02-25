@@ -46,6 +46,7 @@ class Product extends Extended implements TabInterface
 
     /**
      * Product constructor.
+     *
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\Block\Template\Context $context
@@ -58,10 +59,9 @@ class Product extends Extended implements TabInterface
         Data $backendHelper,
         CollectionFactory $productCollectionFactory,
         array $data = []
-    )
-    {
+    ) {
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->coreRegistry             = $coreRegistry;
+        $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context, $backendHelper, $data);
     }
@@ -174,6 +174,7 @@ class Product extends Extended implements TabInterface
 
     /**
      * @param \Mageplaza\Blog\Model\Tag|\Magento\Framework\Object $item
+     *
      * @return string
      */
     public function getRowUrl($item)
@@ -201,6 +202,7 @@ class Product extends Extended implements TabInterface
 
     /**
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */

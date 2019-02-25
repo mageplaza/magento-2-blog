@@ -70,21 +70,21 @@
                         </div>
                     </div>
                 </div>
-                <?php if ($i++ % 2 == 0): ?>
+                <?php if ($i++ % 2 == 0) : ?>
                     <div class="mp-clear"></div>
                 <?php endif; ?>
             <?php endforeach; ?>
             <div class="mp-clear"></div>
         </div>
         <?php echo $block->getPagerHtml() ?>
-    <?php else: ?>
+    <?php else : ?>
         <?php echo __('There are no posts at this moment'); ?>
     <?php endif; ?>
     <?php echo $this->getChildHtml('additional'); ?>
 </div>
 <script>
-    require(['jquery'], function($){
-        $('.limiter').css('float','right');
+    require(['jquery'], function ($) {
+        $('.limiter').css('float', 'right');
     });
 </script>
 

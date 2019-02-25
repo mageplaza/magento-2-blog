@@ -28,13 +28,13 @@ $helper = $this->helper(\Mageplaza\Blog\Helper\Data::class);
 
 $_post = $block->getPost();
 
-$author     = $helper->getAuthorByPost($_post);
+$author = $helper->getAuthorByPost($_post);
 $authorName = $author !== null ? $author->getName() : '';
 
-$modifier     = $helper->getAuthorByPost($_post, true);
+$modifier = $helper->getAuthorByPost($_post, true);
 $modifierName = $modifier !== null ? $modifier->getName() : '';
-$isLogged     = ($block->isLoggedIn()) ? 'Yes' : 'No';
-$color        = $helper->getBlogConfig('general/font_color');
+$isLogged = ($block->isLoggedIn()) ? 'Yes' : 'No';
+$color = $helper->getBlogConfig('general/font_color');
 ?>
 <div class="mp-blog-view">
     <div class="mp-blog-rss">
@@ -57,17 +57,17 @@ $color        = $helper->getBlogConfig('general/font_color');
                 <hr/>
                 <div class="mp-post-info">
                     <span><i class="fa fa-calendar-times-o">&nbsp;</i> <?php echo $block->getDateFormat($_post->getPublishDate()); ?></span>
-                    <?php if ($categoryHtml = $block->getPostCategoryHtml($_post)): ?>
+                    <?php if ($categoryHtml = $block->getPostCategoryHtml($_post)) : ?>
                         |
                         <span><i class="fa fa-folder-open-o">&nbsp;</i><?php echo __('Categories: %1', $categoryHtml); ?></span>
                     <?php endif; ?>
-                    <?php if ($tagList = $block->getTagList($_post)): ?>
+                    <?php if ($tagList = $block->getTagList($_post)) : ?>
                         | <span><i class="fa fa-tags">&nbsp;</i><?php echo __('Tags: %1', $tagList); ?></span>
                     <?php endif; ?>
-                    <?php if ($authorName && $helper->showAuthorInfo()): ?>
+                    <?php if ($authorName && $helper->showAuthorInfo()) : ?>
                         |
                         <span><i class="fa fa-user">&nbsp;</i><?php echo __('By: %1', '<a class="mp-info" href="' . $author->getUrl() . '">' . $authorName . '</a>') ?></span>
-                        <?php if ($authorName != $modifierName && $modifierName): ?>
+                        <?php if ($authorName != $modifierName && $modifierName) : ?>
                             |
                             <span><i class="fa fa-edit">&nbsp;</i><?php echo __('Modify By: %1 at %2', '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>', $block->getDateFormat($_post->getUpdatedAt())) ?></span>
                         <?php endif; ?>
@@ -77,7 +77,7 @@ $color        = $helper->getBlogConfig('general/font_color');
             </div>
         </div>
     </div>
-    <?php if ($helper->getBlogConfig('share/enabled')): ?>
+    <?php if ($helper->getBlogConfig('share/enabled')) : ?>
         <div class="mp-clear"></div>
         <script type="text/javascript"
                 src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $helper->getBlogConfig('share/pubid_id') ?>"
@@ -96,7 +96,7 @@ $color        = $helper->getBlogConfig('general/font_color');
             </div>
         </div>
     <?php endif; ?>
-    <?php if ($authorName && $helper->showAuthorInfo()):
+    <?php if ($authorName && $helper->showAuthorInfo()) :
         $block->resizeImage($author->getImage(), '135x', \Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH);
         ?>
         <div class="block-blog-related about-admin">
@@ -116,11 +116,11 @@ $color        = $helper->getBlogConfig('general/font_color');
     <?php endif; ?>
 
     <?php $relatedPosts = $_post->getRelatedPostsCollection(); ?>
-    <?php if ($relatedPosts && sizeof($relatedPosts)): ?>
+    <?php if ($relatedPosts && sizeof($relatedPosts)) : ?>
         <div class="block-blog-related topic-list mpcss" style="width: 90%;">
             <h2><?php echo __('Related Posts'); ?></h2>
             <div class="related-content-container" style="display: flex; flex-wrap: wrap;">
-                <?php foreach ($relatedPosts as $post): ?>
+                <?php foreach ($relatedPosts as $post) : ?>
                     <div class="post-list-item col-mp mp-6 mp-lg-4 mp-md-6 mp-xs-12">
                         <div class="post-item-wraper">
                             <div class="post-image">
@@ -151,9 +151,9 @@ $color        = $helper->getBlogConfig('general/font_color');
             </div>
         </div>
     <?php endif; ?>
-    <?php if ($helper->getBlogConfig('product_post/post_detail/enable_product')): ?>
+    <?php if ($helper->getBlogConfig('product_post/post_detail/enable_product')) : ?>
         <?php $relatedBlock = $block->getChildBlock('related_products'); ?>
-        <?php if ($relatedBlock->hasProduct()): ?>
+        <?php if ($relatedBlock->hasProduct()) : ?>
             <div class="block-blog-related products-same-post page-products mpcss" style="width: 90%;">
                 <h2><?php echo ($helper->getBlogConfig('product_post/post_detail/title')) ?: __('Related Products') ?></h2>
                 <div class="related-content-container">
@@ -163,10 +163,10 @@ $color        = $helper->getBlogConfig('general/font_color');
         <?php endif; ?>
     <?php endif; ?>
     <?php $typeComment = $block->helperComment('type'); ?>
-    <?php if (($typeComment != Type::DISABLE) && $_post->getAllowComment()): ?>
+    <?php if (($typeComment != Type::DISABLE) && $_post->getAllowComment()) : ?>
         <div class="block-blog-related blog-comment">
             <h2><?php echo __('Comments') ?></h2>
-            <?php if ($typeComment == Type::DISQUS): ?>
+            <?php if ($typeComment == Type::DISQUS) : ?>
                 <div class="related-content-container box-collateral box-reviews" id="post-reviews">
                     <div id="disqus_thread"></div>
                     <script type="text/javascript">
@@ -182,7 +182,7 @@ $color        = $helper->getBlogConfig('general/font_color');
                         })();
                     </script>
                 </div>
-            <?php elseif ($typeComment == Type::FACEBOOK): ?>
+            <?php elseif ($typeComment == Type::FACEBOOK) : ?>
                 <div class="related-content-container box-collateral box-reviews <?php echo $helper->getBlogConfig('comment/facebook_colorscheme') ?>"
                      id="post-reviews">
                     <div id="fb-root"></div>
@@ -202,9 +202,9 @@ $color        = $helper->getBlogConfig('general/font_color');
                          data-order-by="<?php echo $block->helperComment('facebook_order_by') ?>">
                     </div>
                 </div>
-            <?php elseif ($typeComment == Type::DEFAULT_COMMENT): ?>
+            <?php elseif ($typeComment == Type::DEFAULT_COMMENT) : ?>
                 <div class="related-content-container container default-cmt">
-                    <?php if (!$block->isLoggedIn()): ?>
+                    <?php if (!$block->isLoggedIn()) : ?>
                         <div class="col-mp default-cmt__cmt-login">
                             <button class="primary btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
                         </div>
@@ -212,7 +212,7 @@ $color        = $helper->getBlogConfig('general/font_color');
                     <div class="col-mp mp-12" style="float: left;">
                         <div class="default-cmt__content">
                             <div class="default-cmt__content__cmt-block">
-                                <?php if (!$block->isLoggedIn()): ?>
+                                <?php if (!$block->isLoggedIn()) : ?>
                                     <form id="default-cmt__content__cmt-block__guest-form"
                                           data-mage-init='{"validation":{}}'>
                                         <div class="col-mp mp-6 default-cmt__content__cmt-block__guest-box">
@@ -283,44 +283,44 @@ $color        = $helper->getBlogConfig('general/font_color');
             <?php endif; ?>
         </div>
     <?php endif; ?>
-    <?php if ($helper->getSeoConfig('snippet/enabled')): ?>
+    <?php if ($helper->getSeoConfig('snippet/enabled')) : ?>
         <?php
         $logo = $helper->getSeoConfig('snippet/upload_image_id');
         $logo = $logo ? $helper->getImageHelper()->getMediaUrl($logo) : $block->getDefaultImageUrl();
         ?>
         <script type="application/ld+json">
-        {
-          "@context": "http://schema.org",
-          "@type": "NewsArticle",
-          "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://google.com/article"
-          },
-          "headline": "<?php echo $_post->getName(); ?>",
-          "image": {
-            "@type": "ImageObject",
-            "url": "<?php echo $_post->getImage() ? $block->getImageUrl($_post->getImage()) : $block->getDefaultImageUrl(); ?>",
-            "height": 800,
-            "width": 800
-          },
-          "datePublished": "<?php echo $block->getDateFormat($_post->getPublishDate()); ?>",
-          "dateModified": "<?php echo $block->getDateFormat($_post->getUpdatedAt()); ?>",
-          "author": {
-            "@type": "Person",
-            "name": "<?php echo $authorName; ?>"
-          },
-           "publisher": {
-            "@type": "Organization",
-            "name": "<?php echo $helper->getSeoConfig('snippet/organize_name'); ?>",
-            "logo": {
-              "@type": "ImageObject",
-              "url": "<?php echo $logo; ?>",
-              "width": 600,
-              "height": 60
+            {
+                "@context": "http://schema.org",
+                "@type": "NewsArticle",
+                "mainEntityOfPage": {
+                    "@type": "WebPage",
+                    "@id": "https://google.com/article"
+                },
+                "headline": "<?php echo $_post->getName(); ?>",
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "<?php echo $_post->getImage() ? $block->getImageUrl($_post->getImage()) : $block->getDefaultImageUrl(); ?>",
+                    "height": 800,
+                    "width": 800
+                },
+                "datePublished": "<?php echo $block->getDateFormat($_post->getPublishDate()); ?>",
+                "dateModified": "<?php echo $block->getDateFormat($_post->getUpdatedAt()); ?>",
+                "author": {
+                    "@type": "Person",
+                    "name": "<?php echo $authorName; ?>"
+                },
+                "publisher": {
+                    "@type": "Organization",
+                    "name": "<?php echo $helper->getSeoConfig('snippet/organize_name'); ?>",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "<?php echo $logo; ?>",
+                        "width": 600,
+                        "height": 60
+                    }
+                },
+                "description": "<?php echo $_post->getShortDescription(); ?>"
             }
-          },
-          "description": "<?php echo $_post->getShortDescription(); ?>"
-        }
         </script>
     <?php endif; ?>
 </div>

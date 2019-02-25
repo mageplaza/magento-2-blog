@@ -42,6 +42,7 @@ class Edit extends Tag
 
     /**
      * Edit constructor.
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
@@ -52,8 +53,7 @@ class Edit extends Tag
         Registry $registry,
         TagFactory $tagFactory,
         PageFactory $resultPageFactory
-    )
-    {
+    ) {
         $this->resultPageFactory = $resultPageFactory;
 
         parent::__construct($context, $registry, $tagFactory);

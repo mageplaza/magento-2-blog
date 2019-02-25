@@ -57,6 +57,7 @@ class Move extends Category
 
     /**
      * Move constructor.
+     *
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -71,11 +72,10 @@ class Move extends Category
         JsonFactory $resultJsonFactory,
         LayoutFactory $layoutFactory,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory     = $layoutFactory;
-        $this->logger            = $logger;
+        $this->layoutFactory = $layoutFactory;
+        $this->logger = $logger;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }

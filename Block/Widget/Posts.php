@@ -72,6 +72,7 @@ class Posts extends Frontend implements BlockInterface
 
     /**
      * @param $code
+     *
      * @return string
      */
     public function getBlogUrl($code)

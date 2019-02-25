@@ -51,6 +51,7 @@ abstract class Post extends Action
 
     /**
      * Post constructor.
+     *
      * @param \Mageplaza\Blog\Model\PostFactory $postFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\App\Action\Context $context
@@ -59,9 +60,8 @@ abstract class Post extends Action
         PostFactory $postFactory,
         Registry $coreRegistry,
         Context $context
-    )
-    {
-        $this->postFactory  = $postFactory;
+    ) {
+        $this->postFactory = $postFactory;
         $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);
@@ -69,6 +69,7 @@ abstract class Post extends Action
 
     /**
      * @param bool $register
+     *
      * @return bool|\Mageplaza\Blog\Model\Post
      */
     protected function initPost($register = false)

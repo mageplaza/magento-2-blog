@@ -40,7 +40,8 @@ class Listpost extends Frontend
         if ($collection && $collection->getSize()) {
             $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'mpblog.post.pager');
 
-            $perPageValues = (string)$this->helperData->getConfigGeneral('pagination');;
+            $perPageValues = (string)$this->helperData->getConfigGeneral('pagination');
+            ;
             $perPageValues = explode(',', $perPageValues);
             $perPageValues = array_combine($perPageValues, $perPageValues);
 
@@ -57,6 +58,7 @@ class Listpost extends Frontend
      * find /n in text
      *
      * @param $description
+     *
      * @return string
      */
     public function maxShortDescription($description)
@@ -181,6 +183,7 @@ class Listpost extends Frontend
 
     /**
      * @param bool $meta
+     *
      * @return array
      */
     public function getBlogTitle($meta = false)

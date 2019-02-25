@@ -30,6 +30,7 @@ class PortoTopmenu
     /**
      * @param \Smartwave\Megamenu\Block\Topmenu $topmenu
      * @param $html
+     *
      * @return string
      */
     public function afterGetMegamenuHtml(\Smartwave\Megamenu\Block\Topmenu $topmenu, $html)

@@ -44,6 +44,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
 
     /**
      * Tabs constructor.
+     *
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -56,8 +57,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         EncoderInterface $jsonEncoder,
         Session $authSession,
         array $data = []
-    )
-    {
+    ) {
         $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context, $jsonEncoder, $authSession, $data);

@@ -69,6 +69,7 @@ class Tag extends Generic implements TabInterface
 
     /**
      * Tag constructor.
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -89,13 +90,12 @@ class Tag extends Generic implements TabInterface
         Store $systemStore,
         Robots $metaRobotsOptions,
         array $data = []
-    )
-    {
-        $this->wysiwygConfig  = $wysiwygConfig;
+    ) {
+        $this->wysiwygConfig = $wysiwygConfig;
         $this->booleanOptions = $booleanOptions;
-        $this->enableDisable  = $enableDisable;
-        $this->systemStore    = $systemStore;
-        $this->metaRobots     = $metaRobotsOptions;
+        $this->enableDisable = $enableDisable;
+        $this->systemStore = $systemStore;
+        $this->metaRobots = $metaRobotsOptions;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }

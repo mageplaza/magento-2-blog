@@ -21,10 +21,10 @@
 ?>
 <?php
 /** @var \Mageplaza\Blog\Block\Adminhtml\Category\Edit\Form $block */
-$parentId   = $block->getParentCategoryId();
+$parentId = $block->getParentCategoryId();
 $categoryId = $block->getCategoryId();
 
-$blockGrid        = $block->getLayout()->getBlock('mageplaza_blog_category_edit_tab_post');
+$blockGrid = $block->getLayout()->getBlock('mageplaza_blog_category_edit_tab_post');
 $gridJsObjectName = $blockGrid->getJsObjectName();
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
@@ -32,17 +32,18 @@ $gridJsObjectName = $blockGrid->getJsObjectName();
 </div>
 <?php echo $block->getTabsHtml() ?>
 
-<iframe name="iframeSave" style="display:none; width:100%;" src="<?php echo $block->getViewFileUrl('blank.html') ?>"></iframe>
+<iframe name="iframeSave" style="display:none; width:100%;"
+        src="<?php echo $block->getViewFileUrl('blank.html') ?>"></iframe>
 <form id="category_edit_form" name="category-edit-form" action="<?php echo $block->getSaveUrl() ?>" method="post"
       enctype="multipart/form-data">
     <div class="no-display">
         <input type="hidden" name="isIframe" value="1"/>
         <input name="form_key" type="hidden" value="<?php echo $block->getFormKey() ?>"/>
         <input type="hidden" name="active_tab_id" id="active_tab_id" value=""/>
-        <?php if ($parentId !== 0): ?>
+        <?php if ($parentId !== 0) : ?>
             <input type="hidden" name="parent" value="<?php echo $parentId; ?>"/>
         <?php endif; ?>
-        <?php if ($categoryId !== 0): ?>
+        <?php if ($categoryId !== 0) : ?>
             <input type="hidden" name="category_id" value="<?php echo $categoryId; ?>"/>
         <?php endif; ?>
         <input type="hidden" name="selected_products" id="in_category_products" value=""/>
@@ -55,6 +56,7 @@ $gridJsObjectName = $blockGrid->getJsObjectName();
                     }
                 }
             }
+        
         </script>
     </div>
     <div id="category_tab_content"></div>
@@ -167,7 +169,7 @@ $gridJsObjectName = $blockGrid->getJsObjectName();
             });
     });
 
-    <?php if ($block->isAjax() && ($tabsBlock = $block->getLayout()->getBlock('tabs')) && ($_tabsJsObject = $tabsBlock->getJsObjectName())): ?>
+    <?php if ($block->isAjax() && ($tabsBlock = $block->getLayout()->getBlock('tabs')) && ($_tabsJsObject = $tabsBlock->getJsObjectName())) : ?>
     // Temporary solution, will be replaced after refactoring of manage category functionality
     <?php $tabsBlock = $block->getLayout()->getBlock('tabs'); ?>
     require(["jquery", "mage/backend/tabs"], function ($) {

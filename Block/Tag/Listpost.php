@@ -80,20 +80,20 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
                 $breadcrumbs->addCrumb($tag->getUrlKey(), [
                         'label' => __('Tag'),
                         'title' => __('Tag')
-                    ]
-                );
+                    ]);
             }
         }
     }
 
     /**
      * @param bool $meta
+     *
      * @return array
      */
     public function getBlogTitle($meta = false)
     {
         $blogTitle = parent::getBlogTitle($meta);
-        $tag       = $this->getBlogObject();
+        $tag = $this->getBlogObject();
         if (!$tag) {
             return $blogTitle;
         }

@@ -50,6 +50,7 @@ class CategoriesJson extends Category
 
     /**
      * CategoriesJson constructor.
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
@@ -62,10 +63,9 @@ class CategoriesJson extends Category
         CategoryFactory $categoryFactory,
         JsonFactory $resultJsonFactory,
         LayoutFactory $layoutFactory
-    )
-    {
+    ) {
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory     = $layoutFactory;
+        $this->layoutFactory = $layoutFactory;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }

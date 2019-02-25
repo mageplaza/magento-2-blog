@@ -147,6 +147,7 @@ abstract class AbstractImport extends AbstractModel
 
     /**
      * AbstractImport constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param PostFactory $postFactory
@@ -189,24 +190,23 @@ abstract class AbstractImport extends AbstractModel
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
-        $this->date                = $date;
-        $this->importType          = $importType;
-        $this->_type               = $this->_getImportType();
-        $this->helperData          = $helperData;
-        $this->_postFactory        = $postFactory;
-        $this->_tagFactory         = $tagFactory;
-        $this->_categoryFactory    = $categoryFactory;
-        $this->_topicFactory       = $topicFactory;
-        $this->_commentFactory     = $commentFactory;
-        $this->_userFactory        = $userFactory;
-        $this->_customerFactory    = $customerFactory;
-        $this->_objectManager      = $objectManager;
+    ) {
+        $this->date = $date;
+        $this->importType = $importType;
+        $this->_type = $this->_getImportType();
+        $this->helperData = $helperData;
+        $this->_postFactory = $postFactory;
+        $this->_tagFactory = $tagFactory;
+        $this->_categoryFactory = $categoryFactory;
+        $this->_topicFactory = $topicFactory;
+        $this->_commentFactory = $commentFactory;
+        $this->_userFactory = $userFactory;
+        $this->_customerFactory = $customerFactory;
+        $this->_objectManager = $objectManager;
         $this->_resourceConnection = $resourceConnection;
-        $this->_authSession        = $authSession;
-        $this->_storeManager       = $storeManager;
-        $this->_helperImage        = $helperImage;
+        $this->_authSession = $authSession;
+        $this->_storeManager = $storeManager;
+        $this->_helperImage = $helperImage;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -216,6 +216,7 @@ abstract class AbstractImport extends AbstractModel
      *
      * @param $data
      * @param $connection
+     *
      * @return mixed
      */
     abstract protected function _importPosts($data, $connection);
@@ -225,6 +226,7 @@ abstract class AbstractImport extends AbstractModel
      *
      * @param $data
      * @param $connection
+     *
      * @return mixed
      */
     abstract protected function _importTags($data, $connection);
@@ -234,6 +236,7 @@ abstract class AbstractImport extends AbstractModel
      *
      * @param $data
      * @param $connection
+     *
      * @return mixed
      */
     abstract protected function _importCategories($data, $connection);
@@ -243,6 +246,7 @@ abstract class AbstractImport extends AbstractModel
      *
      * @param $data
      * @param $connection
+     *
      * @return mixed
      */
     abstract protected function _importComments($data, $connection);
@@ -252,6 +256,7 @@ abstract class AbstractImport extends AbstractModel
      *
      * @param $data
      * @param $connection
+     *
      * @return mixed
      */
     abstract protected function _importAuthors($data, $connection);
@@ -263,6 +268,7 @@ abstract class AbstractImport extends AbstractModel
      * @param $successCount
      * @param $errorCount
      * @param $hasData
+     *
      * @return array
      */
     protected function _getStatistics($type, $successCount, $errorCount, $hasData)
@@ -282,9 +288,9 @@ abstract class AbstractImport extends AbstractModel
      */
     protected function _resetRecords()
     {
-        $this->_errorCount   = 0;
+        $this->_errorCount = 0;
         $this->_successCount = 0;
-        $this->_hasData      = false;
+        $this->_hasData = false;
     }
 
     /**
@@ -293,6 +299,7 @@ abstract class AbstractImport extends AbstractModel
      * @param int $length
      * @param bool $add_dashes
      * @param string $available_sets
+     *
      * @return bool|string
      */
     protected function _generatePassword($length = 9, $add_dashes = false, $available_sets = 'luds')
@@ -310,11 +317,11 @@ abstract class AbstractImport extends AbstractModel
         if (strpos($available_sets, 's') !== false) {
             $sets[] = '!@#$%&*?';
         }
-        $all      = '';
+        $all = '';
         $password = '';
         foreach ($sets as $set) {
             $password .= $set[array_rand(str_split($set))];
-            $all      .= $set;
+            $all .= $set;
         }
         $all = str_split($all);
         for ($i = 0; $i < $length - count($sets); $i++) {

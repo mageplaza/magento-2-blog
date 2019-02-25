@@ -62,6 +62,7 @@ class Topic extends AbstractDb
 
     /**
      * Topic constructor.
+     *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -72,10 +73,9 @@ class Topic extends AbstractDb
         DateTime $date,
         ManagerInterface $eventManager,
         Data $helperData
-    )
-    {
-        $this->helperData   = $helperData;
-        $this->date         = $date;
+    ) {
+        $this->helperData = $helperData;
+        $this->date = $date;
         $this->eventManager = $eventManager;
 
         parent::__construct($context);
@@ -97,16 +97,17 @@ class Topic extends AbstractDb
      * Retrieves Topic Name from DB by passed id.
      *
      * @param $id
+     *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getTopicNameById($id)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()
+        $select = $adapter->select()
             ->from($this->getMainTable(), 'name')
             ->where('topic_id = :topic_id');
-        $binds   = ['topic_id' => (int)$id];
+        $binds = ['topic_id' => (int)$id];
 
         return $adapter->fetchOne($select, $binds);
     }
@@ -136,6 +137,7 @@ class Topic extends AbstractDb
      * after save callback
      *
      * @param AbstractModel|\Mageplaza\Blog\Model\Topic $object
+     *
      * @return $this
      */
     protected function _afterSave(AbstractModel $object)
@@ -147,6 +149,7 @@ class Topic extends AbstractDb
 
     /**
      * @param \Mageplaza\Blog\Model\Topic $topic
+     *
      * @return array
      */
     public function getPostsPosition(\Mageplaza\Blog\Model\Topic $topic)
@@ -158,25 +161,26 @@ class Topic extends AbstractDb
             ->where(
                 'topic_id = :topic_id'
             );
-        $bind   = ['topic_id' => (int)$topic->getId()];
+        $bind = ['topic_id' => (int)$topic->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);
     }
 
     /**
      * @param \Mageplaza\Blog\Model\Topic $topic
+     *
      * @return $this
      */
     protected function savePostRelation(\Mageplaza\Blog\Model\Topic $topic)
     {
         $topic->setIsChangedPostList(false);
-        $id       = $topic->getId();
-        $posts    = $topic->getPostsData();
+        $id = $topic->getId();
+        $posts = $topic->getPostsData();
         $oldPosts = $topic->getPostsPosition();
         if (is_array($posts)) {
-            $insert  = array_diff_key($posts, $oldPosts);
-            $delete  = array_diff_key($oldPosts, $posts);
-            $update  = array_intersect_key($posts, $oldPosts);
+            $insert = array_diff_key($posts, $oldPosts);
+            $delete = array_diff_key($oldPosts, $posts);
+            $update = array_intersect_key($posts, $oldPosts);
             $_update = [];
             foreach ($update as $key => $settings) {
                 if (isset($oldPosts[$key]) && $oldPosts[$key] != $settings['position']) {
@@ -214,7 +218,7 @@ class Topic extends AbstractDb
         if (!empty($update)) {
             foreach ($update as $postId => $position) {
                 $where = ['topic_id = ?' => (int)$id, 'post_id = ?' => (int)$postId];
-                $bind  = ['position' => (int)$position['position']];
+                $bind = ['position' => (int)$position['position']];
                 $adapter->update($this->topicPostTable, $bind, $where);
             }
         }
@@ -239,22 +243,24 @@ class Topic extends AbstractDb
      *
      * @param $importSource
      * @param $oldId
+     *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function isImported($importSource, $oldId)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()
+        $select = $adapter->select()
             ->from($this->getMainTable(), 'topic_id')
             ->where('import_source = :import_source');
-        $binds   = ['import_source' => $importSource . '-' . $oldId];
+        $binds = ['import_source' => $importSource . '-' . $oldId];
 
         return $adapter->fetchOne($select, $binds);
     }
 
     /**
      * @param $importType
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function deleteImportItems($importType)

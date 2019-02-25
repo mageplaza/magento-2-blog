@@ -54,6 +54,7 @@ class Topic extends Multiselect
 
     /**
      * Topic constructor.
+     *
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
@@ -70,11 +71,10 @@ class Topic extends Multiselect
         AuthorizationInterface $authorization,
         UrlInterface $urlBuilder,
         array $data = []
-    )
-    {
+    ) {
         $this->collectionFactory = $collectionFactory;
-        $this->authorization     = $authorization;
-        $this->_urlBuilder       = $urlBuilder;
+        $this->authorization = $authorization;
+        $this->_urlBuilder = $urlBuilder;
 
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
@@ -123,11 +123,11 @@ class Topic extends Multiselect
     {
         /* @var $collection \Mageplaza\Blog\Model\ResourceModel\Topic\Collection */
         $collection = $this->collectionFactory->create();
-        $topicById  = [];
+        $topicById = [];
         foreach ($collection as $topic) {
-            $topicById[$topic->getId()]['value']     = $topic->getId();
+            $topicById[$topic->getId()]['value'] = $topic->getId();
             $topicById[$topic->getId()]['is_active'] = 1;
-            $topicById[$topic->getId()]['label']     = $topic->getName();
+            $topicById[$topic->getId()]['label'] = $topic->getName();
         }
 
         return $topicById;

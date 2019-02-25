@@ -45,6 +45,7 @@ class Sitemap extends Frontend
 
     /**
      * @param bool $meta
+     *
      * @return array
      */
     public function getBlogTitle($meta = false)

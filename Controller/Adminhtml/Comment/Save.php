@@ -82,6 +82,7 @@ class Save extends Comment
     /**
      * @param $comment
      * @param array $data
+     *
      * @return $this
      */
     protected function prepareData($comment, $data = [])

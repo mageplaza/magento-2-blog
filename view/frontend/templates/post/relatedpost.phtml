@@ -21,10 +21,10 @@
 
 /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $posts */
 $posts = $block->getRelatedPostList();
-if ($posts): ?>
+if ($posts) : ?>
     <h2><?php echo $posts->getSize() ? __('Related Posts') : __('No Related Posts') ?></h2>
     <ul>
-        <?php foreach ($posts as $post): ?>
+        <?php foreach ($posts as $post) : ?>
             <li><a href="<?php echo $post->getUrl() ?>"><?php echo $post->getName(); ?></a></li>
         <?php endforeach; ?>
     </ul>

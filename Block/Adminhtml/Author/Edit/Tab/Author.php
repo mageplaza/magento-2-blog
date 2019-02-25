@@ -54,6 +54,7 @@ class Author extends Generic implements TabInterface
 
     /**
      * Author constructor.
+     *
      * @param Config $wysiwygConfig
      * @param Store $systemStore
      * @param Context $context
@@ -70,11 +71,10 @@ class Author extends Generic implements TabInterface
         FormFactory $formFactory,
         ImageHelper $imageHelper,
         array $data = []
-    )
-    {
+    ) {
         $this->wysiwygConfig = $wysiwygConfig;
-        $this->systemStore   = $systemStore;
-        $this->imageHelper   = $imageHelper;
+        $this->systemStore = $systemStore;
+        $this->imageHelper = $imageHelper;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }

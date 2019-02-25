@@ -59,6 +59,7 @@ class Comment extends Generic implements TabInterface
 
     /**
      * Comment constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param FormFactory $formFactory
@@ -77,12 +78,11 @@ class Comment extends Generic implements TabInterface
         Status $commentStatus,
         Store $systemStore,
         array $data = []
-    )
-    {
-        $this->_commentStatus      = $commentStatus;
+    ) {
+        $this->_commentStatus = $commentStatus;
         $this->_customerRepository = $customerRepository;
-        $this->_postFactory        = $postFactory;
-        $this->systemStore         = $systemStore;
+        $this->_postFactory = $postFactory;
+        $this->systemStore = $systemStore;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -108,12 +108,12 @@ class Comment extends Generic implements TabInterface
             $fieldset->addField('comment_id', 'hidden', ['name' => 'comment_id']);
         }
 
-        $post     = $this->_postFactory->create()->load($comment->getPostId());
+        $post = $this->_postFactory->create()->load($comment->getPostId());
         $postText = '<a href="' . $this->getUrl('mageplaza_blog/post/edit', ['id' => $comment->getPostId()]) . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($post->getName()) . '</a>';
         $fieldset->addField('post_name', 'note', ['text' => $postText, 'label' => __('Post'), 'name' => 'post_name']);
 
         if ($comment->getEntityId() > 0) {
-            $customer     = $this->_customerRepository->getById($comment->getEntityId());
+            $customer = $this->_customerRepository->getById($comment->getEntityId());
             $customerText = '<a href="' . $this->getUrl('customer/index/edit', ['id' => $customer->getId(), 'active_tab' => 'review']) . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($customer->getFirstname() . ' ' . $customer->getLastname()) . '</a> <a href="mailto:%4">(' . $customer->getEmail() . ')</a>';
         } else {
             $customerText = 'Guest';

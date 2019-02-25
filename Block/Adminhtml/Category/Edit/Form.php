@@ -54,6 +54,7 @@ class Form extends AbstractCategory
 
     /**
      * Form constructor.
+     *
      * @param Context $context
      * @param Tree $categoryTree
      * @param Registry $registry
@@ -72,12 +73,11 @@ class Form extends AbstractCategory
         BlogCategoryFactory $blogCategoryFactory,
         EncoderInterface $jsonEncoder,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
 
-        $this->jsonEncoder      = $jsonEncoder;
-        $this->_categoryTree    = $blogCategoryTree;
+        $this->jsonEncoder = $jsonEncoder;
+        $this->_categoryTree = $blogCategoryTree;
         $this->_categoryFactory = $blogCategoryFactory;
     }
 
@@ -86,7 +86,7 @@ class Form extends AbstractCategory
      */
     protected function _prepareLayout()
     {
-        $category   = $this->getCategory();
+        $category = $this->getCategory();
         $categoryId = (int)$category->getId(); // 0 when we create Blog Category, otherwise some value for editing Blog Category
 
         $this->setChild('tabs', $this->getLayout()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tabs', 'tabs'));
@@ -112,9 +112,9 @@ class Form extends AbstractCategory
                 'id'      => 'delete',
                 'label'   => __('Delete Category'),
                 'onclick' => "categoryDelete('" . $this->getUrl(
-                        'mageplaza_blog/*/delete',
-                        ['_current' => true]
-                    ) . "')",
+                    'mageplaza_blog/*/delete',
+                    ['_current' => true]
+                ) . "')",
                 'class'   => 'delete'
             ]);
         }
@@ -156,6 +156,7 @@ class Form extends AbstractCategory
 
     /**
      * @param array $args
+     *
      * @return string
      */
     public function getSaveUrl(array $args = [])
@@ -177,6 +178,7 @@ class Form extends AbstractCategory
     /**
      * @param $alias
      * @param $config
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -202,6 +204,7 @@ class Form extends AbstractCategory
      * Remove additional button
      *
      * @param string $alias
+     *
      * @return $this
      */
     public function removeAdditionalButton($alias)
@@ -241,6 +244,7 @@ class Form extends AbstractCategory
 
     /**
      * @param array $args
+     *
      * @return string
      */
     public function getDeleteUrl(array $args = [])
@@ -255,6 +259,7 @@ class Form extends AbstractCategory
      * Return URL for refresh input element 'path' in form
      *
      * @param array $args
+     *
      * @return string
      */
     public function getRefreshPathUrl(array $args = [])
@@ -288,12 +293,13 @@ class Form extends AbstractCategory
     /**
      * @param $buttonId
      * @param array $data
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addButton($buttonId, array $data)
     {
         $childBlockId = $buttonId . '_button';
-        $button       = $this->getButtonChildBlock($childBlockId);
+        $button = $this->getButtonChildBlock($childBlockId);
         $button->setData($data);
         $block = $this->getLayout()->getBlock('page.actions.toolbar');
         if ($block) {
@@ -315,6 +321,7 @@ class Form extends AbstractCategory
     /**
      * @param $childId
      * @param null $blockClassName
+     *
      * @return \Magento\Framework\View\Element\BlockInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */

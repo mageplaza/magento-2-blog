@@ -55,6 +55,7 @@ class Save extends Post
 
     /**
      * Save constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param PostFactory $postFactory
@@ -69,11 +70,10 @@ class Save extends Post
         Js $jsHelper,
         Image $imageHelper,
         DateTime $date
-    )
-    {
-        $this->jsHelper    = $jsHelper;
+    ) {
+        $this->jsHelper = $jsHelper;
         $this->imageHelper = $imageHelper;
-        $this->date        = $date;
+        $this->date = $date;
 
         parent::__construct($postFactory, $registry, $context);
     }
@@ -129,6 +129,7 @@ class Save extends Post
     /**
      * @param $post
      * @param array $data
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\FileSystemException
      */
@@ -137,13 +138,13 @@ class Save extends Post
         $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_POST, $post->getImage());
 
         /** Set specify field data */
-        $timezone               = $this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $data['publish_date']   .= ' ' . $data['publish_time'][0] . ':' . $data['publish_time'][1] . ':' . $data['publish_time'][2];
-        $data['publish_date']   = $timezone->convertConfigTimeToUtc(isset($data['publish_date']) ? $data['publish_date'] : null);
-        $data['modifier_id']    = $this->_auth->getUser()->getId();
+        $timezone = $this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $data['publish_date'] .= ' ' . $data['publish_time'][0] . ':' . $data['publish_time'][1] . ':' . $data['publish_time'][2];
+        $data['publish_date'] = $timezone->convertConfigTimeToUtc(isset($data['publish_date']) ? $data['publish_date'] : null);
+        $data['modifier_id'] = $this->_auth->getUser()->getId();
         $data['categories_ids'] = (isset($data['categories_ids']) && $data['categories_ids']) ? explode(',', $data['categories_ids']) : [];
-        $data['tags_ids']       = (isset($data['tags_ids']) && $data['tags_ids']) ? explode(',', $data['tags_ids']) : [];
-        $data['topics_ids']     = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(',', $data['topics_ids']) : [];
+        $data['tags_ids'] = (isset($data['tags_ids']) && $data['tags_ids']) ? explode(',', $data['tags_ids']) : [];
+        $data['topics_ids'] = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(',', $data['topics_ids']) : [];
 
         if ($post->getCreatedAt() == null) {
             $data['created_at'] = $this->date->date();
@@ -168,10 +169,10 @@ class Save extends Post
             $post->setProductsData(
                 $this->jsHelper->decodeGridSerializedInput($products)
             );
-        }else{
-            $prodcutData= [];
-            foreach ($post->getProductsPosition() as $key=>$value){
-                $prodcutData[$key] = ['position'=>$value];
+        } else {
+            $prodcutData = [];
+            foreach ($post->getProductsPosition() as $key => $value) {
+                $prodcutData[$key] = ['position' => $value];
             }
             $post->setProductsData($prodcutData);
         }

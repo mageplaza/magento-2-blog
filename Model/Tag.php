@@ -91,6 +91,7 @@ class Tag extends AbstractModel
 
     /**
      * Tag constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param CollectionFactory $postCollectionFactory
@@ -107,10 +108,9 @@ class Tag extends AbstractModel
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
+    ) {
         $this->postCollectionFactory = $postCollectionFactory;
-        $this->tagCollectionFactory  = $tagCollectionFactory;
+        $this->tagCollectionFactory = $tagCollectionFactory;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }

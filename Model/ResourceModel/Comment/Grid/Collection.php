@@ -35,12 +35,14 @@ class Collection extends SearchResult
 {
     /**
      * Collection constructor.
+     *
      * @param EntityFactory $entityFactory
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
      * @param string $mainTable
      * @param $resourceModel
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -50,8 +52,7 @@ class Collection extends SearchResult
         EventManager $eventManager,
         $mainTable = 'mageplaza_blog_comment',
         $resourceModel = '\Mageplaza\Blog\Model\ResourceModel\Comment'
-    )
-    {
+    ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }
 
@@ -71,15 +72,16 @@ class Collection extends SearchResult
     /**
      * @param array|string $field
      * @param null $condition
+     *
      * @return $this
      */
     public function addFieldToFilter($field, $condition = null)
     {
         if ($field == 'customer_name') {
             return parent::addFieldToFilter(['firstname', 'lastname'], [$condition, $condition]);
-        } else if ($field == 'post_name') {
+        } elseif ($field == 'post_name') {
             $field = 'mp.name';
-        } else if ($field == 'created_at') {
+        } elseif ($field == 'created_at') {
             $field = 'main_table.created_at';
         }
 

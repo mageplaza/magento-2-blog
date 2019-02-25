@@ -45,6 +45,7 @@ class InlineEdit extends Action
 
     /**
      * InlineEdit constructor.
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
      * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
@@ -53,10 +54,9 @@ class InlineEdit extends Action
         Context $context,
         JsonFactory $jsonFactory,
         TagFactory $tagFactory
-    )
-    {
+    ) {
         $this->jsonFactory = $jsonFactory;
-        $this->tagFactory  = $tagFactory;
+        $this->tagFactory = $tagFactory;
 
         parent::__construct($context);
     }
@@ -68,9 +68,9 @@ class InlineEdit extends Action
     {
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->jsonFactory->create();
-        $error      = false;
-        $messages   = [];
-        $postItems  = $this->getRequest()->getParam('items', []);
+        $error = false;
+        $messages = [];
+        $postItems = $this->getRequest()->getParam('items', []);
         if (!($this->getRequest()->getParam('isAjax') && !empty($postItems))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
@@ -78,7 +78,7 @@ class InlineEdit extends Action
             ]);
         }
 
-        $key   = array_keys($postItems);
+        $key = array_keys($postItems);
         $tagId = !empty($key) ? (int)$key[0] : '';
         /** @var \Mageplaza\Blog\Model\Tag $tag */
         $tag = $this->tagFactory->create()->load($tagId);
@@ -87,13 +87,13 @@ class InlineEdit extends Action
                 ->save();
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithTagId($tag, $e->getMessage());
-            $error      = true;
+            $error = true;
         } catch (\RuntimeException $e) {
             $messages[] = $this->getErrorWithTagId($tag, $e->getMessage());
-            $error      = true;
+            $error = true;
         } catch (\Exception $e) {
             $messages[] = $this->getErrorWithTagId($tag, __('Something went wrong while saving the Tag.'));
-            $error      = true;
+            $error = true;
         }
 
         return $resultJson->setData([
@@ -107,6 +107,7 @@ class InlineEdit extends Action
      *
      * @param \Mageplaza\Blog\Model\Tag $tag
      * @param string $errorText
+     *
      * @return string
      */
     public function getErrorWithTagId(\Mageplaza\Blog\Model\Tag $tag, $errorText)

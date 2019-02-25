@@ -71,6 +71,7 @@ class Save extends Category
 
     /**
      * Save constructor.
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
@@ -87,12 +88,11 @@ class Save extends Category
         JsonFactory $resultJsonFactory,
         LayoutFactory $layoutFactory,
         Js $jsHelper
-    )
-    {
-        $this->resultRawFactory  = $resultRawFactory;
+    ) {
+        $this->resultRawFactory = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory     = $layoutFactory;
-        $this->jsHelper          = $jsHelper;
+        $this->layoutFactory = $layoutFactory;
+        $this->jsHelper = $jsHelper;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }
@@ -103,10 +103,10 @@ class Save extends Category
     public function execute()
     {
         if ($this->getRequest()->getPost('return_session_messages_only')) {
-            $category                      = $this->initCategory();
-            $categoryPostData              = $this->getRequest()->getPostValue();
+            $category = $this->initCategory();
+            $categoryPostData = $this->getRequest()->getPostValue();
             $categoryPostData['store_ids'] = 0;
-            $categoryPostData['enabled']   = 1;
+            $categoryPostData['enabled'] = 1;
 
             $category->addData($categoryPostData);
 

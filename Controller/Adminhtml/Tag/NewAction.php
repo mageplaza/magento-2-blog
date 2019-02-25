@@ -38,14 +38,14 @@ class NewAction extends Action
 
     /**
      * NewAction constructor.
+     *
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Backend\App\Action\Context $context
      */
     public function __construct(
         ForwardFactory $resultForwardFactory,
         Context $context
-    )
-    {
+    ) {
         $this->resultForwardFactory = $resultForwardFactory;
 
         parent::__construct($context);

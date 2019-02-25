@@ -42,6 +42,7 @@ class Posts extends Topic
 
     /**
      * Posts constructor.
+     *
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Mageplaza\Blog\Model\TopicFactory $postFactory
      * @param \Magento\Framework\Registry $registry
@@ -52,8 +53,7 @@ class Posts extends Topic
         Registry $registry,
         LayoutFactory $resultLayoutFactory,
         TopicFactory $postFactory
-    )
-    {
+    ) {
         $this->resultLayoutFactory = $resultLayoutFactory;
 
         parent::__construct($context, $registry, $postFactory);

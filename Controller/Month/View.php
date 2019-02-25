@@ -53,8 +53,7 @@ class View extends Action
         Context $context,
         PageFactory $resultPageFactory,
         Data $helperData
-    )
-    {
+    ) {
         $this->_helperBlog = $helperData;
         $this->resultPageFactory = $resultPageFactory;
 

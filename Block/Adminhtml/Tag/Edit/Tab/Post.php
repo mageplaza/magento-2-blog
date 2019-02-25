@@ -58,6 +58,7 @@ class Post extends Extended implements TabInterface
 
     /**
      * Post constructor.
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\Helper\Data $backendHelper
@@ -72,10 +73,9 @@ class Post extends Extended implements TabInterface
         PostFactory $postFactory,
         CollectionFactory $postCollectionFactory,
         array $data = []
-    )
-    {
-        $this->coreRegistry          = $coreRegistry;
-        $this->postFactory           = $postFactory;
+    ) {
+        $this->coreRegistry = $coreRegistry;
+        $this->postFactory = $postFactory;
         $this->postCollectionFactory = $postCollectionFactory;
 
         parent::__construct($context, $backendHelper, $data);
@@ -192,6 +192,7 @@ class Post extends Extended implements TabInterface
 
     /**
      * @param \Mageplaza\Blog\Model\Post|\Magento\Framework\Object $item
+     *
      * @return string
      */
     public function getRowUrl($item)
@@ -219,6 +220,7 @@ class Post extends Extended implements TabInterface
 
     /**
      * @param \Magento\Backend\Block\Widget\Grid\Column $column
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -231,7 +233,7 @@ class Post extends Extended implements TabInterface
             }
             if ($column->getFilter()->getValue()) {
                 $this->getCollection()->addFieldToFilter('main_table.post_id', ['in' => $postIds]);
-            } else if ($postIds) {
+            } elseif ($postIds) {
                 $this->getCollection()->addFieldToFilter('main_table.post_id', ['nin' => $postIds]);
             }
         } else {

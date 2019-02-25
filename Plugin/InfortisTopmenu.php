@@ -30,6 +30,7 @@ class InfortisTopmenu
     /**
      * @param \Infortis\UltraMegamenu\Block\Navigation $topmenu
      * @param $html
+     *
      * @return string
      */
     public function afterRenderCategoriesMenuHtml(\Infortis\UltraMegamenu\Block\Navigation $topmenu, $html)

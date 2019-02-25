@@ -42,6 +42,7 @@ class Posts extends Category
 
     /**
      * Posts constructor.
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
@@ -52,8 +53,7 @@ class Posts extends Category
         Registry $coreRegistry,
         CategoryFactory $categoryFactory,
         LayoutFactory $resultLayoutFactory
-    )
-    {
+    ) {
         $this->resultLayoutFactory = $resultLayoutFactory;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);

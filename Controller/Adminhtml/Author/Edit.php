@@ -40,6 +40,7 @@ class Edit extends Author
 
     /**
      * Edit constructor.
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
@@ -50,8 +51,7 @@ class Edit extends Author
         Registry $registry,
         AuthorFactory $authorFactory,
         PageFactory $resultPageFactory
-    )
-    {
+    ) {
         $this->resultPageFactory = $resultPageFactory;
 
         parent::__construct($context, $registry, $authorFactory);

@@ -77,6 +77,7 @@ class WordPress extends AbstractImport
      *
      * @param $data
      * @param $connection
+     *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -101,21 +102,22 @@ class WordPress extends AbstractImport
      *
      * @param $data
      * @param $connection
+     *
      * @return bool|mixed
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _importPosts($data, $connection)
     {
         $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POST . "` WHERE post_type = 'post' AND post_status <> 'auto-draft'";
-        $result    = mysqli_query($connection, $sqlString);
+        $result = mysqli_query($connection, $sqlString);
         $isReplace = true;
         if ($result) {
             $this->_resetRecords();
             /**
              * @var \Mageplaza\Blog\Model\PostFactory
              */
-            $postModel    = $this->_postFactory->create();
-            $oldPostIds   = [];
+            $postModel = $this->_postFactory->create();
+            $oldPostIds = [];
             $importSource = $data['type'] . '-' . $data['database'];
 
             /** delete behaviour action */
@@ -205,17 +207,17 @@ class WordPress extends AbstractImport
                 foreach ($postModel->getCollection() as $item) {
                     if ($item->getImportSource() != null) {
                         $postImportSource = explode('-', $item->getImportSource());
-                        $importType       = array_shift($postImportSource);
+                        $importType = array_shift($postImportSource);
 
                         if ($importType == $this->_type['wordpress']) {
-                            $oldPostId                  = array_pop($postImportSource);
+                            $oldPostId = array_pop($postImportSource);
                             $oldPostIds[$item->getId()] = $oldPostId;
                         }
                     }
                 }
                 /** Import post image banner */
                 $oldPostMetaIds = [];
-                $updateData     = [];
+                $updateData = [];
                 foreach ($oldPostIds as $newPostId => $oldPostId) {
                     $postMetaSqlString = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POST . "` WHERE `post_type` = 'attachment' and `post_parent` = '" . $oldPostId . "'";
 
@@ -228,7 +230,7 @@ class WordPress extends AbstractImport
                 }
                 foreach ($oldPostMetaIds as $newPostId => $oldPostMetaId) {
                     $postMetaSqlString = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POSTMETA . "` WHERE `meta_key` = '_wp_attached_file' and `post_id` = '" . $oldPostMetaId . "'";
-                    $result            = mysqli_query($connection, $postMetaSqlString);
+                    $result = mysqli_query($connection, $postMetaSqlString);
                     if ($result) {
                         while ($postMeta = mysqli_fetch_assoc($result)) {
                             $updateData [$newPostId] = 'uploads/' . $postMeta['meta_value'];
@@ -257,6 +259,7 @@ class WordPress extends AbstractImport
     /**
      * @param $data
      * @param $connection
+     *
      * @return mixed|void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -266,14 +269,14 @@ class WordPress extends AbstractImport
                           INNER JOIN `" . $data['table_prefix'] . self::TABLE_TERMTAXONOMY . "` 
                           ON " . $data['table_prefix'] . self::TABLE_TERMS . ".term_id=" . $data['table_prefix'] . self::TABLE_TERMTAXONOMY . ".term_id 
                           WHERE " . $data['table_prefix'] . self::TABLE_TERMTAXONOMY . ".taxonomy = 'post_tag'";
-        $result    = mysqli_query($connection, $sqlString);
+        $result = mysqli_query($connection, $sqlString);
         $oldTagIds = [];
         $this->_resetRecords();
         $isReplace = true;
         /**
          * @var \Mageplaza\Blog\Model\TagFactory
          */
-        $tagModel     = $this->_tagFactory->create();
+        $tagModel = $this->_tagFactory->create();
         $importSource = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
@@ -372,9 +375,9 @@ class WordPress extends AbstractImport
             foreach ($tagModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
                     $tagImportSource = explode('-', $item->getImportSource());
-                    $importType      = array_shift($tagImportSource);
+                    $importType = array_shift($tagImportSource);
                     if ($importType == $this->_type['wordpress']) {
-                        $oldTagId                  = array_pop($tagImportSource);
+                        $oldTagId = array_pop($tagImportSource);
                         $oldTagIds[$item->getId()] = $oldTagId;
                     }
                 }
@@ -389,6 +392,7 @@ class WordPress extends AbstractImport
     /**
      * @param $data
      * @param $connection
+     *
      * @return mixed|void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -399,12 +403,12 @@ class WordPress extends AbstractImport
                           ON " . $data['table_prefix'] . self::TABLE_TERMS . ".term_id=" . $data['table_prefix'] . self::TABLE_TERMTAXONOMY . ".term_id 
                           WHERE " . $data['table_prefix'] . self::TABLE_TERMTAXONOMY . ".taxonomy = 'category' 
                           AND " . $data['table_prefix'] . self::TABLE_TERMS . ".name <> 'uncategorized' ";
-        $result    = mysqli_query($connection, $sqlString);
+        $result = mysqli_query($connection, $sqlString);
         $isReplace = true;
         /** @var \Mageplaza\Blog\Model\CategoryFactory */
-        $categoryModel  = $this->_categoryFactory->create();
-        $newCategories  = [];
-        $oldCategories  = [];
+        $categoryModel = $this->_categoryFactory->create();
+        $newCategories = [];
+        $oldCategories = [];
         $oldCategoryIds = [];
         $this->_resetRecords();
         $importSource = $data['type'] . '-' . $data['database'];
@@ -509,9 +513,9 @@ class WordPress extends AbstractImport
             foreach ($categoryModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
                     $catImportSource = explode('-', $item->getImportSource());
-                    $importType      = array_shift($catImportSource);
+                    $importType = array_shift($catImportSource);
                     if ($importType == $this->_type['wordpress']) {
-                        $oldCategoryId                  = array_pop($catImportSource);
+                        $oldCategoryId = array_pop($catImportSource);
                         $oldCategoryIds[$item->getId()] = $oldCategoryId;
                     }
                 }
@@ -523,11 +527,11 @@ class WordPress extends AbstractImport
             foreach ($newCategories as $newCatId => $newCategory) {
                 if ($newCategory['parent'] != '0') {
                     if (isset($oldCategories[$newCategory['parent']])) {
-                        $parentId        = array_search($newCategory['parent'], $oldCategoryIds);
-                        $parentPath      = $categoryModel->load($parentId)->getPath();
-                        $parentPaths     = explode('/', $categoryModel->getPath());
-                        $level           = count($parentPaths);
-                        $newPath         = $parentPath . '/' . $newCatId;
+                        $parentId = array_search($newCategory['parent'], $oldCategoryIds);
+                        $parentPath = $categoryModel->load($parentId)->getPath();
+                        $parentPaths = explode('/', $categoryModel->getPath());
+                        $level = count($parentPaths);
+                        $newPath = $parentPath . '/' . $newCatId;
                         $currentCategory = $categoryModel->load($newCatId);
                         $currentCategory->setPath($newPath)->setParentId($parentId)->setLevel($level)->save();
                     }
@@ -550,9 +554,9 @@ class WordPress extends AbstractImport
     protected function _importAuthors($data, $connection)
     {
         $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_USERS . "`";
-        $result    = mysqli_query($connection, $sqlString);
+        $result = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
-        $oldUserIds       = [];
+        $oldUserIds = [];
         $magentoUserEmail = [];
 
         /**
@@ -578,7 +582,7 @@ class WordPress extends AbstractImport
                         'created'          => $createDate
                     ])->setRoleId(1)->save();
                     $this->_successCount++;
-                    $this->_hasData                  = true;
+                    $this->_hasData = true;
                     $oldUserIds[$userModel->getId()] = $user['ID'];
                 } catch (\Exception $e) {
                     $this->_errorCount++;
@@ -602,9 +606,9 @@ class WordPress extends AbstractImport
                                   WHERE post_author = " . $oldUserId . " 
                                   AND post_type = 'post' 
                                   AND post_status <> 'auto-draft'";
-            $result          = mysqli_query($connection, $relationshipSql);
+            $result = mysqli_query($connection, $relationshipSql);
             while ($postAuthor = mysqli_fetch_assoc($result)) {
-                $newPostId              = array_search($postAuthor['ID'], $oldPostIds);
+                $newPostId = array_search($postAuthor['ID'], $oldPostIds);
                 $updateData[$newPostId] = $newUserId;
             }
             mysqli_free_result($result);
@@ -623,24 +627,25 @@ class WordPress extends AbstractImport
      *
      * @param $data
      * @param $connection
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _importComments($data, $connection)
     {
         $accountManage = $this->_objectManager->create('\Magento\Customer\Model\AccountManagement');
-        $sqlString     = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_COMMENT . "`";
-        $result        = mysqli_query($connection, $sqlString);
+        $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_COMMENT . "`";
+        $result = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
         $isReplace = true;
         /**
          * @var \Mageplaza\Blog\Model\CommentFactory
          */
-        $commentModel  = $this->_commentFactory->create();
+        $commentModel = $this->_commentFactory->create();
         $customerModel = $this->_customerFactory->create();
-        $websiteId     = $this->_storeManager->getWebsite()->getId();
-        $oldPostIds    = $this->_registry->registry('mageplaza_import_post_ids_collection');
+        $websiteId = $this->_storeManager->getWebsite()->getId();
+        $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
         $oldCommentIds = [];
-        $importSource  = $data['type'] . '-' . $data['database'];
+        $importSource = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
         if ($data['behaviour'] == 'delete' || $data['behaviour'] == 'replace') {
@@ -671,14 +676,14 @@ class WordPress extends AbstractImport
             }
             $newPostId = array_search($comment['comment_post_ID'], $oldPostIds);
             if ($accountManage->isEmailAvailable($comment['comment_author_email'], $websiteId)) {
-                $entityId  = 0;
-                $userName  = $comment['comment_author'];
+                $entityId = 0;
+                $userName = $comment['comment_author'];
                 $userEmail = $comment['comment_author_email'];
             } else {
                 $customerModel->setWebsiteId($websiteId);
                 $customerModel->loadByEmail($comment['comment_author_email']);
-                $entityId  = $customerModel->getEntityId();
-                $userName  = '';
+                $entityId = $customerModel->getEntityId();
+                $userName = '';
                 $userEmail = '';
             }
 
@@ -723,7 +728,7 @@ class WordPress extends AbstractImport
                             'user_name'     => $comment['user_name'],
                             'user_email'    => $comment['user_email'],
                             'import_source' => $comment['import_source']
-                        ], $where);
+                            ], $where);
                     $this->_successCount++;
                     $this->_hasData = true;
                 } else {
@@ -744,7 +749,7 @@ class WordPress extends AbstractImport
                             'import_source' => $comment['import_source']
                         ])->save();
                         $this->_successCount++;
-                        $this->_hasData                         = true;
+                        $this->_hasData = true;
                         $oldCommentIds [$commentModel->getId()] = $comment['id'];
                     } catch (\Exception $e) {
                         $this->_errorCount++;
@@ -755,19 +760,19 @@ class WordPress extends AbstractImport
             }
 
             $upgradeParentData = [];
-            $upgradeChildData  = [];
+            $upgradeChildData = [];
 
             /**
              * Insert child-parent comments
              */
             foreach ($oldCommentIds as $newCommentId => $oldCommentId) {
                 $relationshipSql = "SELECT `comment_ID`,`comment_parent` FROM `" . $data['table_prefix'] . self::TABLE_COMMENT . "` WHERE `comment_parent` <> 0";
-                $result          = mysqli_query($connection, $relationshipSql);
+                $result = mysqli_query($connection, $relationshipSql);
 
                 while ($commentParent = mysqli_fetch_assoc($result)) {
-                    $newCommentParentId                     = array_search($commentParent['comment_parent'], $oldCommentIds);
-                    $newCommentChildId                      = array_search($commentParent['comment_ID'], $oldCommentIds);
-                    $upgradeChildData[$newCommentChildId]   = $newCommentParentId;
+                    $newCommentParentId = array_search($commentParent['comment_parent'], $oldCommentIds);
+                    $newCommentChildId = array_search($commentParent['comment_ID'], $oldCommentIds);
+                    $upgradeChildData[$newCommentChildId] = $newCommentParentId;
                     $upgradeParentData[$newCommentParentId] = 1;
                 }
             }
@@ -800,7 +805,7 @@ class WordPress extends AbstractImport
      */
     protected function _importRelationships($data, $connection, $oldTermIds, $relationTable, $termType, $isCategory = null)
     {
-        $oldPostIds        = $this->_registry->registry('mageplaza_import_post_ids_collection');
+        $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
         $categoryPostTable = $this->_resourceConnection->getTableName($relationTable);
         foreach ($oldPostIds as $newPostId => $oldPostId) {
             $sqlRelation = "SELECT `" . $data['table_prefix'] . self::TABLE_TERMTAXONOMY . "`.`term_id` 
@@ -811,14 +816,14 @@ class WordPress extends AbstractImport
                       ON " . $data['table_prefix'] . self::TABLE_TERMTAXONOMY . ".`term_id` = " . $data['table_prefix'] . self::TABLE_TERMS . ".`term_id`
                       WHERE " . $data['table_prefix'] . self::TABLE_TERMTAXONOMY . ".taxonomy = '" . $termType . "' 
                       AND `" . $data['table_prefix'] . self::TABLE_TERMRELATIONSHIP . "`.`object_id` = " . $oldPostId;
-            $result      = mysqli_query($connection, $sqlRelation);
+            $result = mysqli_query($connection, $sqlRelation);
             while ($categoryPost = mysqli_fetch_assoc($result)) {
                 if ($isCategory) {
                     $newCategoryId = (array_search($categoryPost['term_id'], $oldTermIds)) ?: '1';
-                    $termId        = 'category_id';
+                    $termId = 'category_id';
                 } else {
                     $newCategoryId = array_search($categoryPost['term_id'], $oldTermIds);
-                    $termId        = 'tag_id';
+                    $termId = 'tag_id';
                 }
                 try {
                     $this->_resourceConnection->getConnection()->insert($categoryPostTable, [
@@ -878,7 +883,7 @@ class WordPress extends AbstractImport
                 'store_ids'         => $post['store_ids'],
                 'meta_robots'       => $post['meta_robots'],
                 'import_source'     => $post['import_source']
-            ], $where);
+                ], $where);
         $this->_resourceConnection->getConnection()
             ->delete($this->_resourceConnection
                 ->getTableName('mageplaza_blog_post_category'), $where);
@@ -920,7 +925,7 @@ class WordPress extends AbstractImport
                 'store_ids'     => $tag['store_ids'],
                 'enabled'       => $tag['enabled'],
                 'import_source' => $tag['import_source']
-            ], $where);
+                ], $where);
     }
 
     /**
@@ -957,6 +962,6 @@ class WordPress extends AbstractImport
                 'store_ids'     => $category['store_ids'],
                 'enabled'       => $category['enabled'],
                 'import_source' => $category['import_source']
-            ], $where);
+                ], $where);
     }
 }

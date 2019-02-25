@@ -52,8 +52,7 @@ class NewTagDataProvider extends AbstractDataProvider
         UrlInterface $urlBuilder,
         array $meta = [],
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
 
         $this->collection = $collectionFactory->create();
@@ -76,7 +75,8 @@ class NewTagDataProvider extends AbstractDataProvider
                         'use_config'                   => ['available_sort_by', 'default_sort_by']
                     ]
                 ]
-            ]);
+            ]
+        );
 
         return $this->data;
     }

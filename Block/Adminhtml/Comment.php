@@ -36,8 +36,8 @@ class Comment extends Container
      */
     protected function _construct()
     {
-        $this->_controller     = 'adminhtml_comment';
-        $this->_blockGroup     = 'Mageplaza_Blog';
+        $this->_controller = 'adminhtml_comment';
+        $this->_blockGroup = 'Mageplaza_Blog';
         $this->_addButtonLabel = __('New Comment');
 
         parent::_construct();

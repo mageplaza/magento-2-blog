@@ -40,6 +40,7 @@ class Edit extends Container
 
     /**
      * Edit constructor.
+     *
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
@@ -48,8 +49,7 @@ class Edit extends Container
         Context $context,
         Registry $coreRegistry,
         array $data = []
-    )
-    {
+    ) {
         $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context, $data);

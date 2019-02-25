@@ -42,6 +42,7 @@ class RefreshPath extends Category
 
     /**
      * RefreshPath constructor.
+     *
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Framework\Registry $coreRegistry
@@ -52,8 +53,7 @@ class RefreshPath extends Category
         Registry $coreRegistry,
         CategoryFactory $categoryFactory,
         JsonFactory $resultJsonFactory
-    )
-    {
+    ) {
         $this->resultJsonFactory = $resultJsonFactory;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);

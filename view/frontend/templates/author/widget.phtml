@@ -22,7 +22,7 @@
 /** @var \Mageplaza\Blog\Block\Author\Widget $block */
 
 $author = $block->getCurrentAuthor();
-if ($author): ?>
+if ($author) : ?>
     <div class="mp-sidebar mpcss">
         <div class="row">
             <div class="author-name col-xs-12">
@@ -37,27 +37,27 @@ if ($author): ?>
                 <?php echo $block->getPageFilter(($author->getShortDescription())) ? $block->getPageFilter(($author->getShortDescription())) : 'No info'; ?>
             </div>
             <div class="author-social col-xs-12">
-                <?php if ($author->getFacebookLink()): ?>
+                <?php if ($author->getFacebookLink()) : ?>
                     <a href="<?php echo $author->getFacebookLink() ?>" target="_blank">
                         <img class="img-responsive"
                              src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/facebook.png') ?>"
                              align="middle"
                              alt="<?php echo $block->escapeHtml($author->getName()); ?>"/>
                     </a>
-                <?php else: ?>
+                <?php else : ?>
                     <img class="img-responsive"
                          src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/facebookoff.png') ?>"
                          align="middle"
                          alt="<?php echo $block->escapeHtml($author->getName()); ?>"/>
                 <?php endif; ?>
-                <?php if ($author->getTwitterLink()): ?>
+                <?php if ($author->getTwitterLink()) : ?>
                     <a href="<?php echo $author->getTwitterLink() ?>" target="_blank">
                         <img class="img-responsive"
                              src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/twitter.png') ?>"
                              align="middle"
                              alt="<?php echo $block->escapeHtml($author->getName()); ?>"/>
                     </a>
-                <?php else: ?>
+                <?php else : ?>
                     <img class="img-responsive"
                          src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/twitter-off.png') ?>"
                          align="middle"

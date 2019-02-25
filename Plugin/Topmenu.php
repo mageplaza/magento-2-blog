@@ -49,6 +49,7 @@ class Topmenu
 
     /**
      * Topmenu constructor.
+     *
      * @param \Mageplaza\Blog\Helper\Data $helper
      * @param \Magento\Framework\Data\TreeFactory $treeFactory
      * @param \Magento\Framework\App\RequestInterface $request
@@ -57,11 +58,10 @@ class Topmenu
         Data $helper,
         TreeFactory $treeFactory,
         RequestInterface $request
-    )
-    {
-        $this->helper      = $helper;
+    ) {
+        $this->helper = $helper;
         $this->treeFactory = $treeFactory;
-        $this->request     = $request;
+        $this->request = $request;
     }
 
     /**
@@ -69,6 +69,7 @@ class Topmenu
      * @param string $outermostClass
      * @param string $childrenWrapClass
      * @param int $limit
+     *
      * @return array
      */
     public function beforeGetHtml(
@@ -76,8 +77,7 @@ class Topmenu
         $outermostClass = '',
         $childrenWrapClass = '',
         $limit = 0
-    )
-    {
+    ) {
         if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
             $subject->getMenu()
                 ->addChild(
@@ -98,8 +98,8 @@ class Topmenu
     private function getMenuAsArray()
     {
         $identifier = trim($this->request->getPathInfo(), '/');
-        $routePath  = explode('/', $identifier);
-        $routeSize  = sizeof($routePath);
+        $routePath = explode('/', $identifier);
+        $routeSize = sizeof($routePath);
 
         return [
             'name'       => $this->helper->getBlogConfig('general/name') ?: __('Blog'),

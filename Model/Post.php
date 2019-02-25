@@ -210,6 +210,7 @@ class Post extends AbstractModel
 
     /**
      * Post constructor.
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -238,16 +239,15 @@ class Post extends AbstractModel
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
-        $this->tagCollectionFactory      = $tagCollectionFactory;
-        $this->topicCollectionFactory    = $topicCollectionFactory;
+    ) {
+        $this->tagCollectionFactory = $tagCollectionFactory;
+        $this->topicCollectionFactory = $topicCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
-        $this->postCollectionFactory     = $postCollectionFactory;
-        $this->productCollectionFactory  = $productCollectionFactory;
-        $this->helperData                = $helperData;
-        $this->dateTime                  = $dateTime;
-        $this->trafficFactory            = $trafficFactory;
+        $this->postCollectionFactory = $postCollectionFactory;
+        $this->productCollectionFactory = $productCollectionFactory;
+        $this->helperData = $helperData;
+        $this->dateTime = $dateTime;
+        $this->trafficFactory = $trafficFactory;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -283,6 +283,7 @@ class Post extends AbstractModel
 
     /**
      * @param bool $shorten
+     *
      * @return mixed|string
      */
     public function getShortDescription($shorten = false)
@@ -322,11 +323,11 @@ class Post extends AbstractModel
      */
     public function getDefaultValues()
     {
-        $values                  = [];
-        $values['in_rss']        = '1';
-        $values['enabled']       = '1';
+        $values = [];
+        $values['in_rss'] = '1';
+        $values['enabled'] = '1';
         $values['allow_comment'] = '1';
-        $values['store_ids']     = '1';
+        $values['store_ids'] = '1';
 
         return $values;
     }
@@ -434,6 +435,7 @@ class Post extends AbstractModel
 
     /**
      * @param null $limit
+     *
      * @return ResourceModel\Post\Collection|null
      * @throws \Magento\Framework\Exception\LocalizedException
      */
