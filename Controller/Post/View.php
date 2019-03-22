@@ -186,10 +186,10 @@ class View extends Action
         $page->getConfig()->setPageLayout($pageLayout);
 
         if ($post->getStoreIds() != $this->storeManager->getStore()->getId() && $post->getStoreIds() != 0) {
-            return $this->resultForwardFactory->create()->forward('noroute');
+            return $this->_redirect('noroute');
         }
         if (!$post->getEnabled()) {
-            return $this->resultForwardFactory->create()->forward('noroute');
+            return $this->_redirect('noroute');
         }
 
         $trafficModel = $this->trafficFactory->create()->load($id, 'post_id');

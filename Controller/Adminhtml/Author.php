@@ -74,6 +74,9 @@ abstract class Author extends Action
         /** @var \Mageplaza\Blog\Model\Author $author */
         $author = $this->authorFactory->create()
             ->load($userId);
+        if (empty($author->getData())) {
+            $author = $this->authorFactory->create()->setId($user->getId())->setName($user->getName())->save();
+        }
 
         if (!$author->getId()) {
             $this->messageManager->addErrorMessage(__('This author no longer exists. Please create the post to access the author management session.'));

@@ -79,6 +79,6 @@ class View extends Action
         $page = $this->resultPageFactory->create();
         $page->getConfig()->setPageLayout($this->helperBlog->getSidebarLayout());
 
-        return ($topic->getEnabled()) ? $page : $this->resultForwardFactory->create()->forward('noroute');
+        return ($topic->getEnabled()) ? $page : $this->_redirect('noroute');;
     }
 }
