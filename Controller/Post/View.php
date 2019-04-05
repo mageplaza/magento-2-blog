@@ -185,7 +185,8 @@ class View extends Action
         $pageLayout = ($post->getLayout() == 'empty') ? $this->helperBlog->getSidebarLayout() : $post->getLayout();
         $page->getConfig()->setPageLayout($pageLayout);
 
-        if ($post->getStoreIds() != $this->storeManager->getStore()->getId() && $post->getStoreIds() != 0) {
+        $storeEnable= explode(',',$post->getStoreIds());
+        if ($post->getStoreIds() != 0 && !in_array($this->storeManager->getStore()->getId(),$storeEnable)) {
             return $this->_redirect('noroute');
         }
         if (!$post->getEnabled()) {
