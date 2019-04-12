@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Post\Rss;
 
+use function Couchbase\zlibDecompress;
 use Magento\Framework\App\Rss\DataProviderInterface;
 use Magento\Framework\App\Rss\UrlBuilderInterface;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -93,11 +94,12 @@ class Lists extends AbstractBlock implements DataProviderInterface
     public function getRssData()
     {
         $storeModel = $this->storeManager->getStore($this->getStoreId());
-        $title = __('List Posts from %1', $storeModel->getFrontendName());
-        $data = [
+        $title      = __('List Posts from %1', $storeModel->getFrontendName())->render();
+        $storeUrl= $this->storeManager->getStore($this->getStoreId())->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB);
+        $data       = [
             'title'       => $title,
             'description' => $title,
-            'link'        => $this->rssUrlBuilder->getUrl(['store_id' => $this->getStoreId(), 'type' => 'blog_posts']),
+            'link'        => $storeUrl.'blog/post/rss.xml',
             'charset'     => 'UTF-8',
             'language'    => $this->helper->getConfigValue('general/locale/code', $storeModel),
         ];
