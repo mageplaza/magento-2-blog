@@ -113,7 +113,8 @@ class Lists extends AbstractBlock implements DataProviderInterface
             $item->setAllowedInRss(true);
             $item->setAllowedPriceInRss(true);
 
-            $description = '<table><tr><td style="text-decoration:none;"> ' . $item->getShortDescription() . '</td></tr></table>';
+//            $description = '<table><tr><td style="text-decoration:none;"> ' . $item->getShortDescription() . '</td></tr></table>';
+            $description = $item->getShortDescription();
             $data['entries'][] = [
                 'title'       => $item->getName(),
                 'link'        => $item->getUrl(),
