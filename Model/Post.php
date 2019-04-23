@@ -299,11 +299,12 @@ class Post extends AbstractModel
     }
 
     /**
-     * @return bool|string
+     * @param null $store
+     * @return string
      */
-    public function getUrl()
+    public function getUrl($store = null)
     {
-        return $this->helperData->getBlogUrl($this, Data::TYPE_POST);
+        return $this->helperData->getBlogUrl($this, Data::TYPE_POST, $store);
     }
 
     /**

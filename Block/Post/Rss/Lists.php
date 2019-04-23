@@ -118,7 +118,7 @@ class Lists extends AbstractBlock implements DataProviderInterface
             $data['entries'][] = [
                 'title'       => $item->getName(),
                 'link'        => $item->getUrl(),
-                'description' => $description,
+                'description' => $description?:'no content',
                 'lastUpdate'  => strtotime($item->getPublishDate())
             ];
         }

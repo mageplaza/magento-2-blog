@@ -30,6 +30,7 @@ use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
 use Mageplaza\Blog\Model\PostFactory;
+use Magento\Store\Model\StoreRepository;
 
 /**
  * Class Comment
@@ -58,8 +59,12 @@ class Comment extends Generic implements TabInterface
     public $systemStore;
 
     /**
+     * @var StoreRepository
+     */
+    public $storeRepository;
+
+    /**
      * Comment constructor.
-     *
      * @param Context $context
      * @param Registry $registry
      * @param FormFactory $formFactory
@@ -67,6 +72,7 @@ class Comment extends Generic implements TabInterface
      * @param PostFactory $postFactory
      * @param Status $commentStatus
      * @param Store $systemStore
+     * @param StoreRepository $storeRepository
      * @param array $data
      */
     public function __construct(
@@ -77,12 +83,14 @@ class Comment extends Generic implements TabInterface
         PostFactory $postFactory,
         Status $commentStatus,
         Store $systemStore,
+        StoreRepository $storeRepository,
         array $data = []
     ) {
         $this->_commentStatus = $commentStatus;
         $this->_customerRepository = $customerRepository;
         $this->_postFactory = $postFactory;
         $this->systemStore = $systemStore;
+        $this->storeRepository = $storeRepository;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -133,9 +141,13 @@ class Comment extends Generic implements TabInterface
             'name'     => 'content',
             'style'    => 'height:24em;'
         ]);
-        $post = $this->_postFactory->create()->load($comment->getPostId());
-
-        $viewText = '<a href="' . $post->getUrl() . '#cmt-id-' . $comment->getId() . '" onclick="this.target=\'blank\'">View</a>';
+        $viewText= '';
+        foreach ($this->storeRepository->getList() as $store){
+            if ($store["store_id"]==='0'){
+                continue;
+            }
+            $viewText.= '<a href="' . $post->getUrl($store["store_id"]) . '#cmt-id-' . $comment->getId() . '" onclick="this.target=\'blank\'">View in store '.$store["name"].'</a><br>';
+        }
 
         $fieldset->addField('view_front', 'note', ['text' => $viewText, 'label' => __('View On Front End'), 'name' => 'view_front']);
 

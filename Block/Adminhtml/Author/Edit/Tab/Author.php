@@ -29,7 +29,7 @@ use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
 use Mageplaza\Blog\Helper\Image as ImageHelper;
-use Mageplaza\Core\Block\Adminhtml\Renderer\Image;
+use Mageplaza\Blog\Block\Adminhtml\Renderer\Image;
 
 /**
  * Class Author

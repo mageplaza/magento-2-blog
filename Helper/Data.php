@@ -288,12 +288,10 @@ class Data extends CoreHelper
     }
 
     /**
-     * Get object collection (Category, Tag, Post, Topic)
-     *
      * @param null $type
      * @param null $storeId
-     *
-     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @return \Mageplaza\Blog\Model\ResourceModel\Author\Collection|\Mageplaza\Blog\Model\ResourceModel\Category\Collection|\Mageplaza\Blog\Model\ResourceModel\Post\Collection|\Mageplaza\Blog\Model\ResourceModel\Tag\Collection|\Mageplaza\Blog\Model\ResourceModel\Topic\Collection
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getObjectList($type = null, $storeId = null)
     {
@@ -309,10 +307,10 @@ class Data extends CoreHelper
     }
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection
+     * @param $collection
      * @param null $storeId
-     *
      * @return mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function addStoreFilter($collection, $storeId = null)
     {
@@ -349,17 +347,17 @@ class Data extends CoreHelper
     /**
      * @param null $urlKey
      * @param null $type
-     *
+     * @param null $store
      * @return string
      */
-    public function getBlogUrl($urlKey = null, $type = null)
+    public function getBlogUrl($urlKey = null, $type = null, $store = null)
     {
         if (is_object($urlKey)) {
             $urlKey = $urlKey->getUrlKey();
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url = $this->getUrl($this->getRoute() . '/' . $urlKey);
+        $url = $this->getUrl($this->getRoute($store) . '/' . $urlKey);
         $url = explode('?', $url);
         $url = $url[0];
 

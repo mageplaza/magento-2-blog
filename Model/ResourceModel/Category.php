@@ -574,4 +574,14 @@ class Category extends AbstractDb
 
         return $this;
     }
+    /**
+     * @param $importType
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function deleteImportItems($importType)
+    {
+        $adapter = $this->getConnection();
+        $adapter->delete($this->getMainTable(), "`import_source` LIKE '" . $importType . "%'");
+    }
 }

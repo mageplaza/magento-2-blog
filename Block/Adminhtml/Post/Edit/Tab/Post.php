@@ -205,7 +205,7 @@ class Post extends Generic implements TabInterface
             ]);
         }
 
-        $fieldset->addField('image', \Mageplaza\Core\Block\Adminhtml\Renderer\Image::class, [
+        $fieldset->addField('image', \Mageplaza\Blog\Block\Adminhtml\Renderer\Image::class, [
             'name'  => 'image',
             'label' => __('Image'),
             'title' => __('Image'),
