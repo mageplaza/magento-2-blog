@@ -184,7 +184,7 @@ class View extends Action
             $traffic->addData(['post_id' => $id, 'numbers_view' => 1])->save();
         }
 
-        if ($this->getRequest()->isAjax() && $this->session->isLoggedIn()) {
+        if ($this->getRequest()->isAjax()) {
             $params = $this->getRequest()->getParams();
             $customerData = $this->session->getCustomerData();
             $result = [];
@@ -197,16 +197,31 @@ class View extends Action
                 $cmtText = $content;
                 $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
                 $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
-                $commentData = [
-                    'post_id' => $id, '',
-                    'entity_id' => $customerData->getId(),
-                    'is_reply' => $isReply,
-                    'reply_id' => $replyId,
-                    'content' => $cmtText,
-                    'created_at' => $this->dateTime->date(),
-                    'status' => $this->helperBlog->getBlogConfig('comment/need_approve') ? Status::PENDING : Status::APPROVED,
-                    'store_ids' => $this->storeManager->getStore()->getId()
-                ];
+                if ($this->session->isLoggedIn()){
+                    $commentData = [
+                        'post_id' => $id, '',
+                        'entity_id' => $customerData->getId(),
+                        'is_reply' => $isReply,
+                        'reply_id' => $replyId,
+                        'content' => $cmtText,
+                        'created_at' => $this->dateTime->date(),
+                        'status' => $this->helperBlog->getBlogConfig('comment/need_approve') ? Status::PENDING : Status::APPROVED,
+                        'store_ids' => $this->storeManager->getStore()->getId()
+                    ];
+                }else{
+                    $commentData = [
+                        'post_id' => $id, '',
+                        'entity_id' => 0,
+                        'is_reply' => $isReply,
+                        'reply_id' => $replyId,
+                        'content' => $cmtText,
+                        'user_name' => $params['guestName'],
+                        'user_email' => $params['guestEmail'],
+                        'created_at' => $this->dateTime->date(),
+                        'status' => $this->helperBlog->getBlogConfig('comment/need_approve') ? Status::PENDING : Status::APPROVED,
+                        'store_ids' => $this->storeManager->getStore()->getId()
+                    ];
+                }
 
                 $commentModel = $this->cmtFactory->create();
                 $result = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
@@ -253,10 +268,16 @@ class View extends Action
 
                     $lastCmt = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
                     $lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
+                    if ($user){
+                        $users = $user->getFirstname() . ' ' . $user->getLastname();
+                    }else{
+                        $users = $data['user_name'];
+                    }
+
                     $result = [
                         'cmt_id' => $lastCmtId,
                         'cmt_text' => $data['content'],
-                        'user_cmt' => $user->getFirstname() . ' ' . $user->getLastname(),
+                        'user_cmt' => $users,
                         'is_reply' => $data['is_reply'],
                         'reply_cmt' => $data['reply_id'],
                         'created_at' => __('Just now'),
