@@ -76,6 +76,11 @@ class View extends Action
     {
         $id = $this->getRequest()->getParam('id');
         $tag = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_TAG)->create()->load($id);
+
+        if (!$this->helperBlog->checkStore($tag)){
+            return $this->_redirect('noroute');
+        }
+
         $page = $this->resultPageFactory->create();
         $page->getConfig()->setPageLayout($this->helperBlog->getSidebarLayout());
 

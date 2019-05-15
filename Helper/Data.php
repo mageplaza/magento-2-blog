@@ -502,4 +502,18 @@ class Data extends CoreHelper
     {
         return $this->_urlBuilder->getUrl($route, $params);
     }
+
+    /**
+     * @param $object
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function checkStore($object){
+        $storeEnable= explode(',',$object->getStoreIds());
+        if ($object->getStoreIds() != 0 && !in_array($this->storeManager->getStore()->getId(),$storeEnable)) {
+            return false;
+        }
+        return true;
+    }
 }

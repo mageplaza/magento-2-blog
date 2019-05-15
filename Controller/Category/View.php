@@ -70,12 +70,18 @@ class View extends Action
     }
 
     /**
-     * @return $this|\Magento\Framework\View\Result\Page
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
         $category = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_CATEGORY)->create()->load($id);
+
+        if (!$this->helperBlog->checkStore($category)){
+            return $this->_redirect('noroute');
+        }
+
         $page = $this->resultPageFactory->create();
         $page->getConfig()->setPageLayout($this->helperBlog->getSidebarLayout());
 
