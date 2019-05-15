@@ -21,17 +21,31 @@
 
 namespace Mageplaza\Blog\Helper;
 
+use DateTimeZone;
+use Exception;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filter\TranslitUrl;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Mageplaza\Blog\Model\Author;
 use Mageplaza\Blog\Model\AuthorFactory;
+use Mageplaza\Blog\Model\Category;
 use Mageplaza\Blog\Model\CategoryFactory;
+use Mageplaza\Blog\Model\Config\Source\SideBarLR;
+use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
+use Mageplaza\Blog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection as PostCollection;
+use Mageplaza\Blog\Model\ResourceModel\Tag\Collection as TagCollection;
+use Mageplaza\Blog\Model\ResourceModel\Topic\Collection;
+use Mageplaza\Blog\Model\Tag;
 use Mageplaza\Blog\Model\TagFactory;
+use Mageplaza\Blog\Model\Topic;
 use Mageplaza\Blog\Model\TopicFactory;
 use Mageplaza\Core\Helper\AbstractData as CoreHelper;
 
@@ -50,53 +64,53 @@ class Data extends CoreHelper
     const TYPE_MONTHLY       = 'month';
 
     /**
-     * @var \Mageplaza\Blog\Model\PostFactory
+     * @var PostFactory
      */
     public $postFactory;
 
     /**
-     * @var \Mageplaza\Blog\Model\CategoryFactory
+     * @var CategoryFactory
      */
     public $categoryFactory;
 
     /**
-     * @var \Mageplaza\Blog\Model\TagFactory
+     * @var TagFactory
      */
     public $tagFactory;
 
     /**
-     * @var \Mageplaza\Blog\Model\TopicFactory
+     * @var TopicFactory
      */
     public $topicFactory;
 
     /**
-     * @var \Mageplaza\Blog\Model\AuthorFactory
+     * @var AuthorFactory
      */
     public $authorFactory;
 
     /**
-     * @var \Magento\Framework\Filter\TranslitUrl
+     * @var TranslitUrl
      */
     public $translitUrl;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     public $dateTime;
 
     /**
      * Data constructor.
      *
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Mageplaza\Blog\Model\PostFactory $postFactory
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
-     * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
-     * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
-     * @param \Magento\Framework\Filter\TranslitUrl $translitUrl
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param Context $context
+     * @param ObjectManagerInterface $objectManager
+     * @param StoreManagerInterface $storeManager
+     * @param PostFactory $postFactory
+     * @param CategoryFactory $categoryFactory
+     * @param TagFactory $tagFactory
+     * @param TopicFactory $topicFactory
+     * @param AuthorFactory $authorFactory
+     * @param TranslitUrl $translitUrl
+     * @param DateTime $dateTime
      */
     public function __construct(
         Context $context,
@@ -110,19 +124,19 @@ class Data extends CoreHelper
         TranslitUrl $translitUrl,
         DateTime $dateTime
     ) {
-        $this->postFactory = $postFactory;
+        $this->postFactory     = $postFactory;
         $this->categoryFactory = $categoryFactory;
-        $this->tagFactory = $tagFactory;
-        $this->topicFactory = $topicFactory;
-        $this->authorFactory = $authorFactory;
-        $this->translitUrl = $translitUrl;
-        $this->dateTime = $dateTime;
+        $this->tagFactory      = $tagFactory;
+        $this->topicFactory    = $topicFactory;
+        $this->authorFactory   = $authorFactory;
+        $this->translitUrl     = $translitUrl;
+        $this->dateTime        = $dateTime;
 
         parent::__construct($context, $objectManager, $storeManager);
     }
 
     /**
-     * @return \Mageplaza\Blog\Helper\Image
+     * @return Image
      */
     public function getImageHelper()
     {
@@ -151,9 +165,9 @@ class Data extends CoreHelper
     {
         $sideBarConfig = $this->getConfigValue(self::CONFIG_MODULE_PATH . '/sidebar/sidebar_left_right', $storeId);
         if ($sideBarConfig == 0) {
-            return \Mageplaza\Blog\Model\Config\Source\SideBarLR::LEFT;
+            return SideBarLR::LEFT;
         } elseif ($sideBarConfig == 1) {
-            return \Mageplaza\Blog\Model\Config\Source\SideBarLR::RIGHT;
+            return SideBarLR::RIGHT;
         }
 
         return $sideBarConfig;
@@ -213,15 +227,16 @@ class Data extends CoreHelper
      * @param null $id
      * @param null $storeId
      *
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @return PostCollection
+     * @throws NoSuchEntityException
      */
     public function getPostCollection($type = null, $id = null, $storeId = null)
     {
-        if (is_null($id)) {
+        if ($id === null) {
             $id = $this->_request->getParam('id');
         }
 
-        /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $collection */
+        /** @var PostCollection $collection */
         $collection = $this->getPostList($storeId);
 
         switch ($type) {
@@ -260,13 +275,14 @@ class Data extends CoreHelper
     /**
      * @param null $storeId
      *
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @return PostCollection
+     * @throws NoSuchEntityException
      */
     public function getPostList($storeId = null)
     {
-        /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $collection */
+        /** @var PostCollection $collection */
         $collection = $this->getObjectList(self::TYPE_POST, $storeId)
-            ->addFieldToFilter('publish_date', ["to" => $this->dateTime->date()])
+            ->addFieldToFilter('publish_date', ['to' => $this->dateTime->date()])
             ->setOrder('publish_date', 'desc');
 
         return $collection;
@@ -278,6 +294,7 @@ class Data extends CoreHelper
      * @param $array
      *
      * @return array|string
+     * @throws NoSuchEntityException
      */
     public function getCategoryCollection($array)
     {
@@ -288,14 +305,17 @@ class Data extends CoreHelper
     }
 
     /**
+     * Get object collection (Category, Tag, Post, Topic)
+     *
      * @param null $type
      * @param null $storeId
-     * @return \Mageplaza\Blog\Model\ResourceModel\Author\Collection|\Mageplaza\Blog\Model\ResourceModel\Category\Collection|\Mageplaza\Blog\Model\ResourceModel\Post\Collection|\Mageplaza\Blog\Model\ResourceModel\Tag\Collection|\Mageplaza\Blog\Model\ResourceModel\Topic\Collection
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     *
+     * @return AuthorCollection|CategoryCollection|PostCollection|TagCollection|Collection
+     * @throws NoSuchEntityException
      */
     public function getObjectList($type = null, $storeId = null)
     {
-        /** @var \Mageplaza\Blog\Model\ResourceModel\Author\Collection|\Mageplaza\Blog\Model\ResourceModel\Category\Collection|\Mageplaza\Blog\Model\ResourceModel\Post\Collection|\Mageplaza\Blog\Model\ResourceModel\Tag\Collection|\Mageplaza\Blog\Model\ResourceModel\Topic\Collection $collection */
+        /** @var AuthorCollection|CategoryCollection|PostCollection|TagCollection|Collection $collection */
         $collection = $this->getFactoryByType($type)
             ->create()
             ->getCollection()
@@ -309,12 +329,13 @@ class Data extends CoreHelper
     /**
      * @param $collection
      * @param null $storeId
+     *
      * @return mixed
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function addStoreFilter($collection, $storeId = null)
     {
-        if (is_null($storeId)) {
+        if ($storeId === null) {
             $storeId = $this->storeManager->getStore()->getId();
         }
 
@@ -330,7 +351,7 @@ class Data extends CoreHelper
      * @param $post
      * @param bool $modify
      *
-     * @return \Mageplaza\Blog\Model\Author
+     * @return Author
      */
     public function getAuthorByPost($post, $modify = false)
     {
@@ -357,9 +378,9 @@ class Data extends CoreHelper
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url = $this->getUrl($this->getRoute($store) . '/' . $urlKey);
-        $url = explode('?', $url);
-        $url = $url[0];
+        $url    = $this->getUrl($this->getRoute($store) . '/' . $urlKey);
+        $url    = explode('?', $url);
+        $url    = $url[0];
 
         return rtrim($url, '/') . $this->getUrlSuffix();
     }
@@ -369,7 +390,7 @@ class Data extends CoreHelper
      * @param null $code
      * @param null $type
      *
-     * @return \Mageplaza\Blog\Model\Author|\Mageplaza\Blog\Model\Category|\Mageplaza\Blog\Model\Post|\Mageplaza\Blog\Model\Tag|\Mageplaza\Blog\Model\Topic
+     * @return Author|Category|Post|Tag|Topic
      */
     public function getObjectByParam($value, $code = null, $type = null)
     {
@@ -383,7 +404,7 @@ class Data extends CoreHelper
     /**
      * @param $type
      *
-     * @return \Mageplaza\Blog\Model\AuthorFactory|\Mageplaza\Blog\Model\CategoryFactory|\Mageplaza\Blog\Model\PostFactory|\Mageplaza\Blog\Model\TagFactory|\Mageplaza\Blog\Model\TopicFactory
+     * @return AuthorFactory|CategoryFactory|PostFactory|TagFactory|TopicFactory
      */
     public function getFactoryByType($type = null)
     {
@@ -415,7 +436,7 @@ class Data extends CoreHelper
      * @param $name
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function generateUrlKey($resource, $object, $name)
     {
@@ -427,7 +448,7 @@ class Data extends CoreHelper
 
             $urlKey = $this->translitUrl->filter($name);
             if ($urlKey) {
-                $urlKey = $urlKey . ($attempt ?: '');
+                $urlKey .= ($attempt ?: '');
             }
         } while ($this->checkUrlKey($resource, $object, $urlKey));
 
@@ -448,7 +469,7 @@ class Data extends CoreHelper
         }
 
         $adapter = $resource->getConnection();
-        $select = $adapter->select()
+        $select  = $adapter->select()
             ->from($resource->getMainTable(), '*')
             ->where('url_key = :url_key');
 
@@ -459,9 +480,7 @@ class Data extends CoreHelper
             $binds['object_id'] = (int)$id;
         }
 
-        $result = $adapter->fetchOne($select, $binds);
-
-        return $result;
+        return $adapter->fetchOne($select, $binds);
     }
 
     /**
@@ -471,16 +490,16 @@ class Data extends CoreHelper
      * @param bool $monthly
      *
      * @return false|string
+     * @throws Exception
      */
     public function getDateFormat($date, $monthly = false)
     {
-        $dateTime = (new \DateTime($date, new \DateTimeZone('UTC')));
-        $dateTime->setTimezone(new \DateTimeZone($this->getTimezone()));
+        $dateTime = new \DateTime($date, new DateTimeZone('UTC'));
+        $dateTime->setTimezone(new DateTimeZone($this->getTimezone()));
 
         $dateType = $this->getBlogConfig($monthly ? 'monthly_archive/date_type_monthly' : 'general/date_type');
-        $dateFormat = $dateTime->format($dateType);
 
-        return $dateFormat;
+        return $dateTime->format($dateType);
     }
 
     /**
@@ -507,13 +526,13 @@ class Data extends CoreHelper
      * @param $object
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
-    public function checkStore($object){
-        $storeEnable= explode(',',$object->getStoreIds());
-        if ($object->getStoreIds() != 0 && !in_array($this->storeManager->getStore()->getId(),$storeEnable)) {
-            return false;
-        }
-        return true;
+    public function checkStore($object)
+    {
+        $storeEnable = explode(',', $object->getStoreIds());
+
+        return !($object->getStoreIds() != 0
+            && !in_array((string) $this->storeManager->getStore()->getId(), $storeEnable, true));
     }
 }

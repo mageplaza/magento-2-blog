@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Mageplaza\Blog\Helper\Data;
@@ -33,7 +35,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 class Author extends AbstractDb
 {
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @var Data
      */
     public $helperData;
 
@@ -50,8 +52,9 @@ class Author extends AbstractDb
     /**
      * Author constructor.
      *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Mageplaza\Blog\Helper\Data $helperData
+     * @param Context $context
+     * @param Data $helperData
+     * @param DateTime $dateTime
      */
     public function __construct(
         Context $context,
@@ -60,6 +63,7 @@ class Author extends AbstractDb
     ) {
         $this->helperData = $helperData;
         $this->dateTime = $dateTime;
+
         parent::__construct($context);
     }
 
@@ -73,8 +77,9 @@ class Author extends AbstractDb
 
     /**
      * @inheritdoc
+     * @throws LocalizedException
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         $object->setUrlKey(
             $this->helperData->generateUrlKey($this, $object, $object->getUrlKey() ?: $object->getName())

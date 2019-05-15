@@ -21,12 +21,15 @@
 
 namespace Mageplaza\Blog\Block\Post\Rss;
 
-use function Couchbase\zlibDecompress;
 use Magento\Framework\App\Rss\DataProviderInterface;
 use Magento\Framework\App\Rss\UrlBuilderInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\Post;
 
 /**
  * Class NewProducts
@@ -35,26 +38,26 @@ use Mageplaza\Blog\Helper\Data;
 class Lists extends AbstractBlock implements DataProviderInterface
 {
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface
+     * @var UrlBuilderInterface
      */
     public $rssUrlBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     public $storeManager;
 
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @var Data
      */
     public $helper;
 
     /**
      * Lists constructor.
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Mageplaza\Blog\Helper\Data $helper
-     * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
+     * @param Context $context
+     * @param Data $helper
+     * @param UrlBuilderInterface $rssUrlBuilder
      * @param array $data
      */
     public function __construct(
@@ -71,7 +74,7 @@ class Lists extends AbstractBlock implements DataProviderInterface
     }
 
     /**
-     * @return void
+     * @throws NoSuchEntityException
      */
     protected function _construct()
     {
@@ -95,7 +98,7 @@ class Lists extends AbstractBlock implements DataProviderInterface
     {
         $storeModel = $this->storeManager->getStore($this->getStoreId());
         $title      = __('List Posts from %1', $storeModel->getFrontendName())->render();
-        $storeUrl= $this->storeManager->getStore($this->getStoreId())->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB);
+        $storeUrl   = $this->storeManager->getStore($this->getStoreId())->getBaseUrl(UrlInterface::URL_TYPE_WEB);
         $data       = [
             'title'       => $title,
             'description' => $title,
@@ -106,19 +109,19 @@ class Lists extends AbstractBlock implements DataProviderInterface
 
         $posts = $this->helper->getPostList($this->getStoreId())
             ->addFieldToFilter('in_rss', 1)
-            ->setOrder('post_id', 'DESC');
-        $posts->getSelect()
+            ->setOrder('post_id', 'DESC')
+            ->getSelect()
             ->limit(10);
+        /** @var Post $item */
         foreach ($posts as $item) {
             $item->setAllowedInRss(true);
             $item->setAllowedPriceInRss(true);
 
-//            $description = '<table><tr><td style="text-decoration:none;"> ' . $item->getShortDescription() . '</td></tr></table>';
             $description = $item->getShortDescription();
             $data['entries'][] = [
                 'title'       => $item->getName(),
                 'link'        => $item->getUrl(),
-                'description' => $description?:'no content',
+                'description' => $description ?: 'no content',
                 'lastUpdate'  => strtotime($item->getPublishDate())
             ];
         }
@@ -128,15 +131,16 @@ class Lists extends AbstractBlock implements DataProviderInterface
 
     /**
      * @return int
+     * @throws NoSuchEntityException
      */
     public function getStoreId()
     {
-        $storeId = (int)$this->getRequest()->getParam('store_id');
-        if ($storeId == null) {
+        $storeId = $this->getRequest()->getParam('store_id');
+        if ($storeId === null) {
             $storeId = $this->storeManager->getStore()->getId();
         }
 
-        return $storeId;
+        return (int) $storeId;
     }
 
     /**

@@ -21,6 +21,9 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
 
+use DateTimeZone;
+use IntlDateFormatter;
+use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
@@ -30,10 +33,15 @@ use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Config\Model\Config\Source\Design\Robots;
 use Magento\Config\Model\Config\Source\Enabledisable;
 use Magento\Config\Model\Config\Source\Yesno;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Store\Model\System\Store;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic;
 use Mageplaza\Blog\Helper\Image;
 
 /**
@@ -45,39 +53,39 @@ class Post extends Generic implements TabInterface
     /**
      * Wysiwyg config
      *
-     * @var \Magento\Cms\Model\Wysiwyg\Config
+     * @var Config
      */
     public $wysiwygConfig;
 
     /**
      * Country options
      *
-     * @var \Magento\Config\Model\Config\Source\Yesno
+     * @var Yesno
      */
     public $booleanOptions;
 
     /**
-     * @var \Magento\Config\Model\Config\Source\Design\Robots
+     * @var Robots
      */
     public $metaRobotsOptions;
 
     /**
-     * @var \Magento\Store\Model\System\Store
+     * @var Store
      */
     public $systemStore;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
     protected $authSession;
 
     /**
-     * @var \Mageplaza\Blog\Helper\Image
+     * @var Image
      */
     protected $imageHelper;
 
     /**
-     * @var \Magento\Config\Model\Config\Source\Enabledisable
+     * @var Enabledisable
      */
     protected $enabledisable;
 
@@ -123,28 +131,29 @@ class Post extends Generic implements TabInterface
         Image $imageHelper,
         array $data = []
     ) {
-        $this->wysiwygConfig = $wysiwygConfig;
-        $this->booleanOptions = $booleanOptions;
-        $this->enabledisable = $enableDisable;
+        $this->wysiwygConfig     = $wysiwygConfig;
+        $this->booleanOptions    = $booleanOptions;
+        $this->enabledisable     = $enableDisable;
         $this->metaRobotsOptions = $metaRobotsOptions;
-        $this->systemStore = $systemStore;
-        $this->authSession = $authSession;
-        $this->_date = $dateTime;
-        $this->_layoutOptions = $layoutOption;
-        $this->imageHelper = $imageHelper;
+        $this->systemStore       = $systemStore;
+        $this->authSession       = $authSession;
+        $this->_date             = $dateTime;
+        $this->_layoutOptions    = $layoutOption;
+        $this->imageHelper       = $imageHelper;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
      * @inheritdoc
+     * @throws \Exception
      */
     protected function _prepareForm()
     {
         /** @var \Mageplaza\Blog\Model\Post $post */
         $post = $this->_coreRegistry->registry('mageplaza_blog_post');
 
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var Form $form */
         $form = $this->_formFactory->create();
 
         $form->setHtmlIdPrefix('post_');
@@ -182,12 +191,21 @@ class Post extends Generic implements TabInterface
             'name'   => 'post_content',
             'label'  => __('Content'),
             'title'  => __('Content'),
-            'config' => $this->wysiwygConfig->getConfig(['add_variables' => false, 'add_widgets' => true, 'add_directives' => true])
+            'config' => $this->wysiwygConfig->getConfig([
+                'add_variables'  => false,
+                'add_widgets'    => true,
+                'add_directives' => true
+            ])
         ]);
 
-        if (!$this->_storeManager->isSingleStoreMode()) {
-            /** @var \Magento\Framework\Data\Form\Element\Renderer\RendererInterface $rendererBlock */
-            $rendererBlock = $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element');
+        if ($this->_storeManager->isSingleStoreMode()) {
+            $fieldset->addField('store_ids', 'hidden', [
+                'name'  => 'store_ids',
+                'value' => $this->_storeManager->getStore()->getId()
+            ]);
+        } else {
+            /** @var RendererInterface $rendererBlock */
+            $rendererBlock = $this->getLayout()->createBlock(Element::class);
             $fieldset->addField('store_ids', 'multiselect', [
                 'name'   => 'store_ids',
                 'label'  => __('Store Views'),
@@ -198,11 +216,6 @@ class Post extends Generic implements TabInterface
             if (!$post->hasData('store_ids')) {
                 $post->setStoreIds(0);
             }
-        } else {
-            $fieldset->addField('store_ids', 'hidden', [
-                'name'  => 'store_ids',
-                'value' => $this->_storeManager->getStore()->getId()
-            ]);
         }
 
         $fieldset->addField('image', \Mageplaza\Blog\Block\Adminhtml\Renderer\Image::class, [
@@ -211,7 +224,7 @@ class Post extends Generic implements TabInterface
             'title' => __('Image'),
             'path'  => $this->imageHelper->getBaseMediaPath(Image::TEMPLATE_MEDIA_TYPE_POST)
         ]);
-        $fieldset->addField('categories_ids', '\Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category', [
+        $fieldset->addField('categories_ids', Category::class, [
             'name'  => 'categories_ids',
             'label' => __('Categories'),
             'title' => __('Categories'),
@@ -220,7 +233,7 @@ class Post extends Generic implements TabInterface
             $post->setCategoriesIds($post->getCategoryIds());
         }
 
-        $fieldset->addField('topics_ids', '\Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic', [
+        $fieldset->addField('topics_ids', Topic::class, [
             'name'  => 'topics_ids',
             'label' => __('Topics'),
             'title' => __('Topics'),
@@ -229,7 +242,7 @@ class Post extends Generic implements TabInterface
             $post->setTopicsIds($post->getTopicIds());
         }
 
-        $fieldset->addField('tags_ids', '\Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag', [
+        $fieldset->addField('tags_ids', Tag::class, [
             'name'  => 'tags_ids',
             'label' => __('Tags'),
             'title' => __('Tags'),
@@ -251,24 +264,24 @@ class Post extends Generic implements TabInterface
             'values' => $this->booleanOptions->toOptionArray(),
         ]);
         $fieldset->addField('publish_date', 'date', [
-                'name'        => 'publish_date',
-                'label'       => __('Publish Date'),
-                'title'       => __('Publish Date'),
-                'date_format' => 'M/d/yyyy',
-                'timezone'    => false,
-                'value'       => $this->_date->date('m/d/Y')
-            ]);
+            'name'        => 'publish_date',
+            'label'       => __('Publish Date'),
+            'title'       => __('Publish Date'),
+            'date_format' => 'M/d/yyyy',
+            'timezone'    => false,
+            'value'       => $this->_date->date('m/d/Y')
+        ]);
 
         /** get current time for public_time field */
-        $currentTime = new \DateTime($this->_date->date(), new \DateTimeZone('UTC'));
-        $currentTime->setTimezone(new \DateTimeZone($this->_localeDate->getConfigTimezone()));
+        $currentTime = new \DateTime($this->_date->date(), new DateTimeZone('UTC'));
+        $currentTime->setTimezone(new DateTimeZone($this->_localeDate->getConfigTimezone()));
         $time = $currentTime->format('H,i,s');
 
         $fieldset->addField('publish_time', 'time', [
             'name'     => 'publish_time',
             'label'    => __('Publish Time'),
             'title'    => __('Publish Time'),
-            'format'   => $this->_localeDate->getTimeFormat(\IntlDateFormatter::SHORT),
+            'format'   => $this->_localeDate->getTimeFormat(IntlDateFormatter::SHORT),
             'timezone' => false,
             'value'    => $time
         ]);
@@ -328,11 +341,10 @@ class Post extends Generic implements TabInterface
 
         /** Get the public_date from database */
         if ($post->getData('publish_date')) {
-            $publicDateTime = new \DateTime($post->getData('publish_date'), new \DateTimeZone('UTC'));
-            $publicDateTime->setTimezone(new \DateTimeZone($this->_localeDate->getConfigTimezone()));
+            $publicDateTime = new \DateTime($post->getData('publish_date'), new DateTimeZone('UTC'));
+            $publicDateTime->setTimezone(new DateTimeZone($this->_localeDate->getConfigTimezone()));
             $publicDateTime = $publicDateTime->format('m/d/Y H:i:s');
-            $date = explode(' ', $publicDateTime)[0];
-            $time = explode(' ', $publicDateTime)[1];
+            list($date, $time) = explode(' ', $publicDateTime);
             $time = str_replace(':', ',', $time);
             $post->setData('publish_date', $date);
             $post->setData('publish_time', $time);

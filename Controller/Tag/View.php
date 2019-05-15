@@ -23,7 +23,11 @@ namespace Mageplaza\Blog\Controller\Tag;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Helper\Data as HelperBlog;
 
@@ -34,17 +38,17 @@ use Mageplaza\Blog\Helper\Data as HelperBlog;
 class View extends Action
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     public $resultPageFactory;
 
     /**
-     * @type \Magento\Framework\Controller\Result\ForwardFactory
+     * @type ForwardFactory
      */
     protected $resultForwardFactory;
 
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @var HelperBlog
      */
     public $helperBlog;
 
@@ -70,20 +74,21 @@ class View extends Action
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page
+     * @return ResponseInterface|ResultInterface|Page
+     * @throws NoSuchEntityException
      */
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
         $tag = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_TAG)->create()->load($id);
 
-        if (!$this->helperBlog->checkStore($tag)){
+        if (!$this->helperBlog->checkStore($tag)) {
             return $this->_redirect('noroute');
         }
 
         $page = $this->resultPageFactory->create();
         $page->getConfig()->setPageLayout($this->helperBlog->getSidebarLayout());
 
-        return ($tag->getEnabled()) ? $page : $this->_redirect('noroute');;
+        return $tag->getEnabled() ? $page : $this->_redirect('noroute');
     }
 }

@@ -27,10 +27,10 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\System\Store;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
 use Mageplaza\Blog\Model\PostFactory;
-use Magento\Store\Model\StoreRepository;
 
 /**
  * Class Comment
@@ -39,32 +39,33 @@ use Magento\Store\Model\StoreRepository;
 class Comment extends Generic implements TabInterface
 {
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @var CustomerRepositoryInterface
      */
     protected $_customerRepository;
 
     /**
-     * @var \Mageplaza\Blog\Model\PostFactory
+     * @var PostFactory
      */
     protected $_postFactory;
 
     /**
-     * @var \Mageplaza\Blog\Model\Config\Source\Comments\Status
+     * @var Status
      */
     protected $_commentStatus;
 
     /**
-     * @var \Magento\Store\Model\System\Store
+     * @var Store
      */
-    public $systemStore;
+    protected $systemStore;
 
     /**
-     * @var StoreRepository
+     * @var StoreManagerInterface
      */
-    public $storeRepository;
+    protected $storeManager;
 
     /**
      * Comment constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param FormFactory $formFactory
@@ -72,7 +73,7 @@ class Comment extends Generic implements TabInterface
      * @param PostFactory $postFactory
      * @param Status $commentStatus
      * @param Store $systemStore
-     * @param StoreRepository $storeRepository
+     * @param StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -83,14 +84,14 @@ class Comment extends Generic implements TabInterface
         PostFactory $postFactory,
         Status $commentStatus,
         Store $systemStore,
-        StoreRepository $storeRepository,
+        StoreManagerInterface $storeManager,
         array $data = []
     ) {
-        $this->_commentStatus = $commentStatus;
+        $this->_commentStatus      = $commentStatus;
         $this->_customerRepository = $customerRepository;
-        $this->_postFactory = $postFactory;
-        $this->systemStore = $systemStore;
-        $this->storeRepository = $storeRepository;
+        $this->_postFactory        = $postFactory;
+        $this->systemStore         = $systemStore;
+        $this->storeManager        = $storeManager;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -116,13 +117,18 @@ class Comment extends Generic implements TabInterface
             $fieldset->addField('comment_id', 'hidden', ['name' => 'comment_id']);
         }
 
-        $post = $this->_postFactory->create()->load($comment->getPostId());
-        $postText = '<a href="' . $this->getUrl('mageplaza_blog/post/edit', ['id' => $comment->getPostId()]) . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($post->getName()) . '</a>';
+        $post     = $this->_postFactory->create()->load($comment->getPostId());
+        $postText = '<a href="' . $this->getUrl('mageplaza_blog/post/edit', ['id' => $comment->getPostId()])
+            . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($post->getName()) . '</a>';
         $fieldset->addField('post_name', 'note', ['text' => $postText, 'label' => __('Post'), 'name' => 'post_name']);
 
         if ($comment->getEntityId() > 0) {
-            $customer = $this->_customerRepository->getById($comment->getEntityId());
-            $customerText = '<a href="' . $this->getUrl('customer/index/edit', ['id' => $customer->getId(), 'active_tab' => 'review']) . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($customer->getFirstname() . ' ' . $customer->getLastname()) . '</a> <a href="mailto:%4">(' . $customer->getEmail() . ')</a>';
+            $customer     = $this->_customerRepository->getById($comment->getEntityId());
+            $customerText = '<a href="'
+                . $this->getUrl('customer/index/edit', ['id' => $customer->getId(), 'active_tab' => 'review'])
+                . '" onclick="this.target=\'blank\'">'
+                . $this->escapeHtml($customer->getFirstname() . ' ' . $customer->getLastname())
+                . '</a> <a href="mailto:%4">(' . $customer->getEmail() . ')</a>';
         } else {
             $customerText = 'Guest';
         }
@@ -142,11 +148,12 @@ class Comment extends Generic implements TabInterface
             'style'    => 'height:24em;'
         ]);
         $viewText= '';
-        foreach ($this->storeRepository->getList() as $store){
-            if ($store["store_id"]==='0'){
+        foreach ($this->storeManager->getStores() as $store) {
+            if ($store->getId() === 0) {
                 continue;
             }
-            $viewText.= '<a href="' . $post->getUrl($store["store_id"]) . '#cmt-id-' . $comment->getId() . '" onclick="this.target=\'blank\'">View in store '.$store["name"].'</a><br>';
+            $viewText .= '<a href="' . $post->getUrl($store->getId()) . '#cmt-id-' . $comment->getId()
+                . '" onclick="this.target=\'blank\'">View in store ' . $store->getName() . '</a><br>';
         }
 
         $fieldset->addField('view_front', 'note', ['text' => $viewText, 'label' => __('View On Front End'), 'name' => 'view_front']);

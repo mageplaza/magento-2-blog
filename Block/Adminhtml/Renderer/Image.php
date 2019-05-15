@@ -30,21 +30,25 @@ namespace Mageplaza\Blog\Block\Adminhtml\Renderer;
  */
 class Image extends \Mageplaza\Core\Block\Adminhtml\Renderer\Image
 {
-    protected function _getDeleteCheckbox(){
+    /**
+     * @return string
+     */
+    protected function _getDeleteCheckbox()
+    {
         $html = '';
         if ($this->getValue()) {
-            $label = (string)new \Magento\Framework\Phrase('Delete Image');
-            $html .= '<span class="delete-image">';
-            $html .= '<input style="margin: auto;" type="checkbox"' .
+            $label = __('Delete Image');
+            $html  .= '<span class="delete-image">';
+            $html  .= '<input style="margin: auto;" type="checkbox"' .
                 ' name="' .
-                parent::getName() .
+                $this->getName() .
                 '[delete]" value="1" class="checkbox"' .
                 ' id="' .
                 $this->getHtmlId() .
                 '_delete"' .
                 ($this->getDisabled() ? ' disabled="disabled"' : '') .
                 '/>';
-            $html .= '<label for="' .
+            $html  .= '<label for="' .
                 $this->getHtmlId() .
                 '_delete"' .
                 ($this->getDisabled() ? ' class="disabled"' : '') .
