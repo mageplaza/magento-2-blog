@@ -272,10 +272,10 @@ $color = $helper->getBlogConfig('general/font_color');
                         isLogged = '<?php echo $isLogged ?>',
                         likedColor = '<?php echo $color;?>',
                         messengerBox = {
-                            cmt_warning: '<?php echo $block->getMessagesHtml('adderror', 'Please write the comment.')?>',
-                            exist_email_warning: '<?php echo $block->getMessagesHtml('adderror', 'This email is exist. Please <a href="' . $block->getLoginUrl() . '"> Login </a> as our customer.')?>',
-                            login_warning: '<?php echo $block->getMessagesHtml('adderror', 'You are not logged in. Please <a href="' . $block->getLoginUrl() . '"> Login </a> or <a href="' . $block->getRegisterUrl() . '"> Signup </a> to like or send a reply.</div>')?>',
-                            comment_approve: '<?php echo $block->getMessagesHtml('addsuccess', 'Your comment has been sent successfully. Please wait admin approve !')?>'
+                            cmt_warning: '<?php echo $block->getMessagesHtml('adderror', 'Please write the comment.') ?>',
+                            exist_email_warning: '<?php echo sprintf($block->getMessagesHtml('adderror', 'This email is exist. Please <a href="%s"> Login </a> as our customer.'),$block->getLoginUrl()) ?>',
+                            login_warning: '<?php echo sprintf($block->getMessagesHtml('adderror', 'You are not logged in. Please <a href="%s"> Login </a> or <a href="%s"> Signup </a> to like or send a reply.</div>'),$block->getLoginUrl(),$block->getRegisterUrl()) ?>',
+                            comment_approve: '<?php echo $block->getMessagesHtml('addsuccess', 'Your comment has been sent successfully. Please wait admin approve !') ?>'
                         };
 
                     require(['comment']);
