@@ -200,8 +200,8 @@ class View extends Action
             if (isset($params['cmt_text'])) {
                 $cmt_text   = $params['cmt_text'];
                 $content    = htmlentities($cmt_text, ENT_COMPAT, 'UTF-8') . "<br />";
-                $htmlentity = htmlentities($content, ENT_COMPAT, 'UTF-8');
-                $content    = html_entity_decode($htmlentity);
+                $htmlEntity = htmlentities($content, ENT_COMPAT, 'UTF-8');
+                $content    = html_entity_decode($htmlEntity);
 
                 $cmtText = $content;
                 $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
