@@ -77,8 +77,8 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
             $category = $this->getBlogObject();
             if ($category) {
                 $breadcrumbs->addCrumb($category->getUrlKey(), [
-                    'label' => __('Category'),
-                    'title' => __('Category')
+                    'label' => $this->getBlogTitle(),
+                    'title' => $this->getBlogTitle()
                 ]);
             }
         }
