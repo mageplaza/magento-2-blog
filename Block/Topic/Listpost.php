@@ -78,8 +78,8 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
             $topic = $this->getBlogObject();
             if ($topic) {
                 $breadcrumbs->addCrumb($topic->getUrlKey(), [
-                    'label' => __('Topic'),
-                    'title' => __('Topic')
+                    'label' => $this->getBlogTitle(),
+                    'title' => $this->getBlogTitle()
                 ]);
             }
         }
