@@ -532,7 +532,7 @@ class Data extends CoreHelper
     {
         $storeEnable = explode(',', $object->getStoreIds());
 
-        return !($object->getStoreIds() != 0
-            && !in_array((string) $this->storeManager->getStore()->getId(), $storeEnable, true));
+        return in_array('0',$storeEnable,true)
+            || in_array((string) $this->storeManager->getStore()->getId(), $storeEnable, true);
     }
 }
