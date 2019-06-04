@@ -73,7 +73,6 @@ class Comment extends Generic implements TabInterface
      * @param PostFactory $postFactory
      * @param Status $commentStatus
      * @param Store $systemStore
-     * @param StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -84,14 +83,13 @@ class Comment extends Generic implements TabInterface
         PostFactory $postFactory,
         Status $commentStatus,
         Store $systemStore,
-        StoreManagerInterface $storeManager,
         array $data = []
     ) {
         $this->_commentStatus      = $commentStatus;
         $this->_customerRepository = $customerRepository;
         $this->_postFactory        = $postFactory;
         $this->systemStore         = $systemStore;
-        $this->storeManager        = $storeManager;
+        $this->storeManager        = $context->getStoreManager();
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
