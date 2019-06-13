@@ -23,7 +23,10 @@ namespace Mageplaza\Blog\Controller\Topic;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Helper\Data as HelperBlog;
 
@@ -34,17 +37,17 @@ use Mageplaza\Blog\Helper\Data as HelperBlog;
 class View extends Action
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     public $resultPageFactory;
 
     /**
-     * @type \Magento\Framework\Controller\Result\ForwardFactory
+     * @type ForwardFactory
      */
     protected $resultForwardFactory;
 
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @var HelperBlog
      */
     public $helperBlog;
 
@@ -70,7 +73,7 @@ class View extends Action
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page
+     * @return ResponseInterface|ResultInterface|Page
      */
     public function execute()
     {
@@ -79,6 +82,6 @@ class View extends Action
         $page = $this->resultPageFactory->create();
         $page->getConfig()->setPageLayout($this->helperBlog->getSidebarLayout());
 
-        return ($topic->getEnabled()) ? $page : $this->resultForwardFactory->create()->forward('noroute');
+        return $topic->getEnabled() ? $page : $this->_redirect('noroute');
     }
 }

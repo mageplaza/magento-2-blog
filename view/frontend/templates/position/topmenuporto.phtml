@@ -22,8 +22,8 @@
 $helper = $this->helper('Mageplaza\Blog\Helper\Data');
 if ($helper->isEnabled() && $helper->getBlogConfig('general/toplinks')) : ?>
     <li class="ui-menu-item level0 fullwidth">
-        <a href="<?php echo $helper->getBlogUrl('') ?>" class="level-top">
-            <span><?php echo $helper->getBlogConfig('general/name') ?: __('Blog') ?></span>
+        <a href="<?= $helper->getBlogUrl('') ?>" class="level-top">
+            <span><?= $helper->getBlogConfig('general/name') ?: __('Blog') ?></span>
         </a>
     </li>
 <?php endif; ?>

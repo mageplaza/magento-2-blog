@@ -112,7 +112,7 @@ class Save extends Topic
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             }
 
-            $hasError = (bool)$this->messageManager->getMessages()->getCountByType(
+            $hasError = (bool) $this->messageManager->getMessages()->getCountByType(
                 MessageInterface::TYPE_ERROR
             );
 

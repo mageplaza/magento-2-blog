@@ -40,7 +40,7 @@ class Listpost extends Frontend
         if ($collection && $collection->getSize()) {
             $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'mpblog.post.pager');
 
-            $perPageValues = (string)$this->helperData->getConfigGeneral('pagination');
+            $perPageValues = (string) $this->helperData->getConfigGeneral('pagination');
             ;
             $perPageValues = explode(',', $perPageValues);
             $perPageValues = array_combine($perPageValues, $perPageValues);
@@ -159,7 +159,11 @@ class Listpost extends Frontend
         $this->pageConfig->setRobots($robots);
 
         if ($this->getRequest()->getFullActionName() == 'mpblog_post_view') {
-            $this->pageConfig->addRemotePageAsset($object->getUrl(), 'canonical', ['attributes' => ['rel' => 'canonical']]);
+            $this->pageConfig->addRemotePageAsset(
+                $object->getUrl(),
+                'canonical',
+                ['attributes' => ['rel' => 'canonical']]
+            );
         }
         $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle) {
@@ -176,7 +180,7 @@ class Listpost extends Frontend
      */
     public function getTitleSeparator()
     {
-        $separator = (string)$this->helperData->getConfigValue('catalog/seo/title_separator');
+        $separator = (string) $this->helperData->getConfigValue('catalog/seo/title_separator');
 
         return ' ' . $separator . ' ';
     }

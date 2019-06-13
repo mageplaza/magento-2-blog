@@ -28,7 +28,6 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Model\ResourceModel\Category;
-use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory;
 
 /**
  * Class Tree
@@ -432,7 +431,7 @@ class Tree extends Dbp
             $ids = [$ids];
         }
         foreach ($ids as $key => $id) {
-            $ids[$key] = (int)$id;
+            $ids[$key] = (int) $id;
         }
 
         // collect paths of specified IDs and prepare to collect all their parents and neighbours
@@ -444,7 +443,7 @@ class Tree extends Dbp
 
         foreach ($this->_conn->fetchAll($select) as $item) {
             $pathIds = explode('/', $item['path']);
-            $level = (int)$item['level'];
+            $level = (int) $item['level'];
             while ($level > 0) {
                 $lastId = end($pathIds);
                 $lastIndex = key($lastId);

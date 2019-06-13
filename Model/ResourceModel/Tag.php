@@ -106,7 +106,7 @@ class Tag extends AbstractDb
         $select = $adapter->select()
             ->from($this->getMainTable(), 'name')
             ->where('tag_id = :tag_id');
-        $binds = ['tag_id' => (int)$id];
+        $binds = ['tag_id' => (int) $id];
 
         return $adapter->fetchOne($select, $binds);
     }
@@ -153,7 +153,7 @@ class Tag extends AbstractDb
             ->from($this->tagPostTable, ['post_id', 'position'])
             ->where('tag_id = :tag_id');
 
-        $bind = ['tag_id' => (int)$tag->getId()];
+        $bind = ['tag_id' => (int) $tag->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);
     }
@@ -184,7 +184,7 @@ class Tag extends AbstractDb
         $adapter = $this->getConnection();
         if ($posts === null) {
             foreach (array_keys($oldPosts) as $value) {
-                $condition = ['post_id =?' => (int)$value, 'tag_id=?' => (int)$id];
+                $condition = ['post_id =?' => (int) $value, 'tag_id=?' => (int) $id];
                 $adapter->delete($this->tagPostTable, $condition);
             }
 
@@ -192,7 +192,7 @@ class Tag extends AbstractDb
         }
         if (!empty($delete)) {
             foreach (array_keys($delete) as $value) {
-                $condition = ['post_id =?' => (int)$value, 'tag_id=?' => (int)$id];
+                $condition = ['post_id =?' => (int) $value, 'tag_id=?' => (int) $id];
                 $adapter->delete($this->tagPostTable, $condition);
             }
         }
@@ -200,17 +200,17 @@ class Tag extends AbstractDb
             $data = [];
             foreach ($insert as $postId => $position) {
                 $data[] = [
-                    'tag_id'   => (int)$id,
-                    'post_id'  => (int)$postId,
-                    'position' => (int)$position['position']
+                    'tag_id'   => (int) $id,
+                    'post_id'  => (int) $postId,
+                    'position' => (int) $position['position']
                 ];
             }
             $adapter->insertMultiple($this->tagPostTable, $data);
         }
         if (!empty($update)) {
             foreach ($update as $postId => $position) {
-                $where = ['tag_id = ?' => (int)$id, 'post_id = ?' => (int)$postId];
-                $bind = ['position' => (int)$position['position']];
+                $where = ['tag_id = ?' => (int) $id, 'post_id = ?' => (int) $postId];
+                $bind = ['position' => (int) $position['position']];
                 $adapter->update($this->tagPostTable, $bind, $where);
             }
         }

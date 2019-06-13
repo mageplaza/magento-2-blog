@@ -107,7 +107,7 @@ class Topic extends AbstractDb
         $select = $adapter->select()
             ->from($this->getMainTable(), 'name')
             ->where('topic_id = :topic_id');
-        $binds = ['topic_id' => (int)$id];
+        $binds = ['topic_id' => (int) $id];
 
         return $adapter->fetchOne($select, $binds);
     }
@@ -161,7 +161,7 @@ class Topic extends AbstractDb
             ->where(
                 'topic_id = :topic_id'
             );
-        $bind = ['topic_id' => (int)$topic->getId()];
+        $bind = ['topic_id' => (int) $topic->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);
     }
@@ -192,7 +192,7 @@ class Topic extends AbstractDb
         $adapter = $this->getConnection();
         if ($posts === null) {
             foreach (array_keys($oldPosts) as $value) {
-                $condition = ['post_id =?' => (int)$value, 'topic_id=?' => (int)$id];
+                $condition = ['post_id =?' => (int) $value, 'topic_id=?' => (int) $id];
                 $adapter->delete($this->topicPostTable, $condition);
             }
 
@@ -200,7 +200,7 @@ class Topic extends AbstractDb
         }
         if (!empty($delete)) {
             foreach (array_keys($delete) as $value) {
-                $condition = ['post_id =?' => (int)$value, 'topic_id=?' => (int)$id];
+                $condition = ['post_id =?' => (int) $value, 'topic_id=?' => (int) $id];
                 $adapter->delete($this->topicPostTable, $condition);
             }
         }
@@ -208,17 +208,17 @@ class Topic extends AbstractDb
             $data = [];
             foreach ($insert as $postId => $position) {
                 $data[] = [
-                    'topic_id' => (int)$id,
-                    'post_id'  => (int)$postId,
-                    'position' => (int)$position['position']
+                    'topic_id' => (int) $id,
+                    'post_id'  => (int) $postId,
+                    'position' => (int) $position['position']
                 ];
             }
             $adapter->insertMultiple($this->topicPostTable, $data);
         }
         if (!empty($update)) {
             foreach ($update as $postId => $position) {
-                $where = ['topic_id = ?' => (int)$id, 'post_id = ?' => (int)$postId];
-                $bind = ['position' => (int)$position['position']];
+                $where = ['topic_id = ?' => (int) $id, 'post_id = ?' => (int) $postId];
+                $bind = ['position' => (int) $position['position']];
                 $adapter->update($this->topicPostTable, $bind, $where);
             }
         }

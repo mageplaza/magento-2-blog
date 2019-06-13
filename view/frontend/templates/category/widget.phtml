@@ -25,10 +25,10 @@ if ($tree) :
     <div class="mp-sidebar mpcss">
         <div class="row">
             <div class="block-title col-xs-12 sidebar-categories">
-                <p class="block-mp-sidebar-heading" role="heading" aria-label="2"><?php echo __('Categories') ?></p>
+                <p class="block-mp-sidebar-heading" role="heading" aria-label="2"><?= __('Categories') ?></p>
             </div>
             <div class="col-xs-12">
-                <?php echo $block->getCategoryTreeHtml($tree) ?>
+                <?= $block->getCategoryTreeHtml($tree) ?>
             </div>
         </div>
     </div>

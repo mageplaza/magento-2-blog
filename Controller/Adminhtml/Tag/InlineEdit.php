@@ -79,7 +79,7 @@ class InlineEdit extends Action
         }
 
         $key = array_keys($postItems);
-        $tagId = !empty($key) ? (int)$key[0] : '';
+        $tagId = !empty($key) ? (int) $key[0] : '';
         /** @var \Mageplaza\Blog\Model\Tag $tag */
         $tag = $this->tagFactory->create()->load($tagId);
         try {

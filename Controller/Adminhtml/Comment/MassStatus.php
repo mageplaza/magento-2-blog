@@ -74,7 +74,7 @@ class MassStatus extends Action
     public function execute()
     {
         $commentUpdated = 0;
-        $status = (int)$this->getRequest()->getParam('status');
+        $status = (int) $this->getRequest()->getParam('status');
         $collection = $this->filter->getCollection($this->collectionFactory->create());
 
         foreach ($collection as $comment) {

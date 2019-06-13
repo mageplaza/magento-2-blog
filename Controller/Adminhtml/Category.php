@@ -76,9 +76,9 @@ abstract class Category extends Action
     {
         $categoryId = null;
         if ($this->getRequest()->getParam('id')) {
-            $categoryId = (int)$this->getRequest()->getParam('id');
+            $categoryId = (int) $this->getRequest()->getParam('id');
         } elseif ($this->getRequest()->getParam('category_id')) {
-            $categoryId = (int)$this->getRequest()->getParam('category_id');
+            $categoryId = (int) $this->getRequest()->getParam('category_id');
         }
 
         /** @var \Mageplaza\Blog\Model\Post $post */

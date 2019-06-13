@@ -147,7 +147,6 @@
                         <comment><![CDATA[This feature is using Ajax Search technology, same as  
                         <a href="https://www.mageplaza.com/magento-2-search-extension/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">Mageplaza Search</a>.
                         ]]>
-
                         </comment>
                     </field>
                     <field id="search_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">

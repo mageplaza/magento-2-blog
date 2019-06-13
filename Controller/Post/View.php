@@ -21,15 +21,19 @@
 
 namespace Mageplaza\Blog\Controller\Post;
 
+use Exception;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Json\Helper\Data as JsonData;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Helper\Data;
@@ -50,37 +54,37 @@ class View extends Action
     const LIKE    = 2;
 
     /**
-     * @var \Mageplaza\Blog\Model\TrafficFactory
+     * @var TrafficFactory
      */
     protected $trafficFactory;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     protected $resultPageFactory;
 
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @var HelperBlog
      */
     protected $helperBlog;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface
+     * @var AccountManagementInterface
      */
     protected $accountManagement;
 
     /**
-     * @var \Magento\Customer\Model\Url
+     * @var CustomerUrl
      */
     protected $customerUrl;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $session;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
@@ -110,12 +114,12 @@ class View extends Action
     protected $timeZone;
 
     /**
-     * @type \Magento\Framework\Controller\Result\ForwardFactory
+     * @type ForwardFactory
      */
     protected $resultForwardFactory;
 
     /**
-     * @var \Mageplaza\Blog\Model\PostFactory
+     * @var PostFactory
      */
     protected $postFactory;
 
@@ -174,22 +178,20 @@ class View extends Action
     }
 
     /**
-     * @return $this|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page
-     * @throws \Exception
+     * @return $this|ResponseInterface|ResultInterface|Page
+     * @throws Exception
      */
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
         $post = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($id);
+
         $page = $this->resultPageFactory->create();
-        $pageLayout = ($post->getLayout() == 'empty') ? $this->helperBlog->getSidebarLayout() : $post->getLayout();
+        $pageLayout = ($post->getLayout() === 'empty') ? $this->helperBlog->getSidebarLayout() : $post->getLayout();
         $page->getConfig()->setPageLayout($pageLayout);
 
-        if ($post->getStoreIds() != $this->storeManager->getStore()->getId() && $post->getStoreIds() != 0) {
-            return $this->resultForwardFactory->create()->forward('noroute');
-        }
-        if (!$post->getEnabled()) {
-            return $this->resultForwardFactory->create()->forward('noroute');
+        if (!$post->getEnabled() || !$this->helperBlog->checkStore($post)) {
+            return $this->_redirect('noroute');
         }
 
         $trafficModel = $this->trafficFactory->create()->load($id, 'post_id');
@@ -203,64 +205,66 @@ class View extends Action
 
         if ($this->getRequest()->isAjax()) {
             $params = $this->getRequest()->getParams();
+            $customerData = $this->session->getCustomerData();
             $result = [];
-            if ($this->session->isLoggedIn()) {
-                $customerData = $this->session->getCustomerData();
-                $user = [
-                    "user_id"    => $customerData->getId(),
-                    "first_name" => $customerData->getFirstname(),
-                    "last_name"  => $customerData->getLastname()
-                ];
-            } else {
-                $user = [
-                    "user_id"    => 0,
-                    "first_name" => $params["guestName"],
-                    "last_name"  => "",
-                    "email"      => $params["guestEmail"]
-                ];
-                if (!$this->accountManagement->isEmailAvailable($user["email"], $this->storeManager->getWebsite()->getId())) {
-                    $result = ['status' => 'duplicated'];
-
-                    return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
-                }
-            }
             if (isset($params['cmt_text'])) {
-                $cmtText = $params['cmt_text'];
+                $cmt_text = $params['cmt_text'];
+                $content = htmlentities($cmt_text, ENT_COMPAT, 'UTF-8') . "<br />";
+                $htmlEntity = htmlentities($content, ENT_COMPAT, 'UTF-8');
+                $content = html_entity_decode($htmlEntity);
+
+                $cmtText = $content;
                 $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
                 $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
-                $commentData = [
-                    'post_id'    => $id, '',
-                    'entity_id'  => $user["user_id"],
-                    'is_reply'   => $isReply,
-                    'reply_id'   => $replyId,
-                    'content'    => $cmtText,
-                    'created_at' => $this->dateTime->date(),
-                    'status'     => $this->helperBlog->getBlogConfig('comment/need_approve') ? Status::PENDING : Status::APPROVED,
-                    'store_ids'  => $this->storeManager->getStore()->getId(),
-                ];
-                if ($user["user_id"] == '0') {
-                    $commentData['user_name'] = $user['first_name'];
-                    $commentData['user_email'] = $user['email'];
+                if ($this->session->isLoggedIn()) {
+                    $commentData = [
+                        'post_id'    => $id,
+                        '',
+                        'entity_id'  => $customerData->getId(),
+                        'is_reply'   => $isReply,
+                        'reply_id'   => $replyId,
+                        'content'    => $cmtText,
+                        'created_at' => $this->dateTime->date(),
+                        'status'     => $this->helperBlog->getBlogConfig('comment/need_approve')
+                            ? Status::PENDING : Status::APPROVED,
+                        'store_ids'  => $this->storeManager->getStore()->getId()
+                    ];
+                } else {
+                    $commentData = [
+                        'post_id'    => $id,
+                        '',
+                        'entity_id'  => 0,
+                        'is_reply'   => $isReply,
+                        'reply_id'   => $replyId,
+                        'content'    => $cmtText,
+                        'user_name'  => $params['guestName'],
+                        'user_email' => $params['guestEmail'],
+                        'created_at' => $this->dateTime->date(),
+                        'status'     => $this->helperBlog->getBlogConfig('comment/need_approve')
+                            ? Status::PENDING : Status::APPROVED,
+                        'store_ids'  => $this->storeManager->getStore()->getId()
+                    ];
                 }
+
                 $commentModel = $this->cmtFactory->create();
-                $result = $this->commentActions(self::COMMENT, $user, $commentData, $commentModel);
+                $result = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
             }
 
             if (isset($params['cmtId'])) {
                 $cmtId = $params['cmtId'];
                 $likeData = [
                     'comment_id' => $cmtId,
-                    'entity_id'  => $user["user_id"]
+                    'entity_id'  => $customerData->getId()
                 ];
 
                 $likeModel = $this->likeFactory->create();
-                $result = $this->commentActions(self::LIKE, $user, $likeData, $likeModel, $cmtId);
+                $result = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
             }
 
             return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
         }
 
-        return $page;
+        return $this->resultPageFactory->create();
     }
 
     /**
@@ -288,10 +292,12 @@ class View extends Action
 
                     $lastCmt = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
                     $lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
+                    $users = $user ? $user->getFirstname() . ' ' . $user->getLastname() : $data['user_name'];
+
                     $result = [
                         'cmt_id'     => $lastCmtId,
                         'cmt_text'   => $data['content'],
-                        'user_cmt'   => $user['first_name'] . ' ' . $user['last_name'],
+                        'user_cmt'   => $users,
                         'is_reply'   => $data['is_reply'],
                         'reply_cmt'  => $data['reply_id'],
                         'created_at' => __('Just now'),
@@ -300,13 +306,13 @@ class View extends Action
                     break;
                 /** Like action */
                 case self::LIKE:
-                    $checkLike = $this->isLikedComment($cmtId, $user['user_id'], $model);
+                    $checkLike = $this->isLikedComment($cmtId, $user->getId(), $model);
                     if (!$checkLike) {
                         $model->addData($data)->save();
                     }
                     $likes = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
-                    $countLikes = ($likes->getSize()) ? $likes->getSize() : '';
-                    $isLiked = ($checkLike) ? "yes" : "no";
+                    $countLikes = $likes->getSize() ?: '';
+                    $isLiked = $checkLike ? 'yes' : 'no';
                     $result = [
                         'liked'      => $isLiked,
                         'comment_id' => $cmtId,
@@ -318,7 +324,7 @@ class View extends Action
                     $result = ['status' => 'error', 'error' => __('Action not found.')];
                     break;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = ['status' => 'error', 'error' => $e->getMessage()];
         }
 
@@ -343,7 +349,7 @@ class View extends Action
                     $item->delete();
 
                     return true;
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     return false;
                 }
             }

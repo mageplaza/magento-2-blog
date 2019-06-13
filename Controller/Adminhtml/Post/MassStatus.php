@@ -73,7 +73,7 @@ class MassStatus extends Action
     public function execute()
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
-        $status = (int)$this->getRequest()->getParam('status');
+        $status = (int) $this->getRequest()->getParam('status');
 
         $postUpdated = 0;
         foreach ($collection as $post) {
@@ -85,7 +85,10 @@ class MassStatus extends Action
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addException($e, __('Something went wrong while updating status for %1.', $post->getName()));
+                $this->_getSession()->addException(
+                    $e,
+                    __('Something went wrong while updating status for %1.', $post->getName())
+                );
             }
         }
 

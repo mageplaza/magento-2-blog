@@ -76,9 +76,7 @@ abstract class Author extends Action
             ->load($userId);
 
         if (!$author->getId()) {
-            $this->messageManager->addErrorMessage(__('This author no longer exists. Please create the post to access the author management session.'));
-
-            return false;
+            $author = $this->authorFactory->create()->setId($user->getId());
         }
 
         return $author;

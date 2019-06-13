@@ -26,17 +26,17 @@ $helper = $this->helper(\Mageplaza\Blog\Helper\Data::class);
 <?php if ($helper->isEnabled()) : ?>
     <?php if ($helper->getBlogConfig('general/footer')) : ?>
         <li>
-            <a <?php echo $block->getLinkAttributes() ?>>
-                <?php echo $block->escapeHtml($block->getLabel()); ?>
-                <?php echo ($block->getCounter()) ? '<span>' . $block->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
+            <a <?= $block->getLinkAttributes() ?>>
+                <?= $block->escapeHtml($block->getLabel()); ?>
+                <?= ($block->getCounter()) ? '<span>' . $block->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
             </a>
         </li>
     <?php endif; ?>
     <?php if ($helper->getBlogConfig('general/display_sitemap')) : ?>
         <li>
-            <a href="<?php echo $block->getHtmlSiteMapUrl() ?>">
-                <?php echo __('Sitemap'); ?>
-                <?php echo ($block->getCounter()) ? '<span>' . $block->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
+            <a href="<?= $block->getHtmlSiteMapUrl() ?>">
+                <?= __('Sitemap'); ?>
+                <?= ($block->getCounter()) ? '<span>' . $block->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
             </a>
         </li>
     <?php endif; ?>

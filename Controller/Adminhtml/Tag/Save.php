@@ -110,7 +110,7 @@ class Save extends Tag
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             }
 
-            $hasError = (bool)$this->messageManager->getMessages()->getCountByType(
+            $hasError = (bool) $this->messageManager->getMessages()->getCountByType(
                 MessageInterface::TYPE_ERROR
             );
 
@@ -147,7 +147,10 @@ class Save extends Tag
                 $tag->setPostsData($this->jsHelper->decodeGridSerializedInput($posts));
             }
 
-            $this->_eventManager->dispatch('mageplaza_blog_tag_prepare_save', ['tag' => $tag, 'request' => $this->getRequest()]);
+            $this->_eventManager->dispatch(
+                'mageplaza_blog_tag_prepare_save',
+                ['tag' => $tag, 'request' => $this->getRequest()]
+            );
 
             try {
                 $tag->save();

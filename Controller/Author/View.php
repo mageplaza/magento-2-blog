@@ -80,6 +80,6 @@ class View extends Action
 
         return ($id)
             ? $page
-            : $this->resultForwardFactory->create()->forward('noroute');
+            : $this->_redirect('noroute');
     }
 }

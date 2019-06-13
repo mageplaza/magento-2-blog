@@ -74,7 +74,7 @@ abstract class Post extends Action
      */
     protected function initPost($register = false)
     {
-        $postId = (int)$this->getRequest()->getParam('id');
+        $postId = (int) $this->getRequest()->getParam('id');
 
         /** @var \Mageplaza\Blog\Model\Post $post */
         $post = $this->postFactory->create();

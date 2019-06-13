@@ -29,14 +29,14 @@
 <div class="mpblog-search">
     <div class="field search">
         <label class="label" for="mpblog-search-box" data-role="minisearch-label">
-            <span><?php echo __('Search'); ?></span>
+            <span><?= __('Search'); ?></span>
         </label>
         <div class="control">
             <input id="mpblog-search-box"
                    type="text"
                    name="query"
-                   value="<?php echo $this->getRequest()->getParam('query') ?>"
-                   placeholder="<?php echo __('Search blogs here...'); ?>"
+                   value="<?= $this->getRequest()->getParam('query') ?>"
+                   placeholder="<?= __('Search blogs here...'); ?>"
                    class="input-text"
                    role="combobox"
                    aria-haspopup="false"
@@ -45,19 +45,19 @@
         </div>
     </div>
     <div class="actions">
-        <button type="submit" title="<?php echo __('Search') ?>" class="action search">
+        <button type="submit" title="<?= __('Search') ?>" class="action search">
             <i class="fa fa-search" aria-hidden="true" style="font-size: 16px;margin-top: 5px;"></i>
         </button>
     </div>
 </div>
 <script>
     require(['jquery', 'mpDevbridgeAutocomplete'], function ($) {
-        var visibleImage = <?php echo $block->getSidebarConfig('search/show_image'); ?>;
+        var visibleImage = <?= $block->getSidebarConfig('search/show_image'); ?>;
         $('#mpblog-search-box').autocomplete({
-            lookup: <?php echo $block->getSearchBlogData();?>,
-            lookupLimit: <?php echo $block->getSidebarConfig('search/search_limit') ?: 10; ?>,
+            lookup: <?= $block->getSearchBlogData();?>,
+            lookupLimit: <?= $block->getSidebarConfig('search/search_limit') ?: 10; ?>,
             maxHeight: 2000,
-            minChars: <?php echo $block->getSidebarConfig('search/min_chars') ?: 1; ?>,
+            minChars: <?= $block->getSidebarConfig('search/min_chars') ?: 1; ?>,
             autoSelectFirst: true,
             showNoSuggestionNotice: true,
             triggerSelectOnValidInput: false,

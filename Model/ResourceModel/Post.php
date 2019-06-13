@@ -146,7 +146,7 @@ class Post extends AbstractDb
         $select = $adapter->select()
             ->from($this->getMainTable(), 'name')
             ->where('post_id = :post_id');
-        $binds = ['post_id' => (int)$id];
+        $binds = ['post_id' => (int) $id];
 
         return $adapter->fetchOne($select, $binds);
     }
@@ -215,8 +215,8 @@ class Post extends AbstractDb
             $data = [];
             foreach ($insert as $tagId) {
                 $data[] = [
-                    'post_id'  => (int)$id,
-                    'tag_id'   => (int)$tagId,
+                    'post_id'  => (int) $id,
+                    'tag_id'   => (int) $tagId,
                     'position' => 1
                 ];
             }
@@ -268,8 +268,8 @@ class Post extends AbstractDb
             $data = [];
             foreach ($insert as $topicId) {
                 $data[] = [
-                    'post_id'  => (int)$id,
-                    'topic_id' => (int)$topicId,
+                    'post_id'  => (int) $id,
+                    'topic_id' => (int) $topicId,
                     'position' => 1
                 ];
             }
@@ -319,8 +319,8 @@ class Post extends AbstractDb
             $data = [];
             foreach ($insert as $categoryId) {
                 $data[] = [
-                    'post_id'     => (int)$id,
-                    'category_id' => (int)$categoryId,
+                    'post_id'     => (int) $id,
+                    'category_id' => (int) $categoryId,
                     'position'    => 1
                 ];
             }
@@ -356,7 +356,7 @@ class Post extends AbstractDb
         )
             ->where(
                 'post_id = ?',
-                (int)$post->getId()
+                (int) $post->getId()
             );
 
         return $adapter->fetchCol($select);
@@ -376,7 +376,7 @@ class Post extends AbstractDb
         )
             ->where(
                 'post_id = ?',
-                (int)$post->getId()
+                (int) $post->getId()
             );
 
         return $adapter->fetchCol($select);
@@ -391,7 +391,7 @@ class Post extends AbstractDb
     {
         $adapter = $this->getConnection();
         $select = $adapter->select()->from($this->postTopicTable, 'topic_id')
-            ->where('post_id = ?', (int)$post->getId());
+            ->where('post_id = ?', (int) $post->getId());
 
         return $adapter->fetchCol($select);
     }
@@ -422,7 +422,7 @@ class Post extends AbstractDb
         $adapter = $this->getConnection();
         if ($products === null) {
             foreach (array_keys($oldProducts) as $value) {
-                $condition = ['entity_id =?' => (int)$value, 'post_id=?' => (int)$id];
+                $condition = ['entity_id =?' => (int) $value, 'post_id=?' => (int) $id];
                 $adapter->delete($this->postProductTable, $condition);
             }
 
@@ -430,7 +430,7 @@ class Post extends AbstractDb
         }
         if (!empty($delete)) {
             foreach (array_keys($delete) as $value) {
-                $condition = ['entity_id =?' => (int)$value, 'post_id=?' => (int)$id];
+                $condition = ['entity_id =?' => (int) $value, 'post_id=?' => (int) $id];
                 $adapter->delete($this->postProductTable, $condition);
             }
         }
@@ -438,17 +438,17 @@ class Post extends AbstractDb
             $data = [];
             foreach ($insert as $entityId => $position) {
                 $data[] = [
-                    'post_id'   => (int)$id,
-                    'entity_id' => (int)$entityId,
-                    'position'  => (int)$position['position']
+                    'post_id'   => (int) $id,
+                    'entity_id' => (int) $entityId,
+                    'position'  => (int) $position['position']
                 ];
             }
             $adapter->insertMultiple($this->postProductTable, $data);
         }
         if (!empty($update)) {
             foreach ($update as $entityId => $position) {
-                $where = ['post_id = ?' => (int)$id, 'entity_id = ?' => (int)$entityId];
-                $bind = ['position' => (int)$position['position']];
+                $where = ['post_id = ?' => (int) $id, 'entity_id = ?' => (int) $entityId];
+                $bind = ['position' => (int) $position['position']];
                 $adapter->update($this->postProductTable, $bind, $where);
             }
         }
@@ -482,7 +482,7 @@ class Post extends AbstractDb
             ->where(
                 'post_id = :post_id'
             );
-        $bind = ['post_id' => (int)$post->getId()];
+        $bind = ['post_id' => (int) $post->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);
     }

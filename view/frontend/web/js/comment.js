@@ -246,20 +246,20 @@ require([
         });
     }
 
-    function htmlComment(text) {
-        var html = '';
-        for (var i = 0; i < text.split("\n"); i++) {
-            html += '<p>' + i + '</p>';
-        }
-        return html;
-    }
-
     // display comment
     function displayComment(cmt, isReply) {
+        function htmlComment(text) {
+            var html = '';
+            var sub = text.split("\n");
+            for (var i = 0; i < sub.length; i++) {
+                html += '<p>' + sub[i] + '</p>';
+            }
+            return html;
+        }
         var cmtRow = '<li id="cmt-id-' + cmt.cmt_id + '" class="default-cmt__content__cmt-content__cmt-row cmt-row-' + cmt.cmt_id + ' cmt-row col-xs-12 '
             + (isReply ? ('reply-row') : '') + '" data-cmt-id="' + cmt.cmt_id + '"' + (isReply ? ('data-reply-id="' + cmt.reply_cmt + '"') : '')
             + '> <div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username username__' + cmt.cmt_id + '">' + cmt.user_cmt
-            + '</span> </div> <div class="cmt-row__cmt-content"> <p>' + this.htmlComment(cmt.cmt_text)
+            + '</span> </div> <div class="cmt-row__cmt-content"> <p>' + htmlComment(cmt.cmt_text)
             + '</p> </div> <div class="cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> <a class="interactions__btn-actions action btn-like mpblog-like" data-cmt-id="'
             + cmt.cmt_id + '" click="1"><i class="fa fa-thumbs-up" aria-hidden="true" style="margin-right: 3px"></i><span class="count-like__like-text"></span></a> <a class="interactions__btn-actions action btn-reply" data-cmt-id="'
             + cmt.cmt_id + '">' + reply + '</a>  </div> <div class="interactions__cmt-createdat"> <span>' + cmt.created_at + '</span> </div> </div> </li>';
@@ -283,6 +283,7 @@ require([
 
                         likeComment(cmtRow.find('.btn-like'));
                         showReply(cmtRow.find('.btn-reply'));
+
                     }
 
                     return false;

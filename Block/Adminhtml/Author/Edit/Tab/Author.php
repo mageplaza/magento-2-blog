@@ -25,11 +25,12 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Cms\Model\Wysiwyg\Config;
+use Magento\Framework\Data\Form;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
+use Mageplaza\Blog\Block\Adminhtml\Renderer\Image;
 use Mageplaza\Blog\Helper\Image as ImageHelper;
-use Mageplaza\Core\Block\Adminhtml\Renderer\Image;
 
 /**
  * Class Author
@@ -87,7 +88,7 @@ class Author extends Generic implements TabInterface
         /** @var \Mageplaza\Blog\Model\Author $author */
         $author = $this->_coreRegistry->registry('mageplaza_blog_author');
 
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('author_');
         $form->setFieldNameSuffix('author');

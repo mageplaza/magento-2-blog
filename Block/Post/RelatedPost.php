@@ -99,7 +99,8 @@ class RelatedPost extends Template
             $collection->getSelect()
                 ->join(
                     [
-                    'related' => $collection->getTable('mageplaza_blog_post_product')],
+                        'related' => $collection->getTable('mageplaza_blog_post_product')
+                    ],
                     'related.post_id=main_table.post_id AND related.entity_id=' . $this->getProductId()
                 )
                 ->limit($this->getLimitPosts());
@@ -116,7 +117,7 @@ class RelatedPost extends Template
     public function getLimitPosts()
     {
         if ($this->_limitPost == null) {
-            $this->_limitPost = (int)$this->helperData->getBlogConfig('product_post/product_detail/post_limit') ?: 1;
+            $this->_limitPost = (int) $this->helperData->getBlogConfig('product_post/product_detail/post_limit') ?: 1;
         }
 
         return $this->_limitPost;

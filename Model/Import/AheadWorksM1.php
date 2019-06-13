@@ -128,7 +128,11 @@ class AheadWorksM1 extends AbstractImport
                     'name'              => $post['title'],
                     'short_description' => $post['short_content'],
                     'post_content'      => $post['post_content'],
-                    'url_key'           => $this->helperData->generateUrlKey($postModel->getResource(), $postModel, $post['identifier']),
+                    'url_key'           => $this->helperData->generateUrlKey(
+                        $postModel->getResource(),
+                        $postModel,
+                        $post['identifier']
+                    ),
                     'created_at'        => ($post['created_time'] > $this->date->date() || !$post['created_time']) ? ($this->date->date()) : ($post['created_time']),
                     'updated_at'        => ($post['update_time']) ?: $this->date->date(),
                     'publish_date'      => ($post['created_time']) ?: $this->date->date(),
@@ -139,7 +143,7 @@ class AheadWorksM1 extends AbstractImport
                     'meta_robots'       => 'INDEX,FOLLOW', //Default value
                     'meta_keywords'     => $post['meta_keywords'],
                     'meta_description'  => $post['meta_description'],
-                    'author_id'         => (int)$authorId,
+                    'author_id'         => (int) $authorId,
                     'import_source'     => $importSource . '-' . $post['post_id'],
                     'tags'              => $post['tags']
                 ];
@@ -152,7 +156,7 @@ class AheadWorksM1 extends AbstractImport
                     if ($post['is_imported']) {
                         /** update post that has duplicate URK key */
                         if ($post['is_duplicated_url'] != null || $data['expand_behaviour'] == '1') {
-                            $where = ['post_id = ?' => (int)$post['is_imported']];
+                            $where = ['post_id = ?' => (int) $post['is_imported']];
                             $this->_updatePosts($post, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
@@ -175,7 +179,7 @@ class AheadWorksM1 extends AbstractImport
                          * Update posts
                          */
                         if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $post['is_duplicated_url'] != null) {
-                            $where = ['post_id = ?' => (int)$post['is_duplicated_url']];
+                            $where = ['post_id = ?' => (int) $post['is_duplicated_url']];
                             $this->_updatePosts($post, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
@@ -291,7 +295,7 @@ class AheadWorksM1 extends AbstractImport
                     /** update tag that has duplicate URK key */
                     if ($tag['is_duplicated_url'] != null || $data['expand_behaviour'] == '1') {
                         try {
-                            $where = ['tag_id = ?' => (int)$tag['is_imported']];
+                            $where = ['tag_id = ?' => (int) $tag['is_imported']];
                             $this->_updateTags($tag, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
@@ -317,7 +321,7 @@ class AheadWorksM1 extends AbstractImport
                     /** Update tags */
                     if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tag['is_duplicated_url'] != null) {
                         try {
-                            $where = ['tag_id = ?' => (int)$tag['is_duplicated_url']];
+                            $where = ['tag_id = ?' => (int) $tag['is_duplicated_url']];
                             $this->_updateTags($tag, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
@@ -361,7 +365,10 @@ class AheadWorksM1 extends AbstractImport
                     try {
                         $newTagId = array_search($id, $oldTagIds);
                         $this->_resourceConnection->getConnection()
-                            ->insert($this->_resourceConnection->getTableName('mageplaza_blog_post_tag'), ['tag_id' => $newTagId, 'post_id' => $postId, 'position' => 0]);
+                            ->insert(
+                                $this->_resourceConnection->getTableName('mageplaza_blog_post_tag'),
+                                ['tag_id' => $newTagId, 'post_id' => $postId, 'position' => 0]
+                            );
                     } catch (\Exception $e) {
                         continue;
                     }
@@ -412,7 +419,11 @@ class AheadWorksM1 extends AbstractImport
                 'is_duplicated_url' => $categoryModel->getResource()->isDuplicateUrlKey($category['identifier']),
                 'id'                => $category['cat_id'],
                 'name'              => $category['title'],
-                'url_key'           => $this->helperData->generateUrlKey($categoryModel->getResource(), $categoryModel, $category['identifier']),
+                'url_key'           => $this->helperData->generateUrlKey(
+                    $categoryModel->getResource(),
+                    $categoryModel,
+                    $category['identifier']
+                ),
                 'meta_robots'       => 'INDEX,FOLLOW',
                 'store_ids'         => $this->_storeManager->getStore()->getId(),
                 'enabled'           => 1,
@@ -430,7 +441,7 @@ class AheadWorksM1 extends AbstractImport
                     /** update category that has duplicate URK key */
                     if (($category['is_duplicated_url'] != null || $data['expand_behaviour'] == '1') && $category['url_key'] != 'root') {
                         try {
-                            $where = ['category_id = ?' => (int)$category['is_imported']];
+                            $where = ['category_id = ?' => (int) $category['is_imported']];
                             $this->_updateCategories($category, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
@@ -459,7 +470,7 @@ class AheadWorksM1 extends AbstractImport
                      */
                     if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $category['is_duplicated_url'] != null && $category['url_key'] != 'root') {
                         try {
-                            $where = ['category_id = ?' => (int)$category['is_duplicated_url']];
+                            $where = ['category_id = ?' => (int) $category['is_duplicated_url']];
                             $this->_updateCategories($category, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
@@ -593,7 +604,7 @@ class AheadWorksM1 extends AbstractImport
                 /** import actions */
                 if ($comment['is_imported']) {
                     /** update comments */
-                    $where = ['comment_id = ?' => (int)$comment['is_imported']];
+                    $where = ['comment_id = ?' => (int) $comment['is_imported']];
                     $this->_resourceConnection->getConnection()
                         ->update($this->_resourceConnection
                             ->getTableName('mageplaza_blog_comment'), [

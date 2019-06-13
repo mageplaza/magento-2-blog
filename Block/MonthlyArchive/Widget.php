@@ -71,7 +71,15 @@ class Widget extends Frontend
     ) {
         $this->dateTime = $dateTime;
 
-        parent::__construct($context, $filterProvider, $commentFactory, $likeFactory, $customerRepository, $helperData, $data);
+        parent::__construct(
+            $context,
+            $filterProvider,
+            $commentFactory,
+            $likeFactory,
+            $customerRepository,
+            $helperData,
+            $data
+        );
     }
 
     /**
