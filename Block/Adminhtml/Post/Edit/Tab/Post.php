@@ -131,15 +131,15 @@ class Post extends Generic implements TabInterface
         Image $imageHelper,
         array $data = []
     ) {
-        $this->wysiwygConfig     = $wysiwygConfig;
-        $this->booleanOptions    = $booleanOptions;
-        $this->enabledisable     = $enableDisable;
+        $this->wysiwygConfig = $wysiwygConfig;
+        $this->booleanOptions = $booleanOptions;
+        $this->enabledisable = $enableDisable;
         $this->metaRobotsOptions = $metaRobotsOptions;
-        $this->systemStore       = $systemStore;
-        $this->authSession       = $authSession;
-        $this->_date             = $dateTime;
-        $this->_layoutOptions    = $layoutOption;
-        $this->imageHelper       = $imageHelper;
+        $this->systemStore = $systemStore;
+        $this->authSession = $authSession;
+        $this->_date = $dateTime;
+        $this->_layoutOptions = $layoutOption;
+        $this->imageHelper = $imageHelper;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }

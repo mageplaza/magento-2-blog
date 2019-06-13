@@ -94,7 +94,7 @@ class Post extends Extended implements TabInterface
         $collection = $this->postFactory->create()->getCollection();
         $collection->getSelect()->joinLeft(
             ['related' => $collection->getTable('mageplaza_blog_post_topic')],
-            'related.post_id=main_table.post_id AND related.topic_id=' . (int)$this->getRequest()->getParam('id', 0),
+            'related.post_id=main_table.post_id AND related.topic_id=' . (int) $this->getRequest()->getParam('id', 0),
             ['position']
         );
 

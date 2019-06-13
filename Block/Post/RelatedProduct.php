@@ -112,7 +112,7 @@ class RelatedProduct extends ListProduct
                 )
                 ->where('product_post.post_id = ' . $postId)
                 ->order('product_post.position ASC')
-                ->limit((int)$this->helper->getBlogConfig('product_post/post_detail/product_limit') ?: self::LIMIT);
+                ->limit((int) $this->helper->getBlogConfig('product_post/post_detail/product_limit') ?: self::LIMIT);
 
             $this->_productCollection = $collection;
         }

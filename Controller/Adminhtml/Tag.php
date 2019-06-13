@@ -74,7 +74,7 @@ abstract class Tag extends Action
      */
     protected function initTag($register = false)
     {
-        $tagId = (int)$this->getRequest()->getParam('id');
+        $tagId = (int) $this->getRequest()->getParam('id');
 
         /** @var \Mageplaza\Blog\Model\Tag $tag */
         $tag = $this->tagFactory->create();

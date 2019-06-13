@@ -31,7 +31,7 @@
         ];
 
         mpBlogImport = {
-            typeSelector: <?php echo $block->getTypeSelector();?>,
+            typeSelector: <?= $block->getTypeSelector();?>,
             initImportFieldsSet: function () {
                 for (var i = 0; i < this.typeSelector.length; i++) {
                     if ($('#import_type').attr("value") == this.typeSelector[i]) {
@@ -82,7 +82,7 @@
                 if ($('#edit_form').valid()) {
                     $('body').loader('show');
                     $.ajax({
-                        url: '<?php echo $block->getUrl('mageplaza_blog/import/validate', ['form_key' => $block->getFormKey()]);?>',
+                        url: '<?= $block->getUrl('mageplaza_blog/import/validate', ['form_key' => $block->getFormKey()]);?>',
                         data: {
                             type: dataImport.type,
                             import_name: $(dataImport.importName).val(),
@@ -98,12 +98,12 @@
                         success: function (result) {
                             var messageHtml;
                             if (result.status == 'false') {
-                                messageHtml = '<?php echo $block->getMessagesHtml('adderror', 'False connection. Please check the credentials and try again!') ?>';
+                                messageHtml = '<?= $block->getMessagesHtml('adderror', 'False connection. Please check the credentials and try again!') ?>';
                                 $(".message-error").hide();
                                 $(messageHtml).appendTo($(".page-columns"));
                                 $(".message-success").hide();
                             } else {
-                                messageHtml = '<?php echo $block->getMessagesHtml('addsuccess', 'Connect successfully. To start import process press "Import" button' . $block->getImportButtonHtml()) ?>';
+                                messageHtml = '<?= $block->getMessagesHtml('addsuccess', 'Connect successfully. To start import process press "Import" button' . $block->getImportButtonHtml()) ?>';
                                 $(".message-success").hide();
                                 $(messageHtml).appendTo($(".page-columns"));
                                 $(".message-error").hide();
@@ -119,7 +119,7 @@
             importAction: function () {
                 $('body').loader('show');
                 $.ajax({
-                    url: '<?php echo $block->getUrl('mageplaza_blog/import/import', ['form_key' => $block->getFormKey()]);?>',
+                    url: '<?= $block->getUrl('mageplaza_blog/import/import', ['form_key' => $block->getFormKey()]);?>',
                     cache: false,
                     success: function (result) {
                         var statisticMessage = result.statistic;

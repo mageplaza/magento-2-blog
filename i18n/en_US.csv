@@ -82,6 +82,7 @@ Products,Products
 "New Category","New Category"
 "New Tag","New Tag"
 "New Topic","New Topic"
+"Delete Image","Delete Image"
 "Create New Tag","Create New Tag"
 "Edit Tag '%1'","Edit Tag '%1'"
 "Create Tag","Create Tag"
@@ -107,7 +108,6 @@ Home,Home
 "List Posts from %1","List Posts from %1"
 Reply,Reply
 "Site Map","Site Map"
-"This author no longer exists. Please create the post to access the author management session.","This author no longer exists. Please create the post to access the author management session."
 "Author Management","Author Management"
 "The Author has been saved.","The Author has been saved."
 "Something went wrong while saving the Author.","Something went wrong while saving the Author."

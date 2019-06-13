@@ -28,31 +28,31 @@ $blockGrid = $block->getLayout()->getBlock('mageplaza_blog_category_edit_tab_pos
 $gridJsObjectName = $blockGrid->getJsObjectName();
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
-    <?php echo $block->getAdditionalButtonsHtml(); ?>
+    <?= $block->getAdditionalButtonsHtml(); ?>
 </div>
-<?php echo $block->getTabsHtml() ?>
+<?= $block->getTabsHtml() ?>
 
 <iframe name="iframeSave" style="display:none; width:100%;"
-        src="<?php echo $block->getViewFileUrl('blank.html') ?>"></iframe>
-<form id="category_edit_form" name="category-edit-form" action="<?php echo $block->getSaveUrl() ?>" method="post"
+        src="<?= $block->getViewFileUrl('blank.html') ?>"></iframe>
+<form id="category_edit_form" name="category-edit-form" action="<?= $block->getSaveUrl() ?>" method="post"
       enctype="multipart/form-data">
     <div class="no-display">
         <input type="hidden" name="isIframe" value="1"/>
-        <input name="form_key" type="hidden" value="<?php echo $block->getFormKey() ?>"/>
+        <input name="form_key" type="hidden" value="<?= $block->getFormKey() ?>"/>
         <input type="hidden" name="active_tab_id" id="active_tab_id" value=""/>
         <?php if ($parentId !== 0) : ?>
-            <input type="hidden" name="parent" value="<?php echo $parentId; ?>"/>
+            <input type="hidden" name="parent" value="<?= $parentId; ?>"/>
         <?php endif; ?>
         <?php if ($categoryId !== 0) : ?>
-            <input type="hidden" name="category_id" value="<?php echo $categoryId; ?>"/>
+            <input type="hidden" name="category_id" value="<?= $categoryId; ?>"/>
         <?php endif; ?>
         <input type="hidden" name="selected_products" id="in_category_products" value=""/>
         <script type="text/x-magento-init">
             {
                 "*": {
                     "Magento_Catalog/catalog/category/assign-products": {
-                        "selectedProducts": <?php echo $block->getPostsJson(); ?>,
-                        "gridJsObjectName": <?php echo '"' . $gridJsObjectName . '"' ?: '{}'; ?>
+                        "selectedProducts": <?= $block->getPostsJson(); ?>,
+                        "gridJsObjectName": <?= '"' . $gridJsObjectName . '"' ?: '{}'; ?>
                     }
                 }
             }
@@ -64,7 +64,7 @@ $gridJsObjectName = $blockGrid->getJsObjectName();
 
 <div data-id="information-dialog-category" class="messages" style="display: none;">
     <div class="message message-notice">
-        <div><?php echo __('This operation can take a long time'); ?></div>
+        <div><?= __('This operation can take a long time'); ?></div>
     </div>
 </div>
 
@@ -153,7 +153,7 @@ $gridJsObjectName = $blockGrid->getJsObjectName();
             mageDialog.needToShow();
         });
         $('#category_edit_form')
-            .mage('categoryForm', {refreshUrl: '<?php echo $block->getRefreshPathUrl() ?>'})
+            .mage('categoryForm', {refreshUrl: '<?= $block->getRefreshPathUrl() ?>'})
             .mage('validation', {
                 submitHandler: function (form) {
                     if (mageDialog.isNeedShow()) {
@@ -171,13 +171,13 @@ $gridJsObjectName = $blockGrid->getJsObjectName();
 
     <?php if ($block->isAjax() && ($tabsBlock = $block->getLayout()->getBlock('tabs')) && ($_tabsJsObject = $tabsBlock->getJsObjectName())) : ?>
     // Temporary solution, will be replaced after refactoring of manage category functionality
-    <?php $tabsBlock = $block->getLayout()->getBlock('tabs'); ?>
+        <?php $tabsBlock = $block->getLayout()->getBlock('tabs'); ?>
     require(["jquery", "mage/backend/tabs"], function ($) {
-        var activeAnchor = $('#<?php echo $tabsBlock->getId() ?>').tabs('activeAnchor');
+        var activeAnchor = $('#<?= $tabsBlock->getId() ?>').tabs('activeAnchor');
         if (activeAnchor.length) {
             $('active_tab_id').value = activeAnchor.prop('id');
         }
-        $('active_tab_id').tabsJsObject = $('#<?php echo $tabsBlock->getId() ?>');
+        $('active_tab_id').tabsJsObject = $('#<?= $tabsBlock->getId() ?>');
     });
     <?php endif; ?>
 </script>

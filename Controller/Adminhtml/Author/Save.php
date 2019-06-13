@@ -74,7 +74,10 @@ class Save extends Author
                 $author->addData($data);
             }
 
-            $this->_eventManager->dispatch('mageplaza_blog_author_prepare_save', ['author' => $author, 'request' => $this->getRequest()]);
+            $this->_eventManager->dispatch(
+                'mageplaza_blog_author_prepare_save',
+                ['author' => $author, 'request' => $this->getRequest()]
+            );
 
             try {
                 $author->save();

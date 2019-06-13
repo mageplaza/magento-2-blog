@@ -44,7 +44,10 @@ class Save extends Comment
 
             $this->prepareData($comment, $data);
 
-            $this->_eventManager->dispatch('mageplaza_blog_comment_prepare_save', ['comment' => $comment, 'request' => $this->getRequest()]);
+            $this->_eventManager->dispatch(
+                'mageplaza_blog_comment_prepare_save',
+                ['comment' => $comment, 'request' => $this->getRequest()]
+            );
 
             try {
                 $comment->save();

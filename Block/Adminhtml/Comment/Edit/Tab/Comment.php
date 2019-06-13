@@ -85,11 +85,11 @@ class Comment extends Generic implements TabInterface
         Store $systemStore,
         array $data = []
     ) {
-        $this->_commentStatus      = $commentStatus;
+        $this->_commentStatus = $commentStatus;
         $this->_customerRepository = $customerRepository;
-        $this->_postFactory        = $postFactory;
-        $this->systemStore         = $systemStore;
-        $this->storeManager        = $context->getStoreManager();
+        $this->_postFactory = $postFactory;
+        $this->systemStore = $systemStore;
+        $this->storeManager = $context->getStoreManager();
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -115,23 +115,30 @@ class Comment extends Generic implements TabInterface
             $fieldset->addField('comment_id', 'hidden', ['name' => 'comment_id']);
         }
 
-        $post     = $this->_postFactory->create()->load($comment->getPostId());
+        $post = $this->_postFactory->create()->load($comment->getPostId());
         $postText = '<a href="' . $this->getUrl('mageplaza_blog/post/edit', ['id' => $comment->getPostId()])
-            . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($post->getName()) . '</a>';
+                    . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($post->getName()) . '</a>';
         $fieldset->addField('post_name', 'note', ['text' => $postText, 'label' => __('Post'), 'name' => 'post_name']);
 
         if ($comment->getEntityId() > 0) {
-            $customer     = $this->_customerRepository->getById($comment->getEntityId());
+            $customer = $this->_customerRepository->getById($comment->getEntityId());
             $customerText = '<a href="'
-                . $this->getUrl('customer/index/edit', ['id' => $customer->getId(), 'active_tab' => 'review'])
-                . '" onclick="this.target=\'blank\'">'
-                . $this->escapeHtml($customer->getFirstname() . ' ' . $customer->getLastname())
-                . '</a> <a href="mailto:%4">(' . $customer->getEmail() . ')</a>';
+                            . $this->getUrl(
+                                'customer/index/edit',
+                                ['id' => $customer->getId(), 'active_tab' => 'review']
+                            )
+                            . '" onclick="this.target=\'blank\'">'
+                            . $this->escapeHtml($customer->getFirstname() . ' ' . $customer->getLastname())
+                            . '</a> <a href="mailto:%4">(' . $customer->getEmail() . ')</a>';
         } else {
             $customerText = 'Guest';
         }
 
-        $fieldset->addField('customer_name', 'note', ['text' => $customerText, 'label' => __('Customer'), 'name' => 'customer_name']);
+        $fieldset->addField(
+            'customer_name',
+            'note',
+            ['text' => $customerText, 'label' => __('Customer'), 'name' => 'customer_name']
+        );
 
         $fieldset->addField('status', 'select', [
             'label'    => __('Status'),
@@ -145,16 +152,20 @@ class Comment extends Generic implements TabInterface
             'name'     => 'content',
             'style'    => 'height:24em;'
         ]);
-        $viewText= '';
+        $viewText = '';
         foreach ($this->storeManager->getStores() as $store) {
             if ($store->getId() === 0) {
                 continue;
             }
             $viewText .= '<a href="' . $post->getUrl($store->getId()) . '#cmt-id-' . $comment->getId()
-                . '" onclick="this.target=\'blank\'">View in store ' . $store->getName() . '</a><br>';
+                         . '" onclick="this.target=\'blank\'">View in store ' . $store->getName() . '</a><br>';
         }
 
-        $fieldset->addField('view_front', 'note', ['text' => $viewText, 'label' => __('View On Front End'), 'name' => 'view_front']);
+        $fieldset->addField(
+            'view_front',
+            'note',
+            ['text' => $viewText, 'label' => __('View On Front End'), 'name' => 'view_front']
+        );
 
         $form->addValues($comment->getData());
         $this->setForm($form);

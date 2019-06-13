@@ -86,7 +86,7 @@ class InlineEdit extends Action
         }
 
         $key = array_keys($commentItems);
-        $commentId = !empty($key) ? (int)$key[0] : '';
+        $commentId = !empty($key) ? (int) $key[0] : '';
 
         /** @var \Mageplaza\Blog\Model\Post $post */
         $comment = $this->commentFactory->create()->load($commentId);

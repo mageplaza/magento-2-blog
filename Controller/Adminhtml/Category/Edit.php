@@ -89,7 +89,7 @@ class Edit extends Category
      */
     public function execute()
     {
-        $categoryId = (int)$this->getRequest()->getParam('id');
+        $categoryId = (int) $this->getRequest()->getParam('id');
 
         $category = $this->initCategory();
         if (!$category) {
@@ -161,7 +161,7 @@ class Edit extends Category
         if ($categoryId) {
             $title = __('%1 (ID: %2)', $category->getName(), $categoryId);
         } else {
-            $parentId = (int)$this->getRequest()->getParam('parent');
+            $parentId = (int) $this->getRequest()->getParam('parent');
             if ($parentId && $parentId != CategoryModel::TREE_ROOT_ID) {
                 $title = __('New Child Category');
             } else {

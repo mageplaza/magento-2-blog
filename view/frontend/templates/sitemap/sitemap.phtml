@@ -30,41 +30,41 @@ $topics = $helper->getObjectList(Data::TYPE_TOPIC);
 ?>
 
 <?php if ($size = $posts->getSize()) : ?>
-    <h2><?php echo ($size == 1) ? __('Post') : __('Posts') ?></h2>
+    <h2><?= ($size == 1) ? __('Post') : __('Posts') ?></h2>
     <ul>
         <?php foreach ($posts as $post) : ?>
-            <li><a href="<?php echo $post->getUrl() ?>"><?php echo $post->getName(); ?></a></li>
+            <li><a href="<?= $post->getUrl() ?>"><?= $post->getName(); ?></a></li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
 
 <?php if ($size = $categories->getSize()) : ?>
-    <h2><?php echo ($size == 1) ? __('Category') : __('Categories') ?></h2>
+    <h2><?= ($size == 1) ? __('Category') : __('Categories') ?></h2>
     <ul>
         <?php foreach ($categories as $category) : ?>
             <li>
-                <a href="<?php echo $helper->getBlogUrl($category, Data::TYPE_CATEGORY) ?>"><?php echo $category->getName(); ?></a>
+                <a href="<?= $helper->getBlogUrl($category, Data::TYPE_CATEGORY) ?>"><?= $category->getName(); ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
 
 <?php if ($size = $tags->getSize()) : ?>
-    <h2><?php echo ($size == 1) ? __('Tag') : __('Tags') ?></h2>
+    <h2><?= ($size == 1) ? __('Tag') : __('Tags') ?></h2>
     <ul>
         <?php foreach ($tags as $tag) : ?>
-            <li><a href="<?php echo $helper->getBlogUrl($tag, Data::TYPE_TAG) ?>"><?php echo $tag->getName(); ?></a>
+            <li><a href="<?= $helper->getBlogUrl($tag, Data::TYPE_TAG) ?>"><?= $tag->getName(); ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
 
 <?php if ($size = $topics->getSize()) : ?>
-    <h2><?php echo ($size == 1) ? __('Topic') : __('Topics') ?></h2>
+    <h2><?= ($size == 1) ? __('Topic') : __('Topics') ?></h2>
     <ul>
         <?php foreach ($topics as $topic) : ?>
             <li>
-                <a href="<?php echo $helper->getBlogUrl($topic, Data::TYPE_TOPIC) ?>"><?php echo $topic->getName(); ?></a>
+                <a href="<?= $helper->getBlogUrl($topic, Data::TYPE_TOPIC) ?>"><?= $topic->getName(); ?></a>
             </li>
         <?php endforeach; ?>
     </ul>

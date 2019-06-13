@@ -124,13 +124,13 @@ class Data extends CoreHelper
         TranslitUrl $translitUrl,
         DateTime $dateTime
     ) {
-        $this->postFactory     = $postFactory;
+        $this->postFactory = $postFactory;
         $this->categoryFactory = $categoryFactory;
-        $this->tagFactory      = $tagFactory;
-        $this->topicFactory    = $topicFactory;
-        $this->authorFactory   = $authorFactory;
-        $this->translitUrl     = $translitUrl;
-        $this->dateTime        = $dateTime;
+        $this->tagFactory = $tagFactory;
+        $this->topicFactory = $topicFactory;
+        $this->authorFactory = $authorFactory;
+        $this->translitUrl = $translitUrl;
+        $this->dateTime = $dateTime;
 
         parent::__construct($context, $objectManager, $storeManager);
     }
@@ -166,7 +166,9 @@ class Data extends CoreHelper
         $sideBarConfig = $this->getConfigValue(self::CONFIG_MODULE_PATH . '/sidebar/sidebar_left_right', $storeId);
         if ($sideBarConfig == 0) {
             return SideBarLR::LEFT;
-        } elseif ($sideBarConfig == 1) {
+        }
+
+        if ($sideBarConfig == 1) {
             return SideBarLR::RIGHT;
         }
 
@@ -199,7 +201,7 @@ class Data extends CoreHelper
      */
     public function getBlogName($store = null)
     {
-        return $this->getConfigGeneral('name', $store) ?: 'Blog';
+        return $this->getConfigGeneral('name', $store) ?: __('Blog');
     }
 
     /**
@@ -369,6 +371,7 @@ class Data extends CoreHelper
      * @param null $urlKey
      * @param null $type
      * @param null $store
+     *
      * @return string
      */
     public function getBlogUrl($urlKey = null, $type = null, $store = null)
@@ -378,9 +381,9 @@ class Data extends CoreHelper
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url    = $this->getUrl($this->getRoute($store) . '/' . $urlKey);
-        $url    = explode('?', $url);
-        $url    = $url[0];
+        $url = $this->getUrl($this->getRoute($store) . '/' . $urlKey);
+        $url = explode('?', $url);
+        $url = $url[0];
 
         return rtrim($url, '/') . $this->getUrlSuffix();
     }
@@ -469,15 +472,15 @@ class Data extends CoreHelper
         }
 
         $adapter = $resource->getConnection();
-        $select  = $adapter->select()
+        $select = $adapter->select()
             ->from($resource->getMainTable(), '*')
             ->where('url_key = :url_key');
 
-        $binds = ['url_key' => (string)$urlKey];
+        $binds = ['url_key' => (string) $urlKey];
 
         if ($id = $object->getId()) {
             $select->where($resource->getIdFieldName() . ' != :object_id');
-            $binds['object_id'] = (int)$id;
+            $binds['object_id'] = (int) $id;
         }
 
         return $adapter->fetchOne($select, $binds);
@@ -532,7 +535,7 @@ class Data extends CoreHelper
     {
         $storeEnable = explode(',', $object->getStoreIds());
 
-        return in_array('0',$storeEnable,true)
-            || in_array((string) $this->storeManager->getStore()->getId(), $storeEnable, true);
+        return in_array('0', $storeEnable, true)
+               || in_array((string) $this->storeManager->getStore()->getId(), $storeEnable, true);
     }
 }

@@ -97,12 +97,12 @@ class Lists extends AbstractBlock implements DataProviderInterface
     public function getRssData()
     {
         $storeModel = $this->storeManager->getStore($this->getStoreId());
-        $title      = __('List Posts from %1', $storeModel->getFrontendName())->render();
-        $storeUrl   = $this->storeManager->getStore($this->getStoreId())->getBaseUrl(UrlInterface::URL_TYPE_WEB);
-        $data       = [
+        $title = __('List Posts from %1', $storeModel->getFrontendName())->render();
+        $storeUrl = $this->storeManager->getStore($this->getStoreId())->getBaseUrl(UrlInterface::URL_TYPE_WEB);
+        $data = [
             'title'       => $title,
             'description' => $title,
-            'link'        => $storeUrl.'blog/post/rss.xml',
+            'link'        => $storeUrl . 'blog/post/rss.xml',
             'charset'     => 'UTF-8',
             'language'    => $this->helper->getConfigValue('general/locale/code', $storeModel),
         ];

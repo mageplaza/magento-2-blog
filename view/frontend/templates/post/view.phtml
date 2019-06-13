@@ -38,38 +38,38 @@ $color = $helper->getBlogConfig('general/font_color');
 ?>
 <div class="mp-blog-view">
     <div class="mp-blog-rss">
-        <a href="<?php echo $block->getRssUrl('post/rss') ?>" class="bb-rss-icon">
-            <img src="<?php echo $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px">
+        <a href="<?= $block->getRssUrl('post/rss') ?>" class="bb-rss-icon">
+            <img src="<?= $this->getViewFileUrl('Mageplaza_Blog::media/images/rss.png') ?>" width="16px">
         </a>
     </div>
     <div class="mpcss post-view" id="mpblog-list-container">
         <div class="post-list-content col-md-9 col-sm-8">
             <div class="post-view-image col-xs-12">
                 <?php if ($_post->getImage()) : ?>
-                    <img class="img-responsive" src="<?php echo $block->getImageUrl($_post->getImage()); ?>"
-                         alt="<?php echo $block->escapeHtml($_post->getName()); ?>"/>
+                    <img class="img-responsive" src="<?= $block->getImageUrl($_post->getImage()); ?>"
+                         alt="<?= $block->escapeHtml($_post->getName()); ?>"/>
                 <?php endif; ?>
             </div>
             <div class="post-post_content col-xs-12">
-                <?php echo $block->getPageFilter($_post->getPostContent()); ?>
+                <?= $block->getPageFilter($_post->getPostContent()); ?>
             </div>
             <div class="col-xs-12">
                 <hr/>
                 <div class="mp-post-info">
-                    <span><i class="fa fa-calendar-times-o">&nbsp;</i> <?php echo $block->getDateFormat($_post->getPublishDate()); ?></span>
+                    <span><i class="fa fa-calendar-times-o">&nbsp;</i> <?= $block->getDateFormat($_post->getPublishDate()); ?></span>
                     <?php if ($categoryHtml = $block->getPostCategoryHtml($_post)) : ?>
                         |
-                        <span><i class="fa fa-folder-open-o">&nbsp;</i><?php echo __('Categories: %1', $categoryHtml); ?></span>
+                        <span><i class="fa fa-folder-open-o">&nbsp;</i><?= __('Categories: %1', $categoryHtml); ?></span>
                     <?php endif; ?>
                     <?php if ($tagList = $block->getTagList($_post)) : ?>
-                        | <span><i class="fa fa-tags">&nbsp;</i><?php echo __('Tags: %1', $tagList); ?></span>
+                        | <span><i class="fa fa-tags">&nbsp;</i><?= __('Tags: %1', $tagList); ?></span>
                     <?php endif; ?>
                     <?php if ($authorName && $helper->showAuthorInfo()) : ?>
                         |
-                        <span><i class="fa fa-user">&nbsp;</i><?php echo __('By: %1', '<a class="mp-info" href="' . $author->getUrl() . '">' . $authorName . '</a>') ?></span>
+                        <span><i class="fa fa-user">&nbsp;</i><?= __('By: %1', '<a class="mp-info" href="' . $author->getUrl() . '">' . $authorName . '</a>') ?></span>
                         <?php if ($authorName != $modifierName && $modifierName) : ?>
                             |
-                            <span><i class="fa fa-edit">&nbsp;</i><?php echo __('Modify By: %1 at %2', '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>', $block->getDateFormat($_post->getUpdatedAt())) ?></span>
+                            <span><i class="fa fa-edit">&nbsp;</i><?= __('Modify By: %1 at %2', '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>', $block->getDateFormat($_post->getUpdatedAt())) ?></span>
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>
@@ -80,12 +80,12 @@ $color = $helper->getBlogConfig('general/font_color');
     <?php if ($helper->getBlogConfig('share/enabled')) : ?>
         <div class="mp-clear"></div>
         <script type="text/javascript"
-                src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $helper->getBlogConfig('share/pubid_id') ?>"
+                src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?= $helper->getBlogConfig('share/pubid_id') ?>"
                 async="async"></script>
         <div class="mpcss">
             <div id="sharing">
                 <div class="share-col-left">
-                    <h5><?php echo __('Share this post'); ?></h5>
+                    <h5><?= __('Share this post'); ?></h5>
                 </div>
                 <div class="share-col-right">
                     <div class="post-sharing-button">
@@ -100,15 +100,15 @@ $color = $helper->getBlogConfig('general/font_color');
         $block->resizeImage($author->getImage(), '135x', \Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH);
         ?>
         <div class="block-blog-related about-admin">
-            <h2><?php echo __('About the Author'); ?></h2>
+            <h2><?= __('About the Author'); ?></h2>
             <div class="related-content-container">
                 <div class="author-content-image">
                     <img class="img-responsive"
-                         src="<?php echo $author->getImage() ? $block->resizeImage($author->getImage(), '135x', \Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH) : $block->getDefaultAuthorImage(); ?>">
+                         src="<?= $author->getImage() ? $block->resizeImage($author->getImage(), '135x', \Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH) : $block->getDefaultAuthorImage(); ?>">
                 </div>
                 <div class="author-content-information">
-                    <div class="author-name"><?php echo $authorName ?></div>
-                    <p class="author-description"><?php echo $block->getPageFilter($author->getShortDescription()); ?></p>
+                    <div class="author-name"><?= $authorName ?></div>
+                    <p class="author-description"><?= $block->getPageFilter($author->getShortDescription()); ?></p>
                 </div>
                 <div class="mp-clear"></div>
             </div>
@@ -118,30 +118,30 @@ $color = $helper->getBlogConfig('general/font_color');
     <?php $relatedPosts = $_post->getRelatedPostsCollection(); ?>
     <?php if ($relatedPosts && sizeof($relatedPosts)) : ?>
         <div class="block-blog-related topic-list mpcss" style="width: 90%;">
-            <h2><?php echo __('Related Posts'); ?></h2>
+            <h2><?= __('Related Posts'); ?></h2>
             <div class="related-content-container" style="display: flex; flex-wrap: wrap;">
                 <?php foreach ($relatedPosts as $post) : ?>
                     <div class="post-list-item col-mp mp-6 mp-lg-4 mp-md-6 mp-xs-12">
                         <div class="post-item-wraper">
                             <div class="post-image">
                                 <?php if ($post->getImage()) : ?>
-                                    <a href="<?php echo $post->getUrl() ?>">
+                                    <a href="<?= $post->getUrl() ?>">
                                         <img class="img-responsive"
-                                             src="<?php echo $block->resizeImage($post->getImage(), '400x'); ?>"
-                                             alt="<?php echo $block->escapeHtml($post->getName()); ?>"/>
+                                             src="<?= $block->resizeImage($post->getImage(), '400x'); ?>"
+                                             alt="<?= $block->escapeHtml($post->getName()); ?>"/>
                                     </a>
                                 <?php endif; ?>
                             </div>
                             <div class="post-info-wraper">
                                 <h2 class="mp-post-title">
                                     <a class="post-link-title"
-                                       title="<?php echo $block->escapeHtml($post->getName()); ?>"
-                                       href="<?php echo $post->getUrl() ?>">
-                                        <?php echo $post->getName(); ?>
+                                       title="<?= $block->escapeHtml($post->getName()); ?>"
+                                       href="<?= $post->getUrl() ?>">
+                                        <?= $post->getName(); ?>
                                     </a>
                                 </h2>
                                 <div class="mp-post-info">
-                                    <?php echo $block->getPostInfo($post); ?>
+                                    <?= $block->getPostInfo($post); ?>
                                 </div>
                             </div>
                         </div>
@@ -155,9 +155,9 @@ $color = $helper->getBlogConfig('general/font_color');
         <?php $relatedBlock = $block->getChildBlock('related_products'); ?>
         <?php if ($relatedBlock->hasProduct()) : ?>
             <div class="block-blog-related products-same-post page-products mpcss" style="width: 90%;">
-                <h2><?php echo ($helper->getBlogConfig('product_post/post_detail/title')) ?: __('Related Products') ?></h2>
+                <h2><?= ($helper->getBlogConfig('product_post/post_detail/title')) ?: __('Related Products') ?></h2>
                 <div class="related-content-container">
-                    <?php echo $relatedBlock->toHtml(); ?>
+                    <?= $relatedBlock->toHtml(); ?>
                 </div>
             </div>
         <?php endif; ?>
@@ -165,12 +165,12 @@ $color = $helper->getBlogConfig('general/font_color');
     <?php $typeComment = $block->helperComment('type'); ?>
     <?php if (($typeComment != Type::DISABLE) && $_post->getAllowComment()) : ?>
         <div class="block-blog-related blog-comment">
-            <h2><?php echo __('Comments') ?></h2>
+            <h2><?= __('Comments') ?></h2>
             <?php if ($typeComment == Type::DISQUS) : ?>
                 <div class="related-content-container box-collateral box-reviews" id="post-reviews">
                     <div id="disqus_thread"></div>
                     <script type="text/javascript">
-                        var disqus_shortname = '<?php echo $block->helperComment('disqus'); ?>';
+                        var disqus_shortname = '<?= $block->helperComment('disqus'); ?>';
 
                         /* * * DON'T EDIT BELOW THIS LINE * * */
                         (function () {
@@ -183,7 +183,7 @@ $color = $helper->getBlogConfig('general/font_color');
                     </script>
                 </div>
             <?php elseif ($typeComment == Type::FACEBOOK) : ?>
-                <div class="related-content-container box-collateral box-reviews <?php echo $helper->getBlogConfig('comment/facebook_colorscheme') ?>"
+                <div class="related-content-container box-collateral box-reviews <?= $helper->getBlogConfig('comment/facebook_colorscheme') ?>"
                      id="post-reviews">
                     <div id="fb-root"></div>
                     <script>(function (d, s, id) {
@@ -191,22 +191,22 @@ $color = $helper->getBlogConfig('general/font_color');
                             if (d.getElementById(id)) return;
                             js = d.createElement(s);
                             js.id = id;
-                            js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId=<?php echo $block->helperComment('facebook_appid') ?>";
+                            js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId=<?= $block->helperComment('facebook_appid') ?>";
                             fjs.parentNode.insertBefore(js, fjs);
                         }(document, 'script', 'facebook-jssdk'));
                     </script>
-                    <div class="fb-comments" data-href="<?php echo $_post->getUrl(); ?>"
-                         data-numposts="<?php echo $block->helperComment('facebook_number_comment'); ?>"
+                    <div class="fb-comments" data-href="<?= $_post->getUrl(); ?>"
+                         data-numposts="<?= $block->helperComment('facebook_number_comment'); ?>"
                          data-width="100%"
-                         data-colorscheme="<?php echo $block->helperComment('facebook_colorscheme') ?>"
-                         data-order-by="<?php echo $block->helperComment('facebook_order_by') ?>">
+                         data-colorscheme="<?= $block->helperComment('facebook_colorscheme') ?>"
+                         data-order-by="<?= $block->helperComment('facebook_order_by') ?>">
                     </div>
                 </div>
             <?php elseif ($typeComment == Type::DEFAULT_COMMENT) : ?>
                 <div class="related-content-container container default-cmt">
                     <?php if (!$block->isLoggedIn()) : ?>
                         <div class="col-mp default-cmt__cmt-login">
-                            <button class="primary btn-primary default-cmt__cmt-login__btn-login"><?php echo __('Login') ?></button>
+                            <button class="primary btn-primary default-cmt__cmt-login__btn-login"><?= __('Login') ?></button>
                         </div>
                     <?php endif; ?>
                     <div class="col-mp mp-12" style="float: left;">
@@ -221,7 +221,7 @@ $color = $helper->getBlogConfig('general/font_color');
                                             <input id="default-cmt__content__cmt-block__guest-box__name-input"
                                                    type="text"
                                                    name="default-cmt__content__cmt-block__guest-box__name-input"
-                                                   placeholder="<?php echo __('Your display name') ?>"
+                                                   placeholder="<?= __('Your display name') ?>"
                                                    data-validate="{required:true}">
                                         </div>
                                         <div class="col-mp mp-6 default-cmt__content__cmt-block__guest-box">
@@ -230,7 +230,7 @@ $color = $helper->getBlogConfig('general/font_color');
                                             <input id="default-cmt__content__cmt-block__guest-box__email-input"
                                                    type="text"
                                                    name="default-cmt__content__cmt-block__guest-box__email-input"
-                                                   placeholder="<?php echo __('Your email') ?> "
+                                                   placeholder="<?= __('Your email') ?> "
                                                    data-validate="{required:true, 'validate-email':true}">
                                         </div>
                                     </form>
@@ -240,15 +240,15 @@ $color = $helper->getBlogConfig('general/font_color');
                                         <label for="mp-guest-cmt-commentbox">Comment</label>
                                         <textarea class="default-cmt__content__cmt-block__cmt-box__cmt-input"
                                                   maxlength="255"
-                                                  placeholder="<?php echo __('Type comments here...') ?>"></textarea>
+                                                  placeholder="<?= __('Type comments here...') ?>"></textarea>
                                     </div>
                                     <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
                                         <div class="default-cmt_loading" style="display: none">
-                                            <img src="<?php echo $block->getViewFileUrl('images/loader-1.gif'); ?>"
+                                            <img src="<?= $block->getViewFileUrl('images/loader-1.gif') ?>"
                                                  alt="Loading...">
                                         </div>
                                         <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit primary btn-primary">
-                                            <?php echo __('Comment') ?>
+                                            <?= __('Comment') ?>
                                         </button>
                                     </div>
 
@@ -258,24 +258,24 @@ $color = $helper->getBlogConfig('general/font_color');
                                 <?php
                                 $comments = $block->getPostComments($_post->getId());
                                 $block->getCommentsTree($comments, 0);
-                                echo $block->getCommentsHtml();
                                 ?>
+                                <?= $block->getCommentsHtml() ?>
                             </div>
                         </div>
                     </div>
                 </div>
                 <script>
                     //get login url, text of button like, reply
-                    var loginUrl = '<?php echo $block->getLoginUrl(); ?>',
-                        like = '<?php echo __('Like') ?>',
-                        reply = '<?php echo __('Reply') ?>',
-                        isLogged = '<?php echo $isLogged ?>',
-                        likedColor = '<?php echo $color;?>',
+                    var loginUrl = '<?= $block->getLoginUrl(); ?>',
+                        like = '<?= __('Like') ?>',
+                        reply = '<?= __('Reply') ?>',
+                        isLogged = '<?= $isLogged ?>',
+                        likedColor = '<?= $color;?>',
                         messengerBox = {
-                            cmt_warning: '<?php echo $block->getMessagesHtml('adderror', 'Please write the comment.')?>',
-                            exist_email_warning: '<?php echo $block->getMessagesHtml('adderror', 'This email is exist. Please <a href="' . $block->getLoginUrl() . '"> Login </a> as our customer.')?>',
-                            login_warning: '<?php echo $block->getMessagesHtml('adderror', 'You are not logged in. Please <a href="' . $block->getLoginUrl() . '"> Login </a> or <a href="' . $block->getRegisterUrl() . '"> Signup </a> to like or send a reply.</div>')?>',
-                            comment_approve: '<?php echo $block->getMessagesHtml('addsuccess', 'Your comment has been sent successfully. Please wait admin approve !')?>'
+                            cmt_warning: '<?= $block->getMessagesHtml('adderror', 'Please write the comment.')?>',
+                            exist_email_warning: '<?= $block->getMessagesHtml('adderror', 'This email is exist. Please <a href="' . $block->getLoginUrl() . '"> Login </a> as our customer.')?>',
+                            login_warning: '<?= $block->getMessagesHtml('adderror', 'You are not logged in. Please <a href="' . $block->getLoginUrl() . '"> Login </a> or <a href="' . $block->getRegisterUrl() . '"> Signup </a> to like or send a reply.</div>')?>',
+                            comment_approve: '<?= $block->getMessagesHtml('addsuccess', 'Your comment has been sent successfully. Please wait admin approve !')?>'
                         };
 
                     require(['comment']);
@@ -296,30 +296,30 @@ $color = $helper->getBlogConfig('general/font_color');
                     "@type": "WebPage",
                     "@id": "https://google.com/article"
                 },
-                "headline": "<?php echo $_post->getName(); ?>",
+                "headline": "<?= $_post->getName(); ?>",
                 "image": {
                     "@type": "ImageObject",
-                    "url": "<?php echo $_post->getImage() ? $block->getImageUrl($_post->getImage()) : $block->getDefaultImageUrl(); ?>",
+                    "url": "<?= $_post->getImage() ? $block->getImageUrl($_post->getImage()) : $block->getDefaultImageUrl(); ?>",
                     "height": 800,
                     "width": 800
                 },
-                "datePublished": "<?php echo $block->getDateFormat($_post->getPublishDate()); ?>",
-                "dateModified": "<?php echo $block->getDateFormat($_post->getUpdatedAt()); ?>",
+                "datePublished": "<?= $block->getDateFormat($_post->getPublishDate()); ?>",
+                "dateModified": "<?= $block->getDateFormat($_post->getUpdatedAt()); ?>",
                 "author": {
                     "@type": "Person",
-                    "name": "<?php echo $authorName; ?>"
+                    "name": "<?= $authorName; ?>"
                 },
                 "publisher": {
                     "@type": "Organization",
-                    "name": "<?php echo $helper->getSeoConfig('snippet/organize_name'); ?>",
+                    "name": "<?= $helper->getSeoConfig('snippet/organize_name'); ?>",
                     "logo": {
                         "@type": "ImageObject",
-                        "url": "<?php echo $logo; ?>",
+                        "url": "<?= $logo; ?>",
                         "width": 600,
                         "height": 60
                     }
                 },
-                "description": "<?php echo $_post->getShortDescription(); ?>"
+                "description": "<?= $_post->getShortDescription(); ?>"
             }
         </script>
     <?php endif; ?>

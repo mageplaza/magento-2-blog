@@ -25,8 +25,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
-use Mageplaza\Blog\Helper\Data;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Author

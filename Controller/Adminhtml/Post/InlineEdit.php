@@ -83,7 +83,7 @@ class InlineEdit extends Action
         }
 
         $key = array_keys($postItems);
-        $postId = !empty($key) ? (int)$key[0] : '';
+        $postId = !empty($key) ? (int) $key[0] : '';
         /** @var \Mageplaza\Blog\Model\Post $post */
         $post = $this->postFactory->create()->load($postId);
         try {

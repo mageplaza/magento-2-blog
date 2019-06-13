@@ -185,7 +185,11 @@ class InstallSchema implements InstallSchemaInterface
                     Table::ACTION_CASCADE
                 )
                 ->addIndex(
-                    $installer->getIdxName('mageplaza_blog_post_tag', ['post_id', 'tag_id'], AdapterInterface::INDEX_TYPE_UNIQUE),
+                    $installer->getIdxName(
+                        'mageplaza_blog_post_tag',
+                        ['post_id', 'tag_id'],
+                        AdapterInterface::INDEX_TYPE_UNIQUE
+                    ),
                     ['post_id', 'tag_id'],
                     ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
                 )
@@ -225,7 +229,11 @@ class InstallSchema implements InstallSchemaInterface
                     Table::ACTION_CASCADE
                 )
                 ->addIndex(
-                    $installer->getIdxName('mageplaza_blog_post_topic', ['post_id', 'topic_id'], AdapterInterface::INDEX_TYPE_UNIQUE),
+                    $installer->getIdxName(
+                        'mageplaza_blog_post_topic',
+                        ['post_id', 'topic_id'],
+                        AdapterInterface::INDEX_TYPE_UNIQUE
+                    ),
                     ['post_id', 'topic_id'],
                     ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
                 )
@@ -251,7 +259,12 @@ class InstallSchema implements InstallSchemaInterface
                 ->addIndex($installer->getIdxName('mageplaza_blog_post_category', ['category_id']), ['category_id'])
                 ->addIndex($installer->getIdxName('mageplaza_blog_post_category', ['post_id']), ['post_id'])
                 ->addForeignKey(
-                    $installer->getFkName('mageplaza_blog_post_category', 'category_id', 'mageplaza_blog_category', 'category_id'),
+                    $installer->getFkName(
+                        'mageplaza_blog_post_category',
+                        'category_id',
+                        'mageplaza_blog_category',
+                        'category_id'
+                    ),
                     'category_id',
                     $installer->getTable('mageplaza_blog_category'),
                     'category_id',
@@ -265,7 +278,11 @@ class InstallSchema implements InstallSchemaInterface
                     Table::ACTION_CASCADE
                 )
                 ->addIndex(
-                    $installer->getIdxName('mageplaza_blog_post_category', ['category_id', 'post_id'], AdapterInterface::INDEX_TYPE_UNIQUE),
+                    $installer->getIdxName(
+                        'mageplaza_blog_post_category',
+                        ['category_id', 'post_id'],
+                        AdapterInterface::INDEX_TYPE_UNIQUE
+                    ),
                     ['category_id', 'post_id'],
                     ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
                 )

@@ -100,7 +100,15 @@ class View extends \Mageplaza\Blog\Block\Listpost
         $this->postFactory = $postFactory;
         $this->customerUrl = $customerUrl;
 
-        parent::__construct($context, $filterProvider, $commentFactory, $likeFactory, $customerRepository, $helperData, $data);
+        parent::__construct(
+            $context,
+            $filterProvider,
+            $commentFactory,
+            $likeFactory,
+            $customerRepository,
+            $helperData,
+            $data
+        );
     }
 
     /**
@@ -280,7 +288,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
         $this->commentTree .= '<ul class="default-cmt__content__cmt-content row">';
         foreach ($comments as $comment) {
             if ($comment['reply_id'] == $cmtId && $comment['status'] == 1) {
-                $isReply = (bool)$comment['is_reply'];
+                $isReply = (bool) $comment['is_reply'];
                 $replyId = $isReply ? $comment['reply_id'] : '';
                 if ($comment['entity_id'] == 0) {
                     $userName = $comment['user_name'];

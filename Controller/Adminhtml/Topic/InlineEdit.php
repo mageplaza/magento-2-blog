@@ -84,7 +84,7 @@ class InlineEdit extends Action
         }
 
         $key = array_keys($postItems);
-        $topicId = !empty($key) ? (int)$key[0] : '';
+        $topicId = !empty($key) ? (int) $key[0] : '';
         /** @var \Mageplaza\Blog\Model\Topic $topic */
         $topic = $this->topicFactory->create()->load($topicId);
         try {

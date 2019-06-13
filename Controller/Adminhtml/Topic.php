@@ -74,7 +74,7 @@ abstract class Topic extends Action
      */
     protected function initTopic($register = false)
     {
-        $topicId = (int)$this->getRequest()->getParam('id');
+        $topicId = (int) $this->getRequest()->getParam('id');
 
         /** @var \Mageplaza\Blog\Model\Topic $topic */
         $topic = $this->topicFactory->create();

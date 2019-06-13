@@ -406,7 +406,7 @@ class Post extends AbstractModel
             $this->setData('category_ids', $ids);
         }
 
-        return (array)$this->_getData('category_ids');
+        return (array) $this->_getData('category_ids');
     }
 
     /**
@@ -421,7 +421,7 @@ class Post extends AbstractModel
             $this->setData('tag_ids', $ids);
         }
 
-        return (array)$this->_getData('tag_ids');
+        return (array) $this->_getData('tag_ids');
     }
 
     /**
@@ -436,7 +436,7 @@ class Post extends AbstractModel
             $this->setData('topic_ids', $ids);
         }
 
-        return (array)$this->_getData('topic_ids');
+        return (array) $this->_getData('topic_ids');
     }
 
     /**
@@ -458,7 +458,7 @@ class Post extends AbstractModel
                     ['position']
                 )->group('main_table.post_id');
 
-            if ($limit = (int)$this->helperData->getBlogConfig('general/related_post')) {
+            if ($limit = (int) $this->helperData->getBlogConfig('general/related_post')) {
                 $collection->getSelect()
                     ->limit($limit);
             }
