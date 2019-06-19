@@ -29,6 +29,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\PostFactory;
+use Exception;
 
 /**
  * Class Save
@@ -138,8 +139,10 @@ class Save extends Post
      */
     protected function prepareData($post, $data = [])
     {
-        if ($post->getImage()) {
+        try {
             $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_POST, $post->getImage());
+        } catch (Exception $exception) {
+            $data['image'] = isset($data['image']['value']) ? $data['image']['value'] : '';
         }
 
         /** Set specify field data */
