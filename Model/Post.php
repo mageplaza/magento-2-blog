@@ -294,8 +294,8 @@ class Post extends AbstractModel
         $shortDescription = $this->getData('short_description');
 
         $maxLength = 200;
-        if ($shorten && strlen($shortDescription) > $maxLength) {
-            $shortDescription = substr($shortDescription, 0, $maxLength) . '...';
+        if ($shorten && mb_strlen($shortDescription) > $maxLength) {
+            $shortDescription = mb_substr($shortDescription, 0, $maxLength) . '...';
         }
 
         return $shortDescription;
