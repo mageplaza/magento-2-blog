@@ -23,7 +23,6 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
-use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
 use Mageplaza\Blog\Model\PostFactory;
 use Magento\Backend\Model\View\Result\ForwardFactory;
@@ -34,12 +33,6 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
  */
 class Duplicate extends Post
 {
-    /**
-     * Page factory
-     *
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    public $resultPageFactory;
 
     /**
      * Redirect result factory
@@ -49,28 +42,25 @@ class Duplicate extends Post
     public $resultForwardFactory;
 
     /**
-     * Edit constructor.
-     *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Model\PostFactory $postFactory
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * Duplicate constructor.
+     * @param Context $context
+     * @param Registry $registry
+     * @param PostFactory $postFactory
+     * @param ForwardFactory $resultForwardFactory
      */
     public function __construct(
         Context $context,
         Registry $registry,
         PostFactory $postFactory,
-        PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory
     ) {
-        $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
 
         parent::__construct($postFactory, $registry, $context);
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return \Magento\Backend\Model\View\Result\Forward|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
