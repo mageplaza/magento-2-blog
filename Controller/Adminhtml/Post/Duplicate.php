@@ -26,12 +26,13 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
 use Mageplaza\Blog\Model\PostFactory;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 
 /**
  * Class Edit
  * @package Mageplaza\Blog\Controller\Adminhtml\Post
  */
-class Edit extends Post
+class Duplicate extends Post
 {
     /**
      * Page factory
@@ -39,6 +40,13 @@ class Edit extends Post
      * @var \Magento\Framework\View\Result\PageFactory
      */
     public $resultPageFactory;
+
+    /**
+     * Redirect result factory
+     *
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     */
+    public $resultForwardFactory;
 
     /**
      * Edit constructor.
@@ -52,9 +60,11 @@ class Edit extends Post
         Context $context,
         Registry $registry,
         PostFactory $postFactory,
-        PageFactory $resultPageFactory
+        PageFactory $resultPageFactory,
+        ForwardFactory $resultForwardFactory
     ) {
         $this->resultPageFactory = $resultPageFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
 
         parent::__construct($postFactory, $registry, $context);
     }
@@ -64,36 +74,9 @@ class Edit extends Post
      */
     public function execute()
     {
-        /** @var \Mageplaza\Blog\Model\Post $post */
-        $post = $this->initPost();
-        $duplicate = $this->getRequest()->getParam('duplicate');
+        $resultForward = $this->resultForwardFactory->create();
+        $resultForward->forward('edit');
 
-        if ($duplicate) {
-            $post->setData('duplicate', true);
-        }
-
-        if (!$post) {
-            $resultRedirect = $this->resultRedirectFactory->create();
-            $resultRedirect->setPath('*');
-
-            return $resultRedirect;
-        }
-
-        $data = $this->_session->getData('mageplaza_blog_post_data', true);
-        if (!empty($data)) {
-            $post->setData($data);
-        }
-
-        $this->coreRegistry->register('mageplaza_blog_post', $post);
-
-        /** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
-        $resultPage = $this->resultPageFactory->create();
-        $resultPage->setActiveMenu('Mageplaza_Blog::post');
-        $resultPage->getConfig()->getTitle()->set(__('Posts'));
-
-        $title = $post->getId() && !$post->getDuplicate() ? $post->getName() : __('New Post');
-        $resultPage->getConfig()->getTitle()->prepend($title);
-
-        return $resultPage;
+        return $resultForward;
     }
 }

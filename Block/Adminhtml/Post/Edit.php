@@ -70,12 +70,12 @@ class Edit extends Container
         $this->buttonList->add(
             'save-and-continue',
             [
-                'label'          => __('Save and Continue Edit'),
-                'class'          => 'save',
+                'label' => __('Save and Continue Edit'),
+                'class' => 'save',
                 'data_attribute' => [
                     'mage-init' => [
                         'button' => [
-                            'event'  => 'saveAndContinueEdit',
+                            'event' => 'saveAndContinueEdit',
                             'target' => '#edit_form'
                         ]
                     ]
@@ -83,6 +83,20 @@ class Edit extends Container
             ],
             -100
         );
+        $post = $this->coreRegistry->registry('mageplaza_blog_post');
+        if ($post->getId() && !$post->getDuplicate()) {
+            $this->buttonList->add(
+                'duplicate',
+                [
+                    'label' => __('Duplicate'),
+                    'class' => 'duplicate',
+                    'onclick' => sprintf("location.href = '%s';", $this->getDuplicateUrl()),
+                ],
+                -101
+            );
+        } else {
+            $this->buttonList->remove('delete');
+        }
     }
 
     /**
@@ -94,7 +108,7 @@ class Edit extends Container
     {
         /** @var \Mageplaza\Blog\Model\Post $post */
         $post = $this->coreRegistry->registry('mageplaza_blog_post');
-        if ($post->getId()) {
+        if ($post->getId() && $post->getDuplicate()) {
             return __("Edit Post '%1'", $this->escapeHtml($post->getName()));
         }
 
@@ -110,10 +124,28 @@ class Edit extends Container
     {
         /** @var \Mageplaza\Blog\Model\Post $post */
         $post = $this->coreRegistry->registry('mageplaza_blog_post');
-        if ($id = $post->getId()) {
-            return $this->getUrl('*/*/save', ['id' => $id]);
+        if ($post->getId()) {
+            if ($post->getDuplicate()) {
+                $ar = [
+                    'id' => $post->getId(),
+                    'duplicate' => $post->getDuplicate()
+                ];
+            } else {
+                $ar = ['id' => $post->getId()];
+            }
+
+            return $this->getUrl('*/*/save', $ar);
         }
 
         return parent::getFormActionUrl();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDuplicateUrl()
+    {
+        $post = $this->coreRegistry->registry('mageplaza_blog_post');
+        return $this->getUrl('*/*/duplicate', ['id' => $post->getId(), 'duplicate' => true]);
     }
 }

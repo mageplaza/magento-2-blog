@@ -72,18 +72,21 @@ abstract class Post extends Action
      *
      * @return bool|\Mageplaza\Blog\Model\Post
      */
-    protected function initPost($register = false)
+    protected function initPost($register = false, $isSave = false)
     {
-        $postId = (int) $this->getRequest()->getParam('id');
+        $postId = (int)$this->getRequest()->getParam('id');
+        $duplicate = $this->getRequest()->getParam('duplicate');
 
         /** @var \Mageplaza\Blog\Model\Post $post */
         $post = $this->postFactory->create();
         if ($postId) {
-            $post->load($postId);
-            if (!$post->getId()) {
-                $this->messageManager->addErrorMessage(__('This post no longer exists.'));
+            if (!$isSave || !$duplicate) {
+                $post->load($postId);
+                if (!$post->getId()) {
+                    $this->messageManager->addErrorMessage(__('This post no longer exists.'));
 
-                return false;
+                    return false;
+                }
             }
         }
 
