@@ -22,6 +22,8 @@
 namespace Mageplaza\Blog\Block\Adminhtml\Category;
 
 use Magento\Backend\Block\Widget\Form\Container;
+use Magento\Framework\Registry;
+use Magento\Backend\Block\Widget\Context;
 
 /**
  * Class Edit
@@ -29,6 +31,28 @@ use Magento\Backend\Block\Widget\Form\Container;
  */
 class Edit extends Container
 {
+    /**
+     * Core registry
+     *
+     * @var Registry
+     */
+    public $coreRegistry;
+
+    /**
+     * Edit constructor.
+     * @param Context $context
+     * @param array $data
+     */
+    public function __construct(
+        Registry $coreRegistry,
+        Context $context,
+        array $data = []
+    ) {
+        $this->coreRegistry = $coreRegistry;
+
+        parent::__construct($context, $data);
+    }
+
     /**
      * prepare the form
      */
@@ -40,8 +64,58 @@ class Edit extends Container
 
         parent::_construct();
 
+        /** @var \Mageplaza\Blog\Model\Category $category */
+        $category = $this->coreRegistry->registry('category');
+
+        if ($category->getId() && !$category->getDuplicate()) {
+            $this->buttonList->add(
+                'duplicate',
+                [
+                    'label' => __('Duplicate'),
+                    'class' => 'duplicate',
+                    'onclick' => sprintf("location.href = '%s';", $this->getDuplicateUrl()),
+                ],
+                -101
+            );
+        }
+
         $this->buttonList->remove('back');
         $this->buttonList->remove('reset');
         $this->buttonList->remove('save');
+    }
+
+    /**
+     * Get form action URL
+     *
+     * @return string
+     */
+    public function getFormActionUrl()
+    {
+        /** @var \Mageplaza\Blog\Model\Category $category */
+        $category = $this->coreRegistry->registry('category');
+        if ($category->getId()) {
+            if ($category->getDuplicate()) {
+                $ar = [
+                    'id' => $category->getId(),
+                    'duplicate' => $category->getDuplicate()
+                ];
+            } else {
+                $ar = ['id' => $category->getId()];
+            }
+
+            return $this->getUrl('*/*/save', $ar);
+        }
+
+        return parent::getFormActionUrl();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDuplicateUrl()
+    {
+        /** @var \Mageplaza\Blog\Model\Category $category */
+        $category = $this->coreRegistry->registry('category');
+        return $this->getUrl('*/*/duplicate', ['id' => $category->getId(), 'duplicate' => true]);
     }
 }

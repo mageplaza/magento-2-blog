@@ -69,10 +69,10 @@ abstract class Category extends Action
 
     /**
      * @param bool $register
-     *
+     * @param bool $isSave
      * @return bool|\Mageplaza\Blog\Model\Category
      */
-    public function initCategory($register = false)
+    public function initCategory($register = false, $isSave = false)
     {
         $categoryId = null;
         if ($this->getRequest()->getParam('id')) {
@@ -83,12 +83,14 @@ abstract class Category extends Action
 
         /** @var \Mageplaza\Blog\Model\Post $post */
         $category = $this->categoryFactory->create();
-        if ($categoryId) {
-            $category->load($categoryId);
-            if (!$category->getId()) {
-                $this->messageManager->addErrorMessage(__('This category no longer exists.'));
+        if (!$this->getRequest()->getParam('duplicate') || !$isSave) {
+            if ($categoryId) {
+                $category->load($categoryId);
+                if (!$category->getId()) {
+                    $this->messageManager->addErrorMessage(__('This category no longer exists.'));
 
-                return false;
+                    return false;
+                }
             }
         }
 

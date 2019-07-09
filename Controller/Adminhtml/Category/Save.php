@@ -132,7 +132,7 @@ class Save extends Category
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             }
 
-            $hasError = (bool) $this->messageManager->getMessages()->getCountByType(
+            $hasError = (bool)$this->messageManager->getMessages()->getCountByType(
                 MessageInterface::TYPE_ERROR
             );
 
@@ -140,7 +140,7 @@ class Save extends Category
             $category->addData([
                 'entity_id' => $category->getId(),
                 'is_active' => $category->getEnabled(),
-                'parent'    => $category->getParentId()
+                'parent' => $category->getParentId()
             ]);
 
             // to obtain truncated category name
@@ -154,7 +154,7 @@ class Save extends Category
             return $resultJson->setData(
                 [
                     'messages' => $block->getGroupedHtml(),
-                    'error'    => $hasError,
+                    'error' => $hasError,
                     'category' => $category->toArray(),
                 ]
             );
@@ -162,7 +162,10 @@ class Save extends Category
 
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data = $this->getRequest()->getPost('category')) {
-            $category = $this->initCategory();
+            $category = $this->initCategory(false, true);
+            if ($this->getRequest()->getParam('duplicate')) {
+                unset($data['id']);
+            }
             if (!$category) {
                 $resultRedirect->setPath('mageplaza_blog/*/', ['_current' => true]);
 

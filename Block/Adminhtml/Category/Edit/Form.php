@@ -87,7 +87,7 @@ class Form extends AbstractCategory
     protected function _prepareLayout()
     {
         $category = $this->getCategory();
-        $categoryId = (int) $category->getId(); // 0 when we create Blog Category, otherwise some value for editing Blog Category
+        $categoryId = (int)$category->getId(); // 0 when we create Blog Category, otherwise some value for editing Blog Category
 
         $this->setChild(
             'tabs',
@@ -96,13 +96,13 @@ class Form extends AbstractCategory
 
         // Save button
         $this->addButton('save', [
-            'id'             => 'save',
-            'label'          => __('Save Category'),
-            'class'          => 'save primary save-category',
+            'id' => 'save',
+            'label' => __('Save Category'),
+            'class' => 'save primary save-category',
             'data_attribute' => [
                 'mage-init' => [
                     'Mageplaza_Blog/category/edit' => [
-                        'url'  => $this->getSaveUrl(),
+                        'url' => $this->getSaveUrl(),
                         'ajax' => true
                     ]
                 ]
@@ -112,23 +112,23 @@ class Form extends AbstractCategory
         // Delete button
         if ($categoryId && !in_array($categoryId, $this->getRootIds())) {
             $this->addButton('delete', [
-                'id'      => 'delete',
-                'label'   => __('Delete Category'),
+                'id' => 'delete',
+                'label' => __('Delete Category'),
                 'onclick' => "categoryDelete('" . $this->getUrl(
-                    'mageplaza_blog/*/delete',
-                    ['_current' => true]
-                ) . "')",
-                'class'   => 'delete'
+                        'mageplaza_blog/*/delete',
+                        ['_current' => true]
+                    ) . "')",
+                'class' => 'delete'
             ]);
         }
 
         // Reset button
         $resetPath = $categoryId ? 'mageplaza_blog/*/edit' : 'mageplaza_blog/*/add';
         $this->addButton('reset', [
-            'id'      => 'reset',
-            'label'   => __('Reset'),
+            'id' => 'reset',
+            'label' => __('Reset'),
             'onclick' => "categoryReset('" . $this->getUrl($resetPath, ['_current' => true]) . "',false)",
-            'class'   => 'reset'
+            'class' => 'reset'
         ]);
 
         return parent::_prepareLayout();
@@ -164,7 +164,12 @@ class Form extends AbstractCategory
      */
     public function getSaveUrl(array $args = [])
     {
+        /** @var \Mageplaza\Blog\Model\Category $category */
+        $category = $this->_coreRegistry->registry('category');
         $params = ['_current' => false, '_query' => false];
+        if ($category->getDuplicate()) {
+            $params['duplicate'] = true;
+        }
         $params = array_merge($params, $args);
 
         return $this->getUrl('mageplaza_blog/*/save', $params);
@@ -236,11 +241,11 @@ class Form extends AbstractCategory
         if ($this->getCategoryId()) {
             return $this->getCategoryName();
         } else {
-            $parentId = (int) $this->getRequest()->getParam('parent');
+            $parentId = (int)$this->getRequest()->getParam('parent');
             if ($parentId && $parentId != Category::TREE_ROOT_ID) {
-                return __('New Child Category');
+                return __('New Child 123 Category');
             } else {
-                return __('New Root Category');
+                return __('New Root 12 Category');
             }
         }
     }
@@ -280,7 +285,7 @@ class Form extends AbstractCategory
      */
     public function getParentCategoryId()
     {
-        return (int) $this->templateContext->getRequest()->getParam('parent');
+        return (int)$this->templateContext->getRequest()->getParam('parent');
     }
 
     /**
@@ -290,7 +295,7 @@ class Form extends AbstractCategory
      */
     public function getCategoryId()
     {
-        return (int) $this->templateContext->getRequest()->getParam('id');
+        return (int)$this->templateContext->getRequest()->getParam('id');
     }
 
     /**
