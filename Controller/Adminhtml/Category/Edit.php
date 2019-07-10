@@ -93,7 +93,9 @@ class Edit extends Category
         $duplicate = $this->getRequest()->getParam('duplicate');
         $category = $this->initCategory();
         if ($duplicate) {
+            $category->setId(null);
             $category->setData('duplicate', true);
+            $categoryId = null;
         }
         if (!$category) {
             $resultRedirect = $this->resultRedirectFactory->create();
