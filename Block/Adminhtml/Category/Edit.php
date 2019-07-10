@@ -79,34 +79,10 @@ class Edit extends Container
             );
         }
 
+        $this->buttonList->remove('delete');
         $this->buttonList->remove('back');
         $this->buttonList->remove('reset');
         $this->buttonList->remove('save');
-    }
-
-    /**
-     * Get form action URL
-     *
-     * @return string
-     */
-    public function getFormActionUrl()
-    {
-        /** @var \Mageplaza\Blog\Model\Category $category */
-        $category = $this->coreRegistry->registry('category');
-        if ($category->getId()) {
-            if ($category->getDuplicate()) {
-                $ar = [
-                    'id' => $category->getId(),
-                    'duplicate' => $category->getDuplicate()
-                ];
-            } else {
-                $ar = ['id' => $category->getId()];
-            }
-
-            return $this->getUrl('*/*/save', $ar);
-        }
-
-        return parent::getFormActionUrl();
     }
 
     /**
@@ -116,6 +92,6 @@ class Edit extends Container
     {
         /** @var \Mageplaza\Blog\Model\Category $category */
         $category = $this->coreRegistry->registry('category');
-        return $this->getUrl('*/*/duplicate', ['id' => $category->getId(), 'duplicate' => true]);
+        return $this->getUrl('*/*/duplicate', ['id' => $category->getId(), 'duplicate' => true, 'parent'=> $category->getParentId()]);
     }
 }

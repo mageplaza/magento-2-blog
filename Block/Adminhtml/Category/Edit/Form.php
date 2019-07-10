@@ -110,7 +110,7 @@ class Form extends AbstractCategory
         ]);
 
         // Delete button
-        if ($categoryId && !in_array($categoryId, $this->getRootIds())) {
+        if ($categoryId && !in_array($categoryId, $this->getRootIds()) && !$this->getRequest()->getParam('duplicate')) {
             $this->addButton('delete', [
                 'id' => 'delete',
                 'label' => __('Delete Category'),
