@@ -87,7 +87,7 @@ class Form extends AbstractCategory
     protected function _prepareLayout()
     {
         $category = $this->getCategory();
-        $categoryId = (int)$category->getId(); // 0 when we create Blog Category, otherwise some value for editing Blog Category
+        $categoryId = (int) $category->getId(); // 0 when we create Blog Category, otherwise some value for editing Blog Category
 
         $this->setChild(
             'tabs',
@@ -241,7 +241,7 @@ class Form extends AbstractCategory
         if ($this->getCategoryId()) {
             return $this->getCategoryName();
         } else {
-            $parentId = (int)$this->getRequest()->getParam('parent');
+            $parentId = (int) $this->getRequest()->getParam('parent');
             if ($parentId && $parentId != Category::TREE_ROOT_ID) {
                 return __('New Child 123 Category');
             } else {
@@ -285,7 +285,7 @@ class Form extends AbstractCategory
      */
     public function getParentCategoryId()
     {
-        return (int)$this->templateContext->getRequest()->getParam('parent');
+        return (int) $this->templateContext->getRequest()->getParam('parent');
     }
 
     /**
@@ -295,7 +295,7 @@ class Form extends AbstractCategory
      */
     public function getCategoryId()
     {
-        return (int)$this->templateContext->getRequest()->getParam('id');
+        return (int) $this->templateContext->getRequest()->getParam('id');
     }
 
     /**
