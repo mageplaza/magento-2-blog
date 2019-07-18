@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\LayoutFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
@@ -34,17 +35,17 @@ use Mageplaza\Blog\Model\PostFactory;
 class Products extends Post
 {
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory
+     * @var LayoutFactory
      */
     protected $resultLayoutFactory;
 
     /**
      * Products constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Mageplaza\Blog\Model\PostFactory $productFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param Context $context
+     * @param PostFactory $productFactory
+     * @param Registry $registry
+     * @param LayoutFactory $resultLayoutFactory
      */
     public function __construct(
         Context $context,
@@ -60,7 +61,7 @@ class Products extends Post
     /**
      * Save action
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {

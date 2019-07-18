@@ -24,8 +24,10 @@ namespace Mageplaza\Blog\Model\ResourceModel\Comment\Grid;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Psr\Log\LoggerInterface as Logger;
+use Zend_Db_Expr;
 
 /**
  * Class Collection
@@ -43,7 +45,7 @@ class Collection extends SearchResult
      * @param string $mainTable
      * @param $resourceModel
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -112,7 +114,7 @@ class Collection extends SearchResult
             "main_table.entity_id = ce.entity_id",
             ['firstname', 'lastname']
         )->columns([
-            "customer_name" => new \Zend_Db_Expr("CONCAT(`ce`.`firstname`,' ',`ce`.`lastname`)")
+            "customer_name" => new Zend_Db_Expr("CONCAT(`ce`.`firstname`,' ',`ce`.`lastname`)")
         ]);
 
         return $this;

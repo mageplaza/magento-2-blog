@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block\Sidebar;
 
 use Mageplaza\Blog\Block\Frontend;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
  * Class MostView
@@ -30,7 +31,7 @@ use Mageplaza\Blog\Block\Frontend;
 class MostView extends Frontend
 {
     /**
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @return Collection
      */
     public function getMostViewPosts()
     {
@@ -48,7 +49,7 @@ class MostView extends Frontend
     }
 
     /**
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @return Collection
      */
     public function getRecentPost()
     {

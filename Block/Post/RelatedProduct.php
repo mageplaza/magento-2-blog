@@ -46,25 +46,25 @@ class RelatedProduct extends ListProduct
     const LIMIT = '12';
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_productCollectionFactory;
 
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @var HelperData
      */
     protected $helper;
 
     /**
      * RelatedProduct constructor.
      *
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
-     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
-     * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Mageplaza\Blog\Helper\Data $helperData
-     * @param \Magento\Framework\Url\Helper\Data $urlHelper
+     * @param Context $context
+     * @param PostHelper $postDataHelper
+     * @param Resolver $layerResolver
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param CollectionFactory $productCollectionFactory
+     * @param HelperData $helperData
+     * @param Data $urlHelper
      * @param array $data
      */
     public function __construct(

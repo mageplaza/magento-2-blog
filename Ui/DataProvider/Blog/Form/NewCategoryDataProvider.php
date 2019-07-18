@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Ui\DataProvider\Blog\Form;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\UrlInterface;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory;
@@ -102,7 +103,7 @@ class NewCategoryDataProvider extends AbstractDataProvider
     /**
      * Get notice message
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     protected function getNotice()
     {

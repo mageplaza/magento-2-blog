@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Controller\Adminhtml\Category;
@@ -36,17 +37,17 @@ class RefreshPath extends Category
     /**
      * JSON Result Factory
      *
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     public $resultJsonFactory;
 
     /**
      * RefreshPath constructor.
      *
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param JsonFactory $resultJsonFactory
+     * @param CategoryFactory $categoryFactory
+     * @param Registry $coreRegistry
+     * @param Context $context
      */
     public function __construct(
         Context $context,
@@ -62,7 +63,7 @@ class RefreshPath extends Category
     /**
      * Build response for refresh input element 'path' in form
      *
-     * @return \Magento\Framework\Controller\Result\Json
+     * @return Json
      */
     public function execute()
     {
@@ -70,7 +71,7 @@ class RefreshPath extends Category
         if ($categoryId) {
             $category = $this->categoryFactory->create()->load($categoryId);
 
-            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            /** @var Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
 
             return $resultJson->setData(['id' => $categoryId, 'path' => $category->getPath()]);

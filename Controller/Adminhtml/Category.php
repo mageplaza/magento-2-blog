@@ -38,23 +38,23 @@ abstract class Category extends Action
     /**
      * Blog Category Factory
      *
-     * @var \Mageplaza\Blog\Model\CategoryFactory
+     * @var CategoryFactory
      */
     public $categoryFactory;
 
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
      * Category constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param CategoryFactory $categoryFactory
      */
     public function __construct(
         Context $context,
@@ -70,6 +70,7 @@ abstract class Category extends Action
     /**
      * @param bool $register
      * @param bool $isSave
+     *
      * @return bool|\Mageplaza\Blog\Model\Category
      */
     public function initCategory($register = false, $isSave = false)

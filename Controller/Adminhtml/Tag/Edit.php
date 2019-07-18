@@ -22,7 +22,9 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Tag;
 use Mageplaza\Blog\Model\TagFactory;
@@ -36,17 +38,17 @@ class Edit extends Tag
     /**
      * Page factory
      *
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     public $resultPageFactory;
 
     /**
      * Edit constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param TagFactory $tagFactory
+     * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
@@ -60,7 +62,7 @@ class Edit extends Tag
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return \Magento\Backend\Model\View\Result\Page|Redirect|Page
      */
     public function execute()
     {
@@ -80,7 +82,7 @@ class Edit extends Tag
 
         $this->coreRegistry->register('mageplaza_blog_tag', $tag);
 
-        /** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
+        /** @var \Magento\Backend\Model\View\Result\Page|Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mageplaza_Blog::tag');
         $resultPage->getConfig()->getTitle()->set(__('Tags'));

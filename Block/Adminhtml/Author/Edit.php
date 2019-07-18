@@ -24,6 +24,7 @@ namespace Mageplaza\Blog\Block\Adminhtml\Author;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Backend\Block\Widget\Form\Container;
 use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\Author;
 
 /**
  * Class Edit
@@ -32,15 +33,15 @@ use Magento\Framework\Registry;
 class Edit extends Container
 {
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
      * Edit constructor.
      *
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param Context $context
+     * @param Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -89,7 +90,7 @@ class Edit extends Container
      */
     public function getHeaderText()
     {
-        /** @var \Mageplaza\Blog\Model\Author $author */
+        /** @var Author $author */
         $author = $this->coreRegistry->registry('mageplaza_blog_author');
         if ($author->getId()) {
             return __("Edit Author '%1'", $this->escapeHtml($author->getName()));

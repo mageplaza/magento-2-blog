@@ -21,9 +21,11 @@
 
 namespace Mageplaza\Blog\Block\Widget;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Widget\Block\BlockInterface;
 use Mageplaza\Blog\Block\Frontend;
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
  * Class Posts
@@ -37,7 +39,7 @@ class Posts extends Frontend implements BlockInterface
     protected $_template = "widget/posts.phtml";
 
     /**
-     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection|\Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @return AbstractCollection|Collection
      */
     public function getCollection()
     {
@@ -55,7 +57,7 @@ class Posts extends Frontend implements BlockInterface
     }
 
     /**
-     * @return \Mageplaza\Blog\Helper\Data
+     * @return Data
      */
     public function getHelperData()
     {

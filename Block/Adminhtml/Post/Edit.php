@@ -24,6 +24,7 @@ namespace Mageplaza\Blog\Block\Adminhtml\Post;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Backend\Block\Widget\Form\Container;
 use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\Post;
 
 /**
  * Class Edit
@@ -70,12 +71,12 @@ class Edit extends Container
         $this->buttonList->add(
             'save-and-continue',
             [
-                'label' => __('Save and Continue Edit'),
-                'class' => 'save',
+                'label'          => __('Save and Continue Edit'),
+                'class'          => 'save',
                 'data_attribute' => [
                     'mage-init' => [
                         'button' => [
-                            'event' => 'saveAndContinueEdit',
+                            'event'  => 'saveAndContinueEdit',
                             'target' => '#edit_form'
                         ]
                     ]
@@ -88,8 +89,8 @@ class Edit extends Container
             $this->buttonList->add(
                 'duplicate',
                 [
-                    'label' => __('Duplicate'),
-                    'class' => 'duplicate',
+                    'label'   => __('Duplicate'),
+                    'class'   => 'duplicate',
                     'onclick' => sprintf("location.href = '%s';", $this->getDuplicateUrl()),
                 ],
                 -101
@@ -106,7 +107,7 @@ class Edit extends Container
      */
     public function getHeaderText()
     {
-        /** @var \Mageplaza\Blog\Model\Post $post */
+        /** @var Post $post */
         $post = $this->coreRegistry->registry('mageplaza_blog_post');
         if ($post->getId() && $post->getDuplicate()) {
             return __("Edit Post '%1'", $this->escapeHtml($post->getName()));
@@ -122,12 +123,12 @@ class Edit extends Container
      */
     public function getFormActionUrl()
     {
-        /** @var \Mageplaza\Blog\Model\Post $post */
+        /** @var Post $post */
         $post = $this->coreRegistry->registry('mageplaza_blog_post');
         if ($post->getId()) {
             if ($post->getDuplicate()) {
                 $ar = [
-                    'id' => $post->getId(),
+                    'id'        => $post->getId(),
                     'duplicate' => $post->getDuplicate()
                 ];
             } else {
@@ -146,6 +147,7 @@ class Edit extends Container
     protected function getDuplicateUrl()
     {
         $post = $this->coreRegistry->registry('mageplaza_blog_post');
+
         return $this->getUrl('*/*/duplicate', ['id' => $post->getId(), 'duplicate' => true]);
     }
 }

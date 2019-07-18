@@ -38,23 +38,23 @@ abstract class Post extends Action
     /**
      * Post Factory
      *
-     * @var \Mageplaza\Blog\Model\PostFactory
+     * @var PostFactory
      */
     public $postFactory;
 
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
      * Post constructor.
      *
-     * @param \Mageplaza\Blog\Model\PostFactory $postFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param PostFactory $postFactory
+     * @param Registry $coreRegistry
+     * @param Context $context
      */
     public function __construct(
         PostFactory $postFactory,
@@ -74,7 +74,7 @@ abstract class Post extends Action
      */
     protected function initPost($register = false, $isSave = false)
     {
-        $postId = (int)$this->getRequest()->getParam('id');
+        $postId = (int) $this->getRequest()->getParam('id');
         $duplicate = $this->getRequest()->getParam('duplicate');
 
         /** @var \Mageplaza\Blog\Model\Post $post */

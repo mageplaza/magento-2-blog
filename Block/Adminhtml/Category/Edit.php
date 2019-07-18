@@ -21,9 +21,10 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Category;
 
+use Magento\Backend\Block\Widget\Context;
 use Magento\Backend\Block\Widget\Form\Container;
 use Magento\Framework\Registry;
-use Magento\Backend\Block\Widget\Context;
+use Mageplaza\Blog\Model\Category;
 
 /**
  * Class Edit
@@ -40,6 +41,7 @@ class Edit extends Container
 
     /**
      * Edit constructor.
+     *
      * @param Context $context
      * @param array $data
      */
@@ -64,15 +66,15 @@ class Edit extends Container
 
         parent::_construct();
 
-        /** @var \Mageplaza\Blog\Model\Category $category */
+        /** @var Category $category */
         $category = $this->coreRegistry->registry('category');
 
         if ($category->getId() && !$category->getDuplicate()) {
             $this->buttonList->add(
                 'duplicate',
                 [
-                    'label' => __('Duplicate'),
-                    'class' => 'duplicate',
+                    'label'   => __('Duplicate'),
+                    'class'   => 'duplicate',
                     'onclick' => sprintf("location.href = '%s';", $this->getDuplicateUrl()),
                 ],
                 -101
@@ -90,8 +92,12 @@ class Edit extends Container
      */
     protected function getDuplicateUrl()
     {
-        /** @var \Mageplaza\Blog\Model\Category $category */
+        /** @var Category $category */
         $category = $this->coreRegistry->registry('category');
-        return $this->getUrl('*/*/duplicate', ['id' => $category->getId(), 'duplicate' => true, 'parent'=> $category->getParentId()]);
+
+        return $this->getUrl(
+            '*/*/duplicate',
+            ['id' => $category->getId(), 'duplicate' => true, 'parent' => $category->getParentId()]
+        );
     }
 }

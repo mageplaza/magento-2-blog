@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Block\Tag;
 
 use Mageplaza\Blog\Block\Frontend;
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
  * Class Widget
@@ -66,7 +67,7 @@ class Widget extends Frontend
      */
     public function getTagSize($tag)
     {
-        /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $postList */
+        /** @var Collection $postList */
         $postList = $this->helperData->getPostList();
         if ($postList && ($max = $postList->getSize()) > 1) {
             $maxSize = 22;

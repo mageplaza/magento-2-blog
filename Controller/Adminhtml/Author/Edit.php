@@ -22,7 +22,10 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Author;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Author;
 use Mageplaza\Blog\Model\AuthorFactory;
@@ -34,17 +37,17 @@ use Mageplaza\Blog\Model\AuthorFactory;
 class Edit extends Author
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     public $resultPageFactory;
 
     /**
      * Edit constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param AuthorFactory $authorFactory
+     * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
@@ -58,7 +61,7 @@ class Edit extends Author
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page
+     * @return \Magento\Backend\Model\View\Result\Page|ResponseInterface|ResultInterface|Page
      */
     public function execute()
     {
@@ -79,7 +82,7 @@ class Edit extends Author
 
         $this->coreRegistry->register('mageplaza_blog_author', $author);
 
-        /** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
+        /** @var \Magento\Backend\Model\View\Result\Page|Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mageplaza_Blog::author');
         $resultPage->getConfig()->getTitle()->set(__('Author Management'));

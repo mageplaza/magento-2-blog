@@ -21,7 +21,9 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel\Post;
 
+use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Zend_Db_Select;
 
 /**
  * Class Collection
@@ -64,12 +66,12 @@ class Collection extends AbstractCollection
      * Get SQL for get record count.
      * Extra GROUP BY strip added.
      *
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      */
     public function getSelectCountSql()
     {
         $countSelect = parent::getSelectCountSql();
-        $countSelect->reset(\Zend_Db_Select::GROUP);
+        $countSelect->reset(Zend_Db_Select::GROUP);
 
         return $countSelect;
     }

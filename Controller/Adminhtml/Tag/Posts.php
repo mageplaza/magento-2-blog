@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Layout;
 use Magento\Framework\View\Result\LayoutFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Tag;
 use Mageplaza\Blog\Model\TagFactory;
@@ -34,17 +35,17 @@ use Mageplaza\Blog\Model\TagFactory;
 class Posts extends Tag
 {
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory
+     * @var LayoutFactory
      */
     public $resultLayoutFactory;
 
     /**
      * Posts constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @param \Mageplaza\Blog\Model\TagFactory $postFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param LayoutFactory $resultLayoutFactory
+     * @param TagFactory $postFactory
      */
     public function __construct(
         Context $context,
@@ -58,7 +59,7 @@ class Posts extends Tag
     }
 
     /**
-     * @return \Magento\Framework\View\Result\Layout
+     * @return Layout
      */
     public function execute()
     {

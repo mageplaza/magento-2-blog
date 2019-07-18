@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block;
 
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
@@ -35,21 +36,21 @@ use Mageplaza\Blog\Helper\Data as HelperData;
 class Design extends Template
 {
     /**
-     * @type \Mageplaza\Blog\Helper\Data
+     * @type HelperData
      */
     public $helperData;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface
+     * @var ThemeProviderInterface
      */
     protected $_themeProvider;
 
     /**
      * Design constructor.
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Mageplaza\Blog\Helper\Data $helperData
-     * @param \Magento\Framework\View\Design\Theme\ThemeProviderInterface $_themeProvider
+     * @param Context $context
+     * @param HelperData $helperData
+     * @param ThemeProviderInterface $_themeProvider
      * @param array $data
      */
     public function __construct(
@@ -65,7 +66,7 @@ class Design extends Template
     }
 
     /**
-     * @return \Mageplaza\Blog\Helper\Data
+     * @return HelperData
      */
     public function getHelper()
     {
@@ -80,7 +81,7 @@ class Design extends Template
     {
         $themeId = $this->helperData->getConfigValue(DesignInterface::XML_PATH_THEME_ID);
 
-        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var $theme ThemeInterface */
         $theme = $this->_themeProvider->getThemeById($themeId);
 
         return $theme->getCode();

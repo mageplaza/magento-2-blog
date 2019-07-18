@@ -21,7 +21,15 @@
 
 namespace Mageplaza\Blog\Model\Import;
 
+use Exception;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\User\Model\UserFactory;
+use Mageplaza\Blog\Model\CategoryFactory;
+use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
+use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\TagFactory;
+use Mageplaza\Blog\Model\TopicFactory;
 
 /**
  * Class MageFanM2
@@ -91,7 +99,7 @@ class MageFanM2 extends AbstractImport
      * @param $connection
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function run($data, $connection)
     {
@@ -116,7 +124,7 @@ class MageFanM2 extends AbstractImport
      * @param $connection
      *
      * @return bool|mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _importPosts($data, $connection)
     {
@@ -125,9 +133,9 @@ class MageFanM2 extends AbstractImport
         $isReplace = true;
         if ($result) {
             $this->_resetRecords();
-            /** @var \Mageplaza\Blog\Model\PostFactory */
+            /** @var PostFactory */
             $postModel = $this->_postFactory->create();
-            /** @var \Mageplaza\Blog\Model\TopicFactory */
+            /** @var TopicFactory */
             $topicModel = $this->_topicFactory->create();
             $oldPostIds = [];
             $importSource = $data['type'] . '-' . $data['database'];
@@ -188,7 +196,7 @@ class MageFanM2 extends AbstractImport
                                 $this->_addPosts($postModel, $post);
                                 $this->_successCount++;
                                 $this->_hasData = true;
-                            } catch (\Exception $e) {
+                            } catch (Exception $e) {
                                 $this->_errorCount++;
                                 $this->_hasData = true;
                                 continue;
@@ -209,7 +217,7 @@ class MageFanM2 extends AbstractImport
                                 $this->_addPosts($postModel, $post);
                                 $this->_successCount++;
                                 $this->_hasData = true;
-                            } catch (\Exception $e) {
+                            } catch (Exception $e) {
                                 $this->_errorCount++;
                                 $this->_hasData = true;
                                 continue;
@@ -251,7 +259,7 @@ class MageFanM2 extends AbstractImport
                                 'import_source' => $importSource . '-' . $topic['post_id']
                             ])->save();
                             $oldTopicIds[$topicModel->getId()] = $topic['post_id'];
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             continue;
                         }
                         $topicCount++;
@@ -274,7 +282,7 @@ class MageFanM2 extends AbstractImport
                             'post_id'  => $newPostId,
                             'position' => 0
                         ]);
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         continue;
                     }
                 }
@@ -296,7 +304,7 @@ class MageFanM2 extends AbstractImport
      * @param $connection
      *
      * @return mixed|void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _importTags($data, $connection)
     {
@@ -307,7 +315,7 @@ class MageFanM2 extends AbstractImport
         $oldTagIds = [];
 
         /**
-         * @var \Mageplaza\Blog\Model\TagFactory
+         * @var TagFactory
          */
         $tagModel = $this->_tagFactory->create();
         $importSource = $data['type'] . '-' . $data['database'];
@@ -357,7 +365,7 @@ class MageFanM2 extends AbstractImport
                             $this->_updateTags($tag, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -369,7 +377,7 @@ class MageFanM2 extends AbstractImport
                             $this->_addTags($tagModel, $tag);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -386,7 +394,7 @@ class MageFanM2 extends AbstractImport
                             $this->_updateTags($tag, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -397,7 +405,7 @@ class MageFanM2 extends AbstractImport
                             $this->_addTags($tagModel, $tag);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -433,7 +441,7 @@ class MageFanM2 extends AbstractImport
                         'post_id'  => $newPostId,
                         'position' => 0
                     ]);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     continue;
                 }
             }
@@ -449,7 +457,7 @@ class MageFanM2 extends AbstractImport
      * @param $connection
      *
      * @return mixed|void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _importCategories($data, $connection)
     {
@@ -457,7 +465,7 @@ class MageFanM2 extends AbstractImport
         $result = mysqli_query($connection, $sqlString);
         $isReplace = true;
         /**
-         * @var \Mageplaza\Blog\Model\CategoryFactory
+         * @var CategoryFactory
          */
         $categoryModel = $this->_categoryFactory->create();
         $oldCategoryIds = [];
@@ -515,7 +523,7 @@ class MageFanM2 extends AbstractImport
                             $this->_updateCategories($category, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -528,7 +536,7 @@ class MageFanM2 extends AbstractImport
                             $newCategories[$categoryModel->getId()] = $category;
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -544,7 +552,7 @@ class MageFanM2 extends AbstractImport
                             $this->_updateCategories($category, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -558,7 +566,7 @@ class MageFanM2 extends AbstractImport
                             $newCategories[$categoryModel->getId()] = $category;
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -614,7 +622,7 @@ class MageFanM2 extends AbstractImport
                         'post_id'     => $newPostId,
                         'position'    => 0
                     ]);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     continue;
                 }
             }
@@ -629,7 +637,7 @@ class MageFanM2 extends AbstractImport
      * @param $data
      * @param $connection
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _importComments($data, $connection)
     {
@@ -640,7 +648,7 @@ class MageFanM2 extends AbstractImport
         $result = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
         $isReplace = true;
-        /** @var \Mageplaza\Blog\Model\CommentFactory */
+        /** @var CommentFactory */
         $commentModel = $this->_commentFactory->create();
         $oldCommentIds = [];
         $newComments = [];
@@ -760,7 +768,7 @@ class MageFanM2 extends AbstractImport
                         $newComments[$commentModel->getId()] = $comment;
                         $this->_successCount++;
                         $this->_hasData = true;
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         $this->_errorCount++;
                         $this->_hasData = true;
                         continue;
@@ -816,7 +824,7 @@ class MageFanM2 extends AbstractImport
         $oldUserIds = [];
         $magentoUserEmail = [];
 
-        /** @var \Magento\User\Model\UserFactory */
+        /** @var UserFactory */
         $userModel = $this->_userFactory->create();
 
         foreach ($userModel->getCollection() as $user) {
@@ -841,7 +849,7 @@ class MageFanM2 extends AbstractImport
                     $this->_successCount++;
                     $this->_hasData = true;
                     $oldUserIds[$userModel->getId()] = $user['user_id'];
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $this->_errorCount++;
                     $this->_hasData = true;
                     continue;

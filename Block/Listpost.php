@@ -21,7 +21,9 @@
 
 namespace Mageplaza\Blog\Block;
 
+use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Model\Config\Source\DisplayType;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
  * Class Listpost
@@ -30,18 +32,17 @@ use Mageplaza\Blog\Model\Config\Source\DisplayType;
 class Listpost extends Frontend
 {
     /**
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return Collection
+     * @throws LocalizedException
      */
     public function getPostCollection()
     {
         $collection = $this->getCollection();
 
         if ($collection && $collection->getSize()) {
-            $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'mpblog.post.pager');
+            $pager = $this->getLayout()->createBlock(\Magento\Theme\Block\Html\Pager::class, 'mpblog.post.pager');
 
             $perPageValues = (string) $this->helperData->getConfigGeneral('pagination');
-            ;
             $perPageValues = explode(',', $perPageValues);
             $perPageValues = array_combine($perPageValues, $perPageValues);
 
@@ -78,7 +79,7 @@ class Listpost extends Frontend
     /**
      * Override this function to apply collection for each type
      *
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @return Collection
      */
     protected function getCollection()
     {
@@ -141,7 +142,7 @@ class Listpost extends Frontend
 
     /**
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function applySeoCode()
     {

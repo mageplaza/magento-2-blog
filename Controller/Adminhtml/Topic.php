@@ -38,23 +38,23 @@ abstract class Topic extends Action
     /**
      * Topic Factory
      *
-     * @var \Mageplaza\Blog\Model\TopicFactory
+     * @var TopicFactory
      */
     public $topicFactory;
 
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
      * Topic constructor.
      *
-     * @param \Mageplaza\Blog\Model\TopicFactory $topicFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param TopicFactory $topicFactory
+     * @param Registry $coreRegistry
+     * @param Context $context
      */
     public function __construct(
         Context $context,

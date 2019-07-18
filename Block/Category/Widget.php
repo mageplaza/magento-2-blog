@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block\Category;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Phrase;
 use Mageplaza\Blog\Block\Adminhtml\Category\Tree;
 use Mageplaza\Blog\Block\Frontend;
 use Mageplaza\Blog\Helper\Data;
@@ -46,7 +47,7 @@ class Widget extends Frontend
     /**
      * @param $tree
      *
-     * @return \Magento\Framework\Phrase|string
+     * @return Phrase|string
      */
     public function getCategoryTreeHtml($tree)
     {

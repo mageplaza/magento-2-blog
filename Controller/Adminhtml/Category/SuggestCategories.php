@@ -22,9 +22,11 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutFactory;
+use Mageplaza\Blog\Block\Adminhtml\Category\Tree;
 use Mageplaza\Blog\Controller\Adminhtml\Category;
 use Mageplaza\Blog\Model\CategoryFactory;
 
@@ -37,25 +39,25 @@ class SuggestCategories extends Category
     /**
      * Json result factory
      *
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     public $resultJsonFactory;
 
     /**
      * Layout factory
      *
-     * @var \Magento\Framework\View\LayoutFactory
+     * @var LayoutFactory
      */
     public $layoutFactory;
 
     /**
      * SuggestCategories constructor.
      *
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param JsonFactory $resultJsonFactory
+     * @param LayoutFactory $layoutFactory
+     * @param CategoryFactory $categoryFactory
+     * @param Registry $coreRegistry
+     * @param Context $context
      */
     public function __construct(
         Context $context,
@@ -73,15 +75,15 @@ class SuggestCategories extends Category
     /**
      * Blog Category list suggestion based on already entered symbols
      *
-     * @return \Magento\Framework\Controller\Result\Json
+     * @return Json
      */
     public function execute()
     {
-        /** @var \Mageplaza\Blog\Block\Adminhtml\Category\Tree $treeBlock */
+        /** @var Tree $treeBlock */
         $treeBlock = $this->layoutFactory->create()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Tree');
         $data = $treeBlock->getSuggestedCategoriesJson($this->getRequest()->getParam('label_part'));
 
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         $resultJson->setJsonData($data);
 

@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 
+use Exception;
+use Magento\Framework\Controller\Result\Redirect;
 use Mageplaza\Blog\Controller\Adminhtml\Tag;
 
 /**
@@ -30,7 +32,7 @@ use Mageplaza\Blog\Controller\Adminhtml\Tag;
 class Delete extends Tag
 {
     /**
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
@@ -41,7 +43,7 @@ class Delete extends Tag
                     ->load($id)
                     ->delete();
                 $this->messageManager->addSuccess(__('The Tag has been deleted.'));
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $id]);
 

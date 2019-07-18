@@ -21,11 +21,16 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Mageplaza\Blog\Model\Topic;
 use Mageplaza\Blog\Model\TopicFactory;
+use RuntimeException;
 
 /**
  * Class InlineEdit
@@ -66,11 +71,11 @@ class InlineEdit extends Action
     }
 
     /**
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->jsonFactory->create();
         $error = false;
         $messages = [];
@@ -85,7 +90,7 @@ class InlineEdit extends Action
 
         $key = array_keys($postItems);
         $topicId = !empty($key) ? (int) $key[0] : '';
-        /** @var \Mageplaza\Blog\Model\Topic $topic */
+        /** @var Topic $topic */
         $topic = $this->topicFactory->create()->load($topicId);
         try {
             $topic->addData($postItems[$topicId])
@@ -93,10 +98,10 @@ class InlineEdit extends Action
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithTopicId($topic, $e->getMessage());
             $error = true;
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $messages[] = $this->getErrorWithTopicId($topic, $e->getMessage());
             $error = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $messages[] = $this->getErrorWithTopicId(
                 $topic,
                 __('Something went wrong while saving the Topic.')
@@ -113,12 +118,12 @@ class InlineEdit extends Action
     /**
      * Add Topic id to error message
      *
-     * @param \Mageplaza\Blog\Model\Topic $topic
+     * @param Topic $topic
      * @param string $errorText
      *
      * @return string
      */
-    public function getErrorWithTopicId(\Mageplaza\Blog\Model\Topic $topic, $errorText)
+    public function getErrorWithTopicId(Topic $topic, $errorText)
     {
         return '[Topic ID: ' . $topic->getId() . '] ' . $errorText;
     }

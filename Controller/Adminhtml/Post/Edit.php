@@ -22,7 +22,9 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
 use Mageplaza\Blog\Model\PostFactory;
@@ -36,17 +38,17 @@ class Edit extends Post
     /**
      * Page factory
      *
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     public $resultPageFactory;
 
     /**
      * Edit constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Model\PostFactory $postFactory
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param PostFactory $postFactory
+     * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
@@ -60,7 +62,7 @@ class Edit extends Post
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return \Magento\Backend\Model\View\Result\Page|Redirect|Page
      */
     public function execute()
     {
@@ -86,7 +88,7 @@ class Edit extends Post
 
         $this->coreRegistry->register('mageplaza_blog_post', $post);
 
-        /** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
+        /** @var \Magento\Backend\Model\View\Result\Page|Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mageplaza_Blog::post');
         $resultPage->getConfig()->getTitle()->set(__('Posts'));

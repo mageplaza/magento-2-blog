@@ -21,11 +21,18 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Author;
 
+use Exception;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Controller\Adminhtml\Author;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\AuthorFactory;
+use RuntimeException;
 
 /**
  * Class Save
@@ -34,17 +41,17 @@ use Mageplaza\Blog\Model\AuthorFactory;
 class Save extends Author
 {
     /**
-     * @var \Mageplaza\Blog\Helper\Image
+     * @var Image
      */
     protected $imageHelper;
 
     /**
      * Save constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Model\AuthorFactory $authorFactory
-     * @param \Mageplaza\Blog\Helper\Image $imageHelper
+     * @param Context $context
+     * @param Registry $registry
+     * @param AuthorFactory $authorFactory
+     * @param Image $imageHelper
      */
     public function __construct(
         Context $context,
@@ -58,8 +65,8 @@ class Save extends Author
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\ResultInterface
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @return ResponseInterface|Redirect|ResultInterface
+     * @throws FileSystemException
      */
     public function execute()
     {
@@ -92,11 +99,11 @@ class Save extends Author
                 }
 
                 return $resultRedirect;
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the Author.'));
             }
 

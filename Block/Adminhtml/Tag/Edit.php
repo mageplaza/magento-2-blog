@@ -24,6 +24,7 @@ namespace Mageplaza\Blog\Block\Adminhtml\Tag;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Backend\Block\Widget\Form\Container;
 use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\Tag;
 
 /**
  * Class Edit
@@ -90,7 +91,7 @@ class Edit extends Container
      */
     public function getHeaderText()
     {
-        /** @var \Mageplaza\Blog\Model\Tag $tag */
+        /** @var Tag $tag */
         $tag = $this->coreRegistry->registry('mageplaza_blog_tag');
         if ($tag->getId()) {
             return __("Edit Tag '%1'", $this->escapeHtml($tag->getName()));

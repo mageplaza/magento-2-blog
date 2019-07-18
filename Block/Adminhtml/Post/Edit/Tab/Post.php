@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
 
 use DateTimeZone;
+use Exception;
 use IntlDateFormatter;
 use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element;
 use Magento\Backend\Block\Template\Context;
@@ -146,7 +147,7 @@ class Post extends Generic implements TabInterface
 
     /**
      * @inheritdoc
-     * @throws \Exception
+     * @throws Exception
      */
     protected function _prepareForm()
     {

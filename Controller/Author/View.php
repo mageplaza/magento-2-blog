@@ -24,6 +24,7 @@ namespace Mageplaza\Blog\Controller\Author;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Helper\Data;
 
@@ -34,12 +35,12 @@ use Mageplaza\Blog\Helper\Data;
 class View extends Action
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     public $resultPageFactory;
 
     /**
-     * @type \Magento\Framework\Controller\Result\ForwardFactory
+     * @type ForwardFactory
      */
     protected $resultForwardFactory;
 
@@ -70,7 +71,7 @@ class View extends Action
     }
 
     /**
-     * @return $this|\Magento\Framework\View\Result\Page
+     * @return $this|Page
      */
     public function execute()
     {

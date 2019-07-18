@@ -21,11 +21,17 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Comment;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Mageplaza\Blog\Model\Comment;
 use Mageplaza\Blog\Model\CommentFactory;
+use Mageplaza\Blog\Model\Post;
+use RuntimeException;
 
 /**
  * Class InlineEdit
@@ -36,14 +42,14 @@ class InlineEdit extends Action
     /**
      * JSON Factory
      *
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     public $jsonFactory;
 
     /**
      * Post Factory
      *
-     * @var \Mageplaza\Blog\Model\CommentFactory
+     * @var CommentFactory
      */
     public $commentFactory;
 
@@ -66,11 +72,11 @@ class InlineEdit extends Action
     }
 
     /**
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->jsonFactory->create();
         $error = false;
         $messages = [];
@@ -88,7 +94,7 @@ class InlineEdit extends Action
         $key = array_keys($commentItems);
         $commentId = !empty($key) ? (int) $key[0] : '';
 
-        /** @var \Mageplaza\Blog\Model\Post $post */
+        /** @var Post $post */
         $comment = $this->commentFactory->create()->load($commentId);
         try {
             $commentData = $commentItems[$commentId];
@@ -97,10 +103,10 @@ class InlineEdit extends Action
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithCommentId($comment, $e->getMessage());
             $error = true;
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $messages[] = $this->getErrorWithCommentId($comment, $e->getMessage());
             $error = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $messages[] = $this->getErrorWithCommentId(
                 $comment,
                 __('Something went wrong while saving the Comment.')
@@ -115,12 +121,12 @@ class InlineEdit extends Action
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Comment $comment
+     * @param Comment $comment
      * @param $errorText
      *
      * @return string
      */
-    public function getErrorWithCommentId(\Mageplaza\Blog\Model\Comment $comment, $errorText)
+    public function getErrorWithCommentId(Comment $comment, $errorText)
     {
         return '[Comment ID: ' . $comment->getId() . '] ' . $errorText;
     }

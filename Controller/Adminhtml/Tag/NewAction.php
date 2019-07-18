@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Forward;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 
 /**
@@ -32,15 +33,15 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 class NewAction extends Action
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @var ForwardFactory
      */
     public $resultForwardFactory;
 
     /**
      * NewAction constructor.
      *
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param ForwardFactory $resultForwardFactory
+     * @param Context $context
      */
     public function __construct(
         ForwardFactory $resultForwardFactory,
@@ -54,7 +55,7 @@ class NewAction extends Action
     /**
      * forward to edit
      *
-     * @return \Magento\Backend\Model\View\Result\Forward
+     * @return Forward
      */
     public function execute()
     {

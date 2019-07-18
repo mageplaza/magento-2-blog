@@ -26,6 +26,7 @@ use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
 use Mageplaza\Blog\Helper\Image as ImageHelper;
@@ -107,7 +108,7 @@ class Form extends Generic
     /**
      * @inheritdoc
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _prepareForm()
     {

@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
+use Exception;
+use Magento\Framework\Controller\Result\Redirect;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
 
 /**
@@ -30,7 +32,7 @@ use Mageplaza\Blog\Controller\Adminhtml\Post;
 class Delete extends Post
 {
     /**
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
@@ -42,7 +44,7 @@ class Delete extends Post
                     ->delete();
 
                 $this->messageManager->addSuccess(__('The Post has been deleted.'));
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $id]);
 

@@ -26,8 +26,11 @@ use Magento\Catalog\Block\Adminhtml\Category\AbstractCategory;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Tree;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Element\BlockInterface;
 use Mageplaza\Blog\Model\CategoryFactory as BlogCategoryFactory;
 use Mageplaza\Blog\Model\ResourceModel\Category\Tree as BlogResourceTree;
 
@@ -48,7 +51,7 @@ class Form extends AbstractCategory
     protected $_template = 'category/edit/form.phtml';
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var EncoderInterface
      */
     public $jsonEncoder;
 
@@ -61,7 +64,7 @@ class Form extends AbstractCategory
      * @param CategoryFactory $categoryFactory
      * @param BlogResourceTree $blogCategoryTree
      * @param BlogCategoryFactory $blogCategoryFactory
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param EncoderInterface $jsonEncoder
      * @param array $data
      */
     public function __construct(
@@ -96,13 +99,13 @@ class Form extends AbstractCategory
 
         // Save button
         $this->addButton('save', [
-            'id' => 'save',
-            'label' => __('Save Category'),
-            'class' => 'save primary save-category',
+            'id'             => 'save',
+            'label'          => __('Save Category'),
+            'class'          => 'save primary save-category',
             'data_attribute' => [
                 'mage-init' => [
                     'Mageplaza_Blog/category/edit' => [
-                        'url' => $this->getSaveUrl(),
+                        'url'  => $this->getSaveUrl(),
                         'ajax' => true
                     ]
                 ]
@@ -112,23 +115,23 @@ class Form extends AbstractCategory
         // Delete button
         if ($categoryId && !in_array($categoryId, $this->getRootIds()) && !$this->getRequest()->getParam('duplicate')) {
             $this->addButton('delete', [
-                'id' => 'delete',
-                'label' => __('Delete Category'),
+                'id'      => 'delete',
+                'label'   => __('Delete Category'),
                 'onclick' => "categoryDelete('" . $this->getUrl(
-                        'mageplaza_blog/*/delete',
-                        ['_current' => true]
-                    ) . "')",
-                'class' => 'delete'
+                    'mageplaza_blog/*/delete',
+                    ['_current' => true]
+                ) . "')",
+                'class'   => 'delete'
             ]);
         }
 
         // Reset button
         $resetPath = $categoryId ? 'mageplaza_blog/*/edit' : 'mageplaza_blog/*/add';
         $this->addButton('reset', [
-            'id' => 'reset',
-            'label' => __('Reset'),
+            'id'      => 'reset',
+            'label'   => __('Reset'),
             'onclick' => "categoryReset('" . $this->getUrl($resetPath, ['_current' => true]) . "',false)",
-            'class' => 'reset'
+            'class'   => 'reset'
         ]);
 
         return parent::_prepareLayout();
@@ -188,7 +191,7 @@ class Form extends AbstractCategory
      * @param $config
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function addAdditionalButton($alias, $config)
     {
@@ -234,7 +237,7 @@ class Form extends AbstractCategory
     }
 
     /**
-     * @return \Magento\Framework\Phrase|string
+     * @return Phrase|string
      */
     public function getHeader()
     {
@@ -302,7 +305,7 @@ class Form extends AbstractCategory
      * @param $buttonId
      * @param array $data
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function addButton($buttonId, array $data)
     {
@@ -319,7 +322,7 @@ class Form extends AbstractCategory
 
     /**
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function hasToolbarBlock()
     {
@@ -330,8 +333,8 @@ class Form extends AbstractCategory
      * @param $childId
      * @param null $blockClassName
      *
-     * @return \Magento\Framework\View\Element\BlockInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return BlockInterface
+     * @throws LocalizedException
      */
     public function getButtonChildBlock($childId, $blockClassName = null)
     {

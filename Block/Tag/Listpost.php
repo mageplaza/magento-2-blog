@@ -22,6 +22,8 @@
 namespace Mageplaza\Blog\Block\Tag;
 
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
+use Mageplaza\Blog\Model\TagFactory;
 
 /**
  * Class Listpost
@@ -30,14 +32,14 @@ use Mageplaza\Blog\Helper\Data;
 class Listpost extends \Mageplaza\Blog\Block\Listpost
 {
     /**
-     * @var \Mageplaza\Blog\Model\TagFactory
+     * @var TagFactory
      */
     protected $_tag;
 
     /**
      * Override this function to apply collection for each type
      *
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @return Collection
      */
     protected function getCollection()
     {

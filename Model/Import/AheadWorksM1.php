@@ -21,7 +21,13 @@
 
 namespace Mageplaza\Blog\Model\Import;
 
+use Exception;
+use Magento\Framework\Exception\LocalizedException;
+use Mageplaza\Blog\Model\CategoryFactory;
+use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
+use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\TagFactory;
 
 /**
  * Class AheadWorksM1
@@ -67,7 +73,7 @@ class AheadWorksM1 extends AbstractImport
      * @param $connection
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function run($data, $connection)
     {
@@ -89,7 +95,7 @@ class AheadWorksM1 extends AbstractImport
      * @param $connection
      *
      * @return bool|mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _importPosts($data, $connection)
     {
@@ -100,7 +106,7 @@ class AheadWorksM1 extends AbstractImport
         if ($result) {
             $this->_resetRecords();
             /**
-             * @var \Mageplaza\Blog\Model\PostFactory
+             * @var PostFactory
              */
             $postModel = $this->_postFactory->create();
             $oldPostIds = [];
@@ -167,7 +173,7 @@ class AheadWorksM1 extends AbstractImport
                                 $this->_addPosts($postModel, $post);
                                 $this->_successCount++;
                                 $this->_hasData = true;
-                            } catch (\Exception $e) {
+                            } catch (Exception $e) {
                                 $this->_errorCount++;
                                 $this->_hasData = true;
                                 continue;
@@ -191,7 +197,7 @@ class AheadWorksM1 extends AbstractImport
                                 $this->_addPosts($postModel, $post);
                                 $this->_successCount++;
                                 $this->_hasData = true;
-                            } catch (\Exception $e) {
+                            } catch (Exception $e) {
                                 $this->_errorCount++;
                                 $this->_hasData = true;
                                 continue;
@@ -258,7 +264,7 @@ class AheadWorksM1 extends AbstractImport
         $isReplace = true;
         $oldTagIds = [];
 
-        /** @var \Mageplaza\Blog\Model\TagFactory */
+        /** @var TagFactory */
         $tagModel = $this->_tagFactory->create();
         $importSource = $data['type'] . '-' . $data['database'];
 
@@ -299,7 +305,7 @@ class AheadWorksM1 extends AbstractImport
                             $this->_updateTags($tag, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -311,7 +317,7 @@ class AheadWorksM1 extends AbstractImport
                             $this->_addTags($tagModel, $tag);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -325,7 +331,7 @@ class AheadWorksM1 extends AbstractImport
                             $this->_updateTags($tag, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -336,7 +342,7 @@ class AheadWorksM1 extends AbstractImport
                             $this->_addTags($tagModel, $tag);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -369,7 +375,7 @@ class AheadWorksM1 extends AbstractImport
                                 $this->_resourceConnection->getTableName('mageplaza_blog_post_tag'),
                                 ['tag_id' => $newTagId, 'post_id' => $postId, 'position' => 0]
                             );
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         continue;
                     }
                 }
@@ -385,7 +391,7 @@ class AheadWorksM1 extends AbstractImport
      * @param $connection
      *
      * @return mixed|void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _importCategories($data, $connection)
     {
@@ -393,7 +399,7 @@ class AheadWorksM1 extends AbstractImport
         $result = mysqli_query($connection, $sqlString);
         $isReplace = true;
         /**
-         * @var \Mageplaza\Blog\Model\CategoryFactory
+         * @var CategoryFactory
          */
         $categoryModel = $this->_categoryFactory->create();
         $oldCategoryIds = [];
@@ -445,7 +451,7 @@ class AheadWorksM1 extends AbstractImport
                             $this->_updateCategories($category, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -458,7 +464,7 @@ class AheadWorksM1 extends AbstractImport
                             $newCategories[$categoryModel->getId()] = $category;
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -474,7 +480,7 @@ class AheadWorksM1 extends AbstractImport
                             $this->_updateCategories($category, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -487,7 +493,7 @@ class AheadWorksM1 extends AbstractImport
                             $this->_addCategories($categoryModel, $category);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -523,7 +529,7 @@ class AheadWorksM1 extends AbstractImport
      * @param $data
      * @param $connection
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _importComments($data, $connection)
     {
@@ -532,7 +538,7 @@ class AheadWorksM1 extends AbstractImport
         $result = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
         $isReplace = true;
-        /** @var \Mageplaza\Blog\Model\CommentFactory */
+        /** @var CommentFactory */
         $commentModel = $this->_commentFactory->create();
         $customerModel = $this->_customerFactory->create();
         $websiteId = $this->_storeManager->getWebsite()->getId();
@@ -642,7 +648,7 @@ class AheadWorksM1 extends AbstractImport
                         ])->save();
                         $this->_successCount++;
                         $this->_hasData = true;
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         $this->_errorCount++;
                         $this->_hasData = true;
                         continue;
@@ -690,7 +696,7 @@ class AheadWorksM1 extends AbstractImport
                         'post_id'     => $newPostId,
                         'position'    => 0
                     ]);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     continue;
                 }
             }

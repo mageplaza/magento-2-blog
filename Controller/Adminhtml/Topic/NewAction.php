@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Forward;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 
 /**
@@ -56,7 +57,7 @@ class NewAction extends Action
     /**
      * forward to edit
      *
-     * @return \Magento\Backend\Model\View\Result\Forward
+     * @return Forward
      */
     public function execute()
     {

@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
+use Exception;
+use Magento\Framework\Controller\Result\Redirect;
 use Mageplaza\Blog\Controller\Adminhtml\Category;
 
 /**
@@ -30,7 +32,7 @@ use Mageplaza\Blog\Controller\Adminhtml\Category;
 class Delete extends Category
 {
     /**
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
@@ -46,7 +48,7 @@ class Delete extends Category
                 $resultRedirect->setPath('mageplaza_blog/*/');
 
                 return $resultRedirect;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // display error message
                 $this->messageManager->addError($e->getMessage());
                 // go back to edit form

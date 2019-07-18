@@ -21,9 +21,14 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
 use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory;
 
@@ -34,21 +39,21 @@ use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory;
 class MassDelete extends Action
 {
     /**
-     * @var \Magento\Ui\Component\MassAction\Filter
+     * @var Filter
      */
     public $filter;
 
     /**
-     * @var \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory
+     * @var CollectionFactory
      */
     public $collectionFactory;
 
     /**
      * MassDelete constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Ui\Component\MassAction\Filter $filter
-     * @param \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $collectionFactory
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         Context $context,
@@ -62,8 +67,8 @@ class MassDelete extends Action
     }
 
     /**
-     * @return $this|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return $this|ResponseInterface|ResultInterface
+     * @throws LocalizedException
      */
     public function execute()
     {
@@ -72,11 +77,11 @@ class MassDelete extends Action
         try {
             $collection->walk('delete');
             $this->messageManager->addSuccess(__('Tags has been deleted.'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addSuccess(__('Something wrong when delete Tag.'));
         }
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         return $resultRedirect->setPath('*/*/');

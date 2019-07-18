@@ -33,26 +33,26 @@ use Mageplaza\Blog\Helper\Data;
 class Topmenu
 {
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @var Data
      */
     protected $helper;
 
     /**
-     * @var \Magento\Framework\Data\TreeFactory
+     * @var TreeFactory
      */
     protected $treeFactory;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $request;
 
     /**
      * Topmenu constructor.
      *
-     * @param \Mageplaza\Blog\Helper\Data $helper
-     * @param \Magento\Framework\Data\TreeFactory $treeFactory
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param Data $helper
+     * @param TreeFactory $treeFactory
+     * @param RequestInterface $request
      */
     public function __construct(
         Data $helper,

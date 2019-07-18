@@ -21,7 +21,14 @@
 
 namespace Mageplaza\Blog\Model\Import;
 
+use Exception;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\User\Model\UserFactory;
+use Mageplaza\Blog\Model\CategoryFactory;
+use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
+use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\TagFactory;
 
 /**
  * Class WordPress
@@ -79,7 +86,7 @@ class WordPress extends AbstractImport
      * @param $connection
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function run($data, $connection)
     {
@@ -104,7 +111,7 @@ class WordPress extends AbstractImport
      * @param $connection
      *
      * @return bool|mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _importPosts($data, $connection)
     {
@@ -114,7 +121,7 @@ class WordPress extends AbstractImport
         if ($result) {
             $this->_resetRecords();
             /**
-             * @var \Mageplaza\Blog\Model\PostFactory
+             * @var PostFactory
              */
             $postModel = $this->_postFactory->create();
             $oldPostIds = [];
@@ -181,7 +188,7 @@ class WordPress extends AbstractImport
                                 $this->_addPosts($postModel, $post);
                                 $this->_successCount++;
                                 $this->_hasData = true;
-                            } catch (\Exception $e) {
+                            } catch (Exception $e) {
                                 $this->_errorCount++;
                                 $this->_hasData = true;
                                 continue;
@@ -204,7 +211,7 @@ class WordPress extends AbstractImport
                                 $this->_addPosts($postModel, $post);
                                 $this->_successCount++;
                                 $this->_hasData = true;
-                            } catch (\Exception $e) {
+                            } catch (Exception $e) {
                                 $this->_errorCount++;
                                 $this->_hasData = true;
                                 continue;
@@ -273,7 +280,7 @@ class WordPress extends AbstractImport
      * @param $connection
      *
      * @return mixed|void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _importTags($data, $connection)
     {
@@ -286,7 +293,7 @@ class WordPress extends AbstractImport
         $this->_resetRecords();
         $isReplace = true;
         /**
-         * @var \Mageplaza\Blog\Model\TagFactory
+         * @var TagFactory
          */
         $tagModel = $this->_tagFactory->create();
         $importSource = $data['type'] . '-' . $data['database'];
@@ -334,7 +341,7 @@ class WordPress extends AbstractImport
                             $this->_updateTags($tag, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -346,7 +353,7 @@ class WordPress extends AbstractImport
                             $this->_addTags($tagModel, $tag);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -362,7 +369,7 @@ class WordPress extends AbstractImport
                             $this->_updateTags($tag, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -375,7 +382,7 @@ class WordPress extends AbstractImport
                             $this->_addTags($tagModel, $tag);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -410,7 +417,7 @@ class WordPress extends AbstractImport
      * @param $connection
      *
      * @return mixed|void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _importCategories($data, $connection)
     {
@@ -421,7 +428,7 @@ class WordPress extends AbstractImport
                           AND " . $data['table_prefix'] . self::TABLE_TERMS . ".name <> 'uncategorized' ";
         $result = mysqli_query($connection, $sqlString);
         $isReplace = true;
-        /** @var \Mageplaza\Blog\Model\CategoryFactory */
+        /** @var CategoryFactory */
         $categoryModel = $this->_categoryFactory->create();
         $newCategories = [];
         $oldCategories = [];
@@ -474,7 +481,7 @@ class WordPress extends AbstractImport
                             $this->_updateCategories($category, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -487,7 +494,7 @@ class WordPress extends AbstractImport
                             $newCategories[$categoryModel->getId()] = $category;
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -503,7 +510,7 @@ class WordPress extends AbstractImport
                             $this->_updateCategories($category, $where);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -517,7 +524,7 @@ class WordPress extends AbstractImport
                             $newCategories[$categoryModel->getId()] = $category;
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             $this->_errorCount++;
                             $this->_hasData = true;
                             continue;
@@ -587,7 +594,7 @@ class WordPress extends AbstractImport
         $magentoUserEmail = [];
 
         /**
-         * @var \Magento\User\Model\UserFactory
+         * @var UserFactory
          */
         $userModel = $this->_userFactory->create();
 
@@ -611,7 +618,7 @@ class WordPress extends AbstractImport
                     $this->_successCount++;
                     $this->_hasData = true;
                     $oldUserIds[$userModel->getId()] = $user['ID'];
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $this->_errorCount++;
                     $this->_hasData = true;
                     continue;
@@ -659,7 +666,7 @@ class WordPress extends AbstractImport
      * @param $data
      * @param $connection
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _importComments($data, $connection)
     {
@@ -669,7 +676,7 @@ class WordPress extends AbstractImport
         $this->_resetRecords();
         $isReplace = true;
         /**
-         * @var \Mageplaza\Blog\Model\CommentFactory
+         * @var CommentFactory
          */
         $commentModel = $this->_commentFactory->create();
         $customerModel = $this->_customerFactory->create();
@@ -782,7 +789,7 @@ class WordPress extends AbstractImport
                         $this->_successCount++;
                         $this->_hasData = true;
                         $oldCommentIds [$commentModel->getId()] = $comment['id'];
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         $this->_errorCount++;
                         $this->_hasData = true;
                         continue;
@@ -868,7 +875,7 @@ class WordPress extends AbstractImport
                         'post_id'  => $newPostId,
                         'position' => 0
                     ]);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     continue;
                 }
             }

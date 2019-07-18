@@ -22,7 +22,10 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Category;
@@ -37,25 +40,25 @@ class CategoriesJson extends Category
     /**
      * JSON Result Factory
      *
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     public $resultJsonFactory;
 
     /**
      * Layout Factory
      *
-     * @var \Magento\Framework\View\LayoutFactory
+     * @var LayoutFactory
      */
     public $layoutFactory;
 
     /**
      * CategoriesJson constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param CategoryFactory $categoryFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param LayoutFactory $layoutFactory
      */
     public function __construct(
         Context $context,
@@ -73,7 +76,7 @@ class CategoriesJson extends Category
     /**
      * Get tree node (Ajax version)
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {
@@ -87,7 +90,7 @@ class CategoriesJson extends Category
 
             $category = $this->initCategory(true);
             if (!$category) {
-                /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+                /** @var Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
 
                 return $resultRedirect->setPath('mageplaza_blog/*/', ['_current' => true]);
@@ -97,7 +100,7 @@ class CategoriesJson extends Category
                 ->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Tree')
                 ->getTreeJson($category);
 
-            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            /** @var Json $resultJson */
             return $resultJson->setJsonData($treeJson);
         }
 

@@ -22,10 +22,13 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Forward;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
 use Mageplaza\Blog\Model\PostFactory;
-use Magento\Backend\Model\View\Result\ForwardFactory;
 
 /**
  * Class Edit
@@ -33,16 +36,16 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
  */
 class Duplicate extends Post
 {
-
     /**
      * Redirect result factory
      *
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @var ForwardFactory
      */
     public $resultForwardFactory;
 
     /**
      * Duplicate constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param PostFactory $postFactory
@@ -60,7 +63,7 @@ class Duplicate extends Post
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Forward|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @return Forward|ResponseInterface|ResultInterface
      */
     public function execute()
     {

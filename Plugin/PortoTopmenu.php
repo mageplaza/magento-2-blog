@@ -36,7 +36,7 @@ class PortoTopmenu
     public function afterGetMegamenuHtml(\Smartwave\Megamenu\Block\Topmenu $topmenu, $html)
     {
         $html .= $topmenu->getLayout()
-            ->createBlock('Mageplaza\Blog\Block\Frontend')
+            ->createBlock(\Mageplaza\Blog\Block\Frontend::class)
             ->setTemplate('Mageplaza_Blog::position/topmenuporto.phtml')
             ->toHtml();
 

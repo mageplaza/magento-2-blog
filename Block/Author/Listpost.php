@@ -22,6 +22,8 @@
 namespace Mageplaza\Blog\Block\Author;
 
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\AuthorFactory;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
  * Class Listpost
@@ -30,14 +32,14 @@ use Mageplaza\Blog\Helper\Data;
 class Listpost extends \Mageplaza\Blog\Block\Listpost
 {
     /**
-     * @var \Mageplaza\Blog\Model\AuthorFactory
+     * @var AuthorFactory
      */
     protected $_author;
 
     /**
      * Override this function to apply collection for each type
      *
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @return Collection
      */
     protected function getCollection()
     {

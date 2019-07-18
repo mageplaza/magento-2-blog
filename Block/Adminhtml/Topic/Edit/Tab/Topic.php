@@ -28,6 +28,7 @@ use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Config\Model\Config\Source\Design\Robots;
 use Magento\Config\Model\Config\Source\Enabledisable;
 use Magento\Config\Model\Config\Source\Yesno;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
@@ -41,43 +42,43 @@ class Topic extends Generic implements TabInterface
     /**
      * Wysiwyg config
      *
-     * @var \Magento\Cms\Model\Wysiwyg\Config
+     * @var Config
      */
     protected $wysiwygConfig;
 
     /**
      * Country options
      *
-     * @var \Magento\Config\Model\Config\Source\Yesno
+     * @var Yesno
      */
     protected $booleanOptions;
 
     /**
-     * @var \Magento\Config\Model\Config\Source\Enabledisable
+     * @var Enabledisable
      */
     protected $enableDisable;
 
     /**
-     * @var \Magento\Config\Model\Config\Source\Design\Robots
+     * @var Robots
      */
     protected $metaRobotsOptions;
 
     /**
-     * @var \Magento\Store\Model\System\Store
+     * @var Store
      */
     protected $systemStore;
 
     /**
      * Topic constructor.
      *
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
-     * @param \Magento\Config\Model\Config\Source\Yesno $booleanOptions
-     * @param \Magento\Config\Model\Config\Source\Enabledisable $enableDisable
-     * @param \Magento\Config\Model\Config\Source\Design\Robots $metaRobotsOptions
-     * @param \Magento\Store\Model\System\Store $systemStore
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param Config $wysiwygConfig
+     * @param Yesno $booleanOptions
+     * @param Enabledisable $enableDisable
+     * @param Robots $metaRobotsOptions
+     * @param Store $systemStore
      * @param array $data
      */
     public function __construct(
@@ -144,7 +145,7 @@ class Topic extends Generic implements TabInterface
         ]);
 
         if (!$this->_storeManager->isSingleStoreMode()) {
-            /** @var \Magento\Framework\Data\Form\Element\Renderer\RendererInterface $rendererBlock */
+            /** @var RendererInterface $rendererBlock */
             $rendererBlock = $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element');
             $fieldset->addField('store_ids', 'multiselect', [
                 'name'   => 'store_ids',

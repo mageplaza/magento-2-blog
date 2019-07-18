@@ -38,23 +38,23 @@ abstract class Tag extends Action
     /**
      * Tag Factory
      *
-     * @var \Mageplaza\Blog\Model\TagFactory
+     * @var TagFactory
      */
     public $tagFactory;
 
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
      * Tag constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Mageplaza\Blog\Model\TagFactory $tagFactory
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param TagFactory $tagFactory
      */
     public function __construct(
         Context $context,

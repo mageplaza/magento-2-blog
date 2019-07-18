@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Block\Adminhtml\Import\Edit;
 
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
+use Magento\Framework\View\Element\Messages;
 use Mageplaza\Blog\Helper\Data as BlogHelper;
 use Mageplaza\Blog\Model\Config\Source\Import\Type;
 
@@ -84,8 +85,8 @@ class Import extends Template
      */
     public function getMessagesHtml($priority, $message)
     {
-        /** @var $messagesBlock \Magento\Framework\View\Element\Messages */
-        $messagesBlock = $this->_layout->createBlock(\Magento\Framework\View\Element\Messages::class);
+        /** @var $messagesBlock Messages */
+        $messagesBlock = $this->_layout->createBlock(Messages::class);
         $messagesBlock->{$priority}(__($message));
 
         return $messagesBlock->toHtml();
