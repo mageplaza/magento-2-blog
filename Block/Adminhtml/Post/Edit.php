@@ -68,22 +68,6 @@ class Edit extends Container
 
         parent::_construct();
 
-        $this->buttonList->add(
-            'save-and-continue',
-            [
-                'label'          => __('Save and Continue Edit'),
-                'class'          => 'save',
-                'data_attribute' => [
-                    'mage-init' => [
-                        'button' => [
-                            'event'  => 'saveAndContinueEdit',
-                            'target' => '#edit_form'
-                        ]
-                    ]
-                ]
-            ],
-            -100
-        );
         $post = $this->coreRegistry->registry('mageplaza_blog_post');
         if ($post->getId() && !$post->getDuplicate()) {
             $this->buttonList->add(
@@ -94,6 +78,22 @@ class Edit extends Container
                     'onclick' => sprintf("location.href = '%s';", $this->getDuplicateUrl()),
                 ],
                 -101
+            );
+            $this->buttonList->add(
+                'save-and-continue',
+                [
+                    'label'          => __('Save and Continue Edit'),
+                    'class'          => 'save',
+                    'data_attribute' => [
+                        'mage-init' => [
+                            'button' => [
+                                'event'  => 'saveAndContinueEdit',
+                                'target' => '#edit_form'
+                            ]
+                        ]
+                    ]
+                ],
+                -100
             );
         } else {
             $this->buttonList->remove('delete');
