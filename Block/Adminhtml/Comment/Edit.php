@@ -24,6 +24,8 @@ namespace Mageplaza\Blog\Block\Adminhtml\Comment;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Backend\Block\Widget\Form\Container;
 use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\Comment;
+use Mageplaza\Blog\Model\Post;
 
 /**
  * Class Edit
@@ -34,15 +36,15 @@ class Edit extends Container
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
      * constructor
      *
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param Registry $coreRegistry
+     * @param Context $context
      * @param array $data
      */
     public function __construct(
@@ -94,7 +96,7 @@ class Edit extends Container
      */
     public function getHeaderText()
     {
-        /** @var \Mageplaza\Blog\Model\Comment $comment */
+        /** @var Comment $comment */
         $comment = $this->coreRegistry->registry('mageplaza_blog_comment');
         if ($comment->getId()) {
             return __("Edit Comment");
@@ -110,7 +112,7 @@ class Edit extends Container
      */
     public function getFormActionUrl()
     {
-        /** @var \Mageplaza\Blog\Model\Post $post */
+        /** @var Post $post */
         $comment = $this->coreRegistry->registry('mageplaza_blog_comment');
         if ($id = $comment->getId()) {
             return $this->getUrl('*/*/save', ['id' => $id]);

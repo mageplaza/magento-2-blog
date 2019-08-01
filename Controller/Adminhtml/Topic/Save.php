@@ -21,17 +21,24 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 
+use Exception;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Js;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\LayoutFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Topic;
 use Mageplaza\Blog\Model\TopicFactory;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 /**
  * Class Save
@@ -42,21 +49,21 @@ class Save extends Topic
     /**
      * JS helper
      *
-     * @var \Magento\Backend\Helper\Js
+     * @var Js
      */
     public $jsHelper;
 
     /**
      * Layout Factory
      *
-     * @var \Magento\Framework\View\LayoutFactory
+     * @var LayoutFactory
      */
     public $layoutFactory;
 
     /**
      * Result Json Factory
      *
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     public $resultJsonFactory;
 
@@ -86,7 +93,7 @@ class Save extends Topic
     }
 
     /**
-     * @return $this|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\ResultInterface
+     * @return $this|ResponseInterface|Redirect|ResultInterface
      */
     public function execute()
     {
@@ -107,7 +114,7 @@ class Save extends Topic
             } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving the topic.'));
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             }
@@ -125,11 +132,11 @@ class Save extends Topic
             ]);
 
             // to obtain truncated category name
-            /** @var $block \Magento\Framework\View\Element\Messages */
+            /** @var $block Messages */
             $block = $this->layoutFactory->create()->getMessagesBlock();
             $block->setMessages($this->messageManager->getMessages(true));
 
-            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            /** @var Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
 
             return $resultJson->setData(
@@ -166,9 +173,9 @@ class Save extends Topic
                 return $resultRedirect;
             } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the Topic.'));
             }
 

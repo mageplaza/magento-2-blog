@@ -38,23 +38,23 @@ abstract class Category extends Action
     /**
      * Blog Category Factory
      *
-     * @var \Mageplaza\Blog\Model\CategoryFactory
+     * @var CategoryFactory
      */
     public $categoryFactory;
 
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
      * Category constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param CategoryFactory $categoryFactory
      */
     public function __construct(
         Context $context,
@@ -69,10 +69,11 @@ abstract class Category extends Action
 
     /**
      * @param bool $register
+     * @param bool $isSave
      *
      * @return bool|\Mageplaza\Blog\Model\Category
      */
-    public function initCategory($register = false)
+    public function initCategory($register = false, $isSave = false)
     {
         $categoryId = null;
         if ($this->getRequest()->getParam('id')) {
@@ -83,12 +84,14 @@ abstract class Category extends Action
 
         /** @var \Mageplaza\Blog\Model\Post $post */
         $category = $this->categoryFactory->create();
-        if ($categoryId) {
-            $category->load($categoryId);
-            if (!$category->getId()) {
-                $this->messageManager->addErrorMessage(__('This category no longer exists.'));
+        if (!$this->getRequest()->getParam('duplicate') || !$isSave) {
+            if ($categoryId) {
+                $category->load($categoryId);
+                if (!$category->getId()) {
+                    $this->messageManager->addErrorMessage(__('This category no longer exists.'));
 
-                return false;
+                    return false;
+                }
             }
         }
 

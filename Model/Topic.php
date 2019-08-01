@@ -26,6 +26,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
 use Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory as TopicCollectionFactory;
 
@@ -46,13 +47,13 @@ use Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory as TopicCollectio
  * @method mixed getMetaDescription()
  * @method mixed getMetaKeywords()
  * @method mixed getMetaRobots()
- * @method Topic setCreatedAt(\string $createdAt)
+ * @method Topic setCreatedAt(string $createdAt)
  * @method string getCreatedAt()
- * @method Topic setUpdatedAt(\string $updatedAt)
+ * @method Topic setUpdatedAt(string $updatedAt)
  * @method string getUpdatedAt()
  * @method Topic setPostsData(array $data)
  * @method array getPostsData()
- * @method Topic setIsChangedPostList(\bool $flag)
+ * @method Topic setIsChangedPostList(bool $flag)
  * @method bool getIsChangedPostList()
  * @method Topic setAffectedPostIds(array $ids)
  * @method bool getAffectedPostIds()
@@ -83,14 +84,14 @@ class Topic extends AbstractModel
     /**
      * Post Collection
      *
-     * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @var Collection
      */
     public $postCollection;
 
     /**
      * Post Collection Factory
      *
-     * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
+     * @var CollectionFactory
      */
     public $postCollectionFactory;
 
@@ -134,7 +135,7 @@ class Topic extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\ResourceModel\Topic');
+        $this->_init(ResourceModel\Topic::class);
     }
 
     /**
@@ -179,7 +180,7 @@ class Topic extends AbstractModel
     }
 
     /**
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @return Collection
      */
     public function getSelectedPostsCollection()
     {

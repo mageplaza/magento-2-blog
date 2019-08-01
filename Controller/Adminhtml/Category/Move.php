@@ -21,10 +21,13 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
+use Exception;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\LayoutFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Category;
 use Mageplaza\Blog\Model\CategoryFactory;
@@ -39,31 +42,31 @@ class Move extends Category
     /**
      * JSON Result Factory
      *
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     public $resultJsonFactory;
 
     /**
      * Layout Factory
      *
-     * @var \Magento\Framework\View\LayoutFactory
+     * @var LayoutFactory
      */
     public $layoutFactory;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     public $logger;
 
     /**
      * Move constructor.
      *
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param JsonFactory $resultJsonFactory
+     * @param LayoutFactory $layoutFactory
+     * @param LoggerInterface $logger
+     * @param CategoryFactory $categoryFactory
+     * @param Registry $coreRegistry
+     * @param Context $context
      */
     public function __construct(
         Context $context,
@@ -81,7 +84,7 @@ class Move extends Category
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Json
+     * @return Json
      */
     public function execute()
     {
@@ -91,7 +94,7 @@ class Move extends Category
         /** Blog category id after which we have put our Blog category */
         $prevNodeId = $this->getRequest()->getPost('aid', false);
 
-        /** @var $block \Magento\Framework\View\Element\Messages */
+        /** @var $block Messages */
         $block = $this->layoutFactory->create()->getMessagesBlock();
         $error = false;
 
@@ -104,7 +107,7 @@ class Move extends Category
         } catch (LocalizedException $e) {
             $error = true;
             $this->messageManager->addErrorMessage(__('There was a Blog category move error.'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $error = true;
             $this->messageManager->addErrorMessage(__('There was a Blog category move error.'));
             $this->logger->critical($e);

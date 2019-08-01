@@ -23,7 +23,9 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Import;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
@@ -61,7 +63,7 @@ class Edit extends Action
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return \Magento\Backend\Model\View\Result\Page|Redirect|Page
      */
     public function execute()
     {
@@ -69,7 +71,7 @@ class Edit extends Action
 
         $this->registry->register('mageplaza_blog_import', $data);
 
-        /** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
+        /** @var \Magento\Backend\Model\View\Result\Page|Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mageplaza_Blog::import');
         $resultPage->getConfig()->getTitle()->set(__('Import'));

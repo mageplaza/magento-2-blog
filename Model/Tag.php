@@ -26,6 +26,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
 use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory as TagCollectionFactory;
 
@@ -36,13 +37,13 @@ use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory as TagCollectionFac
  * @method mixed getName()
  * @method mixed getDescription()
  * @method mixed getEnabled()
- * @method Tag setCreatedAt(\string $createdAt)
+ * @method Tag setCreatedAt(string $createdAt)
  * @method string getCreatedAt()
- * @method Tag setUpdatedAt(\string $updatedAt)
+ * @method Tag setUpdatedAt(string $updatedAt)
  * @method string getUpdatedAt()
  * @method Tag setPostsData(array $data)
  * @method array getPostsData()
- * @method Tag setIsChangedPostList(\bool $flag)
+ * @method Tag setIsChangedPostList(bool $flag)
  * @method bool getIsChangedPostList()
  * @method Tag setAffectedPostIds(array $ids)
  * @method bool getAffectedPostIds()
@@ -73,14 +74,14 @@ class Tag extends AbstractModel
     /**
      * Post Collection
      *
-     * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @var Collection
      */
     public $postCollection;
 
     /**
      * Post Collection Factory
      *
-     * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
+     * @var CollectionFactory
      */
     public $postCollectionFactory;
 
@@ -122,7 +123,7 @@ class Tag extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\ResourceModel\Tag');
+        $this->_init(ResourceModel\Tag::class);
     }
 
     /**
@@ -154,7 +155,7 @@ class Tag extends AbstractModel
     }
 
     /**
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @return Collection
      */
     public function getSelectedPostsCollection()
     {

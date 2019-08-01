@@ -21,9 +21,14 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Comment;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
 use Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory;
 
@@ -36,12 +41,12 @@ class MassDelete extends Action
     /**
      * Mass Action Filter
      *
-     * @var \Magento\Ui\Component\MassAction\Filter
+     * @var Filter
      */
     public $filter;
 
     /**
-     * @var \Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory
+     * @var CollectionFactory
      */
     public $collectionFactory;
 
@@ -63,8 +68,8 @@ class MassDelete extends Action
     }
 
     /**
-     * @return $this|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return $this|ResponseInterface|ResultInterface
+     * @throws LocalizedException
      */
     public function execute()
     {
@@ -77,11 +82,11 @@ class MassDelete extends Action
                 $count++;
             }
             $this->messageManager->addSuccessMessage(__('Total of %1 comments has been deleted.', $count));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addErrorMessage(__('Something wrong when delete Comments.'));
         }
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         return $resultRedirect->setPath('*/*/');

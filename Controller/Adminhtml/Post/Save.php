@@ -21,14 +21,20 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
+use Exception;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Js;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\PostFactory;
+use RuntimeException;
 
 /**
  * Class Save
@@ -39,7 +45,7 @@ class Save extends Post
     /**
      * JS helper
      *
-     * @var \Magento\Backend\Helper\Js
+     * @var Js
      */
     public $jsHelper;
 
@@ -49,7 +55,7 @@ class Save extends Post
     public $date;
 
     /**
-     * @var \Mageplaza\Blog\Helper\Image
+     * @var Image
      */
     protected $imageHelper;
 
@@ -79,8 +85,8 @@ class Save extends Post
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\ResultInterface
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @return ResponseInterface|Redirect|ResultInterface
+     * @throws FileSystemException
      */
     public function execute()
     {
@@ -88,7 +94,7 @@ class Save extends Post
 
         if ($data = $this->getRequest()->getPost('post')) {
             /** @var \Mageplaza\Blog\Model\Post $post */
-            $post = $this->initPost();
+            $post = $this->initPost(false, true);
             $this->prepareData($post, $data);
 
             $this->_eventManager->dispatch(
@@ -111,9 +117,9 @@ class Save extends Post
                 return $resultRedirect;
             } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the Post.'));
             }
 
@@ -134,22 +140,29 @@ class Save extends Post
      * @param array $data
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     protected function prepareData($post, $data = [])
     {
-        $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_POST, $post->getImage());
+        try {
+            $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_POST, $post->getImage());
+        } catch (Exception $exception) {
+            $data['image'] = isset($data['image']['value']) ? $data['image']['value'] : '';
+        }
 
         /** Set specify field data */
         $timezone = $this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $data['publish_date'] .= ' ' . $data['publish_time'][0] . ':' . $data['publish_time'][1] . ':' . $data['publish_time'][2];
-        $data['publish_date'] = $timezone->convertConfigTimeToUtc(isset($data['publish_date']) ? $data['publish_date'] : null);
+        $data['publish_date'] .= ' ' . $data['publish_time'][0]
+                                 . ':' . $data['publish_time'][1] . ':' . $data['publish_time'][2];
+        $data['publish_date'] = $timezone->convertConfigTimeToUtc(isset($data['publish_date'])
+            ? $data['publish_date'] : null);
         $data['modifier_id'] = $this->_auth->getUser()->getId();
         $data['categories_ids'] = (isset($data['categories_ids']) && $data['categories_ids']) ? explode(
             ',',
             $data['categories_ids']
         ) : [];
-        $data['tags_ids'] = (isset($data['tags_ids']) && $data['tags_ids']) ? explode(',', $data['tags_ids']) : [];
+        $data['tags_ids'] = (isset($data['tags_ids']) && $data['tags_ids'])
+            ? explode(',', $data['tags_ids']) : [];
         $data['topics_ids'] = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(
             ',',
             $data['topics_ids']

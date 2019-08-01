@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 
+use Exception;
+use Magento\Framework\Controller\Result\Redirect;
 use Mageplaza\Blog\Controller\Adminhtml\Topic;
 
 /**
@@ -30,7 +32,7 @@ use Mageplaza\Blog\Controller\Adminhtml\Topic;
 class Delete extends Topic
 {
     /**
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
@@ -42,7 +44,7 @@ class Delete extends Topic
                     ->delete();
 
                 $this->messageManager->addSuccess(__('The Topic has been deleted.'));
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $id]);
 

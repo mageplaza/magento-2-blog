@@ -33,12 +33,12 @@ use Mageplaza\Blog\Helper\Image;
 class Sitemap extends \Magento\Sitemap\Model\Sitemap
 {
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @var Data
      */
     protected $blogDataHelper;
 
     /**
-     * @var \Mageplaza\Blog\Helper\Image
+     * @var Image
      */
     protected $imageHelper;
 
@@ -63,6 +63,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
 
     /**
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getBlogPostsSiteMapCollection()
     {
@@ -73,7 +74,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
             $this->router = 'blog';
         }
         foreach ($postCollection as $item) {
-            if (!is_null($item->getEnabled())) {
+            if ($item->getEnabled() !== null) {
                 $images = null;
                 if ($item->getImage()) {
                     $imageFile = $this->imageHelper->getMediaPath($item->getImage(), Image::TEMPLATE_MEDIA_TYPE_POST);
@@ -105,7 +106,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
         $categoryCollection = $this->blogDataHelper->categoryFactory->create()->getCollection();
         $categorySiteMapCollection = [];
         foreach ($categoryCollection as $item) {
-            if (!is_null($item->getEnabled())) {
+            if ($item->getEnabled() !== null) {
                 $categorySiteMapCollection[$item->getId()] = new DataObject([
                     'id'         => $item->getId(),
                     'url'        => $this->router . '/category/' . $item->getUrlKey() . $urlSuffix,
@@ -126,7 +127,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
         $tagCollection = $this->blogDataHelper->tagFactory->create()->getCollection();
         $tagSiteMapCollection = [];
         foreach ($tagCollection as $item) {
-            if (!is_null($item->getEnabled())) {
+            if ($item->getEnabled() !== null) {
                 $tagSiteMapCollection[$item->getId()] = new DataObject([
                     'id'         => $item->getId(),
                     'url'        => $this->router . '/tag/' . $item->getUrlKey() . $urlSuffix,
@@ -147,7 +148,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
         $topicCollection = $this->blogDataHelper->topicFactory->create()->getCollection();
         $topicSiteMapCollection = [];
         foreach ($topicCollection as $item) {
-            if (!is_null($item->getEnabled())) {
+            if ($item->getEnabled() !== null) {
                 $topicSiteMapCollection[$item->getId()] = new DataObject([
                     'id'         => $item->getId(),
                     'url'        => $this->router . '/topic/' . $item->getUrlKey() . $urlSuffix,

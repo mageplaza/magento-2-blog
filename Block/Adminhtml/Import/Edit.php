@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block\Adminhtml\Import;
 
 use Magento\Backend\Block\Widget\Form\Container;
+use Magento\Framework\Phrase;
 
 /**
  * Class Edit
@@ -67,7 +68,7 @@ class Edit extends Container
     /**
      * Get header text
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getHeaderText()
     {

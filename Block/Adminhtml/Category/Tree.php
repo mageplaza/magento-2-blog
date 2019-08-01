@@ -47,15 +47,15 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     /**
      * Tree constructor.
      *
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\DB\Helper $resourceHelper
-     * @param \Magento\Backend\Model\Auth\Session $backendSession
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category\Tree $blogCategoryTree
-     * @param \Mageplaza\Blog\Model\CategoryFactory $blogCategoryFactory
+     * @param Context $context
+     * @param TreeResource $categoryTree
+     * @param Registry $registry
+     * @param CatalogCategoryFactory $categoryFactory
+     * @param EncoderInterface $jsonEncoder
+     * @param Helper $resourceHelper
+     * @param Session $backendSession
+     * @param BlogTreeResource $blogCategoryTree
+     * @param CategoryFactory $blogCategoryFactory
      * @param array $data
      */
     public function __construct(
@@ -142,7 +142,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     /**
      * Get JSON of a tree node or an associative array
      *
-     * @param \Magento\Framework\Data\Tree\Node|array $node
+     * @param Node|array $node
      * @param int $level
      *
      * @return string

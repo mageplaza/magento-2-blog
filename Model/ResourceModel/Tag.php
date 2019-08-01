@@ -22,6 +22,8 @@
 namespace Mageplaza\Blog\Model\ResourceModel;
 
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
@@ -36,14 +38,14 @@ class Tag extends AbstractDb
     /**
      * Date model
      *
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     public $date;
 
     /**
      * Event Manager
      *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     public $eventManager;
 
@@ -55,17 +57,17 @@ class Tag extends AbstractDb
     public $tagPostTable;
 
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @var Data
      */
     public $helperData;
 
     /**
      * Tag constructor.
      *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Mageplaza\Blog\Helper\Data $helperData
+     * @param Context $context
+     * @param ManagerInterface $eventManager
+     * @param DateTime $date
+     * @param Data $helperData
      */
     public function __construct(
         Context $context,
@@ -98,7 +100,7 @@ class Tag extends AbstractDb
      * @param $id
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getTagNameById($id)
     {
@@ -114,7 +116,7 @@ class Tag extends AbstractDb
     /**
      * @inheritdoc
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         $object->setUpdatedAt($this->date->date());
         if ($object->isObjectNew()) {
@@ -135,7 +137,7 @@ class Tag extends AbstractDb
     /**
      * @inheritdoc
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         $this->savePostRelation($object);
 
@@ -236,7 +238,7 @@ class Tag extends AbstractDb
      * @param $urlKey
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function isDuplicateUrlKey($urlKey)
     {
@@ -256,7 +258,7 @@ class Tag extends AbstractDb
      * @param $oldId
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function isImported($importSource, $oldId)
     {
@@ -272,7 +274,7 @@ class Tag extends AbstractDb
     /**
      * @param $importType
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function deleteImportItems($importType)
     {

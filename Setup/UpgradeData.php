@@ -32,7 +32,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * Date model
      *
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     public $date;
 

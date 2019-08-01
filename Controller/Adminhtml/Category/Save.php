@@ -21,15 +21,19 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
+use Exception;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Js;
 use Magento\Catalog\Model\Category as CategoryModel;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\LayoutFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Category;
 use Mageplaza\Blog\Model\CategoryFactory;
@@ -44,41 +48,41 @@ class Save extends Category
     /**
      * Result Raw Factory
      *
-     * @var \Magento\Framework\Controller\Result\RawFactory
+     * @var RawFactory
      */
     public $resultRawFactory;
 
     /**
      * Result Json Factory
      *
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     public $resultJsonFactory;
 
     /**
      * Layout Factory
      *
-     * @var \Magento\Framework\View\LayoutFactory
+     * @var LayoutFactory
      */
     public $layoutFactory;
 
     /**
      * JS helper
      *
-     * @var \Magento\Backend\Helper\Js
+     * @var Js
      */
     public $jsHelper;
 
     /**
      * Save constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Backend\Helper\Js $jsHelper
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param CategoryFactory $categoryFactory
+     * @param RawFactory $resultRawFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param LayoutFactory $layoutFactory
+     * @param Js $jsHelper
      */
     public function __construct(
         Context $context,
@@ -98,7 +102,7 @@ class Save extends Category
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Json|\Magento\Framework\Controller\Result\Redirect
+     * @return Json|Redirect
      */
     public function execute()
     {
@@ -127,7 +131,7 @@ class Save extends Category
             } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving the category.'));
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             }
@@ -144,11 +148,11 @@ class Save extends Category
             ]);
 
             // to obtain truncated category name
-            /** @var $block \Magento\Framework\View\Element\Messages */
+            /** @var $block Messages */
             $block = $this->layoutFactory->create()->getMessagesBlock();
             $block->setMessages($this->messageManager->getMessages(true));
 
-            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            /** @var Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
 
             return $resultJson->setData(
@@ -162,7 +166,10 @@ class Save extends Category
 
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data = $this->getRequest()->getPost('category')) {
-            $category = $this->initCategory();
+            $category = $this->initCategory(false, true);
+            if ($this->getRequest()->getParam('duplicate')) {
+                unset($data['id']);
+            }
             if (!$category) {
                 $resultRedirect->setPath('mageplaza_blog/*/', ['_current' => true]);
 
@@ -194,7 +201,7 @@ class Save extends Category
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the Blog Category.'));
                 $this->_getSession()->setData('mageplaza_blog_category_data', false);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_getSession()->setData('mageplaza_blog_category_data', $data);
             }

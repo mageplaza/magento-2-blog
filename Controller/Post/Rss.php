@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Controller\Post;
 
+use InvalidArgumentException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Rss\Controller\Feed;
 
@@ -31,14 +32,14 @@ use Magento\Rss\Controller\Feed;
 class Rss extends Feed
 {
     /**
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws NotFoundException
      */
     public function execute()
     {
         $type = 'blog_posts';
         try {
             $provider = $this->rssManager->getProvider($type);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw new NotFoundException(__($e->getMessage()));
         }
 

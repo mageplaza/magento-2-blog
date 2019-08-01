@@ -22,6 +22,8 @@
 namespace Mageplaza\Blog\Ui\Component\Blog\Form\Categories;
 
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\Data\OptionSourceInterface;
 use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 
@@ -31,7 +33,7 @@ use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory as CategoryCol
 class Options implements OptionSourceInterface
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @var CollectionFactory
      */
     protected $categoryCollectionFactory;
 
@@ -43,7 +45,7 @@ class Options implements OptionSourceInterface
     /**
      * Options constructor.
      *
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+     * @param CategoryCollectionFactory $categoryCollectionFactory
      */
     public function __construct(CategoryCollectionFactory $categoryCollectionFactory)
     {
@@ -64,7 +66,7 @@ class Options implements OptionSourceInterface
     public function getCategoriesTree()
     {
         if ($this->categoriesTree === null) {
-            /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
+            /* @var $collection Collection */
             $collection = $this->categoryCollectionFactory->create();
 
             $categoryById = [

@@ -23,8 +23,12 @@ namespace Mageplaza\Blog\Block\Post;
 
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Url;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Data as HelperData;
@@ -48,38 +52,38 @@ class View extends \Mageplaza\Blog\Block\Listpost
     const LOGO = 'mageplaza/blog/logo/';
 
     /**
-     * @var \Mageplaza\Blog\Model\CategoryFactory
+     * @var CategoryFactory
      */
     protected $categoryFactory;
 
     /**
-     * @var \Mageplaza\Blog\Model\PostFactory
+     * @var PostFactory
      */
     protected $postFactory;
 
     /**
-     * @var \Magento\Customer\Model\Url
+     * @var Url
      */
     protected $customerUrl;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var CustomerSession
      */
     protected $customerSession;
 
     /**
      * View constructor.
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
-     * @param \Mageplaza\Blog\Model\CommentFactory $commentFactory
-     * @param \Mageplaza\Blog\Model\LikeFactory $likeFactory
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Mageplaza\Blog\Helper\Data $helperData
-     * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Mageplaza\Blog\Model\PostFactory $postFactory
+     * @param Context $context
+     * @param FilterProvider $filterProvider
+     * @param CommentFactory $commentFactory
+     * @param LikeFactory $likeFactory
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param CustomerSession $customerSession
+     * @param HelperData $helperData
+     * @param Url $customerUrl
+     * @param CategoryFactory $categoryFactory
+     * @param PostFactory $postFactory
      * @param array $data
      */
     public function __construct(
@@ -202,9 +206,9 @@ class View extends \Mageplaza\Blog\Block\Listpost
     /**
      * @param $userId
      *
-     * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return CustomerInterface
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function getUserComment($userId)
     {
@@ -280,8 +284,8 @@ class View extends \Mageplaza\Blog\Block\Listpost
      * @param $comments
      * @param $cmtId
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function getCommentsTree($comments, $cmtId)
     {
@@ -436,8 +440,8 @@ class View extends \Mageplaza\Blog\Block\Listpost
      */
     public function getMessagesHtml($priority, $message)
     {
-        /** @var $messagesBlock \Magento\Framework\View\Element\Messages */
-        $messagesBlock = $this->_layout->createBlock(\Magento\Framework\View\Element\Messages::class);
+        /** @var $messagesBlock Messages */
+        $messagesBlock = $this->_layout->createBlock(Messages::class);
         $messagesBlock->{$priority}(__($message));
 
         return $messagesBlock->toHtml();

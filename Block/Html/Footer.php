@@ -32,7 +32,7 @@ use Mageplaza\Blog\Helper\Data;
 class Footer extends Link
 {
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @var Data
      */
     public $helper;
 
@@ -44,8 +44,8 @@ class Footer extends Link
     /**
      * Footer constructor.
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Mageplaza\Blog\Helper\Data $helper
+     * @param Context $context
+     * @param Data $helper
      * @param array $data
      */
     public function __construct(

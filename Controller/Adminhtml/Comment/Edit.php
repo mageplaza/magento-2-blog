@@ -22,7 +22,9 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Comment;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Comment;
 use Mageplaza\Blog\Model\CommentFactory;
@@ -37,7 +39,7 @@ class Edit extends Comment
     /**
      * Page factory
      *
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     public $resultPageFactory;
 
@@ -61,7 +63,7 @@ class Edit extends Comment
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return \Magento\Backend\Model\View\Result\Page|Redirect|Page
      */
     public function execute()
     {
@@ -83,7 +85,7 @@ class Edit extends Comment
 
         $this->coreRegistry->register('mageplaza_blog_comment', $comment);
 
-        /** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
+        /** @var \Magento\Backend\Model\View\Result\Page|Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mageplaza_Blog::comment');
 

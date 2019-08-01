@@ -21,11 +21,16 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\PostFactory;
+use RuntimeException;
 
 /**
  * Class InlineEdit
@@ -36,23 +41,23 @@ class InlineEdit extends Action
     /**
      * JSON Factory
      *
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     public $jsonFactory;
 
     /**
      * Post Factory
      *
-     * @var \Mageplaza\Blog\Model\PostFactory
+     * @var PostFactory
      */
     public $postFactory;
 
     /**
      * InlineEdit constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
-     * @param \Mageplaza\Blog\Model\PostFactory $postFactory
+     * @param Context $context
+     * @param JsonFactory $jsonFactory
+     * @param PostFactory $postFactory
      */
     public function __construct(
         Context $context,
@@ -66,11 +71,11 @@ class InlineEdit extends Action
     }
 
     /**
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->jsonFactory->create();
         $error = false;
         $messages = [];
@@ -84,7 +89,7 @@ class InlineEdit extends Action
 
         $key = array_keys($postItems);
         $postId = !empty($key) ? (int) $key[0] : '';
-        /** @var \Mageplaza\Blog\Model\Post $post */
+        /** @var Post $post */
         $post = $this->postFactory->create()->load($postId);
         try {
             $postData = $postItems[$postId];
@@ -93,10 +98,10 @@ class InlineEdit extends Action
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithPostId($post, $e->getMessage());
             $error = true;
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $messages[] = $this->getErrorWithPostId($post, $e->getMessage());
             $error = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $messages[] = $this->getErrorWithPostId(
                 $post,
                 __('Something went wrong while saving the Post.')
@@ -113,12 +118,12 @@ class InlineEdit extends Action
     /**
      * Add Post id to error message
      *
-     * @param \Mageplaza\Blog\Model\Post $post
+     * @param Post $post
      * @param string $errorText
      *
      * @return string
      */
-    public function getErrorWithPostId(\Mageplaza\Blog\Model\Post $post, $errorText)
+    public function getErrorWithPostId(Post $post, $errorText)
     {
         return '[Post ID: ' . $post->getId() . '] ' . $errorText;
     }

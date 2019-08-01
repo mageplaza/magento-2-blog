@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block\Category;
 
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
  * Class Listpost
@@ -37,7 +38,7 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     /**
      * Override this function to apply collection for each type
      *
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @return Collection
      */
     protected function getCollection()
     {

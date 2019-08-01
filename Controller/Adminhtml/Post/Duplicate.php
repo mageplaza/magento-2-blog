@@ -22,51 +22,54 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Forward;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
-use Magento\Framework\View\Result\LayoutFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
 use Mageplaza\Blog\Model\PostFactory;
 
 /**
- * Class Products
+ * Class Edit
  * @package Mageplaza\Blog\Controller\Adminhtml\Post
  */
-class Products extends Post
+class Duplicate extends Post
 {
     /**
-     * @var LayoutFactory
+     * Redirect result factory
+     *
+     * @var ForwardFactory
      */
-    protected $resultLayoutFactory;
+    public $resultForwardFactory;
 
     /**
-     * Products constructor.
+     * Duplicate constructor.
      *
      * @param Context $context
-     * @param PostFactory $productFactory
      * @param Registry $registry
-     * @param LayoutFactory $resultLayoutFactory
+     * @param PostFactory $postFactory
+     * @param ForwardFactory $resultForwardFactory
      */
     public function __construct(
         Context $context,
         Registry $registry,
-        PostFactory $productFactory,
-        LayoutFactory $resultLayoutFactory
+        PostFactory $postFactory,
+        ForwardFactory $resultForwardFactory
     ) {
-        parent::__construct($productFactory, $registry, $context);
+        $this->resultForwardFactory = $resultForwardFactory;
 
-        $this->resultLayoutFactory = $resultLayoutFactory;
+        parent::__construct($postFactory, $registry, $context);
     }
 
     /**
-     * Save action
-     *
-     * @return ResultInterface
+     * @return Forward|ResponseInterface|ResultInterface
      */
     public function execute()
     {
-        $this->initPost(true);
+        $resultForward = $this->resultForwardFactory->create();
+        $resultForward->forward('edit');
 
-        return $this->resultLayoutFactory->create();
+        return $resultForward;
     }
 }

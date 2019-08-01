@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
@@ -40,11 +42,11 @@ class Comment extends AbstractDb
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      *
      * @return $this
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         if (is_array($object->getStoreIds())) {
             $object->setStoreIds(implode(',', $object->getStoreIds()));
@@ -60,7 +62,7 @@ class Comment extends AbstractDb
      * @param $oldId
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function isImported($importSource, $oldId)
     {
@@ -76,7 +78,7 @@ class Comment extends AbstractDb
     /**
      * @param $importType
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function deleteImportItems($importType)
     {

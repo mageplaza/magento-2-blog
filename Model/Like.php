@@ -62,7 +62,7 @@ class Like extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\ResourceModel\Like');
+        $this->_init(ResourceModel\Like::class);
     }
 
     /**

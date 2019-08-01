@@ -21,9 +21,12 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Comment;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
 use Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory;
@@ -37,14 +40,14 @@ class MassStatus extends Action
     /**
      * Mass Action Filter
      *
-     * @var \Magento\Ui\Component\MassAction\Filter
+     * @var Filter
      */
     public $filter;
 
     /**
      * Collection Factory
      *
-     * @var \Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory
+     * @var CollectionFactory
      */
     public $collectionFactory;
 
@@ -68,7 +71,7 @@ class MassStatus extends Action
 
     /**
      * @inheritdoc
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @return ResponseInterface|ResultInterface
      * @throws LocalizedException
      */
     public function execute()
@@ -83,7 +86,7 @@ class MassStatus extends Action
                 $commentUpdated++;
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->_getSession()->addException($e, __('Something went wrong while updating status'));
             }
         }

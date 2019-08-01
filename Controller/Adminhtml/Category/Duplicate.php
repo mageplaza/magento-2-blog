@@ -21,52 +21,49 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
+use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Registry;
-use Magento\Framework\View\Result\Layout;
-use Magento\Framework\View\Result\LayoutFactory;
-use Mageplaza\Blog\Controller\Adminhtml\Category;
-use Mageplaza\Blog\Model\CategoryFactory;
+use Magento\Backend\Model\View\Result\Forward;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 
 /**
- * Class Posts
+ * Class Duplicate
  * @package Mageplaza\Blog\Controller\Adminhtml\Category
  */
-class Posts extends Category
+class Duplicate extends Action
 {
     /**
-     * Result layout factory
+     * Redirect result factory
      *
-     * @var LayoutFactory
+     * @var ForwardFactory
      */
-    public $resultLayoutFactory;
+    public $resultForwardFactory;
 
     /**
-     * Posts constructor.
+     * NewAction constructor.
      *
      * @param Context $context
-     * @param Registry $coreRegistry
-     * @param CategoryFactory $categoryFactory
-     * @param LayoutFactory $resultLayoutFactory
+     * @param ForwardFactory $resultForwardFactory
      */
     public function __construct(
         Context $context,
-        Registry $coreRegistry,
-        CategoryFactory $categoryFactory,
-        LayoutFactory $resultLayoutFactory
+        ForwardFactory $resultForwardFactory
     ) {
-        $this->resultLayoutFactory = $resultLayoutFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
 
-        parent::__construct($context, $coreRegistry, $categoryFactory);
+        parent::__construct($context);
     }
 
     /**
-     * @return Layout
+     * forward to edit
+     *
+     * @return Forward
      */
     public function execute()
     {
-        $this->initCategory(true);
+        $resultForward = $this->resultForwardFactory->create();
+        $resultForward->forward('edit');
 
-        return $this->resultLayoutFactory->create();
+        return $resultForward;
     }
 }

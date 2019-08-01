@@ -40,18 +40,18 @@ class Author extends AbstractModel
     const CACHE_TAG = 'mageplaza_blog_author';
 
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @var Data
      */
     protected $helperData;
 
     /**
      * Author constructor.
      *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Helper\Data $helperData
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param Data $helperData
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -72,7 +72,7 @@ class Author extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\ResourceModel\Author');
+        $this->_init(ResourceModel\Author::class);
     }
 
     /**

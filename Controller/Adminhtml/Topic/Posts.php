@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Layout;
 use Magento\Framework\View\Result\LayoutFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Topic;
 use Mageplaza\Blog\Model\TopicFactory;
@@ -36,17 +37,17 @@ class Posts extends Topic
     /**
      * Result layout factory
      *
-     * @var \Magento\Framework\View\Result\LayoutFactory
+     * @var LayoutFactory
      */
     public $resultLayoutFactory;
 
     /**
      * Posts constructor.
      *
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @param \Mageplaza\Blog\Model\TopicFactory $postFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param LayoutFactory $resultLayoutFactory
+     * @param TopicFactory $postFactory
+     * @param Registry $registry
+     * @param Context $context
      */
     public function __construct(
         Context $context,
@@ -60,7 +61,7 @@ class Posts extends Topic
     }
 
     /**
-     * @return \Magento\Framework\View\Result\Layout
+     * @return Layout
      */
     public function execute()
     {

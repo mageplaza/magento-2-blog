@@ -24,6 +24,7 @@ namespace Mageplaza\Blog\Block\Adminhtml\Topic;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Backend\Block\Widget\Form\Container;
 use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\Topic;
 
 /**
  * Class Edit
@@ -34,15 +35,15 @@ class Edit extends Container
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
      * Edit constructor.
      *
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param Context $context
+     * @param Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
@@ -92,7 +93,7 @@ class Edit extends Container
      */
     public function getHeaderText()
     {
-        /** @var \Mageplaza\Blog\Model\Topic $topic */
+        /** @var Topic $topic */
         $topic = $this->coreRegistry->registry('mageplaza_blog_topic');
         if ($topic->getId()) {
             return __("Edit Topic '%1'", $this->escapeHtml($topic->getName()));

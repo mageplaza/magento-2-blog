@@ -63,7 +63,7 @@ class Comment extends AbstractModel
 
     /**
      * Post Collection Factory
-     * @type \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
+     * @type CollectionFactory
      */
     public $postCollectionFactory;
 
@@ -103,7 +103,7 @@ class Comment extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\ResourceModel\Comment');
+        $this->_init(ResourceModel\Comment::class);
     }
 
     /**

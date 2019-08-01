@@ -21,12 +21,18 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
 
+use Exception;
 use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Object;
 use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\ResourceModel\Tag\Collection;
+use Mageplaza\Blog\Model\Tag;
 
 /**
  * Class Product
@@ -35,22 +41,22 @@ use Magento\Framework\Registry;
 class Product extends Extended implements TabInterface
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var CollectionFactory
      */
     public $productCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
      * Product constructor.
      *
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
+     * @param CollectionFactory $productCollectionFactory
+     * @param Registry $coreRegistry
+     * @param Context $context
+     * @param Data $backendHelper
      * @param array $data
      */
     public function __construct(
@@ -89,7 +95,7 @@ class Product extends Extended implements TabInterface
      */
     protected function _prepareCollection()
     {
-        /** @var \Mageplaza\Blog\Model\ResourceModel\Tag\Collection $collection */
+        /** @var Collection $collection */
         $collection = $this->productCollectionFactory->create();
 
         $this->setCollection($collection);
@@ -99,7 +105,7 @@ class Product extends Extended implements TabInterface
 
     /**
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     protected function _prepareColumns()
     {
@@ -173,7 +179,7 @@ class Product extends Extended implements TabInterface
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Tag|\Magento\Framework\Object $item
+     * @param Tag|Object $item
      *
      * @return string
      */
@@ -201,10 +207,10 @@ class Product extends Extended implements TabInterface
     }
 
     /**
-     * @param \Magento\Backend\Block\Widget\Grid\Column $column
+     * @param Column $column
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _addColumnFilterToCollection($column)
     {

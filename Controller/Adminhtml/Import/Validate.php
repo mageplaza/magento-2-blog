@@ -21,10 +21,15 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Import;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Session;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Helper\Data as BlogHelper;
+use RuntimeException;
 
 /**
  * Class Import
@@ -53,7 +58,7 @@ class Validate extends Action
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @return ResponseInterface|ResultInterface
      */
     public function execute()
     {
@@ -63,7 +68,7 @@ class Validate extends Action
             $connect = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
             $importName = $data['import_name'];
 
-            /** @var \Magento\Backend\Model\Session */
+            /** @var Session */
             $this->_getSession()->setData('mageplaza_blog_import_data', $data);
             $result = ['import_name' => $importName, 'status' => 'ok'];
 
@@ -74,11 +79,11 @@ class Validate extends Action
             $result = ['import_name' => $data["import_name"], 'status' => 'false'];
 
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $result = ['import_name' => $data["import_name"], 'status' => 'false'];
 
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = ['import_name' => $data["import_name"], 'status' => 'false'];
 
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));

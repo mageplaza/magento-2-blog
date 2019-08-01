@@ -38,7 +38,7 @@ use Mageplaza\Blog\Model\LikeFactory;
 class Widget extends Frontend
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     public $dateTime;
 
@@ -50,13 +50,13 @@ class Widget extends Frontend
     /**
      * Widget constructor.
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
-     * @param \Mageplaza\Blog\Model\CommentFactory $commentFactory
-     * @param \Mageplaza\Blog\Model\LikeFactory $likeFactory
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
-     * @param \Mageplaza\Blog\Helper\Data $helperData
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param Context $context
+     * @param FilterProvider $filterProvider
+     * @param CommentFactory $commentFactory
+     * @param LikeFactory $likeFactory
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param DataHelper $helperData
+     * @param DateTime $dateTime
      * @param array $data
      */
     public function __construct(

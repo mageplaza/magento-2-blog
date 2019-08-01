@@ -113,9 +113,7 @@
                         <comment><![CDATA[Show/Hide related products in post view page. Setup related products, up-sell, cross-sell products with ease, 
                         <a href="https://www.mageplaza.com/magento-2-automatic-related-products/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">explore now</a>
                         ]]>
-
                         </comment>
-
                     </field>
                     <field id="product_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Limit of Related Products</label>

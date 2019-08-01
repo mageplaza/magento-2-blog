@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel\Category;
 
+use Exception;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Tree\Dbp;
@@ -28,6 +29,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Model\ResourceModel\Category;
+use Zend_Db_Select;
 
 /**
  * Class Tree
@@ -63,49 +65,49 @@ class Tree extends Dbp
     /**
      * Event manager
      *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     public $eventManager;
 
     /**
      * Collection factory
      *
-     * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
+     * @var CollectionFactory
      */
     public $collectionFactory;
 
     /**
      * Blog Category Resource instance
      *
-     * @var \Mageplaza\Blog\Model\ResourceModel\Category
+     * @var Category
      */
     public $categoryResource;
 
     /**
      * Cache instance
      *
-     * @var \Magento\Framework\App\CacheInterface
+     * @var CacheInterface
      */
     public $cache;
 
     /**
      * Store Manager instance
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     public $storeManager;
 
     /**
      * App resource
      *
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     public $coreResource;
 
     /**
      * Blog Category Collection
      *
-     * @var \Mageplaza\Blog\Model\ResourceModel\Category\Collection
+     * @var Collection
      */
     public $collection;
 
@@ -120,13 +122,13 @@ class Tree extends Dbp
      * Tree constructor.
      *
      * @param ManagerInterface $eventManager
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $collectionFactory
+     * @param CollectionFactory $collectionFactory
      * @param Category $categoryResource
      * @param CacheInterface $cache
      * @param StoreManagerInterface $storeManager
      * @param ResourceConnection $coreResource
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(
         ManagerInterface $eventManager,
@@ -521,7 +523,7 @@ class Tree extends Dbp
      *
      * @param bool $sorted
      *
-     * @return \Zend_Db_Select
+     * @return Zend_Db_Select
      */
     public function createCollectionDataSelect($sorted = true)
     {

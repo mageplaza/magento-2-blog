@@ -23,6 +23,8 @@ namespace Mageplaza\Blog\Model\ResourceModel;
 
 use Magento\Backend\Model\Auth;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
@@ -38,14 +40,14 @@ class Post extends AbstractDb
     /**
      * Date model
      *
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     public $date;
 
     /**
      * Event Manager
      *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     public $eventManager;
 
@@ -76,7 +78,7 @@ class Post extends AbstractDb
     public $postProductTable;
 
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @var Data
      */
     public $helperData;
 
@@ -138,7 +140,7 @@ class Post extends AbstractDb
      * @param $id
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getPostNameById($id)
     {
@@ -154,12 +156,12 @@ class Post extends AbstractDb
     /**
      * before save callback
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         if (is_array($object->getStoreIds())) {
             $object->setStoreIds(implode(',', $object->getStoreIds()));
@@ -175,7 +177,7 @@ class Post extends AbstractDb
     /**
      * @inheritdoc
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         $this->saveTagRelation($object);
         $this->saveTopicRelation($object);
@@ -190,7 +192,7 @@ class Post extends AbstractDb
      * @param \Mageplaza\Blog\Model\Post $post
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function saveTagRelation(\Mageplaza\Blog\Model\Post $post)
     {
@@ -243,7 +245,7 @@ class Post extends AbstractDb
      * @param \Mageplaza\Blog\Model\Post $post
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function saveTopicRelation(\Mageplaza\Blog\Model\Post $post)
     {
@@ -296,7 +298,7 @@ class Post extends AbstractDb
      * @param \Mageplaza\Blog\Model\Post $post
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function saveCategoryRelation(\Mageplaza\Blog\Model\Post $post)
     {
@@ -493,7 +495,7 @@ class Post extends AbstractDb
      * @param $urlKey
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function isDuplicateUrlKey($urlKey)
     {
@@ -531,7 +533,7 @@ class Post extends AbstractDb
      * @param $oldId
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function isImported($importSource, $oldId)
     {
@@ -547,7 +549,7 @@ class Post extends AbstractDb
     /**
      * @param $importType
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function deleteImportItems($importType)
     {

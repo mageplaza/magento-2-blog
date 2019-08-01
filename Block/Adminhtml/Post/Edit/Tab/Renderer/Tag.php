@@ -27,6 +27,7 @@ use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\Element\Multiselect;
 use Magento\Framework\Escaper;
 use Magento\Framework\UrlInterface;
+use Mageplaza\Blog\Model\ResourceModel\Tag\Collection;
 use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory as BlogTagCollectionFactory;
 
 /**
@@ -36,19 +37,19 @@ use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory as BlogTagCollectio
 class Tag extends Multiselect
 {
     /**
-     * @var \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory
+     * @var BlogTagCollectionFactory
      */
     public $collectionFactory;
 
     /**
      * Authorization
      *
-     * @var \Magento\Framework\AuthorizationInterface
+     * @var AuthorizationInterface
      */
     public $authorization;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $_urlBuilder;
 
@@ -121,7 +122,7 @@ class Tag extends Multiselect
      */
     public function getTagsCollection()
     {
-        /* @var $collection \Mageplaza\Blog\Model\ResourceModel\Tag\Collection */
+        /* @var $collection Collection */
         $collection = $this->collectionFactory->create();
         $tagById = [];
         foreach ($collection as $tag) {
@@ -150,7 +151,7 @@ class Tag extends Multiselect
             return [];
         }
 
-        /* @var $collection \Mageplaza\Blog\Model\ResourceModel\Tag\Collection */
+        /* @var $collection Collection */
         $collection = $this->collectionFactory->create()
             ->addIdFilter($values);
 

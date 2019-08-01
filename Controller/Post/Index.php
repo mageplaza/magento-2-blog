@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Controller\Post;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Helper\Data;
 
@@ -33,7 +34,7 @@ use Mageplaza\Blog\Helper\Data;
 class Index extends Action
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     public $resultPageFactory;
 
@@ -61,7 +62,7 @@ class Index extends Action
     }
 
     /**
-     * @return \Magento\Framework\View\Result\Page
+     * @return Page
      */
     public function execute()
     {

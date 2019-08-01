@@ -28,6 +28,7 @@ use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\Element\Multiselect;
 use Magento\Framework\Escaper;
 use Magento\Framework\UrlInterface;
+use Mageplaza\Blog\Model\ResourceModel\Category\Collection;
 use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory as BlogCategoryCollectionFactory;
 
 /**
@@ -37,29 +38,29 @@ use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory as BlogCategor
 class Category extends Multiselect
 {
     /**
-     * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
+     * @var BlogCategoryCollectionFactory
      */
     public $collectionFactory;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface
+     * @var AuthorizationInterface
      */
     public $authorization;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $_urlBuilder;
 
     /**
      * Category constructor.
      *
-     * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\AuthorizationInterface $authorization
-     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param Factory $factoryElement
+     * @param CollectionFactory $factoryCollection
+     * @param Escaper $escaper
+     * @param BlogCategoryCollectionFactory $collectionFactory
+     * @param AuthorizationInterface $authorization
+     * @param UrlInterface $urlBuilder
      * @param array $data
      */
     public function __construct(
@@ -161,7 +162,7 @@ class Category extends Multiselect
             return [];
         }
 
-        /* @var $collection \Mageplaza\Blog\Model\ResourceModel\Category\Collection */
+        /* @var $collection Collection */
         $collection = $this->collectionFactory->create()
             ->addIdFilter($values);
 

@@ -25,6 +25,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\Category;
 
 /**
  * Class Tabs
@@ -38,17 +39,17 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     protected $_template = 'Magento_Backend::widget/tabshoriz.phtml';
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
      * Tabs constructor.
      *
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param Registry $coreRegistry
+     * @param Context $context
+     * @param EncoderInterface $jsonEncoder
+     * @param Session $authSession
      * @param array $data
      */
     public function __construct(
@@ -79,7 +80,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     /**
      * Retrieve Blog Category object
      *
-     * @return \Mageplaza\Blog\Model\Category
+     * @return Category
      */
     public function getCategory()
     {

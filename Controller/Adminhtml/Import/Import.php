@@ -23,7 +23,10 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Import;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Messages;
 use Mageplaza\Blog\Helper\Data as BlogHelper;
 use Mageplaza\Blog\Model\Import\AheadWorksM1;
 use Mageplaza\Blog\Model\Import\MageFanM2;
@@ -88,7 +91,7 @@ class Import extends Action
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|mixed
+     * @return ResponseInterface|ResultInterface|mixed
      */
     public function execute()
     {
@@ -162,7 +165,7 @@ class Import extends Action
     {
         $statisticHtml = '';
         $connection = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
-        $messagesBlock = $this->_view->getLayout()->createBlock(\Magento\Framework\View\Element\Messages::class);
+        $messagesBlock = $this->_view->getLayout()->createBlock(Messages::class);
         if ($object->run($data, $connection)) {
             $postStatistic = $this->registry->registry('mageplaza_import_post_statistic');
             if ($postStatistic['has_data']) {

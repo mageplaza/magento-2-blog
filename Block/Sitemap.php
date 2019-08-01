@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Blog\Block;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Class Sitemap
  * @package Mageplaza\Blog\Block
@@ -29,7 +31,7 @@ class Sitemap extends Frontend
 {
     /**
      * @return $this|void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _prepareLayout()
     {

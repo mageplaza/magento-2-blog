@@ -21,12 +21,17 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Topic\Edit\Tab;
 
+use Exception;
 use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Object;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
  * Class Post
@@ -37,24 +42,24 @@ class Post extends Extended implements TabInterface
     /**
      * Registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
      * Post factory
      *
-     * @var \Mageplaza\Blog\Model\PostFactory
+     * @var PostFactory
      */
     public $postFactory;
 
     /**
      * Post constructor.
      *
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Mageplaza\Blog\Model\PostFactory $postFactory
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
+     * @param Registry $coreRegistry
+     * @param PostFactory $postFactory
+     * @param Context $context
+     * @param Data $backendHelper
      * @param array $data
      */
     public function __construct(
@@ -90,7 +95,7 @@ class Post extends Extended implements TabInterface
      */
     protected function _prepareCollection()
     {
-        /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $collection */
+        /** @var Collection $collection */
         $collection = $this->postFactory->create()->getCollection();
         $collection->getSelect()->joinLeft(
             ['related' => $collection->getTable('mageplaza_blog_post_topic')],
@@ -105,7 +110,7 @@ class Post extends Extended implements TabInterface
 
     /**
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     protected function _prepareColumns()
     {
@@ -179,7 +184,7 @@ class Post extends Extended implements TabInterface
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Post|\Magento\Framework\Object $item
+     * @param \Mageplaza\Blog\Model\Post|Object $item
      *
      * @return string
      */
@@ -207,10 +212,10 @@ class Post extends Extended implements TabInterface
     }
 
     /**
-     * @param \Magento\Backend\Block\Widget\Grid\Column $column
+     * @param Column $column
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _addColumnFilterToCollection($column)
     {

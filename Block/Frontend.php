@@ -21,10 +21,13 @@
 
 namespace Mageplaza\Blog\Block;
 
+use Exception;
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Helper\Image;
@@ -44,27 +47,27 @@ class Frontend extends Template
     public $filterProvider;
 
     /**
-     * @type \Mageplaza\Blog\Helper\Data
+     * @type HelperData
      */
     public $helperData;
 
     /**
-     * @type \Magento\Store\Model\StoreManagerInterface
+     * @type StoreManagerInterface
      */
     public $store;
 
     /**
-     * @var \Mageplaza\Blog\Model\CommentFactory
+     * @var CommentFactory
      */
     public $cmtFactory;
 
     /**
-     * @var \Mageplaza\Blog\Model\LikeFactory
+     * @var LikeFactory
      */
     public $likeFactory;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @var CustomerRepositoryInterface
      */
     public $customerRepository;
 
@@ -76,12 +79,12 @@ class Frontend extends Template
     /**
      * Frontend constructor.
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
-     * @param \Mageplaza\Blog\Model\CommentFactory $commentFactory
-     * @param \Mageplaza\Blog\Model\LikeFactory $likeFactory
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
-     * @param \Mageplaza\Blog\Helper\Data $helperData
+     * @param Context $context
+     * @param FilterProvider $filterProvider
+     * @param CommentFactory $commentFactory
+     * @param LikeFactory $likeFactory
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param HelperData $helperData
      * @param array $data
      */
     public function __construct(
@@ -107,7 +110,7 @@ class Frontend extends Template
      * @param $content
      *
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function getPageFilter($content)
     {
@@ -119,6 +122,7 @@ class Frontend extends Template
      * @param string $type
      *
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getImageUrl($image, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
     {
@@ -149,7 +153,7 @@ class Frontend extends Template
     /**
      * @param $post
      *
-     * @return \Magento\Framework\Phrase|string
+     * @return Phrase|string
      */
     public function getPostInfo($post)
     {
@@ -189,9 +193,8 @@ class Frontend extends Template
                 Data::TYPE_CATEGORY
             ) . '">' . $_cat->getName() . '</a>';
         }
-        $result = implode(', ', $categoryHtml);
 
-        return $result;
+        return implode(', ', $categoryHtml);
     }
 
     /**

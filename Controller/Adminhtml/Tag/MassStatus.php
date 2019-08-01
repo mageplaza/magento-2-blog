@@ -21,9 +21,13 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Tag;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
 use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory;
@@ -37,7 +41,7 @@ class MassStatus extends Action
     /**
      * Mass Action Filter
      *
-     * @var \Magento\Ui\Component\MassAction\Filter
+     * @var Filter
      */
     public $filter;
 
@@ -51,9 +55,9 @@ class MassStatus extends Action
     /**
      * MassStatus constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Ui\Component\MassAction\Filter $filter
-     * @param \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $collectionFactory
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         Context $context,
@@ -67,7 +71,7 @@ class MassStatus extends Action
     }
 
     /**
-     * @return $this|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @return $this|ResponseInterface|ResultInterface
      * @throws LocalizedException
      */
     public function execute()
@@ -84,7 +88,7 @@ class MassStatus extends Action
                 $tagUpdated++;
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->_getSession()->addException(
                     $e,
                     __('Something went wrong while updating status for %1.', $tag->getName())
@@ -96,7 +100,7 @@ class MassStatus extends Action
             $this->messageManager->addSuccessMessage(__('A total of %1 record(s) have been updated.', $tagUpdated));
         }
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         return $resultRedirect->setPath('*/*/');

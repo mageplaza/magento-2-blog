@@ -34,6 +34,6 @@ class Traffic extends AbstractModel
      */
     public function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\ResourceModel\Traffic');
+        $this->_init(ResourceModel\Traffic::class);
     }
 }

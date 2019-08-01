@@ -21,9 +21,12 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Comment;
 
+use Exception;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Controller\Adminhtml\Comment;
 use Mageplaza\Blog\Model\CommentFactory;
+use RuntimeException;
 
 /**
  * Class Save
@@ -32,7 +35,7 @@ use Mageplaza\Blog\Model\CommentFactory;
 class Save extends Comment
 {
     /**
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
@@ -64,9 +67,9 @@ class Save extends Comment
                 return $resultRedirect;
             } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the Comment.'));
             }
 

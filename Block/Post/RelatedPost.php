@@ -25,6 +25,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
  * Class RelatedPost
@@ -35,17 +36,17 @@ class RelatedPost extends Template
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @var Data
      */
     protected $helperData;
 
     /**
-     * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @var Collection
      */
     protected $_relatedPosts;
 
@@ -89,12 +90,12 @@ class RelatedPost extends Template
     }
 
     /**
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @return Collection
      */
     public function getRelatedPostList()
     {
         if ($this->_relatedPosts == null) {
-            /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $collection */
+            /** @var Collection $collection */
             $collection = $this->helperData->getPostList();
             $collection->getSelect()
                 ->join(

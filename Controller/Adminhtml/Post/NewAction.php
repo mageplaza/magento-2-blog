@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Forward;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 
 /**
@@ -34,15 +35,15 @@ class NewAction extends Action
     /**
      * Redirect result factory
      *
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @var ForwardFactory
      */
     public $resultForwardFactory;
 
     /**
      * constructor
      *
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param ForwardFactory $resultForwardFactory
+     * @param Context $context
      */
     public function __construct(
         Context $context,
@@ -56,7 +57,7 @@ class NewAction extends Action
     /**
      * forward to edit
      *
-     * @return \Magento\Backend\Model\View\Result\Forward
+     * @return Forward
      */
     public function execute()
     {

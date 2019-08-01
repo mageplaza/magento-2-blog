@@ -22,8 +22,11 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Page;
 use Magento\Catalog\Model\Category as CategoryModel;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
@@ -39,31 +42,31 @@ class Edit extends Category
     /**
      * Page factory
      *
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     public $resultPageFactory;
 
     /**
      * Result JSON factory
      *
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     public $resultJsonFactory;
 
     /**
-     * @var \Magento\Framework\DataObject
+     * @var DataObject
      */
     public $dataObject;
 
     /**
      * Edit constructor.
      *
-     * @param \Magento\Framework\DataObject $dataObject
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Mageplaza\Blog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param DataObject $dataObject
+     * @param PageFactory $resultPageFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param CategoryFactory $categoryFactory
+     * @param Registry $registry
+     * @param Context $context
      */
     public function __construct(
         Context $context,
@@ -83,15 +86,20 @@ class Edit extends Category
     /**
      * Edit Blog category page
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
         $categoryId = (int) $this->getRequest()->getParam('id');
-
+        $duplicate = $this->getRequest()->getParam('duplicate');
         $category = $this->initCategory();
+        if ($duplicate) {
+            $category->setId(null);
+            $category->setData('duplicate', true);
+            $categoryId = null;
+        }
         if (!$category) {
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('*');
@@ -109,7 +117,7 @@ class Edit extends Category
 
         $this->coreRegistry->register('category', $category);
 
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
 
         /** Build response for ajax request */
@@ -147,7 +155,7 @@ class Edit extends Category
                 ['response' => $eventResponse, 'controller' => $this]
             );
 
-            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            /** @var Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             $resultJson->setHeader('Content-type', 'application/json', true);
             $resultJson->setData($eventResponse->getData());

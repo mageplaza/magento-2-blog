@@ -27,6 +27,7 @@ use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\Element\Multiselect;
 use Magento\Framework\Escaper;
 use Magento\Framework\UrlInterface;
+use Mageplaza\Blog\Model\ResourceModel\Topic\Collection;
 use Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory as BlogTopicCollectionFactory;
 
 /**
@@ -36,19 +37,19 @@ use Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory as BlogTopicColle
 class Topic extends Multiselect
 {
     /**
-     * @var \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory
+     * @var BlogTopicCollectionFactory
      */
     public $collectionFactory;
 
     /**
      * Authorization
      *
-     * @var \Magento\Framework\AuthorizationInterface
+     * @var AuthorizationInterface
      */
     public $authorization;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $_urlBuilder;
 
@@ -121,7 +122,7 @@ class Topic extends Multiselect
      */
     public function getTopicsCollection()
     {
-        /* @var $collection \Mageplaza\Blog\Model\ResourceModel\Topic\Collection */
+        /* @var $collection Collection */
         $collection = $this->collectionFactory->create();
         $topicById = [];
         foreach ($collection as $topic) {
@@ -150,7 +151,7 @@ class Topic extends Multiselect
             return [];
         }
 
-        /* @var $collection \Mageplaza\Blog\Model\ResourceModel\Topic\Collection */
+        /* @var $collection Collection */
         $collection = $this->collectionFactory->create()
             ->addIdFilter($values);
 

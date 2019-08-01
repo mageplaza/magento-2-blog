@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Model\ResourceModel;
 
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
@@ -37,14 +38,14 @@ class Topic extends AbstractDb
     /**
      * Date model
      *
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     public $date;
 
     /**
      * Event Manager
      *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     public $eventManager;
 
@@ -56,17 +57,17 @@ class Topic extends AbstractDb
     public $topicPostTable;
 
     /**
-     * @var \Mageplaza\Blog\Helper\Data
+     * @var Data
      */
     public $helperData;
 
     /**
      * Topic constructor.
      *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Mageplaza\Blog\Helper\Data $helperData
+     * @param Context $context
+     * @param DateTime $date
+     * @param ManagerInterface $eventManager
+     * @param Data $helperData
      */
     public function __construct(
         Context $context,
@@ -99,7 +100,7 @@ class Topic extends AbstractDb
      * @param $id
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getTopicNameById($id)
     {
@@ -245,7 +246,7 @@ class Topic extends AbstractDb
      * @param $oldId
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function isImported($importSource, $oldId)
     {
@@ -261,7 +262,7 @@ class Topic extends AbstractDb
     /**
      * @param $importType
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function deleteImportItems($importType)
     {

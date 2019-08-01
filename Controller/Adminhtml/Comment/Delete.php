@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Blog\Controller\Adminhtml\Comment;
 
+use Exception;
+use Magento\Framework\Controller\Result\Redirect;
 use Mageplaza\Blog\Controller\Adminhtml\Comment;
 
 /**
@@ -30,7 +32,7 @@ use Mageplaza\Blog\Controller\Adminhtml\Comment;
 class Delete extends Comment
 {
     /**
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
@@ -42,7 +44,7 @@ class Delete extends Comment
                     ->delete();
 
                 $this->messageManager->addSuccess(__('The Comment has been deleted.'));
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $id]);
 

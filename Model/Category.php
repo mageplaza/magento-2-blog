@@ -21,13 +21,16 @@
 
 namespace Mageplaza\Blog\Model;
 
+use Exception;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
 
 /**
@@ -47,23 +50,23 @@ use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
  * @method mixed getMetaDescription()
  * @method mixed getMetaKeywords()
  * @method mixed getMetaRobots()
- * @method Category setParentId(\int $parentId)
+ * @method Category setParentId(int $parentId)
  * @method int getParentId()
- * @method Category setPath(\string $path)
+ * @method Category setPath(string $path)
  * @method string getPath()
- * @method Category setPosition(\int $path)
+ * @method Category setPosition(int $path)
  * @method int getPosition()
- * @method Category setChildrenCount(\int $path)
+ * @method Category setChildrenCount(int $path)
  * @method int getChildrenCount()
- * @method Category setCreatedAt(\string $createdAt)
+ * @method Category setCreatedAt(string $createdAt)
  * @method string getCreatedAt()
- * @method Category setUpdatedAt(\string $updatedAt)
+ * @method Category setUpdatedAt(string $updatedAt)
  * @method string getUpdatedAt()
- * @method Category setMovedCategoryId(\string $id)
+ * @method Category setMovedCategoryId(string $id)
  * @method Category setAffectedCategoryIds(array $ids)
  * @method Category setPostsData(array $data)
  * @method array getPostsData()
- * @method Category setIsChangedPostList(\bool $flag)
+ * @method Category setIsChangedPostList(bool $flag)
  * @method bool getIsChangedPostList()
  * @method Category setAffectedPostIds(array $ids)
  * @method bool getAffectedPostIds()
@@ -94,21 +97,21 @@ class Category extends AbstractModel
     /**
      * Post Collection
      *
-     * @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @var Collection
      */
     public $postCollection;
 
     /**
      * Blog Category Factory
      *
-     * @var \Mageplaza\Blog\Model\CategoryFactory
+     * @var CategoryFactory
      */
     public $categoryFactory;
 
     /**
      * Post Collection Factory
      *
-     * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
+     * @var CollectionFactory
      */
     public $postCollectionFactory;
 
@@ -153,7 +156,7 @@ class Category extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\ResourceModel\Category');
+        $this->_init(ResourceModel\Category::class);
     }
 
     /**
@@ -214,13 +217,13 @@ class Category extends AbstractModel
      *
      * @return $this
      * @throws LocalizedException
-     * @throws \Exception
+     * @throws Exception
      */
     public function move($parentId, $afterCategoryId)
     {
         try {
             $parent = $this->categoryFactory->create()->load($parentId);
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        } catch (NoSuchEntityException $e) {
             throw new LocalizedException(
                 __('Sorry, but we can\'t move the Blog Category because we can\'t find the new parent Blog Category you selected.'),
                 $e
@@ -231,7 +234,8 @@ class Category extends AbstractModel
             throw new LocalizedException(
                 __('Sorry, but we can\'t move the Blog Category because we can\'t find the new parent Blog Category you selected.')
             );
-        } elseif ($parent->getId() == $this->getId()) {
+        }
+        if ($parent->getId() == $this->getId()) {
             throw new LocalizedException(
                 __('We can\'t perform this Blog Category move operation because the parent Blog Category matches the child Blog Category.')
             );
@@ -257,7 +261,7 @@ class Category extends AbstractModel
 
             // Set data for indexer
             $this->setAffectedCategoryIds([$this->getId(), $oldParentId, $parentId]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->_getResource()->rollBack();
             throw $e;
         }
@@ -285,7 +289,7 @@ class Category extends AbstractModel
     }
 
     /**
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @return Collection
      */
     public function getSelectedPostsCollection()
     {
