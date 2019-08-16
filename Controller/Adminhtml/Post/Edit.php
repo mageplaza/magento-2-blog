@@ -70,10 +70,6 @@ class Edit extends Post
         $post = $this->initPost();
         $duplicate = $this->getRequest()->getParam('duplicate');
 
-        if ($duplicate) {
-            $post->setData('duplicate', true);
-        }
-
         if (!$post) {
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('*');
@@ -93,7 +89,7 @@ class Edit extends Post
         $resultPage->setActiveMenu('Mageplaza_Blog::post');
         $resultPage->getConfig()->getTitle()->set(__('Posts'));
 
-        $title = $post->getId() && !$post->getDuplicate() ? $post->getName() : __('New Post');
+        $title = $post->getId() && !$duplicate ? $post->getName() : __('New Post');
         $resultPage->getConfig()->getTitle()->prepend($title);
 
         return $resultPage;

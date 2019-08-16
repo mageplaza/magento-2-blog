@@ -167,6 +167,12 @@ class Post extends Generic implements TabInterface
 
         $fieldset->addField('author_id', 'hidden', ['name' => 'author_id']);
 
+        if ($this->_request->getParam('duplicate')) {
+            $fieldset->addField('duplicate', 'hidden', [
+                'name'     => 'duplicate',
+                'value' => 1
+            ]);
+        }
         $fieldset->addField('name', 'text', [
             'name'     => 'name',
             'label'    => __('Name'),

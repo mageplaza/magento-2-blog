@@ -75,7 +75,7 @@ abstract class Post extends Action
     protected function initPost($register = false, $isSave = false)
     {
         $postId = (int) $this->getRequest()->getParam('id');
-        $duplicate = $this->getRequest()->getParam('duplicate');
+        $duplicate = $this->getRequest()->getParam('post')['duplicate'] ?? null;
 
         /** @var \Mageplaza\Blog\Model\Post $post */
         $post = $this->postFactory->create();

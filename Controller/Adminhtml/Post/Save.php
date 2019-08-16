@@ -153,7 +153,7 @@ class Save extends Post
         /** Set specify field data */
         $timezone = $this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $data['publish_date'] .= ' ' . $data['publish_time'][0]
-                                 . ':' . $data['publish_time'][1] . ':' . $data['publish_time'][2];
+            . ':' . $data['publish_time'][1] . ':' . $data['publish_time'][2];
         $data['publish_date'] = $timezone->convertConfigTimeToUtc(isset($data['publish_date'])
             ? $data['publish_date'] : null);
         $data['modifier_id'] = $this->_auth->getUser()->getId();

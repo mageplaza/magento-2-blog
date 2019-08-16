@@ -69,7 +69,23 @@ class Edit extends Container
         parent::_construct();
 
         $post = $this->coreRegistry->registry('mageplaza_blog_post');
-        if ($post->getId() && !$post->getDuplicate()) {
+        $this->buttonList->add(
+            'save-and-continue',
+            [
+                'label'          => __('Save and Continue Edit'),
+                'class'          => 'save',
+                'data_attribute' => [
+                    'mage-init' => [
+                        'button' => [
+                            'event'  => 'saveAndContinueEdit',
+                            'target' => '#edit_form'
+                        ]
+                    ]
+                ]
+            ],
+            -100
+        );
+        if ($post->getId() && !$this->_request->getParam('duplicate')) {
             $this->buttonList->add(
                 'duplicate',
                 [
@@ -78,22 +94,6 @@ class Edit extends Container
                     'onclick' => sprintf("location.href = '%s';", $this->getDuplicateUrl()),
                 ],
                 -101
-            );
-            $this->buttonList->add(
-                'save-and-continue',
-                [
-                    'label'          => __('Save and Continue Edit'),
-                    'class'          => 'save',
-                    'data_attribute' => [
-                        'mage-init' => [
-                            'button' => [
-                                'event'  => 'saveAndContinueEdit',
-                                'target' => '#edit_form'
-                            ]
-                        ]
-                    ]
-                ],
-                -100
             );
         } else {
             $this->buttonList->remove('delete');
@@ -127,10 +127,7 @@ class Edit extends Container
         $post = $this->coreRegistry->registry('mageplaza_blog_post');
         if ($post->getId()) {
             if ($post->getDuplicate()) {
-                $ar = [
-                    'id'        => $post->getId(),
-                    'duplicate' => $post->getDuplicate()
-                ];
+                $ar = [];
             } else {
                 $ar = ['id' => $post->getId()];
             }
