@@ -144,10 +144,14 @@ class Save extends Post
      */
     protected function prepareData($post, $data = [])
     {
-        try {
-            $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_POST, $post->getImage());
-        } catch (Exception $exception) {
-            $data['image'] = isset($data['image']['value']) ? $data['image']['value'] : '';
+        if (!$this->getRequest()->getParam('image')){
+            try {
+                $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_POST, $post->getImage());
+            } catch (Exception $exception) {
+                $data['image'] = isset($data['image']['value']) ? $data['image']['value'] : '';
+            }
+        }else{
+            $data['image'] = '';
         }
 
         /** Set specify field data */
