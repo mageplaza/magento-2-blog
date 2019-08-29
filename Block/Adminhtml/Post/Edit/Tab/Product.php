@@ -29,7 +29,6 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Object;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\ResourceModel\Tag\Collection;
 use Mageplaza\Blog\Model\Tag;
