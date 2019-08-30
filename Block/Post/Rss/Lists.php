@@ -109,11 +109,9 @@ class Lists extends AbstractBlock implements DataProviderInterface
 
         $posts = $this->helper->getPostList($this->getStoreId())
             ->addFieldToFilter('in_rss', 1)
-            ->setOrder('post_id', 'DESC')
-            ->getSelect()
-            ->limit(10);
+            ->setOrder('post_id', 'DESC');
         /** @var Post $item */
-        foreach ($posts as $item) {
+        foreach ($posts->getItems() as $item) {
             $item->setAllowedInRss(true);
             $item->setAllowedPriceInRss(true);
 
@@ -124,6 +122,9 @@ class Lists extends AbstractBlock implements DataProviderInterface
                 'description' => $description ?: 'no content',
                 'lastUpdate'  => strtotime($item->getPublishDate())
             ];
+            if (sizeof($data['entries']) > 9){
+                break;
+            }
         }
 
         return $data;
