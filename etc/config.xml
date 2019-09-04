@@ -24,7 +24,7 @@
     <default>
         <blog>
             <module>
-                <type>1</type>
+                <type>0</type>
                 <user_guide>blog-m2</user_guide>
             </module>
             <general>
