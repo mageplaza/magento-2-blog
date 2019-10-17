@@ -23,6 +23,9 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="mpblog_design"/>
     <body>
+        <referenceBlock name="head.additional">
+            <block class="Mageplaza\Blog\Block\Post\View" name="mpblog.post.head" template="post/head.phtml" cacheable="false" />
+        </referenceBlock>
         <referenceContainer name="content">
             <block class="Mageplaza\Blog\Block\Post\View" name="mpblog.post.view" template="post/view.phtml" cacheable="false">
                 <block class="Mageplaza\Blog\Block\Post\RelatedProduct" name="related.category.products" as="related_products" template="Magento_Catalog::product/list.phtml"/>
