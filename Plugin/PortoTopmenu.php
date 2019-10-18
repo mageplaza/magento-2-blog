@@ -21,12 +21,31 @@
 
 namespace Mageplaza\Blog\Plugin;
 
+use Mageplaza\Blog\Block\Category\Menu;
+use Mageplaza\Blog\Helper\Data;
+
 /**
  * Class PortoTopmenu
  * @package Mageplaza\Blog\Plugin
  */
 class PortoTopmenu
 {
+    /**
+     * @var Data
+     */
+    protected $helper;
+
+    /**
+     * PortoTopmenu constructor.
+     *
+     * @param Data $helper
+     */
+    public function __construct(
+        Data $helper
+    ) {
+        $this->helper = $helper;
+    }
+
     /**
      * @param \Smartwave\Megamenu\Block\Topmenu $topmenu
      * @param $html
@@ -35,10 +54,11 @@ class PortoTopmenu
      */
     public function afterGetMegamenuHtml(\Smartwave\Megamenu\Block\Topmenu $topmenu, $html)
     {
-        $html .= $topmenu->getLayout()
-            ->createBlock(\Mageplaza\Blog\Block\Frontend::class)
-            ->setTemplate('Mageplaza_Blog::position/topmenuporto.phtml')
-            ->toHtml();
+        if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
+            $blogHtml = $topmenu->getLayout()->createBlock(Menu::class)
+                ->setTemplate('Mageplaza_Blog::category/topmenu.phtml')->toHtml();
+            return $html . $blogHtml;
+        }
 
         return $html;
     }

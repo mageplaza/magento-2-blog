@@ -78,6 +78,10 @@
                     <label>Limit related post</label>
                     <comment>Number of related post in post view page</comment>
                 </field>
+                <field id="related_mode" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Display Related Posts Mode</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\RelatedMode</source_model>
+                </field>
                 <field id="display_style" translate="label comment" type="select" sortOrder="55" showInDefault="1" showInStore="1" showInWebsite="1">
                     <label>Display Blogs Mode</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\DisplayType</source_model>
@@ -89,6 +93,24 @@
                 <field id="font_color" translate="label comment" type="text" sortOrder="65" showInWebsite="1" showInStore="1" showInDefault="1">
                     <label>Choose blog's color</label>
                     <validate>jscolor {hash:true,refine:false}</validate>
+                </field>
+                <field id="customer_approve" translate="label comment" type="select" sortOrder="75" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Allows customers to register as an author</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="auto_approve" translate="label comment" type="select" sortOrder="85" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Automatically approve requests</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="auto_post" translate="label comment" type="select" sortOrder="95" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Automatically approve customer's posts</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="facebook_id" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Facebook ID</label>
+                </field>
+                <field id="twitter_id" translate="label comment" type="text" sortOrder="105" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Twitter ID</label>
                 </field>
             </group>
             <group id="product_post" translate="label" showInDefault="1" sortOrder="5" showInWebsite="1" showInStore="1">
@@ -114,6 +136,10 @@
                         <a href="https://www.mageplaza.com/magento-2-automatic-related-products/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">explore now</a>
                         ]]>
                         </comment>
+                    </field>
+                    <field id="related_mode" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInStore="1" showInWebsite="1">
+                        <label>Display Related Posts Mode</label>
+                        <source_model>Mageplaza\Blog\Model\Config\Source\RelatedMode</source_model>
                     </field>
                     <field id="product_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Limit of Related Products</label>
