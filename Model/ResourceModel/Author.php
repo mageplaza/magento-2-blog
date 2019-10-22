@@ -45,11 +45,6 @@ class Author extends AbstractDb
     public $dateTime;
 
     /**
-     * @inheritdoc
-     */
-    protected $_isPkAutoIncrement = false;
-
-    /**
      * Author constructor.
      *
      * @param Context $context
@@ -62,7 +57,7 @@ class Author extends AbstractDb
         DateTime $dateTime
     ) {
         $this->helperData = $helperData;
-        $this->dateTime = $dateTime;
+        $this->dateTime   = $dateTime;
 
         parent::__construct($context);
     }

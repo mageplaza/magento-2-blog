@@ -25,12 +25,16 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Cms\Model\Wysiwyg\Config;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\System\Store;
 use Mageplaza\Blog\Block\Adminhtml\Renderer\Image;
 use Mageplaza\Blog\Helper\Image as ImageHelper;
+use Mageplaza\Blog\Model\Config\Source\AuthorStatus;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Author
@@ -54,6 +58,21 @@ class Author extends Generic implements TabInterface
     protected $imageHelper;
 
     /**
+     * @var AuthorStatus
+     */
+    protected $authorStatus;
+
+    /**
+     * @var Data
+     */
+    protected $_helperData;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * Author constructor.
      *
      * @param Config $wysiwygConfig
@@ -62,6 +81,9 @@ class Author extends Generic implements TabInterface
      * @param Registry $registry
      * @param FormFactory $formFactory
      * @param ImageHelper $imageHelper
+     * @param AuthorStatus $authorStatus
+     * @param Data $helperData
+     * @param CustomerRepositoryInterface $customerRepository
      * @param array $data
      */
     public function __construct(
@@ -71,11 +93,17 @@ class Author extends Generic implements TabInterface
         Registry $registry,
         FormFactory $formFactory,
         ImageHelper $imageHelper,
+        AuthorStatus $authorStatus,
+        Data $helperData,
+        CustomerRepositoryInterface $customerRepository,
         array $data = []
     ) {
         $this->wysiwygConfig = $wysiwygConfig;
-        $this->systemStore = $systemStore;
-        $this->imageHelper = $imageHelper;
+        $this->systemStore   = $systemStore;
+        $this->imageHelper   = $imageHelper;
+        $this->authorStatus  = $authorStatus;
+        $this->_helperData   = $helperData;
+        $this->customerRepository = $customerRepository;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -92,7 +120,6 @@ class Author extends Generic implements TabInterface
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('author_');
         $form->setFieldNameSuffix('author');
-
         $fieldset = $form->addFieldset('base_fieldset', [
             'legend' => __('Author Information'),
             'class'  => 'fieldset-wide'
@@ -102,6 +129,43 @@ class Author extends Generic implements TabInterface
             $fieldset->addField('user_id', 'hidden', ['name' => 'user_id']);
         }
 
+        if ($author->getCustomerId()) {
+            $fieldset->addField('customer_id', 'hidden', [
+                'name'  => 'customer_id',
+                'value' => $author->getCustomerId()
+            ]);
+
+            $customer = $this->customerRepository->getById($author->getCustomerId());
+
+            $fieldset->addField('customer', 'label', [
+                'name'  => 'customer',
+                'label' => __('Customer'),
+                'title' => __('Customer'),
+                'value' => $customer->getFirstname().' '.$customer->getLastname()
+            ]);
+        } else {
+            $fieldset->addField('customer', 'text', [
+                'name'  => 'customer',
+                'label' => __('Customer'),
+                'title' => __('Customer')
+            ])->setAfterElementHtml(
+                '<div id="customer-grid" style="display:none"></div>
+                <script type="text/x-magento-init">
+                    {
+                        "#author_customer": {
+                            "Mageplaza_Blog/js/view/author":{
+                                "url": "' . $this->getAjaxUrl() . '"
+                            }
+                        }
+                    }
+                </script>'
+            );
+            $fieldset->addField('customer_id', 'hidden', [
+                'name'  => 'customer_id',
+                'value' => 0
+            ]);
+        }
+
         $fieldset->addField('name', 'text', [
             'name'     => 'name',
             'label'    => __('Display Name'),
@@ -109,6 +173,19 @@ class Author extends Generic implements TabInterface
             'required' => true,
             'note'     => __('This name will be displayed on frontend')
         ]);
+
+        $fieldset->addField('status', 'select', [
+            'name'   => 'status',
+            'label'  => __('Status'),
+            'title'  => __('Status'),
+            'values' => $this->authorStatus->toArray()
+        ]);
+
+        $fieldset->addField('type', 'hidden', [
+            'name'  => 'type',
+            'value' => 0
+        ]);
+
         $fieldset->addField('short_description', 'editor', [
             'name'   => 'short_description',
             'label'  => __('Short Description'),
@@ -116,23 +193,53 @@ class Author extends Generic implements TabInterface
             'note'   => __('Short Description'),
             'config' => $this->wysiwygConfig->getConfig()
         ]);
+
         $fieldset->addField('image', Image::class, [
             'name'  => 'image',
             'label' => __('Avatar'),
             'title' => __('Avatar'),
             'path'  => $this->imageHelper->getBaseMediaPath(ImageHelper::TEMPLATE_MEDIA_TYPE_AUTH)
         ]);
+
         $fieldset->addField('url_key', 'text', [
             'name'  => 'url_key',
             'label' => __('URL Key'),
             'title' => __('URL Key')
         ]);
+
+        $authorUrlFormat = $this->_storeManager->getDefaultStoreView()->getBaseUrl(UrlInterface::URL_TYPE_LINK)
+            . '/blog/author/';
+        $urlSuffix       = $this->_helperData->getUrlSuffix();
+
+        $fieldset->addField(
+            'full_url',
+            'label',
+            [
+                'label' => __('Full URL'),
+                'value' => $author->getUrlKey() ? $authorUrlFormat . $author->getUrlKey() . $urlSuffix : ''
+            ]
+        )->setAfterElementHtml(
+            "<script>
+                require(['jquery'], function($){
+                    $('#author_url_key').on('keyup', function() {
+                        var url = '" . $authorUrlFormat . "'+$(this).val()+'" . $urlSuffix . "';
+                        
+                        if ($(this).val() === ''){
+                            url = '';
+                        }
+                        $('.field-full_url .control-value').html(url);
+                    });
+                });
+            </script>"
+        );
+
         $fieldset->addField('facebook_link', 'text', [
             'name'  => 'facebook_link',
             'label' => __('Facebook'),
             'title' => __('Facebook'),
             'note'  => __('Facebook URL'),
         ]);
+
         $fieldset->addField('twitter_link', 'text', [
             'name'  => 'twitter_link',
             'label' => __('Twitter'),
@@ -184,5 +291,14 @@ class Author extends Generic implements TabInterface
     public function isHidden()
     {
         return false;
+    }
+
+    /**
+     * Get transaction grid url
+     * @return string
+     */
+    public function getAjaxUrl()
+    {
+        return $this->getUrl('mageplaza_blog/author/customergrid');
     }
 }

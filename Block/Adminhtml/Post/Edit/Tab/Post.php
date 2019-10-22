@@ -44,6 +44,7 @@ use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic;
 use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Model\Config\Source\Author;
 
 /**
  * Class Post
@@ -100,6 +101,8 @@ class Post extends Generic implements TabInterface
      */
     protected $_layoutOptions;
 
+    protected $_author;
+
     /**
      * Post constructor.
      *
@@ -130,6 +133,7 @@ class Post extends Generic implements TabInterface
         Robots $metaRobotsOptions,
         Store $systemStore,
         Image $imageHelper,
+        Author $author,
         array $data = []
     ) {
         $this->wysiwygConfig = $wysiwygConfig;
@@ -141,6 +145,7 @@ class Post extends Generic implements TabInterface
         $this->_date = $dateTime;
         $this->_layoutOptions = $layoutOption;
         $this->imageHelper = $imageHelper;
+        $this->_author = $author;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -165,8 +170,6 @@ class Post extends Generic implements TabInterface
             'class'  => 'fieldset-wide'
         ]);
 
-        $fieldset->addField('author_id', 'hidden', ['name' => 'author_id']);
-
         if ($this->_request->getParam('duplicate')) {
             $fieldset->addField('duplicate', 'hidden', [
                 'name'     => 'duplicate',
@@ -178,6 +181,13 @@ class Post extends Generic implements TabInterface
             'label'    => __('Name'),
             'title'    => __('Name'),
             'required' => true
+        ]);
+        $fieldset->addField('author_id', 'select', [
+            'name' => 'author_id',
+            'label' => __('Author'),
+            'title' => __('Author'),
+            'required' => true,
+            'values' => $this->_author->toOptionArray()
         ]);
         $fieldset->addField('enabled', 'select', [
             'name'   => 'enabled',

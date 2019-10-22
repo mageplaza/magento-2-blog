@@ -58,25 +58,33 @@ abstract class Author extends Action
         AuthorFactory $authorFactory
     ) {
         $this->authorFactory = $authorFactory;
-        $this->coreRegistry = $coreRegistry;
+        $this->coreRegistry  = $coreRegistry;
 
         parent::__construct($context);
     }
 
     /**
+     * @param bool $register
+     *
      * @return bool|\Mageplaza\Blog\Model\Author
      */
-    public function initAuthor()
+    public function initAuthor($register = false)
     {
-        $user = $this->_auth->getUser();
-        $userId = $user->getId();
+        $authorId = (int) $this->getRequest()->getParam('id');
 
         /** @var \Mageplaza\Blog\Model\Author $author */
-        $author = $this->authorFactory->create()
-            ->load($userId);
+        $author = $this->authorFactory->create();
+        if ($authorId) {
+            $author->load($authorId);
+            if (!$author->getId()) {
+                $this->messageManager->addErrorMessage(__('This author no longer exists.'));
 
-        if (!$author->getId()) {
-            $author = $this->authorFactory->create()->setId($user->getId());
+                return false;
+            }
+        }
+
+        if ($register) {
+            $this->coreRegistry->register('mageplaza_blog_author', $author);
         }
 
         return $author;

@@ -738,6 +738,79 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
 
+        if (version_compare($context->getVersion(), '2.5.1', '<')) {
+            if ($installer->tableExists('mageplaza_blog_author')) {
+                $connection->changeColumn(
+                    $installer->getTable('mageplaza_blog_author'),
+                    'user_id',
+                    'user_id',
+                    [
+                        'type'     => Table::TYPE_INTEGER,
+                        'size'     => null,
+                        'identity' => true,
+                        'nullable' => false,
+                        'primary'  => true,
+                        'unsigned' => true,
+                        'comment'  => 'Author ID'
+                    ]
+                );
+
+                $connection->addColumn(
+                    $installer->getTable('mageplaza_blog_author'),
+                    'status',
+                    [
+                        'type'     => Table::TYPE_INTEGER,
+                        'unsigned' => true,
+                        'nullable' => true,
+                        'default'  => 0,
+                        'comment'  => 'Author Status',
+                        'after' => 'url_key'
+                    ]
+                );
+
+                $connection->addColumn(
+                    $installer->getTable('mageplaza_blog_author'),
+                    'type',
+                    [
+                        'type'     => Table::TYPE_INTEGER,
+                        'unsigned' => true,
+                        'nullable' => true,
+                        'default'  => 0,
+                        'comment'  => 'Author Type',
+                        'after' => 'url_key'
+                    ]
+                );
+
+                $connection->addColumn(
+                    $installer->getTable('mageplaza_blog_author'),
+                    'customer_id',
+                    [
+                        'type'     => Table::TYPE_INTEGER,
+                        'unsigned' => true,
+                        'nullable' => true,
+                        'default'  => 0,
+                        'comment'  => 'Customer ID',
+                        'after' => 'url_key'
+                    ]
+                );
+
+                $connection->dropForeignKey(
+                    $installer->getTable('mageplaza_blog_author'),
+                    $installer->getFkName('mageplaza_blog_author', 'user_id', 'admin_user', 'user_id')
+                );
+            }
+            if ($installer->tableExists('mageplaza_blog_author') && $installer->tableExists('mageplaza_blog_post')) {
+                $connection->addForeignKey(
+                    $installer->getFkName('mageplaza_blog_post', 'author_id', 'mageplaza_blog_author', 'user_id'),
+                    $installer->getTable('mageplaza_blog_post'),
+                    'author_id',
+                    $installer->getTable('mageplaza_blog_author'),
+                    'user_id',
+                    Table::ACTION_CASCADE
+                );
+            }
+        }
+
         $installer->endSetup();
     }
 }

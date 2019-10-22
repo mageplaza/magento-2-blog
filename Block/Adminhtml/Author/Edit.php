@@ -61,15 +61,14 @@ class Edit extends Container
      */
     protected function _construct()
     {
-        $this->_objectId = 'user_id';
+        $this->_objectId   = 'user_id';
         $this->_blockGroup = 'Mageplaza_Blog';
         $this->_controller = 'adminhtml_author';
 
         parent::_construct();
 
         $this->buttonList->add('save-and-continue', [
-            'label'          => __('Save Change'),
-            'class'          => 'save primary',
+            'label'          => __('Save And Continue Edit'),
             'data_attribute' => [
                 'mage-init' => [
                     'button' => [
@@ -79,8 +78,20 @@ class Edit extends Container
                 ]
             ]
         ], -100);
-        $this->buttonList->remove('back');
-        $this->buttonList->remove('save');
+
+        $this->buttonList->add(
+            'delete',
+            [
+                'label'   => __('Delete'),
+                'class'   => 'delete',
+                'onclick' => "setLocation('{$this->getUrl('mageplaza_blog/author/delete', [
+                    'id' => $this->getCurrentAuthor()->getId(),
+                    '_current' => true, 
+                    'back' => 'edit'
+                ])}')",
+            ],
+            -101
+        );
     }
 
     /**
@@ -91,11 +102,19 @@ class Edit extends Container
     public function getHeaderText()
     {
         /** @var Author $author */
-        $author = $this->coreRegistry->registry('mageplaza_blog_author');
+        $author = $this->getCurrentAuthor();
         if ($author->getId()) {
             return __("Edit Author '%1'", $this->escapeHtml($author->getName()));
         }
 
         return __('New Author');
+    }
+
+    /**
+     * @return Author
+     */
+    public function getCurrentAuthor()
+    {
+        return $this->coreRegistry->registry('mageplaza_blog_author');
     }
 }

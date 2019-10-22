@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
+    <container name="root" label="Root" output="1">
+        <block class="Mageplaza\Blog\Block\Adminhtml\Author\Edit\Tab\Post" name="author.edit.tab.post"/>
+        <block class="Magento\Backend\Block\Widget\Grid\Serializer" name="post_grid_serializer">
+            <arguments>
+                <argument name="input_names" xsi:type="string">position</argument>
+                <argument name="grid_block" xsi:type="string">author.edit.tab.post</argument>
+                <argument name="callback" xsi:type="string">getSelectedPosts</argument>
+                <argument name="input_element_name" xsi:type="string">posts</argument>
+                <argument name="reload_param_name" xsi:type="string">author_posts</argument>
+            </arguments>
+        </block>
+    </container>
+</layout>
