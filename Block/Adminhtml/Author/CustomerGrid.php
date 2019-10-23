@@ -67,7 +67,7 @@ class CustomerGrid extends Extended
         array $data = []
     ) {
         $this->_customerFactory = $customerFactory;
-        $this->customerGroup = $customerGroup;
+        $this->customerGroup    = $customerGroup;
 
         parent::__construct($context, $backendHelper, $data);
     }
@@ -89,6 +89,12 @@ class CustomerGrid extends Extended
     protected function _prepareCollection()
     {
         $collection = $this->_customerFactory->create()->getCollection();
+        $collection->getSelect()->joinLeft(
+            ['author' => $collection->getTable('mageplaza_blog_author')],
+            'e.entity_id = author.customer_id',
+            ['author.user_id AS user_id']
+        )->where('author.user_id IS NULL')->getConnection();
+
         $this->setCollection($collection);
 
         return parent::_prepareCollection();

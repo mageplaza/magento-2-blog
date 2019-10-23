@@ -33,6 +33,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Mageplaza\Blog\Model\ResourceModel\Author\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mageplaza_blog_author</argument>
+            <argument name="resourceModel" xsi:type="string">Mageplaza\Blog\Model\ResourceModel\Author</argument>
+        </arguments>
+    </type>
     <virtualType name="Mageplaza\Blog\Model\ResourceModel\Post\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
             <argument name="mainTable" xsi:type="string">mageplaza_blog_post</argument>
@@ -49,12 +55,6 @@
         <arguments>
             <argument name="mainTable" xsi:type="string">mageplaza_blog_topic</argument>
             <argument name="resourceModel" xsi:type="string">Mageplaza\Blog\Model\ResourceModel\Topic</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Mageplaza\Blog\Model\ResourceModel\Author\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">mageplaza_blog_author</argument>
-            <argument name="resourceModel" xsi:type="string">Mageplaza\Blog\Model\ResourceModel\Author</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\App\Rss\RssManagerInterface">
