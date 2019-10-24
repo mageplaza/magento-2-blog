@@ -40,7 +40,11 @@ class Collection extends SearchResult
             ['cus' => $this->getTable('customer_entity')],
             'main_table.customer_id = cus.entity_id',
             ['email']
-        );
+        )->joinLeft(
+            ['post' => $this->getTable('mageplaza_blog_post')],
+            'main_table.user_id = post.author_id',
+            ['qty_post' => 'COUNT(post_id)']
+        )->group('main_table.user_id');
 
         return $this;
     }

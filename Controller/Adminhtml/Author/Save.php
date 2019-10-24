@@ -114,13 +114,9 @@ class Save extends Author
 
     public function prepareData($author, $data)
     {
-        // set data
-        if (!empty($data)) {
-            $author->addData($data);
-        }
 
         // upload image
-        if (!$this->getRequest()->getParam('image')) {
+        if ($this->getRequest()->getFiles('image')['name']) {
             try {
                 $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_AUTH, $author->getImage());
             } catch (Exception $exception) {
@@ -128,6 +124,11 @@ class Save extends Author
             }
         } else {
             $data['image'] = '';
+        }
+
+        // set data
+        if (!empty($data)) {
+            $author->addData($data);
         }
 
         return $this;
