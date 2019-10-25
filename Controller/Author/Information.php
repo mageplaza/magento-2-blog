@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Controller\Author;
 
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
@@ -31,12 +32,13 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\Config\Source\SideBarLR;
+use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
 
 /**
  * Class View
  * @package Mageplaza\Blog\Controller\Author
  */
-class Signup extends Action
+class Information extends Action
 {
     /**
      * @var PageFactory
@@ -54,22 +56,38 @@ class Signup extends Action
     protected $_helperBlog;
 
     /**
+     * @var AuthorCollection
+     */
+    protected $authorCollection;
+
+    /**
+     * @var Session
+     */
+    protected $customerSession;
+
+    /**
      * View constructor.
      *
      * @param Context $context
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
+     * @param AuthorCollection $authorCollection
+     * @param Session $customerSession
      * @param Data $helperData
      */
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
+        AuthorCollection $authorCollection,
+        Session $customerSession,
         Data $helperData
     ) {
         $this->_helperBlog          = $helperData;
         $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
+        $this->authorCollection     = $authorCollection;
+        $this->customerSession      = $customerSession;
 
         parent::__construct($context);
     }
@@ -80,15 +98,17 @@ class Signup extends Action
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        if ($this->_helperBlog->isAuthor()) {
+
+        if (!$this->_helperBlog->isAuthor()) {
             $page = $this->resultPageFactory->create();
             $page->getConfig()->setPageLayout(SideBarLR::LEFT);
-            $page->getConfig()->getTitle()->set('Signup Author');
+            $page->getConfig()->getTitle()->set('Information Author');
+
             return $page;
         }
 
         if ($this->_helperBlog->isLoggin()) {
-            $resultRedirect->setPath('mpblog/*/information');
+            $resultRedirect->setPath('mpblog/*/signup');
         } else {
             $resultRedirect->setPath('customer/account');
         }

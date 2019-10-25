@@ -24,6 +24,7 @@ namespace Mageplaza\Blog\Block;
 use Exception;
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Session;
 use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
@@ -72,6 +73,11 @@ class Frontend extends Template
     public $customerRepository;
 
     /**
+     * @var Session
+     */
+    protected $customerSession;
+
+    /**
      * @var
      */
     public $commentTree;
@@ -84,6 +90,7 @@ class Frontend extends Template
      * @param CommentFactory $commentFactory
      * @param LikeFactory $likeFactory
      * @param CustomerRepositoryInterface $customerRepository
+     * @param Session $customerSession
      * @param HelperData $helperData
      * @param array $data
      */
@@ -93,15 +100,17 @@ class Frontend extends Template
         CommentFactory $commentFactory,
         LikeFactory $likeFactory,
         CustomerRepositoryInterface $customerRepository,
+        Session $customerSession,
         HelperData $helperData,
         array $data = []
     ) {
-        $this->filterProvider = $filterProvider;
-        $this->cmtFactory = $commentFactory;
-        $this->likeFactory = $likeFactory;
+        $this->filterProvider     = $filterProvider;
+        $this->cmtFactory         = $commentFactory;
+        $this->likeFactory        = $likeFactory;
         $this->customerRepository = $customerRepository;
-        $this->helperData = $helperData;
-        $this->store = $context->getStoreManager();
+        $this->customerSession    = $customerSession;
+        $this->helperData         = $helperData;
+        $this->store              = $context->getStoreManager();
 
         parent::__construct($context, $data);
     }
@@ -127,7 +136,7 @@ class Frontend extends Template
     public function getImageUrl($image, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
     {
         $imageHelper = $this->helperData->getImageHelper();
-        $imageFile = $imageHelper->getMediaPath($image, $type);
+        $imageFile   = $imageHelper->getMediaPath($image, $type);
 
         return $this->helperData->getImageHelper()->getMediaUrl($imageFile);
     }
@@ -145,7 +154,7 @@ class Frontend extends Template
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url = $this->helperData->getUrl($this->helperData->getRoute() . '/' . $urlKey);
+        $url    = $this->helperData->getUrl($this->helperData->getRoute() . '/' . $urlKey);
 
         return rtrim($url, '/') . '.xml';
     }
@@ -185,13 +194,13 @@ class Frontend extends Template
             return null;
         }
 
-        $categories = $this->helperData->getCategoryCollection($post->getCategoryIds());
+        $categories   = $this->helperData->getCategoryCollection($post->getCategoryIds());
         $categoryHtml = [];
         foreach ($categories as $_cat) {
             $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl(
-                $_cat,
-                Data::TYPE_CATEGORY
-            ) . '">' . $_cat->getName() . '</a>';
+                    $_cat,
+                    Data::TYPE_CATEGORY
+                ) . '">' . $_cat->getName() . '</a>';
         }
 
         return implode(', ', $categoryHtml);

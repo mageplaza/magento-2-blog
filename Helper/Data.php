@@ -23,10 +23,14 @@ namespace Mageplaza\Blog\Helper;
 
 use DateTimeZone;
 use Exception;
+use Magento\Customer\Model\SessionFactory;
+use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filter\TranslitUrl;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Store\Model\Store;
@@ -99,6 +103,16 @@ class Data extends CoreHelper
     public $dateTime;
 
     /**
+     * @var SessionFactory
+     */
+    protected $customerSession;
+
+    /**
+     * @var HttpContext
+     */
+    protected $_httpContext;
+
+    /**
      * Data constructor.
      *
      * @param Context $context
@@ -110,6 +124,8 @@ class Data extends CoreHelper
      * @param TopicFactory $topicFactory
      * @param AuthorFactory $authorFactory
      * @param TranslitUrl $translitUrl
+     * @param SessionFactory $customerSession
+     * @param HttpContext $httpContext
      * @param DateTime $dateTime
      */
     public function __construct(
@@ -122,17 +138,60 @@ class Data extends CoreHelper
         TopicFactory $topicFactory,
         AuthorFactory $authorFactory,
         TranslitUrl $translitUrl,
+        SessionFactory $customerSession,
+        HttpContext $httpContext,
         DateTime $dateTime
     ) {
-        $this->postFactory = $postFactory;
+        $this->postFactory     = $postFactory;
         $this->categoryFactory = $categoryFactory;
-        $this->tagFactory = $tagFactory;
-        $this->topicFactory = $topicFactory;
-        $this->authorFactory = $authorFactory;
-        $this->translitUrl = $translitUrl;
-        $this->dateTime = $dateTime;
+        $this->tagFactory      = $tagFactory;
+        $this->topicFactory    = $topicFactory;
+        $this->authorFactory   = $authorFactory;
+        $this->translitUrl     = $translitUrl;
+        $this->dateTime        = $dateTime;
+        $this->customerSession = $customerSession->create();
+        $this->_httpContext = $httpContext;
 
         parent::__construct($context, $objectManager, $storeManager);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLoggin()
+    {
+        return $this->customerSession->isLoggedIn();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAuthor()
+    {
+        $collection = $this->getAuthorCollection();
+
+        return empty($collection->getSize());
+    }
+
+    /**
+     * @return DataObject
+     */
+    public function getCurrentAuthor()
+    {
+        $collection = $this->getAuthorCollection();
+
+        return $collection->getFirstItem();
+    }
+
+    /**
+     * @return AbstractCollection
+     */
+    public function getAuthorCollection()
+    {
+        $customerId = $this->customerSession->getId();
+
+        return $this->getFactoryByType('author')->create()
+            ->getCollection()->addFieldToFilter('customer_id', $customerId);
     }
 
     /**
@@ -381,9 +440,9 @@ class Data extends CoreHelper
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url = $this->getUrl($this->getRoute($store) . '/' . $urlKey);
-        $url = explode('?', $url);
-        $url = $url[0];
+        $url    = $this->getUrl($this->getRoute($store) . '/' . $urlKey);
+        $url    = explode('?', $url);
+        $url    = $url[0];
 
         return rtrim($url, '/') . $this->getUrlSuffix();
     }
@@ -472,7 +531,7 @@ class Data extends CoreHelper
         }
 
         $adapter = $resource->getConnection();
-        $select = $adapter->select()
+        $select  = $adapter->select()
             ->from($resource->getMainTable(), '*')
             ->where('url_key = :url_key');
 
@@ -536,6 +595,6 @@ class Data extends CoreHelper
         $storeEnable = explode(',', $object->getStoreIds());
 
         return in_array('0', $storeEnable, true)
-               || in_array((string) $this->storeManager->getStore()->getId(), $storeEnable, true);
+            || in_array((string) $this->storeManager->getStore()->getId(), $storeEnable, true);
     }
 }

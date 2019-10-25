@@ -67,11 +67,6 @@ class View extends \Mageplaza\Blog\Block\Listpost
     protected $customerUrl;
 
     /**
-     * @var CustomerSession
-     */
-    protected $customerSession;
-
-    /**
      * View constructor.
      *
      * @param Context $context
@@ -79,7 +74,6 @@ class View extends \Mageplaza\Blog\Block\Listpost
      * @param CommentFactory $commentFactory
      * @param LikeFactory $likeFactory
      * @param CustomerRepositoryInterface $customerRepository
-     * @param CustomerSession $customerSession
      * @param HelperData $helperData
      * @param Url $customerUrl
      * @param CategoryFactory $categoryFactory
@@ -92,14 +86,12 @@ class View extends \Mageplaza\Blog\Block\Listpost
         CommentFactory $commentFactory,
         LikeFactory $likeFactory,
         CustomerRepositoryInterface $customerRepository,
-        CustomerSession $customerSession,
         HelperData $helperData,
         Url $customerUrl,
         CategoryFactory $categoryFactory,
         PostFactory $postFactory,
         array $data = []
     ) {
-        $this->customerSession = $customerSession;
         $this->categoryFactory = $categoryFactory;
         $this->postFactory = $postFactory;
         $this->customerUrl = $customerUrl;
