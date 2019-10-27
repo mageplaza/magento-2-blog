@@ -26,6 +26,7 @@ use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
@@ -83,6 +84,11 @@ class Frontend extends Template
     public $commentTree;
 
     /**
+     * @var Registry
+     */
+    protected $coreRegistry;
+
+    /**
      * Frontend constructor.
      *
      * @param Context $context
@@ -91,6 +97,7 @@ class Frontend extends Template
      * @param LikeFactory $likeFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param Session $customerSession
+     * @param Registry $coreRegistry
      * @param HelperData $helperData
      * @param array $data
      */
@@ -101,6 +108,7 @@ class Frontend extends Template
         LikeFactory $likeFactory,
         CustomerRepositoryInterface $customerRepository,
         Session $customerSession,
+        Registry $coreRegistry,
         HelperData $helperData,
         array $data = []
     ) {
@@ -110,6 +118,7 @@ class Frontend extends Template
         $this->customerRepository = $customerRepository;
         $this->customerSession    = $customerSession;
         $this->helperData         = $helperData;
+        $this->coreRegistry       = $coreRegistry;
         $this->store              = $context->getStoreManager();
 
         parent::__construct($context, $data);

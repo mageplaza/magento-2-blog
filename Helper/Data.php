@@ -188,7 +188,7 @@ class Data extends CoreHelper
      */
     public function getAuthorCollection()
     {
-        $customerId = $this->customerSession->getId();
+        $customerId = $this->customerSession->getCustomerData()->getId();
 
         return $this->getFactoryByType('author')->create()
             ->getCollection()->addFieldToFilter('customer_id', $customerId);

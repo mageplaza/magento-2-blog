@@ -20,16 +20,12 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="mpblog_author"/>
     <body>
-        <referenceBlock name="page.main.title">
-            <action method="setPageTitle">
-                <argument translate="true" name="title" xsi:type="string">Author Information</argument>
-            </action>
-        </referenceBlock>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Author\SignupForm" name="blog_edit_form" template="author/signup.phtml" cacheable="false"/>
+            <block class="Mageplaza\Blog\Block\Post\AuthorPost" name="mpblog.post.list" as="mpblog_post" template="post/list.phtml"/>
         </referenceContainer>
     </body>
 </page>
+

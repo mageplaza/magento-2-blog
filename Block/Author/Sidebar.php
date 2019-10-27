@@ -33,6 +33,13 @@ class Sidebar extends Frontend{
     {
         return parent::_prepareLayout();
     }
+
+    /**
+     * @return bool
+     */
+    public function isAuthor(){
+        return $this->helperData->isAuthor();
+    }
 }
 
 

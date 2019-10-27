@@ -19,7 +19,7 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-namespace Mageplaza\Blog\Controller\Author;
+namespace Mageplaza\Blog\Controller\Post;
 
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
@@ -39,7 +39,7 @@ use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
  * Class View
  * @package Mageplaza\Blog\Controller\Author
  */
-class Information extends Action
+class History extends Action
 {
     /**
      * @var PageFactory
@@ -110,11 +110,13 @@ class Information extends Action
 
         if (!$this->_helperBlog->isAuthor()) {
 
-            $this->coreRegistry->register('mp_author', $this->_helperBlog->getCurrentAuthor());
+            $author = $this->_helperBlog->getCurrentAuthor();
+
+            $this->coreRegistry->register('mp_author', $author);
 
             $page = $this->resultPageFactory->create();
             $page->getConfig()->setPageLayout(SideBarLR::LEFT);
-            $page->getConfig()->getTitle()->set('Information Author');
+            $page->getConfig()->getTitle()->set($author->getName());
 
             return $page;
         }
