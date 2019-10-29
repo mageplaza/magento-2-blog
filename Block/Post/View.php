@@ -24,14 +24,12 @@ namespace Mageplaza\Blog\Block\Post;
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Url;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data;
-use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\LikeFactory;
@@ -50,62 +48,6 @@ class View extends \Mageplaza\Blog\Block\Listpost
      * config logo blog path
      */
     const LOGO = 'mageplaza/blog/logo/';
-
-    /**
-     * @var CategoryFactory
-     */
-    protected $categoryFactory;
-
-    /**
-     * @var PostFactory
-     */
-    protected $postFactory;
-
-    /**
-     * @var Url
-     */
-    protected $customerUrl;
-
-    /**
-     * View constructor.
-     *
-     * @param Context $context
-     * @param FilterProvider $filterProvider
-     * @param CommentFactory $commentFactory
-     * @param LikeFactory $likeFactory
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param HelperData $helperData
-     * @param Url $customerUrl
-     * @param CategoryFactory $categoryFactory
-     * @param PostFactory $postFactory
-     * @param array $data
-     */
-    public function __construct(
-        Context $context,
-        FilterProvider $filterProvider,
-        CommentFactory $commentFactory,
-        LikeFactory $likeFactory,
-        CustomerRepositoryInterface $customerRepository,
-        HelperData $helperData,
-        Url $customerUrl,
-        CategoryFactory $categoryFactory,
-        PostFactory $postFactory,
-        array $data = []
-    ) {
-        $this->categoryFactory = $categoryFactory;
-        $this->postFactory = $postFactory;
-        $this->customerUrl = $customerUrl;
-
-        parent::__construct(
-            $context,
-            $filterProvider,
-            $commentFactory,
-            $likeFactory,
-            $customerRepository,
-            $helperData,
-            $data
-        );
-    }
 
     /**
      * @inheritdoc
