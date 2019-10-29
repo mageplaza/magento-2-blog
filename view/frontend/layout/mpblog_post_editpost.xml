@@ -21,10 +21,13 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="mpblog_author"/>
+    <head>
+        <script src="Mageplaza_blog::js/select/comboTreePlugin.js"/>
+        <script src="Mageplaza_blog::js/select/icontain.js"/>
+    </head>
     <body>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Post\AuthorPost" name="mpblog.author.post" as="mpblog_post" template="Mageplaza_Blog::post/authorPost.phtml"/>
+            <block class="Mageplaza\Blog\Block\Post\ManagePost" name="mpblog.author.post" as="mpblog_post" template="Mageplaza_Blog::post/managePost.phtml"/>
         </referenceContainer>
     </body>
 </page>

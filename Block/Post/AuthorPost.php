@@ -27,13 +27,20 @@ namespace Mageplaza\Blog\Block\Post;
  */
 class AuthorPost extends \Mageplaza\Blog\Block\Listpost
 {
+
+    protected function _prepareLayout()
+    {
+        return parent::_prepareLayout();
+    }
+
     public function getPostCollection()
     {
         $collection = parent::getPostCollection();
 
         $userId = $this->getAuthor()->getId();
 
-        $collection->addFieldToFilter('user_id', $userId);
+        $collection->addFieldToFilter('author_id', $userId);
+
         return $collection;
     }
 
@@ -45,5 +52,10 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
     public function getAuthor()
     {
         return $this->coreRegistry->registry('mp_author');
+    }
+
+    public function getBlogTitle($meta = false)
+    {
+        return $meta?[$this->getAuthor()->getName()]:$this->getAuthor()->getName();
     }
 }

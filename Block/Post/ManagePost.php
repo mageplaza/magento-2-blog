@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * Mageplaza
  *
@@ -19,13 +18,23 @@
  * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
--->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="mpblog_author"/>
-    <body>
-        <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Post\AuthorPost" name="mpblog.author.post" as="mpblog_post" template="Mageplaza_Blog::post/authorPost.phtml"/>
-        </referenceContainer>
-    </body>
-</page>
 
+namespace Mageplaza\Blog\Block\Post;
+
+use Mageplaza\Blog\Block\Frontend;
+use Mageplaza\Blog\Helper\Data;
+
+/**
+ * Class ManagePost
+ * @package Mageplaza\Blog\Block\Post
+ */
+class ManagePost extends Frontend
+{
+    /**
+     * @return string
+     */
+    public function getCategoriesTree()
+    {
+        return Data::jsonEncode($this->categoryOptions->toOptionArray());
+    }
+}

@@ -25,16 +25,20 @@ use Exception;
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url;
 use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
-use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\LikeFactory;
+use Magento\Catalog\Ui\Component\Product\Form\Categories\Options as CategoryOptions;
+use Mageplaza\Blog\Model\PostFactory;
 
 /**
  * Class Frontend
@@ -89,6 +93,31 @@ class Frontend extends Template
     protected $coreRegistry;
 
     /**
+     * @var DateTime
+     */
+    public $dateTime;
+
+    /**
+     * @var PostFactory
+     */
+    protected $postFactory;
+
+    /**
+     * @var CategoryFactory
+     */
+    protected $categoryFactory;
+
+    /**
+     * @var Url
+     */
+    protected $customerUrl;
+
+    /**
+     * @var CategoryOptions
+     */
+    protected $categoryOptions;
+
+    /**
      * Frontend constructor.
      *
      * @param Context $context
@@ -99,6 +128,11 @@ class Frontend extends Template
      * @param Session $customerSession
      * @param Registry $coreRegistry
      * @param HelperData $helperData
+     * @param Url $customerUrl
+     * @param CategoryFactory $categoryFactory
+     * @param PostFactory $postFactory
+     * @param DateTime $dateTime
+     * @param CategoryOptions $categoryOptions
      * @param array $data
      */
     public function __construct(
@@ -110,6 +144,11 @@ class Frontend extends Template
         Session $customerSession,
         Registry $coreRegistry,
         HelperData $helperData,
+        Url $customerUrl,
+        CategoryFactory $categoryFactory,
+        PostFactory $postFactory,
+        DateTime $dateTime,
+        CategoryOptions $categoryOptions,
         array $data = []
     ) {
         $this->filterProvider     = $filterProvider;
@@ -119,6 +158,11 @@ class Frontend extends Template
         $this->customerSession    = $customerSession;
         $this->helperData         = $helperData;
         $this->coreRegistry       = $coreRegistry;
+        $this->dateTime           = $dateTime;
+        $this->categoryFactory    = $categoryFactory;
+        $this->postFactory        = $postFactory;
+        $this->customerUrl        = $customerUrl;
+        $this->categoryOptions            = $categoryOptions;
         $this->store              = $context->getStoreManager();
 
         parent::__construct($context, $data);
@@ -208,7 +252,7 @@ class Frontend extends Template
         foreach ($categories as $_cat) {
             $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl(
                     $_cat,
-                    Data::TYPE_CATEGORY
+                    HelperData::TYPE_CATEGORY
                 ) . '">' . $_cat->getName() . '</a>';
         }
 

@@ -23,7 +23,7 @@ namespace Mageplaza\Blog\Helper;
 
 use DateTimeZone;
 use Exception;
-use Magento\Customer\Model\SessionFactory;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\DataObject;
@@ -103,7 +103,7 @@ class Data extends CoreHelper
     public $dateTime;
 
     /**
-     * @var SessionFactory
+     * @var Session
      */
     protected $customerSession;
 
@@ -124,7 +124,7 @@ class Data extends CoreHelper
      * @param TopicFactory $topicFactory
      * @param AuthorFactory $authorFactory
      * @param TranslitUrl $translitUrl
-     * @param SessionFactory $customerSession
+     * @param Session $customerSession
      * @param HttpContext $httpContext
      * @param DateTime $dateTime
      */
@@ -138,7 +138,7 @@ class Data extends CoreHelper
         TopicFactory $topicFactory,
         AuthorFactory $authorFactory,
         TranslitUrl $translitUrl,
-        SessionFactory $customerSession,
+        Session $customerSession,
         HttpContext $httpContext,
         DateTime $dateTime
     ) {
@@ -149,8 +149,8 @@ class Data extends CoreHelper
         $this->authorFactory   = $authorFactory;
         $this->translitUrl     = $translitUrl;
         $this->dateTime        = $dateTime;
-        $this->customerSession = $customerSession->create();
-        $this->_httpContext = $httpContext;
+        $this->customerSession = $customerSession;
+        $this->_httpContext    = $httpContext;
 
         parent::__construct($context, $objectManager, $storeManager);
     }

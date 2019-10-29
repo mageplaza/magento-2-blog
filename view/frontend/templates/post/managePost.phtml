@@ -1,0 +1,121 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Blog\Block\Post\ManagePost $block */
+?>
+<form enctype="multipart/form-data" data-mage-init='{"validation": {}}'
+      action="<?= $block->escapeHtml($block->getUrl('mpblog/post/manage'))?>" method="post" class="form"
+      name="mp_blog_post_form">
+    <fieldset class="fieldset">
+        <div class="field required mp-field">
+            <label for="name" class="label"><span><?= /* @noEscape */ __('Post Name')?></span></label>
+            <div class="control">
+                <input type="text" name="name" id="name"
+                       title="<?= /* @noEscape */ __('Post Name')?>"
+                       class="input-text" data-validate="{required:true, 'validate-no-empty':true}">
+            </div>
+        </div>
+        <div class="field mp-field">
+            <label for="short_desciption" class="label">
+                <span><?= /* @noEscape */ __('Short Description')?></span>
+            </label>
+            <div class="control">
+                <textarea name="short_desciption" id="short_desciption" rows="5" cols="19">
+                </textarea>
+            </div>
+        </div>
+        <div class="field mp-field">
+            <label for="post_content" class="label">
+                <span><?= /* @noEscape */ __('Post Content')?></span>
+            </label>
+            <div class="control">
+                <textarea name="post_content" id="post_content" rows="5" cols="19">
+                </textarea>
+            </div>
+        </div>
+        <div class="field mp-field">
+            <label for="image" class="label"><span><?= /* @noEscape */ __('Avatar')?></span></label>
+            <div class="control">
+                <input type="file" name="image" id="image"
+                       title="<?= /* @noEscape */ __('Avatar')?>"
+                       class="input-file">
+            </div>
+        </div>
+        <div class="field required mp-custom-category">
+            <label class="label"><?php echo __('Select Category') ?>:</label>
+            <div data-bind="scope: 'customCategory'">
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <script type="text/x-magento-init">
+                {
+                    ".mp-custom-category": {
+                        "Magento_Ui/js/core/app": {
+                            "components": {
+                                "customCategory": {
+                                    "component": "Magento_Ui/js/form/element/ui-select",
+                                    "template" : "Mageplaza_Blog/ui-select",
+                                    "filterOptions": true,
+                                    "levelsVisibility": "1",
+                                    "multiple": true,
+                                    "showCheckbox": true,
+                                    "options": <?php echo $block->getCategoriesTree();?>
+                                }
+                            }
+                        }
+                    }
+                }
+            </script>
+            </div>
+        </div>
+    </fieldset>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit" class="action submit primary"
+                    title="<?= __('Save')?>">
+                <span>
+                    <?= /* @noEscape */  __('Save')?>
+                </span>
+            </button>
+        </div>
+    </div>
+</form>
+<style>
+    #mp-blog-new-post-popup .column.main{
+        width: 100%;
+    }
+</style>
+<script>
+    require([
+        "jquery",
+        "mage/translate",
+        "mage/adminhtml/events",
+        "mage/adminhtml/wysiwyg/tiny_mce/setup"
+    ], function($){
+        wysiwygcompany_description = new wysiwygSetup("post_content", {
+            "width":"99%",
+            "height":"200px",
+            "plugins":[{"name":"image"}],
+            "tinymce4":{"toolbar":"formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link table charmap","plugins":"advlist autolink lists link charmap media noneditable table contextmenu paste code help table",
+            }
+        });
+        wysiwygcompany_description.setup("exact");
+
+    });
+</script>

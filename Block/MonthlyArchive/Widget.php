@@ -21,15 +21,10 @@
 
 namespace Mageplaza\Blog\Block\MonthlyArchive;
 
-use Magento\Cms\Model\Template\FilterProvider;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Framework\View\Element\Template\Context;
+use Exception;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Mageplaza\Blog\Block\Frontend;
-use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Data as DataHelper;
-use Mageplaza\Blog\Model\CommentFactory;
-use Mageplaza\Blog\Model\LikeFactory;
 
 /**
  * Class Widget
@@ -38,49 +33,9 @@ use Mageplaza\Blog\Model\LikeFactory;
 class Widget extends Frontend
 {
     /**
-     * @var DateTime
-     */
-    public $dateTime;
-
-    /**
      * @var array
      */
     protected $_postDate;
-
-    /**
-     * Widget constructor.
-     *
-     * @param Context $context
-     * @param FilterProvider $filterProvider
-     * @param CommentFactory $commentFactory
-     * @param LikeFactory $likeFactory
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param DataHelper $helperData
-     * @param DateTime $dateTime
-     * @param array $data
-     */
-    public function __construct(
-        Context $context,
-        FilterProvider $filterProvider,
-        CommentFactory $commentFactory,
-        LikeFactory $likeFactory,
-        CustomerRepositoryInterface $customerRepository,
-        DataHelper $helperData,
-        DateTime $dateTime,
-        array $data = []
-    ) {
-        $this->dateTime = $dateTime;
-
-        parent::__construct(
-            $context,
-            $filterProvider,
-            $commentFactory,
-            $likeFactory,
-            $customerRepository,
-            $helperData,
-            $data
-        );
-    }
 
     /**
      * @return mixed
@@ -92,6 +47,7 @@ class Widget extends Frontend
 
     /**
      * @return array
+     * @throws NoSuchEntityException
      */
     public function getDateArrayCount()
     {
@@ -100,6 +56,7 @@ class Widget extends Frontend
 
     /**
      * @return array
+     * @throws NoSuchEntityException
      */
     public function getDateArrayUnique()
     {
@@ -107,8 +64,8 @@ class Widget extends Frontend
     }
 
     /**
-     * get array of posts's date formatted
      * @return array
+     * @throws NoSuchEntityException
      */
     public function getDateArray()
     {
@@ -122,6 +79,7 @@ class Widget extends Frontend
 
     /**
      * @return array
+     * @throws NoSuchEntityException
      */
     protected function getPostDate()
     {
@@ -140,7 +98,8 @@ class Widget extends Frontend
     }
 
     /**
-     * @return int|mixed
+     * @return int|void
+     * @throws NoSuchEntityException
      */
     public function getDateCount()
     {
@@ -159,17 +118,18 @@ class Widget extends Frontend
      */
     public function getMonthlyUrl($month)
     {
-        return $this->helperData->getBlogUrl($month, Data::TYPE_MONTHLY);
+        return $this->helperData->getBlogUrl($month, DataHelper::TYPE_MONTHLY);
     }
 
     /**
      * @return array
+     * @throws Exception
      */
     public function getDateLabel()
     {
         $postDates = $this->getPostDate();
         $postDatesLabel = [];
-        if (sizeof($postDates)) {
+        if (count($postDates)) {
             foreach ($postDates as $date) {
                 $postDatesLabel[] = $this->helperData->getDateFormat($date, true);
             }
