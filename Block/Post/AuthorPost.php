@@ -21,6 +21,10 @@
 
 namespace Mageplaza\Blog\Block\Post;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\UrlInterface;
+use Mageplaza\Blog\Helper\Data;
+
 /**
  * Class AuthorPost
  * @package Mageplaza\Blog\Block\Post
@@ -41,7 +45,25 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
 
         $collection->addFieldToFilter('author_id', $userId);
 
+//        $collection->getSelect()->joinLeft()
+
         return $collection;
+    }
+
+    /**
+     * @param $postCollection
+     *
+     * @return string
+     */
+    public function getPostDatas($postCollection)
+    {
+        $result = [];
+
+        foreach ($postCollection->getItems() as $post) {
+            $result[$post->getId()] = $post->getData();
+        }
+
+        return Data::jsonEncode($result);
     }
 
     public function getAuthorName()
@@ -56,6 +78,11 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
 
     public function getBlogTitle($meta = false)
     {
-        return $meta?[$this->getAuthor()->getName()]:$this->getAuthor()->getName();
+        return $meta ? [$this->getAuthor()->getName()] : $this->getAuthor()->getName();
+    }
+
+    public function getBaseMediaUrl()
+    {
+        return $this->_storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
     }
 }

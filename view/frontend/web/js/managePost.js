@@ -21,8 +21,11 @@ define([
     'jquery',
     'mage/translate',
     'underscore',
-    'Magento_Ui/js/modal/modal'
-], function ($, $t, _, modal) {
+    'Magento_Ui/js/modal/modal',
+    'uiRegistry',
+    "mage/adminhtml/events",
+    "mage/adminhtml/wysiwyg/tiny_mce/setup"
+], function ($, $t, _, modal, registry) {
     'use strict';
 
     $.widget('mageplaza.mpBlogManagePost', {
@@ -30,8 +33,9 @@ define([
                 newUrl: '',
                 duplicateUrl: '',
                 deleteUrl: '',
-                editUrl: ''
-
+                editUrl: '',
+                basePubUrl: '',
+                postDatas: {}
             },
             _create: function () {
                 var self      = this,
@@ -42,7 +46,7 @@ define([
                 });
 
                 $('.mpblog-post-edit').on('click', function () {
-                    self._EditPost(this);
+                    self._EditPost(self, this, htmlPopup);
                 });
 
                 $('.mpblog-post-duplicate').on('click', function () {
@@ -54,32 +58,58 @@ define([
                 });
             },
             _AddNewPost: function (self, htmlPopup) {
-                $.ajax({
-                    url: self.options.newUrl,
-                    type: "post",
-                    showLoader: true,
-                    success: function (html) {
-                        var popupModal,
-                            options = {
-                                'type': 'popup',
-                                'title': $t('Add New Post'),
-                                'responsive': true,
-                                'innerScroll': true,
-                                'buttons': []
-                            };
+                var options = {
+                    'type': 'popup',
+                    'title': $t('Add New Post'),
+                    'responsive': true,
+                    'innerScroll': true,
+                    'buttons': []
+                };
+                self._openPopup(options, htmlPopup);
+            },
+            _EditPost: function (self, click, htmlPopup) {
+                var postId   = $(click).parent().data('postid'),
+                    postData = self.options.postDatas[postId],
+                    pubUrl = self.options.basePubUrl,
+                    options  = {
+                        'type': 'popup',
+                        'title': $t('Add New Post'),
+                        'responsive': true,
+                        'innerScroll': true,
+                        'buttons': []
+                    };
+                self._openPopup(options, htmlPopup);
 
-                        htmlPopup.html(html);
-                        popupModal = modal(options, htmlPopup);
-                        popupModal.openModal();
+                _.each(postData, function (value, name) {
+                    var field = htmlPopup.find('#mp_blog_post_form [name="' + name + '"]'),
+                        imageEL,
+                        category,
+                        tag,
+                        topic;
 
-                        htmlPopup.trigger('contentUpdated');
+                    if (field.is('[type="file"]')) {
+                        imageEL = '<a href="'+pubUrl+'mageplaza/blog/post/'+value+'" onclick="imagePreview(\'post_image_image\'); return false;" >' +
+                                '<img src="'+pubUrl+'mageplaza/blog/post/'+value+'" id="post_image_image"' +
+                                ' title="'+value+'" alt="'+value+'" height="22" width="22"' +
+                                ' class="small-image-preview v-middle"></a>';
+                        field.parent().prepend(imageEL);
+                    } else if (field.is('input') || field.is('select')) {
+                        field.val(value);
+                    } else {
+                        if (field.is('textarea'))
+                            field.html(value);
+                    }
+                    if (name === 'categories_ids'){
+                        category = registry.get('customCategory').value(value);
+                    }
+                    if (name === 'tags_ids' ){
+                        tag = registry.async('customTag').value(value);
+                    }
+                    if (name === 'topics_ids'){
+                        topic = registry.async('customTopic').value(value);
                     }
                 });
-            },
-            _EditPost: function (self) {
-                $('.mpblog-post-edit').on('click', function () {
-                    debugger;
-                });
+                debugger;
             },
             _DuplicatePost: function (self) {
                 $('.mpblog-post-duplicate').on('click', function () {
@@ -90,6 +120,25 @@ define([
                 $('.mpblog-post-delete').on('click', function () {
                     debugger;
                 });
+            },
+            _openPopup: function (options, htmlPopup) {
+                var popupModal,
+                    wysiwygcompany_description;
+
+                popupModal = modal(options, htmlPopup);
+                popupModal.openModal();
+                $('#mp_blog_post_form').trigger('contentUpdated');
+
+                wysiwygcompany_description = new wysiwygSetup("post_content", {
+                    "width": "99%",
+                    "height": "200px",
+                    "plugins": [{"name": "image"}],
+                    "tinymce4": {
+                        "toolbar": "formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link table charmap",
+                        "plugins": "advlist autolink lists link charmap media noneditable table contextmenu paste code help table"
+                    }
+                });
+                wysiwygcompany_description.setup("exact");
             }
         }
     );

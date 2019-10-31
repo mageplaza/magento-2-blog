@@ -21,7 +21,6 @@
 
 /** @var \Mageplaza\Blog\Block\Post\AuthorPost $block */
 ?>
-<div id="mp-blog-new-post-popup"></div>
 <div class="mp-blog-new-post">
     <button type="button" class="action primary" title="<?= /* @noEscape */ __('Add New Post')?>"><?= /* @noEscape */ __('Add New Post')?></button>
 </div>
@@ -105,7 +104,9 @@
                         "newUrl": "<?=  $block->escapeHtml($block->getUrl('mpblog/post/addpost'))?>",
                         "duplicateUrl": "<?=  $block->escapeHtml($block->getUrl('mpblog/post/duplicatepost'))?>",
                         "deleteUrl": "<?=  $block->escapeHtml($block->getUrl('mpblog/post/deletepost'))?>",
-                        "editUrl": "<?=  $block->escapeHtml($block->getUrl('mpblog/post/editpost'))?>"
+                        "editUrl": "<?=  $block->escapeHtml($block->getUrl('mpblog/post/editpost'))?>",
+                        "basePubUrl": "<?=  $block->escapeHtml($block->getBaseMediaUrl())?>",
+                        "postDatas": <?= /* @noEscape */ $block->getPostDatas($postCollection)?>
                     }
                 }
             }
@@ -142,4 +143,5 @@
         $('.limiter').css('float', 'right');
     });
 </script>
+<div id="mp-blog-new-post-popup" style="display: none"><?= $block->getChildHtml('mpblog_manage_post')?></div>
 

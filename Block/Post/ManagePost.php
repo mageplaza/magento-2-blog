@@ -35,6 +35,22 @@ class ManagePost extends Frontend
      */
     public function getCategoriesTree()
     {
-        return Data::jsonEncode($this->categoryOptions->toOptionArray());
+        return Data::jsonEncode($this->categoryOptions->getCategoriesTree());
+    }
+
+    /**
+     * @return string
+     */
+    public function getTopicTree()
+    {
+        return Data::jsonEncode($this->topicOptions->getTopicsCollection());
+    }
+
+    /**
+     * @return string
+     */
+    public function getTagTree()
+    {
+        return Data::jsonEncode($this->tagOptions->getTagsCollection());
     }
 }

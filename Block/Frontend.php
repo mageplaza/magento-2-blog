@@ -37,7 +37,9 @@ use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\LikeFactory;
-use Magento\Catalog\Ui\Component\Product\Form\Categories\Options as CategoryOptions;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category as CategoryOptions;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic as TopicOptions;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag as TagOptions;
 use Mageplaza\Blog\Model\PostFactory;
 
 /**
@@ -118,6 +120,16 @@ class Frontend extends Template
     protected $categoryOptions;
 
     /**
+     * @var TopicOptions
+     */
+    protected $topicOptions;
+
+    /**
+     * @var TagOptions
+     */
+    protected $tagOptions;
+
+    /**
      * Frontend constructor.
      *
      * @param Context $context
@@ -132,7 +144,9 @@ class Frontend extends Template
      * @param CategoryFactory $categoryFactory
      * @param PostFactory $postFactory
      * @param DateTime $dateTime
-     * @param CategoryOptions $categoryOptions
+     * @param CategoryOptions $category
+     * @param TopicOptions $topic
+     * @param TagOptions $tag
      * @param array $data
      */
     public function __construct(
@@ -148,7 +162,9 @@ class Frontend extends Template
         CategoryFactory $categoryFactory,
         PostFactory $postFactory,
         DateTime $dateTime,
-        CategoryOptions $categoryOptions,
+        CategoryOptions $category,
+        TopicOptions $topic,
+        TagOptions $tag,
         array $data = []
     ) {
         $this->filterProvider     = $filterProvider;
@@ -162,7 +178,9 @@ class Frontend extends Template
         $this->categoryFactory    = $categoryFactory;
         $this->postFactory        = $postFactory;
         $this->customerUrl        = $customerUrl;
-        $this->categoryOptions            = $categoryOptions;
+        $this->categoryOptions    = $category;
+        $this->topicOptions       = $topic;
+        $this->tagOptions         = $tag;
         $this->store              = $context->getStoreManager();
 
         parent::__construct($context, $data);

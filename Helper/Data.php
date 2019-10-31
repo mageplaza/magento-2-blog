@@ -156,6 +156,15 @@ class Data extends CoreHelper
     }
 
     /**
+     * @return int
+     * @throws NoSuchEntityException
+     */
+    public function getCurrentStoreId()
+    {
+        return $this->storeManager->getStore()->getId();
+    }
+
+    /**
      * @return bool
      */
     public function isLoggin()
