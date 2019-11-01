@@ -70,7 +70,7 @@ class RelatedPost extends Template
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
-        $this->helperData = $helperData;
+        $this->helperData    = $helperData;
 
         parent::__construct($context, $data);
 
@@ -132,10 +132,18 @@ class RelatedPost extends Template
     public function setTabTitle()
     {
         $relatedSize = min($this->getRelatedPostList()->getSize(), $this->getLimitPosts());
-        $title = $relatedSize
+        $title       = $relatedSize
             ? __('Related Posts %1', '<span class="counter">' . $relatedSize . '</span>')
             : __('Related Posts');
 
         $this->setTitle($title);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getRelatedMode()
+    {
+        return (int)$this->helperData->getModuleConfig('product_post/post_detail/related_mode') === 1?true:false;
     }
 }

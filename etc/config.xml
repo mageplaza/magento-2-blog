@@ -53,6 +53,7 @@
                 <post_detail>
                     <enable_product>1</enable_product>
                     <product_limit>12</product_limit>
+                    <related_mode>1</related_mode>
                     <title>Related Products</title>
                 </post_detail>
             </product_post>
