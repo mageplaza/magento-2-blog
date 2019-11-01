@@ -31,10 +31,7 @@ define([
 
     $.widget('mageplaza.mpBlogManagePost', {
             options: {
-                newUrl: '',
-                duplicateUrl: '',
                 deleteUrl: '',
-                editUrl: '',
                 basePubUrl: '',
                 postDatas: {}
             },
@@ -55,7 +52,7 @@ define([
                 });
 
                 $('.mpblog-post-delete').on('click', function () {
-                    self._DeletePost(this);
+                    self._DeletePost(self, this);
                 });
             },
             _AddNewPost: function (self, htmlPopup) {
@@ -75,10 +72,13 @@ define([
                 $('#mp_blog_post_form').trigger("reset");
                 $('#short_description').empty();
                 $('#post_content').empty();
+                $('#post_id').removeAttr('value');
 
-                iframe.contentWindow.document.open();
-                iframe.contentWindow.document.write(postContent);
-                iframe.contentWindow.document.close();
+                if (iframe){
+                    iframe.contentWindow.document.open();
+                    iframe.contentWindow.document.write(postContent);
+                    iframe.contentWindow.document.close();
+                }
 
                 $('.mp-field .mp-image-link').remove();
                 registry.get('customCategory').value('');
@@ -137,9 +137,25 @@ define([
                     debugger;
                 });
             },
-            _DeletePost: function (self) {
-                $('.mpblog-post-delete').on('click', function () {
-                    debugger;
+            _DeletePost: function (self, widget) {
+                var url = self.options.deleteUrl,
+                    id = $(widget).parent().data('postid');
+
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    data: {
+                        post_id: id
+                    },
+                    showLoader: true,
+                    success: function (result) {
+                        if (result['status'] === 1){
+                            $('.post-list-item[data-post-id="'+result['post_id']+'"]').remove();
+                        }
+                    },
+                    complete: function () {
+
+                    }
                 });
             },
             _openPopup: function (options, htmlPopup) {

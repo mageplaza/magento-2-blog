@@ -31,7 +31,7 @@
             <?php $i = 1 ?>
             <?php /** @var \Mageplaza\Blog\Model\Post $post */
             foreach ($postCollection as $post) : ?>
-                <div class="post-list-item col-mp<?= $block->isGridView() ? ' post-item-grid mp-6 mp-xs-12' : ' post-item-list mp-12'; ?>">
+                <div data-post-id="<?= $block->escapeHtml($post->getId()); ?>" class="post-list-item col-mp<?= $block->isGridView() ? ' post-item-grid mp-6 mp-xs-12' : ' post-item-list mp-12'; ?>">
                     <div class="post-item-wraper">
                         <?php if ($post->getImage()) : ?>
                             <div class="post-image">
@@ -101,10 +101,7 @@
             {
                 "*": {
                     "Mageplaza_Blog/js/managePost": {
-                        "newUrl": "<?=  $block->escapeHtml($block->getUrl('mpblog/post/addpost'))?>",
-                        "duplicateUrl": "<?=  $block->escapeHtml($block->getUrl('mpblog/post/duplicatepost'))?>",
                         "deleteUrl": "<?=  $block->escapeHtml($block->getUrl('mpblog/post/deletepost'))?>",
-                        "editUrl": "<?=  $block->escapeHtml($block->getUrl('mpblog/post/editpost'))?>",
                         "basePubUrl": "<?=  $block->escapeHtml($block->getBaseMediaUrl())?>",
                         "postDatas": <?= /* @noEscape */ $block->getPostDatas($postCollection)?>
                     }

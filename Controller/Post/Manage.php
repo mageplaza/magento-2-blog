@@ -178,7 +178,7 @@ class Manage extends Action
 
         $data['publish_date'] = !empty($data['publish_date']) ? $data['publish_date'] : $this->date->date();
 
-        if (isset($data['post_id'])) {
+        if ($data['post_id']) {
             if ($data['image'] === '') {
                 unset($data['image']);
             }
@@ -186,20 +186,22 @@ class Manage extends Action
             if ($post->getId()) {
                 $post->setData($data);
             }
+            $data['updated_at'] = $this->date->date();
         } else {
+            unset($data['post_id']);
             $data['created_at'] = $this->date->date();
             $post->setData($data);
         }
 
         try {
             $post->save();
-            $this->messageManager->addSuccess(__('The post has been saved.'));
+            $this->messageManager->addSuccessMessage(__('The post has been saved.'));
 
             return $this->getResponse()->representJson(Data::jsonEncode([
                 'status' => 1
             ]));
         } catch (Exception $exception) {
-            $this->messageManager->addSuccess($exception->getMessage());
+            $this->messageManager->addErrorMessage($exception->getMessage());
 
             return $this->getResponse()->representJson(Data::jsonEncode([
                 'status' => 0

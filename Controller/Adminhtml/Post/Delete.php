@@ -22,7 +22,9 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Post;
 
 use Exception;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
 
 /**
@@ -32,7 +34,7 @@ use Mageplaza\Blog\Controller\Adminhtml\Post;
 class Delete extends Post
 {
     /**
-     * @return Redirect
+     * @return ResponseInterface|Redirect|ResultInterface
      */
     public function execute()
     {
