@@ -24,6 +24,7 @@ namespace Mageplaza\Blog\Block\Post;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\Post;
 
 /**
  * Class AuthorPost
@@ -45,8 +46,6 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
 
         $collection->addFieldToFilter('author_id', $userId);
 
-//        $collection->getSelect()->joinLeft()
-
         return $collection;
     }
 
@@ -59,7 +58,11 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
     {
         $result = [];
 
+        /** @var Post $post */
         foreach ($postCollection->getItems() as $post) {
+            $post->getCategoryIds();
+            $post->getTopicIds();
+            $post->getTagIds();
             $result[$post->getId()] = $post->getData();
         }
 
