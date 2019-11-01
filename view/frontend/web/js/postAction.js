@@ -28,21 +28,19 @@ define([
     'use strict';
 
     $.widget('mageplaza.mpBlogPostAction', {
-            options: {
-
-            },
+            options: {},
             _create: function () {
-                var self      = this;
+                var self = this;
 
                 $('button.mpblog-action-new').on('click', function () {
                     self._AddNew(self);
                 });
             },
             _AddNew: function (self) {
-                var form = $('#mp_blog_post_form'),
-                    formData = new FormData(form[0]),
+                var form      = $('#mp_blog_post_form'),
+                    formData  = new FormData(form[0]),
                     htmlPopup = $('#mp-blog-new-post-popup'),
-                    url = form.attr('action');
+                    url       = form.attr('action');
 
                 $.ajax({
                     url: url,
@@ -53,12 +51,14 @@ define([
                     processData: false,
                     showLoader: true,
                     success: function (result) {
-                        if (result.status === 1){
+                        if (result.status === 1) {
                             htmlPopup.data('mageModal').closeModal();
                         }
                     },
                     complete: function () {
-
+                        setTimeout(function () {
+                            location.reload();
+                        }, 100);
                     }
                 });
             }

@@ -48,7 +48,7 @@ define([
                 });
 
                 $('.mpblog-post-duplicate').on('click', function () {
-                    self._DuplicatePost(this);
+                    self._DuplicatePost(self, this, htmlPopup);
                 });
 
                 $('.mpblog-post-delete').on('click', function () {
@@ -101,7 +101,9 @@ define([
                     self._resetForm(postData['post_content']);
                 }
                 self._openPopup(options, htmlPopup);
-
+                self._setPopupFormData(postData, pubUrl, htmlPopup);
+            },
+            _setPopupFormData: function(postData, pubUrl, htmlPopup){
                 _.each(postData, function (value, name) {
                     var field = htmlPopup.find('#mp_blog_post_form [name="' + name + '"]'),
                         imageEL,
@@ -111,7 +113,9 @@ define([
                         imageEL = '<a class="mp-image-link" href="' + pubUrl + 'mageplaza/blog/post/' + value + '" onclick="imagePreview(\'post_image_image\'); return false;" >' +
                             '<img src="' + pubUrl + 'mageplaza/blog/post/' + value + '" id="post_image_image"' +
                             ' title="' + value + '" alt="' + value + '" height="22" width="22"' +
-                            ' class="small-image-preview v-middle"></a>';
+                            ' class="small-image-preview v-middle">' +
+                            '<input type="hidden" name="sub_image" id="sub_image" value="'+value+'" />' +
+                            '</a>';
                         field.parent().prepend(imageEL);
                     } else if (field.is('[type="datetime-local"]')) {
                         date = moment(value).format("YYYY-MM-DDTkk:mm");
@@ -132,10 +136,24 @@ define([
                     }
                 });
             },
-            _DuplicatePost: function (self) {
-                $('.mpblog-post-duplicate').on('click', function () {
-                    debugger;
-                });
+            _DuplicatePost: function (self, click, htmlPopup) {
+                var postId   = $(click).parent().data('postid'),
+                    postData = self.options.postDatas[postId],
+                    pubUrl   = self.options.basePubUrl,
+                    options  = {
+                        'type': 'popup',
+                        'title': $t('Duplicate Post'),
+                        'responsive': true,
+                        'innerScroll': true,
+                        'buttons': []
+                    };
+
+                if (htmlPopup.find('#mp_blog_post_form [name="name"]').length > 0) {
+                    self._resetForm(postData['post_content']);
+                }
+                self._openPopup(options, htmlPopup);
+                self._setPopupFormData(postData, pubUrl, htmlPopup);
+                $('#post_id').removeAttr('value');
             },
             _DeletePost: function (self, widget) {
                 var url = self.options.deleteUrl,
