@@ -28,7 +28,7 @@ use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Object;
+use Magento\Framework\Object as MObject;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
@@ -193,7 +193,7 @@ class Post extends Extended implements TabInterface
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Post|Object $item
+     * @param \Mageplaza\Blog\Model\Post|MObject $item
      *
      * @return string
      */
