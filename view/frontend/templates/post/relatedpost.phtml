@@ -25,16 +25,24 @@ $posts = $block->getRelatedPostList();
 if ($posts) : ?>
     <h2><?= $posts->getSize() ? __('Related Posts') : __('No Related Posts') ?></h2>
     <?php if ($block->getRelatedMode()) :?>
-        <div class="owl-carousel">
-            <div>ABC</div>
-            <div>ABC</div>
-            <div>ABC</div>
-            <div>ABC</div>
-            <div>ABC</div>
-            <div>ABC</div>
-            <div>ABC</div>
-            <div>ABC</div>
-            <div>ABC</div>
+        <div class="owl-carousel owl-theme">
+            <?php foreach ($posts as $post) : ?>
+                <div class="item post-list-item col-mp post-item-list mp-4">
+                    <div class="post-item-wraper">
+                        <div class="post-info-wraper">
+                            <a href="<?= $post->getUrl() ?>">
+                                <img class="img-responsive"
+                                     src="<?= $block->resizeImage($post->getImage(), '400x'); ?>"
+                                     alt="<?= $block->escapeHtml($post->getName()); ?>"/>
+                            </a>
+                            <h2 class="mp-post-title" style="margin: 20px 0;">
+                                <a class="post-link-title" title="<?= $block->escapeHtml($post->getName()); ?>"
+                                   href="<?= $post->getUrl() ?>"><?= $post->getName(); ?></a>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         </div>
     <script>
         require([
@@ -44,8 +52,7 @@ if ($posts) : ?>
             'use strict';
             $(document).ready(function(){
                 $(".owl-carousel").owlCarousel({
-                    center: true,
-                    items:1,
+                    items:2,
                     loop:false,
                     margin:10,
                     responsive:{

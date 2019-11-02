@@ -25,6 +25,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
@@ -145,5 +146,31 @@ class RelatedPost extends Template
     public function getRelatedMode()
     {
         return (int)$this->helperData->getModuleConfig('product_post/post_detail/related_mode') === 1?true:false;
+    }
+
+    /**
+     * Resize Image Function
+     *
+     * @param $image
+     * @param null $size
+     * @param string $type
+     *
+     * @return string
+     */
+    public function resizeImage($image, $size = null, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
+    {
+        if (!$image) {
+            return $this->getDefaultImageUrl();
+        }
+
+        return $this->helperData->getImageHelper()->resizeImage($image, $size, $type);
+    }
+
+    /**
+     * get default image url
+     */
+    public function getDefaultImageUrl()
+    {
+        return $this->getViewFileUrl('Mageplaza_Blog::media/images/mageplaza-logo-default.png');
     }
 }
