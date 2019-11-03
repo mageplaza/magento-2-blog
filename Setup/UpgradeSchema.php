@@ -811,6 +811,33 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
 
+        if (version_compare($context->getVersion(), '2.5.2', '<')) {
+            if ($installer->tableExists('mageplaza_blog_post')) {
+                $connection->addColumn(
+                    $installer->getTable('mageplaza_blog_post'),
+                    'sum_like',
+                    [
+                        'type'     => Table::TYPE_SMALLINT,
+                        'unsigned' => true,
+                        'nullable' => true,
+                        'default'  => 0,
+                        'comment'  => 'Sum like in post'
+                    ]
+                );
+                $connection->addColumn(
+                    $installer->getTable('mageplaza_blog_post'),
+                    'sum_dislike',
+                    [
+                        'type'     => Table::TYPE_SMALLINT,
+                        'unsigned' => true,
+                        'nullable' => true,
+                        'default'  => 0,
+                        'comment'  => 'Sum dislike in post'
+                    ]
+                );
+            }
+        }
+
         $installer->endSetup();
     }
 }

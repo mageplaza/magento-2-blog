@@ -189,7 +189,7 @@ class Data extends CoreHelper
     {
         $collection = $this->getAuthorCollection();
 
-        return $collection->getFirstItem();
+        return $collection?$collection->getFirstItem():null;
     }
 
     /**
@@ -197,10 +197,14 @@ class Data extends CoreHelper
      */
     public function getAuthorCollection()
     {
-        $customerId = $this->customerSession->getCustomerData()->getId();
+        $customer = $this->customerSession->getCustomerData();
 
-        return $this->getFactoryByType('author')->create()
-            ->getCollection()->addFieldToFilter('customer_id', $customerId);
+        if ($customer){
+            return $this->getFactoryByType('author')->create()->getCollection()
+                ->addFieldToFilter('customer_id', $customer->getId());
+        }
+
+        return null;
     }
 
     /**

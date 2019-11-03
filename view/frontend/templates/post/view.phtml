@@ -77,6 +77,84 @@ $color = $helper->getBlogConfig('general/font_color');
             </div>
         </div>
     </div>
+    <div class="mp-blog-review">
+        <div class="mp-blog-like">
+            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+            <span><?= /* @noEscape */ __('LIKE')?></span>
+            <?php if (!empty($_post->getSumLike())):?>
+                <span>(<?= $block->escapeHtml($_post->getSumLike())?>)</span>
+            <?php endif; ?>
+        </div>
+        <div class="mp-blog-dislike">
+            <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+            <span><?= /* @noEscape */ __('DISLIKE')?></span>
+            <?php if (!empty($_post->getSumDislike())):?>
+                <span>(<?= $block->escapeHtml($_post->getSumDislike())?>)</span>
+            <?php endif; ?>
+        </div>
+        <style>
+            .mp-blog-review{
+                display: flex;
+                padding-left: 36%;
+            }
+            .mp-blog-review  div{
+                margin: 2px;
+                padding: 10px 20px;
+                color: #ffffff;
+                cursor: pointer;
+            }
+            .mp-blog-like{
+                background-color: #006AFF;
+            }
+            .mp-blog-dislike{
+                background-color: #3DB6FF;
+            }
+        </style>
+        <script>
+            require([
+                'jquery'
+            ], function ($) {
+                var url = "<?= /* @noEscape */ $block->getUrl('mpblog/post/review') ?>",
+                    id = <?= /* @noEscape */ $_post->getId() ?>;
+
+                $('.mp-blog-like').on('click', function () {
+                    $.ajax({
+                        url: url,
+                        type: "post",
+                        data: {
+                            post_id: id,
+                            action: 1
+                        },
+                        showLoader: true,
+                        success: function (result) {
+
+                        },
+                        complete: function () {
+
+                        }
+                    });
+                });
+
+                $('.mp-blog-dislike').on('click', function () {
+                    $.ajax({
+                        url: url,
+                        type: "post",
+                        data: {
+                            post_id: id,
+                            action: 1
+                        },
+                        showLoader: true,
+                        success: function (result) {
+
+                        },
+                        complete: function () {
+
+                        }
+                    });
+                });
+            });
+        </script>
+    </div>
     <?php if ($helper->getBlogConfig('share/enabled')) : ?>
         <div class="mp-clear"></div>
         <script type="text/javascript"

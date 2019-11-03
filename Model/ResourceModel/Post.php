@@ -526,15 +526,17 @@ class Post extends AbstractDb
     public function saveAuthor()
     {
         $currentUser   = $this->_auth->getUser();
-        $currentUserId = $currentUser->getId();
 
-        /** @var \Mageplaza\Blog\Model\Author $author */
-        $author = $this->_authorFactory->create()->load($currentUserId);
+        if ($currentUser){
+            $currentUserId = $currentUser->getId();
+            /** @var \Mageplaza\Blog\Model\Author $author */
+            $author = $this->_authorFactory->create()->load($currentUserId);
 
-        /** Create the new author if that author isn't exist */
-        if (!$author->getId()) {
-            $author->setId($currentUserId)
-                ->setName($currentUser->getName())->save();
+            /** Create the new author if that author isn't exist */
+            if (!$author->getId()) {
+                $author->setId($currentUserId)
+                    ->setName($currentUser->getName())->save();
+            }
         }
     }
 
