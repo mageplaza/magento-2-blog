@@ -92,6 +92,8 @@ class Review extends Action
         $action     = $this->getRequest()->getParam('action');
         $customerId = $this->_helperBlog->getCurrentUser();
         $post       = $this->postFactory->create()->load($id);
+        $sum = $this->_postLike->create()->getCollection()->addFieldToFilter('action', $action)
+            ->addFieldToFilter('post_id', $id);
         $like       = $this->_postLikeCollection->addFieldToFilter('entity_id', $customerId)
             ->addFieldToFilter('post_id', $post->getId());
 
@@ -125,14 +127,16 @@ class Review extends Action
 
             return $this->getResponse()->representJson(Data::jsonEncode([
                 'status' => 1,
-                'type'   => $action
+                'type'   => $action,
+                'sum'    => $sum->count()
             ]));
         } catch (Exception $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
 
             return $this->getResponse()->representJson(Data::jsonEncode([
                 'status' => 0,
-                'type'   => $action
+                'type'   => $action,
+                'sum'    => $sum->count()
             ]));
         }
     }
