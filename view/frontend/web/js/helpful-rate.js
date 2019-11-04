@@ -51,6 +51,12 @@ define([
                             },
                             showLoader: true,
                             success: function (response) {
+                                if (response['status'] && response['type'] === '1'){
+                                    $('#mp-blog-review .mp-blog-like .mp-blog-view').text('('+response["sum"]+')');
+                                }
+                                if (response['status'] && response['type'] === '0'){
+                                    $('#mp-blog-review .mp-blog-dislike .mp-blog-view').text('('+response["sum"]+')');
+                                }
                                 $('html, body').animate({
                                     scrollTop: $('body').offset().top
                                 }, 500);

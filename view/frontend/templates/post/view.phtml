@@ -81,16 +81,20 @@ $color = $helper->getBlogConfig('general/font_color');
         <div class="mp-blog-like">
             <i class="fa fa-thumbs-up" aria-hidden="true"></i>
             <span><?= /* @noEscape */ __('LIKE')?></span>
-            <?php if (!empty($block->getPostLike($_post->getId(), '1'))):?>
-                <span class="mp-blog-view">(<?= $block->escapeHtml($block->getPostLike($_post->getId(), '1'))?>)</span>
-            <?php endif; ?>
+                <span class="mp-blog-view">
+                <?php if (!empty($block->getPostLike($_post->getId(), '1'))):?>
+                    (<?= $block->escapeHtml($block->getPostLike($_post->getId(), '1'))?>)
+                <?php endif; ?>
+                </span>
         </div>
         <div class="mp-blog-dislike">
             <i class="fa fa-thumbs-down" aria-hidden="true"></i>
             <span><?= /* @noEscape */ __('DISLIKE')?></span>
-            <?php if (!empty($block->getPostLike($_post->getId(), '0'))):?>
-                <span class="mp-blog-view">(<?= $block->escapeHtml($block->getPostLike($_post->getId(), '0'))?>)</span>
-            <?php endif; ?>
+                <span class="mp-blog-view">
+                <?php if (!empty($block->getPostLike($_post->getId(), '0'))):?>
+                    (<?= $block->escapeHtml($block->getPostLike($_post->getId(), '0'))?>)
+                <?php endif; ?>
+                </span>
         </div>
         <style>
             #mp-blog-review{
