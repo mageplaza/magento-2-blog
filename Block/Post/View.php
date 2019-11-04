@@ -35,6 +35,7 @@ use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\LikeFactory;
 use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\PostLike;
 
 /**
  * Class View
@@ -175,8 +176,8 @@ class View extends \Mageplaza\Blog\Block\Listpost
     {
         if ($this->customerSession->isLoggedIn()) {
             $customerData = $this->customerSession->getCustomerData();
-            $customerId = $customerData->getId();
-            $likes = $this->likeFactory->create()->getCollection();
+            $customerId   = $customerData->getId();
+            $likes        = $this->likeFactory->create()->getCollection();
             foreach ($likes as $like) {
                 if ($like->getEntityId() == $customerId && $like->getCommentId() == $cmtId) {
                     return true;
@@ -194,7 +195,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
      */
     public function getPostComments($postId)
     {
-        $result = [];
+        $result   = [];
         $comments = $this->cmtFactory->create()->getCollection()
             ->addFieldToFilter('main_table.post_id', $postId);
         foreach ($comments as $comment) {
@@ -204,6 +205,26 @@ class View extends \Mageplaza\Blog\Block\Listpost
         return $result;
     }
 
+    /**
+     * @param $postId
+     * @param $action
+     *
+     * @return int
+     */
+    public function getPostLike($postId, $action)
+    {
+        /** @var PostLike $postLike */
+        $postLike = $this->postLikeFactory->create();
+
+        return $postLike->getCollection()->addFieldToFilter('post_id', $postId)
+            ->addFieldToFilter('action', $action)->count();
+    }
+
+    /**
+     * @param $comment
+     *
+     * @return string
+     */
     public function commentHtml($comment)
     {
         $html = '';
@@ -231,19 +252,19 @@ class View extends \Mageplaza\Blog\Block\Listpost
                 if ($comment['entity_id'] == 0) {
                     $userName = $comment['user_name'];
                 } else {
-                    $userCmt = $this->getUserComment($comment['entity_id']);
+                    $userCmt  = $this->getUserComment($comment['entity_id']);
                     $userName = $userCmt->getFirstName() . ' '
-                                . $userCmt->getLastName();
+                        . $userCmt->getLastName();
                 }
-                $countLikes = $this->getCommentLikes($comment['comment_id']);
-                $isLiked = ($this->isLiked($comment['comment_id'])) ? "mpblog-liked" : "mpblog-like";
+                $countLikes        = $this->getCommentLikes($comment['comment_id']);
+                $isLiked           = ($this->isLiked($comment['comment_id'])) ? "mpblog-liked" : "mpblog-like";
                 $this->commentTree .= '<li id="cmt-id-' . $comment['comment_id'] . '" class="default-cmt__content__cmt-content__cmt-row cmt-row-' . $comment['comment_id'] . ' cmt-row col-xs-12'
-                                      . ($isReply ? ' reply-row' : '') . '" data-cmt-id="'
-                                      . $comment['comment_id'] . '" ' . ($replyId
+                    . ($isReply ? ' reply-row' : '') . '" data-cmt-id="'
+                    . $comment['comment_id'] . '" ' . ($replyId
                         ? 'data-reply-id="' . $replyId . '"' : '') . '>
                                 <div class="cmt-row__cmt-username">
                                     <span class="cmt-row__cmt-username username username__' . $comment['comment_id'] . '">'
-                                      . $userName . '</span>
+                    . $userName . '</span>
                                 </div>
                                 <div class="cmt-row__cmt-content">
                                    ' . $this->commentHtml($comment['content']) . '
@@ -251,12 +272,12 @@ class View extends \Mageplaza\Blog\Block\Listpost
                                 <div class="cmt-row__cmt-interactions interactions">
                                     <div class="interactions__btn-actions">
                                         <a class="interactions__btn-actions action btn-like ' . $isLiked . '" data-cmt-id="'
-                                      . $comment['comment_id'] . '" click="1">
+                    . $comment['comment_id'] . '" click="1">
                                         <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                                         <span class="count-like__like-text">'
-                                      . $countLikes . '</span></a>
+                    . $countLikes . '</span></a>
                                         <a class="interactions__btn-actions action btn-reply" data-cmt-id="'
-                                      . $comment['comment_id'] . '">' . __('Reply') . '</a>
+                    . $comment['comment_id'] . '">' . __('Reply') . '</a>
                                     </div>
                                     <div class="interactions__cmt-createdat">
                                         <span>' . $this->getDateFormat($comment['created_at']) . '</span>
@@ -284,7 +305,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
     public function getTagList($post)
     {
         $tagCollection = $post->getSelectedTagsCollection();
-        $result = '';
+        $result        = '';
         if (!empty($tagCollection)) {
             $listTags = [];
             foreach ($tagCollection as $tag) {
@@ -348,7 +369,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
     public function getBlogTitle($meta = false)
     {
         $blogTitle = parent::getBlogTitle($meta);
-        $post = $this->getBlogObject();
+        $post      = $this->getBlogObject();
         if (!$post) {
             return $blogTitle;
         }

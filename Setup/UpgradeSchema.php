@@ -812,29 +812,62 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         if (version_compare($context->getVersion(), '2.5.2', '<')) {
-            if ($installer->tableExists('mageplaza_blog_post')) {
-                $connection->addColumn(
-                    $installer->getTable('mageplaza_blog_post'),
-                    'sum_like',
-                    [
-                        'type'     => Table::TYPE_SMALLINT,
+            if (!$installer->tableExists('mageplaza_blog_post_like')) {
+                $table = $installer->getConnection()
+                    ->newTable($installer->getTable('mageplaza_blog_post_like'))
+                    ->addColumn('like_id', Table::TYPE_INTEGER, null, [
+                        'identity' => true,
                         'unsigned' => true,
-                        'nullable' => true,
-                        'default'  => 0,
-                        'comment'  => 'Sum like in post'
-                    ]
-                );
-                $connection->addColumn(
-                    $installer->getTable('mageplaza_blog_post'),
-                    'sum_dislike',
-                    [
-                        'type'     => Table::TYPE_SMALLINT,
-                        'unsigned' => true,
-                        'nullable' => true,
-                        'default'  => 0,
-                        'comment'  => 'Sum dislike in post'
-                    ]
-                );
+                        'nullable' => false,
+                        'primary'  => true,
+                    ], 'Like ID')
+                    ->addColumn(
+                        'post_id',
+                        Table::TYPE_INTEGER,
+                        null,
+                        ['unsigned' => true, 'nullable' => false,],
+                        'Post ID'
+                    )
+                    ->addColumn(
+                        'action',
+                        Table::TYPE_INTEGER,
+                        null,
+                        ['unsigned' => true, 'nullable' => false,],
+                        'type like'
+                    )
+                    ->addColumn(
+                        'entity_id',
+                        Table::TYPE_INTEGER,
+                        null,
+                        ['unsigned' => true, 'nullable' => false,],
+                        'User Like ID'
+                    )
+                    ->addIndex($installer->getIdxName('mageplaza_blog_post_like', ['like_id']), ['like_id'])
+                    ->addForeignKey(
+                        $installer->getFkName(
+                            'mageplaza_blog_post_like',
+                            'post_id',
+                            'mageplaza_blog_post',
+                            'post_id'
+                        ),
+                        'post_id',
+                        $installer->getTable('mageplaza_blog_post'),
+                        'post_id',
+                        Table::ACTION_CASCADE
+                    )->addForeignKey(
+                        $installer->getFkName(
+                            'mageplaza_blog_post_like',
+                            'entity_id',
+                            'customer_entity',
+                            'entity_id'
+                        ),
+                        'entity_id',
+                        $installer->getTable('customer_entity'),
+                        'entity_id',
+                        Table::ACTION_CASCADE
+                    );
+
+                $installer->getConnection()->createTable($table);
             }
         }
 

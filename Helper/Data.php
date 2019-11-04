@@ -156,6 +156,14 @@ class Data extends CoreHelper
     }
 
     /**
+     * @return int|null
+     */
+    public function getCurrentUser()
+    {
+        return $this->customerSession->getId();
+    }
+
+    /**
      * @return int
      * @throws NoSuchEntityException
      */
@@ -189,7 +197,7 @@ class Data extends CoreHelper
     {
         $collection = $this->getAuthorCollection();
 
-        return $collection?$collection->getFirstItem():null;
+        return $collection ? $collection->getFirstItem() : null;
     }
 
     /**
@@ -199,7 +207,7 @@ class Data extends CoreHelper
     {
         $customer = $this->customerSession->getCustomerData();
 
-        if ($customer){
+        if ($customer) {
             return $this->getFactoryByType('author')->create()->getCollection()
                 ->addFieldToFilter('customer_id', $customer->getId());
         }

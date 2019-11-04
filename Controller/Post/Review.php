@@ -28,6 +28,8 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\PostLikeFactory;
+use Mageplaza\Blog\Model\ResourceModel\PostLike\Collection;
 
 /**
  * Class Review
@@ -47,20 +49,35 @@ class Review extends Action
     protected $postFactory;
 
     /**
+     * @var PostLike
+     */
+    protected $_postLike;
+
+    /**
+     * @var Collection
+     */
+    protected $_postLikeCollection;
+
+    /**
      * Review constructor.
      *
      * @param Context $context
      * @param PostFactory $postFactory
+     * @param Collection $postLikeCollection
+     * @param PostLikeFactory $postLikeFactory
      * @param Data $helperData
      */
     public function __construct(
         Context $context,
         PostFactory $postFactory,
+        Collection $postLikeCollection,
+        PostLikeFactory $postLikeFactory,
         Data $helperData
     ) {
-        $this->_helperBlog          = $helperData;
-
-        $this->postFactory          = $postFactory;
+        $this->_helperBlog         = $helperData;
+        $this->_postLikeCollection = $postLikeCollection;
+        $this->_postLike           = $postLikeFactory;
+        $this->postFactory         = $postFactory;
 
         parent::__construct($context);
     }
@@ -71,46 +88,51 @@ class Review extends Action
      */
     public function execute()
     {
-        $id     = $this->getRequest()->getParam('post_id');
-        $action = $this->getRequest()->getParam('action');
-        $author = $this->_helperBlog->getCurrentAuthor();
-        $post   = $this->postFactory->create()->load($id);
+        $id         = $this->getRequest()->getParam('post_id');
+        $action     = $this->getRequest()->getParam('action');
+        $customerId = $this->_helperBlog->getCurrentUser();
+        $post       = $this->postFactory->create()->load($id);
+        $like       = $this->_postLikeCollection->addFieldToFilter('entity_id', $customerId)
+            ->addFieldToFilter('post_id', $post->getId());
 
-        if (!$author || !$post) {
+        if (!$customerId || !$post || $like->count() > 0) {
             if ($action === '1') {
                 $this->messageManager->addErrorMessage(__('Can\'t Like Post.'));
-            }else{
+            } else {
                 $this->messageManager->addErrorMessage(__('Can\'t Dislike Post.'));
             }
+
             return $this->getResponse()->representJson(Data::jsonEncode([
-                'status' => 0
+                'status' => 0,
+                'type'   => $action
             ]));
         }
 
-        if ($action === '1') {
-            $newSumLike = (int)$post->getSumLike() + 1;
-            $post->setData('sum_like', $newSumLike);
-        }else{
-            $newSumDislike = (int)$post->getSumDislike() + 1;
-            $post->setData('sum_dislike', $newSumDislike);
-        }
-            $post->save();
-
         try {
+            $this->_postLike->create()->setData(
+                [
+                    'post_id' => $post->getId(),
+                    'action' => $action,
+                    'entity_id' => $customerId
+                ]
+            )->save();
+
             if ($action === '1') {
                 $this->messageManager->addSuccessMessage(__('The post has been Like.'));
-            }else{
+            } else {
                 $this->messageManager->addSuccessMessage(__('The post has been Dislike.'));
             }
 
             return $this->getResponse()->representJson(Data::jsonEncode([
-                'status' => 1
+                'status' => 1,
+                'type'   => $action
             ]));
         } catch (Exception $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
 
             return $this->getResponse()->representJson(Data::jsonEncode([
-                'status' => 0
+                'status' => 0,
+                'type'   => $action
             ]));
         }
     }

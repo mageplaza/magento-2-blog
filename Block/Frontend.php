@@ -37,6 +37,7 @@ use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\LikeFactory;
+use Mageplaza\Blog\Model\PostLikeFactory;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category as CategoryOptions;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic as TopicOptions;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag as TagOptions;
@@ -130,6 +131,11 @@ class Frontend extends Template
     protected $tagOptions;
 
     /**
+     * @var PostLikeFactory
+     */
+    protected $postLikeFactory;
+
+    /**
      * Frontend constructor.
      *
      * @param Context $context
@@ -144,6 +150,7 @@ class Frontend extends Template
      * @param CategoryFactory $categoryFactory
      * @param PostFactory $postFactory
      * @param DateTime $dateTime
+     * @param PostLikeFactory $postLikeFactory
      * @param CategoryOptions $category
      * @param TopicOptions $topic
      * @param TagOptions $tag
@@ -162,6 +169,7 @@ class Frontend extends Template
         CategoryFactory $categoryFactory,
         PostFactory $postFactory,
         DateTime $dateTime,
+        PostLikeFactory $postLikeFactory,
         CategoryOptions $category,
         TopicOptions $topic,
         TagOptions $tag,
@@ -178,6 +186,7 @@ class Frontend extends Template
         $this->categoryFactory    = $categoryFactory;
         $this->postFactory        = $postFactory;
         $this->customerUrl        = $customerUrl;
+        $this->postLikeFactory    = $postLikeFactory;
         $this->categoryOptions    = $category;
         $this->topicOptions       = $topic;
         $this->tagOptions         = $tag;
