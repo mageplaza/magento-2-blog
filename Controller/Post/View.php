@@ -159,20 +159,20 @@ class View extends Action
         TrafficFactory $trafficFactory,
         PostFactory $postFactory
     ) {
-        $this->storeManager = $storeManager;
-        $this->helperBlog = $helperBlog;
-        $this->resultPageFactory = $resultPageFactory;
-        $this->accountManagement = $accountManagement;
-        $this->customerUrl = $customerUrl;
-        $this->session = $customerSession;
-        $this->timeZone = $timezone;
-        $this->trafficFactory = $trafficFactory;
+        $this->storeManager         = $storeManager;
+        $this->helperBlog           = $helperBlog;
+        $this->resultPageFactory    = $resultPageFactory;
+        $this->accountManagement    = $accountManagement;
+        $this->customerUrl          = $customerUrl;
+        $this->session              = $customerSession;
+        $this->timeZone             = $timezone;
+        $this->trafficFactory       = $trafficFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->jsonHelper = $jsonHelper;
-        $this->cmtFactory = $commentFactory;
-        $this->likeFactory = $likeFactory;
-        $this->dateTime = $dateTime;
-        $this->postFactory = $postFactory;
+        $this->jsonHelper           = $jsonHelper;
+        $this->cmtFactory           = $commentFactory;
+        $this->likeFactory          = $likeFactory;
+        $this->dateTime             = $dateTime;
+        $this->postFactory          = $postFactory;
 
         parent::__construct($context);
     }
@@ -183,10 +183,10 @@ class View extends Action
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('id');
+        $id   = $this->getRequest()->getParam('id');
         $post = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($id);
 
-        $page = $this->resultPageFactory->create();
+        $page       = $this->resultPageFactory->create();
         $pageLayout = ($post->getLayout() === 'empty') ? $this->helperBlog->getSidebarLayout() : $post->getLayout();
         $page->getConfig()->setPageLayout($pageLayout);
 
@@ -204,14 +204,14 @@ class View extends Action
         }
 
         if ($this->getRequest()->isAjax()) {
-            $params = $this->getRequest()->getParams();
+            $params       = $this->getRequest()->getParams();
             $customerData = $this->session->getCustomerData();
-            $result = [];
+            $result       = [];
             if (isset($params['cmt_text'])) {
-                $cmt_text = $params['cmt_text'];
-                $content = htmlentities($cmt_text, ENT_COMPAT, 'UTF-8') . "<br />";
+                $cmt_text   = $params['cmt_text'];
+                $content    = htmlentities($cmt_text, ENT_COMPAT, 'UTF-8') . "<br />";
                 $htmlEntity = htmlentities($content, ENT_COMPAT, 'UTF-8');
-                $content = html_entity_decode($htmlEntity);
+                $content    = html_entity_decode($htmlEntity);
 
                 $cmtText = $content;
                 $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
@@ -247,24 +247,38 @@ class View extends Action
                 }
 
                 $commentModel = $this->cmtFactory->create();
-                $result = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
+                $result       = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
             }
 
             if (isset($params['cmtId'])) {
-                $cmtId = $params['cmtId'];
+                $cmtId    = $params['cmtId'];
                 $likeData = [
                     'comment_id' => $cmtId,
                     'entity_id'  => $customerData->getId()
                 ];
 
                 $likeModel = $this->likeFactory->create();
-                $result = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
+                $result    = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
             }
 
             return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
         }
 
+        if (!$this->getRequest()->isAjax()) {
+            $this->updateSumView($post);
+        }
+
         return $this->resultPageFactory->create();
+    }
+
+    /**
+     * @param PostFactory $post
+     */
+    public function updateSumView($post)
+    {
+        $oldSumView = $post->getSumView();
+        $post->setData('sum_view', (int) $oldSumView + 1);
+        $post->save();
     }
 
     /**
@@ -290,9 +304,9 @@ class View extends Action
                         $cmtHasReply->setHasReply(1)->save();
                     }
 
-                    $lastCmt = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
+                    $lastCmt   = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
                     $lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
-                    $users = $user ? $user->getFirstname() . ' ' . $user->getLastname() : $data['user_name'];
+                    $users     = $user ? $user->getFirstname() . ' ' . $user->getLastname() : $data['user_name'];
 
                     $result = [
                         'cmt_id'     => $lastCmtId,
@@ -310,10 +324,10 @@ class View extends Action
                     if (!$checkLike) {
                         $model->addData($data)->save();
                     }
-                    $likes = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
+                    $likes      = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
                     $countLikes = $likes->getSize() ?: '';
-                    $isLiked = $checkLike ? 'yes' : 'no';
-                    $result = [
+                    $isLiked    = $checkLike ? 'yes' : 'no';
+                    $result     = [
                         'liked'      => $isLiked,
                         'comment_id' => $cmtId,
                         'count_like' => $countLikes,

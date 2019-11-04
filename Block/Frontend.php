@@ -246,7 +246,7 @@ class Frontend extends Template
      */
     public function getPostInfo($post)
     {
-        $html = __('Posted on %1', $this->getDateFormat($post->getPublishDate()));
+        $html = __('<i class="fa fa-calendar-times-o"></i> %1', $this->getDateFormat($post->getPublishDate()));
 
         if ($categoryPost = $this->getPostCategoryHtml($post)) {
             $html .= __('| Posted in %1', $categoryPost);
@@ -254,11 +254,32 @@ class Frontend extends Template
 
         $author = $this->helperData->getAuthorByPost($post);
         if ($author && $author->getName() && $this->helperData->showAuthorInfo()) {
-            $aTag = '<a class="mp-info" href="' . $author->getUrl() . '">' . $this->escapeHtml($author->getName()) . '</a>';
-            $html .= __('| By: %1', $aTag);
+            $aTag = '<a class="mp-info" href="' . $author->getUrl() . '">'
+                . $this->escapeHtml($author->getName()) . '</a>';
+            $html .= __('| <i class="fa fa-user"></i>: %1', $aTag);
+        }
+
+        if ($this->getCommentinPost($post)) {
+            $html .= __('| <i class="fa fa-comments"></i>: %1', $this->getCommentinPost($post));
+        }
+
+        if ($post->getSumView()) {
+            $html .= __('| <i class="fa fa-eye"></i>: %1', $post->getSumView());
         }
 
         return $html;
+    }
+
+    /**
+     * @param $post
+     *
+     * @return int
+     */
+    public function getCommentinPost($post)
+    {
+        $cmt = $this->cmtFactory->create()->getCollection()->addFieldToFilter('post_id', $post->getId());
+
+        return $cmt->count();
     }
 
     /**

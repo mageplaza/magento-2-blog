@@ -869,6 +869,19 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
                 $installer->getConnection()->createTable($table);
             }
+            if ($installer->tableExists('mageplaza_blog_post')) {
+                $connection->addColumn(
+                    $installer->getTable('mageplaza_blog_post'),
+                    'sum_view',
+                    [
+                        'type'     => Table::TYPE_INTEGER,
+                        'unsigned' => true,
+                        'nullable' => true,
+                        'default'  => 0,
+                        'comment'  => 'Sum View'
+                    ]
+                );
+            }
         }
 
         $installer->endSetup();
