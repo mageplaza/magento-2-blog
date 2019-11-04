@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="mageplaza_blog_post" resource="default" engine="innodb" comment="Mageplaza Blog Table">
+        <column xsi:type="int" name="post_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Post ID"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Post Name"/>
+        <column xsi:type="mediumtext" name="short_description" nullable="true" comment="Post Short Description"/>
+        <column xsi:type="mediumtext" name="post_content" nullable="true" comment="Post Content"/>
+        <column xsi:type="int" name="store_ids" nullable="false" default="0" comment="Store Id"/>
+        <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Post Image"/>
+        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false"
+                comment="Attribute Option Id"/>
+        <column xsi:type="varchar" name="page_title" nullable="true" length="255" comment="Brand Page Title"/>
+        <column xsi:type="varchar" name="url_key" nullable="false" length="255" comment="Url Key"/>
+        <column xsi:type="smallint" name="is_featured" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Featured Brand"/>
+        <column xsi:type="mediumtext" name="short_description" nullable="true" comment="Brand Short Description"/>
+        <column xsi:type="mediumtext" name="description" nullable="true" comment="Brand Description"/>
+        <column xsi:type="varchar" name="static_block" nullable="true" length="255" comment="Static Block"/>
+        <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
+        <column xsi:type="varchar" name="meta_keywords" nullable="true" length="255" comment="Meta Keywords"/>
+        <column xsi:type="varchar" name="meta_description" nullable="true" length="255" comment="Meta Description"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="brand_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="Mageplaza_Shopbybrand_Eav_Attribute_Option" table="mageplaza_brand"
+                    column="option_id" referenceTable="eav_attribute_option" referenceColumn="option_id"
+                    onDelete="CASCADE"/>
+        <index referenceId="mageplaza_brand" indexType="btree">
+            <column name="option_id"/>
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="mageplaza_brand" resource="default" engine="innodb" comment="Mageplaza Brand Table">
+        <column xsi:type="int" name="brand_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Brand ID"/>
+        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false"
+                comment="Attribute Option Id"/>
+        <column xsi:type="int" name="store_id" nullable="false" default="0" comment="Config Scope Id"/>
+        <column xsi:type="varchar" name="page_title" nullable="true" length="255" comment="Brand Page Title"/>
+        <column xsi:type="varchar" name="url_key" nullable="false" length="255" comment="Url Key"/>
+        <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Brand Image"/>
+        <column xsi:type="smallint" name="is_featured" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Featured Brand"/>
+        <column xsi:type="mediumtext" name="short_description" nullable="true" comment="Brand Short Description"/>
+        <column xsi:type="mediumtext" name="description" nullable="true" comment="Brand Description"/>
+        <column xsi:type="varchar" name="static_block" nullable="true" length="255" comment="Static Block"/>
+        <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
+        <column xsi:type="varchar" name="meta_keywords" nullable="true" length="255" comment="Meta Keywords"/>
+        <column xsi:type="varchar" name="meta_description" nullable="true" length="255" comment="Meta Description"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="brand_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="Mageplaza_Shopbybrand_Eav_Attribute_Option" table="mageplaza_brand"
+                    column="option_id" referenceTable="eav_attribute_option" referenceColumn="option_id"
+                    onDelete="CASCADE"/>
+        <index referenceId="mageplaza_brand" indexType="btree">
+            <column name="option_id"/>
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="mageplaza_shopbybrand_category" resource="default" engine="innodb" comment="Mageplaza Category Brand Table">
+        <column xsi:type="int" name="cat_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Brand Category ID"/>
+        <column xsi:type="smallint" name="status" padding="6" unsigned="false" nullable="false" identity="false"
+                default="1" comment="Status"/>
+        <column xsi:type="varchar" name="store_ids" nullable="false" length="255" default="0" comment="Store Ids"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Brand Category Name"/>
+        <column xsi:type="varchar" name="url_key" nullable="false" length="255" comment="Url Key"/>
+        <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
+        <column xsi:type="varchar" name="meta_keywords" nullable="true" length="255" comment="Meta Keywords"/>
+        <column xsi:type="mediumtext" name="meta_description" nullable="true" comment="Meta Description"/>
+        <column xsi:type="varchar" name="meta_robots" nullable="true" comment="Meta Robots"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Brand Category Creation Time"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Brand Category Modification Time"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="cat_id"/>
+        </constraint>
+        <index referenceId="mageplaza_shopbybrand_category" indexType="fulltext">
+            <column name="url_key"/>
+        </index>
+    </table>
+    <table name="mageplaza_shopbybrand_brand_category" resource="default" engine="innodb" comment="Mageplaza Brand Category Table">
+        <column xsi:type="int" name="cat_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Brand Category ID"/>
+        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false"
+                comment="Attribute Option Id"/>
+        <column xsi:type="int" name="position" padding="10" nullable="false" default="0"
+                comment="Brand Position"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="cat_id"/>
+            <column name="option_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="Mageplaza_Shopbybrand_Brand_Category_Eav_Attribute_Option" table="mageplaza_shopbybrand_brand_category"
+                    column="option_id" referenceTable="eav_attribute_option" referenceColumn="option_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="Mageplaza_Shopbybrand_Brand_Category_Brand" table="mageplaza_shopbybrand_brand_category"
+                    column="cat_id" referenceTable="mageplaza_shopbybrand_category" referenceColumn="cat_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="Mageplaza_Shopbybrand_Brand_Category_Cat_Option">
+            <column name="cat_id"/>
+            <column name="option_id"/>
+        </constraint>
+        <index referenceId="mageplaza_shopbybrand_brand_category_cate_id" indexType="btree">
+            <column name="cat_id"/>
+        </index>
+        <index referenceId="mageplaza_shopbybrand_brand_category_option_id" indexType="btree">
+            <column name="option_id"/>
+        </index>
+    </table>
+</schema>
