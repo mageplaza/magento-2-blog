@@ -27,6 +27,18 @@
             <resource ref="Mageplaza_Blog::blog" />
         </resources>
     </route>
+    <route url="/V1/mpblog/post/create" method="POST">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="createPost"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/delete:post_id" method="DELETE">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="deletePost"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
     <route url="/V1/mpblog/tag" method="GET">
         <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getTagList"/>
         <resources>

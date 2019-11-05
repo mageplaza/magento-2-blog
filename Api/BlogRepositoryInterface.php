@@ -35,6 +35,22 @@ interface BlogRepositoryInterface
     public function getPostList();
 
     /**
+     * Create Post
+     *
+     * @return string
+     */
+    public function createPost();
+
+    /**
+     * Delete Post
+     *
+     * @param $postId
+     *
+     * @return string
+     */
+    public function deletePost($postId);
+
+    /**
      * Get Tag List
      *
      * @return \Mageplaza\Blog\Api\Data\TagInterface[]
