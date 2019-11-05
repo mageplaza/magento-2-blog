@@ -22,7 +22,31 @@
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
     <route url="/V1/mpblog/post" method="GET">
-        <service class="Mageplaza\Blog\Api\Post\PostInterface" method="getPostList"/>
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostList"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/tag" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getTagList"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/topic" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getTopicList"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/category" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getCategoryList"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/author" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getAuthorList"/>
         <resources>
             <resource ref="Mageplaza_Blog::blog" />
         </resources>
