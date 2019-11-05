@@ -108,19 +108,23 @@ class Register extends Action
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $data           = $this->getRequest()->getParams();
+        $notify         = "";
+
         if ($data) {
             $data = $this->prepareData($data);
 
             if ($this->_helperBlog->isAuthor()) {
                 $author = $this->author->create()->addData($data);
+                $notify = __('Register Successful');
             } else {
-                $author = $this->_helperBlog->getCurrentAuthor()->setData($data);
+                $author = $this->_helperBlog->getCurrentAuthor()->addData($data);
+                $notify = __('Author Edited Successful');
             }
 
             try {
                 $author->save();
                 $resultRedirect->setPath('mpblog/*/information');
-                $this->messageManager->addSuccessMessage(__('Register Successful'));
+                $this->messageManager->addSuccessMessage($notify);
             } catch (Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the Author.'));
                 $resultRedirect->setPath('mpblog/*/signup');
