@@ -63,6 +63,6 @@ class Author implements ArrayInterface
      */
     public function getAuthors()
     {
-        return $this->_authorFactory->create()->getCollection();
+        return $this->_authorFactory->create()->getCollection()->addFieldToFilter('status', '1');
     }
 }
