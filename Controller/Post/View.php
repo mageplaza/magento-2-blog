@@ -264,21 +264,7 @@ class View extends Action
             return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
         }
 
-        if (!$this->getRequest()->isAjax()) {
-            $this->updateSumView($post);
-        }
-
         return $this->resultPageFactory->create();
-    }
-
-    /**
-     * @param PostFactory $post
-     */
-    public function updateSumView($post)
-    {
-        $oldSumView = $post->getSumView();
-        $post->setData('sum_view', (int) $oldSumView + 1);
-        $post->save();
     }
 
     /**

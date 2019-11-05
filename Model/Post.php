@@ -440,6 +440,21 @@ class Post extends AbstractModel
     }
 
     /**
+     * @return int
+     * @throws LocalizedException
+     */
+    public function getViewTraffic()
+    {
+        if (!$this->hasData('view_traffic')) {
+            $traffic = $this->_getResource()->getViewTraffic($this);
+
+            $this->setData('view_traffic', $traffic[0]);
+        }
+
+        return $this->_getData('view_traffic');
+    }
+
+    /**
      * @param null $limit
      *
      * @return ResourceModel\Post\Collection|null

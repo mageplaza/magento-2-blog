@@ -99,6 +99,11 @@ class Post extends AbstractDb
     protected $_request;
 
     /**
+     * @var string
+     */
+    protected $postTrafficTable;
+
+    /**
      * Post constructor.
      *
      * @param Context $context
@@ -131,6 +136,7 @@ class Post extends AbstractDb
         $this->postTopicTable    = $this->getTable('mageplaza_blog_post_topic');
         $this->postCategoryTable = $this->getTable('mageplaza_blog_post_category');
         $this->postProductTable  = $this->getTable('mageplaza_blog_post_product');
+        $this->postTrafficTable  = $this->getTable('mageplaza_blog_post_traffic');
     }
 
     /**
@@ -405,6 +411,20 @@ class Post extends AbstractDb
     {
         $adapter = $this->getConnection();
         $select  = $adapter->select()->from($this->postTopicTable, 'topic_id')
+            ->where('post_id = ?', (int) $post->getId());
+
+        return $adapter->fetchCol($select);
+    }
+
+    /**
+     * @param \Mageplaza\Blog\Model\Post $post
+     *
+     * @return array
+     */
+    public function getViewTraffic(\Mageplaza\Blog\Model\Post $post)
+    {
+        $adapter = $this->getConnection();
+        $select  = $adapter->select()->from($this->postTrafficTable, 'numbers_view')
             ->where('post_id = ?', (int) $post->getId());
 
         return $adapter->fetchCol($select);

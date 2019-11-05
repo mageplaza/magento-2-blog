@@ -263,8 +263,8 @@ class Frontend extends Template
             $html .= __('| <i class="fa fa-comments"></i>: %1', $this->getCommentinPost($post));
         }
 
-        if ($post->getSumView()) {
-            $html .= __('| <i class="fa fa-eye"></i>: %1', $post->getSumView());
+        if ($post->getViewTraffic()) {
+            $html .= __('| <i class="fa fa-eye"></i>: %1', $post->getViewTraffic());
         }
 
         return $html;
