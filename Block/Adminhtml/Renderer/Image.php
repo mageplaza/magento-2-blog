@@ -58,6 +58,7 @@ class Image extends \Mageplaza\Core\Block\Adminhtml\Renderer\Image
             $html .= $this->_getHiddenInput();
             $html .= '</span>';
         }
+        $html .='<style>#author_image_image, #post_image_image{ position: relative;top: 6px }</style>';
 
         return $html;
     }
