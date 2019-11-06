@@ -55,6 +55,7 @@ class BlogRepository implements BlogRepositoryInterface
      *
      * @param Data $helperData
      * @param RequestInterface $request
+     * @param DateTime $date
      */
     public function __construct(
         Data $helperData,
