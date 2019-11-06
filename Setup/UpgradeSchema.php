@@ -764,7 +764,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'nullable' => true,
                         'default'  => 0,
                         'comment'  => 'Author Status',
-                        'after' => 'url_key'
+                        'after'    => 'url_key'
                     ]
                 );
 
@@ -777,7 +777,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'nullable' => true,
                         'default'  => 0,
                         'comment'  => 'Author Type',
-                        'after' => 'url_key'
+                        'after'    => 'url_key'
                     ]
                 );
 
@@ -790,7 +790,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'nullable' => true,
                         'default'  => 0,
                         'comment'  => 'Customer ID',
-                        'after' => 'url_key'
+                        'after'    => 'url_key'
                     ]
                 );
 
@@ -866,6 +866,100 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'entity_id',
                         Table::ACTION_CASCADE
                     );
+
+                $installer->getConnection()->createTable($table);
+            }
+            if (!$installer->tableExists('mageplaza_blog_post_history')) {
+                $table = $installer->getConnection()
+                    ->newTable($installer->getTable('mageplaza_blog_post_history'))
+                    ->addColumn('history_id', Table::TYPE_INTEGER, null, [
+                        'identity' => true,
+                        'nullable' => false,
+                        'primary'  => true,
+                        'unsigned' => true,
+                    ], 'History ID')
+                    ->addColumn(
+                        'post_id',
+                        Table::TYPE_INTEGER,
+                        null,
+                        ['unsigned' => true, 'nullable' => false,],
+                        'Post ID'
+                    )
+                    ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable => false'], 'Post Name')
+                    ->addColumn('short_description', Table::TYPE_TEXT, '64k', [], 'Post Short Description')
+                    ->addColumn('post_content', Table::TYPE_TEXT, '64k', [], 'Post Content')
+                    ->addColumn('store_ids', Table::TYPE_TEXT, null, ['nullable' => false, 'unsigned' => true,],
+                        'Store Id')
+                    ->addColumn('image', Table::TYPE_TEXT, 255, [], 'Post Image')
+                    ->addColumn('views', Table::TYPE_INTEGER, null, [], 'Post Views')
+                    ->addColumn('enabled', Table::TYPE_INTEGER, 1, [], 'Post Enabled')
+                    ->addColumn('url_key', Table::TYPE_TEXT, 255, [], 'Post URL Key')
+                    ->addColumn('in_rss', Table::TYPE_INTEGER, 1, [], 'Post In RSS')
+                    ->addColumn('allow_comment', Table::TYPE_INTEGER, 1, [], 'Post Allow Comment')
+                    ->addColumn('meta_title', Table::TYPE_TEXT, 255, [], 'Post Meta Title')
+                    ->addColumn('meta_description', Table::TYPE_TEXT, '64k', [], 'Post Meta Description')
+                    ->addColumn('meta_keywords', Table::TYPE_TEXT, '64k', [], 'Post Meta Keywords')
+                    ->addColumn('meta_robots', Table::TYPE_INTEGER, null, [], 'Post Meta Robots')
+                    ->addColumn('updated_at', Table::TYPE_TIMESTAMP, null, [], 'Post Updated At')
+                    ->addColumn('created_at', Table::TYPE_TIMESTAMP, null, [], 'Post Created At')
+                    ->addColumn(
+                        'author_id',
+                        Table::TYPE_INTEGER,
+                        null,
+                        ['unsigned' => true, 'nullable' => false,],
+                        'Author ID'
+                    )
+                    ->addColumn(
+                        'modifier_id',
+                        Table::TYPE_INTEGER,
+                        null,
+                        ['unsigned' => true, 'nullable' => false,],
+                        'Modifier ID'
+                    )
+                    ->addColumn('publish_date', Table::TYPE_TIMESTAMP, null, [], 'Publish Date')
+                    ->addColumn(
+                        'import_source',
+                        Table::TYPE_TEXT,
+                        '64k',
+                        ['nullable' => true],
+                        'Import Source'
+                    )
+                    ->addColumn(
+                        'layout',
+                        Table::TYPE_TEXT,
+                        '64k',
+                        ['nullable' => true],
+                        'Post Layout'
+                    )
+                    ->addColumn(
+                        'category_ids',
+                        Table::TYPE_TEXT,
+                        '255',
+                        ['nullable' => true],
+                        'Post Category Id'
+                    )
+                    ->addColumn(
+                        'tag_ids',
+                        Table::TYPE_TEXT,
+                        '255',
+                        ['nullable' => true],
+                        'Post Tag Id'
+                    )
+                    ->addColumn(
+                        'topic_ids',
+                        Table::TYPE_TEXT,
+                        '255',
+                        ['nullable' => true],
+                        'Post Topic Id'
+                    )
+                    ->addColumn(
+                        'product_ids',
+                        Table::TYPE_TEXT,
+                        '255',
+                        ['nullable' => true],
+                        'Post Product Id'
+                    )
+                    ->setComment('Post History Table');
 
                 $installer->getConnection()->createTable($table);
             }

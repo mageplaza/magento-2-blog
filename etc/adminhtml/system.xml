@@ -106,11 +106,10 @@
                     <label>Automatically approve customer's posts</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="facebook_id" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInStore="1" showInWebsite="1">
-                    <label>Facebook ID</label>
-                </field>
-                <field id="twitter_id" translate="label comment" type="text" sortOrder="105" showInDefault="1" showInStore="1" showInWebsite="1">
-                    <label>Twitter ID</label>
+                <field id="history_limit" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Limit of Posts History</label>
+                    <validate>required-number</validate>
+                    <comment>Limit number of post history</comment>
                 </field>
             </group>
             <group id="product_post" translate="label" showInDefault="1" sortOrder="5" showInWebsite="1" showInStore="1">

@@ -40,6 +40,7 @@
                 <font_color>#1abc9c</font_color>
                 <pagination>10,20,50</pagination>
                 <related_post>5</related_post>
+                <history_limit>5</history_limit>
                 <resize_image>
                     <resize_width>900</resize_width>
                     <resize_height>500</resize_height>

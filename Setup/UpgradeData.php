@@ -26,6 +26,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Model\CommentFactory;
+use Mageplaza\Blog\Model\AuthorFactory;
 
 class UpgradeData implements UpgradeDataInterface
 {
@@ -42,16 +43,24 @@ class UpgradeData implements UpgradeDataInterface
     public $comment;
 
     /**
+     * @var AuthorFactory
+     */
+    public $author;
+
+    /**
      * UpgradeData constructor.
      *
      * @param DateTime $date
      * @param CommentFactory $commentFactory
+     * @param AuthorFactory $authorFactory
      */
     public function __construct(
         DateTime $date,
-        CommentFactory $commentFactory
+        CommentFactory $commentFactory,
+        AuthorFactory $authorFactory
     ) {
         $this->comment = $commentFactory;
+        $this->author = $authorFactory;
         $this->date = $date;
     }
 
@@ -79,6 +88,19 @@ class UpgradeData implements UpgradeDataInterface
                     $sampleTemplates,
                     'comment_id IN (' . $commentIds . ')'
                 );
+            }
+        }
+
+        if (version_compare($context->getVersion(), '2.5.2', '<')) {
+            if ($this->author->create()->getCollection()->count() <1){
+                $this->author->create()->addData(
+                    [
+                        'name' => 'Admin',
+                        'type' => 1,
+                        'status' => 1,
+                        'created_at' => $this->date->date()
+                    ]
+                )->save();
             }
         }
 

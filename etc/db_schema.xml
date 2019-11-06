@@ -30,16 +30,16 @@
         <column xsi:type="mediumtext" name="post_content" nullable="true" comment="Post Content"/>
         <column xsi:type="int" name="store_ids" nullable="false" comment="Store Id"/>
         <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Post Image"/>
-        <column xsi:type="int" name="views" nullable="true" default="null" comment="Post Views	"/>
-        <column xsi:type="int" name="enabled" padding="1" nullable="true" default="1" comment="Post Enabled"/>
+        <column xsi:type="int" name="views" nullable="true" comment="Post Views	"/>
+        <column xsi:type="int" name="enabled" padding="2" nullable="true" default="1" comment="Post Enabled"/>
         <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Post URL Key"/>
-        <column xsi:type="int" name="in_rss" padding="1" nullable="true" default="0" comment="Post In RSS"/>
-        <column xsi:type="int" name="allow_comment" padding="1" nullable="false" default="0"
+        <column xsi:type="int" name="in_rss" padding="2" nullable="true" default="0" comment="Post In RSS"/>
+        <column xsi:type="int" name="allow_comment" padding="2" nullable="false" default="0"
                 comment="Post Allow Comment"/>
         <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
         <column xsi:type="mediumtext" name="meta_keywords" nullable="true" comment="Meta Keywords"/>
         <column xsi:type="mediumtext" name="meta_description" nullable="true" comment="Meta Description"/>
-        <column xsi:type="int" name="meta_robots" nullable="true" default="null" comment="Post Meta Robots"/>
+        <column xsi:type="int" name="meta_robots" nullable="true"  comment="Post Meta Robots"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" default="CURRENT_TIMESTAMP"
                 comment="Post Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
@@ -57,6 +57,54 @@
                     column="author_id" referenceTable="mageplaza_blog_author" referenceColumn="user_id"
                     onDelete="CASCADE"/>
         <index referenceId="mageplaza_blog_post" indexType="btree">
+            <column name="post_id"/>
+            <column name="store_ids"/>
+        </index>
+    </table>
+    <table name="mageplaza_blog_post_history" resource="default" engine="innodb" comment="Mageplaza Blog Post History Table">
+        <column xsi:type="int" name="history_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="History ID"/>
+        <column xsi:type="int" name="post_id" padding="10" unsigned="true" nullable="false" comment="Post Id"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Post Name"/>
+        <column xsi:type="mediumtext" name="short_description" nullable="true" comment="Post Short Description"/>
+        <column xsi:type="mediumtext" name="post_content" nullable="true" comment="Post Content"/>
+        <column xsi:type="int" name="store_ids" nullable="false" comment="Store Id"/>
+        <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Post Image"/>
+        <column xsi:type="int" name="views" nullable="true" comment="Post Views	"/>
+        <column xsi:type="int" name="enabled" padding="2" nullable="true" default="1" comment="Post Enabled"/>
+        <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Post URL Key"/>
+        <column xsi:type="int" name="in_rss" padding="2" nullable="true" default="0" comment="Post In RSS"/>
+        <column xsi:type="int" name="allow_comment" padding="2" nullable="false" default="0"
+                comment="Post Allow Comment"/>
+        <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
+        <column xsi:type="mediumtext" name="meta_keywords" nullable="true" comment="Meta Keywords"/>
+        <column xsi:type="mediumtext" name="meta_description" nullable="true" comment="Meta Description"/>
+        <column xsi:type="int" name="meta_robots" nullable="true"  comment="Post Meta Robots"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" default="CURRENT_TIMESTAMP"
+                comment="Post Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
+                comment="Post Updated At"/>
+        <column xsi:type="int" name="author_id" padding="10" unsigned="true" nullable="true" comment="Author ID"/>
+        <column xsi:type="int" name="modifier_id" padding="10" unsigned="true" nullable="true" comment="Author ID"/>
+        <column xsi:type="timestamp" name="publish_date" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
+                comment="Post Updated At"/>
+        <column xsi:type="mediumtext" name="import_source" nullable="true" comment="Import Source"/>
+        <column xsi:type="varchar" name="category_ids" nullable="true" length="255" comment="Category Ids"/>
+        <column xsi:type="varchar" name="tag_ids" nullable="true" length="255" comment="Tag Ids"/>
+        <column xsi:type="varchar" name="topic_ids" nullable="true" length="255" comment="Topic Ids"/>
+        <column xsi:type="varchar" name="product_ids" nullable="true" length="255" comment="Product Ids"/>
+        <column xsi:type="mediumtext" name="layout" nullable="true" comment="Post Layout"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="history_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="Mageplaza_Blog_Post_History_Blog_Post" table="mageplaza_blog_post_history"
+                    column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="Mageplaza_Blog_Post_History_Blog_Author" table="mageplaza_blog_post_history"
+                    column="author_id" referenceTable="mageplaza_blog_author" referenceColumn="user_id"
+                    onDelete="CASCADE"/>
+        <index referenceId="mageplaza_blog_post" indexType="btree">
+            <column name="history_id"/>
             <column name="post_id"/>
             <column name="store_ids"/>
         </index>
@@ -94,7 +142,7 @@
         <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Tag URL Key"/>
         <column xsi:type="mediumtext" name="description" nullable="true" comment="Tag Description"/>
         <column xsi:type="int" name="store_ids" nullable="false" default="0" comment="Store Id"/>
-        <column xsi:type="int" name="enabled" padding="1" nullable="true" default="1" comment="Tag Enabled"/>
+        <column xsi:type="int" name="enabled" padding="2" nullable="true" default="1" comment="Tag Enabled"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" default="CURRENT_TIMESTAMP"
                 comment="Tag Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
@@ -102,7 +150,7 @@
         <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
         <column xsi:type="mediumtext" name="meta_keywords" nullable="true" comment="Meta Keywords"/>
         <column xsi:type="mediumtext" name="meta_description" nullable="true" comment="Meta Description"/>
-        <column xsi:type="int" name="meta_robots" nullable="true" default="null" comment="Meta Robots"/>
+        <column xsi:type="int" name="meta_robots" nullable="true"  comment="Meta Robots"/>
         <column xsi:type="mediumtext" name="import_source" nullable="true" comment="Import Source"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="tag_id"/>
@@ -119,7 +167,7 @@
         <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Topic URL Key"/>
         <column xsi:type="mediumtext" name="description" nullable="true" comment="Topic Description"/>
         <column xsi:type="int" name="store_ids" nullable="false" default="0" comment="Store Id"/>
-        <column xsi:type="int" name="enabled" padding="1" nullable="true" default="1" comment="Topic Enabled"/>
+        <column xsi:type="int" name="enabled" padding="2" nullable="true" default="1" comment="Topic Enabled"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" default="CURRENT_TIMESTAMP"
                 comment="Topic Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
@@ -127,7 +175,7 @@
         <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
         <column xsi:type="mediumtext" name="meta_keywords" nullable="true" comment="Meta Keywords"/>
         <column xsi:type="mediumtext" name="meta_description" nullable="true" comment="Meta Description"/>
-        <column xsi:type="int" name="meta_robots" nullable="true" default="null" comment="Meta Robots"/>
+        <column xsi:type="int" name="meta_robots" nullable="true"  comment="Meta Robots"/>
         <column xsi:type="mediumtext" name="import_source" nullable="true" comment="Import Source"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="topic_id"/>
@@ -144,11 +192,11 @@
         <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Category URL Key"/>
         <column xsi:type="mediumtext" name="description" nullable="true" comment="Category Description"/>
         <column xsi:type="int" name="store_ids" nullable="false" default="0" comment="Store Id"/>
-        <column xsi:type="int" name="enabled" padding="1" nullable="true" default="1" comment="Category Enabled"/>
+        <column xsi:type="int" name="enabled" padding="2" nullable="true" default="1" comment="Category Enabled"/>
         <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
         <column xsi:type="mediumtext" name="meta_keywords" nullable="true" comment="Meta Keywords"/>
         <column xsi:type="mediumtext" name="meta_description" nullable="true" comment="Meta Description"/>
-        <column xsi:type="int" name="meta_robots" nullable="true" default="null" comment="Meta Robots"/>
+        <column xsi:type="int" name="meta_robots" nullable="true"  comment="Meta Robots"/>
         <column xsi:type="int" name="parent_id" padding="11" nullable="true" comment="Category Parent ID"/>
         <column xsi:type="varchar" name="path" nullable="true" length="255" comment="Category Path"/>
         <column xsi:type="int" name="position" padding="11" nullable="true" comment="Category Position"/>

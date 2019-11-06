@@ -33,7 +33,10 @@ use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
 use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Model\Post as PostModel;
 use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\PostHistoryFactory;
 use RuntimeException;
 
 /**
@@ -60,6 +63,16 @@ class Save extends Post
     protected $imageHelper;
 
     /**
+     * @var Data
+     */
+    protected $_helperData;
+
+    /**
+     * @var PostHistoryFactory
+     */
+    protected $_postHistory;
+
+    /**
      * Save constructor.
      *
      * @param Context $context
@@ -67,6 +80,8 @@ class Save extends Post
      * @param PostFactory $postFactory
      * @param Js $jsHelper
      * @param Image $imageHelper
+     * @param Data $helperData
+     * @param PostHistoryFactory $postHistory
      * @param DateTime $date
      */
     public function __construct(
@@ -75,9 +90,13 @@ class Save extends Post
         PostFactory $postFactory,
         Js $jsHelper,
         Image $imageHelper,
+        Data $helperData,
+        PostHistoryFactory $postHistory,
         DateTime $date
     ) {
         $this->jsHelper = $jsHelper;
+        $this->_helperData = $helperData;
+        $this->_postHistory = $postHistory;
         $this->imageHelper = $imageHelper;
         $this->date = $date;
 
@@ -93,9 +112,11 @@ class Save extends Post
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if ($data = $this->getRequest()->getPost('post')) {
-            /** @var \Mageplaza\Blog\Model\Post $post */
+            /** @var PostModel $post */
             $post = $this->initPost(false, true);
             $this->prepareData($post, $data);
+
+            $this->addHistory($post);
 
             $this->_eventManager->dispatch(
                 'mageplaza_blog_post_prepare_save',
@@ -133,6 +154,28 @@ class Save extends Post
         $resultRedirect->setPath('mageplaza_blog/*/');
 
         return $resultRedirect;
+    }
+
+    /**
+     * @param PostModel $post
+     */
+    protected function addHistory($post){
+        if (!empty($post->getId())){
+            $history = $this->_postHistory->create();
+            $historyCount = $history->getSumPostHistory($post->getId());
+            $limitHistory = (int)$this->_helperData->getConfigGeneral('history_limit');
+
+            if ($historyCount < $limitHistory){
+                $history->addData($post->getData());
+                try {
+                    $history->save();
+                } catch (RuntimeException $e) {
+                    $this->messageManager->addError($e->getMessage());
+                } catch (Exception $e) {
+                    $this->messageManager->addException($e, __('Something went wrong while saving the Post History.'));
+                }
+            }
+        }
     }
 
     /**
