@@ -33,8 +33,14 @@
             <resource ref="Mageplaza_Blog::blog" />
         </resources>
     </route>
-    <route url="/V1/mpblog/post/delete:post_id" method="DELETE">
+    <route url="/V1/mpblog/post/delete/:post_id" method="DELETE">
         <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="deletePost"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/update/:post_id" method="PUT">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="updatePost"/>
         <resources>
             <resource ref="Mageplaza_Blog::blog" />
         </resources>
@@ -45,8 +51,44 @@
             <resource ref="Mageplaza_Blog::blog" />
         </resources>
     </route>
+    <route url="/V1/mpblog/tag/create" method="POST">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="createTag"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/tag/delete/:tag_id" method="DELETE">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="deleteTag"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/tag/update/:tag_id" method="PUT">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="updateTag"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
     <route url="/V1/mpblog/topic" method="GET">
         <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getTopicList"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/topic/create" method="POST">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="createTopic"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/topic/delete/:topic_id" method="DELETE">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="deleteTopic"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/topic/update/:topic_id" method="PUT">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="updateTopic"/>
         <resources>
             <resource ref="Mageplaza_Blog::blog" />
         </resources>
@@ -57,8 +99,44 @@
             <resource ref="Mageplaza_Blog::blog" />
         </resources>
     </route>
+    <route url="/V1/mpblog/category/create" method="POST">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="createCategory"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/category/delete/:category_id" method="DELETE">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="deleteCategory"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/category/update/:category_id" method="PUT">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="updateCategory"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
     <route url="/V1/mpblog/author" method="GET">
         <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getAuthorList"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/author/create/:customer_id" method="POST">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="createAuthor"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/author/delete/:author_id" method="DELETE">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="deleteAuthor"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/author/update/:author_id" method="PUT">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="updateAuthor"/>
         <resources>
             <resource ref="Mageplaza_Blog::blog" />
         </resources>

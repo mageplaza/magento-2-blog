@@ -22,8 +22,9 @@
 namespace Mageplaza\Blog\Model\Api;
 
 use Exception;
-use Magento\Framework\App\RequestInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Api\BlogRepositoryInterface;
@@ -41,29 +42,29 @@ class BlogRepository implements BlogRepositoryInterface
     protected $_helperData;
 
     /**
-     * @var RequestInterface
-     */
-    protected $request;
-
-    /**
      * @var DateTime
      */
     protected $date;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $_customerRepositoryInterface;
+
+    /**
      * BlogRepository constructor.
      *
      * @param Data $helperData
-     * @param RequestInterface $request
+     * @param CustomerRepositoryInterface $customerRepositoryInterface
      * @param DateTime $date
      */
     public function __construct(
         Data $helperData,
-        RequestInterface $request,
+        CustomerRepositoryInterface $customerRepositoryInterface,
         DateTime $date
     ) {
         $this->_helperData = $helperData;
-        $this->request     = $request;
+        $this->_customerRepositoryInterface = $customerRepositoryInterface;
         $this->date        = $date;
     }
 
@@ -80,6 +81,70 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
+     * @param \Mageplaza\Blog\Api\Data\PostInterface $post
+     *
+     * @return \Mageplaza\Blog\Api\Data\PostInterface
+     */
+    public function createPost($post)
+    {
+        $data = $post->getData();
+
+        if ($this->checkPostData($data)) {
+            $this->prepareData($data);
+            $post->addData($data);
+            $post->save();
+        }
+        return $post;
+    }
+
+    /**
+     * @param string $postId
+     *
+     * @return string|null
+     * @throws Exception
+     */
+    public function deletePost($postId)
+    {
+        $post = $this->_helperData->getFactoryByType()->create()->load($postId);
+
+        if ($post){
+            $post->delete();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $postId
+     * @param \Mageplaza\Blog\Api\Data\PostInterface $post
+     *
+     * @return \Mageplaza\Blog\Api\Data\PostInterface|void
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    public function updatePost($postId, $post)
+    {
+        if (empty($postId)) {
+            throw new InputException(__('Invalid post id %1', $postId));
+        }
+        $subPost = $this->_helperData->getFactoryByType()->create()->load($postId);
+
+        if (!$subPost->getId()){
+            throw new NoSuchEntityException(
+                __(
+                    'The "%1" Post doesn\'t exist.',
+                    $postId
+                )
+            );
+        }
+
+        $subPost->addData($post->getData())->save();
+        return $subPost;
+    }
+
+    /**
      * @return DataObject[]|BlogRepositoryInterface[]
      * @throws NoSuchEntityException
      */
@@ -88,6 +153,78 @@ class BlogRepository implements BlogRepositoryInterface
         $collection = $this->_helperData->getFactoryByType('tag')->create()->getCollection();
 
         return $collection->getItems();
+    }
+
+    /**
+     * @param \Mageplaza\Blog\Api\Data\TagInterface $tag
+     *
+     * @return \Mageplaza\Blog\Api\Data\TagInterface
+     */
+    public function createTag($tag)
+    {
+        if (!empty($tag->getName())) {
+            if (empty($tag->getStoreIds())){
+                $tag->setStoreIds(0);
+            }
+            if (empty($tag->getEnabled())){
+                $tag->setEnabled(1);
+            }
+            if (empty($tag->getCreatedAt())){
+                $tag->setCreatedAt($this->date->date());
+            }
+            if (empty($tag->getMetaRobots())){
+                $tag->setMetaRobots('INDEX,FOLLOW');
+            }
+            $tag->save();
+        }
+        return $tag;
+    }
+
+    /**
+     * @param string $tagId
+     *
+     * @return bool|string
+     * @throws Exception
+     */
+    public function deleteTag($tagId)
+    {
+        $tag = $this->_helperData->getFactoryByType('tag')->create()->load($tagId);
+
+        if ($tag){
+            $tag->delete();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $tagId
+     * @param \Mageplaza\Blog\Api\Data\TagInterface $tag
+     *
+     * @return \Mageplaza\Blog\Api\Data\TagInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    public function updateTag($tagId, $tag)
+    {
+        if (empty($tagId)) {
+            throw new InputException(__('Invalid tag id %1', $tagId));
+        }
+        $subTag = $this->_helperData->getFactoryByType('tag')->create()->load($tagId);
+
+        if (!$subTag->getId()){
+            throw new NoSuchEntityException(
+                __(
+                    'The "%1" Tag doesn\'t exist.',
+                    $tagId
+                )
+            );
+        }
+
+        $subTag->addData($tag->getData())->save();
+        return $subTag;
     }
 
     /**
@@ -102,14 +239,75 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @return DataObject[]|BlogRepositoryInterface[]
+     * @param \Mageplaza\Blog\Api\Data\TopicInterface $topic
+     *
+     * @return \Mageplaza\Blog\Api\Data\TopicInterface
+     */
+    public function createTopic($topic)
+    {
+        if (!empty($topic->getName())) {
+            if (empty($topic->getStoreIds())){
+                $topic->setStoreIds(0);
+            }
+            if (empty($topic->getEnabled())){
+                $topic->setEnabled(1);
+            }
+            if (empty($topic->getCreatedAt())){
+                $topic->setCreatedAt($this->date->date());
+            }
+            if (empty($topic->getMetaRobots())){
+                $topic->setMetaRobots('INDEX,FOLLOW');
+            }
+            $topic->save();
+        }
+        return $topic;
+    }
+
+    /**
+     * @param string $topicId
+     *
+     * @return bool|string
+     * @throws Exception
+     */
+    public function deleteTopic($topicId)
+    {
+        $topic = $this->_helperData->getFactoryByType('topic')->create()->load($topicId);
+
+        if ($topic){
+            $topic->delete();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $topicId
+     * @param \Mageplaza\Blog\Api\Data\TopicInterface $topic
+     *
+     * @return \Mageplaza\Blog\Api\Data\TopicInterface
+     * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getAuthorList()
+    public function updateTopic($topicId, $topic)
     {
-        $collection = $this->_helperData->getFactoryByType('author')->create()->getCollection();
+        if (empty($topicId)) {
+            throw new InputException(__('Invalid topic id %1', $topicId));
+        }
+        $subTopic = $this->_helperData->getFactoryByType('topic')->create()->load($topicId);
 
-        return $collection->getItems();
+        if (!$subTopic->getId()){
+            throw new NoSuchEntityException(
+                __(
+                    'The "%1" Topic doesn\'t exist.',
+                    $topicId
+                )
+            );
+        }
+
+        $subTopic->addData($topic->getData())->save();
+        return $subTopic;
     }
 
     /**
@@ -124,38 +322,165 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @return \Mageplaza\Blog\Api\Data\PostInterface[]|string|null
+     * @param \Mageplaza\Blog\Api\Data\CategoryInterface $category
+     *
+     * @return \Mageplaza\Blog\Api\Data\CategoryInterface
      */
-    public function createPost()
+    public function createCategory($category)
     {
-        $data = $this->request->getParams();
-
-        if ($this->checkPostData($data)) {
-            $this->prepareData($data);
-
-            $post = $this->_helperData->getFactoryByType()->create()->addData($data);
-
-            try{
-                $post->save();
-                return 'Success';
-            }catch (Exception $exception){
-                return $exception->getMessage();
+        if (!empty($category->getName())) {
+            if (empty($category->getStoreIds())){
+                $category->setStoreIds(0);
             }
+            if (empty($category->getEnabled())){
+                $category->setEnabled(1);
+            }
+            if (empty($category->getCreatedAt())){
+                $category->setCreatedAt($this->date->date());
+            }
+            if (empty($category->getMetaRobots())){
+                $category->setMetaRobots('INDEX,FOLLOW');
+            }
+            if (empty($category->getParentId())){
+                $category->setParentId(1);
+            }
+            $category->save();
         }
-        return null;
+        return $category;
     }
 
-    public function deletePost($postId)
+    /**
+     * @param string $categoryId
+     *
+     * @return bool|string
+     * @throws Exception
+     */
+    public function deleteCategory($categoryId)
     {
-        $post = $this->_helperData->getFactoryByType()->create()->load($postId);
+        $category = $this->_helperData->getFactoryByType('category')->create()->load($categoryId);
 
-        if ($post){
-            $post->delete();
+        if ($category){
+            $category->delete();
 
-            return 'Delete Success';
+            return true;
         }
 
-        return null;
+        return false;
+    }
+
+    /**
+     * @param string $categoryId
+     * @param \Mageplaza\Blog\Api\Data\CategoryInterface $category
+     *
+     * @return \Mageplaza\Blog\Api\Data\CategoryInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    public function updateCategory($categoryId, $category)
+    {
+        if (empty($categoryId)) {
+            throw new InputException(__('Invalid category id %1', $categoryId));
+        }
+        $subCategory = $this->_helperData->getFactoryByType('category')->create()->load($categoryId);
+
+        if (!$subCategory->getId()){
+            throw new NoSuchEntityException(
+                __(
+                    'The "%1" Category doesn\'t exist.',
+                    $categoryId
+                )
+            );
+        }
+
+        $subCategory->addData($category->getData())->save();
+        return $subCategory;
+    }
+
+    /**
+     * @return DataObject[]|BlogRepositoryInterface[]
+     * @throws NoSuchEntityException
+     */
+    public function getAuthorList()
+    {
+        $collection = $this->_helperData->getFactoryByType('author')->create()->getCollection();
+
+        return $collection->getItems();
+    }
+
+    /**
+     * @param string $customerId
+     * @param \Mageplaza\Blog\Api\Data\AuthorInterface $author
+     *
+     * @return \Mageplaza\Blog\Api\Data\AuthorInterface
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function createAuthor($customerId, $author)
+    {
+        $collection = $this->_helperData->getFactoryByType('author')->create()->getCollection();
+        $collection->addFieldToFilter('customer_id', $customerId);
+
+        $customer = $this->_customerRepositoryInterface->getById($customerId);
+        if (!empty($author->getName()) && $collection->count() < 0 && $customer) {
+            $author->setCustomerIdId($customerId);
+            if (empty($author->getType())){
+                $author->setType(0);
+            }
+            if (empty($author->getStatus())){
+                $author->setStatus(0);
+            }
+            if (empty($author->getCreatedAt())){
+                $author->setCreatedAt($this->date->date());
+            }
+            $author->save();
+        }
+        return $author;
+    }
+
+    /**
+     * @param string $authorId
+     *
+     * @return bool|string
+     * @throws Exception
+     */
+    public function deleteAuthor($authorId)
+    {
+        $author = $this->_helperData->getFactoryByType('author')->create()->load($authorId);
+
+        if ($author){
+            $author->delete();
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $authorId
+     * @param \Mageplaza\Blog\Api\Data\AuthorInterface $author
+     *
+     * @return \Mageplaza\Blog\Api\Data\AuthorInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    public function updateAuthor($authorId, $author)
+    {
+        if (empty($authorId)) {
+            throw new InputException(__('Invalid author id %1', $authorId));
+        }
+        $subAuthor = $this->_helperData->getFactoryByType('author')->create()->load($authorId);
+
+        if (!$subAuthor->getId()){
+            throw new NoSuchEntityException(
+                __(
+                    'The "%1" Author doesn\'t exist.',
+                    $authorId
+                )
+            );
+        }
+
+        $subAuthor->addData($author->getData())->save();
+        return $subAuthor;
     }
 
     /**

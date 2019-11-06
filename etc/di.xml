@@ -66,5 +66,9 @@
     </type>
     <preference for="Magento\Sitemap\Model\Sitemap" type="Mageplaza\Blog\Model\Sitemap"/>
     <preference for="Mageplaza\Blog\Api\Data\PostInterface" type="Mageplaza\Blog\Model\Post" />
+    <preference for="Mageplaza\Blog\Api\Data\TagInterface" type="Mageplaza\Blog\Model\Tag" />
+    <preference for="Mageplaza\Blog\Api\Data\CategoryInterface" type="Mageplaza\Blog\Model\Category" />
+    <preference for="Mageplaza\Blog\Api\Data\TopicInterface" type="Mageplaza\Blog\Model\Topic" />
+    <preference for="Mageplaza\Blog\Api\Data\AuthorInterface" type="Mageplaza\Blog\Model\Author" />
     <preference for="Mageplaza\Blog\Api\BlogRepositoryInterface" type="Mageplaza\Blog\Model\Api\BlogRepository" />
 </config>
