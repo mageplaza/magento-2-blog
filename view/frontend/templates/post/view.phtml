@@ -77,6 +77,9 @@ $color = $helper->getBlogConfig('general/font_color');
             </div>
         </div>
     </div>
+    <div class="mp-blog-review-title">
+        <span><?= /* @noEscape */ __('Did you find it helpful?')?></span>
+    </div>
     <div id="mp-blog-review">
         <div class="mp-blog-like">
             <i class="fa fa-thumbs-up" aria-hidden="true"></i>
@@ -97,12 +100,15 @@ $color = $helper->getBlogConfig('general/font_color');
                 </span>
         </div>
         <style>
+            .mp-blog-review-title{
+                text-align: center;
+            }
             #mp-blog-review{
                 display: flex;
-                padding-left: 34%;
+                padding-left: 27%;
             }
             #mp-blog-review  div{
-                margin: 2px;
+                margin: 2px 40px;
                 padding: 10px 20px;
                 color: #ffffff;
                 cursor: pointer;
@@ -110,10 +116,10 @@ $color = $helper->getBlogConfig('general/font_color');
                 text-align: center;
             }
             .mp-blog-like{
-                background-color: #006AFF;
+                background-color: #6AA84F;
             }
             .mp-blog-dislike{
-                background-color: #3DB6FF;
+                background-color: #EC3A3C;
             }
         </style>
     </div>
