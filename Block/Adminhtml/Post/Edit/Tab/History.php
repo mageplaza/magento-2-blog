@@ -27,6 +27,12 @@ use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Action;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Store;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Categories;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Tags;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Topics;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Author;
 use Mageplaza\Blog\Model\ResourceModel\PostHistory\Collection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
@@ -65,7 +71,7 @@ class History extends Extended implements TabInterface
         Collection $historyCollection,
         array $data = []
     ) {
-        $this->coreRegistry = $coreRegistry;
+        $this->coreRegistry      = $coreRegistry;
         $this->historyCollection = $historyCollection;
 
         parent::__construct($context, $backendHelper, $data);
@@ -119,30 +125,40 @@ class History extends Extended implements TabInterface
         $this->addColumn('store_ids', [
             'header'           => __('Store View'),
             'index'            => 'store_ids',
+            'renderer'         => Store::class,
+            'filter'           => false,
             'header_css_class' => 'col-store-ids',
             'column_css_class' => 'col-store-ids'
         ]);
         $this->addColumn('category_ids', [
             'header'           => __('Categories'),
             'index'            => 'category_ids',
+            'renderer'         => Categories::class,
+            'filter'           => false,
             'header_css_class' => 'col-category-ids',
             'column_css_class' => 'col-category-ids'
         ]);
         $this->addColumn('topic_ids', [
             'header'           => __('Topics'),
             'index'            => 'topic_ids',
+            'renderer'         => Topics::class,
+            'filter'           => false,
             'header_css_class' => 'col-topic-ids',
             'column_css_class' => 'col-topic-ids'
         ]);
         $this->addColumn('tag_ids', [
             'header'           => __('Tags'),
             'index'            => 'tag_ids',
+            'renderer'         => Tags::class,
+            'filter'           => false,
             'header_css_class' => 'col-tag-ids',
             'column_css_class' => 'col-tag-ids'
         ]);
         $this->addColumn('modifier_id', [
             'header'           => __('Modified by'),
             'index'            => 'modifier_id',
+            'renderer'         => Author::class,
+            'filter'           => false,
             'header_css_class' => 'col-modifier-id',
             'column_css_class' => 'col-modifier-id'
         ]);
@@ -152,6 +168,19 @@ class History extends Extended implements TabInterface
             'header_css_class' => 'col-updated-at',
             'column_css_class' => 'col-updated-at'
         ]);
+        $this->addColumn(
+            'action',
+            [
+                'header'           => __('Action'),
+                'index'            => 'template_id',
+                'sortable'         => false,
+                'filter'           => false,
+                'no_link'          => true,
+                'renderer'         => Action::class,
+                'header_css_class' => 'col-actions',
+                'column_css_class' => 'col-actions'
+            ]
+        );
 
         return $this;
     }

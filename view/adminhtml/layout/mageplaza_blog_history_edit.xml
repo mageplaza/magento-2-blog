@@ -30,7 +30,6 @@
             <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tabs" name="mageplaza_blog_post_tabs">
                 <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Post" name="mageplaza_blog_post_edit_tab_post"/>
                 <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Product" name="mageplaza_blog_post_edit_tab_product"/>
-                <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\History" name="mageplaza_blog_post_edit_tab_history"/>
                 <action method="addTab">
                     <argument name="name" xsi:type="string">post</argument>
                     <argument name="block" xsi:type="string">mageplaza_blog_post_edit_tab_post</argument>
@@ -38,10 +37,6 @@
                 <action method="addTab">
                     <argument name="name" xsi:type="string">product</argument>
                     <argument name="block" xsi:type="string">mageplaza_blog_post_edit_tab_product</argument>
-                </action>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">history</argument>
-                    <argument name="block" xsi:type="string">mageplaza_blog_post_edit_tab_history</argument>
                 </action>
             </block>
         </referenceContainer>

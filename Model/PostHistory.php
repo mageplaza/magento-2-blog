@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Model;
 
 use Magento\Framework\Model\AbstractModel;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class PostLike
@@ -81,5 +82,20 @@ class PostHistory extends AbstractModel
     public function getSumPostHistory($postId)
     {
         return $this->getCollection()->addFieldToFilter('post_id', $postId)->count();
+    }
+
+    /**
+     * @return array|mixed
+     */
+    public function getProductsPosition()
+    {
+        if (!$this->getId()) {
+            return [];
+        }
+        $data = [];
+        foreach (Data::jsonDecode($this->getProductIds()) as $key=>$value){
+            $data[$key] = $value['position'];
+        }
+        return $data;
     }
 }

@@ -30,7 +30,7 @@ use Magento\Backend\Helper\Data;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
-use Mageplaza\Blog\Model\ResourceModel\Tag\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Mageplaza\Blog\Model\Tag;
 
 /**

@@ -68,35 +68,37 @@ class Edit extends Container
 
         parent::_construct();
 
-        $post = $this->coreRegistry->registry('mageplaza_blog_post');
-        $this->buttonList->add(
-            'save-and-continue',
-            [
-                'label'          => __('Save and Continue Edit'),
-                'class'          => 'save',
-                'data_attribute' => [
-                    'mage-init' => [
-                        'button' => [
-                            'event'  => 'saveAndContinueEdit',
-                            'target' => '#edit_form'
+        if (!$this->getRequest()->getParam('history')){
+            $post = $this->coreRegistry->registry('mageplaza_blog_post');
+            $this->buttonList->add(
+                'save-and-continue',
+                [
+                    'label'          => __('Save and Continue Edit'),
+                    'class'          => 'save',
+                    'data_attribute' => [
+                        'mage-init' => [
+                            'button' => [
+                                'event'  => 'saveAndContinueEdit',
+                                'target' => '#edit_form'
+                            ]
                         ]
                     ]
-                ]
-            ],
-            -100
-        );
-        if ($post->getId() && !$this->_request->getParam('duplicate')) {
-            $this->buttonList->add(
-                'duplicate',
-                [
-                    'label'   => __('Duplicate'),
-                    'class'   => 'duplicate',
-                    'onclick' => sprintf("location.href = '%s';", $this->getDuplicateUrl()),
                 ],
-                -101
+                -100
             );
-        } else {
-            $this->buttonList->remove('delete');
+            if ($post->getId() && !$this->_request->getParam('duplicate')) {
+                $this->buttonList->add(
+                    'duplicate',
+                    [
+                        'label'   => __('Duplicate'),
+                        'class'   => 'duplicate',
+                        'onclick' => sprintf("location.href = '%s';", $this->getDuplicateUrl()),
+                    ],
+                    -101
+                );
+            } else {
+                $this->buttonList->remove('delete');
+            }
         }
     }
 
@@ -109,6 +111,11 @@ class Edit extends Container
     {
         /** @var Post $post */
         $post = $this->coreRegistry->registry('mageplaza_blog_post');
+
+        if ($this->getRequest()->getParam('history')){
+            return __("Edit History Post '%1'", $this->escapeHtml($post->getName()));
+        }
+
         if ($post->getId() && $post->getDuplicate()) {
             return __("Edit Post '%1'", $this->escapeHtml($post->getName()));
         }
@@ -130,6 +137,9 @@ class Edit extends Container
                 $ar = [];
             } else {
                 $ar = ['id' => $post->getId()];
+            }
+            if ($this->getRequest()->getParam('history')){
+                $ar['post_id'] =  $this->getRequest()->getParam('post_id');
             }
 
             return $this->getUrl('*/*/save', $ar);

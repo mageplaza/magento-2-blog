@@ -51,6 +51,7 @@ use Mageplaza\Blog\Model\Tag;
 use Mageplaza\Blog\Model\TagFactory;
 use Mageplaza\Blog\Model\Topic;
 use Mageplaza\Blog\Model\TopicFactory;
+use Mageplaza\Blog\Model\PostHistoryFactory;
 use Mageplaza\Core\Helper\AbstractData as CoreHelper;
 
 /**
@@ -64,6 +65,7 @@ class Data extends CoreHelper
     const TYPE_CATEGORY      = 'category';
     const TYPE_TAG           = 'tag';
     const TYPE_TOPIC         = 'topic';
+    const TYPE_HISTORY       = 'history';
     const TYPE_AUTHOR        = 'author';
     const TYPE_MONTHLY       = 'month';
 
@@ -113,6 +115,11 @@ class Data extends CoreHelper
     protected $_httpContext;
 
     /**
+     * @var PostHistoryFactory
+     */
+    protected $postHistoryFactory;
+
+    /**
      * Data constructor.
      *
      * @param Context $context
@@ -123,6 +130,7 @@ class Data extends CoreHelper
      * @param TagFactory $tagFactory
      * @param TopicFactory $topicFactory
      * @param AuthorFactory $authorFactory
+     * @param PostHistoryFactory $postHistoryFactory
      * @param TranslitUrl $translitUrl
      * @param Session $customerSession
      * @param HttpContext $httpContext
@@ -137,20 +145,22 @@ class Data extends CoreHelper
         TagFactory $tagFactory,
         TopicFactory $topicFactory,
         AuthorFactory $authorFactory,
+        PostHistoryFactory $postHistoryFactory,
         TranslitUrl $translitUrl,
         Session $customerSession,
         HttpContext $httpContext,
         DateTime $dateTime
     ) {
-        $this->postFactory     = $postFactory;
-        $this->categoryFactory = $categoryFactory;
-        $this->tagFactory      = $tagFactory;
-        $this->topicFactory    = $topicFactory;
-        $this->authorFactory   = $authorFactory;
-        $this->translitUrl     = $translitUrl;
-        $this->dateTime        = $dateTime;
-        $this->customerSession = $customerSession;
-        $this->_httpContext    = $httpContext;
+        $this->postFactory        = $postFactory;
+        $this->categoryFactory    = $categoryFactory;
+        $this->tagFactory         = $tagFactory;
+        $this->topicFactory       = $topicFactory;
+        $this->authorFactory      = $authorFactory;
+        $this->postHistoryFactory = $postHistoryFactory;
+        $this->translitUrl        = $translitUrl;
+        $this->dateTime           = $dateTime;
+        $this->customerSession    = $customerSession;
+        $this->_httpContext       = $httpContext;
 
         parent::__construct($context, $objectManager, $storeManager);
     }
@@ -503,6 +513,9 @@ class Data extends CoreHelper
                 break;
             case self::TYPE_TOPIC:
                 $object = $this->topicFactory;
+                break;
+            case self::TYPE_HISTORY:
+                $object = $this->postHistoryFactory;
                 break;
             default:
                 $object = $this->postFactory;

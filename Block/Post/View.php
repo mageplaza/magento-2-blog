@@ -58,9 +58,17 @@ class View extends \Mageplaza\Blog\Block\Listpost
         parent::_construct();
 
         $post = $this->postFactory->create();
-        if ($id = $this->getRequest()->getParam('id')) {
+        $id = $this->getRequest()->getParam('id');
+        $historyId = $this->getRequest()->getParam('historyId');
+
+        if ($historyId) {
+            $history = $this->helperData->getFactoryByType(Data::TYPE_HISTORY)->create()->load($historyId);
+            $post = $this->helperData->getFactoryByType(Data::TYPE_POST)->create()->load($history->getPostId());
+            $data= $history->getData();
+            $post->addData($data);
+        }elseif ($id){
             $post->load($id);
-        }
+    }
         $this->setPost($post);
     }
 

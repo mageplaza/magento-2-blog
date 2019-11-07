@@ -48,19 +48,30 @@ class PostHistory extends AbstractDb
      */
     protected function _beforeSave(AbstractModel $object)
     {
-        if (!empty($object->getData('categories_ids'))){
+        if (!empty($object->getData('store_ids'))) {
+            $object->setData('store_ids', implode(',', $object->getData('store_ids')));
+        }
+        if (!empty($object->getData('categories_ids'))) {
             $object->setData('category_ids', implode(',', $object->getData('categories_ids')));
         }
-        if (!empty($object->getData('topics_ids'))){
+        if (!empty($object->getData('topics_ids'))) {
             $object->setData('topic_ids', implode(',', $object->getData('topics_ids')));
         }
-        if (!empty($object->getData('tags_ids'))){
+        if (!empty($object->getData('tags_ids'))) {
             $object->setData('tag_ids', implode(',', $object->getData('tags_ids')));
         }
-        if (!empty($object->getData('products_data'))){
+        if (!empty($object->getData('products_data'))) {
             $object->setData('product_ids', Data::jsonEncode($object->getData('products_data')));
         }
 
         return parent::_beforeSave($object);
+    }
+
+    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $object->setData('categories_ids', explode(',', $object->getCategoryIds()));
+        $object->setData('tags_ids', explode(',', $object->getTagIds()));
+        $object->setData('topics_ids', explode(',', $object->getTopicIds()));
+        return parent::_afterLoad($object);
     }
 }
