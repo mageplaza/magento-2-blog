@@ -50,7 +50,8 @@ class Edit extends Container
         Registry $coreRegistry,
         Context $context,
         array $data = []
-    ) {
+    )
+    {
         $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context, $data);
@@ -68,17 +69,38 @@ class Edit extends Container
 
         parent::_construct();
 
-        if (!$this->getRequest()->getParam('history')){
+        if (!$this->getRequest()->getParam('history')) {
+
+            $this->buttonList->remove('save');
+            $this->buttonList->add(
+                'save',
+                [
+                    'label' => __('Save'),
+                    'class' => 'save primary',
+                    'data_attribute' => [
+                        'mage-init' => [
+                            'button' => [
+                                'event' => 'save',
+                                'target' => '#edit_form'
+                            ]
+                        ]
+                    ],
+                    'class_name' => \Magento\Ui\Component\Control\Container::SPLIT_BUTTON,
+                    'options' => $this->getOptions(),
+                ],
+                -100
+            );
+
             $post = $this->coreRegistry->registry('mageplaza_blog_post');
             $this->buttonList->add(
                 'save-and-continue',
                 [
-                    'label'          => __('Save and Continue Edit'),
-                    'class'          => 'save',
+                    'label' => __('Save and Continue Edit'),
+                    'class' => 'save',
                     'data_attribute' => [
                         'mage-init' => [
                             'button' => [
-                                'event'  => 'saveAndContinueEdit',
+                                'event' => 'saveAndContinueEdit',
                                 'target' => '#edit_form'
                             ]
                         ]
@@ -90,8 +112,8 @@ class Edit extends Container
                 $this->buttonList->add(
                     'duplicate',
                     [
-                        'label'   => __('Duplicate'),
-                        'class'   => 'duplicate',
+                        'label' => __('Duplicate'),
+                        'class' => 'duplicate',
                         'onclick' => sprintf("location.href = '%s';", $this->getDuplicateUrl()),
                     ],
                     -101
@@ -100,6 +122,37 @@ class Edit extends Container
                 $this->buttonList->remove('delete');
             }
         }
+    }
+
+    /**
+     * Retrieve options
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        $options[] = [
+            'id_hard' => 'save_and_draft',
+            'label' => __('Save as Draft'),
+            'data_attribute' => [
+                'mage-init' => [
+                    'button' => [
+                        'event' => 'save',
+                        'target' => '#edit_form',
+                        'eventData' => [
+                            'action' => ['args' => ['generate' => '1']]
+                        ],
+                    ]
+                ]
+            ],
+        ];
+        $options[] = [
+            'id_hard' => 'save_and_history',
+            'label' => __(' Save & add History'),
+            'onclick' => sprintf("location.href = '%s';", $this->getSaveAddHistoryUrl())
+        ];
+
+        return $options;
     }
 
     /**
@@ -112,7 +165,7 @@ class Edit extends Container
         /** @var Post $post */
         $post = $this->coreRegistry->registry('mageplaza_blog_post');
 
-        if ($this->getRequest()->getParam('history')){
+        if ($this->getRequest()->getParam('history')) {
             return __("Edit History Post '%1'", $this->escapeHtml($post->getName()));
         }
 
@@ -138,8 +191,8 @@ class Edit extends Container
             } else {
                 $ar = ['id' => $post->getId()];
             }
-            if ($this->getRequest()->getParam('history')){
-                $ar['post_id'] =  $this->getRequest()->getParam('post_id');
+            if ($this->getRequest()->getParam('history')) {
+                $ar['post_id'] = $this->getRequest()->getParam('post_id');
             }
 
             return $this->getUrl('*/*/save', $ar);
@@ -156,5 +209,21 @@ class Edit extends Container
         $post = $this->coreRegistry->registry('mageplaza_blog_post');
 
         return $this->getUrl('*/*/duplicate', ['id' => $post->getId(), 'duplicate' => true]);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSaveDraftUrl()
+    {
+        return $this->getUrl('*/*/save', ['action' => 'draft']);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSaveAddHistoryUrl()
+    {
+        return $this->getUrl('*/*/save', ['action' => 'add']);
     }
 }

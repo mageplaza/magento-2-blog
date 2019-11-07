@@ -111,6 +111,10 @@ class Save extends Post
     {
         $resultRedirect = $this->resultRedirectFactory->create();
 
+        echo '<pre>';
+        var_dump($this->getRequest()->getParams());
+        echo '<pre>';die;
+
         if ($data = $this->getRequest()->getPost('post')) {
             /** @var PostModel $post */
             $post = $this->initPost(false, true);
