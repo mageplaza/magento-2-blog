@@ -70,6 +70,7 @@ class Edit extends Container
         parent::_construct();
 
         if (!$this->getRequest()->getParam('history')) {
+            $post = $this->coreRegistry->registry('mageplaza_blog_post');
 
             $this->buttonList->remove('save');
             $this->buttonList->add(
@@ -86,12 +87,11 @@ class Edit extends Container
                         ]
                     ],
                     'class_name' => \Magento\Ui\Component\Control\Container::SPLIT_BUTTON,
-                    'options' => $this->getOptions(),
+                    'options' => $this->getOptions($post),
                 ],
                 -100
             );
 
-            $post = $this->coreRegistry->registry('mageplaza_blog_post');
             $this->buttonList->add(
                 'save-and-continue',
                 [
@@ -127,25 +127,29 @@ class Edit extends Container
     /**
      * Retrieve options
      *
+     * @param Post $post
+     *
      * @return array
      */
-    protected function getOptions()
+    protected function getOptions($post)
     {
-        $options[] = [
-            'id_hard' => 'save_and_draft',
-            'label' => __('Save as Draft'),
-            'data_attribute' => [
-                'mage-init' => [
-                    'button' => [
-                        'event' => 'save',
-                        'target' => '#edit_form',
-                        'eventData' => [
-                            'action' => ['args' => ['action' => 'draft']]
-                        ],
+        if ($post->getId()){
+            $options[] = [
+                'id_hard' => 'save_and_draft',
+                'label' => __('Save as Draft'),
+                'data_attribute' => [
+                    'mage-init' => [
+                        'button' => [
+                            'event' => 'save',
+                            'target' => '#edit_form',
+                            'eventData' => [
+                                'action' => ['args' => ['action' => 'draft']]
+                            ],
+                        ]
                     ]
                 ]
-            ]
-        ];
+            ];
+        }
         $options[] = [
             'id_hard' => 'save_and_history',
             'label' => __(' Save & add History'),

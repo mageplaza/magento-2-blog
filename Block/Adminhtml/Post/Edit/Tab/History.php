@@ -98,6 +98,8 @@ class History extends Extended implements TabInterface
     {
         /** @var Collection $collection */
         $collection = $this->historyCollection;
+        $id         = $this->getRequest()->getParams('id') ?: 0;
+        $collection->addFieldToFilter('post_id', $id);
         $this->setCollection($collection);
 
         return parent::_prepareCollection();

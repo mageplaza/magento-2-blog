@@ -125,10 +125,10 @@ class Save extends Post
             try {
                 if (empty($action) || $action === 'add') {
                     $post->save();
+                    $this->messageManager->addSuccess(__('The post has been saved.'));
                 }
                 $this->addHistory($post, $action);
 
-                $this->messageManager->addSuccess(__('The post has been saved.'));
                 $this->_getSession()->setData('mageplaza_blog_post_data', false);
 
                 if ($this->getRequest()->getParam('back')) {
@@ -166,12 +166,16 @@ class Save extends Post
     {
         if (!empty($action)) {
             $history      = $this->_postHistory->create();
-            $historyCount = $history->getSumPostHistory($post->getId());
+            $historyCount = $history->getSumPostHistory($post->getPostId());
             $limitHistory = (int) $this->_helperData->getConfigGeneral('history_limit');
-
             if ($historyCount < $limitHistory) {
-                $history->addData($post->getData());
                 try {
+                    $data = $post->getData();
+                    unset($data['is_changed_tag_list']);
+                    unset($data['is_changed_topic_list']);
+                    unset($data['is_changed_category_list']);
+                    unset($data['is_changed_product_list']);
+                    $history->addData($data);
                     $history->save();
                 } catch (RuntimeException $e) {
                     $this->messageManager->addErrorMessage($e->getMessage());

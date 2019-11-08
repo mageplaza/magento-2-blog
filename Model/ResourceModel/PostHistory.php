@@ -48,19 +48,19 @@ class PostHistory extends AbstractDb
      */
     protected function _beforeSave(AbstractModel $object)
     {
-        if (!empty($object->getData('store_ids'))) {
+        if (is_array($object->getData('store_ids'))) {
             $object->setData('store_ids', implode(',', $object->getData('store_ids')));
         }
-        if (!empty($object->getData('categories_ids'))) {
+        if (is_array($object->getData('categories_ids'))) {
             $object->setData('category_ids', implode(',', $object->getData('categories_ids')));
         }
-        if (!empty($object->getData('topics_ids'))) {
+        if (is_array($object->getData('topics_ids'))) {
             $object->setData('topic_ids', implode(',', $object->getData('topics_ids')));
         }
-        if (!empty($object->getData('tags_ids'))) {
+        if (is_array($object->getData('tags_ids'))) {
             $object->setData('tag_ids', implode(',', $object->getData('tags_ids')));
         }
-        if (!empty($object->getData('products_data'))) {
+        if (is_array($object->getData('products_data'))) {
             $object->setData('product_ids', Data::jsonEncode($object->getData('products_data')));
         }
 
