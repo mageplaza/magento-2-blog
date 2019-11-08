@@ -178,14 +178,13 @@ interface BlogRepositoryInterface
     /**
      * Create Author
      *
-     * @param string $customerId
      * @param \Mageplaza\Blog\Api\Data\AuthorInterface $author
      *
-     * @return \Mageplaza\Blog\Api\Data\AuthorInterface
+     * @return \Mageplaza\Blog\Api\Data\AuthorInterface|boolean
      * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function createAuthor($customerId, $author);
+    public function createAuthor($author);
 
     /**
      * Delete Author

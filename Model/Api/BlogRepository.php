@@ -27,6 +27,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Tests\NamingConvention\true\false;
 use Mageplaza\Blog\Api\BlogRepositoryInterface;
 use Mageplaza\Blog\Helper\Data;
 
@@ -408,20 +409,26 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param string $customerId
      * @param \Mageplaza\Blog\Api\Data\AuthorInterface $author
      *
-     * @return \Mageplaza\Blog\Api\Data\AuthorInterface
+     * @return bool|\Mageplaza\Blog\Api\Data\AuthorInterface
      * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function createAuthor($customerId, $author)
+    public function createAuthor($author)
     {
         $collection = $this->_helperData->getFactoryByType('author')->create()->getCollection();
-        $collection->addFieldToFilter('customer_id', $customerId);
 
-        $customer = $this->_customerRepositoryInterface->getById($customerId);
-        if (!empty($author->getName()) && $collection->count() < 0 && $customer) {
+        if (!empty($author->getCustomerId())){
+            $customerId = $author->getCustomerId();
+            $collection->addFieldToFilter('customer_id', $customerId);
+            $customer = $this->_customerRepositoryInterface->getById($customerId);
+            if (!$customer){
+                return false;
+            }
+        }
+
+        if (!empty($author->getName()) && $collection->count() < 0) {
             $author->setCustomerIdId($customerId);
             if (empty($author->getType())){
                 $author->setType(0);

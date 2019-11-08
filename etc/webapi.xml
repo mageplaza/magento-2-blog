@@ -123,7 +123,7 @@
             <resource ref="Mageplaza_Blog::blog" />
         </resources>
     </route>
-    <route url="/V1/mpblog/author/create/:customer_id" method="POST">
+    <route url="/V1/mpblog/author/create" method="POST">
         <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="createAuthor"/>
         <resources>
             <resource ref="Mageplaza_Blog::blog" />
