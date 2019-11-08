@@ -73,6 +73,14 @@ class View extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
+     * @return bool
+     */
+    public function getRelatedMode()
+    {
+        return (int)$this->helperData->getConfigGeneral('related_mode') === 1?true:false;
+    }
+
+    /**
      * @return mixed
      */
     protected function getBlogObject()

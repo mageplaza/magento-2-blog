@@ -179,36 +179,93 @@ $color = $helper->getBlogConfig('general/font_color');
     <?php if ($relatedPosts && sizeof($relatedPosts)) : ?>
         <div class="block-blog-related topic-list mpcss" style="width: 90%;">
             <h2><?= __('Related Posts'); ?></h2>
-            <div class="related-content-container" style="display: flex; flex-wrap: wrap;">
-                <?php foreach ($relatedPosts as $post) : ?>
-                    <div class="post-list-item col-mp mp-6 mp-lg-4 mp-md-6 mp-xs-12">
-                        <div class="post-item-wraper">
-                            <div class="post-image">
-                                <?php if ($post->getImage()) : ?>
-                                    <a href="<?= $post->getUrl() ?>">
-                                        <img class="img-responsive"
-                                             src="<?= $block->resizeImage($post->getImage(), '400x'); ?>"
-                                             alt="<?= $block->escapeHtml($post->getName()); ?>"/>
-                                    </a>
-                                <?php endif; ?>
-                            </div>
-                            <div class="post-info-wraper">
-                                <h2 class="mp-post-title">
-                                    <a class="post-link-title"
-                                       title="<?= $block->escapeHtml($post->getName()); ?>"
-                                       href="<?= $post->getUrl() ?>">
-                                        <?= $post->getName(); ?>
-                                    </a>
-                                </h2>
-                                <div class="mp-post-info">
-                                    <?= $block->getPostInfo($post); ?>
+            <?php if ($block->getRelatedMode()) :?>
+                <div class="owl-carousel owl-theme">
+                    <?php foreach ($relatedPosts as $post) : ?>
+                        <div class="item post-list-item col-mp mp-6 mp-lg-4 mp-md-6 mp-xs-12">
+                            <div class="post-item-wraper">
+                                <div class="post-image">
+                                    <?php if ($post->getImage()) : ?>
+                                        <a href="<?= $post->getUrl() ?>">
+                                            <img class="img-responsive"
+                                                 src="<?= $block->resizeImage($post->getImage(), '400x'); ?>"
+                                                 alt="<?= $block->escapeHtml($post->getName()); ?>"/>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="post-info-wraper">
+                                    <h2 class="mp-post-title">
+                                        <a class="post-link-title"
+                                           title="<?= $block->escapeHtml($post->getName()); ?>"
+                                           href="<?= $post->getUrl() ?>">
+                                            <?= $post->getName(); ?>
+                                        </a>
+                                    </h2>
+                                    <div class="mp-post-info">
+                                        <?= $block->getPostInfo($post); ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
-                <div class="mp-clear"></div>
-            </div>
+                    <?php endforeach; ?>
+                </div>
+                <style>
+                    .item.post-list-item.col-mp{
+                        width: 100%;
+                    }
+                </style>
+                <script>
+                    require([
+                        'jquery',
+                        'owlCarousel'
+                    ], function ($) {
+                        'use strict';
+                        $(document).ready(function(){
+                            $(".owl-carousel").owlCarousel({
+                                items:2,
+                                loop:false,
+                                margin:10,
+                                responsive:{
+                                    600:{
+                                        items:4
+                                    }
+                                }
+                            });
+                        });
+                    });
+                </script>
+            <?php else :?>
+                <div class="related-content-container" style="display: flex; flex-wrap: wrap;">
+                    <?php foreach ($relatedPosts as $post) : ?>
+                        <div class="post-list-item col-mp mp-6 mp-lg-4 mp-md-6 mp-xs-12">
+                            <div class="post-item-wraper">
+                                <div class="post-image">
+                                    <?php if ($post->getImage()) : ?>
+                                        <a href="<?= $post->getUrl() ?>">
+                                            <img class="img-responsive"
+                                                 src="<?= $block->resizeImage($post->getImage(), '400x'); ?>"
+                                                 alt="<?= $block->escapeHtml($post->getName()); ?>"/>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="post-info-wraper">
+                                    <h2 class="mp-post-title">
+                                        <a class="post-link-title"
+                                           title="<?= $block->escapeHtml($post->getName()); ?>"
+                                           href="<?= $post->getUrl() ?>">
+                                            <?= $post->getName(); ?>
+                                        </a>
+                                    </h2>
+                                    <div class="mp-post-info">
+                                        <?= $block->getPostInfo($post); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                    <div class="mp-clear"></div>
+                </div>
+            <?php endif;?>
         </div>
     <?php endif; ?>
     <?php if ($helper->getBlogConfig('product_post/post_detail/enable_product')) : ?>
