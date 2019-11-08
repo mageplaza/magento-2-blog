@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Post;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
@@ -63,6 +64,8 @@ class RelatedPost extends Template
      * @param Registry $registry
      * @param Data $helperData
      * @param array $data
+     *
+     * @throws NoSuchEntityException
      */
     public function __construct(
         Context $context,
@@ -92,6 +95,7 @@ class RelatedPost extends Template
 
     /**
      * @return Collection
+     * @throws NoSuchEntityException
      */
     public function getRelatedPostList()
     {
@@ -129,6 +133,7 @@ class RelatedPost extends Template
      * Set tab title
      *
      * @return void
+     * @throws NoSuchEntityException
      */
     public function setTabTitle()
     {
@@ -136,8 +141,16 @@ class RelatedPost extends Template
         $title       = $relatedSize
             ? __('Related Posts %1', '<span class="counter">' . $relatedSize . '</span>')
             : __('Related Posts');
+        if ($this->helperData->isEnabled()){
+            $this->setTitle($title);
+        }
+    }
 
-        $this->setTitle($title);
+    /**
+     * @return bool
+     */
+    public function isEnabledBlog(){
+        return $this->helperData->isEnabled();
     }
 
     /**
@@ -156,6 +169,7 @@ class RelatedPost extends Template
      * @param string $type
      *
      * @return string
+     * @throws NoSuchEntityException
      */
     public function resizeImage($image, $size = null, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
     {

@@ -22,7 +22,7 @@
 /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $posts */
 /** @var \Mageplaza\Blog\Block\Post\RelatedPost $block */
 $posts = $block->getRelatedPostList();
-if ($posts) : ?>
+if ($posts && $block->isEnabledBlog()) : ?>
     <h2><?= $posts->getSize() ? __('Related Posts') : __('No Related Posts') ?></h2>
     <?php if ($block->getRelatedMode()) :?>
         <div class="owl-carousel owl-theme">
