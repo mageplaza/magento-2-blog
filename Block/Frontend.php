@@ -196,6 +196,13 @@ class Frontend extends Template
     }
 
     /**
+     * @return HelperData
+     */
+    public function getBlogHelper(){
+        return $this->helperData;
+    }
+
+    /**
      * @param $content
      *
      * @return string

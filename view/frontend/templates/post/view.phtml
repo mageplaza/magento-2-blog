@@ -24,7 +24,7 @@ use Mageplaza\Blog\Model\Config\Source\Comments\Type;
 /** @var \Mageplaza\Blog\Block\Post\View $block */
 
 /** @var \Mageplaza\Blog\Helper\Data $helper */
-$helper = $this->helper(\Mageplaza\Blog\Helper\Data::class);
+$helper = $block->getBlogHelper();
 
 $_post = $block->getPost();
 
@@ -77,63 +77,66 @@ $color = $helper->getBlogConfig('general/font_color');
             </div>
         </div>
     </div>
-    <div class="mp-blog-review-title">
-        <span><?= /* @noEscape */ __('Did you find it helpful?')?></span>
-    </div>
-    <div id="mp-blog-review">
-        <div class="mp-blog-like">
-            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-            <span><?= /* @noEscape */ __('LIKE')?></span>
-                <span class="mp-blog-view">
-                <?php if (!empty($block->getPostLike($_post->getId(), '1'))):?>
-                    (<?= $block->escapeHtml($block->getPostLike($_post->getId(), '1'))?>)
-                <?php endif; ?>
-                </span>
+    <?php if ($helper->isEnabledReview()) :?>
+        <div class="mp-blog-review-title">
+            <span><?= /* @noEscape */ __('Did you find it helpful?')?></span>
         </div>
-        <div class="mp-blog-dislike">
-            <i class="fa fa-thumbs-down" aria-hidden="true"></i>
-            <span><?= /* @noEscape */ __('DISLIKE')?></span>
-                <span class="mp-blog-view">
-                <?php if (!empty($block->getPostLike($_post->getId(), '0'))):?>
-                    (<?= $block->escapeHtml($block->getPostLike($_post->getId(), '0'))?>)
-                <?php endif; ?>
-                </span>
+        <div id="mp-blog-review">
+            <div class="mp-blog-like">
+                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                <span><?= /* @noEscape */ __('LIKE')?></span>
+                    <span class="mp-blog-view">
+                    <?php if (!empty($block->getPostLike($_post->getId(), '1'))):?>
+                        (<?= $block->escapeHtml($block->getPostLike($_post->getId(), '1'))?>)
+                    <?php endif; ?>
+                    </span>
+            </div>
+            <div class="mp-blog-dislike">
+                <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                <span><?= /* @noEscape */ __('DISLIKE')?></span>
+                    <span class="mp-blog-view">
+                    <?php if (!empty($block->getPostLike($_post->getId(), '0'))):?>
+                        (<?= $block->escapeHtml($block->getPostLike($_post->getId(), '0'))?>)
+                    <?php endif; ?>
+                    </span>
+            </div>
+            <style>
+                .mp-blog-review-title{
+                    text-align: center;
+                }
+                #mp-blog-review{
+                    display: flex;
+                    padding-left: 27%;
+                }
+                #mp-blog-review  div{
+                    margin: 2px 40px;
+                    padding: 10px 20px;
+                    color: #ffffff;
+                    cursor: pointer;
+                    width: 100px;
+                    text-align: center;
+                }
+                .mp-blog-like{
+                    background-color: #6AA84F;
+                }
+                .mp-blog-dislike{
+                    background-color: #EC3A3C;
+                }
+            </style>
         </div>
-        <style>
-            .mp-blog-review-title{
-                text-align: center;
-            }
-            #mp-blog-review{
-                display: flex;
-                padding-left: 27%;
-            }
-            #mp-blog-review  div{
-                margin: 2px 40px;
-                padding: 10px 20px;
-                color: #ffffff;
-                cursor: pointer;
-                width: 100px;
-                text-align: center;
-            }
-            .mp-blog-like{
-                background-color: #6AA84F;
-            }
-            .mp-blog-dislike{
-                background-color: #EC3A3C;
-            }
-        </style>
-    </div>
-    <div class="mp-blog-review-label"></div>
-    <script type="text/x-magento-init">
+        <div class="mp-blog-review-label"></div>
+        <script type="text/x-magento-init">
             {
                 "#mp-blog-review": {
                     "Mageplaza_Blog/js/helpful-rate": {
                         "url": "<?= /* @noEscape */ $block->getUrl('mpblog/post/review') ?>",
-                        "post_id" : <?= /* @noEscape */ $_post->getId() ?>
+                        "post_id" : <?= /* @noEscape */ $_post->getId() ?>,
+                        "mode": <?= /* @noEscape */ $helper->getReviewMode() ?>
                     }
                 }
             }
         </script>
+    <?php endif;?>
     <?php if ($helper->getBlogConfig('share/enabled')) : ?>
         <div class="mp-clear"></div>
         <script type="text/javascript"

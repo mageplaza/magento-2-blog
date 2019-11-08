@@ -854,17 +854,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         $installer->getTable('mageplaza_blog_post'),
                         'post_id',
                         Table::ACTION_CASCADE
-                    )->addForeignKey(
-                        $installer->getFkName(
-                            'mageplaza_blog_post_like',
-                            'entity_id',
-                            'customer_entity',
-                            'entity_id'
-                        ),
-                        'entity_id',
-                        $installer->getTable('customer_entity'),
-                        'entity_id',
-                        Table::ACTION_CASCADE
                     );
 
                 $installer->getConnection()->createTable($table);

@@ -111,6 +111,16 @@
                     <validate>required-number</validate>
                     <comment>Limit number of post history</comment>
                 </field>
+                <field id="is_review" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Allow Voting for Helpfulness</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Select Yes to allow selected group(s) below to vote for helpfulness.</comment>
+                </field>
+                <field id="review_mode" translate="label comment" type="multiselect" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Restrict Rating for</label>
+                <source_model>Magento\Customer\Model\ResourceModel\Group\Collection</source_model>
+                <comment>Select customer group(s) allowed to vote for helpfulness.</comment>
+            </field>
             </group>
             <group id="product_post" translate="label" showInDefault="1" sortOrder="5" showInWebsite="1" showInStore="1">
                 <label>Related Products Content</label>

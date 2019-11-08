@@ -88,16 +88,21 @@ class Review extends Action
      */
     public function execute()
     {
-        $id         = $this->getRequest()->getParam('post_id');
-        $action     = $this->getRequest()->getParam('action');
-        $customerId = $this->_helperBlog->getCurrentUser();
+        $id     = $this->getRequest()->getParam('post_id');
+        $action = $this->getRequest()->getParam('action');
+        $mode   = $this->getRequest()->getParam('mode');
+
+        $customerId = $this->_helperBlog->getCurrentUser()?:0;
         $post       = $this->postFactory->create()->load($id);
         $sum = $this->_postLike->create()->getCollection()->addFieldToFilter('action', $action)
             ->addFieldToFilter('post_id', $id);
-        $like       = $this->_postLikeCollection->addFieldToFilter('entity_id', $customerId)
-            ->addFieldToFilter('post_id', $post->getId());
 
-        if (!$customerId || !$post || $like->count() > 0) {
+        if ($mode === '1') {
+            $like = $this->_postLikeCollection->addFieldToFilter('entity_id', $customerId)
+                ->addFieldToFilter('post_id', $post->getId());
+        }
+
+        if ($mode === '1' && (!$customerId || !$post || $like->count() > 0)) {
             if ($action === '1') {
                 $this->messageManager->addErrorMessage(__('Can\'t Like Post.'));
             } else {
@@ -113,8 +118,8 @@ class Review extends Action
         try {
             $this->_postLike->create()->setData(
                 [
-                    'post_id' => $post->getId(),
-                    'action' => $action,
+                    'post_id'   => $post->getId(),
+                    'action'    => $action,
                     'entity_id' => $customerId
                 ]
             )->save();

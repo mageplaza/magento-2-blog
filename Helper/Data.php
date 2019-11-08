@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Helper;
 
 use DateTimeZone;
 use Exception;
+use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\Helper\Context;
@@ -163,6 +164,40 @@ class Data extends CoreHelper
         $this->_httpContext       = $httpContext;
 
         parent::__construct($context, $objectManager, $storeManager);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabledReview()
+    {
+        $groupId = (string) $this->_httpContext->getValue(CustomerContext::CONTEXT_GROUP);
+
+        if (
+            $this->getConfigGeneral('is_review')
+            && in_array($groupId, explode(',', $this->getConfigGeneral('review_mode')), true)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReviewMode()
+    {
+        $login = $this->_httpContext->getValue(CustomerContext::CONTEXT_AUTH);
+
+        if (
+            !$login
+            && in_array('0', explode(',', $this->getConfigGeneral('review_mode')), true)
+        ) {
+            return '0';
+        }
+
+        return '1';
     }
 
     /**

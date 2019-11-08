@@ -376,10 +376,6 @@
         <constraint xsi:type="foreign" referenceId="Mageplaza_Blog_Post_Like_Blog_Post" table="mageplaza_blog_post_like"
                     column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" referenceId="Mageplaza_Blog_Post_Like_Customer_entity"
-                    table="mageplaza_blog_post_like"
-                    column="entity_id" referenceTable="customer_entity" referenceColumn="entity_id"
-                    onDelete="CASCADE"/>
         <index referenceId="mageplaza_blog_post_like" indexType="btree">
             <column name="like_id"/>
         </index>
