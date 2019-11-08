@@ -210,7 +210,7 @@ define([
                         }
                     });
                     editor = new tinyMceWysiwygSetup(
-                        'short_description',
+                        'post_content',
                         config
                     );
                     editor.turnOn();
