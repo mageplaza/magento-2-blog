@@ -42,6 +42,7 @@ use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category as CategoryOp
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic as TopicOptions;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag as TagOptions;
 use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\Config\Source\AuthorStatus;
 
 /**
  * Class Frontend
@@ -136,6 +137,11 @@ class Frontend extends Template
     protected $postLikeFactory;
 
     /**
+     * @var AuthorStatus
+     */
+    protected $authorStatusType;
+
+    /**
      * Frontend constructor.
      *
      * @param Context $context
@@ -154,6 +160,7 @@ class Frontend extends Template
      * @param CategoryOptions $category
      * @param TopicOptions $topic
      * @param TagOptions $tag
+     * @param AuthorStatus $authorStatus
      * @param array $data
      */
     public function __construct(
@@ -173,6 +180,7 @@ class Frontend extends Template
         CategoryOptions $category,
         TopicOptions $topic,
         TagOptions $tag,
+        AuthorStatus $authorStatus,
         array $data = []
     ) {
         $this->filterProvider     = $filterProvider;
@@ -190,6 +198,7 @@ class Frontend extends Template
         $this->categoryOptions    = $category;
         $this->topicOptions       = $topic;
         $this->tagOptions         = $tag;
+        $this->authorStatusType   = $authorStatus;
         $this->store              = $context->getStoreManager();
 
         parent::__construct($context, $data);
@@ -198,7 +207,8 @@ class Frontend extends Template
     /**
      * @return HelperData
      */
-    public function getBlogHelper(){
+    public function getBlogHelper()
+    {
         return $this->helperData;
     }
 

@@ -152,6 +152,8 @@ class Register extends Action
             $data['customer_id'] = $this->customerSession->getId();
             $data['type']        = '1';
             $data['status']      = '0';
+        }else{
+            unset($data['status']);
         }
 
         if ($this->getRequest()->getFiles('image')) {

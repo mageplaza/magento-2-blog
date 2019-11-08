@@ -96,7 +96,7 @@ class UpgradeData implements UpgradeDataInterface
                 $this->author->create()->addData(
                     [
                         'name' => 'Admin',
-                        'type' => 1,
+                        'type' => 0,
                         'status' => 1,
                         'created_at' => $this->date->date()
                     ]

@@ -50,6 +50,7 @@ class SignupForm extends Frontend
         if ($author) {
             return [
                 'name'              => $author->getName(),
+                'status'            => $this->authorStatusType->toArray()[$author->getStatus()],
                 'url_key'           => $author->getUrlKey(),
                 'short_description' => $author->getShortDescription(),
                 'image'             => $author->getImage(),

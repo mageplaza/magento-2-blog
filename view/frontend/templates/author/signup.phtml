@@ -43,6 +43,15 @@ $author = $block->getAuthor();
                        class="input-text" data-validate="{required:true, 'validate-no-empty':true}">
             </div>
         </div>
+        <?php if (isset($author['status'])) :?>
+            <div class="field mp-field">
+                <label for="name" class="label"><span><?= /* @noEscape */
+                        __('Status') ?></span></label>
+                <div class="control">
+                    <span><?= $block->escapeHtml($author['status']) ?></span>
+                </div>
+            </div>
+        <?php endif;?>
         <div class="field mp-field">
             <label for="short_desciption" class="label">
                 <span><?= /* @noEscape */
