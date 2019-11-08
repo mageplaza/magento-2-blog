@@ -27,7 +27,6 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Tests\NamingConvention\true\false;
 use Mageplaza\Blog\Api\BlogRepositoryInterface;
 use Mageplaza\Blog\Helper\Data;
 
@@ -411,7 +410,7 @@ class BlogRepository implements BlogRepositoryInterface
     /**
      * @param \Mageplaza\Blog\Api\Data\AuthorInterface $author
      *
-     * @return bool|\Mageplaza\Blog\Api\Data\AuthorInterface
+     * @return \Mageplaza\Blog\Api\Data\AuthorInterface
      * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -423,13 +422,12 @@ class BlogRepository implements BlogRepositoryInterface
             $customerId = $author->getCustomerId();
             $collection->addFieldToFilter('customer_id', $customerId);
             $customer = $this->_customerRepositoryInterface->getById($customerId);
-            if (!$customer){
-                return false;
+            if (!$customer || $collection->count() > 0){
+                return null;
             }
         }
 
-        if (!empty($author->getName()) && $collection->count() < 0) {
-            $author->setCustomerIdId($customerId);
+        if (!empty($author->getName())) {
             if (empty($author->getType())){
                 $author->setType(0);
             }
