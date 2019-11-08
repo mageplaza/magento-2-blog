@@ -77,13 +77,15 @@ class Listpost extends Frontend
     }
 
     /**
-     * Override this function to apply collection for each type
-     *
      * @return Collection
      */
     protected function getCollection()
     {
-        return $this->helperData->getPostCollection(null, null, $this->store->getStore()->getId());
+        try {
+            return $this->helperData->getPostCollection(null, null, $this->store->getStore()->getId());
+        } catch (\Exception $exception) {
+            $this->_logger->error($exception->getMessage());
+        }
     }
 
     /**
