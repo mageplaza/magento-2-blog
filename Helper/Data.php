@@ -54,6 +54,7 @@ use Mageplaza\Blog\Model\Topic;
 use Mageplaza\Blog\Model\TopicFactory;
 use Mageplaza\Blog\Model\PostHistoryFactory;
 use Mageplaza\Core\Helper\AbstractData as CoreHelper;
+use Magento\Framework\App\ProductMetadataInterface;
 
 /**
  * Class Data
@@ -121,6 +122,11 @@ class Data extends CoreHelper
     protected $postHistoryFactory;
 
     /**
+     * @var ProductMetadataInterface
+     */
+    protected $_productMetadata;
+
+    /**
      * Data constructor.
      *
      * @param Context $context
@@ -133,6 +139,7 @@ class Data extends CoreHelper
      * @param AuthorFactory $authorFactory
      * @param PostHistoryFactory $postHistoryFactory
      * @param TranslitUrl $translitUrl
+     * @param ProductMetadataInterface $productMetadata
      * @param Session $customerSession
      * @param HttpContext $httpContext
      * @param DateTime $dateTime
@@ -148,6 +155,7 @@ class Data extends CoreHelper
         AuthorFactory $authorFactory,
         PostHistoryFactory $postHistoryFactory,
         TranslitUrl $translitUrl,
+        ProductMetadataInterface $productMetadata,
         Session $customerSession,
         HttpContext $httpContext,
         DateTime $dateTime
@@ -162,6 +170,7 @@ class Data extends CoreHelper
         $this->dateTime           = $dateTime;
         $this->customerSession    = $customerSession;
         $this->_httpContext       = $httpContext;
+        $this->_productMetadata       = $productMetadata;
 
         parent::__construct($context, $objectManager, $storeManager);
     }
@@ -198,6 +207,13 @@ class Data extends CoreHelper
         }
 
         return '1';
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentVersion(){
+        return $this->_productMetadata->getVersion();
     }
 
     /**

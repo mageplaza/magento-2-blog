@@ -70,6 +70,13 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
+     * @return mixed
+     */
+    public function getVersion(){
+        return $this->helperData->getCurrentVersion();
+    }
+
+    /**
      * @param $postCollection
      *
      * @return string

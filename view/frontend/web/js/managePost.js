@@ -33,7 +33,8 @@ define([
             options: {
                 deleteUrl: '',
                 basePubUrl: '',
-                postDatas: {}
+                postDatas: {},
+                version: ''
             },
             _create: function () {
                 var self      = this,
@@ -64,7 +65,7 @@ define([
                     'buttons': []
                 };
                 self._resetForm('');
-                self._openPopup(options, htmlPopup);
+                self._openPopup(options, htmlPopup, self);
             },
             _resetForm: function (postContent) {
                 var iframe = document.getElementById('post_content_ifr');;
@@ -100,7 +101,7 @@ define([
                 if (htmlPopup.find('#mp_blog_post_form [name="name"]').length > 0) {
                     self._resetForm(postData['post_content']);
                 }
-                self._openPopup(options, htmlPopup);
+                self._openPopup(options, htmlPopup, self);
                 self._setPopupFormData(postData, pubUrl, htmlPopup);
             },
             _setPopupFormData: function(postData, pubUrl, htmlPopup){
@@ -176,24 +177,50 @@ define([
                     }
                 });
             },
-            _openPopup: function (options, htmlPopup) {
+            _openPopup: function (options, htmlPopup, self) {
                 var popupModal,
-                    wysiwygcompany_description;
+                    wysiwygcompany_description,
+                    version = self.options.version,
+                    config = {},
+                    editor;
 
                 popupModal = modal(options, htmlPopup);
                 popupModal.openModal();
                 $('#mp_blog_post_form').trigger('contentUpdated');
 
-                wysiwygcompany_description = new wysiwygSetup("post_content", {
-                    "width": "99%",
-                    "height": "200px",
-                    "plugins": [{"name": "image"}],
-                    "tinymce4": {
-                        "toolbar": "formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link table charmap",
-                        "plugins": "advlist autolink lists link charmap media noneditable table contextmenu paste code help table"
-                    }
-                });
-                wysiwygcompany_description.setup("exact");
+                if (version.split('.')[1] === "3"){
+                    wysiwygcompany_description = new wysiwygSetup("post_content", {
+                        "width": "99%",
+                        "height": "200px",
+                        "plugins": [{"name": "image"}],
+                        "tinymce4": {
+                            "toolbar": "formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link table charmap",
+                            "plugins": "advlist autolink lists link charmap media noneditable table contextmenu paste code help table"
+                        }
+                    });
+                    wysiwygcompany_description.setup("exact");
+                }else {
+                    $.extend(config, {
+                        settings: {
+                            theme_advanced_buttons1 : 'bold,italic,|,justifyleft,justifycenter,justifyright,|,' +
+                                'fontselect,fontsizeselect,|,forecolor,backcolor,|,link,unlink,image,|,bullist,numlist,|,code',
+                            theme_advanced_buttons2: null,
+                            theme_advanced_buttons3: null,
+                            theme_advanced_buttons4: null
+                        }
+                    });
+                    editor = new tinyMceWysiwygSetup(
+                        'short_description',
+                        config
+                    );
+                    editor.turnOn();
+                    $('#post_content')
+                    .addClass('wysiwyg-editor')
+                    .data(
+                        'wysiwygEditor',
+                        editor
+                    );
+                }
             }
         }
     );

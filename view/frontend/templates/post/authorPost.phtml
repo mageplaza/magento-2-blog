@@ -115,7 +115,8 @@
                         "deleteUrl": "<?= $block->escapeHtml($block->getUrl('mpblog/post/deletepost')) ?>",
                         "basePubUrl": "<?= $block->escapeHtml($block->getBaseMediaUrl()) ?>",
                         "postDatas": <?= /* @noEscape */
-    $block->getPostDatas($postCollection) ?>
+    $block->getPostDatas($postCollection) ?>,
+                        "version": "<?= $block->escapeHtml($block->getVersion()) ?>"
                     }
                 }
             }
