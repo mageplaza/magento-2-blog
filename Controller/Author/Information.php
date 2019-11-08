@@ -108,6 +108,11 @@ class Information extends Action
     {
         $resultRedirect = $this->resultRedirectFactory->create();
 
+        if (!$this->_helperBlog->isEnabledAuthor()){
+            $resultRedirect->setPath('customer/account');
+            return $resultRedirect;
+        }
+
         if (!$this->_helperBlog->isAuthor()) {
 
             $this->coreRegistry->register('mp_author', $this->_helperBlog->getCurrentAuthor());

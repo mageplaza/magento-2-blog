@@ -80,6 +80,12 @@ class Signup extends Action
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
+
+        if (!$this->_helperBlog->isEnabledAuthor()){
+            $resultRedirect->setPath('customer/account');
+            return $resultRedirect;
+        }
+
         if ($this->_helperBlog->isAuthor()) {
             $page = $this->resultPageFactory->create();
             $page->getConfig()->setPageLayout(SideBarLR::LEFT);

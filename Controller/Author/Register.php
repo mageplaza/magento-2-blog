@@ -108,7 +108,11 @@ class Register extends Action
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $data           = $this->getRequest()->getParams();
-        $notify         = "";
+
+        if (!$this->_helperBlog->isEnabledAuthor()){
+            $resultRedirect->setPath('customer/account');
+            return $resultRedirect;
+        }
 
         if ($data) {
 

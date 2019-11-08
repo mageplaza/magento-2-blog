@@ -236,6 +236,13 @@ class Data extends CoreHelper
     }
 
     /**
+     * @return mixed
+     */
+    public function isEnabledAuthor(){
+        return $this->getConfigGeneral('customer_approve');
+    }
+
+    /**
      * @return DataObject
      */
     public function getCurrentAuthor()
