@@ -222,7 +222,7 @@
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="true" comment="User ID"/>
         <column xsi:type="int" name="has_reply" padding="5" unsigned="true" nullable="true" comment="Comment has reply"/>
         <column xsi:type="int" name="is_reply" padding="5" unsigned="true" nullable="true" comment="Is reply comment"/>
-        <column xsi:type="int" name="	reply_id" padding="10" unsigned="true" nullable="true" comment="Reply ID"/>
+        <column xsi:type="int" name="reply_id" padding="10" unsigned="true" nullable="true" comment="Reply ID"/>
         <column xsi:type="mediumtext" name="content" nullable="true"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" default="CURRENT_TIMESTAMP"/>
         <column xsi:type="int" name="status" padding="5" unsigned="true" default="3" nullable="false" comment="Status"/>

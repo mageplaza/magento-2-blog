@@ -111,13 +111,15 @@ class Register extends Action
         $notify         = "";
 
         if ($data) {
-            $data = $this->prepareData($data);
 
             if ($this->_helperBlog->isAuthor()) {
+                $data = $this->prepareData($data);
                 $author = $this->author->create()->addData($data);
                 $notify = __('Register Successful');
             } else {
-                $author = $this->_helperBlog->getCurrentAuthor()->addData($data);
+                $author = $this->_helperBlog->getCurrentAuthor();
+                $data = $this->prepareData($data, $author);
+                $author->addData($data);
                 $notify = __('Author Edited Successful');
             }
 
@@ -136,14 +138,17 @@ class Register extends Action
 
     /**
      * @param $data
+     * @param null $author
      *
      * @return mixed
      */
-    public function prepareData($data)
+    public function prepareData($data, $author = null)
     {
-        $data['customer_id'] = $this->customerSession->getId();
-        $data['type']        = '1';
-        $data['status']      = '0';
+        if (!$author){
+            $data['customer_id'] = $this->customerSession->getId();
+            $data['type']        = '1';
+            $data['status']      = '0';
+        }
 
         if ($this->getRequest()->getFiles('image')) {
             try {
