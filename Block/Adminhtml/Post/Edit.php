@@ -140,16 +140,26 @@ class Edit extends Container
                         'event' => 'save',
                         'target' => '#edit_form',
                         'eventData' => [
-                            'action' => ['args' => ['generate' => '1']]
+                            'action' => ['args' => ['action' => 'draft']]
                         ],
                     ]
                 ]
-            ],
+            ]
         ];
         $options[] = [
             'id_hard' => 'save_and_history',
             'label' => __(' Save & add History'),
-            'onclick' => sprintf("location.href = '%s';", $this->getSaveAddHistoryUrl())
+            'data_attribute' => [
+                'mage-init' => [
+                    'button' => [
+                        'event' => 'save',
+                        'target' => '#edit_form',
+                        'eventData' => [
+                            'action' => ['args' => ['action' => 'add']]
+                        ],
+                    ]
+                ]
+            ]
         ];
 
         return $options;
