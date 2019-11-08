@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block\Post;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\UrlInterface;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\Post;
@@ -32,19 +33,38 @@ use Mageplaza\Blog\Model\Post;
  */
 class AuthorPost extends \Mageplaza\Blog\Block\Listpost
 {
-
+    /**
+     * @return \Mageplaza\Blog\Block\Frontend
+     */
     protected function _prepareLayout()
     {
         return parent::_prepareLayout();
     }
 
+    /**
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @throws LocalizedException
+     */
     public function getPostCollection()
     {
-        $collection = parent::getPostCollection();
+        $collection = $this->getCollection();
 
         $userId = $this->getAuthor()->getId();
 
         $collection->addFieldToFilter('author_id', $userId);
+
+        if ($collection && $collection->getSize()) {
+            $pager = $this->getLayout()->createBlock(\Magento\Theme\Block\Html\Pager::class, 'mpblog.post.pager');
+
+            $perPageValues = (string) $this->helperData->getConfigGeneral('pagination');
+            $perPageValues = explode(',', $perPageValues);
+            $perPageValues = array_combine($perPageValues, $perPageValues);
+
+            $pager->setAvailableLimit($perPageValues)
+                ->setCollection($collection);
+
+            $this->setChild('pager', $pager);
+        }
 
         return $collection;
     }
@@ -53,6 +73,7 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
      * @param $postCollection
      *
      * @return string
+     * @throws LocalizedException
      */
     public function getPostDatas($postCollection)
     {
@@ -69,21 +90,36 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
         return Data::jsonEncode($result);
     }
 
+    /**
+     * @return mixed
+     */
     public function getAuthorName()
     {
         return $this->getAuthor()->getName();
     }
 
+    /**
+     * @return mixed
+     */
     public function getAuthor()
     {
         return $this->coreRegistry->registry('mp_author');
     }
 
+    /**
+     * @param bool $meta
+     *
+     * @return array
+     */
     public function getBlogTitle($meta = false)
     {
         return $meta ? [$this->getAuthor()->getName()] : $this->getAuthor()->getName();
     }
 
+    /**
+     * @return mixed
+     * @throws NoSuchEntityException
+     */
     public function getBaseMediaUrl()
     {
         return $this->_storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);

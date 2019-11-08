@@ -22,7 +22,9 @@
 /** @var \Mageplaza\Blog\Block\Post\AuthorPost $block */
 ?>
 <div class="mp-blog-new-post">
-    <button type="button" class="action primary" title="<?= /* @noEscape */ __('Add New Post')?>"><?= /* @noEscape */ __('Add New Post')?></button>
+    <button type="button" class="action primary" title="<?= /* @noEscape */
+    __('Add New Post') ?>"><?= /* @noEscape */
+        __('Add New Post') ?></button>
 </div>
 <div class="post-list-content" id="mpblog-list-container">
     <?php $postCollection = $block->getPostCollection(); ?>
@@ -31,7 +33,8 @@
             <?php $i = 1 ?>
             <?php /** @var \Mageplaza\Blog\Model\Post $post */
             foreach ($postCollection as $post) : ?>
-                <div data-post-id="<?= $block->escapeHtml($post->getId()); ?>" class="post-list-item col-mp<?= $block->isGridView() ? ' post-item-grid mp-6 mp-xs-12' : ' post-item-list mp-12'; ?>">
+                <div data-post-id="<?= $block->escapeHtml($post->getId()); ?>"
+                     class="post-list-item col-mp<?= $block->isGridView() ? ' post-item-grid mp-6 mp-xs-12' : ' post-item-list mp-12'; ?>">
                     <div class="post-item-wraper">
                         <?php if ($post->getImage()) : ?>
                             <div class="post-image">
@@ -70,21 +73,24 @@
                                 <img src="<?= $this->getViewFileUrl('Mageplaza_Blog::media/images/duplicate.svg') ?>"
                                      align="middle"
                                      alt="<?= $block->escapeHtml(__('Duplicate')); ?>"
-                                    title="<?= /* @noEscape */ __('Duplicate')?>"
+                                     title="<?= /* @noEscape */
+                                     __('Duplicate') ?>"
                                 />
                             </div>
                             <div class="mpblog-post-edit">
                                 <img src="<?= $this->getViewFileUrl('Mageplaza_Blog::media/images/writing.svg') ?>"
                                      align="middle"
                                      alt="<?= $block->escapeHtml(__('Edit')); ?>"
-                                     title="<?= /* @noEscape */ __('Edit')?>"
+                                     title="<?= /* @noEscape */
+                                     __('Edit') ?>"
                                 />
                             </div>
                             <div class="mpblog-post-delete">
                                 <img src="<?= $this->getViewFileUrl('Mageplaza_Blog::media/images/delete.svg') ?>"
                                      align="middle"
                                      alt="<?= $block->escapeHtml(__('Delete')) ?>"
-                                     title="<?= /* @noEscape */ __('Delete')?>"
+                                     title="<?= /* @noEscape */
+                                     __('Delete') ?>"
                                 />
                             </div>
                         </div>
@@ -97,42 +103,48 @@
             <div class="mp-clear"></div>
         </div>
         <?= $block->getPagerHtml() ?>
-        <script type="text/x-magento-init">
-            {
-                "*": {
-                    "Mageplaza_Blog/js/managePost": {
-                        "deleteUrl": "<?=  $block->escapeHtml($block->getUrl('mpblog/post/deletepost'))?>",
-                        "basePubUrl": "<?=  $block->escapeHtml($block->getBaseMediaUrl())?>",
-                        "postDatas": <?= /* @noEscape */ $block->getPostDatas($postCollection)?>
-                    }
-                }
-            }
-        </script>
     <?php else : ?>
         <?= __('There are no posts at this moment'); ?>
     <?php endif; ?>
     <?= $this->getChildHtml('additional'); ?>
 </div>
+<script type="text/x-magento-init">
+            {
+                "*": {
+                    "Mageplaza_Blog/js/managePost": {
+                        "deleteUrl": "<?= $block->escapeHtml($block->getUrl('mpblog/post/deletepost')) ?>",
+                        "basePubUrl": "<?= $block->escapeHtml($block->getBaseMediaUrl()) ?>",
+                        "postDatas": <?= /* @noEscape */
+    $block->getPostDatas($postCollection) ?>
+                    }
+                }
+            }
+
+</script>
 <style>
-    .mp-blog-new-post{
+    .mp-blog-new-post {
         height: 60px;
     }
-    .mp-blog-new-post button{
+
+    .mp-blog-new-post button {
         float: right;
         margin: 10px;
         padding: 10px 30px
     }
-    .post-item-wraper{
+
+    .post-item-wraper {
         position: relative;
     }
-    .post-info-action{
+
+    .post-info-action {
         display: flex;
         position: absolute;
         float: right;
         right: 10px;
         top: 10px;
     }
-    .post-info-action div{
+
+    .post-info-action div {
         margin: 0 10px;
         width: 25px;
         cursor: pointer;
@@ -143,5 +155,5 @@
         $('.limiter').css('float', 'right');
     });
 </script>
-<div id="mp-blog-new-post-popup" style="display: none"><?= $block->getChildHtml('mpblog_manage_post')?></div>
+<div id="mp-blog-new-post-popup" style="display: none"><?= $block->getChildHtml('mpblog_manage_post') ?></div>
 
