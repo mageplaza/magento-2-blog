@@ -239,6 +239,9 @@ class Data extends CoreHelper
      * @return mixed
      */
     public function isEnabledAuthor(){
+        if (!$this->_httpContext->getValue(CustomerContext::CONTEXT_AUTH)){
+            return false;
+        }
         return $this->getConfigGeneral('customer_approve');
     }
 
