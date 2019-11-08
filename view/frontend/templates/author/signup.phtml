@@ -96,7 +96,7 @@ $author = $block->getAuthor();
             <label for="facebook_link" class="label"><span><?= /* @noEscape */
                     __('Facebook Link') ?></span></label>
             <div class="control">
-                <input type="text" name="facebook_link" id="facebook_link"
+                <input type="url" name="facebook_link" id="facebook_link"
                        value="<?= $block->escapeHtml($author['facebook_link']) ?>"
                        title="<?= /* @noEscape */
                        __('Facebook Link') ?>" class="input-text">
@@ -106,7 +106,7 @@ $author = $block->getAuthor();
             <label for="twitter_link" class="label"><span><?= /* @noEscape */
                     __('Twitter Link') ?></span></label>
             <div class="control">
-                <input type="text" name="twitter_link" id="twitter_link"
+                <input type="url" name="twitter_link" id="twitter_link"
                        value="<?= $block->escapeHtml($author['twitter_link']) ?>"
                        title="<?= /* @noEscape */
                        __('Twitter Link') ?>" class="input-text">

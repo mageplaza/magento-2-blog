@@ -238,6 +238,8 @@ class Author extends Generic implements TabInterface
             'label' => __('Facebook'),
             'title' => __('Facebook'),
             'note'  => __('Facebook URL'),
+            'required' => false,
+            'class' => 'validate-url'
         ]);
 
         $fieldset->addField('twitter_link', 'text', [
@@ -245,6 +247,8 @@ class Author extends Generic implements TabInterface
             'label' => __('Twitter'),
             'title' => __('Twitter'),
             'note'  => __('Twitter URL'),
+            'required' => false,
+            'class' => 'validate-url'
         ]);
 
         $form->addValues($author->getData());
