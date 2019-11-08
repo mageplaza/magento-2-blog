@@ -208,7 +208,7 @@ class Author extends Generic implements TabInterface
         ]);
 
         $authorUrlFormat = $this->_storeManager->getDefaultStoreView()->getBaseUrl(UrlInterface::URL_TYPE_LINK)
-            . '/blog/author/';
+            . 'blog/author/';
         $urlSuffix       = $this->_helperData->getUrlSuffix();
 
         $fieldset->addField(
