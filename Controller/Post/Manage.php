@@ -170,7 +170,7 @@ class Manage extends Action
 
         $data['store_ids'] = $this->_helperBlog->getCurrentStoreId();
 
-        $data['enabled'] = '1';
+        $data['enabled'] = $this->_helperBlog->getConfigGeneral('auto_post')?1:0;
 
         $data['in_rss'] = '0';
 

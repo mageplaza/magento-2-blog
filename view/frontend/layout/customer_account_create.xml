@@ -23,7 +23,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="form.additional.info">
-            <block class="Mageplaza\Blog\Block\Frontend" name="mpblog.author.create" template="Mageplaza_Blog::author/create.phtml" />
+            <block class="Mageplaza\Blog\Block\Frontend" ifconfig="blog/general/customer_approve" name="mpblog.author.create" template="Mageplaza_Blog::author/create.phtml" />
         </referenceContainer>
     </body>
 </page>
