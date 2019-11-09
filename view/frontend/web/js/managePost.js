@@ -24,9 +24,8 @@ define([
     'Magento_Ui/js/modal/modal',
     'uiRegistry',
     'moment',
-    "mage/adminhtml/events",
-    "mage/adminhtml/wysiwyg/tiny_mce/setup"
-], function ($, $t, _, modal, registry, moment) {
+    "Mageplaza_Blog/js/get-editor"
+], function ($, $t, _, modal, registry, moment, editor) {
     'use strict';
 
     $.widget('mageplaza.mpBlogManagePost', {
@@ -34,7 +33,8 @@ define([
                 deleteUrl: '',
                 basePubUrl: '',
                 postDatas: {},
-                version: ''
+                editorVersion: '',
+                magentoVersion: ''
             },
             _create: function () {
                 var self      = this,
@@ -179,48 +179,14 @@ define([
             },
             _openPopup: function (options, htmlPopup, self) {
                 var popupModal,
-                    wysiwygcompany_description,
-                    version = self.options.version,
-                    config = {},
-                    editor;
+                    editorVersion = self.options.editorVersion,
+                    magentoVersion = self.options.magentoVersion;
 
                 popupModal = modal(options, htmlPopup);
                 popupModal.openModal();
                 $('#mp_blog_post_form').trigger('contentUpdated');
 
-                if (version.split('.')[1] === "3"){
-                    wysiwygcompany_description = new wysiwygSetup("post_content", {
-                        "width": "99%",
-                        "height": "200px",
-                        "plugins": [{"name": "image"}],
-                        "tinymce4": {
-                            "toolbar": "formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link table charmap",
-                            "plugins": "advlist autolink lists link charmap media noneditable table contextmenu paste code help table"
-                        }
-                    });
-                    wysiwygcompany_description.setup("exact");
-                }else {
-                    $.extend(config, {
-                        settings: {
-                            theme_advanced_buttons1 : 'bold,italic,|,justifyleft,justifycenter,justifyright,|,' +
-                                'fontselect,fontsizeselect,|,forecolor,backcolor,|,link,unlink,image,|,bullist,numlist,|,code',
-                            theme_advanced_buttons2: null,
-                            theme_advanced_buttons3: null,
-                            theme_advanced_buttons4: null
-                        }
-                    });
-                    editor = new tinyMceWysiwygSetup(
-                        'post_content',
-                        config
-                    );
-                    editor.turnOn();
-                    $('#post_content')
-                    .addClass('wysiwyg-editor')
-                    .data(
-                        'wysiwygEditor',
-                        editor
-                    );
-                }
+                editor.config('post_content', editorVersion, magentoVersion);
             }
         }
     );

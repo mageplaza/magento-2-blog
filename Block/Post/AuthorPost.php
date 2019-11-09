@@ -73,7 +73,18 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
      * @return mixed
      */
     public function getVersion(){
-        return $this->helperData->getCurrentVersion();
+        $array = explode('/',$this->helperData->getConfigValue('cms/wysiwyg/editor'));
+        if ($array[count($array)-1] === 'tinymce4Adapter') {
+            return 4;
+        }
+        return 3;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMagentoVersion(){
+        return (int) $this->helperData->versionCompare('2.3.0')?3:2;
     }
 
     /**

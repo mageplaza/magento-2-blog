@@ -116,7 +116,8 @@
                         "basePubUrl": "<?= $block->escapeHtml($block->getBaseMediaUrl()) ?>",
                         "postDatas": <?= /* @noEscape */
     $block->getPostDatas($postCollection) ?>,
-                        "version": "<?= $block->escapeHtml($block->getVersion()) ?>"
+                        "editorVersion": "<?= $block->escapeHtml($block->getVersion()) ?>",
+                        "magentoVersion": "<?= $block->escapeHtml($block->getMagentoVersion()) ?>"
                     }
                 }
             }
