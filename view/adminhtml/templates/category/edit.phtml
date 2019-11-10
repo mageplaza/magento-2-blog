@@ -25,7 +25,7 @@
 <script>
     require([
         "jquery",
-        "tinymce4",
+        "tinymce<?= $block->getMagentoVersion() ?>",
         "loadingPopup",
         "mage/backend/floating-header"
     ], function (jQuery, tinyMCE) {

@@ -24,6 +24,7 @@ namespace Mageplaza\Blog\Block\Adminhtml\Category;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Backend\Block\Widget\Form\Container;
 use Magento\Framework\Registry;
+use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\Category;
 
 /**
@@ -40,17 +41,26 @@ class Edit extends Container
     public $coreRegistry;
 
     /**
+     * @var Data
+     */
+    protected $_helperData;
+
+    /**
      * Edit constructor.
      *
+     * @param Registry $coreRegistry
+     * @param Data $helperData
      * @param Context $context
      * @param array $data
      */
     public function __construct(
         Registry $coreRegistry,
+        Data $helperData,
         Context $context,
         array $data = []
     ) {
         $this->coreRegistry = $coreRegistry;
+        $this->_helperData = $helperData;
 
         parent::__construct($context, $data);
     }
@@ -99,5 +109,12 @@ class Edit extends Container
             '*/*/duplicate',
             ['id' => $category->getId(), 'duplicate' => true, 'parent' => $category->getParentId()]
         );
+    }
+
+    /**
+     * @return int
+     */
+    public function getMagentoVersion(){
+        return (int) $this->_helperData->versionCompare('2.3.0')?'4':'';
     }
 }
