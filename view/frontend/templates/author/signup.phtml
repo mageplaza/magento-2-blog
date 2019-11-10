@@ -66,10 +66,18 @@ $author = $block->getAuthor();
             <label for="image" class="label"><span><?= /* @noEscape */
                     __('Avatar') ?></span></label>
             <div class="control">
+                <?php if (!empty($author['image'])) :?>
+                    <a class="mp-image-link" href="<?= $block->getImageUrl($author['image'], 'auth')?>" >
+                        <img src="<?= $block->getImageUrl($author['image'], 'auth')?>" id="post_image_image"
+                        title="<?= $author['image'] ?>" alt="<?= $author['image'] ?>" height="22" width="22"
+                        class="small-image-preview v-middle">
+                        </a>
+                <?php endif; ?>
                 <input type="file" name="image" id="image" value="<?= $block->escapeHtml($author['image']) ?>"
                        title="<?= /* @noEscape */
                        __('Avatar') ?>"
-                       class="input-file">
+                       class="input-file"
+                       style="width: 90%;position: relative;top: -5px">
             </div>
         </div>
         <div class="field mp-field">

@@ -263,6 +263,9 @@ class Frontend extends Template
      */
     public function getPostInfo($post)
     {
+        $likeCollection = $this->postLikeFactory->create()->getCollection();
+        $couldLike = $likeCollection->addFieldToFilter('post_id', $post->getId())
+            ->addFieldToFilter('action', '1')->count();
         $html = __('<i class="fa fa-calendar-times-o"></i> %1', $this->getDateFormat($post->getPublishDate()));
 
         if ($categoryPost = $this->getPostCategoryHtml($post)) {
@@ -273,15 +276,19 @@ class Frontend extends Template
         if ($author && $author->getName() && $this->helperData->showAuthorInfo()) {
             $aTag = '<a class="mp-info" href="' . $author->getUrl() . '">'
                 . $this->escapeHtml($author->getName()) . '</a>';
-            $html .= __('| <i class="fa fa-user"></i>: %1', $aTag);
+            $html .= __('| <i class="fa fa-user"></i> %1', $aTag);
         }
 
         if ($this->getCommentinPost($post)) {
-            $html .= __('| <i class="fa fa-comments"></i>: %1', $this->getCommentinPost($post));
+            $html .= __('| <i class="fa fa-comments"></i> %1', $this->getCommentinPost($post));
         }
 
         if ($post->getViewTraffic()) {
-            $html .= __('| <i class="fa fa-eye"></i>: %1', $post->getViewTraffic());
+            $html .= __('| <i class="fa fa-eye"></i> %1', $post->getViewTraffic());
+        }
+
+        if ($couldLike > 0) {
+            $html .= __('| <i class="fa fa-thumbs-up" aria-hidden="true"></i> %1', $couldLike);
         }
 
         return $html;

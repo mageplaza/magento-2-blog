@@ -91,12 +91,10 @@ class Review extends Action
         $id     = $this->getRequest()->getParam('post_id');
         $action = $this->getRequest()->getParam('action');
         $mode   = $this->getRequest()->getParam('mode');
-
         $customerId = $this->_helperBlog->getCurrentUser()?:0;
         $post       = $this->postFactory->create()->load($id);
         $sum = $this->_postLike->create()->getCollection()->addFieldToFilter('action', $action)
             ->addFieldToFilter('post_id', $id);
-
         if ($mode === '1') {
             $like = $this->_postLikeCollection->addFieldToFilter('entity_id', $customerId)
                 ->addFieldToFilter('post_id', $post->getId());

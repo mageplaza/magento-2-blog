@@ -140,7 +140,7 @@ class Manage extends Action
         $data   = $this->getRequest()->getParams();
         $author = $this->_helperBlog->getCurrentAuthor();
         $post   = $this->postFactory->create();
-
+        
         if (!$author) {
             return null;
         }

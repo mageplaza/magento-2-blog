@@ -194,7 +194,8 @@ class Preview extends Action
         $post->addData($data);
 
         $page       = $this->resultPageFactory->create();
-        $page->getConfig()->setPageLayout('1column');
+        $pageLayout = ($post->getLayout() === 'empty') ? $this->helperBlog->getSidebarLayout() : $post->getLayout();
+        $page->getConfig()->setPageLayout($pageLayout);
 
         if (!$post->getEnabled() || !$this->helperBlog->checkStore($post)) {
             return $this->_redirect('noroute');

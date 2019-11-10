@@ -127,7 +127,6 @@ class EditPost extends Action
             $layout = $this->_view->getLayout();
             $this->getResponse()->setBody($layout->renderElement('main.content'));
         } else {
-            die('123');
             $resultRedirect->setPath('customer/account');
 
             return $resultRedirect;

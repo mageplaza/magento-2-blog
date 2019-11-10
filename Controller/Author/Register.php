@@ -151,19 +151,17 @@ class Register extends Action
         if (!$author){
             $data['customer_id'] = $this->customerSession->getId();
             $data['type']        = '1';
-            $data['status']      = '0';
+            $data['status']      = $this->_helperBlog->getConfigGeneral('auto_approve');
         }else{
             unset($data['status']);
         }
 
-        if ($this->getRequest()->getFiles('image')) {
+        if (!$this->getRequest()->getParam('image')) {
             try {
                 $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_AUTH);
             } catch (Exception $exception) {
                 $data['image'] = isset($data['image']['value']) ? $data['image']['value'] : '';
             }
-        } else {
-            $data['image'] = '';
         }
 
         return $data;
