@@ -152,7 +152,7 @@ define([
                 if (htmlPopup.find('#mp_blog_post_form [name="name"]').length > 0) {
                     self._resetForm(postData['post_content']);
                 }
-                self._openPopup(options, htmlPopup);
+                self._openPopup(options, htmlPopup, self);
                 self._setPopupFormData(postData, pubUrl, htmlPopup);
                 $('#post_id').removeAttr('value');
             },
