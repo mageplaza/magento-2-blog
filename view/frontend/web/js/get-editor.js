@@ -25,7 +25,7 @@ define([
     'use strict';
 
     return {
-        config: function (nameEL, versionEditor, versionMagento) {
+        config: function (nameEL, versionEditor, versionMagento, width = '99%') {
             var wysiwygcompany_description,
                 config = {},
                 editor;
@@ -48,7 +48,7 @@ define([
                 $('#' + nameEL).addClass('wysiwyg-editor').data('wysiwygEditor', editor);
             } else if (versionEditor === "4") {
                 wysiwygcompany_description = new wysiwygSetup(nameEL, {
-                    "width": "99%",
+                    "width": width,
                     "height": "200px",
                     "plugins": [{"name": "image"}],
                     "tinymce4": {
