@@ -156,7 +156,7 @@ class Register extends Action
             unset($data['status']);
         }
 
-        if (!$this->getRequest()->getParam('image')) {
+        if ($this->getRequest()->getFiles()['image']['size'] > 0) {
             try {
                 $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_AUTH);
             } catch (Exception $exception) {
