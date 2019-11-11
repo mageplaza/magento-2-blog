@@ -25,6 +25,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\Template;
 
 ;
+
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Model\Category;
@@ -68,9 +69,10 @@ class Menu extends Template
         CategoryFactory $categoryFactory,
         HelperData $helperData,
         array $data = []
-    ) {
+    )
+    {
         $this->categoryCollection = $collectionFactory;
-        $this->category           = $categoryFactory;
+        $this->category = $categoryFactory;
         $this->helper = $helperData;
         parent::__construct($context, $data);
     }
@@ -102,9 +104,9 @@ class Menu extends Template
      */
     public function getMenuHtml($parentCategory)
     {
-        $categoryUrl = $this->helper->getBlogUrl('category/'.$parentCategory->getUrlKey());
+        $categoryUrl = $this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey());
         $html = '<li class="level' . $parentCategory->getLevel() . ' category-item ui-menu-item" role="presentation">'
-            . '<a href="' . $categoryUrl .'" class="ui-corner-all" tabindex="-1" role="menuitem">'
+            . '<a href="' . $categoryUrl . '" class="ui-corner-all" tabindex="-1" role="menuitem">'
             . '<span>' . $parentCategory->getName() . '</span></a>';
 
         $childCategorys = $this->getChildCategory($parentCategory->getId());
@@ -113,6 +115,38 @@ class Menu extends Template
             $html .= '<ul class="level' . $parentCategory->getLevel() . ' submenu ui-menu ui-widget'
                 . ' ui-widget-content ui-corner-all"'
                 . ' role="menu" aria-expanded="false" style="display: none; top: 47px; left: -0.15625px;"'
+                . ' aria-hidden="true">';
+
+            /** @var Category $childCategory */
+            foreach ($childCategorys as $childCategory) {
+                $html .= $this->getMenuHtml($childCategory);
+            }
+            $html .= '</ul>';
+        }
+        $html .= '</li>';
+
+        return $html;
+    }
+
+    /**
+     * @param Category $parentCategory
+     *
+     * @return string
+     */
+    public function getPortoMenuHtml($parentCategory)
+    {
+        $categoryUrl = $this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey());
+        $html = '<li class="ui-menu-item level' . $parentCategory->getLevel() . ' parent" role="presentation">'
+            . '<div class="open-children-toggle"></div>'
+            . '<a href="' . $categoryUrl . '" class="ui-corner-all" tabindex="-1" role="menuitem">'
+            . '<span>' . $parentCategory->getName() . '</span></a>';
+
+        $childCategorys = $this->getChildCategory($parentCategory->getId());
+
+        if (count($childCategorys) > 0) {
+            $html .= '<ul class="subchildmenu level' . $parentCategory->getLevel() . ''
+                . ' ui-widget-content ui-corner-all"'
+                . ' role="menu" aria-expanded="false"'
                 . ' aria-hidden="true">';
 
             /** @var Category $childCategory */
