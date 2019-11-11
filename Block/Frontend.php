@@ -280,11 +280,11 @@ class Frontend extends Template
         }
 
         if ($this->getCommentinPost($post)) {
-            $html .= __('| <i class="fa fa-comments"></i> %1', $this->getCommentinPost($post));
+            $html .= __('| <i class="fa fa-comments" aria-hidden="true"></i> %1', $this->getCommentinPost($post));
         }
 
         if ($post->getViewTraffic()) {
-            $html .= __('| <i class="fa fa-eye"></i> %1', $post->getViewTraffic());
+            $html .= __('| <i class="fa fa-eye" aria-hidden="true"></i> %1', $post->getViewTraffic());
         }
 
         if ($couldLike > 0) {
