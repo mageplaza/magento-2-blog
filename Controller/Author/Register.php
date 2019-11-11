@@ -109,20 +109,21 @@ class Register extends Action
         $resultRedirect = $this->resultRedirectFactory->create();
         $data           = $this->getRequest()->getParams();
 
-        if (!$this->_helperBlog->isEnabledAuthor()){
+        if (!$this->_helperBlog->isEnabledAuthor()) {
             $resultRedirect->setPath('customer/account');
+
             return $resultRedirect;
         }
 
         if ($data) {
 
             if ($this->_helperBlog->isAuthor()) {
-                $data = $this->prepareData($data);
+                $data   = $this->prepareData($data);
                 $author = $this->author->create()->addData($data);
                 $notify = __('Register Successful');
             } else {
                 $author = $this->_helperBlog->getCurrentAuthor();
-                $data = $this->prepareData($data, $author);
+                $data   = $this->prepareData($data, $author);
                 $author->addData($data);
                 $notify = __('Author Edited Successful');
             }
@@ -148,11 +149,11 @@ class Register extends Action
      */
     public function prepareData($data, $author = null)
     {
-        if (!$author){
+        if (!$author) {
             $data['customer_id'] = $this->customerSession->getId();
             $data['type']        = '1';
             $data['status']      = $this->_helperBlog->getConfigGeneral('auto_approve');
-        }else{
+        } else {
             unset($data['status']);
         }
 
@@ -162,6 +163,10 @@ class Register extends Action
             } catch (Exception $exception) {
                 $data['image'] = isset($data['image']['value']) ? $data['image']['value'] : '';
             }
+        }
+
+        if ($data['image']['delete']) {
+            $data['image'] = '';
         }
 
         return $data;

@@ -57,6 +57,7 @@ define([
                     }
                 });
                 wysiwygcompany_description.setup("exact");
+                $('#' + nameEL).parent().css('max-width','78%');
             } else {
                 $.extend(config, {
                     settings: {

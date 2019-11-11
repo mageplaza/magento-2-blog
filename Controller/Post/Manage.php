@@ -145,14 +145,16 @@ class Manage extends Action
             return null;
         }
 
-        if ($this->getRequest()->getFiles('image')['name']) {
+        if ($this->getRequest()->getFiles('image')['size'] > 0) {
             try {
                 $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_POST, $post->getImage());
             } catch (Exception $exception) {
                 $data['image'] = isset($data['image']['value']) ? $data['image']['value'] : '';
             }
-        } elseif (isset($data['sub_image'])) {
-            $data['image'] = $data['sub_image'];
+        }
+
+        if (isset($data['image']['delete'])) {
+            $data['image'] = '';
         }
 
         $data['categories_ids'] = (isset($data['categories_ids']) && $data['categories_ids']) ? explode(
@@ -181,9 +183,6 @@ class Manage extends Action
         $data['publish_date'] = !empty($data['publish_date']) ? $data['publish_date'] : $this->date->date();
 
         if ($data['post_id']) {
-            if ($data['image'] === '') {
-                unset($data['image']);
-            }
             $post->load($data['post_id']);
             if ($post->getId()) {
                 $post->setData($data);

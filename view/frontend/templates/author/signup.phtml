@@ -78,6 +78,12 @@ $author = $block->getAuthor();
                        __('Avatar') ?>"
                        class="input-file"
                        style="width: 90%;position: relative;top: -5px">
+                <?php if (!empty($author['image'])) :?>
+                    <span class="delete-image">
+                    <input style="width: 8%" type="checkbox" name="image[delete]" value="1" class="checkbox" id="post_image_delete">
+                    <label for="post_image_delete"> Delete Image</label>
+                    </span>
+                <?php endif; ?>
             </div>
         </div>
         <div class="field mp-field">
@@ -137,15 +143,14 @@ $author = $block->getAuthor();
 <style>
     .mp-field {
         display: flex;
-        padding: 0 20%;
     }
 
     .mp-field .control{
         max-width: 70%;
     }
 
-    .mp-field .control .mce-tinymce{
-        margin-left: 10%;
+    .mp-field .control .delete-image{
+        width: 65%;
     }
 
     .mp-field .label {
@@ -170,6 +175,6 @@ $author = $block->getAuthor();
                 }
                 $('.mp_full_url').html(url);
             });
-            editor.config('short_description', '<?= /* @noEscape */ $block->getVersion() ?>', '<?= /* @noEscape */ $block->getMagentoVersion() ?>', '74%');
+            editor.config('short_description', '<?= /* @noEscape */ $block->getVersion() ?>', '<?= /* @noEscape */ $block->getMagentoVersion() ?>', '60%');
         });
 </script>

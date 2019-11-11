@@ -52,16 +52,16 @@
             </div>
         </div>
         <div class="field mp-field">
-            <label for="image" class="label"><span><?= /* @noEscape */ __('Avatar')?></span></label>
+            <label for="image" class="label"><span><?= /* @noEscape */ __('Image')?></span></label>
             <div class="control">
                 <input type="file" name="image" id="image"
-                       title="<?= /* @noEscape */ __('Avatar')?>"
+                       title="<?= /* @noEscape */ __('Image')?>"
                        class="input-file">
             </div>
         </div>
         <div class="mp-custom">
             <div class="field mp-field">
-                <label class="label"><span><?php echo __('Select Category :') ?></span></label>
+                <label class="label"><span><?php echo __('Select Category') ?></span></label>
                 <div data-bind="scope: 'customCategory'">
                     <input name="categories_ids" data-bind="value: value" style="display: none"/>
 
@@ -69,14 +69,14 @@
                 </div>
             </div>
             <div class="field mp-field">
-                <label class="label"><span><?php echo __('Select Topic :') ?></span></label>
+                <label class="label"><span><?php echo __('Select Topic') ?></span></label>
                 <div data-bind="scope: 'customTopic'">
                     <input name="topics_ids" data-bind="value: value" style="display: none"/>
                     <!-- ko template: getTemplate() --><!-- /ko -->
                 </div>
             </div>
             <div class="field mp-field">
-                <label class="label"><span><?php echo __('Select Tag :') ?></span></label>
+                <label class="label"><span><?php echo __('Select Tag') ?></span></label>
                 <div data-bind="scope: 'customTag'">
                     <input name="tags_ids" data-bind="value: value" style="display: none"/>
                     <!-- ko template: getTemplate() --><!-- /ko -->
@@ -116,7 +116,7 @@
     }
     #mp_blog_post_form input#image{
         position: relative;
-        bottom: 6px;
+        bottom: 5px;
     }
     .mp-field{
         display: flex;
