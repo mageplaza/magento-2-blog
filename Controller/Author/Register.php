@@ -165,7 +165,7 @@ class Register extends Action
             }
         }
 
-        if ($data['image']['delete']) {
+        if (isset($data['image']['delete'])) {
             $data['image'] = '';
         }
 
