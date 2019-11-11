@@ -161,7 +161,7 @@ require([
                         cmtRow.toggle();
                         $("#cmt-row").remove();
                     } else {
-                        cmtRowContainer.append('<div id="cmt-row" class="cmt-row__reply-row row row__' + inputCmtID + '">' +
+                        cmtRowContainer.append('<div id="cmt-row" class="cmt-row__reply-row row row__' + inputCmtID + ' col-md-12">' +
                             '<div class="reply-form__form-input form-group col-xs-8 col-md-6">' +
                             '<label for="reply_cmt' + inputCmtID + '"></label>' +
                             '<input type="text" id="reply_cmt' + inputCmtID + '" class="form-group__input form-control" placeholder="Press enter to submit reply" value="' + cmtName + ' " autofocus onfocus="this.setSelectionRange(1000,1001);"/>' +
