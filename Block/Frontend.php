@@ -284,7 +284,7 @@ class Frontend extends Template
         }
 
         if ($post->getViewTraffic()) {
-            $html .= __('| <i class="far fa-desktop" aria-hidden="true"></i> %1', $post->getViewTraffic());
+            $html .= __('| <i class="fa fa-desktop" aria-hidden="true"></i> %1', $post->getViewTraffic());
         }
 
         if ($couldLike > 0) {
