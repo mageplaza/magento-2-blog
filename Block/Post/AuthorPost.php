@@ -72,19 +72,22 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
     /**
      * @return mixed
      */
-    public function getVersion(){
-        $array = explode('/',$this->helperData->getConfigValue('cms/wysiwyg/editor'));
-        if ($array[count($array)-1] === 'tinymce4Adapter') {
+    public function getVersion()
+    {
+        $array = explode('/', $this->helperData->getConfigValue('cms/wysiwyg/editor'));
+        if ($array[count($array) - 1] === 'tinymce4Adapter') {
             return 4;
         }
+
         return 3;
     }
 
     /**
      * @return int
      */
-    public function getMagentoVersion(){
-        return (int) $this->helperData->versionCompare('2.3.0')?3:2;
+    public function getMagentoVersion()
+    {
+        return (int) $this->helperData->versionCompare('2.3.0') ? 3 : 2;
     }
 
     /**
@@ -114,6 +117,16 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
     public function getAuthorName()
     {
         return $this->getAuthor()->getName();
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAuthorStatus()
+    {
+        $author = $this->getAuthor();
+
+        return $author->getStatus() === '1' ? true : false;
     }
 
     /**

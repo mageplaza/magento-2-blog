@@ -21,6 +21,12 @@
 
 /** @var \Mageplaza\Blog\Block\Post\AuthorPost $block */
 ?>
+
+<?php if(!$block->getAuthorStatus()) : ?>
+    <div>
+        <h3><?= /* @noEscape */ __('Your account must be licensed in order to perform the Post creation and management function') ?></h3>
+    </div>
+<?php else: ?>
 <div class="mp-blog-new-post">
     <button type="button" class="action primary" title="<?= /* @noEscape */
     __('Add New Post') ?>"><?= /* @noEscape */
@@ -158,4 +164,4 @@
     });
 </script>
 <div id="mp-blog-new-post-popup" style="display: none"><?= $block->getChildHtml('mpblog_manage_post') ?></div>
-
+<?php endif; ?>
