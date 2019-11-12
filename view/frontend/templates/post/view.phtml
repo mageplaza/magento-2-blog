@@ -171,7 +171,7 @@ $color = $helper->getBlogConfig('general/font_color');
                 </div>
                 <div class="author-content-information">
                     <div class="author-name"><?= $authorName ?></div>
-                    <p class="author-description"><?= $block->getPageFilter($author->getShortDescription()); ?></p>
+                    <p class="author-description"><?= /* @noEscape */ $author->getShortDescription(); ?></p>
                 </div>
                 <div class="mp-clear"></div>
             </div>
