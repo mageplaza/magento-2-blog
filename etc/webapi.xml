@@ -22,6 +22,54 @@
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
     <route url="/V1/mpblog/post" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getAllPost"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/view/:post_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostView"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/author/name/:author_name" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostViewByAuthorName"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/tag/name/:tag_name" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostByTagName"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/comment/add/:post_id" method="POST">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="addCommentInPost"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/author/id/:author_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostViewByAuthorId"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/comment/:post_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostComment"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/like/:post_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostLike"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/list" method="GET">
         <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostList"/>
         <resources>
             <resource ref="Mageplaza_Blog::blog" />

@@ -76,6 +76,15 @@ class Author extends AbstractModel
     }
 
     /**
+     * @param $name
+     *
+     * @return \Magento\Framework\DataObject
+     */
+    public function getAuthorByName($name){
+        return $this->getCollection()->addFieldToFilter('name', $name)->getFirstItem();
+    }
+
+    /**
      * @return array
      */
     public function getIdentities()

@@ -31,11 +31,66 @@ use Magento\Framework\Exception\NoSuchEntityException;
 interface BlogRepositoryInterface
 {
     /**
-     * Get Post List
+     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     */
+    public function getAllPost();
+
+    /**
+     * @param string $postId
+     *
+     * @return \Mageplaza\Blog\Api\Data\PostInterface
+     */
+    public function getPostView($postId);
+
+    /**
+     * @param string $authorName
      *
      * @return \Mageplaza\Blog\Api\Data\PostInterface[]
      */
-    public function getPostList();
+    public function getPostViewByAuthorName($authorName);
+
+    /**
+     * @param string $authorId
+     *
+     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     */
+    public function getPostViewByAuthorId($authorId);
+
+    /**
+     * @param string $postId
+     *
+     * @return \Mageplaza\Blog\Api\Data\CommentInterface[]
+     */
+    public function getPostComment($postId);
+
+    /**
+     * @param string $postId
+     *
+     * @return string
+     */
+    public function getPostLike($postId);
+
+    /**
+     * @param string $tagName
+     *
+     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     */
+    public function getPostByTagName($tagName);
+
+    /**
+     * @param string $postId
+     * @param \Mageplaza\Blog\Api\Data\CommentInterface $commentData
+     *
+     * @return \Mageplaza\Blog\Api\Data\CommentInterface
+     */
+    public function addCommentInPost($postId, $commentData);
+
+    /**
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     *
+     * @return \Mageplaza\Blog\Api\Data\BlogSearchResultInterface
+     */
+    public function getPostList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Create Post

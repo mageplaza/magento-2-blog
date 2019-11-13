@@ -23,12 +23,21 @@ namespace Mageplaza\Blog\Model\Api;
 
 use Exception;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Api\BlogRepositoryInterface;
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\CommentFactory;
+use Mageplaza\Blog\Model\PostLikeFactory;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection as PostCollection;
+use Mageplaza\Blog\Model\ResourceModel\Tag\Collection as TagCollection;
+use Mageplaza\Blog\Model\ResourceModel\Topic\Collection as TopicCollection;
+use Mageplaza\Blog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
 
 /**
  * Class PostRepositoryInterface
@@ -52,32 +61,135 @@ class BlogRepository implements BlogRepositoryInterface
     protected $_customerRepositoryInterface;
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    protected $collectionProcessor;
+
+    /**
+     * @var CommentFactory
+     */
+    protected $_commentFactory;
+
+    /**
+     * @var PostLikeFactory
+     */
+    protected $_likeFactory;
+
+    /**
      * BlogRepository constructor.
      *
      * @param Data $helperData
      * @param CustomerRepositoryInterface $customerRepositoryInterface
+     * @param CollectionProcessorInterface $collectionProcessor
+     * @param CommentFactory $commentFactory
+     * @param PostLikeFactory $likeFactory
      * @param DateTime $date
      */
     public function __construct(
         Data $helperData,
         CustomerRepositoryInterface $customerRepositoryInterface,
+        CollectionProcessorInterface $collectionProcessor,
+        CommentFactory $commentFactory,
+        PostLikeFactory $likeFactory,
         DateTime $date
     ) {
-        $this->_helperData = $helperData;
+        $this->_helperData                  = $helperData;
         $this->_customerRepositoryInterface = $customerRepositoryInterface;
-        $this->date        = $date;
+        $this->date                         = $date;
+        $this->_commentFactory              = $commentFactory;
+        $this->_likeFactory              = $likeFactory;
+        $this->collectionProcessor          = $collectionProcessor;
     }
 
-
     /**
-     * @return DataObject[]|BlogRepositoryInterface[]
-     * @throws NoSuchEntityException
+     * @inheritDoc
      */
-    public function getPostList()
+    public function getAllPost()
     {
         $collection = $this->_helperData->getPostCollection();
 
         return $collection->getItems();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPostView($postId)
+    {
+        return $this->_helperData->getFactoryByType()->create()->load($postId);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPostViewByAuthorName($authorName)
+    {
+        $author = $this->_helperData->getFactoryByType('author')->create()->getAuthorByName($authorName);
+
+        return $this->_helperData->getFactoryByType()->create()->getCollection()
+            ->addFieldToFilter('author_id', $author->getId())->getItems();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPostViewByAuthorId($authorId)
+    {
+        return $this->_helperData->getFactoryByType()->create()->getCollection()
+            ->addFieldToFilter('author_id', $authorId)->getItems();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPostComment($postId)
+    {
+        return $this->_commentFactory->create()->getCollection()
+            ->addFieldToFilter('post_id', $postId)->getItems();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPostByTagName($tagName)
+    {
+        $tag = $this->_helperData->getFactoryByType('tag')->create()->getCollection()
+            ->addFieldToFilter('name', $tagName)->getFirstItem();
+        return $tag->getSelectedPostsCollection()->getItems();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addCommentInPost($postId, $commentData)
+    {
+        $comment = $this->_commentFactory->create();
+        $commentData->setPostId($postId);
+        $commentData->setIsReply(0);
+        $commentData->setReplyId(0);
+        $commentData->setCreatedAt($this->date->date());
+        $comment->setData($commentData->getData())->save();
+
+        return $comment;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPostLike($postId)
+    {
+        return $this->_likeFactory->create()->getCollection()
+            ->addFieldToFilter('post_id', $postId)->count();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPostList(SearchCriteriaInterface $searchCriteria)
+    {
+        $collection = $this->_helperData->getPostCollection();
+
+        return $this->getListEntity($collection, $searchCriteria);
     }
 
     /**
@@ -94,6 +206,7 @@ class BlogRepository implements BlogRepositoryInterface
             $post->addData($data);
             $post->save();
         }
+
         return $post;
     }
 
@@ -107,7 +220,7 @@ class BlogRepository implements BlogRepositoryInterface
     {
         $post = $this->_helperData->getFactoryByType()->create()->load($postId);
 
-        if ($post){
+        if ($post) {
             $post->delete();
 
             return true;
@@ -131,7 +244,7 @@ class BlogRepository implements BlogRepositoryInterface
         }
         $subPost = $this->_helperData->getFactoryByType()->create()->load($postId);
 
-        if (!$subPost->getId()){
+        if (!$subPost->getId()) {
             throw new NoSuchEntityException(
                 __(
                     'The "%1" Post doesn\'t exist.',
@@ -141,6 +254,7 @@ class BlogRepository implements BlogRepositoryInterface
         }
 
         $subPost->addData($post->getData())->save();
+
         return $subPost;
     }
 
@@ -163,20 +277,21 @@ class BlogRepository implements BlogRepositoryInterface
     public function createTag($tag)
     {
         if (!empty($tag->getName())) {
-            if (empty($tag->getStoreIds())){
+            if (empty($tag->getStoreIds())) {
                 $tag->setStoreIds(0);
             }
-            if (empty($tag->getEnabled())){
+            if (empty($tag->getEnabled())) {
                 $tag->setEnabled(1);
             }
-            if (empty($tag->getCreatedAt())){
+            if (empty($tag->getCreatedAt())) {
                 $tag->setCreatedAt($this->date->date());
             }
-            if (empty($tag->getMetaRobots())){
+            if (empty($tag->getMetaRobots())) {
                 $tag->setMetaRobots('INDEX,FOLLOW');
             }
             $tag->save();
         }
+
         return $tag;
     }
 
@@ -190,7 +305,7 @@ class BlogRepository implements BlogRepositoryInterface
     {
         $tag = $this->_helperData->getFactoryByType('tag')->create()->load($tagId);
 
-        if ($tag){
+        if ($tag) {
             $tag->delete();
 
             return true;
@@ -214,7 +329,7 @@ class BlogRepository implements BlogRepositoryInterface
         }
         $subTag = $this->_helperData->getFactoryByType('tag')->create()->load($tagId);
 
-        if (!$subTag->getId()){
+        if (!$subTag->getId()) {
             throw new NoSuchEntityException(
                 __(
                     'The "%1" Tag doesn\'t exist.',
@@ -224,6 +339,7 @@ class BlogRepository implements BlogRepositoryInterface
         }
 
         $subTag->addData($tag->getData())->save();
+
         return $subTag;
     }
 
@@ -246,20 +362,21 @@ class BlogRepository implements BlogRepositoryInterface
     public function createTopic($topic)
     {
         if (!empty($topic->getName())) {
-            if (empty($topic->getStoreIds())){
+            if (empty($topic->getStoreIds())) {
                 $topic->setStoreIds(0);
             }
-            if (empty($topic->getEnabled())){
+            if (empty($topic->getEnabled())) {
                 $topic->setEnabled(1);
             }
-            if (empty($topic->getCreatedAt())){
+            if (empty($topic->getCreatedAt())) {
                 $topic->setCreatedAt($this->date->date());
             }
-            if (empty($topic->getMetaRobots())){
+            if (empty($topic->getMetaRobots())) {
                 $topic->setMetaRobots('INDEX,FOLLOW');
             }
             $topic->save();
         }
+
         return $topic;
     }
 
@@ -273,7 +390,7 @@ class BlogRepository implements BlogRepositoryInterface
     {
         $topic = $this->_helperData->getFactoryByType('topic')->create()->load($topicId);
 
-        if ($topic){
+        if ($topic) {
             $topic->delete();
 
             return true;
@@ -297,7 +414,7 @@ class BlogRepository implements BlogRepositoryInterface
         }
         $subTopic = $this->_helperData->getFactoryByType('topic')->create()->load($topicId);
 
-        if (!$subTopic->getId()){
+        if (!$subTopic->getId()) {
             throw new NoSuchEntityException(
                 __(
                     'The "%1" Topic doesn\'t exist.',
@@ -307,6 +424,7 @@ class BlogRepository implements BlogRepositoryInterface
         }
 
         $subTopic->addData($topic->getData())->save();
+
         return $subTopic;
     }
 
@@ -329,23 +447,24 @@ class BlogRepository implements BlogRepositoryInterface
     public function createCategory($category)
     {
         if (!empty($category->getName())) {
-            if (empty($category->getStoreIds())){
+            if (empty($category->getStoreIds())) {
                 $category->setStoreIds(0);
             }
-            if (empty($category->getEnabled())){
+            if (empty($category->getEnabled())) {
                 $category->setEnabled(1);
             }
-            if (empty($category->getCreatedAt())){
+            if (empty($category->getCreatedAt())) {
                 $category->setCreatedAt($this->date->date());
             }
-            if (empty($category->getMetaRobots())){
+            if (empty($category->getMetaRobots())) {
                 $category->setMetaRobots('INDEX,FOLLOW');
             }
-            if (empty($category->getParentId())){
+            if (empty($category->getParentId())) {
                 $category->setParentId(1);
             }
             $category->save();
         }
+
         return $category;
     }
 
@@ -359,7 +478,7 @@ class BlogRepository implements BlogRepositoryInterface
     {
         $category = $this->_helperData->getFactoryByType('category')->create()->load($categoryId);
 
-        if ($category){
+        if ($category) {
             $category->delete();
 
             return true;
@@ -383,7 +502,7 @@ class BlogRepository implements BlogRepositoryInterface
         }
         $subCategory = $this->_helperData->getFactoryByType('category')->create()->load($categoryId);
 
-        if (!$subCategory->getId()){
+        if (!$subCategory->getId()) {
             throw new NoSuchEntityException(
                 __(
                     'The "%1" Category doesn\'t exist.',
@@ -393,6 +512,7 @@ class BlogRepository implements BlogRepositoryInterface
         }
 
         $subCategory->addData($category->getData())->save();
+
         return $subCategory;
     }
 
@@ -418,27 +538,28 @@ class BlogRepository implements BlogRepositoryInterface
     {
         $collection = $this->_helperData->getFactoryByType('author')->create()->getCollection();
 
-        if (!empty($author->getCustomerId())){
+        if (!empty($author->getCustomerId())) {
             $customerId = $author->getCustomerId();
             $collection->addFieldToFilter('customer_id', $customerId);
             $customer = $this->_customerRepositoryInterface->getById($customerId);
-            if (!$customer || $collection->count() > 0){
+            if (!$customer || $collection->count() > 0) {
                 return null;
             }
         }
 
         if (!empty($author->getName())) {
-            if (empty($author->getType())){
+            if (empty($author->getType())) {
                 $author->setType(0);
             }
-            if (empty($author->getStatus())){
+            if (empty($author->getStatus())) {
                 $author->setStatus(0);
             }
-            if (empty($author->getCreatedAt())){
+            if (empty($author->getCreatedAt())) {
                 $author->setCreatedAt($this->date->date());
             }
             $author->save();
         }
+
         return $author;
     }
 
@@ -452,8 +573,9 @@ class BlogRepository implements BlogRepositoryInterface
     {
         $author = $this->_helperData->getFactoryByType('author')->create()->load($authorId);
 
-        if ($author){
+        if ($author) {
             $author->delete();
+
             return true;
         }
 
@@ -475,7 +597,7 @@ class BlogRepository implements BlogRepositoryInterface
         }
         $subAuthor = $this->_helperData->getFactoryByType('author')->create()->load($authorId);
 
-        if (!$subAuthor->getId()){
+        if (!$subAuthor->getId()) {
             throw new NoSuchEntityException(
                 __(
                     'The "%1" Author doesn\'t exist.',
@@ -485,6 +607,7 @@ class BlogRepository implements BlogRepositoryInterface
         }
 
         $subAuthor->addData($author->getData())->save();
+
         return $subAuthor;
     }
 
@@ -579,5 +702,19 @@ class BlogRepository implements BlogRepositoryInterface
             ->addFieldToFilter('user_id', $authorId);
 
         return $collection->count() > 0 ? true : false;
+    }
+
+    /**
+     * @param \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $searchResult
+     * @param SearchCriteriaInterface $searchCriteria
+     *
+     * @return mixed
+     */
+    protected function getListEntity($searchResult, $searchCriteria)
+    {
+        $this->collectionProcessor->process($searchCriteria, $searchResult);
+        $searchResult->setSearchCriteria($searchCriteria);
+
+        return $searchResult;
     }
 }
