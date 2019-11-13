@@ -45,6 +45,18 @@
             <resource ref="Mageplaza_Blog::blog" />
         </resources>
     </route>
+    <route url="/V1/mpblog/post/product/:post_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getProductByPost"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/related/:post_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostRelated"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
     <route url="/V1/mpblog/post/comment/add/:post_id" method="POST">
         <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="addCommentInPost"/>
         <resources>

@@ -493,11 +493,11 @@ class Post extends AbstractModel
             $collection = $this->productCollectionFactory->create();
             $collection->getSelect()->join(
                 $this->getResource()->getTable('mageplaza_blog_post_product'),
-                'main_table.entity_id=' . $this->getResource()->getTable('mageplaza_blog_post_product')
+                'e.entity_id=' . $this->getResource()->getTable('mageplaza_blog_post_product')
                 . '.entity_id AND ' . $this->getResource()->getTable('mageplaza_blog_post_product') . '.post_id='
                 . $this->getId(),
                 ['position']
-            )->where("main_table.enabled='1'");
+            );
             $this->productCollection = $collection;
         }
 

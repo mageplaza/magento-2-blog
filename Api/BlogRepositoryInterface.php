@@ -79,6 +79,20 @@ interface BlogRepositoryInterface
 
     /**
      * @param string $postId
+     *
+     * @return \Magento\Catalog\Api\Data\ProductInterface[]
+     */
+    public function getProductByPost($postId);
+
+    /**
+     * @param string $postId
+     *
+     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     */
+    public function getPostRelated($postId);
+
+    /**
+     * @param string $postId
      * @param \Mageplaza\Blog\Api\Data\CommentInterface $commentData
      *
      * @return \Mageplaza\Blog\Api\Data\CommentInterface
