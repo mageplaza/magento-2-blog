@@ -29,12 +29,6 @@ use Mageplaza\Blog\Block\Frontend;
  */
 class SignupForm extends Frontend
 {
-
-    public function _prepareLayout()
-    {
-        return parent::_prepareLayout();
-    }
-
     /**
      * @return mixed
      */
@@ -72,18 +66,21 @@ class SignupForm extends Frontend
     /**
      * @return mixed
      */
-    public function getVersion(){
-        $array = explode('/',$this->helperData->getConfigValue('cms/wysiwyg/editor'));
-        if ($array[count($array)-1] === 'tinymce4Adapter') {
+    public function getVersion()
+    {
+        $array = explode('/', $this->helperData->getConfigValue('cms/wysiwyg/editor'));
+        if ($array[count($array) - 1] === 'tinymce4Adapter') {
             return 4;
         }
+
         return 3;
     }
 
     /**
      * @return int
      */
-    public function getMagentoVersion(){
-        return (int) $this->helperData->versionCompare('2.3.0')?3:2;
+    public function getMagentoVersion()
+    {
+        return (int) $this->helperData->versionCompare('2.3.0') ? 3 : 2;
     }
 }

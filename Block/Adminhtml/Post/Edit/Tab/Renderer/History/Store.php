@@ -22,6 +22,8 @@
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History;
 
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\Store as CoreStore;
+use Magento\Framework\DataObject;
+use Magento\Framework\Phrase;
 
 /**
  * Class Store
@@ -32,20 +34,21 @@ class Store extends CoreStore
     /**
      * Render row store views
      *
-     * @param \Magento\Framework\DataObject $row
-     * @return \Magento\Framework\Phrase|string
+     * @param DataObject $row
+     *
+     * @return Phrase|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function render(\Magento\Framework\DataObject $row)
+    public function render(DataObject $row)
     {
-        $out = '';
-        $skipAllStoresLabel = $this->_getShowAllStoresLabelFlag();
+        $out                  = '';
+        $skipAllStoresLabel   = $this->_getShowAllStoresLabelFlag();
         $skipEmptyStoresLabel = $this->_getShowEmptyStoresLabelFlag();
-        $origStores = $row->getData($this->getColumn()->getIndex());
+        $origStores           = $row->getData($this->getColumn()->getIndex());
 
-        if ($origStores === '0'){
-            $origStores = [0=>'0'];
+        if ($origStores === '0') {
+            $origStores = [0 => '0'];
         }
 
         if ($origStores === null && $row->getStoreName()) {
@@ -54,6 +57,7 @@ class Store extends CoreStore
                 $scopes[] = str_repeat('&nbsp;', $k * 3) . $label;
             }
             $out .= implode('<br/>', $scopes) . __(' [deleted]');
+
             return $out;
         }
 

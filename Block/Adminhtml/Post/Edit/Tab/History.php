@@ -23,7 +23,6 @@ namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
 
 use Exception;
 use Magento\Backend\Block\Template\Context;
-use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
@@ -34,7 +33,6 @@ use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Tags;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Topics;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Author;
 use Mageplaza\Blog\Model\ResourceModel\PostHistory\Collection;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\Tag;
 
@@ -98,7 +96,7 @@ class History extends Extended implements TabInterface
     {
         /** @var Collection $collection */
         $collection = $this->historyCollection;
-        $id         = $this->getRequest()->getParams('id') ?: 0;
+        $id         = $this->getRequest()->getParam('id', 0);
         $collection->addFieldToFilter('post_id', $id);
         $this->setCollection($collection);
 

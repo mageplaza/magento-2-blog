@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab;
 
+use Exception;
+use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
@@ -92,11 +94,11 @@ class Category extends Generic implements TabInterface
         Store $systemStore,
         array $data = []
     ) {
-        $this->wysiwygConfig = $wysiwygConfig;
-        $this->booleanOptions = $booleanOptions;
-        $this->enableDisable = $enableDisable;
+        $this->wysiwygConfig     = $wysiwygConfig;
+        $this->booleanOptions    = $booleanOptions;
+        $this->enableDisable     = $enableDisable;
         $this->metaRobotsOptions = $metaRobotsOptions;
-        $this->systemStore = $systemStore;
+        $this->systemStore       = $systemStore;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -109,9 +111,13 @@ class Category extends Generic implements TabInterface
         /** @var \Mageplaza\Blog\Model\Category $category */
         $category = $this->_coreRegistry->registry('category');
 
-        $form = $this->_formFactory->create();
-        $form->setHtmlIdPrefix('category_');
-        $form->setFieldNameSuffix('category');
+        try {
+            $form = $this->_formFactory->create();
+            $form->setHtmlIdPrefix('category_');
+            $form->setFieldNameSuffix('category');
+        } catch (Exception $exception) {
+            $this->_logger->error($exception->getMessage());
+        }
 
         $fieldset = $form->addFieldset('base_fieldset', [
             'legend' => __('Category Information'),
@@ -143,8 +149,13 @@ class Category extends Generic implements TabInterface
         ]);
 
         if (!$this->_storeManager->isSingleStoreMode()) {
-            /** @var RendererInterface $rendererBlock */
-            $rendererBlock = $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element');
+            try {
+                /** @var RendererInterface $rendererBlock */
+                $rendererBlock = $this->getLayout()->createBlock(Element::class);
+            } catch (Exception $exception) {
+                $this->_logger->error($exception->getMessage());
+            }
+
             $fieldset->addField('store_ids', 'multiselect', [
                 'name'   => 'store_ids',
                 'label'  => __('Store Views'),
@@ -156,9 +167,14 @@ class Category extends Generic implements TabInterface
                 $category->setStoreIds(0);
             }
         } else {
+            try {
+                $storeId = $this->_storeManager->getStore()->getId();
+            } catch (Exception $exception) {
+                $this->_logger->error($exception->getMessage());
+            }
             $fieldset->addField('store_ids', 'hidden', [
                 'name'  => 'store_ids',
-                'value' => $this->_storeManager->getStore()->getId()
+                'value' => $storeId
             ]);
         }
 

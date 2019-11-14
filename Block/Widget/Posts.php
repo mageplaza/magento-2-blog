@@ -39,7 +39,8 @@ class Posts extends Frontend implements BlockInterface
     protected $_template = "widget/posts.phtml";
 
     /**
-     * @return AbstractCollection|Collection
+     * @return Collection
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getCollection()
     {

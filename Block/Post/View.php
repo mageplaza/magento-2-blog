@@ -21,20 +21,12 @@
 
 namespace Mageplaza\Blog\Block\Post;
 
-use Magento\Cms\Model\Template\FilterProvider;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Model\Url;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Messages;
-use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data;
-use Mageplaza\Blog\Model\CategoryFactory;
-use Mageplaza\Blog\Model\CommentFactory;
-use Mageplaza\Blog\Model\LikeFactory;
 use Mageplaza\Blog\Model\Post;
-use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\PostLike;
 
 /**
@@ -57,18 +49,18 @@ class View extends \Mageplaza\Blog\Block\Listpost
     {
         parent::_construct();
 
-        $post = $this->postFactory->create();
-        $id = $this->getRequest()->getParam('id');
+        $post      = $this->postFactory->create();
+        $id        = $this->getRequest()->getParam('id');
         $historyId = $this->getRequest()->getParam('historyId');
 
         if ($historyId) {
             $history = $this->helperData->getFactoryByType(Data::TYPE_HISTORY)->create()->load($historyId);
-            $post = $this->helperData->getFactoryByType(Data::TYPE_POST)->create()->load($history->getPostId());
-            $data= $history->getData();
+            $post    = $this->helperData->getFactoryByType(Data::TYPE_POST)->create()->load($history->getPostId());
+            $data    = $history->getData();
             $post->addData($data);
-        }elseif ($id){
+        } elseif ($id) {
             $post->load($id);
-    }
+        }
         $this->setPost($post);
     }
 
@@ -77,7 +69,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
      */
     public function getRelatedMode()
     {
-        return (int)$this->helperData->getConfigGeneral('related_mode') === 1?true:false;
+        return (int) $this->helperData->getConfigGeneral('related_mode') === 1 ? true : false;
     }
 
     /**
@@ -274,12 +266,15 @@ class View extends \Mageplaza\Blog\Block\Listpost
                 }
                 $countLikes        = $this->getCommentLikes($comment['comment_id']);
                 $isLiked           = ($this->isLiked($comment['comment_id'])) ? "mpblog-liked" : "mpblog-like";
-                $this->commentTree .= '<li id="cmt-id-' . $comment['comment_id'] . '" class="default-cmt__content__cmt-content__cmt-row cmt-row-' . $comment['comment_id'] . ' cmt-row col-md-12'
+                $this->commentTree .= '<li id="cmt-id-' . $comment['comment_id']
+                    . '" class="default-cmt__content__cmt-content__cmt-row cmt-row-'
+                    . $comment['comment_id'] . ' cmt-row col-md-12'
                     . ($isReply ? ' reply-row' : '') . '" data-cmt-id="'
                     . $comment['comment_id'] . '" ' . ($replyId
                         ? 'data-reply-id="' . $replyId . '"' : '') . '>
                                 <div class="cmt-row__cmt-username">
-                                    <span class="cmt-row__cmt-username username username__' . $comment['comment_id'] . '">'
+                                    <span class="cmt-row__cmt-username username username__'
+                    . $comment['comment_id'] . '">'
                     . $userName . '</span>
                                 </div>
                                 <div class="cmt-row__cmt-content">
@@ -287,7 +282,8 @@ class View extends \Mageplaza\Blog\Block\Listpost
                                 </div>
                                 <div class="cmt-row__cmt-interactions interactions">
                                     <div class="interactions__btn-actions">
-                                        <a class="interactions__btn-actions action btn-like ' . $isLiked . '" data-cmt-id="'
+                                        <a class="interactions__btn-actions action btn-like '
+                    . $isLiked . '" data-cmt-id="'
                     . $comment['comment_id'] . '" click="1">
                                         <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                                         <span class="count-like__like-text">'

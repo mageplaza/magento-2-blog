@@ -79,8 +79,8 @@ class Form extends AbstractCategory
     ) {
         parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
 
-        $this->jsonEncoder = $jsonEncoder;
-        $this->_categoryTree = $blogCategoryTree;
+        $this->jsonEncoder      = $jsonEncoder;
+        $this->_categoryTree    = $blogCategoryTree;
         $this->_categoryFactory = $blogCategoryFactory;
     }
 
@@ -89,50 +89,70 @@ class Form extends AbstractCategory
      */
     protected function _prepareLayout()
     {
-        $category = $this->getCategory();
-        $categoryId = (int) $category->getId(); // 0 when we create Blog Category, otherwise some value for editing Blog Category
+        $category   = $this->getCategory();
+        $categoryId = (int) $category->getId();
+        // 0 when we create Blog Category, otherwise some value for editing Blog Category
 
-        $this->setChild(
-            'tabs',
-            $this->getLayout()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tabs', 'tabs')
-        );
+        try {
+            $this->setChild(
+                'tabs',
+                $this->getLayout()->createBlock(Tabs::class, 'tabs')
+            );
 
-        // Save button
-        $this->addButton('save', [
-            'id'             => 'save',
-            'label'          => __('Save Category'),
-            'class'          => 'save primary save-category',
-            'data_attribute' => [
-                'mage-init' => [
-                    'Mageplaza_Blog/category/edit' => [
-                        'url'  => $this->getSaveUrl(),
-                        'ajax' => true
+        } catch (\Exception $exception) {
+            $this->_logger->error($exception->getMessage());
+        }
+
+        try {
+            // Save button
+            $this->addButton('save', [
+                'id'             => 'save',
+                'label'          => __('Save Category'),
+                'class'          => 'save primary save-category',
+                'data_attribute' => [
+                    'mage-init' => [
+                        'Mageplaza_Blog/category/edit' => [
+                            'url'  => $this->getSaveUrl(),
+                            'ajax' => true
+                        ]
                     ]
                 ]
-            ]
-        ]);
+            ]);
+        } catch (\Exception $exception) {
+            $this->_logger->error($exception->getMessage());
+        }
 
         // Delete button
         if ($categoryId && !in_array($categoryId, $this->getRootIds()) && !$this->getRequest()->getParam('duplicate')) {
-            $this->addButton('delete', [
-                'id'      => 'delete',
-                'label'   => __('Delete Category'),
-                'onclick' => "categoryDelete('" . $this->getUrl(
-                    'mageplaza_blog/*/delete',
-                    ['_current' => true]
-                ) . "')",
-                'class'   => 'delete'
-            ]);
+            try {
+                $this->addButton('delete', [
+                    'id'      => 'delete',
+                    'label'   => __('Delete Category'),
+                    'onclick' => "categoryDelete('" . $this->getUrl(
+                        'mageplaza_blog/*/delete',
+                        [
+                            '_current' => true
+                        ]
+                    ) . "')",
+                    'class'   => 'delete'
+                ]);
+            } catch (\Exception $exception) {
+                $this->_logger->error($exception->getMessage());
+            }
         }
 
-        // Reset button
-        $resetPath = $categoryId ? 'mageplaza_blog/*/edit' : 'mageplaza_blog/*/add';
-        $this->addButton('reset', [
-            'id'      => 'reset',
-            'label'   => __('Reset'),
-            'onclick' => "categoryReset('" . $this->getUrl($resetPath, ['_current' => true]) . "',false)",
-            'class'   => 'reset'
-        ]);
+        try {
+            // Reset button
+            $resetPath = $categoryId ? 'mageplaza_blog/*/edit' : 'mageplaza_blog/*/add';
+            $this->addButton('reset', [
+                'id'      => 'reset',
+                'label'   => __('Reset'),
+                'onclick' => "categoryReset('" . $this->getUrl($resetPath, ['_current' => true]) . "',false)",
+                'class'   => 'reset'
+            ]);
+        } catch (\Exception $exception) {
+            $this->_logger->error($exception->getMessage());
+        }
 
         return parent::_prepareLayout();
     }
@@ -169,7 +189,7 @@ class Form extends AbstractCategory
     {
         /** @var \Mageplaza\Blog\Model\Category $category */
         $category = $this->_coreRegistry->registry('category');
-        $params = ['_current' => false, '_query' => false];
+        $params   = ['_current' => false, '_query' => false];
         if ($category->getDuplicate()) {
             $params['duplicate'] = true;
         }
@@ -203,7 +223,7 @@ class Form extends AbstractCategory
         } else {
             $this->setChild(
                 $alias . '_button',
-                $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->addData($config)
+                $this->getLayout()->createBlock(Magento\Backend\Block\Widget\Button::class)->addData($config)
             );
             $this->additionalButtons[$alias] = $alias . '_button';
         }
@@ -310,7 +330,7 @@ class Form extends AbstractCategory
     public function addButton($buttonId, array $data)
     {
         $childBlockId = $buttonId . '_button';
-        $button = $this->getButtonChildBlock($childBlockId);
+        $button       = $this->getButtonChildBlock($childBlockId);
         $button->setData($data);
         $block = $this->getLayout()->getBlock('page.actions.toolbar');
         if ($block) {
@@ -339,7 +359,7 @@ class Form extends AbstractCategory
     public function getButtonChildBlock($childId, $blockClassName = null)
     {
         if (null === $blockClassName) {
-            $blockClassName = 'Magento\Backend\Block\Widget\Button';
+            $blockClassName = Magento\Backend\Block\Widget\Button::class;
         }
 
         return $this->getLayout()->createBlock($blockClassName, $this->getNameInLayout() . '-' . $childId);

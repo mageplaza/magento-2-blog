@@ -63,7 +63,8 @@ class Widget extends Frontend
             if ($value['enabled']) {
                 $level = count(explode('/', ($value['path'])));
                 $hasChild = isset($value['children']) && $level < 4;
-                $html .= '<ul class="block-content menu-categories category-level' . $level . '" style="margin-bottom:0px;margin-top:8px;">';
+                $html .= '<ul class="block-content menu-categories category-level'
+                    . $level . '" style="margin-bottom:0px;margin-top:8px;">';
                 $html .= '<li class="category-item">';
                 $html .= $hasChild ? '<i class="fa fa-plus-square-o mp-blog-expand-tree-' . $level . '"></i>' : '';
                 $html .= '<a class="list-categories" href="' . $this->getCategoryUrl($value['url']) . '">';

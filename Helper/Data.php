@@ -442,19 +442,21 @@ class Data extends CoreHelper
     }
 
     /**
-     * get category collection
-     *
      * @param $array
      *
-     * @return array|string
-     * @throws NoSuchEntityException
+     * @return \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
      */
     public function getCategoryCollection($array)
     {
-        $collection = $this->getObjectList(self::TYPE_CATEGORY)
-            ->addFieldToFilter('category_id', ['in' => $array]);
+        try {
+            $collection = $this->getObjectList(self::TYPE_CATEGORY)
+                ->addFieldToFilter('category_id', ['in' => $array]);
+            return $collection;
+        } catch (\Exception $exception) {
+            $this->_logger->error($exception->getMessage());
+        }
 
-        return $collection;
+        return null;
     }
 
     /**

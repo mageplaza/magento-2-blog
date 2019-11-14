@@ -74,8 +74,8 @@ class Topic extends Multiselect
         array $data = []
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->authorization = $authorization;
-        $this->_urlBuilder = $urlBuilder;
+        $this->authorization     = $authorization;
+        $this->_urlBuilder       = $urlBuilder;
 
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
@@ -93,7 +93,8 @@ class Topic extends Multiselect
         $html .= '<!-- /ko -->';
         $html .= '</div>';
 
-        $html .= '<div class="admin__field admin__field-group-additional admin__field-small" data-bind="scope:\'create_topic_button\'">';
+        $html .= '<div class="admin__field admin__field-group-additional admin__field-small"'
+            . ' data-bind="scope:\'create_topic_button\'">';
         $html .= '<div class="admin__field-control">';
         $html .= '<!-- ko template: elementTmpl --><!-- /ko -->';
         $html .= '</div></div></div>';
@@ -124,11 +125,11 @@ class Topic extends Multiselect
     {
         /* @var $collection Collection */
         $collection = $this->collectionFactory->create();
-        $topicById = [];
+        $topicById  = [];
         foreach ($collection as $topic) {
-            $topicById[$topic->getId()]['value'] = $topic->getId();
+            $topicById[$topic->getId()]['value']     = $topic->getId();
             $topicById[$topic->getId()]['is_active'] = 1;
-            $topicById[$topic->getId()]['label'] = $topic->getName();
+            $topicById[$topic->getId()]['label']     = $topic->getName();
         }
 
         return $topicById;
@@ -147,7 +148,7 @@ class Topic extends Multiselect
             $values = explode(',', $values);
         }
 
-        if (!sizeof($values)) {
+        if (!count($values)) {
             return [];
         }
 
@@ -246,8 +247,13 @@ class Topic extends Multiselect
                                         "component": "Magento_Ui/js/form/components/insert-form",
                                         "dataScope": "",
                                         "update_url": "' . $this->_urlBuilder->getUrl('mui/index/render') . '",
-                                        "render_url": "' . $this->_urlBuilder->getUrl('mui/index/render_handle',
-                ['handle' => 'mageplaza_blog_topic_create', 'buttons' => 1]) . '",
+                                        "render_url": "' .
+            $this->_urlBuilder->getUrl(
+                'mui/index/render_handle',
+                [
+                    'handle' => 'mageplaza_blog_topic_create',
+                    'buttons' => 1]
+            ) . '",
                                         "autoRender": false,
                                         "ns": "blog_new_topic_form",
                                         "externalProvider": "blog_new_topic_form.new_topic_form_data_source",

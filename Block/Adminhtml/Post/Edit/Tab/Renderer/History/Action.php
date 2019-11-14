@@ -21,7 +21,9 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History;
 
+use Exception;
 use Magento\Backend\Block\Context;
+use Magento\Framework\DataObject;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -55,13 +57,12 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
     }
 
     /**
-     * Renderer for "Action" column in Newsletter templates grid
-     *
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
      *
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function render(\Magento\Framework\DataObject $row)
+    public function render(DataObject $row)
     {
         $actions[] = [
             'url'     =>
@@ -73,11 +74,16 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
             'popup'   => false,
             'caption' => __('Edit'),
         ];
-        $actions[] = [
-            'url'     => $this->_storeManager->getStore()->getBaseUrl().'mpblog/post/preview?id='.$row->getPostId().'&historyId='.$row->getId(),
-            'popup'   => true,
-            'caption' => __('Preview'),
-        ];
+        try {
+            $actions[] = [
+                'url'     => $this->_storeManager->getStore()->getBaseUrl()
+                    . 'mpblog/post/preview?id=' . $row->getPostId() . '&historyId=' . $row->getId(),
+                'popup'   => true,
+                'caption' => __('Preview'),
+            ];
+        } catch (Exception $exception) {
+            $actions[] = [];
+        }
         $actions[] = [
             'url'     =>
                 $this->getUrl('*/history/restore', [

@@ -141,7 +141,7 @@ class RelatedPost extends Template
         $title       = $relatedSize
             ? __('Related Posts %1', '<span class="counter">' . $relatedSize . '</span>')
             : __('Related Posts');
-        if ($this->helperData->isEnabled()){
+        if ($this->helperData->isEnabled()) {
             $this->setTitle($title);
         }
     }
@@ -149,7 +149,8 @@ class RelatedPost extends Template
     /**
      * @return bool
      */
-    public function isEnabledBlog(){
+    public function isEnabledBlog()
+    {
         return $this->helperData->isEnabled();
     }
 
@@ -158,7 +159,7 @@ class RelatedPost extends Template
      */
     public function getRelatedMode()
     {
-        return (int)$this->helperData->getConfigGeneral('related_mode') === 1?true:false;
+        return (int) $this->helperData->getConfigGeneral('related_mode') === 1 ? true : false;
     }
 
     /**

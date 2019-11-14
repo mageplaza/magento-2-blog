@@ -96,7 +96,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
             'label'   => __('Category information'),
             'content' => $this->getLayout()
                 ->createBlock(
-                    'Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Category',
+                    Tab\Category::class,
                     'mageplaza_blog_category_edit_tab_category'
                 )
                 ->toHtml()
@@ -105,7 +105,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
             'label'   => __('Posts'),
             'content' => $this->getLayout()
                 ->createBlock(
-                    'Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab\Post',
+                    Tab\Post::class,
                     'mageplaza_blog_category_edit_tab_post'
                 )
                 ->toHtml()

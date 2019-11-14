@@ -98,7 +98,9 @@ class Import extends Template
     public function getImportButtonHtml()
     {
         $importUrl = $this->getUrl('mageplaza_blog/import/import');
-        $html = '&nbsp;&nbsp;<button id="word-press-import" href="' . $importUrl . '" class="" type="button" onclick="mpBlogImport.importAction();"><span><span><span>Import</span></span></span></button>';
+        $html = '&nbsp;&nbsp;<button id="word-press-import" href="' . $importUrl .
+            '" class="" type="button" onclick="mpBlogImport.importAction();">'.
+            '<span><span><span>Import</span></span></span></button>';
 
         return $html;
     }

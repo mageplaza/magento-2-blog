@@ -24,8 +24,10 @@ namespace Mageplaza\Blog\Block\Post;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\UrlInterface;
+use Magento\Theme\Block\Html\Pager;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\Post;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
  * Class AuthorPost
@@ -33,16 +35,9 @@ use Mageplaza\Blog\Model\Post;
  */
 class AuthorPost extends \Mageplaza\Blog\Block\Listpost
 {
-    /**
-     * @return \Mageplaza\Blog\Block\Frontend
-     */
-    protected function _prepareLayout()
-    {
-        return parent::_prepareLayout();
-    }
 
     /**
-     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection
+     * @return Collection
      * @throws LocalizedException
      */
     public function getPostCollection()
@@ -54,7 +49,7 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
         $collection->addFieldToFilter('author_id', $userId);
 
         if ($collection && $collection->getSize()) {
-            $pager = $this->getLayout()->createBlock(\Magento\Theme\Block\Html\Pager::class, 'mpblog.post.pager');
+            $pager = $this->getLayout()->createBlock(Pager::class, 'mpblog.post.pager');
 
             $perPageValues = (string) $this->helperData->getConfigGeneral('pagination');
             $perPageValues = explode(',', $perPageValues);

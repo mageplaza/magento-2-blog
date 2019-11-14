@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Comment\Edit\Tab;
 
+use Exception;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
@@ -101,10 +102,13 @@ class Comment extends Generic implements TabInterface
     {
         $comment = $this->_coreRegistry->registry('mageplaza_blog_comment');
 
-        $form = $this->_formFactory->create();
-
-        $form->setHtmlIdPrefix('comment_');
-        $form->setFieldNameSuffix('comment');
+        try {
+            $form = $this->_formFactory->create();
+            $form->setHtmlIdPrefix('comment_');
+            $form->setFieldNameSuffix('comment');
+        } catch (Exception $e) {
+            $this->_logger->error($e->getMessage());
+        }
 
         $fieldset = $form->addFieldset(
             'base_fieldset',
@@ -121,7 +125,11 @@ class Comment extends Generic implements TabInterface
         $fieldset->addField('post_name', 'note', ['text' => $postText, 'label' => __('Post'), 'name' => 'post_name']);
 
         if ($comment->getEntityId() > 0) {
-            $customer = $this->_customerRepository->getById($comment->getEntityId());
+            try {
+                $customer = $this->_customerRepository->getById($comment->getEntityId());
+            } catch (Exception $e) {
+                $this->_logger->error($e->getMessage());
+            }
             $customerText = '<a href="'
                             . $this->getUrl(
                                 'customer/index/edit',

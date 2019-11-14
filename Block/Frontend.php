@@ -26,6 +26,7 @@ use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
@@ -228,7 +229,7 @@ class Frontend extends Template
      * @param string $type
      *
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getImageUrl($image, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
     {
@@ -323,9 +324,9 @@ class Frontend extends Template
         $categoryHtml = [];
         foreach ($categories as $_cat) {
             $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl(
-                    $_cat,
-                    HelperData::TYPE_CATEGORY
-                ) . '">' . $_cat->getName() . '</a>';
+                $_cat,
+                HelperData::TYPE_CATEGORY
+            ) . '">' . $_cat->getName() . '</a>';
         }
 
         return implode(', ', $categoryHtml);

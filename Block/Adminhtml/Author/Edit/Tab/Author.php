@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Author\Edit\Tab;
 
+use Exception;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
@@ -117,7 +118,12 @@ class Author extends Generic implements TabInterface
         $author = $this->_coreRegistry->registry('mageplaza_blog_author');
 
         /** @var Form $form */
-        $form = $this->_formFactory->create();
+        try {
+            $form = $this->_formFactory->create();
+        } catch (Exception $e) {
+            $this->_logger->error($e->getMessage());
+        }
+
         $form->setHtmlIdPrefix('author_');
         $form->setFieldNameSuffix('author');
         $fieldset = $form->addFieldset('base_fieldset', [
@@ -135,7 +141,11 @@ class Author extends Generic implements TabInterface
                 'value' => $author->getCustomerId()
             ]);
 
-            $customer = $this->customerRepository->getById($author->getCustomerId());
+            try {
+                $customer = $this->customerRepository->getById($author->getCustomerId());
+            } catch (Exception $exception) {
+                $this->_logger->error($exception->getMessage());
+            }
 
             $fieldset->addField('customer', 'label', [
                 'name'  => 'customer',

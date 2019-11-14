@@ -86,8 +86,8 @@ class RelatedProduct extends ListProduct
         array $data = []
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
-        $this->helper = $helperData;
-        $this->outputHelper = $output;
+        $this->helper                    = $helperData;
+        $this->outputHelper              = $output;
 
         parent::__construct($context, $postDataHelper, $layerResolver, $categoryRepository, $urlHelper, $data);
     }
@@ -95,14 +95,16 @@ class RelatedProduct extends ListProduct
     /**
      * @return Output
      */
-    public function getHelper(){
+    public function getHelper()
+    {
         return $this->outputHelper;
     }
 
     /**
      * @return mixed
      */
-    public function relatedMode(){
+    public function relatedMode()
+    {
         return $this->helper->getModuleConfig('product_post/post_detail/related_mode');
     }
 
@@ -123,7 +125,7 @@ class RelatedProduct extends ListProduct
     public function _getProductCollection()
     {
         if ($this->_productCollection === null) {
-            $postId = $this->getRequest()->getParam('id');
+            $postId     = $this->getRequest()->getParam('id');
             $collection = $this->_productCollectionFactory->create()
                 ->addAttributeToSelect('*')
                 ->addStoreFilter();

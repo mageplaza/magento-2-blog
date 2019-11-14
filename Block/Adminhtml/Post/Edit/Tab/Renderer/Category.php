@@ -73,8 +73,8 @@ class Category extends Multiselect
         array $data = []
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->authorization = $authorization;
-        $this->_urlBuilder = $urlBuilder;
+        $this->authorization     = $authorization;
+        $this->_urlBuilder       = $urlBuilder;
 
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
@@ -85,19 +85,22 @@ class Category extends Multiselect
     public function getElementHtml()
     {
         $html = '<div class="admin__field-control admin__control-grouped">';
-        $html .= '<div id="blog-category-select" class="admin__field" data-bind="scope:\'blogCategory\'" data-index="index">';
+        $html .= '<div id="blog-category-select" class="admin__field"
+                    data-bind="scope:\'blogCategory\'" data-index="index">';
         $html .= '<!-- ko foreach: elems() -->';
         $html .= '<input name="post[categories_ids]" data-bind="value: value" style="display: none"/>';
         $html .= '<!-- ko template: elementTmpl --><!-- /ko -->';
         $html .= '<!-- /ko -->';
         $html .= '</div>';
 
-        $html .= '<div class="admin__field admin__field-group-additional admin__field-small" data-bind="scope:\'create_category_button\'">';
+        $html .= '<div class="admin__field admin__field-group-additional admin__field-small"
+                  data-bind="scope:\'create_category_button\'">';
         $html .= '<div class="admin__field-control">';
         $html .= '<!-- ko template: elementTmpl --><!-- /ko -->';
         $html .= '</div></div></div>';
 
-        $html .= '<!-- ko scope: \'create_category_modal\' --><!-- ko template: getTemplate() --><!-- /ko --><!-- /ko -->';
+        $html .= '<!-- ko scope: \'create_category_modal\' -->
+        <!-- ko template: getTemplate() --><!-- /ko --><!-- /ko -->';
 
         $html .= $this->getAfterElementHtml();
 
@@ -138,8 +141,8 @@ class Category extends Multiselect
                 }
             }
 
-            $categoryById[$category->getId()]['is_active'] = 1;
-            $categoryById[$category->getId()]['label'] = $category->getName();
+            $categoryById[$category->getId()]['is_active']        = 1;
+            $categoryById[$category->getId()]['label']            = $category->getName();
             $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
         }
 
@@ -158,7 +161,7 @@ class Category extends Multiselect
             $values = explode(',', $values);
         }
 
-        if (!sizeof($values)) {
+        if (!count($values)) {
             return [];
         }
 
@@ -257,8 +260,11 @@ class Category extends Multiselect
                                         "component": "Magento_Ui/js/form/components/insert-form",
                                         "dataScope": "",
                                         "update_url": "' . $this->_urlBuilder->getUrl('mui/index/render') . '",
-                                        "render_url": "' . $this->_urlBuilder->getUrl('mui/index/render_handle',
-                ['handle' => 'mageplaza_blog_category_create', 'buttons' => 1]) . '",
+                                        "render_url": "' .
+            $this->_urlBuilder->getUrl(
+                'mui/index/render_handle',
+                ['handle' => 'mageplaza_blog_category_create', 'buttons' => 1]
+            ) . '",
                                         "autoRender": false,
                                         "ns": "blog_new_category_form",
                                         "externalProvider": "blog_new_category_form.new_category_form_data_source",

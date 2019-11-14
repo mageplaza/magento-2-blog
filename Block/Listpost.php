@@ -21,7 +21,9 @@
 
 namespace Mageplaza\Blog\Block;
 
+use Exception;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Theme\Block\Html\Pager;
 use Mageplaza\Blog\Model\Config\Source\DisplayType;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
@@ -40,7 +42,7 @@ class Listpost extends Frontend
         $collection = $this->getCollection();
 
         if ($collection && $collection->getSize()) {
-            $pager = $this->getLayout()->createBlock(\Magento\Theme\Block\Html\Pager::class, 'mpblog.post.pager');
+            $pager = $this->getLayout()->createBlock(Pager::class, 'mpblog.post.pager');
 
             $perPageValues = (string) $this->helperData->getConfigGeneral('pagination');
             $perPageValues = explode(',', $perPageValues);
@@ -83,9 +85,10 @@ class Listpost extends Frontend
     {
         try {
             return $this->helperData->getPostCollection(null, null, $this->store->getStore()->getId());
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->_logger->error($exception->getMessage());
         }
+        return null;
     }
 
     /**

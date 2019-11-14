@@ -21,11 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Category;
 
-use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\Template;
-
-;
-
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Model\Category;
@@ -69,18 +65,17 @@ class Menu extends Template
         CategoryFactory $categoryFactory,
         HelperData $helperData,
         array $data = []
-    )
-    {
+    ) {
         $this->categoryCollection = $collectionFactory;
-        $this->category = $categoryFactory;
-        $this->helper = $helperData;
+        $this->category           = $categoryFactory;
+        $this->helper             = $helperData;
         parent::__construct($context, $data);
     }
 
     /**
      * @param $id
      *
-     * @return DataObject[]
+     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
      */
     public function getChildCategory($id)
     {
@@ -105,7 +100,8 @@ class Menu extends Template
     public function getMenuHtml($parentCategory)
     {
         $categoryUrl = $this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey());
-        $html = '<li class="level' . $parentCategory->getLevel() . ' category-item ui-menu-item" role="presentation">'
+        $html        = '<li class="level' . $parentCategory->getLevel()
+            . ' category-item ui-menu-item" role="presentation">'
             . '<a href="' . $categoryUrl . '" class="ui-corner-all" tabindex="-1" role="menuitem">'
             . '<span>' . $parentCategory->getName() . '</span></a>';
 
@@ -136,7 +132,7 @@ class Menu extends Template
     public function getPortoMenuHtml($parentCategory)
     {
         $categoryUrl = $this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey());
-        $html = '<li class="ui-menu-item level' . $parentCategory->getLevel() . ' parent" role="presentation">'
+        $html        = '<li class="ui-menu-item level' . $parentCategory->getLevel() . ' parent" role="presentation">'
             . '<div class="open-children-toggle"></div>'
             . '<a href="' . $categoryUrl . '" class="ui-corner-all" tabindex="-1" role="menuitem">'
             . '<span>' . $parentCategory->getName() . '</span></a>';

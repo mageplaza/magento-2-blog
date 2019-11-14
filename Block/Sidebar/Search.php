@@ -35,12 +35,13 @@ class Search extends Frontend
      */
     public function getSearchBlogData()
     {
-        $result = [];
-        $posts = $this->helperData->getPostList();
+        $result    = [];
+        $posts     = $this->helperData->getPostList();
         $limitDesc = (int) $this->getSidebarConfig('search/description');
         if (!empty($posts)) {
             foreach ($posts as $item) {
-                $shortDescription = ($item->getShortDescription() && $limitDesc > 0) ? $item->getShortDescription() : '';
+                $shortDescription = ($item->getShortDescription() && $limitDesc > 0) ?
+                    $item->getShortDescription() : '';
                 if (strlen($shortDescription) > $limitDesc) {
                     $shortDescription = mb_substr($shortDescription, 0, $limitDesc, 'UTF-8') . '...';
                 }

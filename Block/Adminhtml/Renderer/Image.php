@@ -48,11 +48,8 @@ class Image extends \Mageplaza\Core\Block\Adminhtml\Renderer\Image
                 '_delete"' .
                 ($this->getDisabled() ? ' disabled="disabled"' : '') .
                 '/>';
-            $html  .= '<label for="' .
-                $this->getHtmlId() .
-                '_delete"' .
-                ($this->getDisabled() ? ' class="disabled"' : '') .
-                '> ' .
+            $html  .= '<label for="' . $this->getHtmlId() .
+                '_delete"' . ($this->getDisabled() ? ' class="disabled"' : '') . '> ' .
                 $label .
                 '</label>';
             $html  .= $this->_getHiddenInput();

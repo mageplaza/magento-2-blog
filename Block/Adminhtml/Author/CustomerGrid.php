@@ -21,12 +21,14 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Author;
 
+use Exception;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Helper\Data;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
+use Magento\Framework\Registry;
 
 /**
  * Class CustomerGrid
@@ -36,17 +38,17 @@ class CustomerGrid extends Extended
 {
     /**
      * Core registry
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory
+     * @var CustomerFactory
      */
     protected $_customerFactory;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Group\CollectionFactory
+     * @var CollectionFactory
      */
     protected $customerGroup;
 
@@ -102,7 +104,7 @@ class CustomerGrid extends Extended
 
     /**
      * @return Extended
-     * @throws \Exception
+     * @throws Exception
      */
     protected function _prepareColumns()
     {
