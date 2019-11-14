@@ -57,11 +57,13 @@ class LinkMenu
         $links
     ) {
         if ($this->helper->isEnabled() && !$this->helper->getConfigGeneral('customer_approve')) {
-            $author = $this->helper->getCurrentAuthor();
-            if ($links && !$author) {
+            if ($links) {
                 foreach ($links as $key => $link) {
                     if ($link->getPath() === 'mpblog/author/signup') {
-                        unset($links[$key]);
+                        $author = $this->helper->getCurrentAuthor();
+                        if (!$author->getId()){
+                            unset($links[$key]);
+                        }
                     }
                 }
             }
