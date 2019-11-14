@@ -161,6 +161,24 @@ class BlogRepository implements BlogRepositoryInterface
     /**
      * @inheritDoc
      */
+    public function getProductByPost($postId)
+    {
+        $post= $this->_helperData->getFactoryByType()->create()->load($postId);
+        return $post->getSelectedProductsCollection()->getItems();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPostRelated($postId)
+    {
+        $post= $this->_helperData->getFactoryByType()->create()->load($postId);
+        return $post->getRelatedPostsCollection()?$post->getRelatedPostsCollection()->getItems():[];
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function addCommentInPost($postId, $commentData)
     {
         $comment = $this->_commentFactory->create();
