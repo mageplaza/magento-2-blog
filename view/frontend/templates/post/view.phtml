@@ -200,7 +200,7 @@ $color = $helper->getBlogConfig('general/font_color');
             <?php if ($block->getRelatedMode()) :?>
                 <div class="owl-carousel owl-theme">
                     <?php foreach ($relatedPosts as $post) : ?>
-                        <div class="item post-list-item col-mp mp-6 mp-lg-4 mp-md-6 mp-xs-12">
+                        <div class="item post-list-item ">
                             <div class="post-item-wraper">
                                 <div class="post-image">
                                     <?php if ($post->getImage()) : ?>
@@ -245,7 +245,7 @@ $color = $helper->getBlogConfig('general/font_color');
                                 margin:10,
                                 responsive:{
                                     600:{
-                                        items:4
+                                        items:3
                                     }
                                 }
                             });

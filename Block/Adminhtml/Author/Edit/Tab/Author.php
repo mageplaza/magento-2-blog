@@ -191,7 +191,7 @@ class Author extends Generic implements TabInterface
             'label'  => __('Short Description'),
             'title'  => __('Short Description'),
             'note'   => __('Short Description'),
-            'config' => $this->wysiwygConfig->getConfig()
+            'config' => $this->wysiwygConfig->getConfig(['add_widgets' => false])
         ]);
 
         $fieldset->addField('image', Image::class, [
