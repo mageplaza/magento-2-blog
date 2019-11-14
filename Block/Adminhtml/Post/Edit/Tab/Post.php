@@ -101,6 +101,9 @@ class Post extends Generic implements TabInterface
      */
     protected $_layoutOptions;
 
+    /**
+     * @var Author
+     */
     protected $_author;
 
     /**
@@ -118,6 +121,7 @@ class Post extends Generic implements TabInterface
      * @param Robots $metaRobotsOptions
      * @param Store $systemStore
      * @param Image $imageHelper
+     * @param Author $author
      * @param array $data
      */
     public function __construct(

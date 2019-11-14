@@ -21,9 +21,9 @@
 
 namespace Mageplaza\Blog\Model\Config\Source;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\Option\ArrayInterface;
 use Mageplaza\Blog\Model\AuthorFactory;
-use Mageplaza\Blog\Model\ResourceModel\Author\Collection;
 
 /**
  * Class Author
@@ -59,7 +59,7 @@ class Author implements ArrayInterface
     }
 
     /**
-     * @return Collection
+     * @return AbstractCollection
      */
     public function getAuthors()
     {
