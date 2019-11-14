@@ -26,7 +26,7 @@
     </head>
     <body>
         <referenceContainer name="sidebar.main">
-            <block class="Magento\Framework\View\Element\Template" name="sidebar.main.reward_nav" ifconfig="blog/general/customer_approve" template="Magento_Theme::html/collapsible.phtml" before="-">
+            <block class="Magento\Framework\View\Element\Template" name="sidebar.main.reward_nav" template="Magento_Theme::html/collapsible.phtml" before="-">
                 <arguments>
                     <argument name="block_css" xsi:type="string">block-collapsible-nav</argument>
                 </arguments>

@@ -258,7 +258,7 @@ class Data extends CoreHelper
         if (!$this->_httpContext->getValue(CustomerContext::CONTEXT_AUTH)){
             return false;
         }
-        return $this->getConfigGeneral('customer_approve');
+        return $this->getCurrentAuthor()?true:false;
     }
 
     /**
