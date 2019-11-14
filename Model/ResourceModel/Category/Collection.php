@@ -22,14 +22,15 @@
 namespace Mageplaza\Blog\Model\ResourceModel\Category;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
+use Mageplaza\Blog\Api\Data\BlogSearchResultInterface;
 use Zend_Db_Select;
 
 /**
  * Class Collection
  * @package Mageplaza\Blog\Model\ResourceModel\Category
  */
-class Collection extends AbstractCollection
+class Collection extends AbstractCollection implements BlogSearchResultInterface
 {
     /**
      * ID Field Name

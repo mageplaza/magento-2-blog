@@ -74,4 +74,8 @@
     <preference for="Mageplaza\Blog\Api\BlogRepositoryInterface" type="Mageplaza\Blog\Model\Api\BlogRepository" />
 
     <preference for="Mageplaza\Blog\Api\Data\BlogSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Post\Collection" />
+    <preference for="Mageplaza\Blog\Api\Data\BlogSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Category\Collection" />
+    <preference for="Mageplaza\Blog\Api\Data\BlogSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Tag\Collection" />
+    <preference for="Mageplaza\Blog\Api\Data\BlogSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Topic\Collection" />
+    <preference for="Mageplaza\Blog\Api\Data\BlogSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Comment\Collection" />
 </config>

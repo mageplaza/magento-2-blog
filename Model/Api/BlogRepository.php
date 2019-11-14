@@ -30,14 +30,15 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Api\BlogRepositoryInterface;
+use Mageplaza\Blog\Api\Data\CategoryInterface;
+use Mageplaza\Blog\Api\Data\CommentInterface;
+use Mageplaza\Blog\Api\Data\PostInterface;
+use Mageplaza\Blog\Api\Data\TagInterface;
+use Mageplaza\Blog\Api\Data\TopicInterface;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\PostLikeFactory;
-use Mageplaza\Blog\Model\ResourceModel\Post\Collection as PostCollection;
-use Mageplaza\Blog\Model\ResourceModel\Tag\Collection as TagCollection;
-use Mageplaza\Blog\Model\ResourceModel\Topic\Collection as TopicCollection;
-use Mageplaza\Blog\Model\ResourceModel\Category\Collection as CategoryCollection;
-use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Class PostRepositoryInterface
@@ -76,6 +77,11 @@ class BlogRepository implements BlogRepositoryInterface
     protected $_likeFactory;
 
     /**
+     * @var RequestInterface
+     */
+    protected $_request;
+
+    /**
      * BlogRepository constructor.
      *
      * @param Data $helperData
@@ -83,6 +89,7 @@ class BlogRepository implements BlogRepositoryInterface
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CommentFactory $commentFactory
      * @param PostLikeFactory $likeFactory
+     * @param RequestInterface $request
      * @param DateTime $date
      */
     public function __construct(
@@ -91,13 +98,15 @@ class BlogRepository implements BlogRepositoryInterface
         CollectionProcessorInterface $collectionProcessor,
         CommentFactory $commentFactory,
         PostLikeFactory $likeFactory,
+        RequestInterface $request,
         DateTime $date
     ) {
+        $this->_request                     = $request;
         $this->_helperData                  = $helperData;
         $this->_customerRepositoryInterface = $customerRepositoryInterface;
         $this->date                         = $date;
         $this->_commentFactory              = $commentFactory;
-        $this->_likeFactory              = $likeFactory;
+        $this->_likeFactory                 = $likeFactory;
         $this->collectionProcessor          = $collectionProcessor;
     }
 
@@ -149,12 +158,42 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
+     * @return DataObject[]|BlogRepositoryInterface[]
+     * @throws NoSuchEntityException
+     */
+    public function getAllComment()
+    {
+        $collection = $this->_commentFactory->create()->getCollection();
+
+        return $collection->getItems();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCommentView($commentId)
+    {
+        return $this->$this->_commentFactory->create()->load($commentId);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCommentList(SearchCriteriaInterface $searchCriteria)
+    {
+        $collection = $this->_commentFactory->create()->getCollection();
+
+        return $this->getListEntity($collection, $searchCriteria);
+    }
+
+    /**
      * @inheritDoc
      */
     public function getPostByTagName($tagName)
     {
         $tag = $this->_helperData->getFactoryByType('tag')->create()->getCollection()
             ->addFieldToFilter('name', $tagName)->getFirstItem();
+
         return $tag->getSelectedPostsCollection()->getItems();
     }
 
@@ -163,7 +202,8 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getProductByPost($postId)
     {
-        $post= $this->_helperData->getFactoryByType()->create()->load($postId);
+        $post = $this->_helperData->getFactoryByType()->create()->load($postId);
+
         return $post->getSelectedProductsCollection()->getItems();
     }
 
@@ -172,8 +212,9 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getPostRelated($postId)
     {
-        $post= $this->_helperData->getFactoryByType()->create()->load($postId);
-        return $post->getRelatedPostsCollection()?$post->getRelatedPostsCollection()->getItems():[];
+        $post = $this->_helperData->getFactoryByType()->create()->load($postId);
+
+        return $post->getRelatedPostsCollection() ? $post->getRelatedPostsCollection()->getItems() : [];
     }
 
     /**
@@ -277,14 +318,31 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @return DataObject[]|BlogRepositoryInterface[]
-     * @throws NoSuchEntityException
+     * @inheritDoc
      */
-    public function getTagList()
+    public function getAllTag()
     {
         $collection = $this->_helperData->getFactoryByType('tag')->create()->getCollection();
 
-        return $collection->getItems();
+        return $this->getAllItem($collection);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTagList(SearchCriteriaInterface $searchCriteria)
+    {
+        $collection = $this->_helperData->getFactoryByType('tag')->create()->getCollection();
+
+        return $this->getListEntity($collection, $searchCriteria);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTagView($tagId)
+    {
+        return $this->_helperData->getFactoryByType('tag')->create()->load($tagId);
     }
 
     /**
@@ -365,11 +423,39 @@ class BlogRepository implements BlogRepositoryInterface
      * @return DataObject[]|BlogRepositoryInterface[]
      * @throws NoSuchEntityException
      */
-    public function getTopicList()
+    public function getAllTopic()
     {
         $collection = $this->_helperData->getFactoryByType('topic')->create()->getCollection();
 
         return $collection->getItems();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTopicView($topicId)
+    {
+        return $this->_helperData->getFactoryByType('topic')->create()->load($topicId);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTopicList(SearchCriteriaInterface $searchCriteria)
+    {
+        $collection = $this->_helperData->getFactoryByType('topic')->create()->getCollection();
+
+        return $this->getListEntity($collection, $searchCriteria);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPostsByTopic($topicId)
+    {
+        $topic = $this->_helperData->getFactoryByType('topic')->create()->load($topicId);
+
+        return $topic->getSelectedPostsCollection()->getItems();
     }
 
     /**
@@ -447,14 +533,62 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @return DataObject[]|BlogRepositoryInterface[]
-     * @throws NoSuchEntityException
+     * @inheritDoc
      */
-    public function getCategoryList()
+    public function getCategoryList(SearchCriteriaInterface $searchCriteria)
+    {
+        $collection = $this->_helperData->getFactoryByType('category')->create()->getCollection();
+
+        return $this->getListEntity($collection, $searchCriteria);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAllCategory()
     {
         $collection = $this->_helperData->getFactoryByType('category')->create()->getCollection();
 
         return $collection->getItems();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPostsByCategoryId($categoryId)
+    {
+        $category = $this->_helperData->getFactoryByType('category')->create()->load($categoryId);
+
+        return $category->getSelectedPostsCollection()->getItems();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPostsByCategory($categoryKey)
+    {
+        $category = $this->_helperData->getFactoryByType('category')->create()->getCollection()
+            ->addFieldToFilter('url_key', $categoryKey)->getFirstItem();
+
+        return $category->getSelectedPostsCollection()->getItems();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCategoriesByPostId($postId)
+    {
+        $post = $this->_helperData->getFactoryByType()->create()->load($postId);
+
+        return $post->getSelectedCategoriesCollection()->getItems();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCategoryView($categoryId)
+    {
+        return $this->_helperData->getFactoryByType('category')->create()->load($categoryId);
     }
 
     /**
@@ -734,5 +868,23 @@ class BlogRepository implements BlogRepositoryInterface
         $searchResult->setSearchCriteria($searchCriteria);
 
         return $searchResult;
+    }
+
+    /**
+     * @param \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection
+     */
+    /**
+     * @param $collection
+     *
+     * @return PostInterface[]|CategoryInterface[]|TagInterface[]|TopicInterface[]|CommentInterface[]
+     */
+    protected function getAllItem($collection)
+    {
+        $page = $this->_request->getParam('page', 1);
+        $limit = $this->_request->getParam('limit', 10);
+
+        $collection->getSelect()->limitPage($page, $limit);
+
+        return $collection->getItems();
     }
 }

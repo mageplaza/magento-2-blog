@@ -21,13 +21,14 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel\Comment;
 
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
+use Mageplaza\Blog\Api\Data\BlogSearchResultInterface;
 
 /**
  * Class Collection
  * @package Mageplaza\Blog\Model\ResourceModel\Comment
  */
-class Collection extends AbstractCollection
+class Collection extends AbstractCollection implements BlogSearchResultInterface
 {
     protected $_idFieldName = 'comment_id';
 

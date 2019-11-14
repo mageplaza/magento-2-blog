@@ -64,6 +64,27 @@ interface BlogRepositoryInterface
     public function getPostComment($postId);
 
     /**
+     * Get All Comment
+     *
+     * @return \Mageplaza\Blog\Api\Data\CommentInterface[]
+     */
+    public function getAllComment();
+
+    /**
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     *
+     * @return \Mageplaza\Blog\Api\Data\BlogSearchResultInterface
+     */
+    public function getCommentList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+
+    /**
+     * @param string $commentId
+     *
+     * @return \Mageplaza\Blog\Api\Data\CommentInterface
+     */
+    public function getCommentView($commentId);
+
+    /**
      * @param string $postId
      *
      * @return string
@@ -136,11 +157,18 @@ interface BlogRepositoryInterface
     public function updatePost($postId, $post);
 
     /**
-     * Get Tag List
+     * Get All Tag
      *
      * @return \Mageplaza\Blog\Api\Data\TagInterface[]
      */
-    public function getTagList();
+    public function getAllTag();
+
+    /**
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     *
+     * @return \Mageplaza\Blog\Api\Data\BlogSearchResultInterface
+     */
+    public function getTagList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Create Post
@@ -163,6 +191,13 @@ interface BlogRepositoryInterface
 
     /**
      * @param string $tagId
+     *
+     * @return \Mageplaza\Blog\Api\Data\TagInterface
+     */
+    public function getTagView($tagId);
+
+    /**
+     * @param string $tagId
      * @param \Mageplaza\Blog\Api\Data\TagInterface $tag
      *
      * @return \Mageplaza\Blog\Api\Data\TagInterface
@@ -174,7 +209,28 @@ interface BlogRepositoryInterface
      *
      * @return \Mageplaza\Blog\Api\Data\TopicInterface[]
      */
-    public function getTopicList();
+    public function getAllTopic();
+
+    /**
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     *
+     * @return \Mageplaza\Blog\Api\Data\BlogSearchResultInterface
+     */
+    public function getTopicList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+
+    /**
+     * @param string $topicId
+     *
+     * @return \Mageplaza\Blog\Api\Data\TagInterface
+     */
+    public function getTopicView($topicId);
+
+    /**
+     * @param string $topicId
+     *
+     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     */
+    public function getPostsByTopic($topicId);
 
     /**
      * Create Topic
@@ -204,11 +260,48 @@ interface BlogRepositoryInterface
     public function updateTopic($topicId, $topic);
 
     /**
-     * Get Category List
+     * Get All Category
      *
      * @return \Mageplaza\Blog\Api\Data\CategoryInterface[]
      */
-    public function getCategoryList();
+    public function getAllCategory();
+
+    /**
+     * Get Category List
+     *
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     *
+     * @return \Mageplaza\Blog\Api\Data\BlogSearchResultInterface
+     */
+    public function getCategoryList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+
+    /**
+     * @param string $categoryId
+     *
+     * @return \Mageplaza\Blog\Api\Data\CategoryInterface
+     */
+    public function getCategoryView($categoryId);
+
+    /**
+     * @param string $categoryId
+     *
+     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     */
+    public function getPostsByCategoryId($categoryId);
+
+    /**
+     * @param string $categoryKey
+     *
+     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     */
+    public function getPostsByCategory($categoryKey);
+
+    /**
+     * @param string $postId
+     *
+     * @return \Mageplaza\Blog\Api\Data\CategoryInterface[]
+     */
+    public function getCategoriesByPostId($postId);
 
     /**
      * Create Category
