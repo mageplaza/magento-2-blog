@@ -36,7 +36,7 @@ use Mageplaza\Blog\Helper\Data as HelperData;
 class Design extends Template
 {
     /**
-     * @type HelperData
+     * @var HelperData
      */
     public $helperData;
 

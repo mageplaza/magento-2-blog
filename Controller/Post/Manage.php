@@ -53,7 +53,7 @@ class Manage extends Action
     public $resultPageFactory;
 
     /**
-     * @type ForwardFactory
+     * @var ForwardFactory
      */
     protected $resultForwardFactory;
 

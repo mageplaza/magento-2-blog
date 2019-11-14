@@ -124,7 +124,9 @@ interface AuthorInterface
     public function getCreatedAt();
 
     /**
-     * @return $this
+     * @param $createdAt
+     *
+     * @return mixed
      */
     public function setCreatedAt($createdAt);
 

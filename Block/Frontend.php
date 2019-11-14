@@ -57,12 +57,12 @@ class Frontend extends Template
     public $filterProvider;
 
     /**
-     * @type HelperData
+     * @var HelperData
      */
     public $helperData;
 
     /**
-     * @type StoreManagerInterface
+     * @var StoreManagerInterface
      */
     public $store;
 

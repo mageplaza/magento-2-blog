@@ -63,7 +63,8 @@ class Comment extends AbstractModel
 
     /**
      * Post Collection Factory
-     * @type CollectionFactory
+     *
+     * @var CollectionFactory
      */
     public $postCollectionFactory;
 

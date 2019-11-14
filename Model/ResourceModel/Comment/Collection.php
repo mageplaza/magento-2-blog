@@ -30,6 +30,9 @@ use Mageplaza\Blog\Api\Data\BlogSearchResultInterface;
  */
 class Collection extends AbstractCollection implements BlogSearchResultInterface
 {
+    /**
+     * @var string
+     */
     protected $_idFieldName = 'comment_id';
 
     /**

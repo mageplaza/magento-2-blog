@@ -173,7 +173,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getCommentView($commentId)
     {
-        return $this->$this->_commentFactory->create()->load($commentId);
+        return $this->_commentFactory->create()->load($commentId);
     }
 
     /**

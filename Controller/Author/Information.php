@@ -47,7 +47,7 @@ class Information extends Action
     public $resultPageFactory;
 
     /**
-     * @type ForwardFactory
+     * @var ForwardFactory
      */
     protected $resultForwardFactory;
 

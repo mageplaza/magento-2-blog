@@ -114,7 +114,7 @@ class View extends Action
     protected $timeZone;
 
     /**
-     * @type ForwardFactory
+     * @var ForwardFactory
      */
     protected $resultForwardFactory;
 

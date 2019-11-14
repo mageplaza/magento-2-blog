@@ -161,7 +161,8 @@ class Post extends AbstractModel
 
     /**
      * Post Collection Factory
-     * @type PostCollectionFactory
+     *
+     * @var PostCollectionFactory
      */
     public $postCollectionFactory;
 

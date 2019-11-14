@@ -35,6 +35,9 @@ use Mageplaza\Blog\Model\PostFactory;
  */
 class Delete extends Author
 {
+    /**
+     * @var PostFactory
+     */
     protected $_postFactory;
 
     public function __construct(

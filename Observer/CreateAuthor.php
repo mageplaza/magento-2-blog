@@ -25,7 +25,6 @@ use Exception;
 use Magento\Customer\Controller\Account\CreatePost;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\AuthorFactory;
@@ -38,7 +37,7 @@ class CreateAuthor implements ObserverInterface
 {
 
     /**
-     * @type Data
+     * @var Data
      */
     protected $_helper;
 
