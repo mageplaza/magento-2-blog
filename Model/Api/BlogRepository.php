@@ -28,6 +28,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Api\BlogRepositoryInterface;
 use Mageplaza\Blog\Api\Data\CategoryInterface;
@@ -115,9 +116,9 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getAllPost()
     {
-        $collection = $this->_helperData->getPostCollection();
+        $collection = $this->_helperData->getFactoryByType()->create()->getCollection();
 
-        return $collection->getItems();
+        return $this->getAllItem($collection);
     }
 
     /**
@@ -165,7 +166,7 @@ class BlogRepository implements BlogRepositoryInterface
     {
         $collection = $this->_commentFactory->create()->getCollection();
 
-        return $collection->getItems();
+        return $this->getAllItem($collection);
     }
 
     /**
@@ -427,7 +428,7 @@ class BlogRepository implements BlogRepositoryInterface
     {
         $collection = $this->_helperData->getFactoryByType('topic')->create()->getCollection();
 
-        return $collection->getItems();
+        return $this->getAllItem($collection);
     }
 
     /**
@@ -549,7 +550,7 @@ class BlogRepository implements BlogRepositoryInterface
     {
         $collection = $this->_helperData->getFactoryByType('category')->create()->getCollection();
 
-        return $collection->getItems();
+        return $this->getAllItem($collection);
     }
 
     /**
@@ -871,7 +872,7 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection
+     * @param AbstractCollection $collection
      */
     /**
      * @param $collection
