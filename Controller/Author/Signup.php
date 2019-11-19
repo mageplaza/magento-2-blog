@@ -81,8 +81,9 @@ class Signup extends Action
     {
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        if (!$this->_helperBlog->isEnabledAuthor()){
+        if (!$this->_helperBlog->isEnabledAuthor()) {
             $resultRedirect->setPath('customer/account');
+
             return $resultRedirect;
         }
 
@@ -90,6 +91,7 @@ class Signup extends Action
             $page = $this->resultPageFactory->create();
             $page->getConfig()->setPageLayout(SideBarLR::LEFT);
             $page->getConfig()->getTitle()->set('Signup Author');
+
             return $page;
         }
 

@@ -147,7 +147,7 @@ class Topic extends Generic implements TabInterface
         if (!$this->_storeManager->isSingleStoreMode()) {
             /** @var RendererInterface $rendererBlock */
             $rendererBlock = $this->getLayout()->createBlock(
-                Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element::class
+                '\Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
             );
             $fieldset->addField('store_ids', 'multiselect', [
                 'name'   => 'store_ids',

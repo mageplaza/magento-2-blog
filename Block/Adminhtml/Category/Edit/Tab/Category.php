@@ -22,7 +22,6 @@
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab;
 
 use Exception;
-use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
@@ -151,7 +150,7 @@ class Category extends Generic implements TabInterface
         if (!$this->_storeManager->isSingleStoreMode()) {
             try {
                 /** @var RendererInterface $rendererBlock */
-                $rendererBlock = $this->getLayout()->createBlock(Element::class);
+                $rendererBlock = $this->getLayout()->createBlock('\Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element');
             } catch (Exception $exception) {
                 $this->_logger->error($exception->getMessage());
             }
