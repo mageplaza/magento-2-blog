@@ -25,6 +25,7 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Mageplaza\Blog\Model\PostHistory;
 use Mageplaza\Blog\Model\PostHistoryFactory;
 use Mageplaza\Blog\Model\PostFactory;
 
@@ -88,7 +89,7 @@ abstract class History extends Action
     /**
      * @param bool $register
      *
-     * @return bool|\Mageplaza\Blog\Model\PostHistory
+     * @return bool|PostHistory
      */
     protected function initPostHistory($register = false)
     {

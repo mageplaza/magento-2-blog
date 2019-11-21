@@ -135,11 +135,9 @@ class Topic extends AbstractDb
     }
 
     /**
-     * after save callback
+     * @param AbstractModel $object
      *
-     * @param AbstractModel|\Mageplaza\Blog\Model\Topic $object
-     *
-     * @return $this
+     * @return AbstractDb
      */
     protected function _afterSave(AbstractModel $object)
     {

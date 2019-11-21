@@ -69,6 +69,7 @@ abstract class Post extends Action
 
     /**
      * @param bool $register
+     * @param bool $isSave
      *
      * @return bool|\Mageplaza\Blog\Model\Post
      */

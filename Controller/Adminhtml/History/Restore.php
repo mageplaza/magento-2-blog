@@ -41,13 +41,13 @@ class Restore extends History
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $postId = $this->getRequest()->getParam('post_id');
-        $historyId = $this->getRequest()->getParam('id');
+        $postId         = $this->getRequest()->getParam('post_id');
+        $historyId      = $this->getRequest()->getParam('id');
         if ($historyId) {
             try {
                 $history = $this->postHistoryFactory->create()
                     ->load($historyId);
-                $post =$this->postFactory->create()->load($postId);
+                $post    = $this->postFactory->create()->load($postId);
 
                 $data = $this->prepareData($history);
 
@@ -71,12 +71,15 @@ class Restore extends History
      *
      * @return array
      */
-    protected function prepareData($history){
+    protected function prepareData($history)
+    {
         $history->setUpdatedAt($this->date->date());
-        $history->setData('categories_ids', empty($history->getCategoryIds())?[]:explode(',', $history->getCategoryIds()));
-        $history->setData('tags_ids', empty($history->getTagIds())?[]:explode(',', $history->getTagIds()));
-        $history->setData('topics_ids', empty($history->getTopicIds())?[]:explode(',', $history->getTopicIds()));
-        $history->setData('products_data', empty($history->getProductIds())?[]:Data::jsonDecode($history->getProductIds()));
+        $history->setData('categories_ids', empty($history->getCategoryIds())
+            ? [] : explode(',', $history->getCategoryIds()));
+        $history->setData('tags_ids', empty($history->getTagIds()) ? [] : explode(',', $history->getTagIds()));
+        $history->setData('topics_ids', empty($history->getTopicIds()) ? [] : explode(',', $history->getTopicIds()));
+        $history->setData('products_data', empty($history->getProductIds())
+            ? [] : Data::jsonDecode($history->getProductIds()));
         $data = $history->getData();
         unset($data['post_id']);
         unset($data['history_id']);
@@ -84,6 +87,7 @@ class Restore extends History
         unset($data['tag_ids']);
         unset($data['topic_ids']);
         unset($data['product_ids']);
+
         return $data;
     }
 }

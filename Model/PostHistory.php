@@ -93,9 +93,10 @@ class PostHistory extends AbstractModel
             return [];
         }
         $data = [];
-        foreach (Data::jsonDecode($this->getProductIds()) as $key=>$value){
+        foreach (Data::jsonDecode($this->getProductIds()) as $key => $value) {
             $data[$key] = $value['position'];
         }
+
         return $data;
     }
 }

@@ -27,19 +27,15 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
-use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\PostFactory;
-use Mageplaza\Blog\Model\Config\Source\SideBarLR;
 use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
-use Symfony\Component\Console\Helper\Helper;
 
 /**
  * Class Manage

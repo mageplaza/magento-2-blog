@@ -105,6 +105,10 @@ class MassDelete extends Action
         return $resultRedirect->setPath('*/*/');
     }
 
+    /**
+     * @return bool
+     * @throws LocalizedException
+     */
     public function allowMassDeleteAuthor()
     {
         $post           = $this->_postFactory->create();

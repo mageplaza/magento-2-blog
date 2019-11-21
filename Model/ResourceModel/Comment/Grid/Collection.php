@@ -75,7 +75,7 @@ class Collection extends SearchResult
      * @param array|string $field
      * @param null $condition
      *
-     * @return $this
+     * @return SearchResult
      */
     public function addFieldToFilter($field, $condition = null)
     {

@@ -98,19 +98,18 @@ class Review extends Action
         if ($mode === '1') {
             $like = $this->_postLikeCollection->addFieldToFilter('entity_id', $customerId)
                 ->addFieldToFilter('post_id', $post->getId());
-        }
+            if (!$customerId || !$post || $like->count() > 0) {
+                if ($action === '1') {
+                    $this->messageManager->addErrorMessage(__('Can\'t Like Post.'));
+                } else {
+                    $this->messageManager->addErrorMessage(__('Can\'t Dislike Post.'));
+                }
 
-        if ($mode === '1' && (!$customerId || !$post || $like->count() > 0)) {
-            if ($action === '1') {
-                $this->messageManager->addErrorMessage(__('Can\'t Like Post.'));
-            } else {
-                $this->messageManager->addErrorMessage(__('Can\'t Dislike Post.'));
+                return $this->getResponse()->representJson(Data::jsonEncode([
+                    'status' => 0,
+                    'type'   => $action
+                ]));
             }
-
-            return $this->getResponse()->representJson(Data::jsonEncode([
-                'status' => 0,
-                'type'   => $action
-            ]));
         }
 
         try {

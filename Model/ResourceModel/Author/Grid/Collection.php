@@ -50,3 +50,4 @@ class Collection extends SearchResult
     }
 }
 
+

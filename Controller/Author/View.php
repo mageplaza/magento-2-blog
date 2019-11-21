@@ -23,7 +23,9 @@ namespace Mageplaza\Blog\Controller\Author;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Helper\Data;
@@ -71,7 +73,7 @@ class View extends Action
     }
 
     /**
-     * @return $this|Page
+     * @return ResponseInterface|ResultInterface|Page
      */
     public function execute()
     {

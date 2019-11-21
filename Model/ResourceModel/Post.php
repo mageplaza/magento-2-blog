@@ -545,9 +545,9 @@ class Post extends AbstractDb
      */
     public function saveAuthor()
     {
-        $currentUser   = $this->_auth->getUser();
+        $currentUser = $this->_auth->getUser();
 
-        if ($currentUser){
+        if ($currentUser) {
             $currentUserId = $currentUser->getId();
             /** @var \Mageplaza\Blog\Model\Author $author */
             $author = $this->_authorFactory->create()->load($currentUserId);

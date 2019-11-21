@@ -93,13 +93,12 @@ class Save extends Post
         Data $helperData,
         PostHistoryFactory $postHistory,
         DateTime $date
-    )
-    {
-        $this->jsHelper = $jsHelper;
-        $this->_helperData = $helperData;
+    ) {
+        $this->jsHelper     = $jsHelper;
+        $this->_helperData  = $helperData;
         $this->_postHistory = $postHistory;
-        $this->imageHelper = $imageHelper;
-        $this->date = $date;
+        $this->imageHelper  = $imageHelper;
+        $this->date         = $date;
 
         parent::__construct($postFactory, $registry, $context);
     }
@@ -111,7 +110,7 @@ class Save extends Post
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $action = $this->getRequest()->getParam('action');
+        $action         = $this->getRequest()->getParam('action');
 
         if ($data = $this->getRequest()->getPost('post')) {
             /** @var PostModel $post */
@@ -166,9 +165,9 @@ class Save extends Post
     protected function addHistory($post, $action = null)
     {
         if (!empty($action)) {
-            $history = $this->_postHistory->create();
+            $history      = $this->_postHistory->create();
             $historyCount = $history->getSumPostHistory($post->getPostId());
-            $limitHistory = (int)$this->_helperData->getConfigGeneral('history_limit');
+            $limitHistory = (int) $this->_helperData->getConfigGeneral('history_limit');
             if ($historyCount < $limitHistory) {
                 try {
                     $data = $post->getData();
@@ -194,7 +193,6 @@ class Save extends Post
      * @param array $data
      *
      * @return $this
-     * @throws FileSystemException
      */
     protected function prepareData($post, $data = [])
     {
@@ -209,19 +207,19 @@ class Save extends Post
         }
 
         /** Set specify field data */
-        $timezone = $this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $data['publish_date'] .= ' ' . $data['publish_time'][0]
+        $timezone               = $this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $data['publish_date']   .= ' ' . $data['publish_time'][0]
             . ':' . $data['publish_time'][1] . ':' . $data['publish_time'][2];
-        $data['publish_date'] = $timezone->convertConfigTimeToUtc(isset($data['publish_date'])
+        $data['publish_date']   = $timezone->convertConfigTimeToUtc(isset($data['publish_date'])
             ? $data['publish_date'] : null);
-        $data['modifier_id'] = $this->_auth->getUser()->getId();
+        $data['modifier_id']    = $this->_auth->getUser()->getId();
         $data['categories_ids'] = (isset($data['categories_ids']) && $data['categories_ids']) ? explode(
             ',',
             $data['categories_ids']
         ) : [];
-        $data['tags_ids'] = (isset($data['tags_ids']) && $data['tags_ids'])
+        $data['tags_ids']       = (isset($data['tags_ids']) && $data['tags_ids'])
             ? explode(',', $data['tags_ids']) : [];
-        $data['topics_ids'] = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(
+        $data['topics_ids']     = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(
             ',',
             $data['topics_ids']
         ) : [];

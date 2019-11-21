@@ -108,8 +108,9 @@ class History extends Action
     {
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        if (!$this->_helperBlog->isEnabledAuthor()){
+        if (!$this->_helperBlog->isEnabledAuthor()) {
             $resultRedirect->setPath('customer/account');
+
             return $resultRedirect;
         }
 

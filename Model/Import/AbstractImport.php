@@ -191,22 +191,22 @@ abstract class AbstractImport extends AbstractModel
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->date = $date;
-        $this->importType = $importType;
-        $this->_type = $this->_getImportType();
-        $this->helperData = $helperData;
-        $this->_postFactory = $postFactory;
-        $this->_tagFactory = $tagFactory;
-        $this->_categoryFactory = $categoryFactory;
-        $this->_topicFactory = $topicFactory;
-        $this->_commentFactory = $commentFactory;
-        $this->_userFactory = $userFactory;
-        $this->_customerFactory = $customerFactory;
-        $this->_objectManager = $objectManager;
+        $this->date                = $date;
+        $this->importType          = $importType;
+        $this->_type               = $this->_getImportType();
+        $this->helperData          = $helperData;
+        $this->_postFactory        = $postFactory;
+        $this->_tagFactory         = $tagFactory;
+        $this->_categoryFactory    = $categoryFactory;
+        $this->_topicFactory       = $topicFactory;
+        $this->_commentFactory     = $commentFactory;
+        $this->_userFactory        = $userFactory;
+        $this->_customerFactory    = $customerFactory;
+        $this->_objectManager      = $objectManager;
         $this->_resourceConnection = $resourceConnection;
-        $this->_authSession = $authSession;
-        $this->_storeManager = $storeManager;
-        $this->_helperImage = $helperImage;
+        $this->_authSession        = $authSession;
+        $this->_storeManager       = $storeManager;
+        $this->_helperImage        = $helperImage;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -288,9 +288,9 @@ abstract class AbstractImport extends AbstractModel
      */
     protected function _resetRecords()
     {
-        $this->_errorCount = 0;
+        $this->_errorCount   = 0;
         $this->_successCount = 0;
-        $this->_hasData = false;
+        $this->_hasData      = false;
     }
 
     /**
@@ -317,11 +317,11 @@ abstract class AbstractImport extends AbstractModel
         if (strpos($available_sets, 's') !== false) {
             $sets[] = '!@#$%&*?';
         }
-        $all = '';
+        $all      = '';
         $password = '';
         foreach ($sets as $set) {
             $password .= $set[array_rand(str_split($set))];
-            $all .= $set;
+            $all      .= $set;
         }
         $all = str_split($all);
         for ($i = 0; $i < $length - count($sets); $i++) {

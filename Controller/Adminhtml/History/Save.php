@@ -118,8 +118,10 @@ class Save extends History
                 $history->save();
                 $this->messageManager->addSuccess(__('The post history has been saved.'));
 
-                $resultRedirect->setPath('mageplaza_blog/post/edit',
-                    ['id' => $history->getPostId(), '_current' => true]);
+                $resultRedirect->setPath(
+                    'mageplaza_blog/post/edit',
+                    ['id' => $history->getPostId(), '_current' => true]
+                );
 
                 return $resultRedirect;
             } catch (LocalizedException $e) {
@@ -146,7 +148,6 @@ class Save extends History
      * @param array $data
      *
      * @return $this
-     * @throws FileSystemException
      */
     protected function prepareData($post, $data = [])
     {

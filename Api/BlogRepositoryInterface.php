@@ -201,6 +201,8 @@ interface BlogRepositoryInterface
      * @param \Mageplaza\Blog\Api\Data\TagInterface $tag
      *
      * @return \Mageplaza\Blog\Api\Data\TagInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function updateTag($tagId, $tag);
 
@@ -256,6 +258,8 @@ interface BlogRepositoryInterface
      * @param \Mageplaza\Blog\Api\Data\TopicInterface $topic
      *
      * @return \Mageplaza\Blog\Api\Data\TopicInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function updateTopic($topicId, $topic);
 
@@ -327,6 +331,8 @@ interface BlogRepositoryInterface
      * @param \Mageplaza\Blog\Api\Data\CategoryInterface $category
      *
      * @return \Mageplaza\Blog\Api\Data\CategoryInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function updateCategory($categoryId, $category);
 
@@ -362,6 +368,8 @@ interface BlogRepositoryInterface
      * @param \Mageplaza\Blog\Api\Data\AuthorInterface $author
      *
      * @return \Mageplaza\Blog\Api\Data\AuthorInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function updateAuthor($authorId, $author);
 }

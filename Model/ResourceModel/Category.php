@@ -175,11 +175,9 @@ class Category extends AbstractDb
     }
 
     /**
-     * After save call back
-     *
      * @param AbstractModel $object
      *
-     * @return $this
+     * @return AbstractDb
      * @throws LocalizedException
      */
     protected function _afterSave(AbstractModel $object)
@@ -446,17 +444,21 @@ class Category extends AbstractDb
                 $positionNew = 0;
             }
             $positionNew++;
-            $sql = "UPDATE `" . $table . "` SET `position`= (`position`-1) WHERE `parent_id`= " . $category->getParentId() . " AND `position` >= " . $positionOld;
+            $sql = "UPDATE `" . $table . "` SET `position`= (`position`-1) WHERE `parent_id`= "
+                . $category->getParentId() . " AND `position` >= " . $positionOld;
             $connect->query($sql);
-            $sql = "UPDATE `" . $table . "` SET `position`= (`position`+1) WHERE `parent_id`= " . $newParent->getId() . " AND `position` >= " . $positionNew;
+            $sql = "UPDATE `" . $table . "` SET `position`= (`position`+1) WHERE `parent_id`= " . $newParent->getId()
+                . " AND `position` >= " . $positionNew;
             $connect->query($sql);
         } else {
             /** Move in the same parent */
             /** Move down */
             if ($positionNew > $positionOld) {
-                $sql = "UPDATE `" . $table . "` SET `position`= (`position`-1) WHERE `parent_id`= " . $newParent->getId() . " AND `position` <= " . $positionNew;
+                $sql = "UPDATE `" . $table . "` SET `position`= (`position`-1) WHERE `parent_id`= "
+                    . $newParent->getId() . " AND `position` <= " . $positionNew;
                 $connect->query($sql);
-                $sql = "UPDATE `" . $table . "` SET `position`= (`position`+1) WHERE `parent_id`= " . $newParent->getId() . " AND `position` < " . $positionOld;
+                $sql = "UPDATE `" . $table . "` SET `position`= (`position`+1) WHERE `parent_id`= "
+                    . $newParent->getId() . " AND `position` < " . $positionOld;
                 $connect->query($sql);
             } else {
                 /** Move up */
@@ -464,9 +466,11 @@ class Category extends AbstractDb
                 if (empty($afterCategoryId)) {
                     $positionNew = 1;
                 }
-                $sql = "UPDATE `" . $table . "` SET `position`= (`position`+1) WHERE `parent_id`= " . $newParent->getId() . " AND `position` >= " . $positionNew;
+                $sql = "UPDATE `" . $table . "` SET `position`= (`position`+1) WHERE `parent_id`= "
+                    . $newParent->getId() . " AND `position` >= " . $positionNew;
                 $connect->query($sql);
-                $sql = "UPDATE `" . $table . "` SET `position`= (`position`-1) WHERE `parent_id`= " . $newParent->getId() . " AND `position` > " . $positionOld;
+                $sql = "UPDATE `" . $table . "` SET `position`= (`position`-1) WHERE `parent_id`= "
+                    . $newParent->getId() . " AND `position` > " . $positionOld;
                 $connect->query($sql);
             }
         }

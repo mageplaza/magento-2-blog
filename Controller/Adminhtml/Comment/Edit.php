@@ -28,7 +28,6 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Comment;
 use Mageplaza\Blog\Model\CommentFactory;
-use Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory;
 
 /**
  * Class Edit

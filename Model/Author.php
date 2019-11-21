@@ -80,7 +80,8 @@ class Author extends AbstractModel
      *
      * @return \Magento\Framework\DataObject
      */
-    public function getAuthorByName($name){
+    public function getAuthorByName($name)
+    {
         return $this->getCollection()->addFieldToFilter('name', $name)->getFirstItem();
     }
 

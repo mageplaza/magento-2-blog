@@ -99,155 +99,155 @@ class AheadWorksM1 extends AbstractImport
      */
     protected function _importPosts($data, $connection)
     {
-        $authorId = $this->_authSession->getUser()->getId();
+        $authorId  = $this->_authSession->getUser()->getId();
         $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POST . "`";
-        $result = mysqli_query($connection, $sqlString);
+        $result    = mysqli_query($connection, $sqlString);
         $isReplace = true;
-        if ($result) {
-            $this->_resetRecords();
-            /**
-             * @var PostFactory
-             */
-            $postModel = $this->_postFactory->create();
-            $oldPostIds = [];
-            $tags = [];
-            $importSource = $data['type'] . '-' . $data['database'];
+        if (!$result) {
+            return false;
+        }
 
-            /** delete behaviour action */
-            if ($data['behaviour'] == 'delete' || $data['behaviour'] == 'replace') {
-                $postModel->getResource()->deleteImportItems($data['type']);
-                $this->_hasData = true;
-                if ($data['behaviour'] == 'delete') {
-                    $isReplace = false;
-                } else {
-                    $isReplace = true;
-                }
+        $this->_resetRecords();
+        /**
+         * @var PostFactory
+         */
+        $postModel    = $this->_postFactory->create();
+        $oldPostIds   = [];
+        $tags         = [];
+        $importSource = $data['type'] . '-' . $data['database'];
+
+        /** delete behaviour action */
+        if ($data['behaviour'] == 'delete' || $data['behaviour'] == 'replace') {
+            $postModel->getResource()->deleteImportItems($data['type']);
+            $this->_hasData = true;
+            if ($data['behaviour'] == 'delete') {
+                $isReplace = false;
+            } else {
+                $isReplace = true;
             }
+        }
 
-            /** fetch all items from import source */
-            while ($post = mysqli_fetch_assoc($result)) {
-                /** store the source item */
-                $sourceItems[] = [
-                    'is_imported'       => $postModel->getResource()->isImported($importSource, $post['post_id']),
-                    'is_duplicated_url' => $postModel->getResource()->isDuplicateUrlKey($post['identifier']),
-                    'id'                => $post['post_id'],
-                    'name'              => $post['title'],
-                    'short_description' => $post['short_content'],
-                    'post_content'      => $post['post_content'],
-                    'url_key'           => $this->helperData->generateUrlKey(
-                        $postModel->getResource(),
-                        $postModel,
-                        $post['identifier']
-                    ),
-                    'created_at'        => ($post['created_time'] > $this->date->date() || !$post['created_time']) ? ($this->date->date()) : ($post['created_time']),
-                    'updated_at'        => ($post['update_time']) ?: $this->date->date(),
-                    'publish_date'      => ($post['created_time']) ?: $this->date->date(),
-                    'enabled'           => 1,
-                    'in_rss'            => 0,
-                    'allow_comment'     => 1,
-                    'store_ids'         => $this->_storeManager->getStore()->getId(),
-                    'meta_robots'       => 'INDEX,FOLLOW', //Default value
-                    'meta_keywords'     => $post['meta_keywords'],
-                    'meta_description'  => $post['meta_description'],
-                    'author_id'         => (int) $authorId,
-                    'import_source'     => $importSource . '-' . $post['post_id'],
-                    'tags'              => $post['tags']
-                ];
-            }
+        /** fetch all items from import source */
+        while ($post = mysqli_fetch_assoc($result)) {
+            /** store the source item */
+            $sourceItems[] = [
+                'is_imported'       => $postModel->getResource()->isImported($importSource, $post['post_id']),
+                'is_duplicated_url' => $postModel->getResource()->isDuplicateUrlKey($post['identifier']),
+                'id'                => $post['post_id'],
+                'name'              => $post['title'],
+                'short_description' => $post['short_content'],
+                'post_content'      => $post['post_content'],
+                'url_key'           => $this->helperData->generateUrlKey(
+                    $postModel->getResource(),
+                    $postModel,
+                    $post['identifier']
+                ),
+                'created_at'        => ($post['created_time'] > $this->date->date() || !$post['created_time']) ? ($this->date->date()) : ($post['created_time']),
+                'updated_at'        => ($post['update_time']) ?: $this->date->date(),
+                'publish_date'      => ($post['created_time']) ?: $this->date->date(),
+                'enabled'           => 1,
+                'in_rss'            => 0,
+                'allow_comment'     => 1,
+                'store_ids'         => $this->_storeManager->getStore()->getId(),
+                'meta_robots'       => 'INDEX,FOLLOW', //Default value
+                'meta_keywords'     => $post['meta_keywords'],
+                'meta_description'  => $post['meta_description'],
+                'author_id'         => (int) $authorId,
+                'import_source'     => $importSource . '-' . $post['post_id'],
+                'tags'              => $post['tags']
+            ];
+        }
 
-            /** update and replace behaviour action */
-            if ($isReplace && isset($sourceItems)) {
-                foreach ($sourceItems as $post) {
-                    $postTag = $post['tags'];
-                    if ($post['is_imported']) {
-                        /** update post that has duplicate URK key */
-                        if ($post['is_duplicated_url'] != null || $data['expand_behaviour'] == '1') {
-                            $where = ['post_id = ?' => (int) $post['is_imported']];
-                            $this->_updatePosts($post, $where);
-                            $this->_successCount++;
-                            $this->_hasData = true;
-                        } else {
-                            /** Add new posts */
-                            $postModel->load($post['is_imported'])->setImportSource('')->save();
-                            try {
-                                $this->_addPosts($postModel, $post);
-                                $this->_successCount++;
-                                $this->_hasData = true;
-                            } catch (Exception $e) {
-                                $this->_errorCount++;
-                                $this->_hasData = true;
-                                continue;
-                            }
-                        }
+        /** update and replace behaviour action */
+        if ($isReplace && isset($sourceItems)) {
+            foreach ($sourceItems as $post) {
+                $postTag = $post['tags'];
+                if ($post['is_imported']) {
+                    /** update post that has duplicate URK key */
+                    if ($post['is_duplicated_url'] != null || $data['expand_behaviour'] == '1') {
+                        $where = ['post_id = ?' => (int) $post['is_imported']];
+                        $this->_updatePosts($post, $where);
+                        $this->_successCount++;
+                        $this->_hasData = true;
                     } else {
-                        /**
-                         * check the posts isn't imported
-                         * Update posts
-                         */
-                        if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $post['is_duplicated_url'] != null) {
-                            $where = ['post_id = ?' => (int) $post['is_duplicated_url']];
-                            $this->_updatePosts($post, $where);
+                        /** Add new posts */
+                        $postModel->load($post['is_imported'])->setImportSource('')->save();
+                        try {
+                            $this->_addPosts($postModel, $post);
                             $this->_successCount++;
                             $this->_hasData = true;
-                        } else {
-                            /**
-                             * Add new posts
-                             */
-                            try {
-                                $this->_addPosts($postModel, $post);
-                                $this->_successCount++;
-                                $this->_hasData = true;
-                            } catch (Exception $e) {
-                                $this->_errorCount++;
-                                $this->_hasData = true;
-                                continue;
-                            }
+                        } catch (Exception $e) {
+                            $this->_errorCount++;
+                            $this->_hasData = true;
+                            continue;
                         }
                     }
-
+                } else {
                     /**
-                     * Store post-tags
+                     * check the posts isn't imported
+                     * Update posts
                      */
-                    if (!empty($postTag)) {
-                        $tagNames = explode(',', $postTag);
-                        $id = [];
-                        foreach ($tagNames as $name) {
-                            $tagTableSql = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_TAG . "` WHERE `tag` = '" . $name . "'";
-                            $tagResult = mysqli_query($connection, $tagTableSql);
-                            $tag = mysqli_fetch_assoc($tagResult);
-                            $id [] = $tag['id'];
-                        }
-                        if ($post['is_imported']) {
-                            $tags[$post['is_imported']] = $id;
+                    if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $post['is_duplicated_url'] != null) {
+                        $where = ['post_id = ?' => (int) $post['is_duplicated_url']];
+                        $this->_updatePosts($post, $where);
+                        $this->_successCount++;
+                        $this->_hasData = true;
+                    } else {
+                        /**
+                         * Add new posts
+                         */
+                        try {
+                            $this->_addPosts($postModel, $post);
+                            $this->_successCount++;
+                            $this->_hasData = true;
+                        } catch (Exception $e) {
+                            $this->_errorCount++;
+                            $this->_hasData = true;
+                            continue;
                         }
                     }
                 }
 
                 /**
-                 * Get old post ids
+                 * Store post-tags
                  */
-                foreach ($postModel->getCollection() as $item) {
-                    if ($item->getImportSource() != null) {
-                        $postImportSource = explode('-', $item->getImportSource());
-                        $importType = array_shift($postImportSource);
-                        if ($importType == $this->_type['aheadworksm1']) {
-                            $oldPostId = array_pop($postImportSource);
-                            $oldPostIds[$item->getId()] = $oldPostId;
-                        }
+                if (!empty($postTag)) {
+                    $tagNames = explode(',', $postTag);
+                    $id       = [];
+                    foreach ($tagNames as $name) {
+                        $tagTableSql = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_TAG . "` WHERE `tag` = '" . $name . "'";
+                        $tagResult   = mysqli_query($connection, $tagTableSql);
+                        $tag         = mysqli_fetch_assoc($tagResult);
+                        $id []       = $tag['id'];
+                    }
+                    if ($post['is_imported']) {
+                        $tags[$post['is_imported']] = $id;
                     }
                 }
-                mysqli_free_result($result);
             }
 
-            $statistics = $this->_getStatistics('posts', $this->_successCount, $this->_errorCount, $this->_hasData);
-            $this->_registry->register('mageplaza_import_post_ids_collection', $oldPostIds);
-            $this->_registry->register('mageplaza_import_post_tags_collection', $tags);
-            $this->_registry->register('mageplaza_import_post_statistic', $statistics);
-
-            return true;
+            /**
+             * Get old post ids
+             */
+            foreach ($postModel->getCollection() as $item) {
+                if ($item->getImportSource() != null) {
+                    $postImportSource = explode('-', $item->getImportSource());
+                    $importType       = array_shift($postImportSource);
+                    if ($importType == $this->_type['aheadworksm1']) {
+                        $oldPostId                  = array_pop($postImportSource);
+                        $oldPostIds[$item->getId()] = $oldPostId;
+                    }
+                }
+            }
+            mysqli_free_result($result);
         }
 
-        return false;
+        $statistics = $this->_getStatistics('posts', $this->_successCount, $this->_errorCount, $this->_hasData);
+        $this->_registry->register('mageplaza_import_post_ids_collection', $oldPostIds);
+        $this->_registry->register('mageplaza_import_post_tags_collection', $tags);
+        $this->_registry->register('mageplaza_import_post_statistic', $statistics);
+
+        return true;
     }
 
     /**
@@ -259,13 +259,13 @@ class AheadWorksM1 extends AbstractImport
     protected function _importTags($data, $connection)
     {
         $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_TAG . "`";
-        $result = mysqli_query($connection, $sqlString);
+        $result    = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
         $isReplace = true;
         $oldTagIds = [];
 
         /** @var TagFactory */
-        $tagModel = $this->_tagFactory->create();
+        $tagModel     = $this->_tagFactory->create();
         $importSource = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
@@ -325,7 +325,9 @@ class AheadWorksM1 extends AbstractImport
                     }
                 } else {
                     /** Update tags */
-                    if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $tag['is_duplicated_url'] != null) {
+                    if ($data['behaviour'] == 'update'
+                        && $data['expand_behaviour'] == '1'
+                        && $tag['is_duplicated_url'] != null) {
                         try {
                             $where = ['tag_id = ?' => (int) $tag['is_duplicated_url']];
                             $this->_updateTags($tag, $where);
@@ -356,9 +358,9 @@ class AheadWorksM1 extends AbstractImport
             foreach ($tagModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
                     $tagImportSource = explode('-', $item->getImportSource());
-                    $importType = array_shift($tagImportSource);
+                    $importType      = array_shift($tagImportSource);
                     if ($importType == $this->_type['aheadworksm1']) {
-                        $oldTagId = array_pop($tagImportSource);
+                        $oldTagId                  = array_pop($tagImportSource);
                         $oldTagIds[$item->getId()] = $oldTagId;
                     }
                 }
@@ -396,12 +398,12 @@ class AheadWorksM1 extends AbstractImport
     protected function _importCategories($data, $connection)
     {
         $sqlString = "SELECT * FROM `" . $data["table_prefix"] . self::TABLE_CATEGORY . "`";
-        $result = mysqli_query($connection, $sqlString);
+        $result    = mysqli_query($connection, $sqlString);
         $isReplace = true;
         /**
          * @var CategoryFactory
          */
-        $categoryModel = $this->_categoryFactory->create();
+        $categoryModel  = $this->_categoryFactory->create();
         $oldCategoryIds = [];
         $this->_resetRecords();
         $importSource = $data['type'] . '-' . $data['database'];
@@ -445,7 +447,8 @@ class AheadWorksM1 extends AbstractImport
             foreach ($sourceItems as $category) {
                 if ($category['is_imported']) {
                     /** update category that has duplicate URK key */
-                    if (($category['is_duplicated_url'] != null || $data['expand_behaviour'] == '1') && $category['url_key'] != 'root') {
+                    if (($category['is_duplicated_url'] != null || $data['expand_behaviour'] == '1')
+                        && $category['url_key'] != 'root') {
                         try {
                             $where = ['category_id = ?' => (int) $category['is_imported']];
                             $this->_updateCategories($category, $where);
@@ -474,7 +477,10 @@ class AheadWorksM1 extends AbstractImport
                     /**
                      * Update categories
                      */
-                    if ($data['behaviour'] == 'update' && $data['expand_behaviour'] == '1' && $category['is_duplicated_url'] != null && $category['url_key'] != 'root') {
+                    if ($data['behaviour'] == 'update'
+                        && $data['expand_behaviour'] == '1'
+                        && $category['is_duplicated_url'] != null
+                        && $category['url_key'] != 'root') {
                         try {
                             $where = ['category_id = ?' => (int) $category['is_duplicated_url']];
                             $this->_updateCategories($category, $where);
@@ -506,9 +512,9 @@ class AheadWorksM1 extends AbstractImport
             foreach ($categoryModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
                     $catImportSource = explode('-', $item->getImportSource());
-                    $importType = array_shift($catImportSource);
+                    $importType      = array_shift($catImportSource);
                     if ($importType == $this->_type['aheadworksm1']) {
-                        $oldCategoryId = array_pop($catImportSource);
+                        $oldCategoryId                  = array_pop($catImportSource);
                         $oldCategoryIds[$item->getId()] = $oldCategoryId;
                     }
                 }
@@ -534,16 +540,16 @@ class AheadWorksM1 extends AbstractImport
     protected function _importComments($data, $connection)
     {
         $accountManage = $this->_objectManager->create('\Magento\Customer\Model\AccountManagement');
-        $sqlString = "SELECT * FROM `" . $data["table_prefix"] . self::TABLE_COMMENT . "`";
-        $result = mysqli_query($connection, $sqlString);
+        $sqlString     = "SELECT * FROM `" . $data["table_prefix"] . self::TABLE_COMMENT . "`";
+        $result        = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
         $isReplace = true;
         /** @var CommentFactory */
-        $commentModel = $this->_commentFactory->create();
+        $commentModel  = $this->_commentFactory->create();
         $customerModel = $this->_customerFactory->create();
-        $websiteId = $this->_storeManager->getWebsite()->getId();
-        $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
-        $importSource = $data['type'] . '-' . $data['database'];
+        $websiteId     = $this->_storeManager->getWebsite()->getId();
+        $oldPostIds    = $this->_registry->registry('mageplaza_import_post_ids_collection');
+        $importSource  = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
         if ($data['behaviour'] == 'delete' || $data['behaviour'] == 'replace') {
@@ -573,15 +579,15 @@ class AheadWorksM1 extends AbstractImport
             $newPostId = array_search($comment['post_id'], $oldPostIds);
             /** check if comment author is customer */
             if ($accountManage->isEmailAvailable($comment['email'], $websiteId)) {
-                $entityId = 0;
-                $userName = $comment['user'];
+                $entityId  = 0;
+                $userName  = $comment['user'];
                 $userEmail = $comment['email'];
             } else {
                 /** comment author is guest */
                 $customerModel->setWebsiteId($websiteId);
                 $customerModel->loadByEmail($comment['email']);
-                $entityId = $customerModel->getEntityId();
-                $userName = "";
+                $entityId  = $customerModel->getEntityId();
+                $userName  = "";
                 $userEmail = "";
             }
 
@@ -626,7 +632,7 @@ class AheadWorksM1 extends AbstractImport
                             'user_name'     => $comment['user_name'],
                             'user_email'    => $comment['user_email'],
                             'import_source' => $comment['import_source']
-                            ], $where);
+                        ], $where);
                     $this->_successCount++;
                     $this->_hasData = true;
                 } else {
@@ -683,11 +689,12 @@ class AheadWorksM1 extends AbstractImport
      */
     protected function _importCategoryPost($data, $connection, $oldCatIds, $relationTable)
     {
-        $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
+        $oldPostIds        = $this->_registry->registry('mageplaza_import_post_ids_collection');
         $categoryPostTable = $this->_resourceConnection->getTableName($relationTable);
         foreach ($oldPostIds as $newPostId => $oldPostId) {
-            $sqlRelation = "SELECT * FROM `" . $data["table_prefix"] . self::TABLE_CATEGORY_POST . "` WHERE `post_id` = " . $oldPostId;
-            $result = mysqli_query($connection, $sqlRelation);
+            $sqlRelation = "SELECT * FROM `" . $data["table_prefix"]
+                . self::TABLE_CATEGORY_POST . "` WHERE `post_id` = " . $oldPostId;
+            $result      = mysqli_query($connection, $sqlRelation);
             while ($categoryPost = mysqli_fetch_assoc($result)) {
                 $newCategoryId = (array_search($categoryPost['cat_id'], $oldCatIds)) ?: '1';
                 try {
@@ -758,7 +765,7 @@ class AheadWorksM1 extends AbstractImport
                 'meta_description'  => $post['meta_description'],
                 'author_id'         => $post['author_id'],
                 'import_source'     => $post['import_source']
-                ], $where);
+            ], $where);
         $this->_resourceConnection->getConnection()
             ->delete($this->_resourceConnection
                 ->getTableName('mageplaza_blog_post_category'), $where);
@@ -796,7 +803,7 @@ class AheadWorksM1 extends AbstractImport
                 'store_ids'     => $tag['store_ids'],
                 'enabled'       => $tag['enabled'],
                 'import_source' => $tag['import_source']
-                ], $where);
+            ], $where);
     }
 
     /**
@@ -835,6 +842,6 @@ class AheadWorksM1 extends AbstractImport
                 'meta_description' => $category['meta_description'],
                 'meta_keywords'    => $category['meta_keywords'],
                 'import_source'    => $category['import_source']
-                ], $where);
+            ], $where);
     }
 }

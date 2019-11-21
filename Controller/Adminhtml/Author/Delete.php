@@ -40,6 +40,14 @@ class Delete extends Author
      */
     protected $_postFactory;
 
+    /**
+     * Delete constructor.
+     *
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param AuthorFactory $authorFactory
+     * @param PostFactory $postFactory
+     */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
@@ -62,8 +70,8 @@ class Delete extends Author
             $post               = $this->_postFactory->create();
             $postCollectionSize = $post->getCollection()->addFieldToFilter('author_id', ['eq' => $id])->getSize();
             if ($postCollectionSize > 0) {
-                $this->messageManager->addErrorMessage(__('You can not delete this author. This is the author of %1 post(s)',
-                    $postCollectionSize));
+                $this->messageManager->addErrorMessage(__('You can not delete this author.'
+                    .' This is the author of %1 post(s)', $postCollectionSize));
                 $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $id]);
 
                 return $resultRedirect;

@@ -61,7 +61,7 @@ class LinkMenu
                 foreach ($links as $key => $link) {
                     if ($link->getPath() === 'mpblog/author/signup') {
                         $author = $this->helper->getCurrentAuthor();
-                        if (!$author->getId()){
+                        if (!$author->getId()) {
                             unset($links[$key]);
                         }
                     }

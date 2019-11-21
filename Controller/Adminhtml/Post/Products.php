@@ -64,7 +64,7 @@ class Products extends Post
         parent::__construct($productFactory, $registry, $context);
 
         $this->resultLayoutFactory = $resultLayoutFactory;
-        $this->postHistoryFactory = $postHistoryFactory;
+        $this->postHistoryFactory  = $postHistoryFactory;
     }
 
     /**
@@ -74,10 +74,10 @@ class Products extends Post
      */
     public function execute()
     {
-        if ($this->getRequest()->getParam('history')){
+        if ($this->getRequest()->getParam('history')) {
             $history = $this->postHistoryFactory->create()->load($this->getRequest()->getParam('id'));
             $this->coreRegistry->register('mageplaza_blog_post', $history);
-        }else{
+        } else {
             $this->initPost(true);
         }
 

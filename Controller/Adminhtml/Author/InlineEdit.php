@@ -30,6 +30,7 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Model\Author;
 use Mageplaza\Blog\Model\AuthorFactory;
+use Mageplaza\Blog\Model\Post;
 use RuntimeException;
 
 /**

@@ -170,7 +170,7 @@ class Data extends CoreHelper
         $this->dateTime           = $dateTime;
         $this->customerSession    = $customerSession;
         $this->_httpContext       = $httpContext;
-        $this->_productMetadata       = $productMetadata;
+        $this->_productMetadata   = $productMetadata;
 
         parent::__construct($context, $objectManager, $storeManager);
     }
@@ -182,8 +182,7 @@ class Data extends CoreHelper
     {
         $groupId = (string) $this->_httpContext->getValue(CustomerContext::CONTEXT_GROUP);
 
-        if (
-            $this->getConfigGeneral('is_review')
+        if ($this->getConfigGeneral('is_review')
             && in_array($groupId, explode(',', $this->getConfigGeneral('review_mode')), true)
         ) {
             return true;
@@ -199,8 +198,7 @@ class Data extends CoreHelper
     {
         $login = $this->_httpContext->getValue(CustomerContext::CONTEXT_AUTH);
 
-        if (
-            !$login
+        if (!$login
             && in_array('0', explode(',', $this->getConfigGeneral('review_mode')), true)
         ) {
             return '0';
@@ -212,7 +210,8 @@ class Data extends CoreHelper
     /**
      * @return string
      */
-    public function getCurrentVersion(){
+    public function getCurrentVersion()
+    {
         return $this->_productMetadata->getVersion();
     }
 
@@ -254,11 +253,13 @@ class Data extends CoreHelper
     /**
      * @return mixed
      */
-    public function isEnabledAuthor(){
-        if (!$this->_httpContext->getValue(CustomerContext::CONTEXT_AUTH)){
+    public function isEnabledAuthor()
+    {
+        if (!$this->_httpContext->getValue(CustomerContext::CONTEXT_AUTH)) {
             return false;
         }
-        return $this->getCurrentAuthor()?true:false;
+
+        return $this->getCurrentAuthor() ? true : false;
     }
 
     /**
@@ -451,8 +452,9 @@ class Data extends CoreHelper
         try {
             $collection = $this->getObjectList(self::TYPE_CATEGORY)
                 ->addFieldToFilter('category_id', ['in' => $array]);
+
             return $collection;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->_logger->error($exception->getMessage());
         }
 

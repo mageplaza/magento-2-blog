@@ -32,7 +32,6 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Helper\Data;
-use Mageplaza\Blog\Model\Config\Source\SideBarLR;
 use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
 
 /**
@@ -108,7 +107,6 @@ class EditPost extends Action
     {
         $resultRedirect = $this->resultRedirectFactory->create();
 
-
         if ($this->_helperBlog->isLoggin()
             && $this->getRequest()->isAjax()
             && !$this->_helperBlog->isAuthor()
@@ -126,6 +124,7 @@ class EditPost extends Action
             $this->_view->loadLayout();
             $layout = $this->_view->getLayout();
             $this->getResponse()->setBody($layout->renderElement('main.content'));
+            return $page;
         } else {
             $resultRedirect->setPath('customer/account');
 

@@ -184,13 +184,12 @@ class Preview extends Action
      */
     public function execute()
     {
-        $id   = $this->getRequest()->getParam('id');
+        $id        = $this->getRequest()->getParam('id');
         $historyId = $this->getRequest()->getParam('historyId');
-        $history = $this->helperBlog->getFactoryByType(Data::TYPE_HISTORY)->create()->load($historyId);
-        $post = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($history->getPostId());
+        $history   = $this->helperBlog->getFactoryByType(Data::TYPE_HISTORY)->create()->load($historyId);
+        $post      = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($history->getPostId());
 
-
-        $data= $this->prepareData($history);
+        $data = $this->prepareData($history);
         $post->addData($data);
 
         $page       = $this->resultPageFactory->create();
@@ -270,11 +269,8 @@ class Preview extends Action
      *
      * @return array
      */
-    protected function prepareData($history){
-//        $history->setData('categories_ids', explode(',', $history->getCategoryIds()));
-//        $history->setData('tags_ids', explode(',', $history->getTagIds()));
-//        $history->setData('topics_ids', explode(',', $history->getTopicIds()));
-//        $history->setData('products_data', Data::jsonDecode($history->getProductIds()));
+    protected function prepareData($history)
+    {
         $data = $history->getData();
         unset($data['post_id']);
         unset($data['history_id']);
@@ -285,6 +281,7 @@ class Preview extends Action
         unset($data['tags_ids']);
         unset($data['topics_ids']);
         unset($data['product_ids']);
+
         return $data;
     }
 

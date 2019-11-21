@@ -159,8 +159,7 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @return DataObject[]|BlogRepositoryInterface[]
-     * @throws NoSuchEntityException
+     * @inheritDoc
      */
     public function getAllComment()
     {
@@ -290,12 +289,7 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param string $postId
-     * @param \Mageplaza\Blog\Api\Data\PostInterface $post
-     *
-     * @return \Mageplaza\Blog\Api\Data\PostInterface|void
-     * @throws InputException
-     * @throws NoSuchEntityException
+     * @inheritDoc
      */
     public function updatePost($postId, $post)
     {
@@ -392,12 +386,7 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param string $tagId
-     * @param \Mageplaza\Blog\Api\Data\TagInterface $tag
-     *
-     * @return \Mageplaza\Blog\Api\Data\TagInterface
-     * @throws InputException
-     * @throws NoSuchEntityException
+     * @inheritDoc
      */
     public function updateTag($tagId, $tag)
     {
@@ -421,8 +410,7 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @return DataObject[]|BlogRepositoryInterface[]
-     * @throws NoSuchEntityException
+     * @inheritDoc
      */
     public function getAllTopic()
     {
@@ -505,12 +493,7 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param string $topicId
-     * @param \Mageplaza\Blog\Api\Data\TopicInterface $topic
-     *
-     * @return \Mageplaza\Blog\Api\Data\TopicInterface
-     * @throws InputException
-     * @throws NoSuchEntityException
+     * @inheritDoc
      */
     public function updateTopic($topicId, $topic)
     {
@@ -641,12 +624,7 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param string $categoryId
-     * @param \Mageplaza\Blog\Api\Data\CategoryInterface $category
-     *
-     * @return \Mageplaza\Blog\Api\Data\CategoryInterface
-     * @throws InputException
-     * @throws NoSuchEntityException
+     * @inheritDoc
      */
     public function updateCategory($categoryId, $category)
     {
@@ -736,12 +714,7 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param string $authorId
-     * @param \Mageplaza\Blog\Api\Data\AuthorInterface $author
-     *
-     * @return \Mageplaza\Blog\Api\Data\AuthorInterface
-     * @throws InputException
-     * @throws NoSuchEntityException
+     * @inheritDoc
      */
     public function updateAuthor($authorId, $author)
     {

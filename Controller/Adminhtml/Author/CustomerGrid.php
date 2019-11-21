@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Author;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\View\LayoutFactory;
 
@@ -61,11 +62,11 @@ class CustomerGrid extends Action
     /**
      * Grid Action
      *
-     * @return \Magento\Framework\Controller\Result\Raw
+     * @return Raw
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        /** @var Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
 
         return $resultRaw->setContents(

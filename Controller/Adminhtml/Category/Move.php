@@ -77,8 +77,8 @@ class Move extends Category
         LoggerInterface $logger
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory = $layoutFactory;
-        $this->logger = $logger;
+        $this->layoutFactory     = $layoutFactory;
+        $this->logger            = $logger;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }

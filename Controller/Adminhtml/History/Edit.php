@@ -29,6 +29,7 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Controller\Adminhtml\History;
 use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\PostHistory;
 use Mageplaza\Blog\Model\PostHistoryFactory;
 
 /**
@@ -66,13 +67,12 @@ class Edit extends History
         parent::__construct($postHistoryFactory, $postFactory, $coreRegistry, $date, $context);
     }
 
-
     /**
      * @return \Magento\Backend\Model\View\Result\Page|Redirect|Page
      */
     public function execute()
     {
-        /** @var \Mageplaza\Blog\Model\PostHistory $history */
+        /** @var PostHistory $history */
         $history = $this->initPostHistory();
 
         if (!$history) {
