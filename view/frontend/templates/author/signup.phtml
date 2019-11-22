@@ -156,10 +156,6 @@ $author = $block->getAuthor();
     .mp-field .label {
         width: 30%;
     }
-
-    .mp-field input, .mp-field textarea {
-        width: 200%;
-    }
 </style>
 <script>
     require(
@@ -175,6 +171,6 @@ $author = $block->getAuthor();
                 }
                 $('.mp_full_url').html(url);
             });
-            editor.config('short_description', '<?= /* @noEscape */ $block->getVersion() ?>', '<?= /* @noEscape */ $block->getMagentoVersion() ?>', '60%');
+            editor.config('short_description', '<?= /* @noEscape */ $block->getVersion() ?>', '<?= /* @noEscape */ $block->getMagentoVersion() ?>', '100%');
         });
 </script>

@@ -17,6 +17,7 @@
  * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 define([
     'jquery',
     'Magento_Ui/js/modal/modal',

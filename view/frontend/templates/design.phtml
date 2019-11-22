@@ -39,6 +39,74 @@
 
 <?php $color = $block->getHelper()->getBlogConfig('general/font_color'); ?>
 <style type="text/css">
+    .mp-blog-review-title{
+        text-align: center;
+    }
+    #mp-blog-review{
+        position: relative;
+        height: 65px;
+    }
+    #mp-blog-review  div{
+        padding: 10px 20px;
+        color: #ffffff;
+        cursor: pointer;
+        width: 120px;
+        text-align: center;
+        position: absolute;
+        margin-top: 10px;
+    }
+    .mp-blog-like{
+        background-color: #6AA84F;
+        left: 33%;
+    }
+    .mp-blog-dislike{
+        background-color: #EC3A3C;
+        left: 52%;
+    }
+    @media (max-width: 1024px) {
+        .mp-blog-like{
+            left: 28%;
+        }
+    }
+    @media (max-width: 768px) {
+        .mp-blog-like{
+            left: 20%;
+        }
+    }
+    @media (max-width: 375px) {
+        .mp-blog-like{
+            left: 0;
+        }
+    }
+
+    .mp-blog-new-post {
+        height: 60px;
+    }
+
+    .mp-blog-new-post button {
+        float: right;
+        margin: 10px;
+        padding: 10px 30px
+    }
+
+    .post-item-wraper {
+        position: relative;
+    }
+
+    .post-info-action {
+        display: flex;
+        position: absolute;
+        float: right;
+        right: 10px;
+        top: 10px;
+    }
+
+    .post-info-action div {
+        margin: 0 10px;
+        width: 25px;
+        cursor: pointer;
+    }
+
     #mpblog-list-container a {
         text-decoration: none;
     }
