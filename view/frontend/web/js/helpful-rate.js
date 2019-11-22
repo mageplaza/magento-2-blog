@@ -18,10 +18,8 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 define([
-    'jquery',
-    'mage/translate',
-    'underscore'
-], function ($, $t, _) {
+    'jquery'
+], function ($) {
     'use strict';
 
     $.widget('mageplaza.mpBlogHelpfulRate', {
@@ -43,7 +41,7 @@ define([
                             currentPostIds = {};
 
                         if (JSON.parse(self.getCookie('mpblog_post_data'))) {
-                            currentPostIds = JSON.parse(self.getCookie('mpblog_post_data'))
+                            currentPostIds = JSON.parse(self.getCookie('mpblog_post_data'));
                         }
 
                         if ($(this).hasClass('mp-blog-like')) {
@@ -74,10 +72,12 @@ define([
                                     }
 
                                     if (response['status'] && response['type'] === '1') {
-                                        $('#mp-blog-review .mp-blog-like .mp-blog-view').text('(' + response["sum"] + ')');
+                                        $('#mp-blog-review .mp-blog-like .mp-blog-view')
+                                        .text('(' + response["sum"] + ')');
                                     }
                                     if (response['status'] && response['type'] === '0') {
-                                        $('#mp-blog-review .mp-blog-dislike .mp-blog-view').text('(' + response["sum"] + ')');
+                                        $('#mp-blog-review .mp-blog-dislike .mp-blog-view')
+                                        .text('(' + response["sum"] + ')');
                                     }
                                     $('html, body').animate({
                                         scrollTop: $('body').offset().top
@@ -90,6 +90,7 @@ define([
             },
             getCookie: function (name) {
                 var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+
                 return v ? v[2] : null;
             },
             receiveCookiePostIds: function (postId, action, self) {

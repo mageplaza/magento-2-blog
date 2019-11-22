@@ -120,8 +120,7 @@
                     "Mageplaza_Blog/js/managePost": {
                         "deleteUrl": "<?= $block->escapeHtml($block->getUrl('mpblog/post/deletepost')) ?>",
                         "basePubUrl": "<?= $block->escapeHtml($block->getBaseMediaUrl()) ?>",
-                        "postDatas": <?= /* @noEscape */
-    $block->getPostDatas($postCollection) ?>,
+                        "postDatas": <?= /* @noEscape */ $block->getPostDatas($postCollection) ?>,
                         "editorVersion": "<?= $block->escapeHtml($block->getVersion()) ?>",
                         "magentoVersion": "<?= $block->escapeHtml($block->getMagentoVersion()) ?>"
                     }

@@ -63,12 +63,15 @@ define([
          * @param {Array} options
          */
         setOption: function (option, options) {
-            var parent = parseInt(option.parent);
+            // eslint-disable-next-line radix
+            var parent = parseInt(option.parent),
+                copyOptionsTree;
+
             if (_.contains([0, 1], parent)) {
                 options = options || this.cacheOptions.tree;
                 options.push(option);
 
-                var copyOptionsTree = JSON.parse(JSON.stringify(this.cacheOptions.tree));
+                copyOptionsTree = JSON.parse(JSON.stringify(this.cacheOptions.tree));
                 this.cacheOptions.plain = flattenCollection(copyOptionsTree, this.separator);
                 this.options(this.cacheOptions.tree);
             } else {

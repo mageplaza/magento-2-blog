@@ -19,12 +19,9 @@
  */
 define([
     'jquery',
-    'mage/translate',
-    'underscore',
-    'Magento_Ui/js/modal/modal',
     "mage/adminhtml/events",
     "mage/adminhtml/wysiwyg/tiny_mce/setup"
-], function ($, $t, _, modal) {
+], function ($) {
     'use strict';
 
     $.widget('mageplaza.mpBlogPostAction', {
@@ -33,10 +30,10 @@ define([
                 var self = this;
 
                 $('button.mpblog-action-new').on('click', function () {
-                    self._AddNew(self);
+                    self._AddNew();
                 });
             },
-            _AddNew: function (self) {
+            _AddNew: function () {
                 var form      = $('#mp_blog_post_form'),
                     formData  = new FormData(form[0]),
                     htmlPopup = $('#mp-blog-new-post-popup'),

@@ -64,11 +64,12 @@ define([
                     'innerScroll': true,
                     'buttons': []
                 };
+
                 self._resetForm('');
                 self._openPopup(options, htmlPopup, self);
             },
             _resetForm: function (postContent) {
-                var iframe = document.getElementById('post_content_ifr');;
+                var iframe = document.getElementById('post_content_ifr');
 
                 $('#mp_blog_post_form').trigger("reset");
                 $('#short_description').empty();
@@ -112,14 +113,16 @@ define([
                         date;
 
                     if (field.is('[type="file"]') && value) {
-                        imageEL = '<a class="mp-image-link" href="' + pubUrl + 'mageplaza/blog/post/' + value + '" onclick="imagePreview(\'post_image_image\'); return false;" >' +
+                        imageEL = '<a class="mp-image-link" href="' + pubUrl + 'mageplaza/blog/post/' + value
+                            + '" onclick="imagePreview(\'post_image_image\'); return false;" >' +
                             '<img src="' + pubUrl + 'mageplaza/blog/post/' + value + '" id="post_image_image"' +
                             ' title="' + value + '" alt="' + value + '" height="22" width="22"' +
                             ' class="small-image-preview v-middle">' +
                             '</a>';
                         field.parent().prepend(imageEL);
                         deleteEL =  '<span class="delete-image">'
-                            + '<input style="width: 8%" type="checkbox" name="image[delete]" value="1" class="checkbox" id="post_image_delete">'
+                            + '<input style="width: 8%" type="checkbox" name="image[delete]"'
+                            + ' value="1" class="checkbox" id="post_image_delete">'
                             + '<label for="post_image_delete"> Delete Image</label>'
                             + '</span>';
                         field.parent().append(deleteEL);

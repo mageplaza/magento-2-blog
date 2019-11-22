@@ -51,9 +51,11 @@ define([
                 innerScroll: true,
                 title: $t('Select Customer'),
                 buttons: []
-            };
-            modal(options, $('#customer-grid'));
-            $('#customer-grid').modal('openModal');
+            },
+            customerGridEl = $('#customer-grid');
+
+            modal(options, customerGridEl);
+            customerGridEl.modal('openModal');
         },
 
         /**
