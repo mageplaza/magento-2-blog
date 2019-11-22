@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Tag\Edit\Tab;
 
+use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
@@ -147,7 +148,7 @@ class Tag extends Generic implements TabInterface
         if (!$this->_storeManager->isSingleStoreMode()) {
             /** @var RendererInterface $rendererBlock */
             $rendererBlock = $this->getLayout()->createBlock(
-                '\Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+                Element::class
             );
             $fieldset->addField('store_ids', 'multiselect', [
                 'name'   => 'store_ids',

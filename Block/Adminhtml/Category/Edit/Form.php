@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit;
 
 use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Button;
 use Magento\Catalog\Block\Adminhtml\Category\AbstractCategory;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
@@ -90,11 +91,12 @@ class Form extends AbstractCategory
     protected function _prepareLayout()
     {
         $category = $this->getCategory();
-        $categoryId = (int) $category->getId(); // 0 when we create Blog Category, otherwise some value for editing Blog Category
+        $categoryId = (int) $category->getId();
+        // 0 when we create Blog Category, otherwise some value for editing Blog Category
 
         $this->setChild(
             'tabs',
-            $this->getLayout()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tabs', 'tabs')
+            $this->getLayout()->createBlock(Tabs::class, 'tabs')
         );
 
         // Save button
@@ -118,9 +120,9 @@ class Form extends AbstractCategory
                 'id'      => 'delete',
                 'label'   => __('Delete Category'),
                 'onclick' => "categoryDelete('" . $this->getUrl(
-                        'mageplaza_blog/*/delete',
-                        ['_current' => true]
-                    ) . "')",
+                    'mageplaza_blog/*/delete',
+                    ['_current' => true]
+                ) . "')",
                 'class'   => 'delete'
             ]);
         }
@@ -203,7 +205,7 @@ class Form extends AbstractCategory
         } else {
             $this->setChild(
                 $alias . '_button',
-                $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->addData($config)
+                $this->getLayout()->createBlock(Button::class)->addData($config)
             );
             $this->additionalButtons[$alias] = $alias . '_button';
         }
@@ -339,7 +341,7 @@ class Form extends AbstractCategory
     public function getButtonChildBlock($childId, $blockClassName = null)
     {
         if (null === $blockClassName) {
-            $blockClassName = 'Magento\Backend\Block\Widget\Button';
+            $blockClassName = Button::class;
         }
 
         return $this->getLayout()->createBlock($blockClassName, $this->getNameInLayout() . '-' . $childId);
