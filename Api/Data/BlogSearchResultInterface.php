@@ -21,11 +21,13 @@
 
 namespace Mageplaza\Blog\Api\Data;
 
+use Magento\Framework\Api\SearchResultsInterface;
+
 /**
  * Interface BlogSearchResultInterface
  * @api
  */
-interface BlogSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
+interface BlogSearchResultInterface extends SearchResultsInterface
 {
     /**
      * @return \Mageplaza\Blog\Api\Data\PostInterface[]

@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Api;
 
+use Exception;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -109,6 +110,7 @@ interface BlogRepositoryInterface
      * @param string $postId
      *
      * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getPostRelated($postId);
 
@@ -117,6 +119,7 @@ interface BlogRepositoryInterface
      * @param \Mageplaza\Blog\Api\Data\CommentInterface $commentData
      *
      * @return \Mageplaza\Blog\Api\Data\CommentInterface
+     * @throws Exception
      */
     public function addCommentInPost($postId, $commentData);
 
@@ -124,6 +127,7 @@ interface BlogRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      *
      * @return \Mageplaza\Blog\Api\Data\BlogSearchResultInterface
+     * @throws NoSuchEntityException
      */
     public function getPostList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -133,7 +137,7 @@ interface BlogRepositoryInterface
      * @param \Mageplaza\Blog\Api\Data\PostInterface $post
      *
      * @return \Mageplaza\Blog\Api\Data\PostInterface
-     * @throws \Exception
+     * @throws Exception
      */
     public function createPost($post);
 
@@ -153,6 +157,7 @@ interface BlogRepositoryInterface
      * @return \Mageplaza\Blog\Api\Data\PostInterface
      * @throws InputException
      * @throws NoSuchEntityException
+     * @throws Exception
      */
     public function updatePost($postId, $post);
 
@@ -176,7 +181,7 @@ interface BlogRepositoryInterface
      * @param \Mageplaza\Blog\Api\Data\TagInterface $tag
      *
      * @return \Mageplaza\Blog\Api\Data\TagInterface
-     * @throws \Exception
+     * @throws Exception
      */
     public function createTag($tag);
 
@@ -203,6 +208,7 @@ interface BlogRepositoryInterface
      * @return \Mageplaza\Blog\Api\Data\TagInterface
      * @throws InputException
      * @throws NoSuchEntityException
+     * @throws Exception
      */
     public function updateTag($tagId, $tag);
 
@@ -240,7 +246,7 @@ interface BlogRepositoryInterface
      * @param \Mageplaza\Blog\Api\Data\TopicInterface $topic
      *
      * @return \Mageplaza\Blog\Api\Data\TopicInterface
-     * @throws \Exception
+     * @throws Exception
      */
     public function createTopic($topic);
 
@@ -260,6 +266,7 @@ interface BlogRepositoryInterface
      * @return \Mageplaza\Blog\Api\Data\TopicInterface
      * @throws InputException
      * @throws NoSuchEntityException
+     * @throws Exception
      */
     public function updateTopic($topicId, $topic);
 
@@ -313,7 +320,7 @@ interface BlogRepositoryInterface
      * @param \Mageplaza\Blog\Api\Data\CategoryInterface $category
      *
      * @return \Mageplaza\Blog\Api\Data\CategoryInterface
-     * @throws \Exception
+     * @throws Exception
      */
     public function createCategory($category);
 
@@ -333,6 +340,7 @@ interface BlogRepositoryInterface
      * @return \Mageplaza\Blog\Api\Data\CategoryInterface
      * @throws InputException
      * @throws NoSuchEntityException
+     * @throws Exception
      */
     public function updateCategory($categoryId, $category);
 
@@ -370,6 +378,7 @@ interface BlogRepositoryInterface
      * @return \Mageplaza\Blog\Api\Data\AuthorInterface
      * @throws InputException
      * @throws NoSuchEntityException
+     * @throws Exception
      */
     public function updateAuthor($authorId, $author);
 }
