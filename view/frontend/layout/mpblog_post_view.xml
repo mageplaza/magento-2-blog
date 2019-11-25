@@ -24,7 +24,7 @@
     <update handle="mpblog_design"/>
     <body>
         <referenceBlock name="head.additional">
-            <block class="Mageplaza\Blog\Block\Post\View" name="mpblog.post.head" template="post/head.phtml" cacheable="false" />
+            <block class="Mageplaza\Blog\Block\Post\View" name="mpblog.post.head" template="post/head.phtml"/>
         </referenceBlock>
         <referenceContainer name="content">
             <block class="Mageplaza\Blog\Block\Post\View" name="mpblog.post.view" template="post/view.phtml" cacheable="false">

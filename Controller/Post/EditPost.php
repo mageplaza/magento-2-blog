@@ -107,7 +107,7 @@ class EditPost extends Action
     {
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        if ($this->_helperBlog->isLoggin()
+        if ($this->_helperBlog->isLogin()
             && $this->getRequest()->isAjax()
             && !$this->_helperBlog->isAuthor()
         ) {

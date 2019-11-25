@@ -56,8 +56,7 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Author\SignupForm" name="blog_signup_form" template="author/signup.phtml"
-                   cacheable="false"/>
+            <block class="Mageplaza\Blog\Block\Author\SignupForm" name="blog_signup_form" template="author/signup.phtml"/>
         </referenceContainer>
     </body>
 </page>

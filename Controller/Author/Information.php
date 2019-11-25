@@ -107,12 +107,14 @@ class Information extends Action
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
+        $this->_helperBlog->setCustomerContextId();
 
         if (!$this->_helperBlog->isEnabledAuthor()) {
             $resultRedirect->setPath('customer/account');
 
             return $resultRedirect;
         }
+
 
         if (!$this->_helperBlog->isAuthor()) {
 
@@ -125,7 +127,7 @@ class Information extends Action
             return $page;
         }
 
-        if ($this->_helperBlog->isLoggin()) {
+        if ($this->_helperBlog->isLogin()) {
             $resultRedirect->setPath('mpblog/*/signup');
         } else {
             $resultRedirect->setPath('customer/account');

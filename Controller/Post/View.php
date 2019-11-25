@@ -185,6 +185,7 @@ class View extends Action
     {
         $id   = $this->getRequest()->getParam('id');
         $post = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($id);
+        $this->helperBlog->setCustomerContextId();
 
         $page       = $this->resultPageFactory->create();
         $pageLayout = ($post->getLayout() === 'empty') ? $this->helperBlog->getSidebarLayout() : $post->getLayout();

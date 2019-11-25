@@ -188,6 +188,7 @@ class Preview extends Action
         $historyId = $this->getRequest()->getParam('historyId');
         $history   = $this->helperBlog->getFactoryByType(Data::TYPE_HISTORY)->create()->load($historyId);
         $post      = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($history->getPostId());
+        $this->helperBlog->setCustomerContextId();
 
         $data = $this->prepareData($history);
         $post->addData($data);

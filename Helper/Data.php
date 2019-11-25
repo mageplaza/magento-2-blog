@@ -224,6 +224,14 @@ class Data extends CoreHelper
     }
 
     /**
+     * @return int|null
+     */
+    public function getCustomerIdByContext()
+    {
+        return $this->_httpContext->getValue('mp_customer_id')?:$this->customerSession->getId();
+    }
+
+    /**
      * @return int
      * @throws NoSuchEntityException
      */
@@ -235,9 +243,9 @@ class Data extends CoreHelper
     /**
      * @return bool
      */
-    public function isLoggin()
+    public function isLogin()
     {
-        return $this->customerSession->isLoggedIn();
+        return $this->_httpContext->getValue(CustomerContext::CONTEXT_AUTH);
     }
 
     /**
@@ -263,6 +271,17 @@ class Data extends CoreHelper
     }
 
     /**
+     * Set Customer Id in Context
+     */
+    public function setCustomerContextId()
+    {
+        $customer = $this->customerSession->getCustomerData();
+        if (!$this->_httpContext->getValue('mp_customer_id') && $customer) {
+            $this->_httpContext->setValue('mp_customer_id', $customer->getId(), 0);
+        }
+    }
+
+    /**
      * @return DataObject
      */
     public function getCurrentAuthor()
@@ -277,11 +296,9 @@ class Data extends CoreHelper
      */
     public function getAuthorCollection()
     {
-        $customer = $this->customerSession->getCustomerData();
-
-        if ($customer) {
+        if ($customerId = $this->_httpContext->getValue('mp_customer_id')) {
             return $this->getFactoryByType('author')->create()->getCollection()
-                ->addFieldToFilter('customer_id', $customer->getId());
+                ->addFieldToFilter('customer_id', $customerId);
         }
 
         return null;

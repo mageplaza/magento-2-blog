@@ -24,7 +24,6 @@ namespace Mageplaza\Blog\Block;
 use Exception;
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
@@ -81,11 +80,6 @@ class Frontend extends Template
      * @var CustomerRepositoryInterface
      */
     public $customerRepository;
-
-    /**
-     * @var Session
-     */
-    protected $customerSession;
 
     /**
      * @var
@@ -150,7 +144,6 @@ class Frontend extends Template
      * @param CommentFactory $commentFactory
      * @param LikeFactory $likeFactory
      * @param CustomerRepositoryInterface $customerRepository
-     * @param Session $customerSession
      * @param Registry $coreRegistry
      * @param HelperData $helperData
      * @param Url $customerUrl
@@ -170,7 +163,6 @@ class Frontend extends Template
         CommentFactory $commentFactory,
         LikeFactory $likeFactory,
         CustomerRepositoryInterface $customerRepository,
-        Session $customerSession,
         Registry $coreRegistry,
         HelperData $helperData,
         Url $customerUrl,
@@ -188,7 +180,6 @@ class Frontend extends Template
         $this->cmtFactory         = $commentFactory;
         $this->likeFactory        = $likeFactory;
         $this->customerRepository = $customerRepository;
-        $this->customerSession    = $customerSession;
         $this->helperData         = $helperData;
         $this->coreRegistry       = $coreRegistry;
         $this->dateTime           = $dateTime;

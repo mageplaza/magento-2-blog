@@ -85,7 +85,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
      */
     public function isLoggedIn()
     {
-        return $this->customerSession->isLoggedIn();
+        return $this->helperData->isLogin();
     }
 
     /**
@@ -182,9 +182,8 @@ class View extends \Mageplaza\Blog\Block\Listpost
      */
     public function isLiked($cmtId)
     {
-        if ($this->customerSession->isLoggedIn()) {
-            $customerData = $this->customerSession->getCustomerData();
-            $customerId   = $customerData->getId();
+        if ($this->helperData->isLogin()) {
+            $customerId   = $this->helperData->getCustomerIdByContext();
             $likes        = $this->likeFactory->create()->getCollection();
             foreach ($likes as $like) {
                 if ($like->getEntityId() == $customerId && $like->getCommentId() == $cmtId) {
@@ -223,6 +222,10 @@ class View extends \Mageplaza\Blog\Block\Listpost
     {
         /** @var PostLike $postLike */
         $postLike = $this->postLikeFactory->create();
+        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
+        $logger = new \Zend\Log\Logger();
+        $logger->addWriter($writer);
+        $logger->info('123');
 
         return $postLike->getCollection()->addFieldToFilter('post_id', $postId)
             ->addFieldToFilter('action', $action)->count();
