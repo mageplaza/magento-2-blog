@@ -147,7 +147,7 @@
                         </comment>
                     </field>
                     <field id="related_mode" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInStore="1" showInWebsite="1">
-                        <label>Display Related Posts Mode</label>
+                        <label>Display Related Products Mode</label>
                         <source_model>Mageplaza\Blog\Model\Config\Source\RelatedMode</source_model>
                     </field>
                     <field id="product_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
