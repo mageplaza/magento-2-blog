@@ -106,6 +106,7 @@ class EditPost extends Action
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
+        $this->_helperBlog->setCustomerContextId();
 
         if ($this->_helperBlog->isLogin()
             && $this->getRequest()->isAjax()

@@ -75,6 +75,7 @@ class DeletePost extends Action
     public function execute()
     {
         $postId   = $this->getRequest()->getParam('post_id');
+        $this->_helperBlog->setCustomerContextId();
         $author = $this->_helperBlog->getCurrentAuthor();
         $post   = $this->postFactory->create();
 
