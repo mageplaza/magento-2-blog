@@ -134,6 +134,7 @@ class Manage extends Action
     public function execute()
     {
         $data   = $this->getRequest()->getParams();
+        $this->_helperBlog->setCustomerContextId();
         $author = $this->_helperBlog->getCurrentAuthor();
         $post   = $this->postFactory->create();
         
