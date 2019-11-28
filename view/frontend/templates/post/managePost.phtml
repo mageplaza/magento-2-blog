@@ -95,7 +95,19 @@
         <div class="field mp-field">
             <label for="publish_date" class="label"><span><?= /* @noEscape */ __('Publish Date')?></span></label>
             <div class="control">
-                <input name="publish_date" id="publish_date" type="datetime-local">
+                <input name="publish_date" id="publish_date" type="text">
+                <script>
+                    require([
+                        "jquery",
+                        "mage/calendar"
+                    ], function($){
+                        $('#publish_date').datetimepicker({
+                                dateFormat:'yy-mm-dd',
+                                beforeShowDay: $.datepicker.noWeekends,
+                            }
+                        );
+                    });
+                </script>
             </div>
         </div>
     </fieldset>
