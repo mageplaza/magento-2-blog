@@ -92,6 +92,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
                 ]),
             'popup'   => false,
             'caption' => __('Restore'),
+            'confirm' => 'Are you sure you want to do this?'
         ];
 
         $actions[] = [
