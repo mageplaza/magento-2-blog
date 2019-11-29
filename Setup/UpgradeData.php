@@ -25,10 +25,13 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\AuthorFactory;
 
+/**
+ * Class UpgradeData
+ * @package Mageplaza\Blog\Setup
+ */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
@@ -49,27 +52,19 @@ class UpgradeData implements UpgradeDataInterface
     public $author;
 
     /**
-     * @var Data
-     */
-    protected $helperData;
-
-    /**
      * UpgradeData constructor.
      *
      * @param DateTime $date
      * @param CommentFactory $commentFactory
-     * @param Data $helperData
      * @param AuthorFactory $authorFactory
      */
     public function __construct(
         DateTime $date,
         CommentFactory $commentFactory,
-        Data $helperData,
         AuthorFactory $authorFactory
     ) {
         $this->comment    = $commentFactory;
         $this->author     = $authorFactory;
-        $this->helperData = $helperData;
         $this->date       = $date;
     }
 
@@ -83,37 +78,35 @@ class UpgradeData implements UpgradeDataInterface
         $installer = $setup;
         $installer->startSetup();
 
-        if (!$this->helperData->versionCompare('2.3.0')) :
-            if (version_compare($context->getVersion(), '2.4.4', '<')) {
-                $commentIds = $this->comment->create()->getCollection()->getAllIds();
-                $commentIds = implode(',', $commentIds);
-                if ($commentIds) {
-                    /** Add create at old comment */
-                    $sampleTemplates = [
-                        'created_at' => $this->date->date(),
-                        'status'     => 3
-                    ];
-                    $setup->getConnection()->update(
-                        $setup->getTable('mageplaza_blog_comment'),
-                        $sampleTemplates,
-                        'comment_id IN (' . $commentIds . ')'
-                    );
-                }
+        if (version_compare($context->getVersion(), '2.4.4', '<')) {
+            $commentIds = $this->comment->create()->getCollection()->getAllIds();
+            $commentIds = implode(',', $commentIds);
+            if ($commentIds) {
+                /** Add create at old comment */
+                $sampleTemplates = [
+                    'created_at' => $this->date->date(),
+                    'status'     => 3
+                ];
+                $setup->getConnection()->update(
+                    $setup->getTable('mageplaza_blog_comment'),
+                    $sampleTemplates,
+                    'comment_id IN (' . $commentIds . ')'
+                );
             }
+        }
 
-            if (version_compare($context->getVersion(), '2.5.2', '<')) {
-                if ($this->author->create()->getCollection()->count() < 1) {
-                    $this->author->create()->addData(
-                        [
-                            'name'       => 'Admin',
-                            'type'       => 0,
-                            'status'     => 1,
-                            'created_at' => $this->date->date()
-                        ]
-                    )->save();
-                }
+        if (version_compare($context->getVersion(), '2.5.2', '<')) {
+            if ($this->author->create()->getCollection()->count() < 1) {
+                $this->author->create()->addData(
+                    [
+                        'name'       => 'Admin',
+                        'type'       => 0,
+                        'status'     => 1,
+                        'created_at' => $this->date->date()
+                    ]
+                )->save();
             }
-        endif;
+        }
         $installer->endSetup();
     }
 }
