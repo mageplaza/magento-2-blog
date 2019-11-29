@@ -32,7 +32,6 @@ use Magento\Backend\Model\Auth\Session;
 use Magento\Cms\Model\Page\Source\PageLayout as BasePageLayout;
 use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Config\Model\Config\Source\Design\Robots;
-use Magento\Config\Model\Config\Source\Enabledisable;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
@@ -45,6 +44,7 @@ use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\Config\Source\Author;
+use Mageplaza\Blog\Model\Config\Source\AuthorStatus;
 
 /**
  * Class Post
@@ -87,11 +87,6 @@ class Post extends Generic implements TabInterface
     protected $imageHelper;
 
     /**
-     * @var Enabledisable
-     */
-    protected $enabledisable;
-
-    /**
      * @var DateTime
      */
     protected $_date;
@@ -107,6 +102,11 @@ class Post extends Generic implements TabInterface
     protected $_author;
 
     /**
+     * @var AuthorStatus
+     */
+    protected $_status;
+
+    /**
      * Post constructor.
      *
      * @param Context $context
@@ -117,11 +117,11 @@ class Post extends Generic implements TabInterface
      * @param FormFactory $formFactory
      * @param Config $wysiwygConfig
      * @param Yesno $booleanOptions
-     * @param Enabledisable $enableDisable
      * @param Robots $metaRobotsOptions
      * @param Store $systemStore
      * @param Image $imageHelper
      * @param Author $author
+     * @param AuthorStatus $status
      * @param array $data
      */
     public function __construct(
@@ -133,16 +133,15 @@ class Post extends Generic implements TabInterface
         FormFactory $formFactory,
         Config $wysiwygConfig,
         Yesno $booleanOptions,
-        Enabledisable $enableDisable,
         Robots $metaRobotsOptions,
         Store $systemStore,
         Image $imageHelper,
         Author $author,
+        AuthorStatus $status,
         array $data = []
     ) {
         $this->wysiwygConfig = $wysiwygConfig;
         $this->booleanOptions = $booleanOptions;
-        $this->enabledisable = $enableDisable;
         $this->metaRobotsOptions = $metaRobotsOptions;
         $this->systemStore = $systemStore;
         $this->authSession = $authSession;
@@ -150,6 +149,7 @@ class Post extends Generic implements TabInterface
         $this->_layoutOptions = $layoutOption;
         $this->imageHelper = $imageHelper;
         $this->_author = $author;
+        $this->_status = $status;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -197,7 +197,7 @@ class Post extends Generic implements TabInterface
             'name'   => 'enabled',
             'label'  => __('Status'),
             'title'  => __('Status'),
-            'values' => $this->enabledisable->toOptionArray()
+            'values' => $this->_status->toOptionArray()
         ]);
         if (!$post->hasData('enabled')) {
             $post->setEnabled(1);

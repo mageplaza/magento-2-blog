@@ -38,6 +38,9 @@ define([
                     case '0':
                         label = '<span class="grid-severity-critical"><span>' + label + '</span></span>';
                         break;
+                    case '2':
+                        label = '<span class="grid-severity-critical"><span>' + label + '</span></span>';
+                        break;
                 }
             }
             return label;
