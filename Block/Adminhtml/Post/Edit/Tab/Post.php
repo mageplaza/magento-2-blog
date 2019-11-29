@@ -285,28 +285,40 @@ class Post extends Generic implements TabInterface
             'title'  => __('Allow Comment'),
             'values' => $this->booleanOptions->toOptionArray(),
         ]);
-        $fieldset->addField('publish_date', 'date', [
-            'name'        => 'publish_date',
-            'label'       => __('Publish Date'),
-            'title'       => __('Publish Date'),
-            'date_format' => 'M/d/yyyy',
-            'timezone'    => false,
-            'value'       => $this->_date->date('m/d/Y')
-        ]);
+        $fieldset->addField(
+            'publish_date',
+            'date',
+            [
+                'name' => 'publish_date',
+                'label' => __('Publish Date'),
+                'title'       => __('Publish Date'),
+                'date_format' => 'yyyy-MM-dd',
+                'timezone'    => false,
+                'time_format' => 'hh:mm:ss'
+            ]
+        );
+//        $fieldset->addField('publish_date', 'da', [
+//            'name'        => 'publish_date',
+//            'label'       => __('Publish Date'),
+//            'title'       => __('Publish Date'),
+//            'date_format' => 'M/d/yyyy',
+//            'timezone'    => false,
+//            'value'       => $this->_date->date('m/d/Y')
+//        ]);
 
-        /** get current time for public_time field */
-        $currentTime = new \DateTime($this->_date->date(), new DateTimeZone('UTC'));
-        $currentTime->setTimezone(new DateTimeZone($this->_localeDate->getConfigTimezone()));
-        $time = $currentTime->format('H,i,s');
-
-        $fieldset->addField('publish_time', 'time', [
-            'name'     => 'publish_time',
-            'label'    => __('Publish Time'),
-            'title'    => __('Publish Time'),
-            'format'   => $this->_localeDate->getTimeFormat(IntlDateFormatter::SHORT),
-            'timezone' => false,
-            'value'    => $time
-        ]);
+//        /** get current time for public_time field */
+//        $currentTime = new \DateTime($this->_date->date(), new DateTimeZone('UTC'));
+//        $currentTime->setTimezone(new DateTimeZone($this->_localeDate->getConfigTimezone()));
+//        $time = $currentTime->format('H,i,s');
+//
+//        $fieldset->addField('publish_time', 'time', [
+//            'name'     => 'publish_time',
+//            'label'    => __('Publish Time'),
+//            'title'    => __('Publish Time'),
+//            'format'   => $this->_localeDate->getTimeFormat(IntlDateFormatter::SHORT),
+//            'timezone' => false,
+//            'value'    => $time
+//        ]);
 
         $seoFieldset = $form->addFieldset('seo_fieldset', [
             'legend' => __('Search Engine Optimization'),
@@ -366,10 +378,10 @@ class Post extends Generic implements TabInterface
             $publicDateTime = new \DateTime($post->getData('publish_date'), new DateTimeZone('UTC'));
             $publicDateTime->setTimezone(new DateTimeZone($this->_localeDate->getConfigTimezone()));
             $publicDateTime = $publicDateTime->format('m/d/Y H:i:s');
-            list($date, $time) = explode(' ', $publicDateTime);
-            $time = str_replace(':', ',', $time);
-            $post->setData('publish_date', $date);
-            $post->setData('publish_time', $time);
+//            list($date, $time) = explode(' ', $publicDateTime);
+//            $time = str_replace(':', ',', $time);
+            $post->setData('publish_date', $publicDateTime);
+//            $post->setData('publish_time', $time);
         }
 
         $form->addValues($post->getData());

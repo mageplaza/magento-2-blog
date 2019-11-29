@@ -46,7 +46,7 @@
                 comment="Post Updated At"/>
         <column xsi:type="int" name="author_id" padding="10" unsigned="true" nullable="true" comment="Author ID"/>
         <column xsi:type="int" name="modifier_id" padding="10" unsigned="true" nullable="true" comment="Author ID"/>
-        <column xsi:type="timestamp" name="publish_date" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
+        <column xsi:type="timestamp" name="publish_date" nullable="true" default="CURRENT_TIMESTAMP"
                 comment="Post Updated At"/>
         <column xsi:type="mediumtext" name="import_source" nullable="true" comment="Import Source"/>
         <column xsi:type="mediumtext" name="layout" nullable="true" comment="Post Layout"/>
@@ -86,7 +86,7 @@
                 comment="Post Updated At"/>
         <column xsi:type="int" name="author_id" padding="10" unsigned="true" nullable="true" comment="Author ID"/>
         <column xsi:type="int" name="modifier_id" padding="10" unsigned="true" nullable="true" comment="Author ID"/>
-        <column xsi:type="timestamp" name="publish_date" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
+        <column xsi:type="timestamp" name="publish_date" nullable="true" default="CURRENT_TIMESTAMP"
                 comment="Post Updated At"/>
         <column xsi:type="mediumtext" name="import_source" nullable="true" comment="Import Source"/>
         <column xsi:type="varchar" name="category_ids" nullable="true" length="255" comment="Category Ids"/>
