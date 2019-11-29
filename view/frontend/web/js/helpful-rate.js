@@ -36,6 +36,28 @@ define([
                 $('#mp-blog-review div').each(function () {
                     var el = this;
 
+                    if (self.options.mode === 0 && self.getCookie('mpblog_post_data')){
+                        self.disableReview();
+                    }
+
+                    if (self.options.mode === 1){
+                        $.ajax({
+                            url: url,
+                            type: "post",
+                            data: {
+                                post_id: post_id,
+                                action: '3',
+                                mode: self.options.mode
+                            },
+                            showLoader: false,
+                            success: function (response) {
+                                if (response.status === 0){
+                                    self.disableReview();
+                                }
+                            }
+                        });
+                    }
+
                     $(el).on('click', function () {
                         var action         = 0,
                             currentPostIds = {};
@@ -88,6 +110,12 @@ define([
                     });
                 });
             },
+            disableReview: function () {
+                $('#mp-blog-review').css('pointer-events','none');
+                $('.mp-blog-like').css('background-color','#658259');
+                $('.mp-blog-dislike').css('background-color','##9a6464');
+            }
+            ,
             getCookie: function (name) {
                 var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
 

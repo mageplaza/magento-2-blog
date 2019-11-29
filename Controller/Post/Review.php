@@ -88,17 +88,25 @@ class Review extends Action
      */
     public function execute()
     {
-        $id     = $this->getRequest()->getParam('post_id');
-        $action = $this->getRequest()->getParam('action');
-        $mode   = $this->getRequest()->getParam('mode');
-        $customerId = $this->_helperBlog->getCurrentUser()?:0;
+        $id         = $this->getRequest()->getParam('post_id');
+        $action     = $this->getRequest()->getParam('action');
+        $mode       = $this->getRequest()->getParam('mode');
+        $customerId = $this->_helperBlog->getCurrentUser() ?: 0;
         $post       = $this->postFactory->create()->load($id);
-        $sum = $this->_postLike->create()->getCollection()->addFieldToFilter('action', $action)
+        $sum        = $this->_postLike->create()->getCollection()->addFieldToFilter('action', $action)
             ->addFieldToFilter('post_id', $id);
         if ($mode === '1') {
             $like = $this->_postLikeCollection->addFieldToFilter('entity_id', $customerId)
                 ->addFieldToFilter('post_id', $post->getId());
-            if (!$customerId || !$post || $like->count() > 0) {
+
+            if ($like->count() > 0 && $action === '3') {
+                return $this->getResponse()->representJson(Data::jsonEncode([
+                    'status' => 0,
+                    'type'   => $action
+                ]));
+            }
+
+            if (!$customerId || !$post) {
                 if ($action === '1') {
                     $this->messageManager->addErrorMessage(__('Can\'t Like Post.'));
                 } else {
