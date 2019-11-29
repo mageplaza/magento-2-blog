@@ -34,13 +34,17 @@ define([
                     self    = this;
 
                 $('#mp-blog-review div').each(function () {
-                    var el = this;
+                    var el        = this,
+                        subPostId = {};
 
-                    if (self.options.mode === 0 && self.getCookie('mpblog_post_data')){
-                        self.disableReview();
+                    if (self.options.mode === 0 && JSON.parse(self.getCookie('mpblog_post_data'))) {
+                        subPostId = JSON.parse(self.getCookie('mpblog_post_data'));
+                        if (typeof subPostId[post_id] !== "undefined") {
+                            self.disableReview();
+                        }
                     }
 
-                    if (self.options.mode === 1){
+                    if (self.options.mode === 1) {
                         $.ajax({
                             url: url,
                             type: "post",
@@ -51,7 +55,7 @@ define([
                             },
                             showLoader: false,
                             success: function (response) {
-                                if (response.status === 0){
+                                if (response.status === 0) {
                                     self.disableReview();
                                 }
                             }
@@ -87,9 +91,9 @@ define([
                                 showLoader: true,
                                 success: function (response) {
                                     var storedPostIds = self.receiveCookiePostIds(post_id, action, self),
-                                        jsonStringIds    = JSON.stringify(storedPostIds);
+                                        jsonStringIds = JSON.stringify(storedPostIds);
 
-                                    if (self.options.mode === 0){
+                                    if (self.options.mode === 0) {
                                         document.cookie = 'mpblog_post_data = ' + jsonStringIds;
                                     }
 
@@ -111,9 +115,9 @@ define([
                 });
             },
             disableReview: function () {
-                $('#mp-blog-review').css('pointer-events','none');
-                $('.mp-blog-like').css('background-color','#658259');
-                $('.mp-blog-dislike').css('background-color','##9a6464');
+                $('#mp-blog-review').css('pointer-events', 'none');
+                $('.mp-blog-like').css('background-color', '#658259');
+                $('.mp-blog-dislike').css('background-color', '##9a6464');
             }
             ,
             getCookie: function (name) {
