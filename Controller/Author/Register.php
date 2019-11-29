@@ -107,6 +107,7 @@ class Register extends Action
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $data           = $this->getRequest()->getParams();
+        $this->_helperBlog->setCustomerContextId();
 
         if (!$this->_helperBlog->isEnabledAuthor()) {
             $resultRedirect->setPath('customer/account');
