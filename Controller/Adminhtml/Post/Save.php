@@ -175,8 +175,12 @@ class Save extends Post
                     unset($data['is_changed_topic_list']);
                     unset($data['is_changed_category_list']);
                     unset($data['is_changed_product_list']);
-                    $history->addData($data);
-                    $history->save();
+                    if ($this->checkHistory($data)) {
+                        $history->addData($data);
+                        $history->save();
+                    } else {
+                        $this->messageManager->addErrorMessage(__('Data does not change from the last historical field'));
+                    }
                 } catch (RuntimeException $e) {
                     $this->messageManager->addErrorMessage($e->getMessage());
                 } catch (Exception $e) {
@@ -186,6 +190,46 @@ class Save extends Post
                 $this->messageManager->addErrorMessage(__('The number of records exceeds the specified number'));
             }
         }
+    }
+
+    /**
+     * @param $data
+     *
+     * @return bool
+     */
+    protected function checkHistory($data)
+    {
+        unset($data['updated_at']);
+        $lastHistory = $this->_postHistory->create()->getCollection()
+            ->addFieldToFilter('post_id', $data['post_id'])->getLastItem();
+
+        if (empty($lastHistory->getData())) {
+            return true;
+        }
+
+        $data['category_ids'] = implode(',', $data['categories_ids']);
+        $data['topic_ids']    = implode(',', $data['topics_ids']);
+        $data['tag_ids']      = implode(',', $data['tags_ids']);
+        $data['product_ids']  = Data::jsonEncode($data['products_data']);
+
+        foreach ($lastHistory->getData() as $key => $value) {
+            if (array_key_exists($key, $data)) {
+                if (is_array($data[$key])) {
+                    $data[$key] = trim(implode(',', $data[$key]), ',');
+                }
+                if ($data[$key] === null) {
+                    $data[$key] = '';
+                }
+                if ($value === null) {
+                    $value = '';
+                }
+                if ($data[$key] !== $value) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -942,7 +942,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         ->addColumn('meta_title', Table::TYPE_TEXT, 255, [], 'Post Meta Title')
                         ->addColumn('meta_description', Table::TYPE_TEXT, '64k', [], 'Post Meta Description')
                         ->addColumn('meta_keywords', Table::TYPE_TEXT, '64k', [], 'Post Meta Keywords')
-                        ->addColumn('meta_robots', Table::TYPE_INTEGER, null, [], 'Post Meta Robots')
+                        ->addColumn('meta_robots', Table::TYPE_TEXT, '64k', [], 'Post Meta Robots')
                         ->addColumn('updated_at', Table::TYPE_TIMESTAMP, null, [], 'Post Updated At')
                         ->addColumn('created_at', Table::TYPE_TIMESTAMP, null, [], 'Post Created At')
                         ->addColumn(

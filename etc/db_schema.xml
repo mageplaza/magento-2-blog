@@ -39,7 +39,7 @@
         <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
         <column xsi:type="mediumtext" name="meta_keywords" nullable="true" comment="Meta Keywords"/>
         <column xsi:type="mediumtext" name="meta_description" nullable="true" comment="Meta Description"/>
-        <column xsi:type="int" name="meta_robots" nullable="true"  comment="Post Meta Robots"/>
+        <column xsi:type="mediumtext" name="meta_robots" nullable="true"  comment="Post Meta Robots"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" default="CURRENT_TIMESTAMP"
                 comment="Post Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
@@ -79,7 +79,7 @@
         <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
         <column xsi:type="mediumtext" name="meta_keywords" nullable="true" comment="Meta Keywords"/>
         <column xsi:type="mediumtext" name="meta_description" nullable="true" comment="Meta Description"/>
-        <column xsi:type="int" name="meta_robots" nullable="true"  comment="Post Meta Robots"/>
+        <column xsi:type="mediumtext" name="meta_robots" nullable="true" comment="Post Meta Robots"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" default="CURRENT_TIMESTAMP"
                 comment="Post Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
@@ -150,7 +150,7 @@
         <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
         <column xsi:type="mediumtext" name="meta_keywords" nullable="true" comment="Meta Keywords"/>
         <column xsi:type="mediumtext" name="meta_description" nullable="true" comment="Meta Description"/>
-        <column xsi:type="int" name="meta_robots" nullable="true"  comment="Meta Robots"/>
+        <column xsi:type="mediumtext" name="meta_robots" nullable="true" comment="Meta Robots"/>
         <column xsi:type="mediumtext" name="import_source" nullable="true" comment="Import Source"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="tag_id"/>
@@ -175,7 +175,7 @@
         <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
         <column xsi:type="mediumtext" name="meta_keywords" nullable="true" comment="Meta Keywords"/>
         <column xsi:type="mediumtext" name="meta_description" nullable="true" comment="Meta Description"/>
-        <column xsi:type="int" name="meta_robots" nullable="true"  comment="Meta Robots"/>
+        <column xsi:type="mediumtext" name="meta_robots" nullable="true" comment="Meta Robots"/>
         <column xsi:type="mediumtext" name="import_source" nullable="true" comment="Import Source"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="topic_id"/>
@@ -196,7 +196,7 @@
         <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
         <column xsi:type="mediumtext" name="meta_keywords" nullable="true" comment="Meta Keywords"/>
         <column xsi:type="mediumtext" name="meta_description" nullable="true" comment="Meta Description"/>
-        <column xsi:type="int" name="meta_robots" nullable="true"  comment="Meta Robots"/>
+        <column xsi:type="mediumtext" name="meta_robots" nullable="true" comment="Meta Robots"/>
         <column xsi:type="int" name="parent_id" padding="11" nullable="true" comment="Category Parent ID"/>
         <column xsi:type="varchar" name="path" nullable="true" length="255" comment="Category Path"/>
         <column xsi:type="int" name="position" padding="11" nullable="true" comment="Category Position"/>
