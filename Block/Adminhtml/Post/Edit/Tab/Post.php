@@ -241,9 +241,10 @@ class Post extends Generic implements TabInterface
 
         $fieldset->addField('image', \Mageplaza\Blog\Block\Adminhtml\Renderer\Image::class, [
             'name'  => 'image',
-            'label' => __('Image'),
-            'title' => __('Image'),
-            'path'  => $this->imageHelper->getBaseMediaPath(Image::TEMPLATE_MEDIA_TYPE_POST)
+            'label' => __('Thumbnail Image'),
+            'title' => __('Thumbnail Image'),
+            'path'  => $this->imageHelper->getBaseMediaPath(Image::TEMPLATE_MEDIA_TYPE_POST),
+            'note'  => __('The appropriate size is 265px * 250px.')
         ]);
         $fieldset->addField('categories_ids', Category::class, [
             'name'  => 'categories_ids',
