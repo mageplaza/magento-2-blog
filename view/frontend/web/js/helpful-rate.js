@@ -105,6 +105,9 @@ define([
                                         $('#mp-blog-review .mp-blog-dislike .mp-blog-view')
                                         .text('(' + response["sum"] + ')');
                                     }
+                                    if (response['status']) {
+                                        self.disableReview();
+                                    }
                                     $('html, body').animate({
                                         scrollTop: $('body').offset().top
                                     }, 500);
