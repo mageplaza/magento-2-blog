@@ -478,6 +478,7 @@ class Post extends AbstractModel
                 $collection->getSelect()
                     ->limit($limit);
             }
+            $collection->addFieldToFilter('enabled', '1');
 
             return $collection;
         }

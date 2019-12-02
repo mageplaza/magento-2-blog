@@ -33,6 +33,24 @@ define([
                     url     = this.options.url,
                     self    = this;
 
+                if (self.options.mode === 1) {
+                    $.ajax({
+                        url: url,
+                        type: "post",
+                        data: {
+                            post_id: post_id,
+                            action: '3',
+                            mode: self.options.mode
+                        },
+                        showLoader: false,
+                        success: function (response) {
+                            if (response.status === 0) {
+                                self.disableReview();
+                            }
+                        }
+                    });
+                }
+
                 $('#mp-blog-review div').each(function () {
                     var el        = this,
                         subPostId = {};
@@ -42,24 +60,6 @@ define([
                         if (typeof subPostId[post_id] !== "undefined") {
                             self.disableReview();
                         }
-                    }
-
-                    if (self.options.mode === 1) {
-                        $.ajax({
-                            url: url,
-                            type: "post",
-                            data: {
-                                post_id: post_id,
-                                action: '3',
-                                mode: self.options.mode
-                            },
-                            showLoader: false,
-                            success: function (response) {
-                                if (response.status === 0) {
-                                    self.disableReview();
-                                }
-                            }
-                        });
                     }
 
                     $(el).on('click', function () {

@@ -99,9 +99,15 @@ class Review extends Action
             $like = $this->_postLikeCollection->addFieldToFilter('entity_id', $customerId)
                 ->addFieldToFilter('post_id', $post->getId());
 
-            if ($like->count() > 0 && $action === '3') {
+            if ($like->count() > 0) {
                 return $this->getResponse()->representJson(Data::jsonEncode([
                     'status' => 0,
+                    'type'   => $action
+                ]));
+            }
+            if ($action === '3') {
+                return $this->getResponse()->representJson(Data::jsonEncode([
+                    'status' => 1,
                     'type'   => $action
                 ]));
             }
