@@ -22,13 +22,13 @@
 namespace Mageplaza\Blog\Model\ResourceModel\Comment;
 
 use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
-use Mageplaza\Blog\Api\Data\BlogSearchResultInterface;
+use Mageplaza\Blog\Api\Data\SearchResult\CommentSearchResultInterface;
 
 /**
  * Class Collection
  * @package Mageplaza\Blog\Model\ResourceModel\Comment
  */
-class Collection extends AbstractCollection implements BlogSearchResultInterface
+class Collection extends AbstractCollection implements CommentSearchResultInterface
 {
     /**
      * @var string

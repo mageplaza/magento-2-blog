@@ -23,14 +23,14 @@ namespace Mageplaza\Blog\Model\ResourceModel\Post;
 
 use Magento\Framework\DB\Select;
 use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
-use Mageplaza\Blog\Api\Data\BlogSearchResultInterface;
+use Mageplaza\Blog\Api\Data\SearchResult\PostSearchResultInterface;
 use Zend_Db_Select;
 
 /**
  * Class Collection
  * @package Mageplaza\Blog\Model\ResourceModel\Post
  */
-class Collection extends AbstractCollection implements BlogSearchResultInterface
+class Collection extends AbstractCollection implements PostSearchResultInterface
 {
     /**
      * ID Field Name

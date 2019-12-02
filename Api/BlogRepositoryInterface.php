@@ -74,7 +74,7 @@ interface BlogRepositoryInterface
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      *
-     * @return \Mageplaza\Blog\Api\Data\BlogSearchResultInterface
+     * @return \Mageplaza\Blog\Api\Data\SearchResult\CommentSearchResultInterface
      */
     public function getCommentList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -126,7 +126,7 @@ interface BlogRepositoryInterface
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      *
-     * @return \Mageplaza\Blog\Api\Data\BlogSearchResultInterface
+     * @return \Mageplaza\Blog\Api\Data\SearchResult\PostSearchResultInterface
      * @throws NoSuchEntityException
      */
     public function getPostList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
@@ -171,7 +171,7 @@ interface BlogRepositoryInterface
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      *
-     * @return \Mageplaza\Blog\Api\Data\BlogSearchResultInterface
+     * @return \Mageplaza\Blog\Api\Data\SearchResult\TagSearchResultInterface
      */
     public function getTagList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -222,7 +222,7 @@ interface BlogRepositoryInterface
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      *
-     * @return \Mageplaza\Blog\Api\Data\BlogSearchResultInterface
+     * @return \Mageplaza\Blog\Api\Data\SearchResult\TopicSearchResultInterface
      */
     public function getTopicList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
@@ -282,7 +282,7 @@ interface BlogRepositoryInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      *
-     * @return \Mageplaza\Blog\Api\Data\BlogSearchResultInterface
+     * @return \Mageplaza\Blog\Api\Data\SearchResult\CategorySearchResultInterface
      */
     public function getCategoryList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 

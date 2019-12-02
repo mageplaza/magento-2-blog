@@ -19,23 +19,23 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-namespace Mageplaza\Blog\Api\Data;
+namespace Mageplaza\Blog\Api\Data\SearchResult;
 
 use Magento\Framework\Api\SearchResultsInterface;
 
 /**
- * Interface BlogSearchResultInterface
- * @api
+ * Interface CategorySearchResultInterface
+ * @package Mageplaza\Blog\Api\Data\SearchResult
  */
-interface BlogSearchResultInterface extends SearchResultsInterface
+interface CategorySearchResultInterface extends SearchResultsInterface
 {
     /**
-     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     * @return \Mageplaza\Blog\Api\Data\CategoryInterface[]
      */
     public function getItems();
 
     /**
-     * @param \Mageplaza\Blog\Api\Data\PostInterface[] $items
+     * @param \Mageplaza\Blog\Api\Data\CategoryInterface[] $items
      * @return $this
      */
     public function setItems(array $items = null);

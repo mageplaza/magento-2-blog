@@ -65,6 +65,7 @@
         </arguments>
     </type>
     <preference for="Magento\Sitemap\Model\Sitemap" type="Mageplaza\Blog\Model\Sitemap"/>
+
     <preference for="Mageplaza\Blog\Api\Data\PostInterface" type="Mageplaza\Blog\Model\Post" />
     <preference for="Mageplaza\Blog\Api\Data\CommentInterface" type="Mageplaza\Blog\Model\Comment" />
     <preference for="Mageplaza\Blog\Api\Data\TagInterface" type="Mageplaza\Blog\Model\Tag" />
@@ -73,9 +74,9 @@
     <preference for="Mageplaza\Blog\Api\Data\AuthorInterface" type="Mageplaza\Blog\Model\Author" />
     <preference for="Mageplaza\Blog\Api\BlogRepositoryInterface" type="Mageplaza\Blog\Model\Api\BlogRepository" />
 
-    <preference for="Mageplaza\Blog\Api\Data\BlogSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Post\Collection" />
-    <preference for="Mageplaza\Blog\Api\Data\BlogSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Category\Collection" />
-    <preference for="Mageplaza\Blog\Api\Data\BlogSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Tag\Collection" />
-    <preference for="Mageplaza\Blog\Api\Data\BlogSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Topic\Collection" />
-    <preference for="Mageplaza\Blog\Api\Data\BlogSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Comment\Collection" />
+    <preference for="Mageplaza\Blog\Api\Data\SearchResult\PostSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Post\Collection" />
+    <preference for="Mageplaza\Blog\Api\Data\SearchResult\CategorySearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Category\Collection" />
+    <preference for="Mageplaza\Blog\Api\Data\SearchResult\TagSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Tag\Collection" />
+    <preference for="Mageplaza\Blog\Api\Data\SearchResult\TopicSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Topic\Collection" />
+    <preference for="Mageplaza\Blog\Api\Data\SearchResult\CommentSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Comment\Collection" />
 </config>
