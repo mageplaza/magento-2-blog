@@ -168,26 +168,25 @@ class Save extends Post
             $history      = $this->_postHistory->create();
             $historyCount = $history->getSumPostHistory($post->getPostId());
             $limitHistory = (int) $this->_helperData->getConfigGeneral('history_limit');
-            if ($historyCount < $limitHistory) {
-                try {
-                    $data = $post->getData();
-                    unset($data['is_changed_tag_list']);
-                    unset($data['is_changed_topic_list']);
-                    unset($data['is_changed_category_list']);
-                    unset($data['is_changed_product_list']);
-                    if ($this->checkHistory($data)) {
-                        $history->addData($data);
-                        $history->save();
-                    } else {
-                        $this->messageManager->addErrorMessage(__('Data does not change from the last historical field'));
-                    }
-                } catch (RuntimeException $e) {
-                    $this->messageManager->addErrorMessage($e->getMessage());
-                } catch (Exception $e) {
-                    $this->messageManager->addException($e, __('Something went wrong while saving the Post History.'));
+            if ($historyCount >= $limitHistory) {
+                $history->removeFistHistory($post->getPostId());
+            }
+            try {
+                $data = $post->getData();
+                unset($data['is_changed_tag_list']);
+                unset($data['is_changed_topic_list']);
+                unset($data['is_changed_category_list']);
+                unset($data['is_changed_product_list']);
+                if (!($isSave = $this->checkHistory($data))) {
+                    $history->addData($data);
+                    $history->save();
+                } else {
+                    $this->messageManager->addErrorMessage(__('Record Id %1 like the one you want to save.', $isSave->getId()));
                 }
-            } else {
-                $this->messageManager->addErrorMessage(__('The number of records exceeds the specified number'));
+            } catch (RuntimeException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
+            } catch (Exception $e) {
+                $this->messageManager->addException($e, __('Something went wrong while saving the Post History.'));
             }
         }
     }
@@ -195,41 +194,50 @@ class Save extends Post
     /**
      * @param $data
      *
-     * @return bool
+     * @return \Magento\Framework\DataObject|null
      */
     protected function checkHistory($data)
     {
         unset($data['updated_at']);
-        $lastHistory = $this->_postHistory->create()->getCollection()
-            ->addFieldToFilter('post_id', $data['post_id'])->getLastItem();
+        $historyItems = $this->_postHistory->create()->getCollection()
+            ->addFieldToFilter('post_id', $data['post_id'])->getItems();
 
-        if (empty($lastHistory->getData())) {
-            return true;
+        if (count($historyItems) < 1) {
+            return null;
         }
-
         $data['category_ids'] = implode(',', $data['categories_ids']);
         $data['topic_ids']    = implode(',', $data['topics_ids']);
         $data['tag_ids']      = implode(',', $data['tags_ids']);
         $data['product_ids']  = Data::jsonEncode($data['products_data']);
 
-        foreach ($lastHistory->getData() as $key => $value) {
-            if (array_key_exists($key, $data)) {
-                if (is_array($data[$key])) {
-                    $data[$key] = trim(implode(',', $data[$key]), ',');
+        $result = null;
+        foreach ($historyItems as $historyItem) {
+            $subReturn = false;
+            foreach ($historyItem->getData() as $key => $value) {
+                if (array_key_exists($key, $data)) {
+                    if (is_array($data[$key])) {
+                        $data[$key] = trim(implode(',', $data[$key]), ',');
+                    }
+                    if ($data[$key] === null) {
+                        $data[$key] = '';
+                    }
+                    if ($value === null) {
+                        $value = '';
+                    }
+                    if ($data[$key] !== $value) {
+                        $subReturn = true;
+                        break;
+                    }
                 }
-                if ($data[$key] === null) {
-                    $data[$key] = '';
-                }
-                if ($value === null) {
-                    $value = '';
-                }
-                if ($data[$key] !== $value) {
-                    return true;
-                }
+            }
+
+            if (!$subReturn) {
+                $result = $historyItem;
+                break;
             }
         }
 
-        return false;
+        return $result;
     }
 
     /**
@@ -292,11 +300,11 @@ class Save extends Post
                 $this->jsHelper->decodeGridSerializedInput($products)
             );
         } else {
-            $prodcutData = [];
+            $productData = [];
             foreach ($post->getProductsPosition() as $key => $value) {
-                $prodcutData[$key] = ['position' => $value];
+                $productData[$key] = ['position' => $value];
             }
-            $post->setProductsData($prodcutData);
+            $post->setProductsData($productData);
         }
 
         return $this;

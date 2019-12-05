@@ -48,14 +48,12 @@ define([
                     processData: false,
                     showLoader: true,
                     success: function (result) {
+                        htmlPopup.data('mageModal').closeModal();
                         if (result.status === 1) {
-                            htmlPopup.data('mageModal').closeModal();
+                            setTimeout(function () {
+                                location.reload();
+                            }, 500);
                         }
-                    },
-                    complete: function () {
-                        setTimeout(function () {
-                            location.reload();
-                        }, 500);
                     }
                 });
             }

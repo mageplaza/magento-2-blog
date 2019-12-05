@@ -85,6 +85,14 @@ class PostHistory extends AbstractModel
     }
 
     /**
+     * @param $postId
+     */
+    public function removeFistHistory($postId)
+    {
+        $this->getCollection()->addFieldToFilter('post_id', $postId)->getFirstItem()->delete();
+    }
+
+    /**
      * @return array|mixed
      */
     public function getProductsPosition()

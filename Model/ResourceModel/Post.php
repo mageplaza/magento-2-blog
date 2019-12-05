@@ -185,11 +185,6 @@ class Post extends AbstractDb
         $object->setUrlKey(
             $this->helperData->generateUrlKey($this, $object, $object->getUrlKey() ?: $object->getName())
         );
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-        $logger->info($object->getPublishDate());
-
 
         return $this;
     }
@@ -203,10 +198,6 @@ class Post extends AbstractDb
         $this->saveTopicRelation($object);
         $this->saveCategoryRelation($object);
         $this->saveProductRelation($object);
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-        $logger->info($object->getPublishDate());
 
         if ($this->_request->getActionName() !== 'manage') {
             $this->saveAuthor();

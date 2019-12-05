@@ -29,9 +29,10 @@ define([
                 mode: ''
             },
             _create: function () {
-                var post_id = this.options.post_id,
-                    url     = this.options.url,
-                    self    = this;
+                var post_id   = this.options.post_id,
+                    url       = this.options.url,
+                    self      = this,
+                    subPostId = {};
 
                 if (self.options.mode === 1) {
                     $.ajax({
@@ -45,26 +46,25 @@ define([
                         showLoader: false,
                         success: function (response) {
                             if (response.status === 0) {
-                                self.disableReview();
+                                self.disableReview(response.action);
                             }
                         }
                     });
+                } else if (JSON.parse(self.getCookie('mpblog_post_data'))) {
+                    subPostId = JSON.parse(self.getCookie('mpblog_post_data'));
+                    if (typeof subPostId[post_id] !== "undefined") {
+                        self.disableReview(subPostId[post_id].type);
+                    }
                 }
 
                 $('#mp-blog-review div').each(function () {
-                    var el        = this,
-                        subPostId = {};
+                    var el = this;
 
-                    if (self.options.mode === 0 && JSON.parse(self.getCookie('mpblog_post_data'))) {
-                        subPostId = JSON.parse(self.getCookie('mpblog_post_data'));
-                        if (typeof subPostId[post_id] !== "undefined") {
-                            self.disableReview();
-                        }
-                    }
 
                     $(el).on('click', function () {
                         var action         = 0,
-                            currentPostIds = {};
+                            currentPostIds = {},
+                            likeId         = 0;
 
                         if (JSON.parse(self.getCookie('mpblog_post_data'))) {
                             currentPostIds = JSON.parse(self.getCookie('mpblog_post_data'));
@@ -75,63 +75,102 @@ define([
                         }
 
                         if (typeof currentPostIds[post_id] !== "undefined" && self.options.mode === 0) {
-                            $('.mp-blog-review-label').html('<div class="message message-error error">' +
-                                '<div data-ui-id="magento-framework-view-element-messages-2-message-error">' +
-                                'You have voted already!' +
-                                '</div></div>');
-                        } else {
-                            $.ajax({
-                                url: url,
-                                type: "post",
-                                data: {
-                                    post_id: post_id,
-                                    action: action,
-                                    mode: self.options.mode
-                                },
-                                showLoader: true,
-                                success: function (response) {
-                                    var storedPostIds = self.receiveCookiePostIds(post_id, action, self),
-                                        jsonStringIds = JSON.stringify(storedPostIds);
-
-                                    if (self.options.mode === 0) {
-                                        document.cookie = 'mpblog_post_data = ' + jsonStringIds;
-                                    }
-
-                                    if (response['status'] && response['type'] === '1') {
-                                        $('#mp-blog-review .mp-blog-like .mp-blog-view')
-                                        .text('(' + response["sum"] + ')');
-                                    }
-                                    if (response['status'] && response['type'] === '0') {
-                                        $('#mp-blog-review .mp-blog-dislike .mp-blog-view')
-                                        .text('(' + response["sum"] + ')');
-                                    }
-                                    if (response['status']) {
-                                        self.disableReview();
-                                    }
-                                    $('html, body').animate({
-                                        scrollTop: $('body').offset().top
-                                    }, 500);
-                                }
-                            });
+                            likeId = currentPostIds[post_id].likeId;
+                            self.enableReview(currentPostIds[post_id].type);
+                            if (action === currentPostIds[post_id].type) {
+                                delete currentPostIds[post_id];
+                                document.cookie = 'mpblog_post_data = ' + JSON.stringify(currentPostIds);
+                            } else {
+                                currentPostIds[post_id].type = action;
+                                self.disableReview(action);
+                            }
                         }
+                        $.ajax({
+                            url: url,
+                            type: "post",
+                            data: {
+                                post_id: post_id,
+                                action: action,
+                                mode: self.options.mode,
+                                likeId: likeId
+                            },
+                            showLoader: true,
+                            success: function (response) {
+                                var storedPostIds,
+                                    jsonStringIds;
+
+                                if (response['postLike']
+                                    && self.options.mode === 0 && typeof currentPostIds[post_id] === "undefined") {
+                                    storedPostIds   =
+                                        self.receiveCookiePostIds(post_id, action, response['postLike'], self);
+                                    jsonStringIds   = JSON.stringify(storedPostIds);
+                                    document.cookie = 'mpblog_post_data = ' + jsonStringIds;
+                                }
+
+                                if (response['status']) {
+                                    if (response["sumLike"]) {
+                                        $('#mp-blog-review .mp-blog-like .mp-blog-view')
+                                        .text('(' + response["sumLike"] + ')');
+                                    } else {
+                                        $('#mp-blog-review .mp-blog-like .mp-blog-view')
+                                        .text('');
+                                    }
+                                    if (response["sumDislike"]) {
+                                        $('#mp-blog-review .mp-blog-dislike .mp-blog-view')
+                                        .text('(' + response["sumDislike"] + ')');
+                                    } else {
+                                        $('#mp-blog-review .mp-blog-dislike .mp-blog-view')
+                                        .text('');
+                                    }
+                                }
+
+                                if (response['status']) {
+                                    self.enableAllReview();
+                                    if (response['postLike']) {
+                                        self.disableReview(action);
+                                    }
+                                }
+
+                                $('html, body').animate({
+                                    scrollTop: $('body').offset().top
+                                }, 500);
+                            }
+                        });
+
                     });
                 });
             },
-            disableReview: function () {
-                $('#mp-blog-review').css('pointer-events', 'none');
-                $('.mp-blog-like').css('background-color', '#658259');
-                $('.mp-blog-dislike').css('background-color', '##9a6464');
-            }
-            ,
+            disableReview: function (action) {
+                if ('' + action === '1') {
+                    $('.mp-blog-like').css('background-color', '#658259');
+
+                } else {
+                    $('.mp-blog-dislike').css('background-color', '#9a6464');
+                }
+            },
+            enableReview: function (action) {
+                if ('' + action === '1') {
+                    $('.mp-blog-like').css('background-color', '#6AA84F');
+
+                } else {
+                    $('.mp-blog-dislike').css('background-color', '#EC3A3C');
+                }
+            },
+            enableAllReview: function () {
+                $('.mp-blog-like').css('background-color', '#6AA84F');
+                $('.mp-blog-dislike').css('background-color', '#EC3A3C');
+
+            },
             getCookie: function (name) {
                 var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
 
                 return v ? v[2] : null;
             },
-            receiveCookiePostIds: function (postId, action, self) {
+            receiveCookiePostIds: function (postId, action, likeId, self) {
                 var postData        = {
                         id: postId,
-                        type: action
+                        type: action,
+                        likeId: likeId
                     },
                     receivedJsonStr = self.getCookie('mpblog_post_data'),
                     postIds         = JSON.parse(receivedJsonStr);

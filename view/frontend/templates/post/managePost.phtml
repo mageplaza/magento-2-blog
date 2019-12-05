@@ -95,7 +95,7 @@
         <div class="field mp-field">
             <label for="publish_date" class="label"><span><?= /* @noEscape */ __('Publish Date')?></span></label>
             <div class="control">
-                <input name="publish_date" id="publish_date" type="text">
+                <input name="publish_date" id="publish_date" type="text" data-validate="{'datetime-validation':true}">
                 <script>
                     require([
                         "jquery",

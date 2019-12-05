@@ -297,28 +297,6 @@ class Post extends Generic implements TabInterface
                 'time_format' => 'hh:mm:ss'
             ]
         );
-//        $fieldset->addField('publish_date', 'da', [
-//            'name'        => 'publish_date',
-//            'label'       => __('Publish Date'),
-//            'title'       => __('Publish Date'),
-//            'date_format' => 'M/d/yyyy',
-//            'timezone'    => false,
-//            'value'       => $this->_date->date('m/d/Y')
-//        ]);
-
-//        /** get current time for public_time field */
-//        $currentTime = new \DateTime($this->_date->date(), new DateTimeZone('UTC'));
-//        $currentTime->setTimezone(new DateTimeZone($this->_localeDate->getConfigTimezone()));
-//        $time = $currentTime->format('H,i,s');
-//
-//        $fieldset->addField('publish_time', 'time', [
-//            'name'     => 'publish_time',
-//            'label'    => __('Publish Time'),
-//            'title'    => __('Publish Time'),
-//            'format'   => $this->_localeDate->getTimeFormat(IntlDateFormatter::SHORT),
-//            'timezone' => false,
-//            'value'    => $time
-//        ]);
 
         $seoFieldset = $form->addFieldset('seo_fieldset', [
             'legend' => __('Search Engine Optimization'),

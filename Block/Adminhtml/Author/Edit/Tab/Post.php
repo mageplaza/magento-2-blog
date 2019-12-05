@@ -103,11 +103,6 @@ class Post extends Extended implements TabInterface
         /** @var Collection $collection */
         $collection = $this->postCollectionFactory->create();
         $collection->addFieldToFilter('author_id', $this->getAuthor()->getId());
-        $collection->getSelect()->joinLeft(
-            ['author' => $collection->getTable('mageplaza_blog_author')],
-            'main_table.author_id=author.user_id',
-            ['author.name AS author_name']
-        );
 
         $this->setCollection($collection);
 
@@ -151,7 +146,7 @@ class Post extends Extended implements TabInterface
      */
     public function getRowUrl($item)
     {
-        return '#';
+        return $this->getUrl('mageplaza_blog/post/edit', ['id' => $item->getId()]);
     }
 
     /**

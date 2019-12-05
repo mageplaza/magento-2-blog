@@ -222,10 +222,6 @@ class View extends \Mageplaza\Blog\Block\Listpost
     {
         /** @var PostLike $postLike */
         $postLike = $this->postLikeFactory->create();
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-        $logger->info('123');
 
         return $postLike->getCollection()->addFieldToFilter('post_id', $postId)
             ->addFieldToFilter('action', $action)->count();

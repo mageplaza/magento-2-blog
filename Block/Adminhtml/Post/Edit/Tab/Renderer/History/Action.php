@@ -103,6 +103,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
                 ]),
             'popup'   => false,
             'caption' => __('Delete'),
+            'confirm' => 'Are you sure you want to do this?'
         ];
 
         $this->getColumn()->setActions($actions);

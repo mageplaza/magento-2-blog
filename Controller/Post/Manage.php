@@ -185,17 +185,15 @@ class Manage extends Action
                 $post->setData($data);
             }
             $data['updated_at'] = $this->date->date();
-            $this->messageManager->addSuccessMessage(__('The post has been saved.'));
         } else {
             unset($data['post_id']);
             $data['created_at'] = $this->date->date();
             $post->setData($data);
-            $this->messageManager->addSuccessMessage(__('The post has been created successfully.'));
         }
 
         try {
             $post->save();
-
+            $this->messageManager->addSuccessMessage(__('The post has been saved.'));
             return $this->getResponse()->representJson(Data::jsonEncode([
                 'status' => 1
             ]));
