@@ -21,12 +21,13 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Comment\Edit\Tab;
 
-use Exception;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\System\Store;
@@ -86,29 +87,27 @@ class Comment extends Generic implements TabInterface
         Store $systemStore,
         array $data = []
     ) {
-        $this->_commentStatus = $commentStatus;
+        $this->_commentStatus      = $commentStatus;
         $this->_customerRepository = $customerRepository;
-        $this->_postFactory = $postFactory;
-        $this->systemStore = $systemStore;
-        $this->storeManager = $context->getStoreManager();
+        $this->_postFactory        = $postFactory;
+        $this->systemStore         = $systemStore;
+        $this->storeManager        = $context->getStoreManager();
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
-     * @inheritdoc
+     * @return Generic
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     protected function _prepareForm()
     {
         $comment = $this->_coreRegistry->registry('mageplaza_blog_comment');
 
-        try {
-            $form = $this->_formFactory->create();
-            $form->setHtmlIdPrefix('comment_');
-            $form->setFieldNameSuffix('comment');
-        } catch (Exception $e) {
-            $this->_logger->error($e->getMessage());
-        }
+        $form = $this->_formFactory->create();
+        $form->setHtmlIdPrefix('comment_');
+        $form->setFieldNameSuffix('comment');
 
         $fieldset = $form->addFieldset(
             'base_fieldset',
@@ -119,25 +118,21 @@ class Comment extends Generic implements TabInterface
             $fieldset->addField('comment_id', 'hidden', ['name' => 'comment_id']);
         }
 
-        $post = $this->_postFactory->create()->load($comment->getPostId());
+        $post     = $this->_postFactory->create()->load($comment->getPostId());
         $postText = '<a href="' . $this->getUrl('mageplaza_blog/post/edit', ['id' => $comment->getPostId()])
-                    . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($post->getName()) . '</a>';
+            . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($post->getName()) . '</a>';
         $fieldset->addField('post_name', 'note', ['text' => $postText, 'label' => __('Post'), 'name' => 'post_name']);
 
         if ($comment->getEntityId() > 0) {
-            try {
-                $customer = $this->_customerRepository->getById($comment->getEntityId());
-            } catch (Exception $e) {
-                $this->_logger->error($e->getMessage());
-            }
+            $customer     = $this->_customerRepository->getById($comment->getEntityId());
             $customerText = '<a href="'
-                            . $this->getUrl(
-                                'customer/index/edit',
-                                ['id' => $customer->getId(), 'active_tab' => 'review']
-                            )
-                            . '" onclick="this.target=\'blank\'">'
-                            . $this->escapeHtml($customer->getFirstname() . ' ' . $customer->getLastname())
-                            . '</a> <a href="mailto:%4">(' . $customer->getEmail() . ')</a>';
+                . $this->getUrl(
+                    'customer/index/edit',
+                    ['id' => $customer->getId(), 'active_tab' => 'review']
+                )
+                . '" onclick="this.target=\'blank\'">'
+                . $this->escapeHtml($customer->getFirstname() . ' ' . $customer->getLastname())
+                . '</a> <a href="mailto:%4">(' . $customer->getEmail() . ')</a>';
         } else {
             $customerText = 'Guest';
         }
@@ -166,7 +161,7 @@ class Comment extends Generic implements TabInterface
                 continue;
             }
             $viewText .= '<a href="' . $post->getUrl($store->getId()) . '#cmt-id-' . $comment->getId()
-                         . '" onclick="this.target=\'blank\'">View in store ' . $store->getName() . '</a><br>';
+                . '" onclick="this.target=\'blank\'">View in store ' . $store->getName() . '</a><br>';
         }
 
         $fieldset->addField(

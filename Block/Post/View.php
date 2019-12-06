@@ -375,7 +375,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
     /**
      * @param bool $meta
      *
-     * @return array
+     * @return array|string
      */
     public function getBlogTitle($meta = false)
     {

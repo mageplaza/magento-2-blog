@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Block;
 
 use Exception;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 use Magento\Theme\Block\Html\Pager;
 use Mageplaza\Blog\Model\Config\Source\DisplayType;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
@@ -194,7 +195,7 @@ class Listpost extends Frontend
     /**
      * @param bool $meta
      *
-     * @return array
+     * @return array|Phrase
      */
     public function getBlogTitle($meta = false)
     {

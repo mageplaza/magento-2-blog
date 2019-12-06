@@ -328,6 +328,7 @@ class Frontend extends Template
      * @param bool $monthly
      *
      * @return false|string
+     * @throws Exception
      */
     public function getDateFormat($date, $monthly = false)
     {
@@ -335,13 +336,12 @@ class Frontend extends Template
     }
 
     /**
-     * Resize Image Function
-     *
      * @param $image
      * @param null $size
      * @param string $type
      *
      * @return string
+     * @throws NoSuchEntityException
      */
     public function resizeImage($image, $size = null, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
     {

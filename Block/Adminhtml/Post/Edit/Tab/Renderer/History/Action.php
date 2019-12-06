@@ -60,7 +60,6 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
      * @param DataObject $row
      *
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function render(DataObject $row)
     {

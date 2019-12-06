@@ -23,7 +23,6 @@ namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
 
 use DateTimeZone;
 use Exception;
-use IntlDateFormatter;
 use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
@@ -356,10 +355,7 @@ class Post extends Generic implements TabInterface
             $publicDateTime = new \DateTime($post->getData('publish_date'), new DateTimeZone('UTC'));
             $publicDateTime->setTimezone(new DateTimeZone($this->_localeDate->getConfigTimezone()));
             $publicDateTime = $publicDateTime->format('m/d/Y H:i:s');
-//            list($date, $time) = explode(' ', $publicDateTime);
-//            $time = str_replace(':', ',', $time);
             $post->setData('publish_date', $publicDateTime);
-//            $post->setData('publish_time', $time);
         }
 
         $form->addValues($post->getData());

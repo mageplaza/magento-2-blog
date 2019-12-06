@@ -23,11 +23,9 @@ namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
 
 use Exception;
 use Magento\Backend\Block\Template\Context;
-use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
-use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Action;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Store;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Categories;

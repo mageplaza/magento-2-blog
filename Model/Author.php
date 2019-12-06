@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Model;
 
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -78,7 +79,7 @@ class Author extends AbstractModel
     /**
      * @param $name
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getAuthorByName($name)
     {

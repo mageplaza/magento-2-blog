@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Sidebar;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Mageplaza\Blog\Block\Frontend;
 use Mageplaza\Blog\Helper\Data;
 
@@ -32,6 +33,7 @@ class Search extends Frontend
 {
     /**
      * @return string
+     * @throws NoSuchEntityException
      */
     public function getSearchBlogData()
     {
