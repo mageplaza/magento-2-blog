@@ -42,6 +42,7 @@
                 <div data-post-id="<?= $block->escapeHtml($post->getId()); ?>"
                      class="post-list-item col-mp<?= $block->isGridView() ? ' post-item-grid mp-6 mp-xs-12' : ' post-item-list mp-12'; ?>">
                     <div class="post-item-wraper">
+                        <?= /* @noEscape */ $block->getStatusHtmlById($post->getEnabled()) ?>
                         <?php if ($post->getImage()) : ?>
                             <div class="post-image">
                                 <a href="<?= $post->getUrl() ?>">

@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Block\Post;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\UrlInterface;
 use Magento\Theme\Block\Html\Pager;
 use Mageplaza\Blog\Helper\Data;
@@ -37,12 +38,14 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
 {
 
     /**
-     * @return Collection
+     * @return AbstractCollection|Collection
      * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function getPostCollection()
     {
-        $collection = $this->getCollection();
+        $collection = $this->helperData->getFactoryByType()->create()->getCollection();
+        $this->helperData->addStoreFilter($collection, $this->store->getStore()->getId());
 
         $userId = $this->getAuthor()->getId();
 
@@ -62,6 +65,31 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
         }
 
         return $collection;
+    }
+
+    /**
+     * @param $statusId
+     *
+     * @return mixed
+     */
+    public function getStatusHtmlById($statusId)
+    {
+        $statusText = $this->authorStatusType->toArray()[$statusId]->getText();
+
+        switch ($statusId) {
+            case '2':
+                $html = '<div class="mp-post-status mp-post-disapproved">' . $statusText . '</div>';
+                break;
+            case '1':
+                $html = '<div class="mp-post-status mp-post-approved">' . $statusText . '</div>';
+                break;
+            case '0':
+            default:
+                $html = '<div class="mp-post-status mp-post-pending">' . $statusText . '</div>';
+                break;
+        }
+
+        return $html;
     }
 
     /**
