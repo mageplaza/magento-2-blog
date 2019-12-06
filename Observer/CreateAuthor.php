@@ -80,7 +80,7 @@ class CreateAuthor implements ObserverInterface
                 'customer_id' => $customer->getId(),
                 'name' => $customer->getFirstname(),
                 'type' => '1',
-                'status' => '0'
+                'status' => $this->_helper->getConfigGeneral('auto_approve')?1:0
             ];
             $author = $this->author->create();
             $author->addData($data);
