@@ -252,6 +252,7 @@ class Frontend extends Template
      * @param $post
      *
      * @return Phrase|string
+     * @throws Exception
      */
     public function getPostInfo($post)
     {
