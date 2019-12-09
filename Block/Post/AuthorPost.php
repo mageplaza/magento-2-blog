@@ -128,6 +128,9 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
             $post->getCategoryIds();
             $post->getTopicIds();
             $post->getTagIds();
+            if ($post->getPostContent()) {
+                $post->setData('post_content', $this->getPageFilter($post->getPostContent()));
+            }
             $result[$post->getId()] = $post->getData();
         }
 

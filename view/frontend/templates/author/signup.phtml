@@ -59,7 +59,7 @@ $author = $block->getAuthor();
             </label>
             <div class="control">
                 <textarea name="short_description" id="short_description" rows="5" data-
-                          cols="19"><?= $block->escapeHtml($author['short_description']) ?></textarea>
+                          cols="19"><?= /* @noEscape */ $author['short_description']?$block->getPageFilter($author['short_description']):'' ?></textarea>
             </div>
         </div>
         <div class="field mp-field">
