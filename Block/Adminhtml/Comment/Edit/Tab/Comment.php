@@ -157,11 +157,10 @@ class Comment extends Generic implements TabInterface
         ]);
         $viewText = '';
         foreach ($this->storeManager->getStores() as $store) {
-            if ($store->getId() === 0) {
-                continue;
+            if ($store->getId() === $comment->getStoreIds()) {
+                $viewText .= '<a href="' . $post->getUrl($store->getId()) . '#cmt-id-' . $comment->getId()
+                    . '" onclick="this.target=\'blank\'">View in store ' . $store->getName() . '</a><br>';
             }
-            $viewText .= '<a href="' . $post->getUrl($store->getId()) . '#cmt-id-' . $comment->getId()
-                . '" onclick="this.target=\'blank\'">View in store ' . $store->getName() . '</a><br>';
         }
 
         $fieldset->addField(
