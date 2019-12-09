@@ -163,6 +163,7 @@ define([
                 self._openPopup(options, htmlPopup, self);
                 self._setPopupFormData(postData, pubUrl, htmlPopup);
                 $('#post_id').removeAttr('value');
+                $('#image').parent().append('<input type="hidden" name="image" value="'+postData["image"]+'" />');
             },
             _DeletePost: function (self, widget) {
                 var url = self.options.deleteUrl,
