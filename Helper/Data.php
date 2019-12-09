@@ -557,7 +557,7 @@ class Data extends CoreHelper
         $url    = explode('?', $url);
         $url    = $url[0];
 
-        return rtrim($url, '/') . $this->getUrlSuffix();
+        return rtrim($url, '/') . $this->getUrlSuffix($store);
     }
 
     /**
