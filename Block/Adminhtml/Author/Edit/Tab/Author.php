@@ -29,6 +29,8 @@ use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\System\Store;
@@ -99,11 +101,11 @@ class Author extends Generic implements TabInterface
         CustomerRepositoryInterface $customerRepository,
         array $data = []
     ) {
-        $this->wysiwygConfig = $wysiwygConfig;
-        $this->systemStore   = $systemStore;
-        $this->imageHelper   = $imageHelper;
-        $this->authorStatus  = $authorStatus;
-        $this->_helperData   = $helperData;
+        $this->wysiwygConfig      = $wysiwygConfig;
+        $this->systemStore        = $systemStore;
+        $this->imageHelper        = $imageHelper;
+        $this->authorStatus       = $authorStatus;
+        $this->_helperData        = $helperData;
         $this->customerRepository = $customerRepository;
 
         parent::__construct($context, $registry, $formFactory, $data);
@@ -135,7 +137,7 @@ class Author extends Generic implements TabInterface
             $fieldset->addField('user_id', 'hidden', ['name' => 'user_id']);
         }
 
-        if ($author->getCustomerId()) {
+        if ($this->checkCustomerId($author->getCustomerId())) {
             $fieldset->addField('customer_id', 'hidden', [
                 'name'  => 'customer_id',
                 'value' => $author->getCustomerId()
@@ -151,7 +153,7 @@ class Author extends Generic implements TabInterface
                 'name'  => 'customer',
                 'label' => __('Customer'),
                 'title' => __('Customer'),
-                'value' => $customer->getFirstname().' '.$customer->getLastname()
+                'value' => $customer->getFirstname() . ' ' . $customer->getLastname()
             ]);
         } else {
             $fieldset->addField('customer', 'text', [
@@ -244,27 +246,47 @@ class Author extends Generic implements TabInterface
         );
 
         $fieldset->addField('facebook_link', 'text', [
-            'name'  => 'facebook_link',
-            'label' => __('Facebook'),
-            'title' => __('Facebook'),
-            'note'  => __('Facebook URL'),
+            'name'     => 'facebook_link',
+            'label'    => __('Facebook'),
+            'title'    => __('Facebook'),
+            'note'     => __('Facebook URL'),
             'required' => false,
-            'class' => 'validate-url'
+            'class'    => 'validate-url'
         ]);
 
         $fieldset->addField('twitter_link', 'text', [
-            'name'  => 'twitter_link',
-            'label' => __('Twitter'),
-            'title' => __('Twitter'),
-            'note'  => __('Twitter URL'),
+            'name'     => 'twitter_link',
+            'label'    => __('Twitter'),
+            'title'    => __('Twitter'),
+            'note'     => __('Twitter URL'),
             'required' => false,
-            'class' => 'validate-url'
+            'class'    => 'validate-url'
         ]);
 
         $form->addValues($author->getData());
         $this->setForm($form);
 
         return parent::_prepareForm();
+    }
+
+    /**
+     * @param $customerId
+     *
+     * @return bool
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    public function checkCustomerId($customerId)
+    {
+        try {
+            if ($this->customerRepository->getById($customerId)) {
+                return true;
+            }
+        } catch (NoSuchEntityException $noSuchEntityException) {
+            return false;
+        }
+
+        return false;
     }
 
     /**
