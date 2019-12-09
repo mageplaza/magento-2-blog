@@ -64,7 +64,7 @@
 }
 
 .sidebar.sidebar-main:before {
-    content: unset;
+    content: unset !important;
 }
 
 .post-info-action div {
