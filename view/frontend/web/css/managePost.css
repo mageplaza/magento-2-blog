@@ -6,6 +6,7 @@
     color: white;
     border-radius: 5px;
     font-size: 10px;
+    z-index: 5;
 }
 
 .mp-post-disapproved {
