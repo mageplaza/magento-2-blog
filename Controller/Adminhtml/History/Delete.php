@@ -39,11 +39,13 @@ class Delete extends History
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
+        $postId = null;
         if ($id = $this->getRequest()->getParam('id')) {
             try {
-                $this->postHistoryFactory->create()
-                    ->load($id)
-                    ->delete();
+                $history = $this->postHistoryFactory->create()
+                    ->load($id);
+                $postId = $history->getPostId();
+                $history->delete();
 
                 $this->messageManager->addSuccess(__('The Post History has been deleted.'));
             } catch (Exception $e) {
@@ -52,8 +54,11 @@ class Delete extends History
         } else {
             $this->messageManager->addError(__('Post History to delete was not found.'));
         }
-
-        $resultRedirect->setPath('mageplaza_blog/post/edit', ['id' => $this->getRequest()->getParam('post_id')]);
+        if ($postId) {
+            $resultRedirect->setPath('mageplaza_blog/post/edit', ['id' => $postId]);
+        } else {
+            $resultRedirect->setPath('mageplaza_blog/post/index');
+        }
 
         return $resultRedirect;
     }
