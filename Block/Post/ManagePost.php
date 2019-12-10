@@ -53,4 +53,13 @@ class ManagePost extends Frontend
     {
         return Data::jsonEncode($this->tagOptions->getTagsCollection());
     }
+
+    /**
+     * @return bool
+     */
+    public function checkTheme()
+    {
+        return $this->themeProvider->getThemeById($this->helperData->getCurrentThemeId())
+                ->getCode() === 'Smartwave/porto';
+    }
 }

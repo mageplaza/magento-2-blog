@@ -29,6 +29,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
@@ -137,6 +138,11 @@ class Frontend extends Template
     protected $authorStatusType;
 
     /**
+     * @var ThemeProviderInterface
+     */
+    protected $themeProvider;
+
+    /**
      * Frontend constructor.
      *
      * @param Context $context
@@ -154,6 +160,7 @@ class Frontend extends Template
      * @param CategoryOptions $category
      * @param TopicOptions $topic
      * @param TagOptions $tag
+     * @param ThemeProviderInterface $themeProvider
      * @param AuthorStatus $authorStatus
      * @param array $data
      */
@@ -173,6 +180,7 @@ class Frontend extends Template
         CategoryOptions $category,
         TopicOptions $topic,
         TagOptions $tag,
+        ThemeProviderInterface $themeProvider,
         AuthorStatus $authorStatus,
         array $data = []
     ) {
@@ -191,6 +199,7 @@ class Frontend extends Template
         $this->topicOptions       = $topic;
         $this->tagOptions         = $tag;
         $this->authorStatusType   = $authorStatus;
+        $this->themeProvider      = $themeProvider;
         $this->store              = $context->getStoreManager();
 
         parent::__construct($context, $data);
@@ -257,9 +266,10 @@ class Frontend extends Template
     public function getPostInfo($post)
     {
         $likeCollection = $this->postLikeFactory->create()->getCollection();
-        $couldLike = $likeCollection->addFieldToFilter('post_id', $post->getId())
+        $couldLike      = $likeCollection->addFieldToFilter('post_id', $post->getId())
             ->addFieldToFilter('action', '1')->count();
-        $html = __('<i class="fa fa-calendar-times-o"></i> %1', $this->getDateFormat($post->getPublishDate()));
+        $html           = __('<i class="fa fa-calendar-times-o"></i> %1',
+            $this->getDateFormat($post->getPublishDate()));
 
         if ($categoryPost = $this->getPostCategoryHtml($post)) {
             $html .= __('| Posted in %1', $categoryPost);
@@ -316,9 +326,9 @@ class Frontend extends Template
         $categoryHtml = [];
         foreach ($categories as $_cat) {
             $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl(
-                $_cat,
-                HelperData::TYPE_CATEGORY
-            ) . '">' . $_cat->getName() . '</a>';
+                    $_cat,
+                    HelperData::TYPE_CATEGORY
+                ) . '">' . $_cat->getName() . '</a>';
         }
 
         return implode(', ', $categoryHtml);

@@ -34,6 +34,7 @@ use Magento\Framework\Filter\TranslitUrl;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Model\Author;
@@ -391,6 +392,15 @@ class Data extends CoreHelper
     public function getUrlSuffix($store = null)
     {
         return $this->getConfigGeneral('url_suffix', $store) ?: '';
+    }
+
+    /**
+     * Get current theme id
+     * @return mixed
+     */
+    public function getCurrentThemeId()
+    {
+        return $this->getConfigValue(DesignInterface::XML_PATH_THEME_ID);
     }
 
     /**

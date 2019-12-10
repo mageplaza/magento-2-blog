@@ -121,6 +121,28 @@
             </button>
         </div>
     </div>
+    <?php if ($block->checkTheme()) : ?>
+        <style>
+            .admin__action-multiselect-crumb .action-close:before {
+                top: -6px;
+                right: 8px;
+            }
+            .admin__action-multiselect-menu-inner-item._root .action-menu-item .admin__action-multiselect-label:before {
+                content: '\f846';
+                font-family: 'porto-icons';
+            }
+            .admin__action-multiselect-dropdown:before {
+                content: '\f803';
+                font-family: 'porto-icons';
+            }
+            .admin__action-multiselect-tree .action-menu-item._expended .admin__action-multiselect-dropdown:before {
+                right: 5px;
+                position: absolute;
+                content: '\f800';
+                font-family: 'porto-icons';
+            }
+        </style>
+    <?php endif; ?>
 </form>
 <script type="text/x-magento-init">
     {
