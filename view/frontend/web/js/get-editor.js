@@ -25,16 +25,21 @@ define([
     'use strict';
 
     return {
-        config: function (nameEL, versionEditor, versionMagento, width = '99%') {
+        config: function (nameEL, versionEditor, versionMagento, width) {
             var wysiwygcompany_description,
                 config = {},
                 editor;
+
+            if (typeof width === 'undefined') {
+                width = '99%';
+            }
 
             if (versionMagento === "2") {
                 $.extend(config, {
                     settings: {
                         theme_advanced_buttons1: 'bold,italic,|,justifyleft,justifycenter,justifyright,|,' +
-                            'fontselect,fontsizeselect,|,forecolor,backcolor,|,link,unlink,image,|,bullist,numlist,|,code',
+                            'fontselect,fontsizeselect,|,forecolor,backcolor,|,link,unlink,image,|,' +
+                            'bullist,numlist,|,code',
                         theme_advanced_buttons2: null,
                         theme_advanced_buttons3: null,
                         theme_advanced_buttons4: null
@@ -52,17 +57,19 @@ define([
                     "height": "200px",
                     "plugins": [{"name": "image"}],
                     "tinymce4": {
-                        "toolbar": "formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link table charmap",
-                        "plugins": "advlist autolink lists link charmap media noneditable table contextmenu paste code help table"
+                        "toolbar": "formatselect | bold italic underline | alignleft aligncenter alignright |" +
+                            " bullist numlist | link table charmap",
+                        "plugins": "advlist autolink lists link charmap media noneditable" +
+                            " table contextmenu paste code help table"
                     }
                 });
                 wysiwygcompany_description.setup("exact");
-                // $('#' + nameEL).parent().css('max-width','78%');
             } else {
                 $.extend(config, {
                     settings: {
                         theme_advanced_buttons1: 'bold,italic,|,justifyleft,justifycenter,justifyright,|,' +
-                            'fontselect,fontsizeselect,|,forecolor,backcolor,|,link,unlink,image,|,bullist,numlist,|,code',
+                            'fontselect,fontsizeselect,|,forecolor,backcolor,|,link,unlink,image,|,' +
+                            'bullist,numlist,|,code',
                         theme_advanced_buttons2: null,
                         theme_advanced_buttons3: null,
                         theme_advanced_buttons4: null
