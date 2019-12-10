@@ -44,14 +44,13 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="name" translate="label comment" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Blog name</label>
-                    <comment>Blog name</comment>
+                    <label>Blog Name</label>
                 </field>
                 <field id="url_prefix" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Route name</label>
+                    <label>Route Name</label>
                 </field>
                 <field id="url_suffix" translate="label comment" type="text" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Url Suffix</label>
+                    <label>URL Suffix</label>
                     <comment>Leave empty for no suffix. Default: .html</comment>
                 </field>
                 <field id="toplinks" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
