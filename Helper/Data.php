@@ -229,7 +229,7 @@ class Data extends CoreHelper
      */
     public function getCustomerIdByContext()
     {
-        return $this->_httpContext->getValue('mp_customer_id')?:$this->customerSession->getId();
+        return $this->_httpContext->getValue('mp_customer_id') ?: $this->customerSession->getId();
     }
 
     /**
@@ -265,6 +265,10 @@ class Data extends CoreHelper
     public function isEnabledAuthor()
     {
         if (!$this->_httpContext->getValue(CustomerContext::CONTEXT_AUTH)) {
+            return false;
+        }
+
+        if (!$this->getConfigGeneral('customer_approve')) {
             return false;
         }
 
