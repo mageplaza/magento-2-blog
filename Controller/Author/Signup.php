@@ -82,7 +82,8 @@ class Signup extends Action
         $resultRedirect = $this->resultRedirectFactory->create();
         $this->_helperBlog->setCustomerContextId();
 
-        if (!$this->_helperBlog->isEnabledAuthor()) {
+        if (!$this->_helperBlog->isEnabledAuthor()
+            || ($this->_helperBlog->isAuthor() && !$this->_helperBlog->getConfigGeneral('customer_approve'))) {
             $resultRedirect->setPath('customer/account');
 
             return $resultRedirect;

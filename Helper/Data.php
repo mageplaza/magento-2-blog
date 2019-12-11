@@ -268,10 +268,6 @@ class Data extends CoreHelper
             return false;
         }
 
-        if (!$this->getConfigGeneral('customer_approve')) {
-            return false;
-        }
-
         return $this->getCurrentAuthor() ? true : false;
     }
 
