@@ -115,7 +115,6 @@ class History extends Action
             return $resultRedirect;
         }
 
-
         if (!$this->_helperBlog->isAuthor()) {
 
             $author = $this->_helperBlog->getCurrentAuthor();

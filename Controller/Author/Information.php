@@ -115,7 +115,6 @@ class Information extends Action
             return $resultRedirect;
         }
 
-
         if (!$this->_helperBlog->isAuthor()) {
 
             $this->coreRegistry->register('mp_author', $this->_helperBlog->getCurrentAuthor());

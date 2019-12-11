@@ -49,5 +49,3 @@ class Collection extends SearchResult
         return $this;
     }
 }
-
-
