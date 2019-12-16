@@ -26,7 +26,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Helper\Data;
-use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 use Magento\Framework\Registry;
 
@@ -43,9 +43,9 @@ class CustomerGrid extends Extended
     protected $_coreRegistry = null;
 
     /**
-     * @var CustomerFactory
+     * @var CustomerCollectionFactory
      */
-    protected $_customerFactory;
+    protected $_customerCollectionFactory;
 
     /**
      * @var CollectionFactory
@@ -57,18 +57,18 @@ class CustomerGrid extends Extended
      *
      * @param Context $context
      * @param Data $backendHelper
-     * @param CustomerFactory $customerFactory
+     * @param CustomerCollectionFactory $customerFactory
      * @param CollectionFactory $customerGroup
      * @param array $data
      */
     public function __construct(
         Context $context,
         Data $backendHelper,
-        CustomerFactory $customerFactory,
+        CustomerCollectionFactory $customerFactory,
         CollectionFactory $customerGroup,
         array $data = []
     ) {
-        $this->_customerFactory = $customerFactory;
+        $this->_customerCollectionFactory = $customerFactory;
         $this->customerGroup    = $customerGroup;
 
         parent::__construct($context, $backendHelper, $data);
@@ -90,7 +90,7 @@ class CustomerGrid extends Extended
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_customerFactory->create()->getCollection();
+        $collection = $this->_customerCollectionFactory->create();
         $collection->getSelect()->joinLeft(
             ['author' => $collection->getTable('mageplaza_blog_author')],
             'e.entity_id = author.customer_id',

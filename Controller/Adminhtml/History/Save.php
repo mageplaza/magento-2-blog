@@ -103,7 +103,6 @@ class Save extends History
 
     /**
      * @return ResponseInterface|Redirect|ResultInterface
-     * @throws FileSystemException
      */
     public function execute()
     {
@@ -124,8 +123,6 @@ class Save extends History
                 );
 
                 return $resultRedirect;
-            } catch (LocalizedException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (RuntimeException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (Exception $e) {
@@ -189,11 +186,11 @@ class Save extends History
                 $this->jsHelper->decodeGridSerializedInput($products)
             );
         } else {
-            $prodcutData = [];
+            $productData = [];
             foreach ($post->getProductsPosition() as $key => $value) {
-                $prodcutData[$key] = ['position' => $value];
+                $productData[$key] = ['position' => $value];
             }
-            $post->setProductsData($prodcutData);
+            $post->setProductsData($productData);
         }
 
         return $this;

@@ -87,7 +87,7 @@ class CreateAuthor implements ObserverInterface
             try {
                 $author->save();
             } catch (Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the Author.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Author.'));
             }
         }
     }

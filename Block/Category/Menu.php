@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Block\Category;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Mageplaza\Blog\Api\Data\CategoryInterface;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Model\Category;
 use Mageplaza\Blog\Model\CategoryFactory;
@@ -75,7 +76,7 @@ class Menu extends Template
     /**
      * @param $id
      *
-     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     * @return CategoryInterface[]
      */
     public function getChildCategory($id)
     {

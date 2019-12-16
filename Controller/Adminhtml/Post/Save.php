@@ -186,7 +186,7 @@ class Save extends Post
             } catch (RuntimeException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the Post History.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Post History.'));
             }
         }
     }
