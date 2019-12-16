@@ -47,12 +47,12 @@ class Delete extends History
                 $postId = $history->getPostId();
                 $history->delete();
 
-                $this->messageManager->addSuccess(__('The Post History has been deleted.'));
+                $this->messageManager->addSuccessMessage(__('The Post History has been deleted.'));
             } catch (Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         } else {
-            $this->messageManager->addError(__('Post History to delete was not found.'));
+            $this->messageManager->addErrorMessage(__('Post History to delete was not found.'));
         }
         if ($postId) {
             $resultRedirect->setPath('mageplaza_blog/post/edit', ['id' => $postId]);

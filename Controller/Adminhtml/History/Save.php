@@ -116,7 +116,7 @@ class Save extends History
 
             try {
                 $history->save();
-                $this->messageManager->addSuccess(__('The post history has been saved.'));
+                $this->messageManager->addSuccessMessage(__('The post history has been saved.'));
 
                 $resultRedirect->setPath(
                     'mageplaza_blog/post/edit',
@@ -125,11 +125,11 @@ class Save extends History
 
                 return $resultRedirect;
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (RuntimeException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the Post.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Post.'));
             }
         }
 

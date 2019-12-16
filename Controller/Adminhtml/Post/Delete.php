@@ -45,15 +45,15 @@ class Delete extends Post
                     ->load($id)
                     ->delete();
 
-                $this->messageManager->addSuccess(__('The Post has been deleted.'));
+                $this->messageManager->addSuccessMessage(__('The Post has been deleted.'));
             } catch (Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $id]);
 
                 return $resultRedirect;
             }
         } else {
-            $this->messageManager->addError(__('Post to delete was not found.'));
+            $this->messageManager->addErrorMessage(__('Post to delete was not found.'));
         }
 
         $resultRedirect->setPath('mageplaza_blog/*/');

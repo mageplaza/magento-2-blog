@@ -268,7 +268,7 @@ class Frontend extends Template
         $likeCollection = $this->postLikeFactory->create()->getCollection();
         $couldLike      = $likeCollection->addFieldToFilter('post_id', $post->getId())
             ->addFieldToFilter('action', '1')->count();
-        $html           = __('<i class="fa fa-calendar-times-o"></i> %1',
+        $html           = __('<i class="mp-blog-icon mp-blog-calendar-times"></i> %1',
             $this->getDateFormat($post->getPublishDate()));
 
         if ($categoryPost = $this->getPostCategoryHtml($post)) {
@@ -279,19 +279,19 @@ class Frontend extends Template
         if ($author && $author->getName() && $this->helperData->showAuthorInfo()) {
             $aTag = '<a class="mp-info" href="' . $author->getUrl() . '">'
                 . $this->escapeHtml($author->getName()) . '</a>';
-            $html .= __('| <i class="fa fa-user"></i> %1', $aTag);
+            $html .= __('| <i class="mp-blog-icon mp-blog-user"></i> %1', $aTag);
         }
 
         if ($this->getCommentinPost($post)) {
-            $html .= __('| <i class="fa fa-comments" aria-hidden="true"></i> %1', $this->getCommentinPost($post));
+            $html .= __('| <i class="mp-blog-icon mp-blog-comments" aria-hidden="true"></i> %1', $this->getCommentinPost($post));
         }
 
         if ($post->getViewTraffic()) {
-            $html .= __('| <i class="fa fa-desktop" aria-hidden="true"></i> %1', $post->getViewTraffic());
+            $html .= __('| <i class="mp-blog-icon mp-blog-traffic" aria-hidden="true"></i> %1', $post->getViewTraffic());
         }
 
         if ($couldLike > 0) {
-            $html .= __('| <i class="fa fa-thumbs-up" aria-hidden="true"></i> %1', $couldLike);
+            $html .= __('| <i class="mp-blog-icon mp-blog-thumbs-up" aria-hidden="true"></i> %1', $couldLike);
         }
 
         return $html;

@@ -107,15 +107,15 @@ class Save extends Topic
 
             try {
                 $topic->save();
-                $this->messageManager->addSuccess(__('You saved the topic.'));
+                $this->messageManager->addSuccessMessage(__('You saved the topic.'));
             } catch (AlreadyExistsException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             } catch (Exception $e) {
-                $this->messageManager->addError(__('Something went wrong while saving the topic.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while saving the topic.'));
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             }
 
@@ -161,7 +161,7 @@ class Save extends Topic
             try {
                 $topic->save();
 
-                $this->messageManager->addSuccess(__('The Topic has been saved.'));
+                $this->messageManager->addSuccessMessage(__('The Topic has been saved.'));
                 $this->_getSession()->setData('mageplaza_blog_topic_data', false);
 
                 if ($this->getRequest()->getParam('back')) {
@@ -172,11 +172,11 @@ class Save extends Topic
 
                 return $resultRedirect;
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (RuntimeException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the Topic.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Topic.'));
             }
 
             $this->_getSession()->setData('mageplaza_blog_topic_data', $data);

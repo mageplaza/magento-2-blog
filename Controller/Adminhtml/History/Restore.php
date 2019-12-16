@@ -53,12 +53,12 @@ class Restore extends History
 
                 $post->addData($data)->save();
 
-                $this->messageManager->addSuccess(__('The Post History has been restore.'));
+                $this->messageManager->addSuccessMessage(__('The Post History has been restore.'));
             } catch (Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         } else {
-            $this->messageManager->addError(__('Post History to restore was not found.'));
+            $this->messageManager->addErrorMessage(__('Post History to restore was not found.'));
         }
 
         $resultRedirect->setPath('mageplaza_blog/post/edit', ['id' => $postId]);

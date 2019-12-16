@@ -83,7 +83,7 @@ class Save extends Author
             try {
                 $author->save();
 
-                $this->messageManager->addSuccess(__('The Author has been saved.'));
+                $this->messageManager->addSuccessMessage(__('The Author has been saved.'));
                 $this->_getSession()->setData('mageplaza_blog_author_data', false);
 
                 if ($this->getRequest()->getParam('back')) {
@@ -94,11 +94,11 @@ class Save extends Author
 
                 return $resultRedirect;
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (RuntimeException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the Author.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Author.'));
             }
 
             $this->_getSession()->setData('mageplaza_blog_author_data', $data);

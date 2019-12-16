@@ -125,7 +125,7 @@ class Save extends Post
             try {
                 if (empty($action) || $action === 'add') {
                     $post->save();
-                    $this->messageManager->addSuccess(__('The post has been saved.'));
+                    $this->messageManager->addSuccessMessage(__('The post has been saved.'));
                 }
                 $this->addHistory($post, $action);
 
@@ -139,11 +139,11 @@ class Save extends Post
 
                 return $resultRedirect;
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (RuntimeException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the Post.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Post.'));
             }
 
             $this->_getSession()->setData('mageplaza_blog_post_data', $data);

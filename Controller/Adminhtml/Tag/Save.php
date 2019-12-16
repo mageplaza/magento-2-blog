@@ -105,15 +105,15 @@ class Save extends Tag
 
             try {
                 $tag->save();
-                $this->messageManager->addSuccess(__('You saved the tag.'));
+                $this->messageManager->addSuccessMessage(__('You saved the tag.'));
             } catch (AlreadyExistsException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             } catch (Exception $e) {
-                $this->messageManager->addError(__('Something went wrong while saving the tag.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while saving the tag.'));
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             }
 
@@ -162,7 +162,7 @@ class Save extends Tag
             try {
                 $tag->save();
 
-                $this->messageManager->addSuccess(__('The Tag has been saved.'));
+                $this->messageManager->addSuccessMessage(__('The Tag has been saved.'));
                 $this->_session->setData('mageplaza_blog_tag_data', false);
 
                 if ($this->getRequest()->getParam('back')) {
@@ -173,11 +173,11 @@ class Save extends Tag
 
                 return $resultRedirect;
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (RuntimeException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the Tag.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Tag.'));
             }
             $this->_getSession()->setData('mageplaza_blog_tag_data', $data);
 
