@@ -137,12 +137,7 @@ class Author extends Generic implements TabInterface
                 'name'  => 'customer_id',
                 'value' => $author->getCustomerId()
             ]);
-
-            try {
-                $customer = $this->customerRepository->getById($author->getCustomerId());
-            } catch (Exception $exception) {
-                $this->_logger->error($exception->getMessage());
-            }
+            $customer = $this->customerRepository->getById($author->getCustomerId());
 
             $fieldset->addField('customer', 'label', [
                 'name'  => 'customer',
@@ -198,7 +193,11 @@ class Author extends Generic implements TabInterface
             'label'  => __('Short Description'),
             'title'  => __('Short Description'),
             'note'   => __('Short Description'),
-            'config' => $this->wysiwygConfig->getConfig(['add_widgets' => false])
+            'config' => $this->wysiwygConfig->getConfig([
+                'add_variables'  => false,
+                'add_widgets'    => false,
+                'add_directives' => true
+            ])
         ]);
 
         $fieldset->addField('image', Image::class, [
