@@ -30,6 +30,7 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\Post;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection as PostCollection;
 
 /**
  * Class NewProducts
@@ -91,12 +92,26 @@ class Lists extends AbstractBlock implements DataProviderInterface
         return $this->helper->isEnabled();
     }
 
+    private function loadRecentPosts(int $storeId, int $numberOfPosts): PostCollection
+    {
+        /** @var PostCollection $posts */
+        $posts = $this->helper->getPostList($storeId)
+            ->addFieldToFilter('in_rss', 1)
+            ->setOrder('post_id', 'DESC');
+
+        $posts->getSelect()
+            ->limit($numberOfPosts);
+
+        return $posts;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function getRssData()
     {
-        $storeModel = $this->storeManager->getStore($this->getStoreId());
+        $storeId = $this->getStoreId();
+        $storeModel = $this->storeManager->getStore($storeId);
         $title = __('List Posts from %1', $storeModel->getFrontendName())->render();
         $storeUrl = $this->storeManager->getStore($this->getStoreId())->getBaseUrl(UrlInterface::URL_TYPE_WEB);
         $data = [
@@ -107,10 +122,9 @@ class Lists extends AbstractBlock implements DataProviderInterface
             'language'    => $this->helper->getConfigValue('general/locale/code', $storeModel),
         ];
 
-        $posts = $this->helper->getPostList($this->getStoreId())
-            ->addFieldToFilter('in_rss', 1)
-            ->setOrder('post_id', 'DESC');
-        $posts->getSelect()->limit(10);
+        /** @var PostCollection $posts */
+        $posts = $this->loadRecentPosts($storeId, 10);
+
         /** @var Post $item */
         foreach ($posts->getItems() as $item) {
             $item->setAllowedInRss(true);
