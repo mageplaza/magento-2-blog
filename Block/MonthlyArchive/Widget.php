@@ -106,9 +106,8 @@ class Widget extends Frontend
         $limit = $this->helperData->getBlogConfig('monthly_archive/number_records') ?: 5;
         $dateArrayCount = $this->getDateArrayCount();
         $count = count($dateArrayCount);
-        $result = ($count < $limit) ? $count : $limit;
 
-        return $result;
+        return ($count < $limit) ? $count : $limit;
     }
 
     /**
@@ -134,8 +133,7 @@ class Widget extends Frontend
                 $postDatesLabel[] = $this->helperData->getDateFormat($date, true);
             }
         }
-        $result = array_values(array_unique($postDatesLabel));
 
-        return $result;
+        return array_values(array_unique($postDatesLabel));
     }
 }

@@ -152,7 +152,7 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
     {
         $author = $this->getAuthor();
 
-        return $author->getStatus() === '1' ? true : false;
+        return $author->getStatus() === '1';
     }
 
     /**

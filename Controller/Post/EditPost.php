@@ -108,9 +108,9 @@ class EditPost extends Action
         $resultRedirect = $this->resultRedirectFactory->create();
         $this->_helperBlog->setCustomerContextId();
 
-        if ($this->_helperBlog->isLogin()
+        if (!$this->_helperBlog->isAuthor()
+            && $this->_helperBlog->isLogin()
             && $this->getRequest()->isAjax()
-            && !$this->_helperBlog->isAuthor()
         ) {
             $page = $this->resultPageFactory->create();
             if ($this->getRequest()->getParam('postId')) {
@@ -125,6 +125,7 @@ class EditPost extends Action
             $this->_view->loadLayout();
             $layout = $this->_view->getLayout();
             $this->getResponse()->setBody($layout->renderElement('main.content'));
+
             return $page;
         } else {
             $resultRedirect->setPath('customer/account');

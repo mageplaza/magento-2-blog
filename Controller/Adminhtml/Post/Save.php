@@ -27,6 +27,7 @@ use Magento\Backend\Helper\Js;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
@@ -105,7 +106,6 @@ class Save extends Post
 
     /**
      * @return ResponseInterface|Redirect|ResultInterface
-     * @throws FileSystemException
      */
     public function execute()
     {
@@ -138,8 +138,6 @@ class Save extends Post
                 }
 
                 return $resultRedirect;
-            } catch (LocalizedException $e) {
-                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (RuntimeException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (Exception $e) {
@@ -173,15 +171,17 @@ class Save extends Post
             }
             try {
                 $data = $post->getData();
-                unset($data['is_changed_tag_list']);
-                unset($data['is_changed_topic_list']);
-                unset($data['is_changed_category_list']);
-                unset($data['is_changed_product_list']);
-                if (!($isSave = $this->checkHistory($data))) {
+                unset(
+                    $data['is_changed_tag_list'],
+                    $data['is_changed_topic_list'],
+                    $data['is_changed_category_list'],
+                    $data['is_changed_product_list']
+                );
+                if ($isSave = $this->checkHistory($data)) {
+                    $this->messageManager->addErrorMessage(__('Record Id %1 like the one you want to save.', $isSave->getId()));
+                } else {
                     $history->addData($data);
                     $history->save();
-                } else {
-                    $this->messageManager->addErrorMessage(__('Record Id %1 like the one you want to save.', $isSave->getId()));
                 }
             } catch (RuntimeException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
@@ -194,7 +194,7 @@ class Save extends Post
     /**
      * @param $data
      *
-     * @return \Magento\Framework\DataObject|null
+     * @return DataObject|null
      */
     protected function checkHistory($data)
     {

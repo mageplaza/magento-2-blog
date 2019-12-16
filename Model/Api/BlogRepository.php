@@ -27,6 +27,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
@@ -663,7 +664,7 @@ class BlogRepository implements BlogRepositoryInterface
      *
      * @return \Mageplaza\Blog\Api\Data\AuthorInterface
      * @throws NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function createAuthor($author)
     {
@@ -827,7 +828,7 @@ class BlogRepository implements BlogRepositoryInterface
         $collection = $this->_helperData->getFactoryByType('author')->create()->getCollection()
             ->addFieldToFilter('user_id', $authorId);
 
-        return $collection->count() > 0 ? true : false;
+        return $collection->count() > 0;
     }
 
     /**

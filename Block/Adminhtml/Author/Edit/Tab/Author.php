@@ -120,12 +120,7 @@ class Author extends Generic implements TabInterface
         $author = $this->_coreRegistry->registry('mageplaza_blog_author');
 
         /** @var Form $form */
-        try {
-            $form = $this->_formFactory->create();
-        } catch (Exception $e) {
-            $this->_logger->error($e->getMessage());
-        }
-
+        $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('author_');
         $form->setFieldNameSuffix('author');
         $fieldset = $form->addFieldset('base_fieldset', [
@@ -274,7 +269,6 @@ class Author extends Generic implements TabInterface
      *
      * @return bool
      * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function checkCustomerId($customerId)
     {

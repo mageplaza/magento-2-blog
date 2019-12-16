@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Plugin\Customer;
 
+use Magento\Framework\View\Element\Html\Link;
 use Mageplaza\Blog\Helper\Data;
 use Magento\Framework\View\Element\Html\Links;
 
@@ -48,7 +49,7 @@ class LinkMenu
 
     /**
      * @param Links $subject
-     * @param \Magento\Framework\View\Element\Html\Link[] $links
+     * @param Link[] $links
      *
      * @return mixed
      */
@@ -56,15 +57,13 @@ class LinkMenu
         Links $subject,
         $links
     ) {
-        if ($this->helper->isEnabled() && !$this->helper->getConfigGeneral('customer_approve')) {
-            if ($links) {
-                foreach ($links as $key => $link) {
-                    if ($link->getPath() === 'mpblog/author/signup') {
-                        $this->helper->setCustomerContextId();
-                        $author = $this->helper->getCurrentAuthor();
-                        if (!$author->getId()) {
-                            unset($links[$key]);
-                        }
+        if ($links && $this->helper->isEnabled() && !$this->helper->getConfigGeneral('customer_approve')) {
+            foreach ($links as $key => $link) {
+                if ($link->getPath() === 'mpblog/author/signup') {
+                    $this->helper->setCustomerContextId();
+                    $author = $this->helper->getCurrentAuthor();
+                    if (!$author->getId()) {
+                        unset($links[$key]);
                     }
                 }
             }

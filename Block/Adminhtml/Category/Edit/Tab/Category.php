@@ -123,15 +123,15 @@ class Category extends Generic implements TabInterface
             'class'  => 'fieldset-wide'
         ]);
 
-        if (!$category->getId()) {
+        if ($category->getId()) {
+            $fieldset->addField('category_id', 'hidden', ['name' => 'id', 'value' => $category->getId()]);
+            $fieldset->addField('path', 'hidden', ['name' => 'path', 'value' => $category->getPath()]);
+        } else {
             $fieldset->addField(
                 'path',
                 'hidden',
                 ['name' => 'path', 'value' => $this->getRequest()->getParam('parent') ?: 1]
             );
-        } else {
-            $fieldset->addField('category_id', 'hidden', ['name' => 'id', 'value' => $category->getId()]);
-            $fieldset->addField('path', 'hidden', ['name' => 'path', 'value' => $category->getPath()]);
         }
 
         $fieldset->addField('name', 'text', [
@@ -147,7 +147,13 @@ class Category extends Generic implements TabInterface
             'values' => $this->enableDisable->toOptionArray(),
         ]);
 
-        if (!$this->_storeManager->isSingleStoreMode()) {
+        if ($this->_storeManager->isSingleStoreMode()) {
+            $storeId = $this->_storeManager->getStore()->getId();
+            $fieldset->addField('store_ids', 'hidden', [
+                'name'  => 'store_ids',
+                'value' => $storeId
+            ]);
+        } else {
             /** @var RendererInterface $rendererBlock */
             $rendererBlock = $this->getLayout()->createBlock(Element::class);
 
@@ -161,12 +167,6 @@ class Category extends Generic implements TabInterface
             if (!$category->hasData('store_ids')) {
                 $category->setStoreIds(0);
             }
-        } else {
-            $storeId = $this->_storeManager->getStore()->getId();
-            $fieldset->addField('store_ids', 'hidden', [
-                'name'  => 'store_ids',
-                'value' => $storeId
-            ]);
         }
 
         $fieldset->addField('url_key', 'text', [

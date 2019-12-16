@@ -159,7 +159,7 @@ class RelatedPost extends Template
      */
     public function getRelatedMode()
     {
-        return (int) $this->helperData->getConfigGeneral('related_mode') === 1 ? true : false;
+        return (int) $this->helperData->getConfigGeneral('related_mode') === 1;
     }
 
     /**

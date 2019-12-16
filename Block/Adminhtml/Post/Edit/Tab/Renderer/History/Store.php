@@ -70,7 +70,7 @@ class Store extends CoreStore
 
         if (empty($origStores)) {
             return '';
-        } elseif (in_array(0, $origStores) && count($origStores) == 1 && !$skipAllStoresLabel) {
+        } elseif (!$skipAllStoresLabel && in_array('0', $origStores, true) && count($origStores) === 1) {
             return __('All Store Views');
         }
 

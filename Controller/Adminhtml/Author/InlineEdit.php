@@ -81,7 +81,7 @@ class InlineEdit extends Action
         $error = false;
         $messages = [];
         $authorItems = $this->getRequest()->getParam('items', []);
-        if (!($this->getRequest()->getParam('isAjax') && !empty($authorItems))) {
+        if (!(!empty($authorItems) && $this->getRequest()->getParam('isAjax'))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
                 'error'    => true,

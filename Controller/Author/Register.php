@@ -149,12 +149,12 @@ class Register extends Action
      */
     public function prepareData($data, $author = null)
     {
-        if (!$author) {
+        if ($author) {
+            unset($data['status']);
+        } else {
             $data['customer_id'] = $this->customerSession->getId();
             $data['type']        = '1';
             $data['status']      = $this->_helperBlog->getConfigGeneral('auto_approve');
-        } else {
-            unset($data['status']);
         }
 
         if ($this->getRequest()->getFiles()['image']['size'] > 0) {

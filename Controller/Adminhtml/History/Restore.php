@@ -81,12 +81,14 @@ class Restore extends History
         $history->setData('products_data', empty($history->getProductIds())
             ? [] : Data::jsonDecode($history->getProductIds()));
         $data = $history->getData();
-        unset($data['post_id']);
-        unset($data['history_id']);
-        unset($data['category_ids']);
-        unset($data['tag_ids']);
-        unset($data['topic_ids']);
-        unset($data['product_ids']);
+        unset(
+            $data['post_id'],
+            $data['history_id'],
+            $data['category_ids'],
+            $data['tag_ids'],
+            $data['topic_ids'],
+            $data['product_ids']
+        );
 
         return $data;
     }
