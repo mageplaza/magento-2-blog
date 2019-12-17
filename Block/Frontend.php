@@ -214,6 +214,14 @@ class Frontend extends Template
     }
 
     /**
+     * @return bool
+     */
+    public function isBlogEnabled()
+    {
+        return $this->helperData->isEnabled();
+    }
+
+    /**
      * @param $content
      *
      * @return string
@@ -283,11 +291,13 @@ class Frontend extends Template
         }
 
         if ($this->getCommentinPost($post)) {
-            $html .= __('| <i class="mp-blog-icon mp-blog-comments" aria-hidden="true"></i> %1', $this->getCommentinPost($post));
+            $html .= __('| <i class="mp-blog-icon mp-blog-comments" aria-hidden="true"></i> %1',
+                $this->getCommentinPost($post));
         }
 
         if ($post->getViewTraffic()) {
-            $html .= __('| <i class="mp-blog-icon mp-blog-traffic" aria-hidden="true"></i> %1', $post->getViewTraffic());
+            $html .= __('| <i class="mp-blog-icon mp-blog-traffic" aria-hidden="true"></i> %1',
+                $post->getViewTraffic());
         }
 
         if ($couldLike > 0) {
