@@ -61,7 +61,12 @@ class PostHistory extends AbstractDb
             $object->setData('tag_ids', implode(',', $object->getData('tags_ids')));
         }
         if (is_array($object->getData('products_data'))) {
-            $object->setData('product_ids', Data::jsonEncode($object->getData('products_data')));
+            $data = $object->getData('products_data');
+            foreach ($data as $key => $datum) {
+                $data[$key]['position'] = $datum['position']?:'0';
+            }
+
+            $object->setData('product_ids', Data::jsonEncode($data));
         }
 
         return parent::_beforeSave($object);
