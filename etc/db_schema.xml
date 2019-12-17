@@ -92,7 +92,7 @@
         <column xsi:type="varchar" name="category_ids" nullable="true" length="255" comment="Category Ids"/>
         <column xsi:type="varchar" name="tag_ids" nullable="true" length="255" comment="Tag Ids"/>
         <column xsi:type="varchar" name="topic_ids" nullable="true" length="255" comment="Topic Ids"/>
-        <column xsi:type="varchar" name="product_ids" nullable="true" length="255" comment="Product Ids"/>
+        <column xsi:type="mediumtext" name="product_ids" nullable="true" comment="Product Ids"/>
         <column xsi:type="mediumtext" name="layout" nullable="true" comment="Post Layout"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="history_id"/>

@@ -998,7 +998,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         ->addColumn(
                             'product_ids',
                             Table::TYPE_TEXT,
-                            '255',
+                            '64k',
                             ['nullable' => true],
                             'Post Product Id'
                         )
