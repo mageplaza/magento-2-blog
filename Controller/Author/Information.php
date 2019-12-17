@@ -109,7 +109,7 @@ class Information extends Action
         $resultRedirect = $this->resultRedirectFactory->create();
         $this->_helperBlog->setCustomerContextId();
 
-        if (!$this->_helperBlog->isEnabledAuthor()) {
+        if (!$this->_helperBlog->isEnabled() || !$this->_helperBlog->isEnabledAuthor()) {
             $resultRedirect->setPath('customer/account');
 
             return $resultRedirect;
