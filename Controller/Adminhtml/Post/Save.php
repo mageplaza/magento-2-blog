@@ -166,9 +166,6 @@ class Save extends Post
             $history      = $this->_postHistory->create();
             $historyCount = $history->getSumPostHistory($post->getPostId());
             $limitHistory = (int) $this->_helperData->getConfigGeneral('history_limit');
-            if ($historyCount >= $limitHistory) {
-                $history->removeFistHistory($post->getPostId());
-            }
             try {
                 $data = $post->getData();
                 unset(
@@ -178,6 +175,9 @@ class Save extends Post
                     $data['is_changed_product_list']
                 );
                 if ($isSave = $this->checkHistory($data)) {
+                    if ($historyCount >= $limitHistory) {
+                        $history->removeFistHistory($post->getPostId());
+                    }
                     $this->messageManager->addErrorMessage(__('Record Id %1 like the one you want to save.', $isSave->getId()));
                 } else {
                     $history->addData($data);
