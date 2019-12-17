@@ -224,12 +224,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
-                    <item name="editor" xsi:type="array">
-                        <item name="editorType" xsi:type="string">text</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="required-entry" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
+                    <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Email</item>
                 </item>
             </argument>
@@ -238,13 +233,8 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
-                    <item name="editor" xsi:type="array">
-                        <item name="editorType" xsi:type="string">text</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="required-entry" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
                     <item name="label" xsi:type="string" translate="true">Qty of Post</item>
+                    <item name="visible" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
