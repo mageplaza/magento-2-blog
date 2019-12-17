@@ -175,11 +175,11 @@ class Save extends Post
                     $data['is_changed_product_list']
                 );
                 if ($isSave = $this->checkHistory($data)) {
+                    $this->messageManager->addErrorMessage(__('Record Id %1 like the one you want to save.', $isSave->getId()));
+                } else {
                     if ($historyCount >= $limitHistory) {
                         $history->removeFistHistory($post->getPostId());
                     }
-                    $this->messageManager->addErrorMessage(__('Record Id %1 like the one you want to save.', $isSave->getId()));
-                } else {
                     $history->addData($data);
                     $history->save();
                 }
