@@ -132,7 +132,7 @@ class Edit extends Container
      */
     protected function getOptions($post)
     {
-        if ($post->getId()) {
+        if ($post->getId() && !$this->_request->getParam('duplicate')) {
             $options[] = [
                 'id_hard'        => 'save_and_draft',
                 'label'          => __('Save as Draft'),
