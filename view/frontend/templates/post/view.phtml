@@ -60,7 +60,7 @@ $color = $helper->getBlogConfig('general/font_color');
                     <span><i class="fa fa-calendar-times-o">&nbsp;</i> <?= $block->getDateFormat($_post->getPublishDate()); ?></span>
                     <?php if ($_post->getViewTraffic()) : ?>
                         |
-                        <span><i class="fa fa-desktop" aria-hidden="true"> </i> <?= __('View: %1', $_post->getViewTraffic());?></span>
+                        <span><i class="mp-blog-icon mp-blog-traffic" aria-hidden="true"> </i> <?= __('View: %1', $_post->getViewTraffic());?></span>
                     <?php endif; ?>
                     <?php if ($categoryHtml = $block->getPostCategoryHtml($_post)) : ?>
                         |
