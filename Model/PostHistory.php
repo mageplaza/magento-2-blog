@@ -87,7 +87,7 @@ class PostHistory extends AbstractModel
     /**
      * @param $postId
      */
-    public function removeFistHistory($postId)
+    public function removeFirstHistory($postId)
     {
         $this->getCollection()->addFieldToFilter('post_id', $postId)->getFirstItem()->delete();
     }

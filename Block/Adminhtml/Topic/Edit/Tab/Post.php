@@ -218,7 +218,7 @@ class Post extends Extended implements TabInterface
      */
     protected function _addColumnFilterToCollection($column)
     {
-        if ($column->getId() == 'in_posts') {
+        if ($column->getId() === 'in_posts') {
             $postIds = $this->_getSelectedPosts();
             if (empty($postIds)) {
                 $postIds = 0;

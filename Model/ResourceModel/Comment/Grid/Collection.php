@@ -79,11 +79,11 @@ class Collection extends SearchResult
      */
     public function addFieldToFilter($field, $condition = null)
     {
-        if ($field == 'customer_name') {
+        if ($field === 'customer_name') {
             return parent::addFieldToFilter(['firstname', 'lastname'], [$condition, $condition]);
-        } elseif ($field == 'post_name') {
+        } elseif ($field === 'post_name') {
             $field = 'mp.name';
-        } elseif ($field == 'created_at') {
+        } elseif ($field === 'created_at') {
             $field = 'main_table.created_at';
         }
 
@@ -97,7 +97,7 @@ class Collection extends SearchResult
     {
         $this->getSelect()->joinLeft(
             ['mp' => $this->getTable('mageplaza_blog_post')],
-            "main_table.post_id = mp.post_id",
+            'main_table.post_id = mp.post_id',
             ['post_name' => 'name']
         );
 
@@ -111,10 +111,10 @@ class Collection extends SearchResult
     {
         $this->getSelect()->joinLeft(
             ['ce' => $this->getTable('customer_entity')],
-            "main_table.entity_id = ce.entity_id",
+            'main_table.entity_id = ce.entity_id',
             ['firstname', 'lastname']
         )->columns([
-            "customer_name" => new Zend_Db_Expr("CONCAT(`ce`.`firstname`,' ',`ce`.`lastname`)")
+            'customer_name' => new Zend_Db_Expr("CONCAT(`ce`.`firstname`,' ',`ce`.`lastname`)")
         ]);
 
         return $this;

@@ -138,16 +138,16 @@ class Menu extends Template
             . '<a href="' . $categoryUrl . '" class="ui-corner-all" tabindex="-1" role="menuitem">'
             . '<span>' . $parentCategory->getName() . '</span></a>';
 
-        $childCategorys = $this->getChildCategory($parentCategory->getId());
+        $childCategories = $this->getChildCategory($parentCategory->getId());
 
-        if (count($childCategorys) > 0) {
+        if (count($childCategories) > 0) {
             $html .= '<ul class="subchildmenu level' . $parentCategory->getLevel() . ''
                 . ' ui-widget-content ui-corner-all"'
                 . ' role="menu" aria-expanded="false"'
                 . ' aria-hidden="true">';
 
             /** @var Category $childCategory */
-            foreach ($childCategorys as $childCategory) {
+            foreach ($childCategories as $childCategory) {
                 $html .= $this->getMenuHtml($childCategory);
             }
             $html .= '</ul>';

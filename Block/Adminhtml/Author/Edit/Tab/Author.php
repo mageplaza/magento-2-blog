@@ -21,7 +21,6 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Author\Edit\Tab;
 
-use Exception;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;

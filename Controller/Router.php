@@ -35,7 +35,7 @@ use Mageplaza\Blog\Helper\Data;
  */
 class Router implements RouterInterface
 {
-    const URL_SUFFIX_RSS_XML = ".xml";
+    const URL_SUFFIX_RSS_XML = '.xml';
 
     /**
      * @var ActionFactory
@@ -75,7 +75,7 @@ class Router implements RouterInterface
         $urlSuffix  = $this->helper->getUrlSuffix();
 
         if ($length = strlen($urlSuffix)) {
-            if (substr($identifier, -$length) == $urlSuffix && !$this->isRss($identifier)) {
+            if (substr($identifier, -$length) === $urlSuffix && !$this->isRss($identifier)) {
                 $identifier = substr($identifier, 0, strlen($identifier) - $length);
             } else {
                 $identifier = $this->checkRssIdentifier($identifier);
@@ -86,7 +86,7 @@ class Router implements RouterInterface
 
         $routePath = explode('/', $identifier);
         $routeSize = count($routePath);
-        if (!$routeSize || ($routeSize > 3) || (array_shift($routePath) != $this->helper->getRoute())) {
+        if (!$routeSize || ($routeSize > 3) || (array_shift($routePath) !== $this->helper->getRoute())) {
             return null;
         }
 
@@ -168,7 +168,7 @@ class Router implements RouterInterface
         $routePath = explode('.', $routePath);
         $action    = array_shift($routePath);
 
-        return $action == 'rss';
+        return $action === 'rss';
     }
 
     /**

@@ -39,7 +39,6 @@ use Mageplaza\Blog\Api\Data\TagInterface;
 use Mageplaza\Blog\Api\Data\TopicInterface;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\CommentFactory;
-use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\PostLikeFactory;
 use Magento\Framework\App\RequestInterface;
 

@@ -213,7 +213,7 @@ class Product extends Extended implements TabInterface
      */
     protected function _addColumnFilterToCollection($column)
     {
-        if ($column->getId() == 'in_products') {
+        if ($column->getId() === 'in_products') {
             $productIds = $this->_getSelectedProducts();
             if (empty($productIds)) {
                 $productIds = 0;

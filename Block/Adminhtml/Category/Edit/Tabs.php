@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit;
 
+use Exception;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\Json\EncoderInterface;
@@ -89,6 +90,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
 
     /**
      * @inheritdoc
+     * @throws Exception
      */
     protected function _prepareLayout()
     {

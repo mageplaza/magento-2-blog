@@ -274,10 +274,10 @@ abstract class AbstractImport extends AbstractModel
     protected function _getStatistics($type, $successCount, $errorCount, $hasData)
     {
         $statistics = [
-            "type"          => $type,
-            "success_count" => $successCount,
-            "error_count"   => $errorCount,
-            "has_data"      => $hasData
+            'type' => $type,
+            'success_count' => $successCount,
+            'error_count' => $errorCount,
+            'has_data' => $hasData
         ];
 
         return $statistics;

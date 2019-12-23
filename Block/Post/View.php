@@ -155,9 +155,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
      */
     public function getUserComment($userId)
     {
-        $user = $this->customerRepository->getById($userId);
-
-        return $user;
+        return $this->customerRepository->getById($userId);
     }
 
     /**
@@ -206,7 +204,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
         $comments = $this->cmtFactory->create()->getCollection()
             ->addFieldToFilter('main_table.post_id', $postId);
         foreach ($comments as $comment) {
-            array_push($result, $comment->getData());
+            $result[] = $comment->getData();
         }
 
         return $result;
@@ -387,9 +385,9 @@ class View extends \Mageplaza\Blog\Block\Listpost
 
         if ($meta) {
             if ($post->getMetaTitle()) {
-                array_push($blogTitle, $post->getMetaTitle());
+                $blogTitle[] = $post->getMetaTitle();
             } else {
-                array_push($blogTitle, ucfirst($post->getName()));
+                $blogTitle[] = ucfirst($post->getName());
             }
 
             return $blogTitle;

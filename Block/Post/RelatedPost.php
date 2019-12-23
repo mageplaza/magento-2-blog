@@ -122,7 +122,7 @@ class RelatedPost extends Template
      */
     public function getLimitPosts()
     {
-        if ($this->_limitPost == null) {
+        if (!$this->_limitPost) {
             $this->_limitPost = (int) $this->helperData->getBlogConfig('product_post/product_detail/post_limit') ?: 1;
         }
 

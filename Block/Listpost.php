@@ -139,7 +139,7 @@ class Listpost extends Frontend
             'title' => $label
         ];
 
-        if ($this->getRequest()->getFullActionName() != 'mpblog_post_index') {
+        if ($this->getRequest()->getFullActionName() !== 'mpblog_post_index') {
             $data['link'] = $this->helperData->getBlogUrl();
         }
 
@@ -165,7 +165,7 @@ class Listpost extends Frontend
         $robots = $object ? $object->getMetaRobots() : $this->helperData->getSeoConfig('meta_robots');
         $this->pageConfig->setRobots($robots);
 
-        if ($this->getRequest()->getFullActionName() == 'mpblog_post_view') {
+        if ($this->getRequest()->getFullActionName() === 'mpblog_post_view') {
             $this->pageConfig->addRemotePageAsset(
                 $object->getUrl(),
                 'canonical',

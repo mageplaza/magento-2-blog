@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Model\ResourceModel\Comment;
 
 use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
 use Mageplaza\Blog\Api\Data\SearchResult\CommentSearchResultInterface;
+use Mageplaza\Blog\Model\Comment;
 
 /**
  * Class Collection
@@ -40,6 +41,6 @@ class Collection extends AbstractCollection implements CommentSearchResultInterf
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\Comment', 'Mageplaza\Blog\Model\ResourceModel\Comment');
+        $this->_init(Comment::class, \Mageplaza\Blog\Model\ResourceModel\Comment::class);
     }
 }

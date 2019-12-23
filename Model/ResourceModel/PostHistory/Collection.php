@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Model\ResourceModel\PostHistory;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Mageplaza\Blog\Model\PostHistory;
 
 /**
  * Class Collection
@@ -34,6 +35,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\PostHistory', 'Mageplaza\Blog\Model\ResourceModel\PostHistory');
+        $this->_init(PostHistory::class, \Mageplaza\Blog\Model\ResourceModel\PostHistory::class);
     }
 }

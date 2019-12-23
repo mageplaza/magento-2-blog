@@ -25,6 +25,7 @@ use Magento\Framework\DB\Select;
 use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
 use Mageplaza\Blog\Api\Data\SearchResult\PostSearchResultInterface;
 use Zend_Db_Select;
+use Mageplaza\Blog\Model\Post;
 
 /**
  * Class Collection
@@ -60,7 +61,7 @@ class Collection extends AbstractCollection implements PostSearchResultInterface
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\Post', 'Mageplaza\Blog\Model\ResourceModel\Post');
+        $this->_init(Post::class, \Mageplaza\Blog\Model\ResourceModel\Post::class);
     }
 
     /**

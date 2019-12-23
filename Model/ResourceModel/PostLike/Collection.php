@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Model\ResourceModel\PostLike;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Mageplaza\Blog\Model\PostLike;
 
 /**
  * Class Collection
@@ -34,6 +35,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\PostLike', 'Mageplaza\Blog\Model\ResourceModel\PostLike');
+        $this->_init(PostLike::class, \Mageplaza\Blog\Model\ResourceModel\PostLike::class);
     }
 }

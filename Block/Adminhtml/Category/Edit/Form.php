@@ -87,6 +87,7 @@ class Form extends AbstractCategory
 
     /**
      * @inheritdoc
+     * @throws LocalizedException
      */
     protected function _prepareLayout()
     {
@@ -245,13 +246,13 @@ class Form extends AbstractCategory
     {
         if ($this->getCategoryId()) {
             return $this->getCategoryName();
+        }
+
+        $parentId = (int) $this->getRequest()->getParam('parent');
+        if ($parentId && $parentId !== Category::TREE_ROOT_ID) {
+            return __('New Child 123 Category');
         } else {
-            $parentId = (int) $this->getRequest()->getParam('parent');
-            if ($parentId && $parentId != Category::TREE_ROOT_ID) {
-                return __('New Child 123 Category');
-            } else {
-                return __('New Root 12 Category');
-            }
+            return __('New Root 12 Category');
         }
     }
 
@@ -340,7 +341,7 @@ class Form extends AbstractCategory
      */
     public function getButtonChildBlock($childId, $blockClassName = null)
     {
-        if (null === $blockClassName) {
+        if ($blockClassName === null) {
             $blockClassName = Button::class;
         }
 

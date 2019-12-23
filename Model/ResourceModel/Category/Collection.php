@@ -25,6 +25,7 @@ use Magento\Framework\DB\Select;
 use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
 use Mageplaza\Blog\Api\Data\SearchResult\CategorySearchResultInterface;
 use Zend_Db_Select;
+use Mageplaza\Blog\Model\Category;
 
 /**
  * Class Collection
@@ -60,7 +61,7 @@ class Collection extends AbstractCollection implements CategorySearchResultInter
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\Category', 'Mageplaza\Blog\Model\ResourceModel\Category');
+        $this->_init(Category::class, \Mageplaza\Blog\Model\ResourceModel\Category::class);
     }
 
     /**
@@ -79,7 +80,7 @@ class Collection extends AbstractCollection implements CategorySearchResultInter
      */
     public function addFieldToFilter($field, $condition = null)
     {
-        if ($field == 'entity_id') {
+        if ($field === 'entity_id') {
             $field = 'category_id';
         }
 
@@ -179,7 +180,7 @@ class Collection extends AbstractCollection implements CategorySearchResultInter
             }
         }
 
-        if ($condition != '') {
+        if ($condition) {
             $this->addFieldToFilter('category_id', $condition);
         }
 

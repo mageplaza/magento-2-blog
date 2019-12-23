@@ -178,7 +178,7 @@ class Save extends Post
                     $this->messageManager->addErrorMessage(__('Record Id %1 like the one you want to save.', $isSave->getId()));
                 } else {
                     if ($historyCount >= $limitHistory) {
-                        $history->removeFistHistory($post->getPostId());
+                        $history->removeFirstHistory($post->getPostId());
                     }
                     $history->addData($data);
                     $history->save();

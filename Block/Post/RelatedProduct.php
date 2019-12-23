@@ -133,7 +133,7 @@ class RelatedProduct extends ListProduct
             $collection->getSelect()
                 ->join(
                     ['product_post' => $collection->getTable('mageplaza_blog_post_product')],
-                    "e.entity_id = product_post.entity_id"
+                    'e.entity_id = product_post.entity_id'
                 )
                 ->where('product_post.post_id = ' . $postId)
                 ->order('product_post.position ASC')

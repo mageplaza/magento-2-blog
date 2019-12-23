@@ -100,10 +100,12 @@ class Move extends Category
 
         try {
             $category = $this->initCategory();
-            if ($category === false) {
-                throw new LocalizedException(__('Blog category is not available.'));
+            if ($category !== false) {
+                $category->move($parentNodeId, $prevNodeId);
+            } else {
+                $error = true;
+                $this->messageManager->addErrorMessage(__('There was a Blog category move error.'));
             }
-            $category->move($parentNodeId, $prevNodeId);
         } catch (LocalizedException $e) {
             $error = true;
             $this->messageManager->addErrorMessage(__('There was a Blog category move error.'));
