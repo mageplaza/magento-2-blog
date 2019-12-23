@@ -30,7 +30,6 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
-use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\ResourceModel\Author\CollectionFactory;
 
 /**
@@ -54,73 +53,55 @@ class MassDelete extends Action
     public $collectionFactory;
 
     /**
-     * @var PostFactory
-     */
-    protected $_postFactory;
-
-    /**
      * constructor
      *
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
-     * @param PostFactory $postFactory
      */
     public function __construct(
         Context $context,
         Filter $filter,
-        CollectionFactory $collectionFactory,
-        PostFactory $postFactory
+        CollectionFactory $collectionFactory
     ) {
         $this->filter            = $filter;
         $this->collectionFactory = $collectionFactory;
-        $this->_postFactory      = $postFactory;
 
         parent::__construct($context);
     }
 
     /**
-     * @return $this|ResponseInterface|ResultInterface
+     * @return Redirect|ResponseInterface|ResultInterface
      * @throws LocalizedException
      */
     public function execute()
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
+        $authorRemove = 0;
 
-        if ($this->allowMassDeleteAuthor()) {
-            try {
-                $collection->walk('delete');
-
-                $this->messageManager->addSuccessMessage(__('Authors has been deleted.'));
-            } catch (Exception $e) {
-                $this->messageManager->addErrorMessage(__('Something wrong when delete Authors.'));
+        foreach ($collection->getItems() as $author) {
+            if ($author->hasPost()) {
+                $this->messageManager->addWarningMessage(__('One of the authors has post. You can not delete this one.'));
+            } else {
+                try {
+                    $author->delete();
+                    $authorRemove++;
+                } catch (Exception $e) {
+                    $this->_getSession()->addException(
+                        $e,
+                        __('Something went wrong while updating status for %1.', $author->getName())
+                    );
+                }
             }
-        } else {
-            $this->messageManager->addErrorMessage('One of the authors has post. You can not delete this one.');
+        }
+
+        if ($authorRemove) {
+            $this->messageManager->addSuccessMessage(__('A total of %1 record(s) have been removed.', $authorRemove));
         }
 
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         return $resultRedirect->setPath('*/*/');
-    }
-
-    /**
-     * @return bool
-     * @throws LocalizedException
-     */
-    public function allowMassDeleteAuthor()
-    {
-        $post           = $this->_postFactory->create();
-        $postCollection = $post->getCollection();
-        $collection     = $this->filter->getCollection($this->collectionFactory->create());
-
-        foreach ($collection as $item) {
-            if ($postCollection->addFieldToFilter('author_id', ['eq' => $item->getId()])->getSize() > 0) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

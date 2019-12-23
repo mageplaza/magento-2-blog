@@ -45,6 +45,11 @@ class Author extends AbstractDb
     public $dateTime;
 
     /**
+     * @var string
+     */
+    public $postTable;
+
+    /**
      * Author constructor.
      *
      * @param Context $context
@@ -60,6 +65,7 @@ class Author extends AbstractDb
         $this->dateTime   = $dateTime;
 
         parent::__construct($context);
+        $this->postTable      = $this->getTable('mageplaza_blog_post');
     }
 
     /**
@@ -86,5 +92,25 @@ class Author extends AbstractDb
         }
 
         return $this;
+    }
+
+    /**
+     * @param \Mageplaza\Blog\Model\Author $author
+     *
+     * @return array
+     */
+    public function getPostIds(\Mageplaza\Blog\Model\Author $author)
+    {
+        $adapter = $this->getConnection();
+        $select  = $adapter->select()->from(
+            $this->postTable,
+            'post_id'
+        )
+            ->where(
+                'author_id = ?',
+                (int) $author->getId()
+            );
+
+        return $adapter->fetchCol($select);
     }
 }

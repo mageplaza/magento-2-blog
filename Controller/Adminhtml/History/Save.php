@@ -27,6 +27,7 @@ use Magento\Backend\Helper\Js;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Controller\Adminhtml\History;
@@ -36,6 +37,7 @@ use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\PostHistoryFactory;
 use RuntimeException;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Class Save
@@ -71,6 +73,11 @@ class Save extends History
     protected $_postHistory;
 
     /**
+     * @var TimezoneInterface
+     */
+    protected $_timezone;
+
+    /**
      * Save constructor.
      *
      * @param PostHistoryFactory $postHistoryFactory
@@ -80,6 +87,7 @@ class Save extends History
      * @param Js $jsHelper
      * @param Image $imageHelper
      * @param Data $helperData
+     * @param TimezoneInterface $timezone
      * @param Context $context
      */
     public function __construct(
@@ -90,17 +98,20 @@ class Save extends History
         Js $jsHelper,
         Image $imageHelper,
         Data $helperData,
+        TimezoneInterface $timezone,
         Context $context
     ) {
         $this->jsHelper    = $jsHelper;
         $this->_helperData = $helperData;
         $this->imageHelper = $imageHelper;
+        $this->_timezone   = $timezone;
 
         parent::__construct($postHistoryFactory, $postFactory, $coreRegistry, $date, $context);
     }
 
     /**
      * @return ResponseInterface|Redirect|ResultInterface
+     * @throws LocalizedException
      */
     public function execute()
     {
@@ -143,6 +154,7 @@ class Save extends History
      * @param array $data
      *
      * @return $this
+     * @throws LocalizedException
      */
     protected function prepareData($post, $data = [])
     {
@@ -157,8 +169,7 @@ class Save extends History
         }
 
         /** Set specify field data */
-        $timezone               = $this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $data['publish_date']   = $timezone->convertConfigTimeToUtc(isset($data['publish_date'])
+        $data['publish_date']   = $this->_timezone->convertConfigTimeToUtc(isset($data['publish_date'])
             ? $data['publish_date'] : null);
         $data['modifier_id']    = $this->_auth->getUser()->getId();
         $data['categories_ids'] = (isset($data['categories_ids']) && $data['categories_ids']) ? explode(
@@ -172,7 +183,7 @@ class Save extends History
             $data['topics_ids']
         ) : [];
 
-        if ($post->getCreatedAt() == null) {
+        if ($post->getCreatedAt() === null) {
             $data['created_at'] = $this->date->date();
         }
         $data['updated_at'] = $this->date->date();
