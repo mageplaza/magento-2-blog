@@ -81,11 +81,11 @@ class Import extends Action
         BlogHelper $blogHelper,
         Registry $registry
     ) {
-        $this->blogHelper = $blogHelper;
-        $this->_wordpressModel = $wordPress;
+        $this->blogHelper         = $blogHelper;
+        $this->_wordpressModel    = $wordPress;
         $this->_aheadWorksM1Model = $aheadWorksM1;
-        $this->_mageFanM2Model = $mageFanM2;
-        $this->registry = $registry;
+        $this->_mageFanM2Model    = $mageFanM2;
+        $this->registry           = $registry;
 
         parent::__construct($context);
     }
@@ -116,6 +116,7 @@ class Import extends Action
     /**
      * @param $statisticData
      * @param $messagesBlock
+     * @param $data
      *
      * @return mixed
      */
@@ -164,7 +165,7 @@ class Import extends Action
     protected function processImport($object, $data)
     {
         $statisticHtml = '';
-        $connection = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
+        $connection    = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
         $messagesBlock = $this->_view->getLayout()->createBlock(Messages::class);
         if ($object->run($data, $connection)) {
             $postStatistic = $this->registry->registry('mageplaza_import_post_statistic');
@@ -206,7 +207,7 @@ class Import extends Action
             $statisticHtml = $messagesBlock
                 ->{'adderror'}(__('Can not make import, please check your table prefix OR import type and try again.'))
                 ->toHtml();
-            $result = ['statistic' => $statisticHtml, 'status' => 'ok'];
+            $result        = ['statistic' => $statisticHtml, 'status' => 'ok'];
 
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         }

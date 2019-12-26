@@ -22,14 +22,16 @@
 namespace Mageplaza\Blog\Model\ResourceModel\Category;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
+use Mageplaza\Blog\Api\Data\SearchResult\CategorySearchResultInterface;
+use Mageplaza\Blog\Model\Category;
 use Zend_Db_Select;
 
 /**
  * Class Collection
  * @package Mageplaza\Blog\Model\ResourceModel\Category
  */
-class Collection extends AbstractCollection
+class Collection extends AbstractCollection implements CategorySearchResultInterface
 {
     /**
      * ID Field Name
@@ -59,7 +61,7 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\Category', 'Mageplaza\Blog\Model\ResourceModel\Category');
+        $this->_init(Category::class, \Mageplaza\Blog\Model\ResourceModel\Category::class);
     }
 
     /**
@@ -78,7 +80,7 @@ class Collection extends AbstractCollection
      */
     public function addFieldToFilter($field, $condition = null)
     {
-        if ($field == 'entity_id') {
+        if ($field === 'entity_id') {
             $field = 'category_id';
         }
 
@@ -178,7 +180,7 @@ class Collection extends AbstractCollection
             }
         }
 
-        if ($condition != '') {
+        if ($condition) {
             $this->addFieldToFilter('category_id', $condition);
         }
 

@@ -28,7 +28,6 @@ use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Object;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
@@ -70,7 +69,7 @@ class Post extends Extended implements TabInterface
         array $data = []
     ) {
         $this->coreRegistry = $coreRegistry;
-        $this->postFactory = $postFactory;
+        $this->postFactory  = $postFactory;
 
         parent::__construct($context, $backendHelper, $data);
     }
@@ -219,7 +218,7 @@ class Post extends Extended implements TabInterface
      */
     protected function _addColumnFilterToCollection($column)
     {
-        if ($column->getId() == 'in_posts') {
+        if ($column->getId() === 'in_posts') {
             $postIds = $this->_getSelectedPosts();
             if (empty($postIds)) {
                 $postIds = 0;

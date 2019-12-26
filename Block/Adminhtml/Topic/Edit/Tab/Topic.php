@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Topic\Edit\Tab;
 
+use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
@@ -92,11 +93,11 @@ class Topic extends Generic implements TabInterface
         Store $systemStore,
         array $data = []
     ) {
-        $this->wysiwygConfig = $wysiwygConfig;
-        $this->booleanOptions = $booleanOptions;
-        $this->enableDisable = $enableDisable;
+        $this->wysiwygConfig     = $wysiwygConfig;
+        $this->booleanOptions    = $booleanOptions;
+        $this->enableDisable     = $enableDisable;
         $this->metaRobotsOptions = $metaRobotsOptions;
-        $this->systemStore = $systemStore;
+        $this->systemStore       = $systemStore;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -146,7 +147,9 @@ class Topic extends Generic implements TabInterface
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             /** @var RendererInterface $rendererBlock */
-            $rendererBlock = $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element');
+            $rendererBlock = $this->getLayout()->createBlock(
+                Element::class
+            );
             $fieldset->addField('store_ids', 'multiselect', [
                 'name'   => 'store_ids',
                 'label'  => __('Store Views'),

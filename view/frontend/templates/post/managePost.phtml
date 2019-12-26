@@ -1,0 +1,187 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Blog\Block\Post\ManagePost $block */
+?>
+<form enctype="multipart/form-data" data-mage-init='{"validation": {}}'
+      action="<?= $block->escapeHtml($block->getUrl('mpblog/post/manage'))?>" method="post" class="form"
+      name="mp_blog_post_form" id="mp_blog_post_form">
+    <fieldset class="fieldset">
+        <div class="field required mp-field">
+            <label for="name" class="label"><span><?= /* @noEscape */ __('Post Name')?></span></label>
+            <div class="control">
+                <input type="text" name="name" id="name"
+                       title="<?= /* @noEscape */ __('Post Name')?>"
+                       class="input-text" data-validate="{required:true, 'validate-no-empty':true}">
+            </div>
+        </div>
+        <input type="hidden" name="post_id" id="post_id">
+        <div class="field mp-field">
+            <label for="short_description" class="label">
+                <span><?= /* @noEscape */ __('Short Description')?></span>
+            </label>
+            <div class="control">
+                <textarea name="short_description" id="short_description" rows="5" cols="19"></textarea>
+            </div>
+        </div>
+        <div class="field mp-field">
+            <label for="post_content" class="label">
+                <span><?= /* @noEscape */ __('Post Content')?></span>
+            </label>
+            <div class="control">
+                <textarea name="post_content" id="post_content" rows="5" cols="19">
+                </textarea>
+            </div>
+        </div>
+        <div class="field mp-field">
+            <label for="image" class="label"><span><?= /* @noEscape */ __('Image')?></span></label>
+            <div class="control">
+                <input type="file" name="image" id="image"
+                       title="<?= /* @noEscape */ __('Image')?>"
+                       class="input-file">
+            </div>
+        </div>
+        <div class="mp-custom">
+            <div class="field mp-field">
+                <label class="label"><span><?php echo __('Select Category') ?></span></label>
+                <div data-bind="scope: 'customCategory'">
+                    <input name="categories_ids" data-bind="value: value" style="display: none"/>
+
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                </div>
+            </div>
+            <div class="field mp-field">
+                <label class="label"><span><?php echo __('Select Topic') ?></span></label>
+                <div data-bind="scope: 'customTopic'">
+                    <input name="topics_ids" data-bind="value: value" style="display: none"/>
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                </div>
+            </div>
+            <div class="field mp-field">
+                <label class="label"><span><?php echo __('Select Tag') ?></span></label>
+                <div data-bind="scope: 'customTag'">
+                    <input name="tags_ids" data-bind="value: value" style="display: none"/>
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                </div>
+            </div>
+        </div>
+        <div class="field mp-field">
+            <label for="allow_comment" class="label"><span><?= /* @noEscape */ __('Allow Comment')?></span></label>
+            <div class="control">
+                <select id="allow_comment" name="allow_comment">
+                    <option value="0"><span><?= /* @noEscape */ __('No')?></option>
+                    <option value="1"><span><?= /* @noEscape */ __('Yes')?></option>
+                </select>
+            </div>
+        </div>
+        <div class="field mp-field">
+            <label for="publish_date" class="label"><span><?= /* @noEscape */ __('Publish Date')?></span></label>
+            <div class="control">
+                <input name="publish_date" id="publish_date" type="text" data-validate="{'datetime-validation':true}">
+                <script>
+                    require([
+                        "jquery",
+                        "mage/calendar"
+                    ], function($){
+                        $('#publish_date').datetimepicker({
+                                dateFormat:'yy-mm-dd',
+                                beforeShowDay: $.datepicker.noWeekends,
+                            }
+                        );
+                    });
+                </script>
+            </div>
+        </div>
+    </fieldset>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="button" class="action submit primary mpblog-action-new"
+                    title="<?= __('Save')?>">
+                <span>
+                    <?= /* @noEscape */  __('Save')?>
+                </span>
+            </button>
+        </div>
+    </div>
+    <?php if ($block->checkTheme()) : ?>
+        <style>
+            .admin__action-multiselect-crumb .action-close:before {
+                top: -6px;
+                right: 8px;
+            }
+            .admin__action-multiselect-menu-inner-item._root .action-menu-item .admin__action-multiselect-label:before {
+                content: '\f846';
+                font-family: 'porto-icons';
+            }
+            .admin__action-multiselect-dropdown:before {
+                content: '\f803';
+                font-family: 'porto-icons';
+            }
+            .admin__action-multiselect-tree .action-menu-item._expended .admin__action-multiselect-dropdown:before {
+                right: 5px;
+                position: absolute;
+                content: '\f800';
+                font-family: 'porto-icons';
+            }
+        </style>
+    <?php endif; ?>
+</form>
+<script type="text/x-magento-init">
+    {
+        ".mp-custom": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "customCategory": {
+                        "component": "Magento_Ui/js/form/element/ui-select",
+                        "template" : "Mageplaza_Blog/ui-select",
+                        "filterOptions": true,
+                        "levelsVisibility": "1",
+                        "multiple": true,
+                        "showCheckbox": true,
+                        "options": <?php echo $block->getCategoriesTree()?>
+                    },
+                    "customTopic": {
+                        "component": "Magento_Ui/js/form/element/ui-select",
+                        "template" : "Mageplaza_Blog/ui-select",
+                        "filterOptions": true,
+                        "levelsVisibility": "1",
+                        "multiple": true,
+                        "showCheckbox": true,
+                        "options": <?php echo $block->getTopicTree()?>
+                    },
+                    "customTag": {
+                        "component": "Magento_Ui/js/form/element/ui-select",
+                        "template" : "Mageplaza_Blog/ui-select",
+                        "filterOptions": true,
+                        "levelsVisibility": "1",
+                        "multiple": true,
+                        "showCheckbox": true,
+                        "options": <?php echo $block->getTagTree()?>
+                    }
+                }
+            }
+        },
+        "*": {
+            "Mageplaza_Blog/js/postAction": {
+            }
+        }
+    }
+</script>

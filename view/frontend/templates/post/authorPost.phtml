@@ -1,0 +1,138 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Blog\Block\Post\AuthorPost $block */
+?>
+
+<?php if (!$block->getAuthorStatus()) : ?>
+    <div>
+        <h3><?= /* @noEscape */ __('Your account must be licensed in order to perform the Post creation and management function') ?></h3>
+    </div>
+<?php else : ?>
+<div class="mp-blog-new-post">
+    <button type="button" class="action primary" title="<?= /* @noEscape */
+    __('Add New Post') ?>"><?= /* @noEscape */
+        __('Add New Post') ?></button>
+</div>
+<div class="post-list-content" id="mpblog-list-container">
+    <?php $postCollection = $block->getPostCollection(); ?>
+    <?php if ($postCollection && count($postCollection) > 0) : ?>
+        <div class="post-list-body">
+            <?php $i = 1 ?>
+            <?php /** @var \Mageplaza\Blog\Model\Post $post */
+            foreach ($postCollection as $post) : ?>
+                <div data-post-id="<?= $block->escapeHtml($post->getId()); ?>"
+                     class="post-list-item col-mp post-item-list mp-12">
+                    <div class="post-item-wraper">
+                        <?= /* @noEscape */ $block->getStatusHtmlById($post->getEnabled()) ?>
+                        <?php if ($post->getImage()) : ?>
+                            <div class="post-image">
+                                <a href="<?= $post->getUrl() ?>">
+                                    <img class="img-responsive"
+                                         src="<?= $block->resizeImage($post->getImage(), '400x'); ?>"
+                                         alt="<?= $block->escapeHtml($post->getName()); ?>"/>
+                                </a>
+                            </div>
+                        <?php endif; ?>
+                        <div class="post-info-wraper">
+                            <h2 class="mp-post-title">
+                                <a class="post-link-title" title="<?= $block->escapeHtml($post->getName()); ?>"
+                                   href="<?= $post->getUrl() ?>">
+                                    <?= $post->getName(); ?>
+                                </a>
+                            </h2>
+                            <div class="mp-post-info">
+                                <?= $block->getPostInfo($post); ?>
+                            </div>
+                            <div class="post-short-description">
+                                <p><?= $block->maxShortDescription($post->getShortDescription()); ?></p>
+                            </div>
+                            <div class="mp-clearfix"></div>
+                            <div class="mp-post-meta-info mp-alignright">
+                                <div class="actions">
+                                    <a class="mp-read-more" href="<?= $post->getUrl(); ?>"
+                                       title="<?= __('Read More'); ?>">
+                                        <?= __('Read More'); ?>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-info-action" data-postId="<?= $block->escapeHtml($post->getId()); ?>">
+                            <div class="mpblog-post-duplicate">
+                                <img src="<?= $this->getViewFileUrl('Mageplaza_Blog::media/images/duplicate.svg') ?>"
+                                     align="middle"
+                                     alt="<?= $block->escapeHtml(__('Duplicate')); ?>"
+                                     title="<?= /* @noEscape */
+                                        __('Duplicate') ?>"
+                                />
+                            </div>
+                            <div class="mpblog-post-edit">
+                                <img src="<?= $this->getViewFileUrl('Mageplaza_Blog::media/images/writing.svg') ?>"
+                                     align="middle"
+                                     alt="<?= $block->escapeHtml(__('Edit')); ?>"
+                                     title="<?= /* @noEscape */
+                                        __('Edit') ?>"
+                                />
+                            </div>
+                            <div class="mpblog-post-delete">
+                                <img src="<?= $this->getViewFileUrl('Mageplaza_Blog::media/images/delete.svg') ?>"
+                                     align="middle"
+                                     alt="<?= $block->escapeHtml(__('Delete')) ?>"
+                                     title="<?= /* @noEscape */
+                                        __('Delete') ?>"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php if ($i++ % 2 == 0) : ?>
+                    <div class="mp-clear"></div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <div class="mp-clear"></div>
+        </div>
+        <?= $block->getPagerHtml() ?>
+    <?php else : ?>
+        <?= __('There are no posts at this moment'); ?>
+    <?php endif; ?>
+    <?= $this->getChildHtml('additional'); ?>
+</div>
+<script type="text/x-magento-init">
+            {
+                "*": {
+                    "Mageplaza_Blog/js/managePost": {
+                        "deleteUrl": "<?= $block->escapeHtml($block->getUrl('mpblog/post/deletepost')) ?>",
+                        "basePubUrl": "<?= $block->escapeHtml($block->getBaseMediaUrl()) ?>",
+                        "postDatas": <?= /* @noEscape */ $block->getPostDatas($postCollection) ?>,
+                        "editorVersion": "<?= $block->escapeHtml($block->getVersion()) ?>",
+                        "magentoVersion": "<?= $block->escapeHtml($block->getMagentoVersion()) ?>"
+                    }
+                }
+            }
+
+</script>
+<script>
+    require(['jquery'], function ($) {
+        $('.limiter').css('float', 'right');
+    });
+</script>
+<div id="mp-blog-new-post-popup" style="display: none"><?= $block->getChildHtml('mpblog_manage_post') ?></div>
+<?php endif; ?>

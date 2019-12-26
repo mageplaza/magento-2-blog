@@ -26,7 +26,6 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Controller\Adminhtml\Author;
@@ -66,7 +65,6 @@ class Save extends Author
 
     /**
      * @return ResponseInterface|Redirect|ResultInterface
-     * @throws FileSystemException
      */
     public function execute()
     {
@@ -75,11 +73,7 @@ class Save extends Author
         if ($data = $this->getRequest()->getPost('author')) {
             /** @var \Mageplaza\Blog\Model\Author $author */
             $author = $this->initAuthor();
-
-            $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_AUTH, $author->getImage());
-            if (!empty($data)) {
-                $author->addData($data);
-            }
+            $this->prepareData($author, $data);
 
             $this->_eventManager->dispatch(
                 'mageplaza_blog_author_prepare_save',
@@ -89,32 +83,59 @@ class Save extends Author
             try {
                 $author->save();
 
-                $this->messageManager->addSuccess(__('The Author has been saved.'));
+                $this->messageManager->addSuccessMessage(__('The Author has been saved.'));
                 $this->_getSession()->setData('mageplaza_blog_author_data', false);
 
                 if ($this->getRequest()->getParam('back')) {
-                    $resultRedirect->setPath('mageplaza_blog/*/edit', ['_current' => true]);
+                    $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $author->getId(), '_current' => true]);
                 } else {
                     $resultRedirect->setPath('mageplaza_blog/*/');
                 }
 
                 return $resultRedirect;
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (RuntimeException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the Author.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Author.'));
             }
 
             $this->_getSession()->setData('mageplaza_blog_author_data', $data);
 
-            $resultRedirect->setPath('mageplaza_blog/*/edit', ['_current' => true]);
+            $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $author->getId(), '_current' => true]);
 
             return $resultRedirect;
         }
         $resultRedirect->setPath('mageplaza_blog/*/');
 
         return $resultRedirect;
+    }
+
+    /**
+     * @param $author
+     * @param $data
+     *
+     * @return $this
+     */
+    public function prepareData($author, $data)
+    {
+        // upload image
+        if (!$this->getRequest()->getParam('image')) {
+            try {
+                $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_AUTH, $author->getImage());
+            } catch (Exception $exception) {
+                $data['image'] = isset($data['image']['value']) ? $data['image']['value'] : '';
+            }
+        }
+        if ($this->getRequest()->getParam('image')['delete']) {
+            $data['image'] = '';
+        }
+        // set data
+        if (!empty($data)) {
+            $author->addData($data);
+        }
+
+        return $this;
     }
 }

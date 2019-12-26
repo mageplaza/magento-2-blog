@@ -25,8 +25,13 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Mageplaza\Blog\Model\AuthorFactory;
 use Mageplaza\Blog\Model\CommentFactory;
 
+/**
+ * Class UpgradeData
+ * @package Mageplaza\Blog\Setup
+ */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
@@ -42,17 +47,25 @@ class UpgradeData implements UpgradeDataInterface
     public $comment;
 
     /**
+     * @var AuthorFactory
+     */
+    public $author;
+
+    /**
      * UpgradeData constructor.
      *
      * @param DateTime $date
      * @param CommentFactory $commentFactory
+     * @param AuthorFactory $authorFactory
      */
     public function __construct(
         DateTime $date,
-        CommentFactory $commentFactory
+        CommentFactory $commentFactory,
+        AuthorFactory $authorFactory
     ) {
         $this->comment = $commentFactory;
-        $this->date = $date;
+        $this->author  = $authorFactory;
+        $this->date    = $date;
     }
 
     /**
@@ -82,6 +95,18 @@ class UpgradeData implements UpgradeDataInterface
             }
         }
 
+        if (version_compare($context->getVersion(), '2.5.2', '<')) {
+            if ($this->author->create()->getCollection()->count() < 1) {
+                $this->author->create()->addData(
+                    [
+                        'name'       => 'Admin',
+                        'type'       => 0,
+                        'status'     => 1,
+                        'created_at' => $this->date->date()
+                    ]
+                )->save();
+            }
+        }
         $installer->endSetup();
     }
 }

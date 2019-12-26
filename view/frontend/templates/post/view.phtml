@@ -24,7 +24,7 @@ use Mageplaza\Blog\Model\Config\Source\Comments\Type;
 /** @var \Mageplaza\Blog\Block\Post\View $block */
 
 /** @var \Mageplaza\Blog\Helper\Data $helper */
-$helper = $this->helper(\Mageplaza\Blog\Helper\Data::class);
+$helper = $block->getBlogHelper();
 
 $_post = $block->getPost();
 
@@ -43,7 +43,7 @@ $color = $helper->getBlogConfig('general/font_color');
         </a>
     </div>
     <div class="mpcss post-view" id="mpblog-list-container">
-        <div class="post-list-content col-md-9 col-sm-8">
+        <div class="post-list-content col-md-12 col-sm-8">
             <div class="post-view-image col-xs-12">
                 <?php if ($_post->getImage()) : ?>
                     <img class="img-responsive" src="<?= $block->getImageUrl($_post->getImage()); ?>"
@@ -51,12 +51,17 @@ $color = $helper->getBlogConfig('general/font_color');
                 <?php endif; ?>
             </div>
             <div class="post-post_content col-xs-12">
-                <?= $block->getPageFilter($_post->getPostContent()); ?>
+                <?= $block->getPageFilter($_post->getPostContent()?:''); ?>
             </div>
+            <div class="mp-clear"></div>
             <div class="col-xs-12">
                 <hr/>
                 <div class="mp-post-info">
                     <span><i class="fa fa-calendar-times-o">&nbsp;</i> <?= $block->getDateFormat($_post->getPublishDate()); ?></span>
+                    <?php if ($_post->getViewTraffic()) : ?>
+                        |
+                        <span><i class="mp-blog-icon mp-blog-traffic" aria-hidden="true"> </i> <?= __('View: %1', $_post->getViewTraffic());?></span>
+                    <?php endif; ?>
                     <?php if ($categoryHtml = $block->getPostCategoryHtml($_post)) : ?>
                         |
                         <span><i class="fa fa-folder-open-o">&nbsp;</i><?= __('Categories: %1', $categoryHtml); ?></span>
@@ -77,6 +82,43 @@ $color = $helper->getBlogConfig('general/font_color');
             </div>
         </div>
     </div>
+    <?php if ($helper->isEnabledReview()) :?>
+        <div class="mp-blog-review-title">
+            <span><?= /* @noEscape */ __('Did you find it helpful?')?></span>
+        </div>
+        <div id="mp-blog-review">
+            <div class="mp-blog-like">
+                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                <span><?= /* @noEscape */ __('LIKE')?></span>
+                    <span class="mp-blog-view">
+                    <?php if (!empty($block->getPostLike($_post->getId(), '1'))) :?>
+                        (<?= $block->escapeHtml($block->getPostLike($_post->getId(), '1'))?>)
+                    <?php endif; ?>
+                    </span>
+            </div>
+            <div class="mp-blog-dislike">
+                <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                <span><?= /* @noEscape */ __('DISLIKE')?></span>
+                    <span class="mp-blog-view">
+                    <?php if (!empty($block->getPostLike($_post->getId(), '0'))) :?>
+                        (<?= $block->escapeHtml($block->getPostLike($_post->getId(), '0'))?>)
+                    <?php endif; ?>
+                    </span>
+            </div>
+        </div>
+        <div class="mp-blog-review-label"></div>
+        <script type="text/x-magento-init">
+            {
+                "#mp-blog-review": {
+                    "Mageplaza_Blog/js/helpful-rate": {
+                        "url": "<?= /* @noEscape */ $block->getUrl('mpblog/post/review') ?>",
+                        "post_id" : <?= /* @noEscape */ $_post->getId() ?>,
+                        "mode": <?= /* @noEscape */ $helper->getReviewMode() ?>
+                    }
+                }
+            }
+        </script>
+    <?php endif;?>
     <?php if ($helper->getBlogConfig('share/enabled')) : ?>
         <div class="mp-clear"></div>
         <script type="text/javascript"
@@ -108,7 +150,9 @@ $color = $helper->getBlogConfig('general/font_color');
                 </div>
                 <div class="author-content-information">
                     <div class="author-name"><?= $authorName ?></div>
-                    <p class="author-description"><?= $block->getPageFilter($author->getShortDescription()); ?></p>
+                    <p class="author-description">
+                        <?= /* @noEscape */ $author->getShortDescription()?$block->getPageFilter($author->getShortDescription()):''; ?>
+                    </p>
                 </div>
                 <div class="mp-clear"></div>
             </div>
@@ -119,36 +163,93 @@ $color = $helper->getBlogConfig('general/font_color');
     <?php if ($relatedPosts && sizeof($relatedPosts)) : ?>
         <div class="block-blog-related topic-list mpcss" style="width: 90%;">
             <h2><?= __('Related Posts'); ?></h2>
-            <div class="related-content-container" style="display: flex; flex-wrap: wrap;">
-                <?php foreach ($relatedPosts as $post) : ?>
-                    <div class="post-list-item col-mp mp-6 mp-lg-4 mp-md-6 mp-xs-12">
-                        <div class="post-item-wraper">
-                            <div class="post-image">
-                                <?php if ($post->getImage()) : ?>
-                                    <a href="<?= $post->getUrl() ?>">
-                                        <img class="img-responsive"
-                                             src="<?= $block->resizeImage($post->getImage(), '400x'); ?>"
-                                             alt="<?= $block->escapeHtml($post->getName()); ?>"/>
-                                    </a>
-                                <?php endif; ?>
-                            </div>
-                            <div class="post-info-wraper">
-                                <h2 class="mp-post-title">
-                                    <a class="post-link-title"
-                                       title="<?= $block->escapeHtml($post->getName()); ?>"
-                                       href="<?= $post->getUrl() ?>">
-                                        <?= $post->getName(); ?>
-                                    </a>
-                                </h2>
-                                <div class="mp-post-info">
-                                    <?= $block->getPostInfo($post); ?>
+            <?php if ($block->getRelatedMode()) :?>
+                <div class="owl-carousel owl-theme">
+                    <?php foreach ($relatedPosts as $post) : ?>
+                        <div class="item post-list-item ">
+                            <div class="post-item-wraper">
+                                <div class="post-image">
+                                    <?php if ($post->getImage()) : ?>
+                                        <a href="<?= $post->getUrl() ?>">
+                                            <img class="img-responsive"
+                                                 src="<?= $block->resizeImage($post->getImage(), '400x'); ?>"
+                                                 alt="<?= $block->escapeHtml($post->getName()); ?>"/>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="post-info-wraper">
+                                    <h2 class="mp-post-title">
+                                        <a class="post-link-title"
+                                           title="<?= $block->escapeHtml($post->getName()); ?>"
+                                           href="<?= $post->getUrl() ?>">
+                                            <?= $post->getName(); ?>
+                                        </a>
+                                    </h2>
+                                    <div class="mp-post-info">
+                                        <?= $block->getPostInfo($post); ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
-                <div class="mp-clear"></div>
-            </div>
+                    <?php endforeach; ?>
+                </div>
+                <style>
+                    .item.post-list-item.col-mp{
+                        width: 100%;
+                    }
+                </style>
+                <script>
+                    require([
+                        'jquery',
+                        'owlCarousel'
+                    ], function ($) {
+                        'use strict';
+                        $(document).ready(function(){
+                            $(".owl-carousel").owlCarousel({
+                                items:2,
+                                loop:false,
+                                margin:10,
+                                responsive:{
+                                    600:{
+                                        items:3
+                                    }
+                                }
+                            });
+                        });
+                    });
+                </script>
+            <?php else :?>
+                <div class="related-content-container" style="display: flex; flex-wrap: wrap;">
+                    <?php foreach ($relatedPosts as $post) : ?>
+                        <div class="post-list-item col-mp mp-6 mp-lg-4 mp-md-6 mp-xs-12">
+                            <div class="post-item-wraper">
+                                <div class="post-image">
+                                    <?php if ($post->getImage()) : ?>
+                                        <a href="<?= $post->getUrl() ?>">
+                                            <img class="img-responsive"
+                                                 src="<?= $block->resizeImage($post->getImage(), '400x'); ?>"
+                                                 alt="<?= $block->escapeHtml($post->getName()); ?>"/>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="post-info-wraper">
+                                    <h2 class="mp-post-title">
+                                        <a class="post-link-title"
+                                           title="<?= $block->escapeHtml($post->getName()); ?>"
+                                           href="<?= $post->getUrl() ?>">
+                                            <?= $post->getName(); ?>
+                                        </a>
+                                    </h2>
+                                    <div class="mp-post-info">
+                                        <?= $block->getPostInfo($post); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                    <div class="mp-clear"></div>
+                </div>
+            <?php endif;?>
         </div>
     <?php endif; ?>
     <?php if ($helper->getBlogConfig('product_post/post_detail/enable_product')) : ?>

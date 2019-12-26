@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tab;
 
+use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
@@ -30,6 +31,8 @@ use Magento\Config\Model\Config\Source\Enabledisable;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
 
@@ -92,17 +95,19 @@ class Category extends Generic implements TabInterface
         Store $systemStore,
         array $data = []
     ) {
-        $this->wysiwygConfig = $wysiwygConfig;
-        $this->booleanOptions = $booleanOptions;
-        $this->enableDisable = $enableDisable;
+        $this->wysiwygConfig     = $wysiwygConfig;
+        $this->booleanOptions    = $booleanOptions;
+        $this->enableDisable     = $enableDisable;
         $this->metaRobotsOptions = $metaRobotsOptions;
-        $this->systemStore = $systemStore;
+        $this->systemStore       = $systemStore;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
-     * @inheritdoc
+     * @return Generic
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     protected function _prepareForm()
     {
@@ -118,15 +123,15 @@ class Category extends Generic implements TabInterface
             'class'  => 'fieldset-wide'
         ]);
 
-        if (!$category->getId()) {
+        if ($category->getId()) {
+            $fieldset->addField('category_id', 'hidden', ['name' => 'id', 'value' => $category->getId()]);
+            $fieldset->addField('path', 'hidden', ['name' => 'path', 'value' => $category->getPath()]);
+        } else {
             $fieldset->addField(
                 'path',
                 'hidden',
                 ['name' => 'path', 'value' => $this->getRequest()->getParam('parent') ?: 1]
             );
-        } else {
-            $fieldset->addField('category_id', 'hidden', ['name' => 'id', 'value' => $category->getId()]);
-            $fieldset->addField('path', 'hidden', ['name' => 'path', 'value' => $category->getPath()]);
         }
 
         $fieldset->addField('name', 'text', [
@@ -142,9 +147,16 @@ class Category extends Generic implements TabInterface
             'values' => $this->enableDisable->toOptionArray(),
         ]);
 
-        if (!$this->_storeManager->isSingleStoreMode()) {
+        if ($this->_storeManager->isSingleStoreMode()) {
+            $storeId = $this->_storeManager->getStore()->getId();
+            $fieldset->addField('store_ids', 'hidden', [
+                'name'  => 'store_ids',
+                'value' => $storeId
+            ]);
+        } else {
             /** @var RendererInterface $rendererBlock */
-            $rendererBlock = $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element');
+            $rendererBlock = $this->getLayout()->createBlock(Element::class);
+
             $fieldset->addField('store_ids', 'multiselect', [
                 'name'   => 'store_ids',
                 'label'  => __('Store Views'),
@@ -155,11 +167,6 @@ class Category extends Generic implements TabInterface
             if (!$category->hasData('store_ids')) {
                 $category->setStoreIds(0);
             }
-        } else {
-            $fieldset->addField('store_ids', 'hidden', [
-                'name'  => 'store_ids',
-                'value' => $this->_storeManager->getStore()->getId()
-            ]);
         }
 
         $fieldset->addField('url_key', 'text', [

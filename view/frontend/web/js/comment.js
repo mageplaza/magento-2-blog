@@ -22,11 +22,14 @@
 require([
     'jquery'
 ], function ($) {
+    'use strict';
+
     var cmtBox = $('.default-cmt__content__cmt-block__cmt-box__cmt-input'),
         submitCmt = $('.default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit'),
         defaultCmt = $('ul.default-cmt__content__cmt-content:first'),
         likeBtn = defaultCmt.find('.btn-like'),
         replyBtn = defaultCmt.find('.btn-reply');
+
     submitComment();
     likeComment(likeBtn);
     showReply(replyBtn);
@@ -34,6 +37,7 @@ require([
     $('li.default-cmt__content__cmt-content__cmt-row:first').css({'border-top': 'none'});
     $('.default-cmt__cmt-login__btn-login').click(function () {
         var socialPopup = $("[href$='social-login-popup']");
+
         if (socialPopup.length) {
             socialPopup.first().trigger("click");
         } else {
@@ -61,6 +65,7 @@ require([
             $(".default-cmt__content__cmt-block__cmt-box").find('.messages').hide();
             if (checkGuestFormValidate()) {
                 var cmtText = cmtBox.val();
+
                 if (cmtText.trim().length) {
                     $('.default-cmt_loading').show();
                     $(this).prop('disabled', true);
@@ -81,6 +86,7 @@ require([
     function likeComment(btn) {
         btn.each(function () {
             var likeEl = $(this);
+
             likeEl.click(function () {
                 var cmtId = $(this).attr('data-cmt-id'),
                     cmtRowContainer = $(this).closest('.default-cmt__content__cmt-content__cmt-row');
@@ -136,12 +142,6 @@ require([
         btn.each(function () {
 
             $(this).click(function () {
-                // if($("li.default-cmt__content__cmt-content__cmt-row").children("ul.default-cmt__content__cmt-content").length) {
-                //     var cmtRowContainer = $("#cmt-id-"+cmtId+" ul:last-child");
-                // } else {
-                //     var cmtRowContainer = $(this).closest('.default-cmt__content__cmt-content__cmt-row');
-                // }
-                // var cmtRowContainer = $("#cmt-id-"+cmtId+" ul:last-child");
                 var cmtId = (typeof $(this).closest('.default-cmt__content__cmt-content__cmt-row').parent().parent().attr('data-cmt-id') !== 'undefined') ? $(this).closest('.default-cmt__content__cmt-content__cmt-row').parent().parent().attr('data-cmt-id') : $(this).attr('data-cmt-id'),
                     inputCmtID = $(this).attr('data-cmt-id'),
                     cmtRowCmt = $("div").find('#cmt-row');
@@ -161,7 +161,7 @@ require([
                         cmtRow.toggle();
                         $("#cmt-row").remove();
                     } else {
-                        cmtRowContainer.append('<div id="cmt-row" class="cmt-row__reply-row row row__' + inputCmtID + '">' +
+                        cmtRowContainer.append('<div id="cmt-row" class="cmt-row__reply-row row row__' + inputCmtID + ' col-md-12">' +
                             '<div class="reply-form__form-input form-group col-xs-8 col-md-6">' +
                             '<label for="reply_cmt' + inputCmtID + '"></label>' +
                             '<input type="text" id="reply_cmt' + inputCmtID + '" class="form-group__input form-control" placeholder="Press enter to submit reply" value="' + cmtName + ' " autofocus onfocus="this.setSelectionRange(1000,1001);"/>' +
@@ -256,7 +256,7 @@ require([
             }
             return html;
         }
-        var cmtRow = '<li id="cmt-id-' + cmt.cmt_id + '" class="default-cmt__content__cmt-content__cmt-row cmt-row-' + cmt.cmt_id + ' cmt-row col-xs-12 '
+        var cmtRow = '<li style="width: 100%" id="cmt-id-' + cmt.cmt_id + '" class="default-cmt__content__cmt-content__cmt-row cmt-row-' + cmt.cmt_id + ' cmt-row col-m-12 '
             + (isReply ? ('reply-row') : '') + '" data-cmt-id="' + cmt.cmt_id + '"' + (isReply ? ('data-reply-id="' + cmt.reply_cmt + '"') : '')
             + '> <div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username username__' + cmt.cmt_id + '">' + cmt.user_cmt
             + '</span> </div> <div class="cmt-row__cmt-content"> <p>' + htmlComment(cmt.cmt_text)
@@ -267,10 +267,12 @@ require([
         if (isReply) {
             var replyCmtId = cmt.reply_cmt;
             var replyCmt = defaultCmt.find('.default-cmt__content__cmt-content__cmt-row');
+
             replyCmt.each(function () {
                 var cmtEl = $(this);
                 if (cmtEl.attr('data-cmt-id') === replyCmtId) {
                     var replyList = cmtEl.find('ul.default-cmt__content__cmt-content:first');
+
                     if (!replyList.length) {
                         cmtRow = $('<ul class="default-cmt__content__cmt-content row">' + cmtRow + '</ul>');
                         cmtEl.append(cmtRow);

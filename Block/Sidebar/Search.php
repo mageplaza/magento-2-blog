@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Sidebar;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Mageplaza\Blog\Block\Frontend;
 use Mageplaza\Blog\Helper\Data;
 
@@ -32,15 +33,17 @@ class Search extends Frontend
 {
     /**
      * @return string
+     * @throws NoSuchEntityException
      */
     public function getSearchBlogData()
     {
-        $result = [];
-        $posts = $this->helperData->getPostList();
+        $result    = [];
+        $posts     = $this->helperData->getPostList();
         $limitDesc = (int) $this->getSidebarConfig('search/description');
         if (!empty($posts)) {
             foreach ($posts as $item) {
-                $shortDescription = ($item->getShortDescription() && $limitDesc > 0) ? $item->getShortDescription() : '';
+                $shortDescription = ($item->getShortDescription() && $limitDesc > 0) ?
+                    $item->getShortDescription() : '';
                 if (strlen($shortDescription) > $limitDesc) {
                     $shortDescription = mb_substr($shortDescription, 0, $limitDesc, 'UTF-8') . '...';
                 }

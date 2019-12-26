@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block\Adminhtml\Category\Edit;
 
 use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Button;
 use Magento\Catalog\Block\Adminhtml\Category\AbstractCategory;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
@@ -79,22 +80,24 @@ class Form extends AbstractCategory
     ) {
         parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
 
-        $this->jsonEncoder = $jsonEncoder;
-        $this->_categoryTree = $blogCategoryTree;
+        $this->jsonEncoder      = $jsonEncoder;
+        $this->_categoryTree    = $blogCategoryTree;
         $this->_categoryFactory = $blogCategoryFactory;
     }
 
     /**
      * @inheritdoc
+     * @throws LocalizedException
      */
     protected function _prepareLayout()
     {
-        $category = $this->getCategory();
-        $categoryId = (int) $category->getId(); // 0 when we create Blog Category, otherwise some value for editing Blog Category
+        $category   = $this->getCategory();
+        $categoryId = (int) $category->getId();
+        // 0 when we create Blog Category, otherwise some value for editing Blog Category
 
         $this->setChild(
             'tabs',
-            $this->getLayout()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Edit\Tabs', 'tabs')
+            $this->getLayout()->createBlock(Tabs::class, 'tabs')
         );
 
         // Save button
@@ -169,7 +172,7 @@ class Form extends AbstractCategory
     {
         /** @var \Mageplaza\Blog\Model\Category $category */
         $category = $this->_coreRegistry->registry('category');
-        $params = ['_current' => false, '_query' => false];
+        $params   = ['_current' => false, '_query' => false];
         if ($category->getDuplicate()) {
             $params['duplicate'] = true;
         }
@@ -203,7 +206,7 @@ class Form extends AbstractCategory
         } else {
             $this->setChild(
                 $alias . '_button',
-                $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->addData($config)
+                $this->getLayout()->createBlock(Button::class)->addData($config)
             );
             $this->additionalButtons[$alias] = $alias . '_button';
         }
@@ -243,13 +246,13 @@ class Form extends AbstractCategory
     {
         if ($this->getCategoryId()) {
             return $this->getCategoryName();
+        }
+
+        $parentId = (int) $this->getRequest()->getParam('parent');
+        if ($parentId && $parentId !== Category::TREE_ROOT_ID) {
+            return __('New Child 123 Category');
         } else {
-            $parentId = (int) $this->getRequest()->getParam('parent');
-            if ($parentId && $parentId != Category::TREE_ROOT_ID) {
-                return __('New Child 123 Category');
-            } else {
-                return __('New Root 12 Category');
-            }
+            return __('New Root 12 Category');
         }
     }
 
@@ -310,7 +313,7 @@ class Form extends AbstractCategory
     public function addButton($buttonId, array $data)
     {
         $childBlockId = $buttonId . '_button';
-        $button = $this->getButtonChildBlock($childBlockId);
+        $button       = $this->getButtonChildBlock($childBlockId);
         $button->setData($data);
         $block = $this->getLayout()->getBlock('page.actions.toolbar');
         if ($block) {
@@ -338,8 +341,8 @@ class Form extends AbstractCategory
      */
     public function getButtonChildBlock($childId, $blockClassName = null)
     {
-        if (null === $blockClassName) {
-            $blockClassName = 'Magento\Backend\Block\Widget\Button';
+        if ($blockClassName === null) {
+            $blockClassName = Button::class;
         }
 
         return $this->getLayout()->createBlock($blockClassName, $this->getNameInLayout() . '-' . $childId);

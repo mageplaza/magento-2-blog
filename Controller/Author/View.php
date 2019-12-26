@@ -23,7 +23,9 @@ namespace Mageplaza\Blog\Controller\Author;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Helper\Data;
@@ -40,7 +42,7 @@ class View extends Action
     public $resultPageFactory;
 
     /**
-     * @type ForwardFactory
+     * @var ForwardFactory
      */
     protected $resultForwardFactory;
 
@@ -63,19 +65,19 @@ class View extends Action
         ForwardFactory $resultForwardFactory,
         Data $helperData
     ) {
-        $this->_helperBlog = $helperData;
-        $this->resultPageFactory = $resultPageFactory;
+        $this->_helperBlog          = $helperData;
+        $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
 
         parent::__construct($context);
     }
 
     /**
-     * @return $this|Page
+     * @return ResponseInterface|ResultInterface|Page
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('id');
+        $id   = $this->getRequest()->getParam('id');
         $page = $this->resultPageFactory->create();
         $page->getConfig()->setPageLayout($this->_helperBlog->getSidebarLayout());
 

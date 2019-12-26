@@ -60,7 +60,7 @@ class Edit extends Container
             ],
             -100
         );
-        $this->_objectId = 'import_id';
+        $this->_objectId   = 'import_id';
         $this->_blockGroup = 'Mageplaza_Blog';
         $this->_controller = 'adminhtml_import';
     }

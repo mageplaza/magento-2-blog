@@ -43,14 +43,14 @@ class Delete extends Category
                     ->load($id)
                     ->delete();
 
-                $this->messageManager->addSuccess(__('The Blog Category has been deleted.'));
+                $this->messageManager->addSuccessMessage(__('The Blog Category has been deleted.'));
 
                 $resultRedirect->setPath('mageplaza_blog/*/');
 
                 return $resultRedirect;
             } catch (Exception $e) {
                 // display error message
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 // go back to edit form
                 $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $id]);
 
@@ -59,7 +59,7 @@ class Delete extends Category
         }
 
         // display error message
-        $this->messageManager->addError(__('Blog Category to delete was not found.'));
+        $this->messageManager->addErrorMessage(__('Blog Category to delete was not found.'));
         // go to grid
         $resultRedirect->setPath('mageplaza_blog/*/');
 

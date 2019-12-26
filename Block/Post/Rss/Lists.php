@@ -67,8 +67,8 @@ class Lists extends AbstractBlock implements DataProviderInterface
         array $data = []
     ) {
         $this->rssUrlBuilder = $rssUrlBuilder;
-        $this->helper = $helper;
-        $this->storeManager = $context->getStoreManager();
+        $this->helper        = $helper;
+        $this->storeManager  = $context->getStoreManager();
 
         parent::__construct($context, $data);
     }
@@ -97,9 +97,9 @@ class Lists extends AbstractBlock implements DataProviderInterface
     public function getRssData()
     {
         $storeModel = $this->storeManager->getStore($this->getStoreId());
-        $title = __('List Posts from %1', $storeModel->getFrontendName())->render();
-        $storeUrl = $this->storeManager->getStore($this->getStoreId())->getBaseUrl(UrlInterface::URL_TYPE_WEB);
-        $data = [
+        $title      = __('List Posts from %1', $storeModel->getFrontendName())->render();
+        $storeUrl   = $this->storeManager->getStore($this->getStoreId())->getBaseUrl(UrlInterface::URL_TYPE_WEB);
+        $data       = [
             'title'       => $title,
             'description' => $title,
             'link'        => $storeUrl . 'blog/post/rss.xml',
@@ -109,15 +109,14 @@ class Lists extends AbstractBlock implements DataProviderInterface
 
         $posts = $this->helper->getPostList($this->getStoreId())
             ->addFieldToFilter('in_rss', 1)
-            ->setOrder('post_id', 'DESC')
-            ->getSelect()
-            ->limit(10);
+            ->setOrder('post_id', 'DESC');
+        $posts->getSelect()->limit(10);
         /** @var Post $item */
-        foreach ($posts as $item) {
+        foreach ($posts->getItems() as $item) {
             $item->setAllowedInRss(true);
             $item->setAllowedPriceInRss(true);
 
-            $description = $item->getShortDescription();
+            $description       = $item->getShortDescription();
             $data['entries'][] = [
                 'title'       => $item->getName(),
                 'link'        => $item->getUrl(),
@@ -158,7 +157,7 @@ class Lists extends AbstractBlock implements DataProviderInterface
     {
         $data = [];
         if ($this->isAllowed()) {
-            $url = $this->rssUrlBuilder->getUrl(['type' => 'blog_posts']);
+            $url  = $this->rssUrlBuilder->getUrl(['type' => 'blog_posts']);
             $data = ['label' => __('Posts'), 'link' => $url];
         }
 

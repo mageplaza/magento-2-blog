@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mageplaza_Core::css/font-awesome.min.css"/>
+        <css src="Mageplaza_Blog::css/managePost.css"/>
+    </head>
+    <body>
+        <referenceContainer name="sidebar.main">
+            <block class="Magento\Framework\View\Element\Template" name="sidebar.main.reward_nav" template="Magento_Theme::html/collapsible.phtml" before="-">
+                <arguments>
+                    <argument name="block_css" xsi:type="string">block-collapsible-nav</argument>
+                </arguments>
+                <block class="Mageplaza\Blog\Block\Navigation" name="reward_account_navigation" before="-">
+                    <arguments>
+                        <argument name="css_class" xsi:type="string">nav items</argument>
+                    </arguments>
+                    <block class="Magento\Framework\View\Element\Html\Link\Current" name="reward-navigation-dashboard">
+                        <arguments>
+                            <argument name="label" xsi:type="string" translate="true">Author Information</argument>
+                            <argument name="path" xsi:type="string">mpblog/author/information</argument>
+                            <argument name="sortOrder" xsi:type="number">10</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Framework\View\Element\Html\Link\Current" name="reward-navigation-transaction">
+                        <arguments>
+                            <argument name="label" xsi:type="string" translate="true">Post List</argument>
+                            <argument name="path" xsi:type="string">mpblog/post/history</argument>
+                            <argument name="sortOrder" xsi:type="number">20</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Framework\View\Element\Html\Link\Current" name="reward-navigation-back">
+                        <arguments>
+                            <argument name="label" xsi:type="string" translate="true">Back</argument>
+                            <argument name="path" xsi:type="string">customer/account/</argument>
+                            <argument name="sortOrder" xsi:type="number">100</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceContainer>
+        <referenceBlock name="head.additional">
+            <block class="Mageplaza\Blog\Block\Design" ifconfig="blog/general/customer_approve" name="mpblog.design" template="Mageplaza_Blog::design.phtml"/>
+        </referenceBlock>
+    </body>
+</page>

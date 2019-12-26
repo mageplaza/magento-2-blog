@@ -96,17 +96,24 @@
                 </argument>
                 <argument name="actions" xsi:type="array">
                     <item name="0" xsi:type="array">
-                        <item name="type" xsi:type="string">enable</item>
-                        <item name="label" xsi:type="string" translate="true">Enable</item>
+                        <item name="type" xsi:type="string">pending</item>
+                        <item name="label" xsi:type="string" translate="true">Pending</item>
+                        <item name="url" xsi:type="url" path="mageplaza_blog/post/massStatus">
+                            <param name="status">0</param>
+                        </item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="type" xsi:type="string">approved</item>
+                        <item name="label" xsi:type="string" translate="true">Approved</item>
                         <item name="url" xsi:type="url" path="mageplaza_blog/post/massStatus">
                             <param name="status">1</param>
                         </item>
                     </item>
-                    <item name="1" xsi:type="array">
-                        <item name="type" xsi:type="string">disable</item>
-                        <item name="label" xsi:type="string" translate="true">Disable</item>
+                    <item name="2" xsi:type="array">
+                        <item name="type" xsi:type="string">disapproved</item>
+                        <item name="label" xsi:type="string" translate="true">Disapproved</item>
                         <item name="url" xsi:type="url" path="mageplaza_blog/post/massStatus">
-                            <param name="status">0</param>
+                            <param name="status">2</param>
                         </item>
                     </item>
                 </argument>
@@ -172,7 +179,7 @@
         </column>
         <column name="enabled">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Enabledisable</item>
+                <item name="options" xsi:type="object">Mageplaza\Blog\Model\Config\Source\AuthorStatus</item>
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>

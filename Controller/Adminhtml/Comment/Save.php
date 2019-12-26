@@ -55,7 +55,7 @@ class Save extends Comment
             try {
                 $comment->save();
 
-                $this->messageManager->addSuccess(__('The comment has been saved.'));
+                $this->messageManager->addSuccessMessage(__('The comment has been saved.'));
                 $this->_getSession()->setData('mageplaza_blog_comment_data', false);
 
                 if ($this->getRequest()->getParam('back')) {
@@ -66,11 +66,11 @@ class Save extends Comment
 
                 return $resultRedirect;
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (RuntimeException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the Comment.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Comment.'));
             }
 
             $this->_getSession()->setData('mageplaza_blog_comment_data', $data);

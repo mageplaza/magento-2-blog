@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="editor"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit" name="mageplaza_blog_post_edit"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tabs" name="mageplaza_blog_post_tabs">
+                <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Post" name="mageplaza_blog_post_edit_tab_post"/>
+                <block class="Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Product" name="mageplaza_blog_post_edit_tab_product"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">post</argument>
+                    <argument name="block" xsi:type="string">mageplaza_blog_post_edit_tab_post</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">product</argument>
+                    <argument name="block" xsi:type="string">mageplaza_blog_post_edit_tab_product</argument>
+                </action>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

@@ -24,6 +24,7 @@ namespace Mageplaza\Blog\Block\Post;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\ListProduct;
+use Magento\Catalog\Helper\Output;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Data\Helper\PostHelper;
@@ -56,6 +57,11 @@ class RelatedProduct extends ListProduct
     protected $helper;
 
     /**
+     * @var Output
+     */
+    protected $outputHelper;
+
+    /**
      * RelatedProduct constructor.
      *
      * @param Context $context
@@ -64,6 +70,7 @@ class RelatedProduct extends ListProduct
      * @param CategoryRepositoryInterface $categoryRepository
      * @param CollectionFactory $productCollectionFactory
      * @param HelperData $helperData
+     * @param Output $output
      * @param Data $urlHelper
      * @param array $data
      */
@@ -74,13 +81,31 @@ class RelatedProduct extends ListProduct
         CategoryRepositoryInterface $categoryRepository,
         CollectionFactory $productCollectionFactory,
         HelperData $helperData,
+        Output $output,
         Data $urlHelper,
         array $data = []
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
-        $this->helper = $helperData;
+        $this->helper                    = $helperData;
+        $this->outputHelper              = $output;
 
         parent::__construct($context, $postDataHelper, $layerResolver, $categoryRepository, $urlHelper, $data);
+    }
+
+    /**
+     * @return Output
+     */
+    public function getHelper()
+    {
+        return $this->outputHelper;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function relatedMode()
+    {
+        return $this->helper->getModuleConfig('product_post/post_detail/related_mode');
     }
 
     /**
@@ -100,7 +125,7 @@ class RelatedProduct extends ListProduct
     public function _getProductCollection()
     {
         if ($this->_productCollection === null) {
-            $postId = $this->getRequest()->getParam('id');
+            $postId     = $this->getRequest()->getParam('id');
             $collection = $this->_productCollectionFactory->create()
                 ->addAttributeToSelect('*')
                 ->addStoreFilter();
@@ -108,7 +133,7 @@ class RelatedProduct extends ListProduct
             $collection->getSelect()
                 ->join(
                     ['product_post' => $collection->getTable('mageplaza_blog_post_product')],
-                    "e.entity_id = product_post.entity_id"
+                    'e.entity_id = product_post.entity_id'
                 )
                 ->where('product_post.post_id = ' . $postId)
                 ->order('product_post.position ASC')

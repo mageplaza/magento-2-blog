@@ -36,9 +36,9 @@ class Topic extends Container
      */
     protected function _construct()
     {
-        $this->_controller = 'adminhtml_topic';
-        $this->_blockGroup = 'Mageplaza_Blog';
-        $this->_headerText = __('Topics');
+        $this->_controller     = 'adminhtml_topic';
+        $this->_blockGroup     = 'Mageplaza_Blog';
+        $this->_headerText     = __('Topics');
         $this->_addButtonLabel = __('Create New Topic');
 
         parent::_construct();

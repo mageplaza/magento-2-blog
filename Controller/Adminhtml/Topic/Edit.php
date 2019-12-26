@@ -22,7 +22,6 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Topic;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\Page;
@@ -49,14 +48,12 @@ class Edit extends Topic
      * @param Context $context
      * @param Registry $registry
      * @param PageFactory $resultPageFactory
-     * @param JsonFactory $resultJsonFactory
      * @param TopicFactory $topicFactory
      */
     public function __construct(
         Context $context,
         Registry $registry,
         PageFactory $resultPageFactory,
-        JsonFactory $resultJsonFactory,
         TopicFactory $topicFactory
     ) {
         $this->resultPageFactory = $resultPageFactory;

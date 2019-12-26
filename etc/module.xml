@@ -21,7 +21,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Mageplaza_Blog" setup_version="2.5.0">
+    <module name="Mageplaza_Blog" setup_version="2.5.2">
         <sequence>
             <module name="Magento_Backend"/>
             <module name="Mageplaza_Core"/>

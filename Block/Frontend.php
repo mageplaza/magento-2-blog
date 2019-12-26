@@ -24,15 +24,26 @@ namespace Mageplaza\Blog\Block;
 use Exception;
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Url;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
-use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category as CategoryOptions;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag as TagOptions;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic as TopicOptions;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\CommentFactory;
+use Mageplaza\Blog\Model\Config\Source\AuthorStatus;
 use Mageplaza\Blog\Model\LikeFactory;
+use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\PostLikeFactory;
 
 /**
  * Class Frontend
@@ -47,12 +58,12 @@ class Frontend extends Template
     public $filterProvider;
 
     /**
-     * @type HelperData
+     * @var HelperData
      */
     public $helperData;
 
     /**
-     * @type StoreManagerInterface
+     * @var StoreManagerInterface
      */
     public $store;
 
@@ -77,6 +88,61 @@ class Frontend extends Template
     public $commentTree;
 
     /**
+     * @var Registry
+     */
+    protected $coreRegistry;
+
+    /**
+     * @var DateTime
+     */
+    public $dateTime;
+
+    /**
+     * @var PostFactory
+     */
+    protected $postFactory;
+
+    /**
+     * @var CategoryFactory
+     */
+    protected $categoryFactory;
+
+    /**
+     * @var Url
+     */
+    protected $customerUrl;
+
+    /**
+     * @var CategoryOptions
+     */
+    protected $categoryOptions;
+
+    /**
+     * @var TopicOptions
+     */
+    protected $topicOptions;
+
+    /**
+     * @var TagOptions
+     */
+    protected $tagOptions;
+
+    /**
+     * @var PostLikeFactory
+     */
+    protected $postLikeFactory;
+
+    /**
+     * @var AuthorStatus
+     */
+    protected $authorStatusType;
+
+    /**
+     * @var ThemeProviderInterface
+     */
+    protected $themeProvider;
+
+    /**
      * Frontend constructor.
      *
      * @param Context $context
@@ -84,7 +150,18 @@ class Frontend extends Template
      * @param CommentFactory $commentFactory
      * @param LikeFactory $likeFactory
      * @param CustomerRepositoryInterface $customerRepository
+     * @param Registry $coreRegistry
      * @param HelperData $helperData
+     * @param Url $customerUrl
+     * @param CategoryFactory $categoryFactory
+     * @param PostFactory $postFactory
+     * @param DateTime $dateTime
+     * @param PostLikeFactory $postLikeFactory
+     * @param CategoryOptions $category
+     * @param TopicOptions $topic
+     * @param TagOptions $tag
+     * @param ThemeProviderInterface $themeProvider
+     * @param AuthorStatus $authorStatus
      * @param array $data
      */
     public function __construct(
@@ -93,17 +170,55 @@ class Frontend extends Template
         CommentFactory $commentFactory,
         LikeFactory $likeFactory,
         CustomerRepositoryInterface $customerRepository,
+        Registry $coreRegistry,
         HelperData $helperData,
+        Url $customerUrl,
+        CategoryFactory $categoryFactory,
+        PostFactory $postFactory,
+        DateTime $dateTime,
+        PostLikeFactory $postLikeFactory,
+        CategoryOptions $category,
+        TopicOptions $topic,
+        TagOptions $tag,
+        ThemeProviderInterface $themeProvider,
+        AuthorStatus $authorStatus,
         array $data = []
     ) {
-        $this->filterProvider = $filterProvider;
-        $this->cmtFactory = $commentFactory;
-        $this->likeFactory = $likeFactory;
+        $this->filterProvider     = $filterProvider;
+        $this->cmtFactory         = $commentFactory;
+        $this->likeFactory        = $likeFactory;
         $this->customerRepository = $customerRepository;
-        $this->helperData = $helperData;
-        $this->store = $context->getStoreManager();
+        $this->helperData         = $helperData;
+        $this->coreRegistry       = $coreRegistry;
+        $this->dateTime           = $dateTime;
+        $this->categoryFactory    = $categoryFactory;
+        $this->postFactory        = $postFactory;
+        $this->customerUrl        = $customerUrl;
+        $this->postLikeFactory    = $postLikeFactory;
+        $this->categoryOptions    = $category;
+        $this->topicOptions       = $topic;
+        $this->tagOptions         = $tag;
+        $this->authorStatusType   = $authorStatus;
+        $this->themeProvider      = $themeProvider;
+        $this->store              = $context->getStoreManager();
 
         parent::__construct($context, $data);
+    }
+
+    /**
+     * @return HelperData
+     */
+    public function getBlogHelper()
+    {
+        return $this->helperData;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBlogEnabled()
+    {
+        return $this->helperData->isEnabled();
     }
 
     /**
@@ -122,12 +237,12 @@ class Frontend extends Template
      * @param string $type
      *
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getImageUrl($image, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
     {
         $imageHelper = $this->helperData->getImageHelper();
-        $imageFile = $imageHelper->getMediaPath($image, $type);
+        $imageFile   = $imageHelper->getMediaPath($image, $type);
 
         return $this->helperData->getImageHelper()->getMediaUrl($imageFile);
     }
@@ -145,7 +260,7 @@ class Frontend extends Template
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url = $this->helperData->getUrl($this->helperData->getRoute() . '/' . $urlKey);
+        $url    = $this->helperData->getUrl($this->helperData->getRoute() . '/' . $urlKey);
 
         return rtrim($url, '/') . '.xml';
     }
@@ -154,10 +269,17 @@ class Frontend extends Template
      * @param $post
      *
      * @return Phrase|string
+     * @throws Exception
      */
     public function getPostInfo($post)
     {
-        $html = __('Posted on %1', $this->getDateFormat($post->getPublishDate()));
+        $likeCollection = $this->postLikeFactory->create()->getCollection();
+        $couldLike      = $likeCollection->addFieldToFilter('post_id', $post->getId())
+            ->addFieldToFilter('action', '1')->count();
+        $html           = __(
+            '<i class="mp-blog-icon mp-blog-calendar-times"></i> %1',
+            $this->getDateFormat($post->getPublishDate())
+        );
 
         if ($categoryPost = $this->getPostCategoryHtml($post)) {
             $html .= __('| Posted in %1', $categoryPost);
@@ -165,11 +287,42 @@ class Frontend extends Template
 
         $author = $this->helperData->getAuthorByPost($post);
         if ($author && $author->getName() && $this->helperData->showAuthorInfo()) {
-            $aTag = '<a class="mp-info" href="' . $author->getUrl() . '">' . $this->escapeHtml($author->getName()) . '</a>';
-            $html .= __('| By: %1', $aTag);
+            $aTag = '<a class="mp-info" href="' . $author->getUrl() . '">'
+                . $this->escapeHtml($author->getName()) . '</a>';
+            $html .= __('| <i class="mp-blog-icon mp-blog-user"></i> %1', $aTag);
+        }
+
+        if ($this->getCommentinPost($post)) {
+            $html .= __(
+                '| <i class="mp-blog-icon mp-blog-comments" aria-hidden="true"></i> %1',
+                $this->getCommentinPost($post)
+            );
+        }
+
+        if ($post->getViewTraffic()) {
+            $html .= __(
+                '| <i class="mp-blog-icon mp-blog-traffic" aria-hidden="true"></i> %1',
+                $post->getViewTraffic()
+            );
+        }
+
+        if ($couldLike > 0) {
+            $html .= __('| <i class="mp-blog-icon mp-blog-thumbs-up" aria-hidden="true"></i> %1', $couldLike);
         }
 
         return $html;
+    }
+
+    /**
+     * @param $post
+     *
+     * @return int
+     */
+    public function getCommentinPost($post)
+    {
+        $cmt = $this->cmtFactory->create()->getCollection()->addFieldToFilter('post_id', $post->getId());
+
+        return $cmt->count();
     }
 
     /**
@@ -185,12 +338,12 @@ class Frontend extends Template
             return null;
         }
 
-        $categories = $this->helperData->getCategoryCollection($post->getCategoryIds());
+        $categories   = $this->helperData->getCategoryCollection($post->getCategoryIds());
         $categoryHtml = [];
         foreach ($categories as $_cat) {
             $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl(
                 $_cat,
-                Data::TYPE_CATEGORY
+                HelperData::TYPE_CATEGORY
             ) . '">' . $_cat->getName() . '</a>';
         }
 
@@ -202,6 +355,7 @@ class Frontend extends Template
      * @param bool $monthly
      *
      * @return false|string
+     * @throws Exception
      */
     public function getDateFormat($date, $monthly = false)
     {
@@ -209,13 +363,12 @@ class Frontend extends Template
     }
 
     /**
-     * Resize Image Function
-     *
      * @param $image
      * @param null $size
      * @param string $type
      *
      * @return string
+     * @throws NoSuchEntityException
      */
     public function resizeImage($image, $size = null, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
     {

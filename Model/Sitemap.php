@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Image;
 
@@ -57,18 +58,18 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
         parent::_construct();
 
         $this->blogDataHelper = ObjectManager::getInstance()->get(Data::class);
-        $this->imageHelper = ObjectManager::getInstance()->get(Image::class);
-        $this->router = $this->blogDataHelper->getBlogConfig('general/url_prefix');
+        $this->imageHelper    = ObjectManager::getInstance()->get(Image::class);
+        $this->router         = $this->blogDataHelper->getBlogConfig('general/url_prefix');
     }
 
     /**
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getBlogPostsSiteMapCollection()
     {
-        $urlSuffix = $this->blogDataHelper->getUrlSuffix();
-        $postCollection = $this->blogDataHelper->postFactory->create()->getCollection();
+        $urlSuffix             = $this->blogDataHelper->getUrlSuffix();
+        $postCollection        = $this->blogDataHelper->postFactory->create()->getCollection();
         $postSiteMapCollection = [];
         if (!$this->router) {
             $this->router = 'blog';
@@ -83,7 +84,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
                         'url'     => $this->imageHelper->getMediaUrl($imageFile),
                         'caption' => null,
                     ]);
-                    $images = new DataObject(['collection' => $imagesCollection]);
+                    $images             = new DataObject(['collection' => $imagesCollection]);
                 }
                 $postSiteMapCollection[$item->getId()] = new DataObject([
                     'id'         => $item->getId(),
@@ -102,8 +103,8 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogCategoriesSiteMapCollection()
     {
-        $urlSuffix = $this->blogDataHelper->getUrlSuffix();
-        $categoryCollection = $this->blogDataHelper->categoryFactory->create()->getCollection();
+        $urlSuffix                 = $this->blogDataHelper->getUrlSuffix();
+        $categoryCollection        = $this->blogDataHelper->categoryFactory->create()->getCollection();
         $categorySiteMapCollection = [];
         foreach ($categoryCollection as $item) {
             if ($item->getEnabled() !== null) {
@@ -123,8 +124,8 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogTagsSiteMapCollection()
     {
-        $urlSuffix = $this->blogDataHelper->getUrlSuffix();
-        $tagCollection = $this->blogDataHelper->tagFactory->create()->getCollection();
+        $urlSuffix            = $this->blogDataHelper->getUrlSuffix();
+        $tagCollection        = $this->blogDataHelper->tagFactory->create()->getCollection();
         $tagSiteMapCollection = [];
         foreach ($tagCollection as $item) {
             if ($item->getEnabled() !== null) {
@@ -144,8 +145,8 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogTopicsSiteMapCollection()
     {
-        $urlSuffix = $this->blogDataHelper->getUrlSuffix();
-        $topicCollection = $this->blogDataHelper->topicFactory->create()->getCollection();
+        $urlSuffix              = $this->blogDataHelper->getUrlSuffix();
+        $topicCollection        = $this->blogDataHelper->topicFactory->create()->getCollection();
         $topicSiteMapCollection = [];
         foreach ($topicCollection as $item) {
             if ($item->getEnabled() !== null) {

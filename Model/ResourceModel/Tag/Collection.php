@@ -22,14 +22,16 @@
 namespace Mageplaza\Blog\Model\ResourceModel\Tag;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
+use Mageplaza\Blog\Api\Data\SearchResult\TagSearchResultInterface;
+use Mageplaza\Blog\Model\Tag;
 use Zend_Db_Select;
 
 /**
  * Class Collection
  * @package Mageplaza\Blog\Model\ResourceModel\Tag
  */
-class Collection extends AbstractCollection
+class Collection extends AbstractCollection implements TagSearchResultInterface
 {
     /**
      * ID Field Name
@@ -59,7 +61,7 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\Tag', 'Mageplaza\Blog\Model\ResourceModel\Tag');
+        $this->_init(Tag::class, \Mageplaza\Blog\Model\ResourceModel\Tag::class);
     }
 
     /**
@@ -114,7 +116,7 @@ class Collection extends AbstractCollection
             }
         }
 
-        if ($condition != '') {
+        if ($condition) {
             $this->addFieldToFilter('tag_id', $condition);
         }
 

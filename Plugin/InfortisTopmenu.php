@@ -22,6 +22,8 @@
 namespace Mageplaza\Blog\Plugin;
 
 use Infortis\UltraMegamenu\Block\Navigation;
+use Mageplaza\Blog\Block\Category\Menu;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class InfortisTopmenu
@@ -30,6 +32,22 @@ use Infortis\UltraMegamenu\Block\Navigation;
 class InfortisTopmenu
 {
     /**
+     * @var Data
+     */
+    protected $helper;
+
+    /**
+     * PortoTopmenu constructor.
+     *
+     * @param Data $helper
+     */
+    public function __construct(
+        Data $helper
+    ) {
+        $this->helper = $helper;
+    }
+
+    /**
      * @param Navigation $topmenu
      * @param $html
      *
@@ -37,10 +55,12 @@ class InfortisTopmenu
      */
     public function afterRenderCategoriesMenuHtml(Navigation $topmenu, $html)
     {
-        $html .= $topmenu->getLayout()
-            ->createBlock(\Mageplaza\Blog\Block\Frontend::class)
-            ->setTemplate('Mageplaza_Blog::position/topmenuinfortis.phtml')
-            ->toHtml();
+        if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
+            $blogHtml = $topmenu->getLayout()->createBlock(Menu::class)
+                ->setTemplate('Mageplaza_Blog::category/topmenu.phtml')->toHtml();
+
+            return $html . $blogHtml;
+        }
 
         return $html;
     }

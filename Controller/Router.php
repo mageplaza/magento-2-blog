@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Controller;
 
+use Magento\Framework\App\Action\Forward;
 use Magento\Framework\App\ActionFactory;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
@@ -34,7 +35,7 @@ use Mageplaza\Blog\Helper\Data;
  */
 class Router implements RouterInterface
 {
-    const URL_SUFFIX_RSS_XML = ".xml";
+    const URL_SUFFIX_RSS_XML = '.xml';
 
     /**
      * @var ActionFactory
@@ -55,7 +56,7 @@ class Router implements RouterInterface
         Data $helper
     ) {
         $this->actionFactory = $actionFactory;
-        $this->helper = $helper;
+        $this->helper        = $helper;
     }
 
     /**
@@ -69,12 +70,12 @@ class Router implements RouterInterface
             return null;
         }
 
-        $rssAction = "rss.xml";
+        $rssAction  = "rss.xml";
         $identifier = trim($request->getPathInfo(), '/');
-        $urlSuffix = $this->helper->getUrlSuffix();
+        $urlSuffix  = $this->helper->getUrlSuffix();
 
         if ($length = strlen($urlSuffix)) {
-            if (substr($identifier, -$length) == $urlSuffix && !$this->isRss($identifier)) {
+            if (substr($identifier, -$length) === $urlSuffix && !$this->isRss($identifier)) {
                 $identifier = substr($identifier, 0, strlen($identifier) - $length);
             } else {
                 $identifier = $this->checkRssIdentifier($identifier);
@@ -84,8 +85,8 @@ class Router implements RouterInterface
         }
 
         $routePath = explode('/', $identifier);
-        $routeSize = sizeof($routePath);
-        if (!$routeSize || ($routeSize > 3) || (array_shift($routePath) != $this->helper->getRoute())) {
+        $routeSize = count($routePath);
+        if (!$routeSize || ($routeSize > 3) || (array_shift($routePath) !== $this->helper->getRoute())) {
             return null;
         }
 
@@ -97,7 +98,7 @@ class Router implements RouterInterface
                 ->setActionName('index')
                 ->setPathInfo('/mpblog/post/index');
 
-            return $this->actionFactory->create(\Magento\Framework\App\Action\Forward::class);
+            return $this->actionFactory->create(Forward::class);
         }
 
         $action = array_shift($routePath) ?: 'index';
@@ -143,14 +144,14 @@ class Router implements RouterInterface
                 $post = $this->helper->getObjectByParam($controller, 'url_key');
                 $request->setParam('id', $post->getId());
                 $controller = 'post';
-                $action = 'view';
+                $action     = 'view';
         }
 
         $request->setControllerName($controller)
             ->setActionName($action)
             ->setPathInfo('/mpblog/' . $controller . '/' . $action);
 
-        return $this->actionFactory->create(\Magento\Framework\App\Action\Forward::class);
+        return $this->actionFactory->create(Forward::class);
     }
 
     /**
@@ -165,9 +166,9 @@ class Router implements RouterInterface
         $routePath = explode('/', $identifier);
         $routePath = array_pop($routePath);
         $routePath = explode('.', $routePath);
-        $action = array_shift($routePath);
+        $action    = array_shift($routePath);
 
-        return $action == 'rss';
+        return $action === 'rss';
     }
 
     /**

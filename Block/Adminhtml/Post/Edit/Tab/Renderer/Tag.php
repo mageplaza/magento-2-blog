@@ -74,8 +74,8 @@ class Tag extends Multiselect
         array $data = []
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->authorization = $authorization;
-        $this->_urlBuilder = $urlBuilder;
+        $this->authorization     = $authorization;
+        $this->_urlBuilder       = $urlBuilder;
 
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
@@ -93,7 +93,8 @@ class Tag extends Multiselect
         $html .= '<!-- /ko -->';
         $html .= '</div>';
 
-        $html .= '<div class="admin__field admin__field-group-additional admin__field-small" data-bind="scope:\'create_tag_button\'">';
+        $html .= '<div class="admin__field admin__field-group-additional admin__field-small"'
+            . 'data-bind="scope:\'create_tag_button\'">';
         $html .= '<div class="admin__field-control">';
         $html .= '<!-- ko template: elementTmpl --><!-- /ko -->';
         $html .= '</div></div></div>';
@@ -124,11 +125,11 @@ class Tag extends Multiselect
     {
         /* @var $collection Collection */
         $collection = $this->collectionFactory->create();
-        $tagById = [];
+        $tagById    = [];
         foreach ($collection as $tag) {
-            $tagById[$tag->getId()]['value'] = $tag->getId();
+            $tagById[$tag->getId()]['value']     = $tag->getId();
             $tagById[$tag->getId()]['is_active'] = 1;
-            $tagById[$tag->getId()]['label'] = $tag->getName();
+            $tagById[$tag->getId()]['label']     = $tag->getName();
         }
 
         return $tagById;
@@ -147,7 +148,7 @@ class Tag extends Multiselect
             $values = explode(',', $values);
         }
 
-        if (!sizeof($values)) {
+        if (!count($values)) {
             return [];
         }
 
@@ -246,8 +247,14 @@ class Tag extends Multiselect
                                         "component": "Magento_Ui/js/form/components/insert-form",
                                         "dataScope": "",
                                         "update_url": "' . $this->_urlBuilder->getUrl('mui/index/render') . '",
-                                        "render_url": "' . $this->_urlBuilder->getUrl('mui/index/render_handle',
-                ['handle' => 'mageplaza_blog_tag_create', 'buttons' => 1]) . '",
+                                        "render_url": "' .
+            $this->_urlBuilder->getUrl(
+                'mui/index/render_handle',
+                [
+                    'handle'  => 'mageplaza_blog_tag_create',
+                    'buttons' => 1
+                ]
+            ) . '",
                                         "autoRender": false,
                                         "ns": "blog_new_tag_form",
                                         "externalProvider": "blog_new_tag_form.new_tag_form_data_source",

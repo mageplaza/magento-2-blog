@@ -87,7 +87,7 @@ class Edit extends Author
         $resultPage->setActiveMenu('Mageplaza_Blog::author');
         $resultPage->getConfig()->getTitle()->set(__('Author Management'));
 
-        $resultPage->getConfig()->getTitle()->prepend($this->_auth->getUser()->getName());
+        $resultPage->getConfig()->getTitle()->prepend($author->getId() ? $author->getName() : __('New Author'));
 
         return $resultPage;
     }

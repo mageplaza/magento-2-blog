@@ -27,6 +27,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Result\LayoutFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
 use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\PostHistoryFactory;
 
 /**
  * Class Products
@@ -40,22 +41,30 @@ class Products extends Post
     protected $resultLayoutFactory;
 
     /**
+     * @var PostHistoryFactory
+     */
+    protected $postHistoryFactory;
+
+    /**
      * Products constructor.
      *
      * @param Context $context
-     * @param PostFactory $productFactory
      * @param Registry $registry
+     * @param PostFactory $productFactory
+     * @param PostHistoryFactory $postHistoryFactory
      * @param LayoutFactory $resultLayoutFactory
      */
     public function __construct(
         Context $context,
         Registry $registry,
         PostFactory $productFactory,
+        PostHistoryFactory $postHistoryFactory,
         LayoutFactory $resultLayoutFactory
     ) {
         parent::__construct($productFactory, $registry, $context);
 
         $this->resultLayoutFactory = $resultLayoutFactory;
+        $this->postHistoryFactory  = $postHistoryFactory;
     }
 
     /**
@@ -65,7 +74,12 @@ class Products extends Post
      */
     public function execute()
     {
-        $this->initPost(true);
+        if ($this->getRequest()->getParam('history')) {
+            $history = $this->postHistoryFactory->create()->load($this->getRequest()->getParam('id'));
+            $this->coreRegistry->register('mageplaza_blog_post', $history);
+        } else {
+            $this->initPost(true);
+        }
 
         return $this->resultLayoutFactory->create();
     }

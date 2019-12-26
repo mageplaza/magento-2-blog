@@ -95,12 +95,12 @@ class Form extends Generic
         Yesno $booleanOptions,
         array $data = []
     ) {
-        $this->wysiwygConfig = $wysiwygConfig;
-        $this->systemStore = $systemStore;
-        $this->_imageHelper = $imageHelper;
-        $this->_importType = $importType;
+        $this->wysiwygConfig    = $wysiwygConfig;
+        $this->systemStore      = $systemStore;
+        $this->_imageHelper     = $imageHelper;
+        $this->_importType      = $importType;
         $this->_importBehaviour = $importBehaviour;
-        $this->booleanOptions = $booleanOptions;
+        $this->booleanOptions   = $booleanOptions;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }

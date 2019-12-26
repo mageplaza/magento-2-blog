@@ -23,12 +23,19 @@ namespace Mageplaza\Blog\Helper;
 
 use DateTimeZone;
 use Exception;
+use Magento\Customer\Model\Context as CustomerContext;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filter\TranslitUrl;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Model\Author;
@@ -38,6 +45,7 @@ use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\Config\Source\SideBarLR;
 use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\PostHistoryFactory;
 use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
 use Mageplaza\Blog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection as PostCollection;
@@ -60,6 +68,7 @@ class Data extends CoreHelper
     const TYPE_CATEGORY      = 'category';
     const TYPE_TAG           = 'tag';
     const TYPE_TOPIC         = 'topic';
+    const TYPE_HISTORY       = 'history';
     const TYPE_AUTHOR        = 'author';
     const TYPE_MONTHLY       = 'month';
 
@@ -99,6 +108,26 @@ class Data extends CoreHelper
     public $dateTime;
 
     /**
+     * @var Session
+     */
+    protected $customerSession;
+
+    /**
+     * @var HttpContext
+     */
+    protected $_httpContext;
+
+    /**
+     * @var PostHistoryFactory
+     */
+    protected $postHistoryFactory;
+
+    /**
+     * @var ProductMetadataInterface
+     */
+    protected $_productMetadata;
+
+    /**
      * Data constructor.
      *
      * @param Context $context
@@ -109,7 +138,11 @@ class Data extends CoreHelper
      * @param TagFactory $tagFactory
      * @param TopicFactory $topicFactory
      * @param AuthorFactory $authorFactory
+     * @param PostHistoryFactory $postHistoryFactory
      * @param TranslitUrl $translitUrl
+     * @param ProductMetadataInterface $productMetadata
+     * @param Session $customerSession
+     * @param HttpContext $httpContext
      * @param DateTime $dateTime
      */
     public function __construct(
@@ -121,18 +154,155 @@ class Data extends CoreHelper
         TagFactory $tagFactory,
         TopicFactory $topicFactory,
         AuthorFactory $authorFactory,
+        PostHistoryFactory $postHistoryFactory,
         TranslitUrl $translitUrl,
+        ProductMetadataInterface $productMetadata,
+        Session $customerSession,
+        HttpContext $httpContext,
         DateTime $dateTime
     ) {
-        $this->postFactory = $postFactory;
-        $this->categoryFactory = $categoryFactory;
-        $this->tagFactory = $tagFactory;
-        $this->topicFactory = $topicFactory;
-        $this->authorFactory = $authorFactory;
-        $this->translitUrl = $translitUrl;
-        $this->dateTime = $dateTime;
+        $this->postFactory        = $postFactory;
+        $this->categoryFactory    = $categoryFactory;
+        $this->tagFactory         = $tagFactory;
+        $this->topicFactory       = $topicFactory;
+        $this->authorFactory      = $authorFactory;
+        $this->postHistoryFactory = $postHistoryFactory;
+        $this->translitUrl        = $translitUrl;
+        $this->dateTime           = $dateTime;
+        $this->customerSession    = $customerSession;
+        $this->_httpContext       = $httpContext;
+        $this->_productMetadata   = $productMetadata;
 
         parent::__construct($context, $objectManager, $storeManager);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabledReview()
+    {
+        $groupId = (string) $this->_httpContext->getValue(CustomerContext::CONTEXT_GROUP);
+
+        if ($this->getConfigGeneral('is_review')
+            && in_array($groupId, explode(',', $this->getConfigGeneral('review_mode')), true)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReviewMode()
+    {
+        $login = $this->_httpContext->getValue(CustomerContext::CONTEXT_AUTH);
+
+        if (!$login
+            && in_array('0', explode(',', $this->getConfigGeneral('review_mode')), true)
+        ) {
+            return '0';
+        }
+
+        return '1';
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentVersion()
+    {
+        return $this->_productMetadata->getVersion();
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCurrentUser()
+    {
+        return $this->customerSession->getId();
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCustomerIdByContext()
+    {
+        return $this->_httpContext->getValue('mp_customer_id') ?: $this->customerSession->getId();
+    }
+
+    /**
+     * @return int
+     * @throws NoSuchEntityException
+     */
+    public function getCurrentStoreId()
+    {
+        return $this->storeManager->getStore()->getId();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLogin()
+    {
+        return $this->_httpContext->getValue(CustomerContext::CONTEXT_AUTH);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAuthor()
+    {
+        $collection = $this->getAuthorCollection();
+
+        return empty($collection->getSize());
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isEnabledAuthor()
+    {
+        if (!$this->_httpContext->getValue(CustomerContext::CONTEXT_AUTH)) {
+            return false;
+        }
+
+        return $this->getCurrentAuthor() ? true : false;
+    }
+
+    /**
+     * Set Customer Id in Context
+     */
+    public function setCustomerContextId()
+    {
+        $customer = $this->customerSession->getCustomerData();
+        if (!$this->_httpContext->getValue('mp_customer_id') && $customer) {
+            $this->_httpContext->setValue('mp_customer_id', $customer->getId(), 0);
+        }
+    }
+
+    /**
+     * @return DataObject
+     */
+    public function getCurrentAuthor()
+    {
+        $collection = $this->getAuthorCollection();
+
+        return $collection ? $collection->getFirstItem() : null;
+    }
+
+    /**
+     * @return AbstractCollection
+     */
+    public function getAuthorCollection()
+    {
+        if ($customerId = $this->_httpContext->getValue('mp_customer_id')) {
+            return $this->getFactoryByType('author')->create()->getCollection()
+                ->addFieldToFilter('customer_id', $customerId);
+        }
+
+        return null;
     }
 
     /**
@@ -225,6 +395,15 @@ class Data extends CoreHelper
     }
 
     /**
+     * Get current theme id
+     * @return mixed
+     */
+    public function getCurrentThemeId()
+    {
+        return $this->getConfigValue(DesignInterface::XML_PATH_THEME_ID);
+    }
+
+    /**
      * @param null $type
      * @param null $id
      * @param null $storeId
@@ -291,19 +470,22 @@ class Data extends CoreHelper
     }
 
     /**
-     * get category collection
-     *
      * @param $array
      *
-     * @return array|string
-     * @throws NoSuchEntityException
+     * @return \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
      */
     public function getCategoryCollection($array)
     {
-        $collection = $this->getObjectList(self::TYPE_CATEGORY)
-            ->addFieldToFilter('category_id', ['in' => $array]);
+        try {
+            $collection = $this->getObjectList(self::TYPE_CATEGORY)
+                ->addFieldToFilter('category_id', ['in' => $array]);
 
-        return $collection;
+            return $collection;
+        } catch (Exception $exception) {
+            $this->_logger->error($exception->getMessage());
+        }
+
+        return null;
     }
 
     /**
@@ -381,11 +563,11 @@ class Data extends CoreHelper
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url = $this->getUrl($this->getRoute($store) . '/' . $urlKey);
-        $url = explode('?', $url);
-        $url = $url[0];
+        $url    = $this->getUrl($this->getRoute($store) . '/' . $urlKey);
+        $url    = explode('?', $url);
+        $url    = $url[0];
 
-        return rtrim($url, '/') . $this->getUrlSuffix();
+        return rtrim($url, '/') . $this->getUrlSuffix($store);
     }
 
     /**
@@ -423,6 +605,9 @@ class Data extends CoreHelper
                 break;
             case self::TYPE_TOPIC:
                 $object = $this->topicFactory;
+                break;
+            case self::TYPE_HISTORY:
+                $object = $this->postHistoryFactory;
                 break;
             default:
                 $object = $this->postFactory;
@@ -472,7 +657,7 @@ class Data extends CoreHelper
         }
 
         $adapter = $resource->getConnection();
-        $select = $adapter->select()
+        $select  = $adapter->select()
             ->from($resource->getMainTable(), '*')
             ->where('url_key = :url_key');
 
@@ -536,6 +721,6 @@ class Data extends CoreHelper
         $storeEnable = explode(',', $object->getStoreIds());
 
         return in_array('0', $storeEnable, true)
-               || in_array((string) $this->storeManager->getStore()->getId(), $storeEnable, true);
+            || in_array((string) $this->storeManager->getStore()->getId(), $storeEnable, true);
     }
 }

@@ -42,7 +42,7 @@ class View extends Action
     public $resultPageFactory;
 
     /**
-     * @type ForwardFactory
+     * @var ForwardFactory
      */
     protected $resultForwardFactory;
 
@@ -65,9 +65,9 @@ class View extends Action
         ForwardFactory $resultForwardFactory,
         HelperBlog $helperBlog
     ) {
-        $this->resultPageFactory = $resultPageFactory;
+        $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->helperBlog = $helperBlog;
+        $this->helperBlog           = $helperBlog;
 
         parent::__construct($context);
     }
@@ -77,9 +77,9 @@ class View extends Action
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('id');
+        $id    = $this->getRequest()->getParam('id');
         $topic = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_TOPIC)->create()->load($id);
-        $page = $this->resultPageFactory->create();
+        $page  = $this->resultPageFactory->create();
         $page->getConfig()->setPageLayout($this->helperBlog->getSidebarLayout());
 
         return $topic->getEnabled() ? $page : $this->_redirect('noroute');

@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/mpblog/post" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getAllPost"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/view/:post_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostView"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/author/name/:author_name" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostViewByAuthorName"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/tag/name/:tag_name" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostByTagName"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/product/:post_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getProductByPost"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/related/:post_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostRelated"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/comment/add/:post_id" method="POST">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="addCommentInPost"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/comment" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getAllComment"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/comment/view/:commentId" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getCommentView"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/comment/list" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getCommentList"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/author/id/:author_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostViewByAuthorId"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/comment/:post_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostComment"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/like/:post_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostLike"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/list" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostList"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/create" method="POST">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="createPost"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/delete/:post_id" method="DELETE">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="deletePost"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/update/:post_id" method="PUT">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="updatePost"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/tag" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getAllTag"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/tag/view/:tag_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getTagView"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/tag/list" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getTagList"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/tag/create" method="POST">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="createTag"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/tag/delete/:tag_id" method="DELETE">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="deleteTag"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/tag/update/:tag_id" method="PUT">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="updateTag"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/topic" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getAllTopic"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/topic/view/:topic_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getTopicView"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/topic/list" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getTopicList"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/topic/post/:topicId" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostsByTopic"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/topic/create" method="POST">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="createTopic"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/topic/delete/:topic_id" method="DELETE">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="deleteTopic"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/topic/update/:topic_id" method="PUT">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="updateTopic"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/category" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getAllCategory"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/category/view/:category_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getCategoryView"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/category/post/id/:category_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostsByCategoryId"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/post/category/:post_id" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getCategoriesByPostId"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/category/post/key/:category_key" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostsByCategory"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/category/list" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getCategoryList"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/category/create" method="POST">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="createCategory"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/category/delete/:category_id" method="DELETE">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="deleteCategory"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/category/update/:category_id" method="PUT">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="updateCategory"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/author" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getAuthorList"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/author/create" method="POST">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="createAuthor"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/author/delete/:author_id" method="DELETE">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="deleteAuthor"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+    <route url="/V1/mpblog/author/update/:author_id" method="PUT">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="updateAuthor"/>
+        <resources>
+            <resource ref="Mageplaza_Blog::blog" />
+        </resources>
+    </route>
+</routes>

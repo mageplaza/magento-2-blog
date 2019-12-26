@@ -36,7 +36,7 @@ use Mageplaza\Blog\Helper\Data as HelperData;
 class Design extends Template
 {
     /**
-     * @type HelperData
+     * @var HelperData
      */
     public $helperData;
 
@@ -59,7 +59,7 @@ class Design extends Template
         ThemeProviderInterface $_themeProvider,
         array $data = []
     ) {
-        $this->helperData = $helperData;
+        $this->helperData     = $helperData;
         $this->_themeProvider = $_themeProvider;
 
         parent::__construct($context, $data);

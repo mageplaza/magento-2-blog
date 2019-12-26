@@ -29,9 +29,14 @@
         <referenceContainer name="left">
             <block class="Mageplaza\Blog\Block\Adminhtml\Author\Edit\Tabs" name="mageplaza_blog_author_tabs">
                 <block class="Mageplaza\Blog\Block\Adminhtml\Author\Edit\Tab\Author" name="mageplaza_blog_author_edit_tab_author"/>
+                <block class="Mageplaza\Blog\Block\Adminhtml\Author\Edit\Tab\Post" name="mageplaza_blog_author_edit_tab_post"/>
                 <action method="addTab">
                     <argument name="name" xsi:type="string">author</argument>
                     <argument name="block" xsi:type="string">mageplaza_blog_author_edit_tab_author</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">post</argument>
+                    <argument name="block" xsi:type="string">mageplaza_blog_author_edit_tab_post</argument>
                 </action>
             </block>
         </referenceContainer>

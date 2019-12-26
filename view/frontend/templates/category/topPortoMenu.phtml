@@ -1,0 +1,43 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Blog\Block\Category\Menu $block */
+$categorys = $block->getCollections();
+?>
+<li class="ui-menu-item level0 fullwidth <?php if (sizeof($categorys)) :?>parent<?php endif;?>" role="presentation">
+    <div class="open-children-toggle"></div>
+    <a href="<?= /* @noEscape */ $block->getBlogHomeUrl() ?>" class="level-top" aria-haspopup="true" id="ui-id-6" tabindex="-1" role="menuitem">
+        <span><?= /* @noEscape */ $block->getBlogHomePageTitle()?></span>
+    </a>
+    <?php if (sizeof($categorys)) :?>
+        <div class="level0 submenu">
+            <div class="container">
+                <div class="row">
+                    <ul class="subchildmenu col-md-12 mega-columns columns4" role="menu" aria-expanded="false" aria-hidden="true">
+                        <?php foreach ($categorys as $category) : ?>
+                            <?= /* @noEscape */ $block->getPortoMenuHtml($category)?>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    <?php endif;?>
+</li>

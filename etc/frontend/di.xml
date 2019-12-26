@@ -42,4 +42,7 @@
     <type name="Infortis\UltraMegamenu\Block\Navigation">
         <plugin name="blog-topmenu-infortis" type="Mageplaza\Blog\Plugin\InfortisTopmenu"/>
     </type>
+    <type name="Magento\Framework\View\Element\Html\Links">
+        <plugin name="blog-customer-nav" type="Mageplaza\Blog\Plugin\Customer\LinkMenu"/>
+    </type>
 </config>

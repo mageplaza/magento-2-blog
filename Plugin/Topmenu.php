@@ -21,9 +21,8 @@
 
 namespace Mageplaza\Blog\Plugin;
 
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Data\Tree\Node;
-use Magento\Framework\Data\TreeFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Mageplaza\Blog\Block\Category\Menu;
 use Mageplaza\Blog\Helper\Data;
 
 /**
@@ -38,75 +37,34 @@ class Topmenu
     protected $helper;
 
     /**
-     * @var TreeFactory
-     */
-    protected $treeFactory;
-
-    /**
-     * @var RequestInterface
-     */
-    protected $request;
-
-    /**
      * Topmenu constructor.
      *
      * @param Data $helper
-     * @param TreeFactory $treeFactory
-     * @param RequestInterface $request
      */
     public function __construct(
-        Data $helper,
-        TreeFactory $treeFactory,
-        RequestInterface $request
+        Data $helper
     ) {
         $this->helper = $helper;
-        $this->treeFactory = $treeFactory;
-        $this->request = $request;
     }
 
     /**
      * @param \Magento\Theme\Block\Html\Topmenu $subject
-     * @param string $outermostClass
-     * @param string $childrenWrapClass
-     * @param int $limit
+     * @param $html
      *
-     * @return array
+     * @return string
+     * @throws LocalizedException
      */
-    public function beforeGetHtml(
+    public function afterGetHtml(
         \Magento\Theme\Block\Html\Topmenu $subject,
-        $outermostClass = '',
-        $childrenWrapClass = '',
-        $limit = 0
+        $html
     ) {
         if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
-            $subject->getMenu()
-                ->addChild(
-                    new Node(
-                        $this->getMenuAsArray(),
-                        'id',
-                        $this->treeFactory->create()
-                    )
-                );
+            $blogHtml = $subject->getLayout()->createBlock(Menu::class)
+                ->setTemplate('Mageplaza_Blog::category/topmenu.phtml')->toHtml();
+
+            return $html . $blogHtml;
         }
 
-        return [$outermostClass, $childrenWrapClass, $limit];
-    }
-
-    /**
-     * @return array
-     */
-    private function getMenuAsArray()
-    {
-        $identifier = trim($this->request->getPathInfo(), '/');
-        $routePath = explode('/', $identifier);
-        $routeSize = sizeof($routePath);
-
-        return [
-            'name'       => $this->helper->getBlogConfig('general/name') ?: __('Blog'),
-            'id'         => 'mpblog-node',
-            'url'        => $this->helper->getBlogUrl(''),
-            'has_active' => ($identifier == 'mpblog/post/index'),
-            'is_active'  => ('mpblog' == array_shift($routePath)) && ($routeSize == 3)
-        ];
+        return $html;
     }
 }

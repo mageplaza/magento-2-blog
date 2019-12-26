@@ -24,7 +24,7 @@
     <default>
         <blog>
             <module>
-                <type>1</type>
+                <type>0</type>
                 <user_guide>blog-m2</user_guide>
             </module>
             <general>
@@ -40,6 +40,7 @@
                 <font_color>#1abc9c</font_color>
                 <pagination>10,20,50</pagination>
                 <related_post>5</related_post>
+                <history_limit>5</history_limit>
                 <resize_image>
                     <resize_width>900</resize_width>
                     <resize_height>500</resize_height>
@@ -53,6 +54,7 @@
                 <post_detail>
                     <enable_product>1</enable_product>
                     <product_limit>12</product_limit>
+                    <related_mode>1</related_mode>
                     <title>Related Products</title>
                 </post_detail>
             </product_post>

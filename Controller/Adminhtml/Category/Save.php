@@ -93,10 +93,10 @@ class Save extends Category
         LayoutFactory $layoutFactory,
         Js $jsHelper
     ) {
-        $this->resultRawFactory = $resultRawFactory;
+        $this->resultRawFactory  = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory = $layoutFactory;
-        $this->jsHelper = $jsHelper;
+        $this->layoutFactory     = $layoutFactory;
+        $this->jsHelper          = $jsHelper;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }
@@ -107,10 +107,10 @@ class Save extends Category
     public function execute()
     {
         if ($this->getRequest()->getPost('return_session_messages_only')) {
-            $category = $this->initCategory();
-            $categoryPostData = $this->getRequest()->getPostValue();
+            $category                      = $this->initCategory();
+            $categoryPostData              = $this->getRequest()->getPostValue();
             $categoryPostData['store_ids'] = 0;
-            $categoryPostData['enabled'] = 1;
+            $categoryPostData['enabled']   = 1;
 
             $category->addData($categoryPostData);
 
@@ -124,15 +124,15 @@ class Save extends Category
 
             try {
                 $category->save();
-                $this->messageManager->addSuccess(__('You saved the category.'));
+                $this->messageManager->addSuccessMessage(__('You saved the category.'));
             } catch (AlreadyExistsException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             } catch (Exception $e) {
-                $this->messageManager->addError(__('Something went wrong while saving the category.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while saving the category.'));
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             }
 
@@ -199,10 +199,10 @@ class Save extends Category
 
             try {
                 $category->save();
-                $this->messageManager->addSuccess(__('You saved the Blog Category.'));
+                $this->messageManager->addSuccessMessage(__('You saved the Blog Category.'));
                 $this->_getSession()->setData('mageplaza_blog_category_data', false);
             } catch (Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_getSession()->setData('mageplaza_blog_category_data', $data);
             }
 

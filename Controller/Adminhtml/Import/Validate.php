@@ -65,7 +65,7 @@ class Validate extends Action
         $data = $this->getRequest()->getParams();
 
         try {
-            $connect = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
+            $connect    = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
             $importName = $data['import_name'];
 
             /** @var Session */

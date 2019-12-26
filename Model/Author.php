@@ -22,6 +22,8 @@
 namespace Mageplaza\Blog\Model;
 
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -76,6 +78,16 @@ class Author extends AbstractModel
     }
 
     /**
+     * @param $name
+     *
+     * @return DataObject
+     */
+    public function getAuthorByName($name)
+    {
+        return $this->getCollection()->addFieldToFilter('name', $name)->getFirstItem();
+    }
+
+    /**
      * @return array
      */
     public function getIdentities()
@@ -89,5 +101,17 @@ class Author extends AbstractModel
     public function getUrl()
     {
         return $this->helperData->getBlogUrl($this, Data::TYPE_AUTHOR);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPost()
+    {
+        try {
+            return (bool) count($this->_getResource()->getPostIds($this));
+        } catch (LocalizedException $exception) {
+            return false;
+        }
     }
 }

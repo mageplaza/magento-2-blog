@@ -67,7 +67,7 @@ class SuggestCategories extends Category
         LayoutFactory $layoutFactory
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory = $layoutFactory;
+        $this->layoutFactory     = $layoutFactory;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }
@@ -81,7 +81,7 @@ class SuggestCategories extends Category
     {
         /** @var Tree $treeBlock */
         $treeBlock = $this->layoutFactory->create()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Tree');
-        $data = $treeBlock->getSuggestedCategoriesJson($this->getRequest()->getParam('label_part'));
+        $data      = $treeBlock->getSuggestedCategoriesJson($this->getRequest()->getParam('label_part'));
 
         /** @var Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();

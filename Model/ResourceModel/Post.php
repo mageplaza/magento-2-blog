@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Model\ResourceModel;
 
 use Magento\Backend\Model\Auth;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
@@ -93,6 +94,16 @@ class Post extends AbstractDb
     protected $_auth;
 
     /**
+     * @var RequestInterface
+     */
+    protected $_request;
+
+    /**
+     * @var string
+     */
+    protected $postTrafficTable;
+
+    /**
      * Post constructor.
      *
      * @param Context $context
@@ -100,6 +111,7 @@ class Post extends AbstractDb
      * @param ManagerInterface $eventManager
      * @param Auth $auth
      * @param Data $helperData
+     * @param RequestInterface $request
      * @param AuthorFactory $authorFactory
      */
     public function __construct(
@@ -108,20 +120,23 @@ class Post extends AbstractDb
         ManagerInterface $eventManager,
         Auth $auth,
         Data $helperData,
+        RequestInterface $request,
         AuthorFactory $authorFactory
     ) {
-        $this->date = $date;
-        $this->eventManager = $eventManager;
-        $this->_auth = $auth;
-        $this->helperData = $helperData;
+        $this->date           = $date;
+        $this->eventManager   = $eventManager;
+        $this->_auth          = $auth;
+        $this->helperData     = $helperData;
+        $this->_request       = $request;
         $this->_authorFactory = $authorFactory;
 
         parent::__construct($context);
 
-        $this->postTagTable = $this->getTable('mageplaza_blog_post_tag');
-        $this->postTopicTable = $this->getTable('mageplaza_blog_post_topic');
+        $this->postTagTable      = $this->getTable('mageplaza_blog_post_tag');
+        $this->postTopicTable    = $this->getTable('mageplaza_blog_post_topic');
         $this->postCategoryTable = $this->getTable('mageplaza_blog_post_category');
-        $this->postProductTable = $this->getTable('mageplaza_blog_post_product');
+        $this->postProductTable  = $this->getTable('mageplaza_blog_post_product');
+        $this->postTrafficTable  = $this->getTable('mageplaza_blog_post_traffic');
     }
 
     /**
@@ -145,10 +160,10 @@ class Post extends AbstractDb
     public function getPostNameById($id)
     {
         $adapter = $this->getConnection();
-        $select = $adapter->select()
+        $select  = $adapter->select()
             ->from($this->getMainTable(), 'name')
             ->where('post_id = :post_id');
-        $binds = ['post_id' => (int) $id];
+        $binds   = ['post_id' => (int) $id];
 
         return $adapter->fetchOne($select, $binds);
     }
@@ -183,7 +198,10 @@ class Post extends AbstractDb
         $this->saveTopicRelation($object);
         $this->saveCategoryRelation($object);
         $this->saveProductRelation($object);
-        $this->saveAuthor();
+
+        if ($this->_request->getActionName() !== 'manage') {
+            $this->saveAuthor();
+        }
 
         return parent::_afterSave($object);
     }
@@ -197,7 +215,7 @@ class Post extends AbstractDb
     public function saveTagRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedTagList(false);
-        $id = $post->getId();
+        $id   = $post->getId();
         $tags = $post->getTagsIds();
 
         if ($tags === null) {
@@ -250,7 +268,7 @@ class Post extends AbstractDb
     public function saveTopicRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedTopicList(false);
-        $id = $post->getId();
+        $id     = $post->getId();
         $topics = $post->getTopicsIds();
 
         if ($topics === null) {
@@ -303,15 +321,15 @@ class Post extends AbstractDb
     public function saveCategoryRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedCategoryList(false);
-        $id = $post->getId();
+        $id         = $post->getId();
         $categories = $post->getCategoriesIds();
         if ($categories === null) {
             return $this;
         }
         $oldCategoryIds = $post->getCategoryIds();
-        $insert = array_diff($categories, $oldCategoryIds);
-        $delete = array_diff($oldCategoryIds, $categories);
-        $adapter = $this->getConnection();
+        $insert         = array_diff($categories, $oldCategoryIds);
+        $delete         = array_diff($oldCategoryIds, $categories);
+        $adapter        = $this->getConnection();
 
         if (!empty($delete)) {
             $condition = ['category_id IN(?)' => $delete, 'post_id=?' => $id];
@@ -352,7 +370,7 @@ class Post extends AbstractDb
     public function getCategoryIds(\Mageplaza\Blog\Model\Post $post)
     {
         $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $select  = $adapter->select()->from(
             $this->postCategoryTable,
             'category_id'
         )
@@ -372,7 +390,7 @@ class Post extends AbstractDb
     public function getTagIds(\Mageplaza\Blog\Model\Post $post)
     {
         $adapter = $this->getConnection();
-        $select = $adapter->select()->from(
+        $select  = $adapter->select()->from(
             $this->postTagTable,
             'tag_id'
         )
@@ -392,7 +410,21 @@ class Post extends AbstractDb
     public function getTopicIds(\Mageplaza\Blog\Model\Post $post)
     {
         $adapter = $this->getConnection();
-        $select = $adapter->select()->from($this->postTopicTable, 'topic_id')
+        $select  = $adapter->select()->from($this->postTopicTable, 'topic_id')
+            ->where('post_id = ?', (int) $post->getId());
+
+        return $adapter->fetchCol($select);
+    }
+
+    /**
+     * @param \Mageplaza\Blog\Model\Post $post
+     *
+     * @return array
+     */
+    public function getViewTraffic(\Mageplaza\Blog\Model\Post $post)
+    {
+        $adapter = $this->getConnection();
+        $select  = $adapter->select()->from($this->postTrafficTable, 'numbers_view')
             ->where('post_id = ?', (int) $post->getId());
 
         return $adapter->fetchCol($select);
@@ -406,13 +438,13 @@ class Post extends AbstractDb
     public function saveProductRelation(\Mageplaza\Blog\Model\Post $post)
     {
         $post->setIsChangedProductList(false);
-        $id = $post->getId();
-        $products = $post->getProductsData();
+        $id          = $post->getId();
+        $products    = $post->getProductsData();
         $oldProducts = $post->getProductsPosition();
         if (is_array($products)) {
-            $insert = array_diff_key($products, $oldProducts);
-            $delete = array_diff_key($oldProducts, $products);
-            $update = array_intersect_key($products, $oldProducts);
+            $insert  = array_diff_key($products, $oldProducts);
+            $delete  = array_diff_key($oldProducts, $products);
+            $update  = array_intersect_key($products, $oldProducts);
             $_update = [];
             foreach ($update as $key => $settings) {
                 if (isset($oldProducts[$key]) && $oldProducts[$key] != $settings['position']) {
@@ -450,7 +482,7 @@ class Post extends AbstractDb
         if (!empty($update)) {
             foreach ($update as $entityId => $position) {
                 $where = ['post_id = ?' => (int) $id, 'entity_id = ?' => (int) $entityId];
-                $bind = ['position' => (int) $position['position']];
+                $bind  = ['position' => (int) $position['position']];
                 $adapter->update($this->postProductTable, $bind, $where);
             }
         }
@@ -484,7 +516,7 @@ class Post extends AbstractDb
             ->where(
                 'post_id = :post_id'
             );
-        $bind = ['post_id' => (int) $post->getId()];
+        $bind   = ['post_id' => (int) $post->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);
     }
@@ -500,29 +532,31 @@ class Post extends AbstractDb
     public function isDuplicateUrlKey($urlKey)
     {
         $adapter = $this->getConnection();
-        $select = $adapter->select()
+        $select  = $adapter->select()
             ->from($this->getMainTable(), 'post_id')
             ->where('url_key = :url_key');
-        $binds = ['url_key' => $urlKey];
+        $binds   = ['url_key' => $urlKey];
 
         return $adapter->fetchOne($select, $binds);
     }
 
     /**
-     * Save the post autho when creating post
+     * Save the post author when creating post
      */
     public function saveAuthor()
     {
         $currentUser = $this->_auth->getUser();
-        $currentUserId = $currentUser->getId();
 
-        /** @var \Mageplaza\Blog\Model\Author $author */
-        $author = $this->_authorFactory->create()->load($currentUserId);
+        if ($currentUser) {
+            $currentUserId = $currentUser->getId();
+            /** @var \Mageplaza\Blog\Model\Author $author */
+            $author = $this->_authorFactory->create()->load($currentUserId);
 
-        /** Create the new author if that author isn't exist */
-        if (!$author->getId()) {
-            $author->setId($currentUserId)
-                ->setName($currentUser->getName())->save();
+            /** Create the new author if that author isn't exist */
+            if (!$author->getId()) {
+                $author->setId($currentUserId)
+                    ->setName($currentUser->getName())->save();
+            }
         }
     }
 
@@ -538,10 +572,10 @@ class Post extends AbstractDb
     public function isImported($importSource, $oldId)
     {
         $adapter = $this->getConnection();
-        $select = $adapter->select()
+        $select  = $adapter->select()
             ->from($this->getMainTable(), 'post_id')
             ->where('import_source = :import_source');
-        $binds = ['import_source' => $importSource . '-' . $oldId];
+        $binds   = ['import_source' => $importSource . '-' . $oldId];
 
         return $adapter->fetchOne($select, $binds);
     }

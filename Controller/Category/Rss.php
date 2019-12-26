@@ -22,7 +22,11 @@
 namespace Mageplaza\Blog\Controller\Category;
 
 use InvalidArgumentException;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Rss\Controller\Feed;
 
 /**
@@ -32,11 +36,14 @@ use Magento\Rss\Controller\Feed;
 class Rss extends Feed
 {
     /**
+     * @return ResponseInterface|ResultInterface|void
      * @throws NotFoundException
+     * @throws InputException
+     * @throws RuntimeException
      */
     public function execute()
     {
-        $type = 'blog_categories';
+        $type       = 'blog_categories';
         $categoryId = $this->getRequest()->getParam('category_id');
         if (!$categoryId) {
             return;

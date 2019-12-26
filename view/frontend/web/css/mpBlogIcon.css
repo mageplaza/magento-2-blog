@@ -1,0 +1,46 @@
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+.mp-blog-icon:before {
+    background-repeat: no-repeat;
+    color: #999999;
+    content: '';
+    display: inline-flex;
+    width: 12px;
+    height: 12px;
+    opacity: 50%;
+    position: relative;
+    top: 2px;
+}
+.mp-blog-calendar-times:before {
+    background-image: url("../media/images/calendar-times.svg");
+}
+.mp-blog-user:before {
+    background-image: url("../media/images/user.svg");
+}
+.mp-blog-comments:before {
+    background-image: url("../media/images/comments.svg");
+}
+.mp-blog-traffic:before {
+    background-image: url("../media/images/eye.svg");
+}
+.mp-blog-thumbs-up:before {
+    background-image: url("../media/images/thumbs-up.svg");
+}

@@ -60,7 +60,7 @@ class MassDelete extends Action
         Filter $filter,
         CollectionFactory $collectionFactory
     ) {
-        $this->filter = $filter;
+        $this->filter            = $filter;
         $this->collectionFactory = $collectionFactory;
 
         parent::__construct($context);
@@ -76,9 +76,9 @@ class MassDelete extends Action
 
         try {
             $collection->walk('delete');
-            $this->messageManager->addSuccess(__('Tags has been deleted.'));
+            $this->messageManager->addSuccessMessage(__('Tags has been deleted.'));
         } catch (Exception $e) {
-            $this->messageManager->addSuccess(__('Something wrong when delete Tag.'));
+            $this->messageManager->addSuccessMessage(__('Something wrong when delete Tag.'));
         }
 
         /** @var Redirect $resultRedirect */

@@ -28,7 +28,6 @@ use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Object;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
@@ -79,8 +78,8 @@ class Post extends Extended implements TabInterface
         CollectionFactory $postCollectionFactory,
         array $data = []
     ) {
-        $this->coreRegistry = $coreRegistry;
-        $this->postFactory = $postFactory;
+        $this->coreRegistry          = $coreRegistry;
+        $this->postFactory           = $postFactory;
         $this->postCollectionFactory = $postCollectionFactory;
 
         parent::__construct($context, $backendHelper, $data);

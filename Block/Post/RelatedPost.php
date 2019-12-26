@@ -21,10 +21,12 @@
 
 namespace Mageplaza\Blog\Block\Post;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
@@ -62,6 +64,8 @@ class RelatedPost extends Template
      * @param Registry $registry
      * @param Data $helperData
      * @param array $data
+     *
+     * @throws NoSuchEntityException
      */
     public function __construct(
         Context $context,
@@ -70,7 +74,7 @@ class RelatedPost extends Template
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
-        $this->helperData = $helperData;
+        $this->helperData    = $helperData;
 
         parent::__construct($context, $data);
 
@@ -91,6 +95,7 @@ class RelatedPost extends Template
 
     /**
      * @return Collection
+     * @throws NoSuchEntityException
      */
     public function getRelatedPostList()
     {
@@ -117,7 +122,7 @@ class RelatedPost extends Template
      */
     public function getLimitPosts()
     {
-        if ($this->_limitPost == null) {
+        if (!$this->_limitPost) {
             $this->_limitPost = (int) $this->helperData->getBlogConfig('product_post/product_detail/post_limit') ?: 1;
         }
 
@@ -128,14 +133,59 @@ class RelatedPost extends Template
      * Set tab title
      *
      * @return void
+     * @throws NoSuchEntityException
      */
     public function setTabTitle()
     {
         $relatedSize = min($this->getRelatedPostList()->getSize(), $this->getLimitPosts());
-        $title = $relatedSize
+        $title       = $relatedSize
             ? __('Related Posts %1', '<span class="counter">' . $relatedSize . '</span>')
             : __('Related Posts');
+        if ($this->helperData->isEnabled()) {
+            $this->setTitle($title);
+        }
+    }
 
-        $this->setTitle($title);
+    /**
+     * @return bool
+     */
+    public function isEnabledBlog()
+    {
+        return $this->helperData->isEnabled();
+    }
+
+    /**
+     * @return bool
+     */
+    public function getRelatedMode()
+    {
+        return (int) $this->helperData->getConfigGeneral('related_mode') === 1;
+    }
+
+    /**
+     * Resize Image Function
+     *
+     * @param $image
+     * @param null $size
+     * @param string $type
+     *
+     * @return string
+     * @throws NoSuchEntityException
+     */
+    public function resizeImage($image, $size = null, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
+    {
+        if (!$image) {
+            return $this->getDefaultImageUrl();
+        }
+
+        return $this->helperData->getImageHelper()->resizeImage($image, $size, $type);
+    }
+
+    /**
+     * get default image url
+     */
+    public function getDefaultImageUrl()
+    {
+        return $this->getViewFileUrl('Mageplaza_Blog::media/images/mageplaza-logo-default.png');
     }
 }

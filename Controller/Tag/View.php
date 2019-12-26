@@ -43,7 +43,7 @@ class View extends Action
     public $resultPageFactory;
 
     /**
-     * @type ForwardFactory
+     * @var ForwardFactory
      */
     protected $resultForwardFactory;
 
@@ -66,9 +66,9 @@ class View extends Action
         ForwardFactory $resultForwardFactory,
         HelperBlog $helperBlog
     ) {
-        $this->resultPageFactory = $resultPageFactory;
+        $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->helperBlog = $helperBlog;
+        $this->helperBlog           = $helperBlog;
 
         parent::__construct($context);
     }
@@ -79,7 +79,7 @@ class View extends Action
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('id');
+        $id  = $this->getRequest()->getParam('id');
         $tag = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_TAG)->create()->load($id);
 
         if (!$this->helperBlog->checkStore($tag)) {

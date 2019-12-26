@@ -161,7 +161,8 @@ class Post extends AbstractModel
 
     /**
      * Post Collection Factory
-     * @type PostCollectionFactory
+     *
+     * @var PostCollectionFactory
      */
     public $postCollectionFactory;
 
@@ -243,14 +244,14 @@ class Post extends AbstractModel
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->tagCollectionFactory = $tagCollectionFactory;
-        $this->topicCollectionFactory = $topicCollectionFactory;
+        $this->tagCollectionFactory      = $tagCollectionFactory;
+        $this->topicCollectionFactory    = $topicCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
-        $this->postCollectionFactory = $postCollectionFactory;
-        $this->productCollectionFactory = $productCollectionFactory;
-        $this->helperData = $helperData;
-        $this->dateTime = $dateTime;
-        $this->trafficFactory = $trafficFactory;
+        $this->postCollectionFactory     = $postCollectionFactory;
+        $this->productCollectionFactory  = $productCollectionFactory;
+        $this->helperData                = $helperData;
+        $this->dateTime                  = $dateTime;
+        $this->trafficFactory            = $trafficFactory;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -328,11 +329,11 @@ class Post extends AbstractModel
      */
     public function getDefaultValues()
     {
-        $values = [];
-        $values['in_rss'] = '1';
-        $values['enabled'] = '1';
+        $values                  = [];
+        $values['in_rss']        = '1';
+        $values['enabled']       = '1';
         $values['allow_comment'] = '1';
-        $values['store_ids'] = '1';
+        $values['store_ids']     = '1';
 
         return $values;
     }
@@ -440,6 +441,21 @@ class Post extends AbstractModel
     }
 
     /**
+     * @return int
+     * @throws LocalizedException
+     */
+    public function getViewTraffic()
+    {
+        if (!$this->hasData('view_traffic')) {
+            $traffic = $this->_getResource()->getViewTraffic($this);
+
+            $this->setData('view_traffic', $traffic[0]);
+        }
+
+        return $this->_getData('view_traffic');
+    }
+
+    /**
      * @param null $limit
      *
      * @return ResourceModel\Post\Collection|null
@@ -462,6 +478,7 @@ class Post extends AbstractModel
                 $collection->getSelect()
                     ->limit($limit);
             }
+            $collection->addFieldToFilter('enabled', '1');
 
             return $collection;
         }
@@ -478,11 +495,11 @@ class Post extends AbstractModel
             $collection = $this->productCollectionFactory->create();
             $collection->getSelect()->join(
                 $this->getResource()->getTable('mageplaza_blog_post_product'),
-                'main_table.entity_id=' . $this->getResource()->getTable('mageplaza_blog_post_product')
+                'e.entity_id=' . $this->getResource()->getTable('mageplaza_blog_post_product')
                 . '.entity_id AND ' . $this->getResource()->getTable('mageplaza_blog_post_product') . '.post_id='
                 . $this->getId(),
                 ['position']
-            )->where("main_table.enabled='1'");
+            );
             $this->productCollection = $collection;
         }
 

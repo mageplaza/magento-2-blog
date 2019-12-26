@@ -22,14 +22,16 @@
 namespace Mageplaza\Blog\Model\ResourceModel\Topic;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
+use Mageplaza\Blog\Api\Data\SearchResult\TopicSearchResultInterface;
+use Mageplaza\Blog\Model\Topic;
 use Zend_Db_Select;
 
 /**
  * Class Collection
  * @package Mageplaza\Blog\Model\ResourceModel\Topic
  */
-class Collection extends AbstractCollection
+class Collection extends AbstractCollection implements TopicSearchResultInterface
 {
     /**
      * ID Field Name
@@ -59,7 +61,7 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\Topic', 'Mageplaza\Blog\Model\ResourceModel\Topic');
+        $this->_init(Topic::class, \Mageplaza\Blog\Model\ResourceModel\Topic::class);
     }
 
     /**
@@ -112,7 +114,7 @@ class Collection extends AbstractCollection
             }
         }
 
-        if ($condition != '') {
+        if ($condition) {
             $this->addFieldToFilter('topic_id', $condition);
         }
 

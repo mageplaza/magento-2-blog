@@ -23,7 +23,6 @@ namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab;
 
 use DateTimeZone;
 use Exception;
-use IntlDateFormatter;
 use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
@@ -32,7 +31,6 @@ use Magento\Backend\Model\Auth\Session;
 use Magento\Cms\Model\Page\Source\PageLayout as BasePageLayout;
 use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Config\Model\Config\Source\Design\Robots;
-use Magento\Config\Model\Config\Source\Enabledisable;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
@@ -44,6 +42,8 @@ use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic;
 use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Model\Config\Source\Author;
+use Mageplaza\Blog\Model\Config\Source\AuthorStatus;
 
 /**
  * Class Post
@@ -86,11 +86,6 @@ class Post extends Generic implements TabInterface
     protected $imageHelper;
 
     /**
-     * @var Enabledisable
-     */
-    protected $enabledisable;
-
-    /**
      * @var DateTime
      */
     protected $_date;
@@ -99,6 +94,16 @@ class Post extends Generic implements TabInterface
      * @var BasePageLayout
      */
     protected $_layoutOptions;
+
+    /**
+     * @var Author
+     */
+    protected $_author;
+
+    /**
+     * @var AuthorStatus
+     */
+    protected $_status;
 
     /**
      * Post constructor.
@@ -111,10 +116,11 @@ class Post extends Generic implements TabInterface
      * @param FormFactory $formFactory
      * @param Config $wysiwygConfig
      * @param Yesno $booleanOptions
-     * @param Enabledisable $enableDisable
      * @param Robots $metaRobotsOptions
      * @param Store $systemStore
      * @param Image $imageHelper
+     * @param Author $author
+     * @param AuthorStatus $status
      * @param array $data
      */
     public function __construct(
@@ -126,21 +132,23 @@ class Post extends Generic implements TabInterface
         FormFactory $formFactory,
         Config $wysiwygConfig,
         Yesno $booleanOptions,
-        Enabledisable $enableDisable,
         Robots $metaRobotsOptions,
         Store $systemStore,
         Image $imageHelper,
+        Author $author,
+        AuthorStatus $status,
         array $data = []
     ) {
-        $this->wysiwygConfig = $wysiwygConfig;
-        $this->booleanOptions = $booleanOptions;
-        $this->enabledisable = $enableDisable;
+        $this->wysiwygConfig     = $wysiwygConfig;
+        $this->booleanOptions    = $booleanOptions;
         $this->metaRobotsOptions = $metaRobotsOptions;
-        $this->systemStore = $systemStore;
-        $this->authSession = $authSession;
-        $this->_date = $dateTime;
-        $this->_layoutOptions = $layoutOption;
-        $this->imageHelper = $imageHelper;
+        $this->systemStore       = $systemStore;
+        $this->authSession       = $authSession;
+        $this->_date             = $dateTime;
+        $this->_layoutOptions    = $layoutOption;
+        $this->imageHelper       = $imageHelper;
+        $this->_author           = $author;
+        $this->_status           = $status;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -165,19 +173,30 @@ class Post extends Generic implements TabInterface
             'class'  => 'fieldset-wide'
         ]);
 
-        $fieldset->addField('author_id', 'hidden', ['name' => 'author_id']);
-
+        if ($this->_request->getParam('duplicate')) {
+            $fieldset->addField('duplicate', 'hidden', [
+                'name'  => 'duplicate',
+                'value' => 1
+            ]);
+        }
         $fieldset->addField('name', 'text', [
             'name'     => 'name',
             'label'    => __('Name'),
             'title'    => __('Name'),
             'required' => true
         ]);
+        $fieldset->addField('author_id', 'select', [
+            'name'     => 'author_id',
+            'label'    => __('Author'),
+            'title'    => __('Author'),
+            'required' => true,
+            'values'   => $this->_author->toOptionArray()
+        ]);
         $fieldset->addField('enabled', 'select', [
             'name'   => 'enabled',
             'label'  => __('Status'),
             'title'  => __('Status'),
-            'values' => $this->enabledisable->toOptionArray()
+            'values' => $this->_status->toOptionArray()
         ]);
         if (!$post->hasData('enabled')) {
             $post->setEnabled(1);
@@ -223,7 +242,8 @@ class Post extends Generic implements TabInterface
             'name'  => 'image',
             'label' => __('Image'),
             'title' => __('Image'),
-            'path'  => $this->imageHelper->getBaseMediaPath(Image::TEMPLATE_MEDIA_TYPE_POST)
+            'path'  => $this->imageHelper->getBaseMediaPath(Image::TEMPLATE_MEDIA_TYPE_POST),
+            'note'  => __('The appropriate size is 265px * 250px.')
         ]);
         $fieldset->addField('categories_ids', Category::class, [
             'name'  => 'categories_ids',
@@ -264,28 +284,18 @@ class Post extends Generic implements TabInterface
             'title'  => __('Allow Comment'),
             'values' => $this->booleanOptions->toOptionArray(),
         ]);
-        $fieldset->addField('publish_date', 'date', [
-            'name'        => 'publish_date',
-            'label'       => __('Publish Date'),
-            'title'       => __('Publish Date'),
-            'date_format' => 'M/d/yyyy',
-            'timezone'    => false,
-            'value'       => $this->_date->date('m/d/Y')
-        ]);
-
-        /** get current time for public_time field */
-        $currentTime = new \DateTime($this->_date->date(), new DateTimeZone('UTC'));
-        $currentTime->setTimezone(new DateTimeZone($this->_localeDate->getConfigTimezone()));
-        $time = $currentTime->format('H,i,s');
-
-        $fieldset->addField('publish_time', 'time', [
-            'name'     => 'publish_time',
-            'label'    => __('Publish Time'),
-            'title'    => __('Publish Time'),
-            'format'   => $this->_localeDate->getTimeFormat(IntlDateFormatter::SHORT),
-            'timezone' => false,
-            'value'    => $time
-        ]);
+        $fieldset->addField(
+            'publish_date',
+            'date',
+            [
+                'name'        => 'publish_date',
+                'label'       => __('Publish Date'),
+                'title'       => __('Publish Date'),
+                'date_format' => 'yyyy-MM-dd',
+                'timezone'    => false,
+                'time_format' => 'hh:mm:ss'
+            ]
+        );
 
         $seoFieldset = $form->addFieldset('seo_fieldset', [
             'legend' => __('Search Engine Optimization'),
@@ -345,10 +355,7 @@ class Post extends Generic implements TabInterface
             $publicDateTime = new \DateTime($post->getData('publish_date'), new DateTimeZone('UTC'));
             $publicDateTime->setTimezone(new DateTimeZone($this->_localeDate->getConfigTimezone()));
             $publicDateTime = $publicDateTime->format('m/d/Y H:i:s');
-            list($date, $time) = explode(' ', $publicDateTime);
-            $time = str_replace(':', ',', $time);
-            $post->setData('publish_date', $date);
-            $post->setData('publish_time', $time);
+            $post->setData('publish_date', $publicDateTime);
         }
 
         $form->addValues($post->getData());

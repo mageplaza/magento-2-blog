@@ -22,6 +22,15 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceBlock name="customer_account_navigation">
+            <block class="Magento\Customer\Block\Account\SortLinkInterface" name="author-link" ifconfig="blog/general/enabled">
+                <arguments>
+                    <argument name="path" xsi:type="string">mpblog/author/signup</argument>
+                    <argument name="label" xsi:type="string">My Better Blog</argument>
+                    <argument name="sortOrder" xsi:type="number">200</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
         <referenceBlock name="footer_links">
             <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_footer_link" template="html/footer.phtml"/>
         </referenceBlock>

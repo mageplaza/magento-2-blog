@@ -1,0 +1,180 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Blog\Block\Author\SignupForm $block */
+$author = $block->getAuthor();
+?>
+<form enctype="multipart/form-data" data-mage-init='{"validation": {}}'
+      action="<?= $block->escapeHtml($block->getUrl('mpblog/author/register')) ?>" method="post" class="form"
+      name="mp_blog_author_form">
+    <fieldset class="fieldset">
+        <legend class="legend">
+            <span>
+                <?= /* @noEscape */
+                $author['name'] === '' ? __('Signup Author') : __('Author Information') ?>
+            </span>
+        </legend>
+        <br>
+        <div class="field required mp-field">
+            <label for="name" class="label"><span><?= /* @noEscape */
+                    __('Display Name') ?></span></label>
+            <div class="control">
+                <input type="text" name="name" id="name" value="<?= $block->escapeHtml($author['name']) ?>"
+                       title="<?= /* @noEscape */
+                        __('Display Name') ?>"
+                       class="input-text" data-validate="{required:true, 'validate-no-empty':true}">
+            </div>
+        </div>
+        <?php if (isset($author['status'])) :?>
+            <div class="field mp-field">
+                <label for="name" class="label"><span><?= /* @noEscape */
+                        __('Status') ?></span></label>
+                <div class="control">
+                    <span><?= $block->escapeHtml($author['status']) ?></span>
+                </div>
+            </div>
+        <?php endif;?>
+        <div class="field mp-field">
+            <label for="short_desciption" class="label">
+                <span><?= /* @noEscape */
+                    __('Short Description') ?></span>
+            </label>
+            <div class="control">
+                <textarea name="short_description" id="short_description" rows="5" data-
+                          cols="19"><?= /* @noEscape */ $author['short_description']?$block->getPageFilter($author['short_description']):'' ?></textarea>
+            </div>
+        </div>
+        <div class="field mp-field">
+            <label for="image" class="label"><span><?= /* @noEscape */
+                    __('Avatar') ?></span></label>
+            <div class="control">
+                <?php if (!empty($author['image'])) :?>
+                    <a class="mp-image-link" href="<?= $block->getImageUrl($author['image'], 'auth')?>" >
+                        <img src="<?= $block->getImageUrl($author['image'], 'auth')?>" id="post_image_image"
+                        title="<?= $author['image'] ?>" alt="<?= $author['image'] ?>" height="22" width="22"
+                        class="small-image-preview v-middle">
+                        </a>
+                <?php endif; ?>
+                <input type="file" name="image" id="image" value="<?= $block->escapeHtml($author['image']) ?>"
+                       title="<?= /* @noEscape */
+                        __('Avatar') ?>"
+                       class="input-file"
+                       style="width: 90%;position: relative;top: -5px">
+                <?php if (!empty($author['image'])) :?>
+                    <span class="delete-image">
+                    <input style="width: 8%" type="checkbox" name="image[delete]" value="1" class="checkbox" id="post_image_delete">
+                    <label for="post_image_delete"> Delete Image</label>
+                    </span>
+                <?php endif; ?>
+            </div>
+        </div>
+        <div class="field mp-field">
+            <label for="url_key" class="label"><span><?= /* @noEscape */
+                    __('URL Key') ?></span></label>
+            <div class="control">
+                <input type="text" name="url_key" id="url_key" value="<?= $block->escapeHtml($author['url_key']) ?>"
+                       title="<?= /* @noEscape */
+                        __('URL Key') ?>"
+                       class="input-text">
+            </div>
+        </div>
+        <div class="field mp-field">
+            <label for="full_url" class="label"><span><?= /* @noEscape */
+                    __('Full URL') ?></span></label>
+            <div class="control">
+                <span class="mp_full_url">
+                    <?= $block->escapeHtml($block->getUrl("blog/author")
+                        . $author['url_key'] . $block->getUrlSuffix()) ?>
+                </span>
+            </div>
+        </div>
+        <div class="field mp-field">
+            <label for="facebook_link" class="label"><span><?= /* @noEscape */
+                    __('Facebook Link') ?></span></label>
+            <div class="control">
+                <input type="url" name="facebook_link" id="facebook_link"
+                       value="<?= $block->escapeHtml($author['facebook_link']) ?>"
+                       title="<?= /* @noEscape */
+                        __('Facebook Link') ?>" class="input-text">
+            </div>
+        </div>
+        <div class="field mp-field">
+            <label for="twitter_link" class="label"><span><?= /* @noEscape */
+                    __('Twitter Link') ?></span></label>
+            <div class="control">
+                <input type="url" name="twitter_link" id="twitter_link"
+                       value="<?= $block->escapeHtml($author['twitter_link']) ?>"
+                       title="<?= /* @noEscape */
+                        __('Twitter Link') ?>" class="input-text">
+            </div>
+        </div>
+    </fieldset>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit" class="action submit primary"
+                    title="<?= /* @noEscape */
+                    $author['name'] === '' ? __('Submit') : __('Save') ?>">
+                <span>
+                    <?= /* @noEscape */
+                    $author['name'] === '' ? __('Submit') : __('Save') ?>
+                </span>
+            </button>
+        </div>
+    </div>
+</form>
+<style>
+    .mp-field {
+        display: flex;
+    }
+
+    .mp-field .control{
+        width: 70%;
+    }
+
+    .mp-field .control .delete-image{
+        width: 65%;
+    }
+
+    .mp-field .label {
+        width: 30%;
+    }
+
+    .sidebar.sidebar-main:before {
+        content: unset !important;
+    }
+</style>
+<script>
+    require(
+        [
+            'jquery',
+            "Mageplaza_Blog/js/get-editor"
+        ], function ($, editor) {
+            $('#url_key').on('keyup', function () {
+                var url = '<?= $block->escapeHtml($block->getUrl("blog/author"))?>' + $(this).val() + '<?= $block->escapeHtml($block->getUrlSuffix())?>';
+
+                if ($(this).val() === '') {
+                    url = '';
+                }
+                $('.mp_full_url').html(url);
+            });
+            editor.config('short_description', '<?= /* @noEscape */ $block->getVersion() ?>', '<?= /* @noEscape */ $block->getMagentoVersion() ?>', '99%');
+        });
+</script>

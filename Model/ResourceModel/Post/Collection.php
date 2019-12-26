@@ -22,14 +22,16 @@
 namespace Mageplaza\Blog\Model\ResourceModel\Post;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
+use Mageplaza\Blog\Api\Data\SearchResult\PostSearchResultInterface;
+use Mageplaza\Blog\Model\Post;
 use Zend_Db_Select;
 
 /**
  * Class Collection
  * @package Mageplaza\Blog\Model\ResourceModel\Post
  */
-class Collection extends AbstractCollection
+class Collection extends AbstractCollection implements PostSearchResultInterface
 {
     /**
      * ID Field Name
@@ -59,7 +61,7 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\Post', 'Mageplaza\Blog\Model\ResourceModel\Post');
+        $this->_init(Post::class, \Mageplaza\Blog\Model\ResourceModel\Post::class);
     }
 
     /**

@@ -21,7 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Widget;
 
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Widget\Block\BlockInterface;
 use Mageplaza\Blog\Block\Frontend;
 use Mageplaza\Blog\Helper\Data;
@@ -39,7 +39,8 @@ class Posts extends Frontend implements BlockInterface
     protected $_template = "widget/posts.phtml";
 
     /**
-     * @return AbstractCollection|Collection
+     * @return Collection
+     * @throws NoSuchEntityException
      */
     public function getCollection()
     {

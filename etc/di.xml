@@ -29,7 +29,14 @@
                 <item name="mageplaza_blog_tag_listing_data_source" xsi:type="string">Mageplaza\Blog\Model\ResourceModel\Tag\Grid\Collection</item>
                 <item name="mageplaza_blog_topic_listing_data_source" xsi:type="string">Mageplaza\Blog\Model\ResourceModel\Topic\Grid\Collection</item>
                 <item name="mageplaza_blog_comment_listing_data_source" xsi:type="string">Mageplaza\Blog\Model\ResourceModel\Comment\Grid\Collection</item>
+                <item name="mageplaza_blog_author_listing_data_source" xsi:type="string">Mageplaza\Blog\Model\ResourceModel\Author\Grid\Collection</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Mageplaza\Blog\Model\ResourceModel\Author\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">mageplaza_blog_author</argument>
+            <argument name="resourceModel" xsi:type="string">Mageplaza\Blog\Model\ResourceModel\Author</argument>
         </arguments>
     </type>
     <virtualType name="Mageplaza\Blog\Model\ResourceModel\Post\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
@@ -58,4 +65,18 @@
         </arguments>
     </type>
     <preference for="Magento\Sitemap\Model\Sitemap" type="Mageplaza\Blog\Model\Sitemap"/>
+
+    <preference for="Mageplaza\Blog\Api\Data\PostInterface" type="Mageplaza\Blog\Model\Post" />
+    <preference for="Mageplaza\Blog\Api\Data\CommentInterface" type="Mageplaza\Blog\Model\Comment" />
+    <preference for="Mageplaza\Blog\Api\Data\TagInterface" type="Mageplaza\Blog\Model\Tag" />
+    <preference for="Mageplaza\Blog\Api\Data\CategoryInterface" type="Mageplaza\Blog\Model\Category" />
+    <preference for="Mageplaza\Blog\Api\Data\TopicInterface" type="Mageplaza\Blog\Model\Topic" />
+    <preference for="Mageplaza\Blog\Api\Data\AuthorInterface" type="Mageplaza\Blog\Model\Author" />
+    <preference for="Mageplaza\Blog\Api\BlogRepositoryInterface" type="Mageplaza\Blog\Model\Api\BlogRepository" />
+
+    <preference for="Mageplaza\Blog\Api\Data\SearchResult\PostSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Post\Collection" />
+    <preference for="Mageplaza\Blog\Api\Data\SearchResult\CategorySearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Category\Collection" />
+    <preference for="Mageplaza\Blog\Api\Data\SearchResult\TagSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Tag\Collection" />
+    <preference for="Mageplaza\Blog\Api\Data\SearchResult\TopicSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Topic\Collection" />
+    <preference for="Mageplaza\Blog\Api\Data\SearchResult\CommentSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Comment\Collection" />
 </config>

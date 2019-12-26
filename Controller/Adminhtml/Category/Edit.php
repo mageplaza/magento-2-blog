@@ -76,7 +76,7 @@ class Edit extends Category
         PageFactory $resultPageFactory,
         JsonFactory $resultJsonFactory
     ) {
-        $this->dataObject = $dataObject;
+        $this->dataObject        = $dataObject;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
 
@@ -93,8 +93,8 @@ class Edit extends Category
     public function execute()
     {
         $categoryId = (int) $this->getRequest()->getParam('id');
-        $duplicate = $this->getRequest()->getParam('duplicate');
-        $category = $this->initCategory();
+        $duplicate  = $this->getRequest()->getParam('duplicate');
+        $category   = $this->initCategory();
         if ($duplicate) {
             $category->setId(null);
             $category->setData('duplicate', true);
@@ -140,10 +140,10 @@ class Edit extends Category
                 }
             }
 
-            $layout = $resultPage->getLayout();
-            $content = $layout->getBlock('mageplaza.blog.category.edit')->getFormHtml()
-                       . $layout->getBlock('mageplaza.blog.category.tree')
-                           ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs');
+            $layout        = $resultPage->getLayout();
+            $content       = $layout->getBlock('mageplaza.blog.category.edit')->getFormHtml()
+                . $layout->getBlock('mageplaza.blog.category.tree')
+                    ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs');
             $eventResponse = $this->dataObject->addData([
                 'content'  => $content,
                 'messages' => $layout->getMessagesBlock()->getGroupedHtml(),

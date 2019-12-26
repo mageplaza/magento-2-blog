@@ -1,0 +1,820 @@
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+.mp-post-status {
+    padding: 5px;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    color: white;
+    border-radius: 5px;
+    font-size: 10px;
+    z-index: 5;
+}
+
+.mp-post-disapproved {
+    background-color: #e67878;
+}
+
+.mp-post-approved {
+    background-color: #35a927;
+}
+
+.mp-post-pending {
+    background-color: #d7da1e;
+}
+
+.mp-blog-new-post {
+    height: 60px;
+}
+
+.mp-blog-new-post button {
+    float: right;
+    margin: 10px;
+    padding: 10px 30px
+}
+
+.post-item-wraper {
+    position: relative;
+}
+
+.post-info-action {
+    display: flex;
+    position: absolute;
+    float: right;
+    right: 10px;
+    top: 10px;
+}
+
+.sidebar.sidebar-main:before {
+    content: unset !important;
+}
+
+.post-info-action div {
+    margin: 0 10px;
+    width: 25px;
+    cursor: pointer;
+}
+
+#mp-blog-new-post-popup .column.main {
+    width: 100%;
+}
+
+#mp_blog_post_form input#image {
+    position: relative;
+    bottom: 5px;
+}
+
+.mp-field {
+    display: flex;
+    padding: 0 10%;
+}
+
+.mp-field .label {
+    width: 30%;
+}
+
+.mp-field > div {
+    width: 100%;
+}
+
+.mp-custom .mp-field {
+    margin: 0 0 20px;
+}
+
+.mp-custom .field label.label {
+    font-weight: 600;
+}
+
+.admin__form-field-label {
+    display: block;
+    font-weight: bold;
+    margin: 0 0 .3rem;
+    text-align: left;
+}
+
+.admin__data-grid-filters-wrap .admin__form-field .admin__form-field .admin__form-field-label {
+    border: 1px solid transparent;
+    float: left;
+    font-weight: normal;
+    line-height: 1.36;
+    margin-bottom: 0;
+    padding-bottom: 0.6rem;
+    padding-right: 1em;
+    padding-top: 0.6rem;
+    width: 25%;
+}
+
+.admin__control-text {
+    -webkit-appearance: none;
+    background-color: #ffffff;
+    border: 1px solid #adadad;
+    border-radius: 1px;
+    box-shadow: none;
+    color: #303030;
+    font-size: 1.4rem;
+    font-weight: 400;
+    height: auto;
+    line-height: 1.36;
+    padding: 0.6rem 1rem 0.6rem;
+    transition: border-color 0.1s linear;
+    vertical-align: baseline;
+    width: auto;
+}
+
+.admin__data-grid-filters-wrap .admin__form-field-label,
+.admin__data-grid-filters-wrap .admin__control-text,
+.admin__data-grid-filters-wrap .admin__control-select,
+.admin__data-grid-filters-wrap .admin__action-multiselect,
+.admin__data-grid-filters-wrap .ui-datepicker .ui-datepicker-title select {
+    font-size: 1.3rem;
+}
+
+.admin__action-multiselect-tree .action-menu,
+.admin__action-multiselect-tree .abs-action-menu .action-submenu,
+.admin__action-multiselect-tree .action-menu .action-submenu,
+.admin__action-multiselect-tree .actions-split .dropdown-menu .action-submenu,
+.admin__action-multiselect-tree .actions-split .action-menu .action-submenu {
+    min-width: 34.7rem;
+}
+
+.admin__action-multiselect-tree .action-menu .action-menu-item,
+.admin__action-multiselect-tree .abs-action-menu .action-submenu .action-menu-item,
+.admin__action-multiselect-tree .action-menu .action-submenu .action-menu-item,
+.admin__action-multiselect-tree .actions-split .dropdown-menu .action-submenu .action-menu-item,
+.admin__action-multiselect-tree .actions-split .action-menu .action-submenu .action-menu-item {
+    margin-top: .1rem;
+}
+
+.action-menu .item,
+.action-menu .action-menu-item,
+.abs-action-menu .action-submenu .item,
+.abs-action-menu .action-submenu .action-menu-item,
+.action-menu .action-submenu .item,
+.action-menu .action-submenu .action-menu-item,
+.actions-split .dropdown-menu .action-submenu .item,
+.actions-split .dropdown-menu .action-submenu .action-menu-item,
+.actions-split .action-menu .action-submenu .item,
+.actions-split .action-menu .action-submenu .action-menu-item {
+    cursor: pointer;
+    display: block;
+    padding: .6875em 1em;
+}
+
+.admin__action-multiselect-tree .action-menu-item {
+    margin-left: 4.2rem;
+    position: relative;
+}
+
+.admin__action-multiselect-tree .action-menu-item._expended:before {
+    border-left: 1px dashed #a79d95;
+    bottom: 0;
+    content: '';
+    left: -1rem;
+    position: absolute;
+    top: 1rem;
+    width: 1px;
+}
+
+.admin__action-multiselect-dropdown {
+    border-radius: 50%;
+    height: 2.2rem;
+    left: -2.2rem;
+    position: absolute;
+    top: 1rem;
+    width: 2.2rem;
+    z-index: 1;
+}
+
+input[type="checkbox"] {
+    margin: 2px 5px 0 0;
+    position: relative;
+    top: 2px;
+}
+
+.admin__action-multiselect-wrap .action-menu-item {
+    transition: background-color 0.1s linear;
+}
+
+.admin__action-multiselect-tree .action-menu-item._expended .admin__action-multiselect-dropdown:before {
+    line-height: 28px;
+    content: '\e621';
+    font-family: 'luma-icons';
+}
+
+[class*='admin__'] + label,
+[class*='admin__'] + label:after,
+[class*='admin__'] + label:before,
+[class*='admin__']:before,
+[class*='admin__']:after {
+    box-sizing: border-box;
+}
+
+.admin__action-multiselect-dropdown:before {
+    background: #ffffff;
+    color: #a79d95;
+    content: '\e622';
+    font-size: 2.2rem;
+    font-family: 'luma-icons';
+}
+
+.admin__action-multiselect-tree .action-menu-item._with-checkbox .admin__action-multiselect-label {
+    padding-left: 2.6rem;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner {
+    position: relative;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner .admin__action-multiselect-menu-inner {
+    padding-left: 3.2rem;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner .admin__action-multiselect-menu-inner:before {
+    left: 4.3rem;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner-item {
+    position: relative;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner-item:last-child:before {
+    height: 2.1rem;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner-item:after,
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner-item:before {
+    content: '';
+    left: 0;
+    position: absolute;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner-item:after {
+    border-top: 1px dashed #a79d95;
+    height: 1px;
+    top: 2.1rem;
+    width: 4.2rem;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner-item:before {
+    border-left: 1px dashed #a79d95;
+    height: 100%;
+    top: 0;
+    width: 1px;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner-item._parent:after {
+    width: 4.2rem;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner-item._root {
+    margin-left: -1rem;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner-item._root:after {
+    left: 3.2rem;
+    width: 2.2rem;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner-item._root:before {
+    left: 3.2rem;
+    top: 1rem;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner-item._root._parent:after {
+    display: none;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner-item._root:first-child:before {
+    top: 2.1rem;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-menu-inner-item._root:last-child:before {
+    height: 1rem;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-label {
+    line-height: 2.2rem;
+    vertical-align: middle;
+    word-break: break-all;
+}
+
+.admin__action-multiselect-tree .admin__action-multiselect-label:before {
+    left: 1rem;
+    position: absolute;
+    top: 1.4rem;
+}
+
+.action-select-wrap {
+    display: inline-block;
+    position: relative;
+}
+
+.action-select-wrap .action-select {
+    padding-right: 3.2rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background-color: #ffffff;
+    font-weight: 400;
+    text-align: left;
+}
+
+.action-select-wrap .action-select._active:after,
+.action-select-wrap .action-select.active:after {
+    transform: rotate(180deg);
+}
+
+.action-select-wrap .action-select:after {
+    border-color: #000000 transparent transparent transparent;
+    border-style: solid;
+    border-width: 0.5rem 0.4rem 0 0.4rem;
+    content: '';
+    height: 0;
+    margin-top: -0.2rem;
+    position: absolute;
+    right: 1.2rem;
+    top: 50%;
+    transition: all .2s linear;
+    width: 0;
+}
+
+._active .action-select-wrap .action-select:after,
+.active .action-select-wrap .action-select:after {
+    transform: rotate(180deg);
+}
+
+.action-select-wrap .action-select:hover:after {
+    border-color: #000000 transparent transparent transparent;
+}
+
+.action-select-wrap .action-select:hover {
+    border-color: #878787;
+}
+
+.action-select-wrap .action-select:hover:before {
+    border-color: #878787;
+}
+
+.action-select-wrap .action-select:before {
+    background-color: #e3e3e3;
+    border: 1px solid #adadad;
+    bottom: 0;
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 3.2rem;
+}
+
+.action-select-wrap .action-select._active {
+    border-color: #007bdb;
+}
+
+.action-select-wrap .action-select._active:before {
+    border-color: #007bdb;
+    border-left-color: #adadad;
+}
+
+.action-select-wrap .action-select[disabled] {
+    color: #41362f;
+}
+
+.action-select-wrap .action-select[disabled]:after {
+    border-color: #41362f transparent transparent transparent;
+}
+
+.action-select-wrap._active {
+    z-index: 500;
+}
+
+.action-select-wrap._active .action-select {
+    border-color: #007bdb;
+}
+
+.action-select-wrap._active .action-select:before {
+    border-color: #007bdb;
+}
+
+.action-select-wrap._active .action-select:after {
+    transform: rotate(180deg);
+}
+
+.action-select-wrap .action-menu,
+.action-select-wrap .abs-action-menu .action-submenu,
+.action-select-wrap .action-menu .action-submenu,
+.action-select-wrap .actions-split .dropdown-menu .action-submenu,
+.action-select-wrap .actions-split .action-menu .action-submenu {
+    max-height: 45rem;
+    overflow-y: auto;
+}
+
+.action-select-wrap .action-menu ._disabled:hover,
+.action-select-wrap .abs-action-menu .action-submenu ._disabled:hover,
+.action-select-wrap .action-menu .action-submenu ._disabled:hover,
+.action-select-wrap .actions-split .dropdown-menu .action-submenu ._disabled:hover,
+.action-select-wrap .actions-split .action-menu .action-submenu ._disabled:hover {
+    background: #ffffff;
+}
+
+.action-select-wrap .action-menu ._disabled .action-menu-item,
+.action-select-wrap .abs-action-menu .action-submenu ._disabled .action-menu-item,
+.action-select-wrap .action-menu .action-submenu ._disabled .action-menu-item,
+.action-select-wrap .actions-split .dropdown-menu .action-submenu ._disabled .action-menu-item,
+.action-select-wrap .actions-split .action-menu .action-submenu ._disabled .action-menu-item {
+    cursor: default;
+    opacity: .5;
+}
+
+.action-select-wrap .action-menu-items {
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 100%;
+}
+
+.action-select-wrap .action-menu-items > .action-menu,
+.action-select-wrap .action-menu-items > .abs-action-menu .action-submenu,
+.action-select-wrap .action-menu-items > .action-menu .action-submenu,
+.action-select-wrap .action-menu-items > .actions-split .dropdown-menu .action-submenu,
+.action-select-wrap .action-menu-items > .actions-split .action-menu .action-submenu {
+    min-width: 100%;
+    position: static;
+}
+
+.action-select-wrap .action-menu-items > .action-menu .action-submenu,
+.action-select-wrap .action-menu-items > .abs-action-menu .action-submenu .action-submenu,
+.action-select-wrap .action-menu-items > .action-menu .action-submenu .action-submenu,
+.action-select-wrap .action-menu-items > .actions-split .dropdown-menu .action-submenu .action-submenu,
+.action-select-wrap .action-menu-items > .actions-split .action-menu .action-submenu .action-submenu {
+    position: absolute;
+    right: -100%;
+}
+
+.admin__action-multiselect-crumb .action-close {
+    bottom: 0;
+    font-size: .5em;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 2rem;
+}
+
+.admin__action-multiselect-wrap {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    display: block;
+    user-select: none;
+}
+
+.admin__action-multiselect-wrap .admin__action-multiselect {
+    border: 1px solid #adadad;
+    cursor: pointer;
+    display: block;
+    min-height: 3.2rem;
+    padding-right: 3.6rem;
+    white-space: normal;
+}
+
+.admin__control-table-wrapper .admin__action-multiselect-wrap .admin__action-multiselect {
+    position: relative;
+}
+
+.admin__action-multiselect-text {
+    padding: .6rem 1rem;
+}
+
+.admin__action-multiselect-search-wrap {
+    border-bottom: 1px solid #e3e3e3;
+    margin: 0 1rem;
+    padding: 1rem 0;
+    position: relative;
+}
+
+.admin__action-multiselect-search {
+    padding-right: 3rem;
+    width: 100%;
+}
+
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu .admin__control-text {
+    font-size: 1.3rem;
+    min-width: 15rem;
+    width: calc(100% - 4rem);
+}
+
+.admin__control-text {
+    min-width: 4rem;
+}
+
+button, input, optgroup, select, textarea, .block-footer .action-add {
+    color: inherit;
+    font: inherit;
+    margin: 0;
+}
+
+.admin__fieldset > .admin__field > .admin__field-control input[type="checkbox"] {
+    margin-top: 1rem;
+}
+
+input[type='checkbox'].admin__control-checkbox {
+    margin: 0;
+    position: absolute;
+}
+
+input[type='checkbox'] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.admin__scope-old input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    background: #ffffff;
+    border-radius: 2px;
+    border: 1px solid #adadad;
+    cursor: pointer;
+    display: inline-block;
+    height: 16px;
+    margin: 0 5px 0 0;
+    position: relative;
+    transition: all 0.1s ease-in;
+    vertical-align: middle;
+    width: 16px;
+}
+
+.admin__scope-old input[type="radio"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    background: #ffffff;
+    border-radius: 2px;
+    border: 1px solid #adadad;
+    cursor: pointer;
+    display: inline-block;
+    height: 16px;
+    margin: 0 5px 0 0;
+    position: relative;
+    transition: all 0.1s ease-in;
+    vertical-align: middle;
+    width: 16px;
+}
+
+.admin__action-multiselect-search-label {
+    display: block;
+    font-size: 1.5rem;
+    height: 1.3em;
+    overflow: hidden;
+    position: absolute;
+    right: 2.2rem;
+    top: 1.7rem;
+    width: 1em;
+}
+
+[class*='admin__'] + label, [class*='admin__'] + label:after,
+[class*='admin__'] + label:before, [class*='admin__']:before, [class*='admin__']:after {
+    box-sizing: border-box;
+}
+
+.admin__control-checkbox + label:before, .mass-select-wrap select + label:before {
+    border-radius: 1px;
+    content: '';
+    font-size: 0;
+    transition: font-size 0.1s ease-out, color 0.1s ease-out, border-color 0.1s linear;
+}
+
+.admin__control-radio + label:before, .admin__control-checkbox + label:before, .mass-select-wrap select + label:before {
+    background-color: #ffffff;
+    border: 1px solid #adadad;
+    color: transparent;
+    float: left;
+    height: 1.6rem;
+    text-align: center;
+    vertical-align: top;
+    width: 1.6rem;
+}
+
+.admin__action-multiselect-crumb .action-close:before {
+    position: absolute;
+    top: -9px;
+    right: -10px;
+    font-size: 10px;
+}
+
+.admin__action-multiselect-menu-inner-item._root .action-menu-item .admin__action-multiselect-label:before {
+    margin-right: 1rem;
+}
+
+.admin__control-checkbox:checked + label:before, .mass-select-wrap select._checked + label:before {
+    content: '\e610';
+    font-size: 1.1rem;
+    line-height: 125%;
+    color: #000;
+    font-family: 'luma-icons';
+}
+
+.admin__scope-old input[type=text] {
+    box-sizing: border-box;
+    border: 1px solid #adadad;
+    border-radius: 1px;
+    padding: .6rem 1rem .6rem;
+    color: #303030;
+    background-color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    height: 33px;
+}
+
+.admin__action-multiselect-crumb:hover {
+    border-color: #908379;
+}
+
+.admin__action-multiselect-crumb {
+    background-color: #f5f5f5;
+    border: 1px solid #a79d95;
+    border-radius: 1px;
+    display: inline-block;
+    font-size: 1.2rem;
+    margin: 0.3rem -4px 0.3rem 0.3rem;
+    padding: 0.3rem 2.4rem 0.4rem 1rem;
+    position: relative;
+    transition: border-color 0.1s linear;
+}
+
+.admin__action-multiselect-menu-inner {
+    margin-bottom: 0;
+    max-height: 46rem;
+    overflow-y: auto;
+}
+
+.admin__action-multiselect-menu-inner .admin__action-multiselect-menu-inner {
+    list-style: none;
+    max-height: none;
+    overflow: hidden;
+    padding-left: 2.2rem;
+}
+
+.admin__action-multiselect-menu-inner ._hidden {
+    display: none;
+}
+
+.admin__action-multiselect-actions-wrap {
+    border-top: 1px solid #e3e3e3;
+    margin: 0 1rem;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+.admin__action-multiselect-actions-wrap .action-default {
+    font-size: 1.3rem;
+    min-width: 13rem;
+}
+
+.action-default, button, .block-footer .action-add, .block-footer .action-add {
+    background: #e3e3e3;
+    border-color: #adadad;
+    color: #514943;
+}
+
+.action-default, button {
+    border: 1px solid;
+    border-radius: 0;
+    display: inline-block;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    line-height: 1.36;
+    padding: 0.6rem 1em 0.6rem;
+    text-align: center;
+    vertical-align: baseline;
+}
+
+button, html input[type='button'], input[type='reset'], input[type='submit'], .block-footer .action-add {
+    -webkit-appearance: button;
+    appearance: button;
+    cursor: pointer;
+}
+
+ul, ol, dl {
+    margin-top: 0;
+    padding-left: 0;
+}
+
+.admin__action-multiselect-wrap.action-select-wrap .action-menu,
+.admin__action-multiselect-wrap.action-select-wrap .abs-action-menu
+.action-submenu, .admin__action-multiselect-wrap.action-select-wrap
+.action-menu .action-submenu, .admin__action-multiselect-wrap.action-select-wrap
+.actions-split .dropdown-menu .action-submenu,
+.admin__action-multiselect-wrap.action-select-wrap .actions-split .action-menu .action-submenu {
+    max-height: none;
+    overflow-y: inherit;
+    width: 100%;
+}
+
+.action-menu._active,
+.abs-action-menu .action-submenu._active,
+.action-menu .action-submenu._active, .actions-split .dropdown-menu .action-submenu._active,
+.actions-split .action-menu .action-submenu._active {
+    display: block;
+}
+
+.admin__action-multiselect-tree .action-menu,
+.admin__action-multiselect-tree .abs-action-menu .action-submenu,
+.admin__action-multiselect-tree .action-menu .action-submenu,
+.admin__action-multiselect-tree .actions-split .dropdown-menu .action-submenu,
+.admin__action-multiselect-tree .actions-split .action-menu .action-submenu {
+    min-width: 34.7rem;
+}
+
+.action-menu,
+.abs-action-menu .action-submenu, .action-menu .action-submenu,
+.actions-split .dropdown-menu .action-submenu, .actions-split .action-menu .action-submenu {
+    background-color: #ffffff;
+    border: 1px solid #007bdb;
+    border-radius: 1px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    color: #41362f;
+    display: none;
+    font-weight: 400;
+    left: 0;
+    list-style: none;
+    margin: 2px 0 0;
+    min-width: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 100%;
+}
+
+.action-menu,
+.abs-action-menu .action-submenu,
+.action-menu .action-submenu,
+.actions-split .dropdown-menu .action-submenu,
+.actions-split .action-menu .action-submenu {
+    left: 0;
+    margin-top: 2px;
+    right: auto;
+    text-align: left;
+}
+
+.admin__form-field-control .admin__control-text,
+.admin__field-control .admin__control-text,
+.admin__form-field-control .admin__control-textarea,
+.admin__field-control .admin__control-textarea {
+    width: 100%;
+}
+
+.admin__control-checkbox {
+    cursor: pointer;
+    opacity: .01;
+    overflow: hidden;
+    position: absolute;
+    vertical-align: top;
+}
+
+.action-close {
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+}
+
+.action-close:before {
+    content: '\e616';
+    transition: color 0.1s linear;
+    font-family: 'luma-icons';
+}
+
+.action-close > span {
+    clip: rect(0, 0, 0, 0);
+    overflow: hidden;
+    position: absolute;
+    display: none;
+    visibility: hidden;
+}
+
+.admin__action-multiselect-search-wrap input[type="text"] {
+    width: 100%;
+}
