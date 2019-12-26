@@ -22,7 +22,6 @@
 namespace Mageplaza\Blog\Api\Data\SearchResult;
 
 use Magento\Framework\Api\SearchResultsInterface;
-use Mageplaza\Blog\Api\Data\CommentInterface;
 
 /**
  * Interface CommentSearchResultInterface
@@ -31,13 +30,12 @@ use Mageplaza\Blog\Api\Data\CommentInterface;
 interface CommentSearchResultInterface extends SearchResultsInterface
 {
     /**
-     * @return CommentInterface[]
+     * @return \Mageplaza\Blog\Api\Data\CommentInterface[]
      */
     public function getItems();
 
     /**
-     * @param CommentInterface[] $items
-     *
+     * @param \Mageplaza\Blog\Api\Data\CommentInterface[] $items
      * @return $this
      */
     public function setItems(array $items = null);
