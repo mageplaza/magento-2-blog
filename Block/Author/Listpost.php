@@ -94,7 +94,7 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     public function getBlogTitle($meta = false)
     {
         $blogTitle = parent::getBlogTitle($meta);
-        $author = $this->getAuthor();
+        $author    = $this->getAuthor();
         if (!$author) {
             return $blogTitle;
         }

@@ -22,8 +22,8 @@
 namespace Mageplaza\Blog\Plugin\Customer;
 
 use Magento\Framework\View\Element\Html\Link;
-use Mageplaza\Blog\Helper\Data;
 use Magento\Framework\View\Element\Html\Links;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class LinkMenu

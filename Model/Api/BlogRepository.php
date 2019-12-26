@@ -25,6 +25,7 @@ use Exception;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
@@ -32,6 +33,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Api\BlogRepositoryInterface;
+use Mageplaza\Blog\Api\Data\AuthorInterface;
 use Mageplaza\Blog\Api\Data\CategoryInterface;
 use Mageplaza\Blog\Api\Data\CommentInterface;
 use Mageplaza\Blog\Api\Data\PostInterface;
@@ -40,7 +42,6 @@ use Mageplaza\Blog\Api\Data\TopicInterface;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\PostLikeFactory;
-use Magento\Framework\App\RequestInterface;
 
 /**
  * Class PostRepositoryInterface
@@ -253,9 +254,9 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param \Mageplaza\Blog\Api\Data\PostInterface $post
+     * @param PostInterface $post
      *
-     * @return \Mageplaza\Blog\Api\Data\PostInterface
+     * @return PostInterface
      */
     public function createPost($post)
     {
@@ -342,9 +343,9 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param \Mageplaza\Blog\Api\Data\TagInterface $tag
+     * @param TagInterface $tag
      *
-     * @return \Mageplaza\Blog\Api\Data\TagInterface
+     * @return TagInterface
      */
     public function createTag($tag)
     {
@@ -449,9 +450,9 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param \Mageplaza\Blog\Api\Data\TopicInterface $topic
+     * @param TopicInterface $topic
      *
-     * @return \Mageplaza\Blog\Api\Data\TopicInterface
+     * @return TopicInterface
      */
     public function createTopic($topic)
     {
@@ -577,9 +578,9 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param \Mageplaza\Blog\Api\Data\CategoryInterface $category
+     * @param CategoryInterface $category
      *
-     * @return \Mageplaza\Blog\Api\Data\CategoryInterface
+     * @return CategoryInterface
      */
     public function createCategory($category)
     {
@@ -659,9 +660,9 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param \Mageplaza\Blog\Api\Data\AuthorInterface $author
+     * @param AuthorInterface $author
      *
-     * @return \Mageplaza\Blog\Api\Data\AuthorInterface
+     * @return AuthorInterface
      * @throws NoSuchEntityException
      * @throws LocalizedException
      */
@@ -854,7 +855,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     protected function getAllItem($collection)
     {
-        $page = $this->_request->getParam('page', 1);
+        $page  = $this->_request->getParam('page', 1);
         $limit = $this->_request->getParam('limit', 10);
 
         $collection->getSelect()->limitPage($page, $limit);

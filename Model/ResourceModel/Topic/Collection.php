@@ -24,8 +24,8 @@ namespace Mageplaza\Blog\Model\ResourceModel\Topic;
 use Magento\Framework\DB\Select;
 use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
 use Mageplaza\Blog\Api\Data\SearchResult\TopicSearchResultInterface;
-use Zend_Db_Select;
 use Mageplaza\Blog\Model\Topic;
+use Zend_Db_Select;
 
 /**
  * Class Collection

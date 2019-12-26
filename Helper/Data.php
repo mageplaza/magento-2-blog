@@ -25,8 +25,9 @@ use DateTimeZone;
 use Exception;
 use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -44,6 +45,7 @@ use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\Config\Source\SideBarLR;
 use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\PostHistoryFactory;
 use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
 use Mageplaza\Blog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection as PostCollection;
@@ -53,9 +55,7 @@ use Mageplaza\Blog\Model\Tag;
 use Mageplaza\Blog\Model\TagFactory;
 use Mageplaza\Blog\Model\Topic;
 use Mageplaza\Blog\Model\TopicFactory;
-use Mageplaza\Blog\Model\PostHistoryFactory;
 use Mageplaza\Core\Helper\AbstractData as CoreHelper;
-use Magento\Framework\App\ProductMetadataInterface;
 
 /**
  * Class Data

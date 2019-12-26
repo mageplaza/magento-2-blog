@@ -114,7 +114,6 @@ class EditPost extends Action
         ) {
             $page = $this->resultPageFactory->create();
             if ($this->getRequest()->getParam('postId')) {
-
                 $author = $this->_helperBlog->getCurrentAuthor();
 
                 $this->coreRegistry->register('mp_author', $author);

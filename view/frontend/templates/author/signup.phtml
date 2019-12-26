@@ -39,7 +39,7 @@ $author = $block->getAuthor();
             <div class="control">
                 <input type="text" name="name" id="name" value="<?= $block->escapeHtml($author['name']) ?>"
                        title="<?= /* @noEscape */
-                       __('Display Name') ?>"
+                        __('Display Name') ?>"
                        class="input-text" data-validate="{required:true, 'validate-no-empty':true}">
             </div>
         </div>
@@ -75,7 +75,7 @@ $author = $block->getAuthor();
                 <?php endif; ?>
                 <input type="file" name="image" id="image" value="<?= $block->escapeHtml($author['image']) ?>"
                        title="<?= /* @noEscape */
-                       __('Avatar') ?>"
+                        __('Avatar') ?>"
                        class="input-file"
                        style="width: 90%;position: relative;top: -5px">
                 <?php if (!empty($author['image'])) :?>
@@ -92,7 +92,7 @@ $author = $block->getAuthor();
             <div class="control">
                 <input type="text" name="url_key" id="url_key" value="<?= $block->escapeHtml($author['url_key']) ?>"
                        title="<?= /* @noEscape */
-                       __('URL Key') ?>"
+                        __('URL Key') ?>"
                        class="input-text">
             </div>
         </div>
@@ -113,7 +113,7 @@ $author = $block->getAuthor();
                 <input type="url" name="facebook_link" id="facebook_link"
                        value="<?= $block->escapeHtml($author['facebook_link']) ?>"
                        title="<?= /* @noEscape */
-                       __('Facebook Link') ?>" class="input-text">
+                        __('Facebook Link') ?>" class="input-text">
             </div>
         </div>
         <div class="field mp-field">
@@ -123,7 +123,7 @@ $author = $block->getAuthor();
                 <input type="url" name="twitter_link" id="twitter_link"
                        value="<?= $block->escapeHtml($author['twitter_link']) ?>"
                        title="<?= /* @noEscape */
-                       __('Twitter Link') ?>" class="input-text">
+                        __('Twitter Link') ?>" class="input-text">
             </div>
         </div>
     </fieldset>

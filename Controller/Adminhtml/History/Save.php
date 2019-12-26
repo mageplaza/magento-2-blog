@@ -30,14 +30,14 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Mageplaza\Blog\Controller\Adminhtml\History;
+use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\Post as PostModel;
 use Mageplaza\Blog\Model\PostFactory;
-use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\PostHistoryFactory;
 use RuntimeException;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Class Save

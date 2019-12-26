@@ -89,6 +89,7 @@ class Listpost extends Frontend
         } catch (Exception $exception) {
             $this->_logger->error($exception->getMessage());
         }
+
         return null;
     }
 

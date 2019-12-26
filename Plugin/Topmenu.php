@@ -21,8 +21,9 @@
 
 namespace Mageplaza\Blog\Plugin;
 
-use Mageplaza\Blog\Helper\Data;
+use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Block\Category\Menu;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Topmenu
@@ -51,7 +52,7 @@ class Topmenu
      * @param $html
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function afterGetHtml(
         \Magento\Theme\Block\Html\Topmenu $subject,
@@ -60,8 +61,10 @@ class Topmenu
         if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
             $blogHtml = $subject->getLayout()->createBlock(Menu::class)
                 ->setTemplate('Mageplaza_Blog::category/topmenu.phtml')->toHtml();
+
             return $html . $blogHtml;
         }
+
         return $html;
     }
 }

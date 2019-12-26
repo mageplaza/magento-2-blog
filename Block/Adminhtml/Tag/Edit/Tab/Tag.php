@@ -93,11 +93,11 @@ class Tag extends Generic implements TabInterface
         Robots $metaRobotsOptions,
         array $data = []
     ) {
-        $this->wysiwygConfig = $wysiwygConfig;
+        $this->wysiwygConfig  = $wysiwygConfig;
         $this->booleanOptions = $booleanOptions;
-        $this->enableDisable = $enableDisable;
-        $this->systemStore = $systemStore;
-        $this->metaRobots = $metaRobotsOptions;
+        $this->enableDisable  = $enableDisable;
+        $this->systemStore    = $systemStore;
+        $this->metaRobots     = $metaRobotsOptions;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }

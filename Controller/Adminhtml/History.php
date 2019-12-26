@@ -25,9 +25,9 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\PostHistory;
 use Mageplaza\Blog\Model\PostHistoryFactory;
-use Mageplaza\Blog\Model\PostFactory;
 
 /**
  * Class Post
@@ -81,7 +81,7 @@ abstract class History extends Action
         $this->postHistoryFactory = $postHistoryFactory;
         $this->postFactory        = $postFactory;
         $this->coreRegistry       = $coreRegistry;
-        $this->date = $date;
+        $this->date               = $date;
 
         parent::__construct($context);
     }
@@ -104,7 +104,6 @@ abstract class History extends Action
 
                 return false;
             }
-
         }
 
         if ($register) {

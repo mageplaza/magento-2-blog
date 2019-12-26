@@ -30,8 +30,8 @@ use Magento\Framework\Option\ArrayInterface;
 class AuthorType implements ArrayInterface
 {
 
-    const ADMIN     = '0';
-    const CUSTOMER    = '1';
+    const ADMIN    = '0';
+    const CUSTOMER = '1';
 
     /**
      * @return array
@@ -57,7 +57,7 @@ class AuthorType implements ArrayInterface
     public function toArray()
     {
         return [
-            self::ADMIN => __('Created by Admin'),
+            self::ADMIN    => __('Created by Admin'),
             self::CUSTOMER => __('Customer Register')
         ];
     }

@@ -57,6 +57,7 @@ class PortoTopmenu
         if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
             $blogHtml = $topmenu->getLayout()->createBlock(Menu::class)
                 ->setTemplate('Mageplaza_Blog::category/topPortoMenu.phtml')->toHtml();
+
             return $html . $blogHtml;
         }
 

@@ -73,8 +73,8 @@ class Post extends Extended implements TabInterface
         array $data = []
     ) {
         $this->postCollectionFactory = $postCollectionFactory;
-        $this->coreRegistry = $coreRegistry;
-        $this->postFactory = $postFactory;
+        $this->coreRegistry          = $coreRegistry;
+        $this->postFactory           = $postFactory;
 
         parent::__construct($context, $backendHelper, $data);
     }

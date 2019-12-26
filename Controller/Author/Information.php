@@ -116,7 +116,6 @@ class Information extends Action
         }
 
         if (!$this->_helperBlog->isAuthor()) {
-
             $this->coreRegistry->register('mp_author', $this->_helperBlog->getCurrentAuthor());
 
             $page = $this->resultPageFactory->create();

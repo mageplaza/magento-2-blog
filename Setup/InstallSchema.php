@@ -74,8 +74,13 @@ class InstallSchema implements InstallSchemaInterface
                     ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable => false'], 'Post Name')
                     ->addColumn('short_description', Table::TYPE_TEXT, '64k', [], 'Post Short Description')
                     ->addColumn('post_content', Table::TYPE_TEXT, '64k', [], 'Post Content')
-                    ->addColumn('store_ids', Table::TYPE_TEXT, null, ['nullable' => false, 'unsigned' => true,],
-                        'Store Id')
+                    ->addColumn(
+                        'store_ids',
+                        Table::TYPE_TEXT,
+                        null,
+                        ['nullable' => false, 'unsigned' => true,],
+                        'Store Id'
+                    )
                     ->addColumn('image', Table::TYPE_TEXT, 255, [], 'Post Image')
                     ->addColumn('views', Table::TYPE_INTEGER, null, [], 'Post Views')
                     ->addColumn('enabled', Table::TYPE_INTEGER, 1, [], 'Post Enabled')
@@ -105,8 +110,13 @@ class InstallSchema implements InstallSchemaInterface
                     ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable => false'], 'Tag Name')
                     ->addColumn('url_key', Table::TYPE_TEXT, 255, [], 'Tag URL Key')
                     ->addColumn('description', Table::TYPE_TEXT, '64k', [], 'Tag Description')
-                    ->addColumn('store_ids', Table::TYPE_TEXT, null, ['nullable' => false, 'unsigned' => true,],
-                        'Store Id')
+                    ->addColumn(
+                        'store_ids',
+                        Table::TYPE_TEXT,
+                        null,
+                        ['nullable' => false, 'unsigned' => true,],
+                        'Store Id'
+                    )
                     ->addColumn('enabled', Table::TYPE_INTEGER, 1, [], 'Tag Enabled')
                     ->addColumn('updated_at', Table::TYPE_TIMESTAMP, null, [], 'Tag Updated At')
                     ->addColumn('created_at', Table::TYPE_TIMESTAMP, null, [], 'Tag Created At')
@@ -126,8 +136,13 @@ class InstallSchema implements InstallSchemaInterface
                     ], 'Topic ID')
                     ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable => false'], 'Topic Name')
                     ->addColumn('description', Table::TYPE_TEXT, '64k', [], 'Topic Description')
-                    ->addColumn('store_ids', Table::TYPE_TEXT, null, ['nullable' => false, 'unsigned' => true,],
-                        'Store Id')
+                    ->addColumn(
+                        'store_ids',
+                        Table::TYPE_TEXT,
+                        null,
+                        ['nullable' => false, 'unsigned' => true,],
+                        'Store Id'
+                    )
                     ->addColumn('enabled', Table::TYPE_INTEGER, 1, [], 'Topic Enabled')
                     ->addColumn('url_key', Table::TYPE_TEXT, 255, [], 'Topic URL Key')
                     ->addColumn('meta_title', Table::TYPE_TEXT, 255, [], 'Topic Meta Title')
@@ -152,8 +167,13 @@ class InstallSchema implements InstallSchemaInterface
                     ], 'Category ID')
                     ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable => false'], 'Category Name')
                     ->addColumn('description', Table::TYPE_TEXT, '64k', [], 'Category Description')
-                    ->addColumn('store_ids', Table::TYPE_TEXT, null, ['nullable' => false, 'unsigned' => true,],
-                        'Store Id')
+                    ->addColumn(
+                        'store_ids',
+                        Table::TYPE_TEXT,
+                        null,
+                        ['nullable' => false, 'unsigned' => true,],
+                        'Store Id'
+                    )
                     ->addColumn('url_key', Table::TYPE_TEXT, 255, [], 'Category URL Key')
                     ->addColumn('enabled', Table::TYPE_INTEGER, 1, [], 'Category Enabled')
                     ->addColumn('meta_title', Table::TYPE_TEXT, 255, [], 'Category Meta Title')
@@ -232,8 +252,13 @@ class InstallSchema implements InstallSchemaInterface
                         'primary'  => true,
                         'nullable' => false
                     ], 'Post ID')
-                    ->addColumn('position', Table::TYPE_INTEGER, null, ['nullable' => false, 'default' => '0'],
-                        'Position')
+                    ->addColumn(
+                        'position',
+                        Table::TYPE_INTEGER,
+                        null,
+                        ['nullable' => false, 'default' => '0'],
+                        'Position'
+                    )
                     ->addIndex($installer->getIdxName('mageplaza_blog_post_topic', ['post_id']), ['post_id'])
                     ->addIndex($installer->getIdxName('mageplaza_blog_post_topic', ['topic_id']), ['topic_id'])
                     ->addForeignKey(
@@ -244,8 +269,12 @@ class InstallSchema implements InstallSchemaInterface
                         Table::ACTION_CASCADE
                     )
                     ->addForeignKey(
-                        $installer->getFkName('mageplaza_blog_post_topic', 'topic_id', 'mageplaza_blog_topic',
-                            'topic_id'),
+                        $installer->getFkName(
+                            'mageplaza_blog_post_topic',
+                            'topic_id',
+                            'mageplaza_blog_topic',
+                            'topic_id'
+                        ),
                         'topic_id',
                         $installer->getTable('mageplaza_blog_topic'),
                         'topic_id',
@@ -278,8 +307,13 @@ class InstallSchema implements InstallSchemaInterface
                         'primary'  => true,
                         'nullable' => false
                     ], 'Post ID')
-                    ->addColumn('position', Table::TYPE_INTEGER, null, ['nullable' => false, 'default' => '0'],
-                        'Position')
+                    ->addColumn(
+                        'position',
+                        Table::TYPE_INTEGER,
+                        null,
+                        ['nullable' => false, 'default' => '0'],
+                        'Position'
+                    )
                     ->addIndex($installer->getIdxName('mageplaza_blog_post_category', ['category_id']), ['category_id'])
                     ->addIndex($installer->getIdxName('mageplaza_blog_post_category', ['post_id']), ['post_id'])
                     ->addForeignKey(
@@ -295,8 +329,12 @@ class InstallSchema implements InstallSchemaInterface
                         Table::ACTION_CASCADE
                     )
                     ->addForeignKey(
-                        $installer->getFkName('mageplaza_blog_post_category', 'post_id', 'mageplaza_blog_post',
-                            'post_id'),
+                        $installer->getFkName(
+                            'mageplaza_blog_post_category',
+                            'post_id',
+                            'mageplaza_blog_post',
+                            'post_id'
+                        ),
                         'post_id',
                         $installer->getTable('mageplaza_blog_post'),
                         'post_id',

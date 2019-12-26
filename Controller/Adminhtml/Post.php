@@ -61,7 +61,7 @@ abstract class Post extends Action
         Registry $coreRegistry,
         Context $context
     ) {
-        $this->postFactory = $postFactory;
+        $this->postFactory  = $postFactory;
         $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);
@@ -75,7 +75,7 @@ abstract class Post extends Action
      */
     protected function initPost($register = false, $isSave = false)
     {
-        $postId = (int) $this->getRequest()->getParam('id');
+        $postId    = (int) $this->getRequest()->getParam('id');
         $duplicate = $this->getRequest()->getParam('post')['duplicate'] ?? null;
 
         /** @var \Mageplaza\Blog\Model\Post $post */

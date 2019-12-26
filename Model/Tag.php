@@ -111,7 +111,7 @@ class Tag extends AbstractModel
         array $data = []
     ) {
         $this->postCollectionFactory = $postCollectionFactory;
-        $this->tagCollectionFactory = $tagCollectionFactory;
+        $this->tagCollectionFactory  = $tagCollectionFactory;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }

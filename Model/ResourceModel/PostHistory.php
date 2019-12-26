@@ -63,7 +63,7 @@ class PostHistory extends AbstractDb
         if (is_array($object->getData('products_data'))) {
             $data = $object->getData('products_data');
             foreach ($data as $key => $datum) {
-                $data[$key]['position'] = $datum['position']?:'0';
+                $data[$key]['position'] = $datum['position'] ?: '0';
             }
 
             $object->setData('product_ids', Data::jsonEncode($data));
@@ -72,11 +72,12 @@ class PostHistory extends AbstractDb
         return parent::_beforeSave($object);
     }
 
-    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterLoad(AbstractModel $object)
     {
         $object->setData('categories_ids', explode(',', $object->getCategoryIds()));
         $object->setData('tags_ids', explode(',', $object->getTagIds()));
         $object->setData('topics_ids', explode(',', $object->getTopicIds()));
+
         return parent::_afterLoad($object);
     }
 }

@@ -29,7 +29,7 @@ $categorys = $block->getCollections();
     </a>
     <?php if (sizeof($categorys)) :?>
         <ul class="level0 submenu ui-menu ui-widget ui-widget-content ui-corner-all" role="menu" aria-expanded="false" style="display: none; top: 47px; left: -0.15625px;" aria-hidden="true">
-            <?php foreach ($categorys as $category): ?>
+            <?php foreach ($categorys as $category) : ?>
                 <?= /* @noEscape */ $block->getMenuHtml($category)?>
             <?php endforeach; ?>
         </ul>

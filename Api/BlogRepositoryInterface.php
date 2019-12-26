@@ -22,8 +22,22 @@
 namespace Mageplaza\Blog\Api;
 
 use Exception;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Mageplaza\Blog\Api\Data\AuthorInterface;
+use Mageplaza\Blog\Api\Data\CategoryInterface;
+use Mageplaza\Blog\Api\Data\CommentInterface;
+use Mageplaza\Blog\Api\Data\PostInterface;
+use Mageplaza\Blog\Api\Data\SearchResult\CategorySearchResultInterface;
+use Mageplaza\Blog\Api\Data\SearchResult\CommentSearchResultInterface;
+use Mageplaza\Blog\Api\Data\SearchResult\PostSearchResultInterface;
+use Mageplaza\Blog\Api\Data\SearchResult\TagSearchResultInterface;
+use Mageplaza\Blog\Api\Data\SearchResult\TopicSearchResultInterface;
+use Mageplaza\Blog\Api\Data\TagInterface;
+use Mageplaza\Blog\Api\Data\TopicInterface;
 
 /**
  * Class PostInterface
@@ -32,56 +46,56 @@ use Magento\Framework\Exception\NoSuchEntityException;
 interface BlogRepositoryInterface
 {
     /**
-     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     * @return PostInterface[]
      */
     public function getAllPost();
 
     /**
      * @param string $postId
      *
-     * @return \Mageplaza\Blog\Api\Data\PostInterface
+     * @return PostInterface
      */
     public function getPostView($postId);
 
     /**
      * @param string $authorName
      *
-     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     * @return PostInterface[]
      */
     public function getPostViewByAuthorName($authorName);
 
     /**
      * @param string $authorId
      *
-     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     * @return PostInterface[]
      */
     public function getPostViewByAuthorId($authorId);
 
     /**
      * @param string $postId
      *
-     * @return \Mageplaza\Blog\Api\Data\CommentInterface[]
+     * @return CommentInterface[]
      */
     public function getPostComment($postId);
 
     /**
      * Get All Comment
      *
-     * @return \Mageplaza\Blog\Api\Data\CommentInterface[]
+     * @return CommentInterface[]
      */
     public function getAllComment();
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      *
-     * @return \Mageplaza\Blog\Api\Data\SearchResult\CommentSearchResultInterface
+     * @return CommentSearchResultInterface
      */
-    public function getCommentList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+    public function getCommentList(SearchCriteriaInterface $searchCriteria);
 
     /**
      * @param string $commentId
      *
-     * @return \Mageplaza\Blog\Api\Data\CommentInterface
+     * @return CommentInterface
      */
     public function getCommentView($commentId);
 
@@ -95,48 +109,48 @@ interface BlogRepositoryInterface
     /**
      * @param string $tagName
      *
-     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     * @return PostInterface[]
      */
     public function getPostByTagName($tagName);
 
     /**
      * @param string $postId
      *
-     * @return \Magento\Catalog\Api\Data\ProductInterface[]
+     * @return ProductInterface[]
      */
     public function getProductByPost($postId);
 
     /**
      * @param string $postId
      *
-     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return PostInterface[]
+     * @throws LocalizedException
      */
     public function getPostRelated($postId);
 
     /**
      * @param string $postId
-     * @param \Mageplaza\Blog\Api\Data\CommentInterface $commentData
+     * @param CommentInterface $commentData
      *
-     * @return \Mageplaza\Blog\Api\Data\CommentInterface
+     * @return CommentInterface
      * @throws Exception
      */
     public function addCommentInPost($postId, $commentData);
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      *
-     * @return \Mageplaza\Blog\Api\Data\SearchResult\PostSearchResultInterface
+     * @return PostSearchResultInterface
      * @throws NoSuchEntityException
      */
-    public function getPostList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+    public function getPostList(SearchCriteriaInterface $searchCriteria);
 
     /**
      * Create Post
      *
-     * @param \Mageplaza\Blog\Api\Data\PostInterface $post
+     * @param PostInterface $post
      *
-     * @return \Mageplaza\Blog\Api\Data\PostInterface
+     * @return PostInterface
      * @throws Exception
      */
     public function createPost($post);
@@ -152,9 +166,9 @@ interface BlogRepositoryInterface
 
     /**
      * @param string $postId
-     * @param \Mageplaza\Blog\Api\Data\PostInterface $post
+     * @param PostInterface $post
      *
-     * @return \Mageplaza\Blog\Api\Data\PostInterface
+     * @return PostInterface
      * @throws InputException
      * @throws NoSuchEntityException
      * @throws Exception
@@ -164,23 +178,23 @@ interface BlogRepositoryInterface
     /**
      * Get All Tag
      *
-     * @return \Mageplaza\Blog\Api\Data\TagInterface[]
+     * @return TagInterface[]
      */
     public function getAllTag();
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      *
-     * @return \Mageplaza\Blog\Api\Data\SearchResult\TagSearchResultInterface
+     * @return TagSearchResultInterface
      */
-    public function getTagList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+    public function getTagList(SearchCriteriaInterface $searchCriteria);
 
     /**
      * Create Post
      *
-     * @param \Mageplaza\Blog\Api\Data\TagInterface $tag
+     * @param TagInterface $tag
      *
-     * @return \Mageplaza\Blog\Api\Data\TagInterface
+     * @return TagInterface
      * @throws Exception
      */
     public function createTag($tag);
@@ -197,15 +211,15 @@ interface BlogRepositoryInterface
     /**
      * @param string $tagId
      *
-     * @return \Mageplaza\Blog\Api\Data\TagInterface
+     * @return TagInterface
      */
     public function getTagView($tagId);
 
     /**
      * @param string $tagId
-     * @param \Mageplaza\Blog\Api\Data\TagInterface $tag
+     * @param TagInterface $tag
      *
-     * @return \Mageplaza\Blog\Api\Data\TagInterface
+     * @return TagInterface
      * @throws InputException
      * @throws NoSuchEntityException
      * @throws Exception
@@ -215,37 +229,37 @@ interface BlogRepositoryInterface
     /**
      * Get Topic List
      *
-     * @return \Mageplaza\Blog\Api\Data\TopicInterface[]
+     * @return TopicInterface[]
      */
     public function getAllTopic();
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      *
-     * @return \Mageplaza\Blog\Api\Data\SearchResult\TopicSearchResultInterface
+     * @return TopicSearchResultInterface
      */
-    public function getTopicList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+    public function getTopicList(SearchCriteriaInterface $searchCriteria);
 
     /**
      * @param string $topicId
      *
-     * @return \Mageplaza\Blog\Api\Data\TagInterface
+     * @return TagInterface
      */
     public function getTopicView($topicId);
 
     /**
      * @param string $topicId
      *
-     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     * @return PostInterface[]
      */
     public function getPostsByTopic($topicId);
 
     /**
      * Create Topic
      *
-     * @param \Mageplaza\Blog\Api\Data\TopicInterface $topic
+     * @param TopicInterface $topic
      *
-     * @return \Mageplaza\Blog\Api\Data\TopicInterface
+     * @return TopicInterface
      * @throws Exception
      */
     public function createTopic($topic);
@@ -261,9 +275,9 @@ interface BlogRepositoryInterface
 
     /**
      * @param string $topicId
-     * @param \Mageplaza\Blog\Api\Data\TopicInterface $topic
+     * @param TopicInterface $topic
      *
-     * @return \Mageplaza\Blog\Api\Data\TopicInterface
+     * @return TopicInterface
      * @throws InputException
      * @throws NoSuchEntityException
      * @throws Exception
@@ -273,53 +287,53 @@ interface BlogRepositoryInterface
     /**
      * Get All Category
      *
-     * @return \Mageplaza\Blog\Api\Data\CategoryInterface[]
+     * @return CategoryInterface[]
      */
     public function getAllCategory();
 
     /**
      * Get Category List
      *
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      *
-     * @return \Mageplaza\Blog\Api\Data\SearchResult\CategorySearchResultInterface
+     * @return CategorySearchResultInterface
      */
-    public function getCategoryList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+    public function getCategoryList(SearchCriteriaInterface $searchCriteria);
 
     /**
      * @param string $categoryId
      *
-     * @return \Mageplaza\Blog\Api\Data\CategoryInterface
+     * @return CategoryInterface
      */
     public function getCategoryView($categoryId);
 
     /**
      * @param string $categoryId
      *
-     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     * @return PostInterface[]
      */
     public function getPostsByCategoryId($categoryId);
 
     /**
      * @param string $categoryKey
      *
-     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     * @return PostInterface[]
      */
     public function getPostsByCategory($categoryKey);
 
     /**
      * @param string $postId
      *
-     * @return \Mageplaza\Blog\Api\Data\CategoryInterface[]
+     * @return CategoryInterface[]
      */
     public function getCategoriesByPostId($postId);
 
     /**
      * Create Category
      *
-     * @param \Mageplaza\Blog\Api\Data\CategoryInterface $category
+     * @param CategoryInterface $category
      *
-     * @return \Mageplaza\Blog\Api\Data\CategoryInterface
+     * @return CategoryInterface
      * @throws Exception
      */
     public function createCategory($category);
@@ -335,9 +349,9 @@ interface BlogRepositoryInterface
 
     /**
      * @param string $categoryId
-     * @param \Mageplaza\Blog\Api\Data\CategoryInterface $category
+     * @param CategoryInterface $category
      *
-     * @return \Mageplaza\Blog\Api\Data\CategoryInterface
+     * @return CategoryInterface
      * @throws InputException
      * @throws NoSuchEntityException
      * @throws Exception
@@ -347,18 +361,18 @@ interface BlogRepositoryInterface
     /**
      * Get Author List
      *
-     * @return \Mageplaza\Blog\Api\Data\AuthorInterface[]
+     * @return AuthorInterface[]
      */
     public function getAuthorList();
 
     /**
      * Create Author
      *
-     * @param \Mageplaza\Blog\Api\Data\AuthorInterface $author
+     * @param AuthorInterface $author
      *
-     * @return \Mageplaza\Blog\Api\Data\AuthorInterface
+     * @return AuthorInterface
      * @throws NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function createAuthor($author);
 
@@ -373,9 +387,9 @@ interface BlogRepositoryInterface
 
     /**
      * @param string $authorId
-     * @param \Mageplaza\Blog\Api\Data\AuthorInterface $author
+     * @param AuthorInterface $author
      *
-     * @return \Mageplaza\Blog\Api\Data\AuthorInterface
+     * @return AuthorInterface
      * @throws InputException
      * @throws NoSuchEntityException
      * @throws Exception

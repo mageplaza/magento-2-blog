@@ -65,7 +65,7 @@ class Author extends AbstractDb
         $this->dateTime   = $dateTime;
 
         parent::__construct($context);
-        $this->postTable      = $this->getTable('mageplaza_blog_post');
+        $this->postTable = $this->getTable('mageplaza_blog_post');
     }
 
     /**

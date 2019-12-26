@@ -779,7 +779,7 @@ class WordPress extends AbstractImport
                             'user_name'     => $comment['user_name'],
                             'user_email'    => $comment['user_email'],
                             'import_source' => $comment['import_source']
-                        ], $where);
+                            ], $where);
                     $this->_successCount++;
                     $this->_hasData = true;
                 } else {
@@ -822,10 +822,14 @@ class WordPress extends AbstractImport
                 $result          = mysqli_query($connection, $relationshipSql);
 
                 while ($commentParent = mysqli_fetch_assoc($result)) {
-                    $newCommentParentId                     = array_search($commentParent['comment_parent'],
-                        $oldCommentIds);
-                    $newCommentChildId                      = array_search($commentParent['comment_ID'],
-                        $oldCommentIds);
+                    $newCommentParentId                     = array_search(
+                        $commentParent['comment_parent'],
+                        $oldCommentIds
+                    );
+                    $newCommentChildId                      = array_search(
+                        $commentParent['comment_ID'],
+                        $oldCommentIds
+                    );
                     $upgradeChildData[$newCommentChildId]   = $newCommentParentId;
                     $upgradeParentData[$newCommentParentId] = 1;
                 }
@@ -945,7 +949,7 @@ class WordPress extends AbstractImport
                 'store_ids'         => $post['store_ids'],
                 'meta_robots'       => $post['meta_robots'],
                 'import_source'     => $post['import_source']
-            ], $where);
+                ], $where);
         $this->_resourceConnection->getConnection()
             ->delete($this->_resourceConnection
                 ->getTableName('mageplaza_blog_post_category'), $where);
@@ -987,7 +991,7 @@ class WordPress extends AbstractImport
                 'store_ids'     => $tag['store_ids'],
                 'enabled'       => $tag['enabled'],
                 'import_source' => $tag['import_source']
-            ], $where);
+                ], $where);
     }
 
     /**
@@ -1024,6 +1028,6 @@ class WordPress extends AbstractImport
                 'store_ids'     => $category['store_ids'],
                 'enabled'       => $category['enabled'],
                 'import_source' => $category['import_source']
-            ], $where);
+                ], $where);
     }
 }

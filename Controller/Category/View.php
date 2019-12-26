@@ -66,9 +66,9 @@ class View extends Action
         ForwardFactory $resultForwardFactory,
         HelperBlog $helperBlog
     ) {
-        $this->resultPageFactory = $resultPageFactory;
+        $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->helperBlog = $helperBlog;
+        $this->helperBlog           = $helperBlog;
 
         parent::__construct($context);
     }
@@ -79,7 +79,7 @@ class View extends Action
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('id');
+        $id       = $this->getRequest()->getParam('id');
         $category = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_CATEGORY)->create()->load($id);
 
         if (!$this->helperBlog->checkStore($category)) {

@@ -133,11 +133,11 @@ class Manage extends Action
      */
     public function execute()
     {
-        $data   = $this->getRequest()->getParams();
+        $data = $this->getRequest()->getParams();
         $this->_helperBlog->setCustomerContextId();
         $author = $this->_helperBlog->getCurrentAuthor();
         $post   = $this->postFactory->create();
-        
+
         if (!$author) {
             return null;
         }
@@ -169,7 +169,7 @@ class Manage extends Action
 
         $data['store_ids'] = $this->_helperBlog->getCurrentStoreId();
 
-        $data['enabled'] = $this->_helperBlog->getConfigGeneral('auto_post')?1:0;
+        $data['enabled'] = $this->_helperBlog->getConfigGeneral('auto_post') ? 1 : 0;
 
         $data['in_rss'] = '0';
 
@@ -194,6 +194,7 @@ class Manage extends Action
         try {
             $post->save();
             $this->messageManager->addSuccessMessage(__('The post has been saved.'));
+
             return $this->getResponse()->representJson(Data::jsonEncode([
                 'status' => 1
             ]));

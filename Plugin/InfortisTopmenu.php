@@ -58,6 +58,7 @@ class InfortisTopmenu
         if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
             $blogHtml = $topmenu->getLayout()->createBlock(Menu::class)
                 ->setTemplate('Mageplaza_Blog::category/topmenu.phtml')->toHtml();
+
             return $html . $blogHtml;
         }
 

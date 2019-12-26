@@ -36,9 +36,9 @@ class Tag extends Container
      */
     protected function _construct()
     {
-        $this->_controller = 'adminhtml_tag';
-        $this->_blockGroup = 'Mageplaza_Blog';
-        $this->_headerText = __('Tags');
+        $this->_controller     = 'adminhtml_tag';
+        $this->_blockGroup     = 'Mageplaza_Blog';
+        $this->_headerText     = __('Tags');
         $this->_addButtonLabel = __('Create New Tag');
 
         parent::_construct();

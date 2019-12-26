@@ -65,7 +65,7 @@ class InlineEdit extends Action
         JsonFactory $jsonFactory,
         AuthorFactory $postFactory
     ) {
-        $this->jsonFactory = $jsonFactory;
+        $this->jsonFactory   = $jsonFactory;
         $this->authorFactory = $postFactory;
 
         parent::__construct($context);
@@ -77,9 +77,9 @@ class InlineEdit extends Action
     public function execute()
     {
         /** @var Json $resultJson */
-        $resultJson = $this->jsonFactory->create();
-        $error = false;
-        $messages = [];
+        $resultJson  = $this->jsonFactory->create();
+        $error       = false;
+        $messages    = [];
         $authorItems = $this->getRequest()->getParam('items', []);
         if (!(!empty($authorItems) && $this->getRequest()->getParam('isAjax'))) {
             return $resultJson->setData([
@@ -88,7 +88,7 @@ class InlineEdit extends Action
             ]);
         }
 
-        $key = array_keys($authorItems);
+        $key      = array_keys($authorItems);
         $authorId = !empty($key) ? (int) $key[0] : '';
         /** @var Post $post */
         $author = $this->authorFactory->create()->load($authorId);
@@ -98,16 +98,16 @@ class InlineEdit extends Action
             $author->save();
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithPostId($post, $e->getMessage());
-            $error = true;
+            $error      = true;
         } catch (RuntimeException $e) {
             $messages[] = $this->getErrorWithPostId($post, $e->getMessage());
-            $error = true;
+            $error      = true;
         } catch (Exception $e) {
             $messages[] = $this->getErrorWithPostId(
                 $author,
                 __('Something went wrong while saving the Post.')
             );
-            $error = true;
+            $error      = true;
         }
 
         return $resultJson->setData([

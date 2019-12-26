@@ -251,7 +251,7 @@ class Tag extends Multiselect
             $this->_urlBuilder->getUrl(
                 'mui/index/render_handle',
                 [
-                    'handle' => 'mageplaza_blog_tag_create',
+                    'handle'  => 'mageplaza_blog_tag_create',
                     'buttons' => 1
                 ]
             ) . '",

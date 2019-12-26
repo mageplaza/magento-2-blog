@@ -23,8 +23,8 @@ namespace Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History;
 
 use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\Text;
-use Mageplaza\Blog\Helper\Data;
 use Magento\Framework\DataObject;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Action

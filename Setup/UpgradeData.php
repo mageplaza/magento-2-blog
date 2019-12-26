@@ -25,8 +25,8 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\AuthorFactory;
+use Mageplaza\Blog\Model\CommentFactory;
 
 /**
  * Class UpgradeData
@@ -63,9 +63,9 @@ class UpgradeData implements UpgradeDataInterface
         CommentFactory $commentFactory,
         AuthorFactory $authorFactory
     ) {
-        $this->comment    = $commentFactory;
-        $this->author     = $authorFactory;
-        $this->date       = $date;
+        $this->comment = $commentFactory;
+        $this->author  = $authorFactory;
+        $this->date    = $date;
     }
 
     /**

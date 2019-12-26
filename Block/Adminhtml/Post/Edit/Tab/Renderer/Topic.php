@@ -251,8 +251,9 @@ class Topic extends Multiselect
             $this->_urlBuilder->getUrl(
                 'mui/index/render_handle',
                 [
-                    'handle' => 'mageplaza_blog_topic_create',
-                    'buttons' => 1]
+                    'handle'  => 'mageplaza_blog_topic_create',
+                    'buttons' => 1
+                ]
             ) . '",
                                         "autoRender": false,
                                         "ns": "blog_new_topic_form",

@@ -139,16 +139,16 @@ class Post extends Generic implements TabInterface
         AuthorStatus $status,
         array $data = []
     ) {
-        $this->wysiwygConfig = $wysiwygConfig;
-        $this->booleanOptions = $booleanOptions;
+        $this->wysiwygConfig     = $wysiwygConfig;
+        $this->booleanOptions    = $booleanOptions;
         $this->metaRobotsOptions = $metaRobotsOptions;
-        $this->systemStore = $systemStore;
-        $this->authSession = $authSession;
-        $this->_date = $dateTime;
-        $this->_layoutOptions = $layoutOption;
-        $this->imageHelper = $imageHelper;
-        $this->_author = $author;
-        $this->_status = $status;
+        $this->systemStore       = $systemStore;
+        $this->authSession       = $authSession;
+        $this->_date             = $dateTime;
+        $this->_layoutOptions    = $layoutOption;
+        $this->imageHelper       = $imageHelper;
+        $this->_author           = $author;
+        $this->_status           = $status;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -175,7 +175,7 @@ class Post extends Generic implements TabInterface
 
         if ($this->_request->getParam('duplicate')) {
             $fieldset->addField('duplicate', 'hidden', [
-                'name'     => 'duplicate',
+                'name'  => 'duplicate',
                 'value' => 1
             ]);
         }
@@ -186,11 +186,11 @@ class Post extends Generic implements TabInterface
             'required' => true
         ]);
         $fieldset->addField('author_id', 'select', [
-            'name' => 'author_id',
-            'label' => __('Author'),
-            'title' => __('Author'),
+            'name'     => 'author_id',
+            'label'    => __('Author'),
+            'title'    => __('Author'),
             'required' => true,
-            'values' => $this->_author->toOptionArray()
+            'values'   => $this->_author->toOptionArray()
         ]);
         $fieldset->addField('enabled', 'select', [
             'name'   => 'enabled',
@@ -288,8 +288,8 @@ class Post extends Generic implements TabInterface
             'publish_date',
             'date',
             [
-                'name' => 'publish_date',
-                'label' => __('Publish Date'),
+                'name'        => 'publish_date',
+                'label'       => __('Publish Date'),
                 'title'       => __('Publish Date'),
                 'date_format' => 'yyyy-MM-dd',
                 'timezone'    => false,

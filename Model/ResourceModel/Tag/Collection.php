@@ -24,8 +24,8 @@ namespace Mageplaza\Blog\Model\ResourceModel\Tag;
 use Magento\Framework\DB\Select;
 use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
 use Mageplaza\Blog\Api\Data\SearchResult\TagSearchResultInterface;
-use Zend_Db_Select;
 use Mageplaza\Blog\Model\Tag;
+use Zend_Db_Select;
 
 /**
  * Class Collection

@@ -109,7 +109,7 @@ class Author extends AbstractModel
     public function hasPost()
     {
         try {
-            return (bool)count($this->_getResource()->getPostIds($this));
+            return (bool) count($this->_getResource()->getPostIds($this));
         } catch (LocalizedException $exception) {
             return false;
         }

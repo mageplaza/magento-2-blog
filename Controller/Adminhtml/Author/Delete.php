@@ -71,7 +71,7 @@ class Delete extends Author
             $postCollectionSize = $post->getCollection()->addFieldToFilter('author_id', ['eq' => $id])->getSize();
             if ($postCollectionSize > 0) {
                 $this->messageManager->addErrorMessage(__('You can not delete this author.'
-                    .' This is the author of %1 post(s)', $postCollectionSize));
+                    . ' This is the author of %1 post(s)', $postCollectionSize));
                 $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $id]);
 
                 return $resultRedirect;

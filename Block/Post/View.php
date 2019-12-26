@@ -181,8 +181,8 @@ class View extends \Mageplaza\Blog\Block\Listpost
     public function isLiked($cmtId)
     {
         if ($this->helperData->isLogin()) {
-            $customerId   = $this->helperData->getCustomerIdByContext();
-            $likes        = $this->likeFactory->create()->getCollection();
+            $customerId = $this->helperData->getCustomerIdByContext();
+            $likes      = $this->likeFactory->create()->getCollection();
             foreach ($likes as $like) {
                 if ($like->getEntityId() == $customerId && $like->getCommentId() == $cmtId) {
                     return true;

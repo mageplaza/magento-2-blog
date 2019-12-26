@@ -38,7 +38,6 @@ class Index extends Action
      */
     public function execute()
     {
-
         $resultRedirect = $this->resultRedirectFactory->create();
 
         $resultRedirect->setPath('mageplaza_blog/post/');

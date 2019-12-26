@@ -80,8 +80,8 @@ class Form extends AbstractCategory
     ) {
         parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
 
-        $this->jsonEncoder = $jsonEncoder;
-        $this->_categoryTree = $blogCategoryTree;
+        $this->jsonEncoder      = $jsonEncoder;
+        $this->_categoryTree    = $blogCategoryTree;
         $this->_categoryFactory = $blogCategoryFactory;
     }
 
@@ -91,7 +91,7 @@ class Form extends AbstractCategory
      */
     protected function _prepareLayout()
     {
-        $category = $this->getCategory();
+        $category   = $this->getCategory();
         $categoryId = (int) $category->getId();
         // 0 when we create Blog Category, otherwise some value for editing Blog Category
 
@@ -172,7 +172,7 @@ class Form extends AbstractCategory
     {
         /** @var \Mageplaza\Blog\Model\Category $category */
         $category = $this->_coreRegistry->registry('category');
-        $params = ['_current' => false, '_query' => false];
+        $params   = ['_current' => false, '_query' => false];
         if ($category->getDuplicate()) {
             $params['duplicate'] = true;
         }
@@ -313,7 +313,7 @@ class Form extends AbstractCategory
     public function addButton($buttonId, array $data)
     {
         $childBlockId = $buttonId . '_button';
-        $button = $this->getButtonChildBlock($childBlockId);
+        $button       = $this->getButtonChildBlock($childBlockId);
         $button->setData($data);
         $block = $this->getLayout()->getBlock('page.actions.toolbar');
         if ($block) {

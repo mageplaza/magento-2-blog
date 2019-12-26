@@ -26,14 +26,14 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
+use Magento\Framework\Registry;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Action;
-use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Store;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Author;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Categories;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Store;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Tags;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Topics;
-use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Author;
 use Mageplaza\Blog\Model\ResourceModel\PostHistory\Collection;
-use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\Tag;
 
 /**

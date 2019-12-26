@@ -27,10 +27,10 @@ use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Mageplaza\Blog\Model\Tag;
 
 /**
@@ -66,7 +66,7 @@ class Product extends Extended implements TabInterface
         array $data = []
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->coreRegistry = $coreRegistry;
+        $this->coreRegistry             = $coreRegistry;
 
         parent::__construct($context, $backendHelper, $data);
     }

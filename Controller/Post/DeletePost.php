@@ -63,8 +63,8 @@ class DeletePost extends Action
         PostFactory $postFactory,
         Data $helperData
     ) {
-        $this->_helperBlog          = $helperData;
-        $this->postFactory          = $postFactory;
+        $this->_helperBlog = $helperData;
+        $this->postFactory = $postFactory;
 
         parent::__construct($context);
     }
@@ -74,7 +74,7 @@ class DeletePost extends Action
      */
     public function execute()
     {
-        $postId   = $this->getRequest()->getParam('post_id');
+        $postId = $this->getRequest()->getParam('post_id');
         $this->_helperBlog->setCustomerContextId();
         $author = $this->_helperBlog->getCurrentAuthor();
         $post   = $this->postFactory->create();
@@ -88,7 +88,7 @@ class DeletePost extends Action
             $this->messageManager->addSuccessMessage(__('The post has been deleted.'));
 
             return $this->getResponse()->representJson(Data::jsonEncode([
-                'status' => 1,
+                'status'  => 1,
                 'post_id' => $postId
             ]));
         } catch (Exception $exception) {

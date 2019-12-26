@@ -24,8 +24,8 @@ namespace Mageplaza\Blog\Model\ResourceModel\Category;
 use Magento\Framework\DB\Select;
 use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
 use Mageplaza\Blog\Api\Data\SearchResult\CategorySearchResultInterface;
-use Zend_Db_Select;
 use Mageplaza\Blog\Model\Category;
+use Zend_Db_Select;
 
 /**
  * Class Collection

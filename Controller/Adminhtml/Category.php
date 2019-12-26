@@ -62,7 +62,7 @@ abstract class Category extends Action
         CategoryFactory $categoryFactory
     ) {
         $this->categoryFactory = $categoryFactory;
-        $this->coreRegistry = $coreRegistry;
+        $this->coreRegistry    = $coreRegistry;
 
         parent::__construct($context);
     }

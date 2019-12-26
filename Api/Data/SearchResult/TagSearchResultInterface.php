@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Api\Data\SearchResult;
 
 use Magento\Framework\Api\SearchResultsInterface;
+use Mageplaza\Blog\Api\Data\TagInterface;
 
 /**
  * Interface TagSearchResultInterface
@@ -30,12 +31,13 @@ use Magento\Framework\Api\SearchResultsInterface;
 interface TagSearchResultInterface extends SearchResultsInterface
 {
     /**
-     * @return \Mageplaza\Blog\Api\Data\TagInterface[]
+     * @return TagInterface[]
      */
     public function getItems();
 
     /**
-     * @param \Mageplaza\Blog\Api\Data\TagInterface[] $items
+     * @param TagInterface[] $items
+     *
      * @return $this
      */
     public function setItems(array $items = null);

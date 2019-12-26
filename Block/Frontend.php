@@ -33,17 +33,17 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category as CategoryOptions;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag as TagOptions;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic as TopicOptions;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\CommentFactory;
-use Mageplaza\Blog\Model\LikeFactory;
-use Mageplaza\Blog\Model\PostLikeFactory;
-use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category as CategoryOptions;
-use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic as TopicOptions;
-use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag as TagOptions;
-use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\Config\Source\AuthorStatus;
+use Mageplaza\Blog\Model\LikeFactory;
+use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\PostLikeFactory;
 
 /**
  * Class Frontend
@@ -276,8 +276,10 @@ class Frontend extends Template
         $likeCollection = $this->postLikeFactory->create()->getCollection();
         $couldLike      = $likeCollection->addFieldToFilter('post_id', $post->getId())
             ->addFieldToFilter('action', '1')->count();
-        $html           = __('<i class="mp-blog-icon mp-blog-calendar-times"></i> %1',
-            $this->getDateFormat($post->getPublishDate()));
+        $html           = __(
+            '<i class="mp-blog-icon mp-blog-calendar-times"></i> %1',
+            $this->getDateFormat($post->getPublishDate())
+        );
 
         if ($categoryPost = $this->getPostCategoryHtml($post)) {
             $html .= __('| Posted in %1', $categoryPost);
@@ -291,13 +293,17 @@ class Frontend extends Template
         }
 
         if ($this->getCommentinPost($post)) {
-            $html .= __('| <i class="mp-blog-icon mp-blog-comments" aria-hidden="true"></i> %1',
-                $this->getCommentinPost($post));
+            $html .= __(
+                '| <i class="mp-blog-icon mp-blog-comments" aria-hidden="true"></i> %1',
+                $this->getCommentinPost($post)
+            );
         }
 
         if ($post->getViewTraffic()) {
-            $html .= __('| <i class="mp-blog-icon mp-blog-traffic" aria-hidden="true"></i> %1',
-                $post->getViewTraffic());
+            $html .= __(
+                '| <i class="mp-blog-icon mp-blog-traffic" aria-hidden="true"></i> %1',
+                $post->getViewTraffic()
+            );
         }
 
         if ($couldLike > 0) {
@@ -336,9 +342,9 @@ class Frontend extends Template
         $categoryHtml = [];
         foreach ($categories as $_cat) {
             $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl(
-                    $_cat,
-                    HelperData::TYPE_CATEGORY
-                ) . '">' . $_cat->getName() . '</a>';
+                $_cat,
+                HelperData::TYPE_CATEGORY
+            ) . '">' . $_cat->getName() . '</a>';
         }
 
         return implode(', ', $categoryHtml);

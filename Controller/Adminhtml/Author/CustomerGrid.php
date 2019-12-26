@@ -56,7 +56,7 @@ class CustomerGrid extends Action
         parent::__construct($context);
 
         $this->resultRawFactory = $resultRawFactory;
-        $this->layoutFactory = $layoutFactory;
+        $this->layoutFactory    = $layoutFactory;
     }
 
     /**

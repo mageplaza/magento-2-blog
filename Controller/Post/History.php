@@ -116,7 +116,6 @@ class History extends Action
         }
 
         if (!$this->_helperBlog->isAuthor()) {
-
             $author = $this->_helperBlog->getCurrentAuthor();
 
             $this->coreRegistry->register('mp_author', $author);

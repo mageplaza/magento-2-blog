@@ -58,8 +58,8 @@ class AuthorStatus implements ArrayInterface
     public function toArray()
     {
         return [
-            self::PENDING => __('Pending'),
-            self::APPROVED => __('Approved'),
+            self::PENDING     => __('Pending'),
+            self::APPROVED    => __('Approved'),
             self::DISAPPROVED => __('Disapproved')
         ];
     }

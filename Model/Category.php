@@ -142,8 +142,8 @@ class Category extends AbstractModel
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->categoryFactory = $categoryFactory;
-        $this->postCollectionFactory = $postCollectionFactory;
+        $this->categoryFactory           = $categoryFactory;
+        $this->postCollectionFactory     = $postCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -176,9 +176,9 @@ class Category extends AbstractModel
      */
     public function getDefaultValues()
     {
-        $values = [];
+        $values              = [];
         $values['store_ids'] = '1';
-        $values['enabled'] = '1';
+        $values['enabled']   = '1';
 
         return $values;
     }

@@ -34,9 +34,9 @@ use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\System\Store;
 use Mageplaza\Blog\Block\Adminhtml\Renderer\Image;
+use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Image as ImageHelper;
 use Mageplaza\Blog\Model\Config\Source\AuthorStatus;
-use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Author

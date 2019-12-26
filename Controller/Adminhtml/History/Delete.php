@@ -39,12 +39,12 @@ class Delete extends History
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $postId = null;
+        $postId         = null;
         if ($id = $this->getRequest()->getParam('id')) {
             try {
                 $history = $this->postHistoryFactory->create()
                     ->load($id);
-                $postId = $history->getPostId();
+                $postId  = $history->getPostId();
                 $history->delete();
 
                 $this->messageManager->addSuccessMessage(__('The Post History has been deleted.'));

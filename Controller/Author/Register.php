@@ -116,7 +116,6 @@ class Register extends Action
         }
 
         if ($data) {
-
             if ($this->_helperBlog->isAuthor()) {
                 $data   = $this->prepareData($data);
                 $author = $this->author->create()->addData($data);

@@ -28,15 +28,13 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
+use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\Post as PostModel;
 use Mageplaza\Blog\Model\PostFactory;
-use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\PostHistoryFactory;
 use RuntimeException;
 
@@ -175,7 +173,10 @@ class Save extends Post
                     $data['is_changed_product_list']
                 );
                 if ($isSave = $this->checkHistory($data)) {
-                    $this->messageManager->addErrorMessage(__('Record Id %1 like the one you want to save.', $isSave->getId()));
+                    $this->messageManager->addErrorMessage(__(
+                        'Record Id %1 like the one you want to save.',
+                        $isSave->getId()
+                    ));
                 } else {
                     if ($historyCount >= $limitHistory) {
                         $history->removeFirstHistory($post->getPostId());
@@ -186,7 +187,10 @@ class Save extends Post
             } catch (RuntimeException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (Exception $e) {
-                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Post History.'));
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    __('Something went wrong while saving the Post History.')
+                );
             }
         }
     }

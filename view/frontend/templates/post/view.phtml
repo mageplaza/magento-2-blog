@@ -91,7 +91,7 @@ $color = $helper->getBlogConfig('general/font_color');
                 <i class="fa fa-thumbs-up" aria-hidden="true"></i>
                 <span><?= /* @noEscape */ __('LIKE')?></span>
                     <span class="mp-blog-view">
-                    <?php if (!empty($block->getPostLike($_post->getId(), '1'))):?>
+                    <?php if (!empty($block->getPostLike($_post->getId(), '1'))) :?>
                         (<?= $block->escapeHtml($block->getPostLike($_post->getId(), '1'))?>)
                     <?php endif; ?>
                     </span>
@@ -100,7 +100,7 @@ $color = $helper->getBlogConfig('general/font_color');
                 <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                 <span><?= /* @noEscape */ __('DISLIKE')?></span>
                     <span class="mp-blog-view">
-                    <?php if (!empty($block->getPostLike($_post->getId(), '0'))):?>
+                    <?php if (!empty($block->getPostLike($_post->getId(), '0'))) :?>
                         (<?= $block->escapeHtml($block->getPostLike($_post->getId(), '0'))?>)
                     <?php endif; ?>
                     </span>

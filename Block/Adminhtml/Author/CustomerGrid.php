@@ -69,7 +69,7 @@ class CustomerGrid extends Extended
         array $data = []
     ) {
         $this->_customerCollectionFactory = $customerFactory;
-        $this->customerGroup    = $customerGroup;
+        $this->customerGroup              = $customerGroup;
 
         parent::__construct($context, $backendHelper, $data);
     }

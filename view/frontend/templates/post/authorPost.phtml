@@ -22,11 +22,11 @@
 /** @var \Mageplaza\Blog\Block\Post\AuthorPost $block */
 ?>
 
-<?php if(!$block->getAuthorStatus()) : ?>
+<?php if (!$block->getAuthorStatus()) : ?>
     <div>
         <h3><?= /* @noEscape */ __('Your account must be licensed in order to perform the Post creation and management function') ?></h3>
     </div>
-<?php else: ?>
+<?php else : ?>
 <div class="mp-blog-new-post">
     <button type="button" class="action primary" title="<?= /* @noEscape */
     __('Add New Post') ?>"><?= /* @noEscape */
@@ -81,7 +81,7 @@
                                      align="middle"
                                      alt="<?= $block->escapeHtml(__('Duplicate')); ?>"
                                      title="<?= /* @noEscape */
-                                     __('Duplicate') ?>"
+                                        __('Duplicate') ?>"
                                 />
                             </div>
                             <div class="mpblog-post-edit">
@@ -89,7 +89,7 @@
                                      align="middle"
                                      alt="<?= $block->escapeHtml(__('Edit')); ?>"
                                      title="<?= /* @noEscape */
-                                     __('Edit') ?>"
+                                        __('Edit') ?>"
                                 />
                             </div>
                             <div class="mpblog-post-delete">
@@ -97,7 +97,7 @@
                                      align="middle"
                                      alt="<?= $block->escapeHtml(__('Delete')) ?>"
                                      title="<?= /* @noEscape */
-                                     __('Delete') ?>"
+                                        __('Delete') ?>"
                                 />
                             </div>
                         </div>
