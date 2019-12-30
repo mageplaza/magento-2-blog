@@ -321,8 +321,8 @@
                     column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id"
                     onDelete="CASCADE"/>
         <index referenceId="mageplaza_blog_post_topic" indexType="btree">
-            <column name="post_id"/>
             <column name="topic_id"/>
+            <column name="post_id"/>
         </index>
     </table>
     <table name="mageplaza_blog_post_product" resource="default" engine="innodb"
