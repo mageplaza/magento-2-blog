@@ -1,0 +1,88 @@
+{
+    "mageplaza_blog_post": {
+        "constraint": {
+            "PRIMARY": true,
+            "Mageplaza_Blog_Post_Blog_Author": true
+        }
+    },
+    "mageplaza_blog_post_history": {
+        "constraint": {
+            "PRIMARY": true,
+            "Mageplaza_Blog_Post_History_Blog_Post": true,
+            "Mageplaza_Blog_Post_History_Blog_Author": true
+        }
+    },
+    "mageplaza_blog_author": {
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "mageplaza_blog_tag": {
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "mageplaza_blog_topic": {
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "mageplaza_blog_category": {
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "mageplaza_blog_comment": {
+        "constraint": {
+            "PRIMARY": true,
+            "Mageplaza_Blog_Comment_Blog_Post": true
+        }
+    },
+    "mageplaza_blog_comment_like": {
+        "constraint": {
+            "PRIMARY": true,
+            "Mageplaza_Blog_Comment_Like_Blog_Comment": true,
+            "Mageplaza_Blog_Comment_Like_Customer_Entity": true
+        }
+    },
+    "mageplaza_blog_post_category": {
+        "constraint": {
+            "PRIMARY": true,
+            "Mageplaza_Blog_Post_Category_Blog_Category": true,
+            "Mageplaza_Blog_Post_Category_Blog_Post": true
+        }
+    },
+    "mageplaza_blog_post_tag": {
+        "constraint": {
+            "PRIMARY": true,
+            "Mageplaza_Blog_Post_Tag_Blog_Tag": true,
+            "Mageplaza_Blog_Post_Tag_Blog_Post": true
+        }
+    },
+    "mageplaza_blog_post_topic": {
+        "constraint": {
+            "PRIMARY": true,
+            "Mageplaza_Blog_Post_Tag_Blog_Tag": true,
+            "Mageplaza_Blog_Post_Tag_Blog_Post": true
+        }
+    },
+    "mageplaza_blog_post_product": {
+        "constraint": {
+            "PRIMARY": true,
+            "Mageplaza_Blog_Post_Topic_Blog_Topic": true,
+            "Mageplaza_Blog_Post_Topic_Blog_Post": true
+        }
+    },
+    "mageplaza_blog_post_traffic": {
+        "constraint": {
+            "PRIMARY": true,
+            "Mageplaza_Blog_Post_Traffic_Blog_Post": true
+        }
+    },
+    "mageplaza_blog_post_like": {
+        "constraint": {
+            "PRIMARY": true,
+            "Mageplaza_Blog_Post_Like_Blog_Post": true
+        }
+    }
+}
