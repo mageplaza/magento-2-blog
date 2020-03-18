@@ -131,9 +131,6 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="user_id"/>
         </constraint>
-        <index referenceId="mageplaza_blog_author" indexType="btree">
-            <column name="user_id"/>
-        </index>
     </table>
     <table name="mageplaza_blog_tag" resource="default" engine="innodb" comment="Mageplaza Blog Tag Table">
         <column xsi:type="int" name="tag_id" padding="10" unsigned="true" nullable="false" identity="true"
