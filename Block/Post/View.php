@@ -73,6 +73,16 @@ class View extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
+     * @param $value
+     *
+     * @return string
+     */
+    public function getDecrypt($value)
+    {
+        return $this->enc->decrypt($value);
+    }
+
+    /**
      * @return mixed
      */
     protected function getBlogObject()

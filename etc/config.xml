@@ -37,10 +37,16 @@
                 <display_author>1</display_author>
                 <display_sitemap>1</display_sitemap>
                 <date_type>F j, Y</date_type>
+                <related_post>5</related_post>
+                <related_mode>1</related_mode>
+                <display_style>1</display_style>
                 <font_color>#1abc9c</font_color>
                 <pagination>10,20,50</pagination>
-                <related_post>5</related_post>
+                <customer_approve>0</customer_approve>
+                <auto_approve>0</auto_approve>
+                <auto_post>0</auto_post>
                 <history_limit>5</history_limit>
+                <is_review>1</is_review>
                 <resize_image>
                     <resize_width>900</resize_width>
                     <resize_height>500</resize_height>
