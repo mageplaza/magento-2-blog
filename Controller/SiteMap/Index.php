@@ -68,6 +68,7 @@ class Index extends Action
     {
         $page = $this->resultPageFactory->create();
         $page->getConfig()->setPageLayout($this->_helperBlog->getSidebarLayout());
+        $page->getConfig()->getTitle()->set('Mageplaza Site map');
 
         return $page;
     }
