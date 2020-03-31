@@ -94,6 +94,7 @@ class Post extends Extended implements TabInterface
         $this->setId('post_grid');
         $this->setDefaultSort('position');
         $this->setDefaultDir('ASC');
+        $this->setSaveParametersInSession(false);
         $this->setUseAjax(true);
 
         if ($this->getTag()->getId()) {
@@ -154,7 +155,7 @@ class Post extends Extended implements TabInterface
             'type'           => 'number',
             'validate_class' => 'validate-number',
             'index'          => 'position',
-            'editable'       => true,
+            'editable'       => true
         ]);
 
         return $this;
