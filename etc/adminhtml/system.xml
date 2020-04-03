@@ -45,7 +45,6 @@
                 </field>
                 <field id="name" translate="label comment" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Blog Name</label>
-                    <validate>validate-data</validate>
                 </field>
                 <field id="url_prefix" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Route Name</label>

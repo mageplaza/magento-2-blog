@@ -125,7 +125,9 @@ define([
                             + ' value="1" class="checkbox" id="post_image_delete">'
                             + '<label for="post_image_delete"> Delete Image</label>'
                             + '</span>';
-                        field.parent().append(deleteEL);
+                        if (!field.parent().find('.delete-image').lenth) {
+                            field.parent().append(deleteEL);
+                        }
                     } else if (field.is('[type="datetime-local"]')) {
                         date = moment(value).format("YYYY-MM-DDTkk:mm");
                         field.val(date);

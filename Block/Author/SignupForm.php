@@ -37,6 +37,9 @@ class SignupForm extends Frontend
         return $this->helperData->getUrlSuffix();
     }
 
+    /**
+     * @return array
+     */
     public function getAuthor()
     {
         $author = $this->coreRegistry->registry('mp_author');
