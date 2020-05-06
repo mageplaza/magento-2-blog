@@ -228,6 +228,7 @@ Import,Import
 "The ""%1"" Author doesn't exist.","The ""%1"" Author doesn't exist."
 "Sorry, but we can't move the Blog Category because we can't find the new parent Blog Category you selected.","Sorry, but we can't move the Blog Category because we can't find the new parent Blog Category you selected."
 "We can't perform this Blog Category move operation because the parent Blog Category matches the child Blog Category.","We can't perform this Blog Category move operation because the parent Blog Category matches the child Blog Category."
+"Pagination value must be a positive integer.","Pagination value must be a positive integer."
 Pending,Pending
 Approved,Approved
 Disapproved,Disapproved

@@ -150,7 +150,7 @@ class Manage extends Action
             }
         }
 
-        if (isset($data['image']['delete'])) {
+        if (isset($data['image']['delete']) || (isset($data['image']) && $data['image'] === 'null')) {
             $data['image'] = '';
         }
 

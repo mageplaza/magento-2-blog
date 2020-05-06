@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel;
 
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
@@ -62,22 +63,30 @@ class Topic extends AbstractDb
     public $helperData;
 
     /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
      * Topic constructor.
      *
      * @param Context $context
      * @param DateTime $date
      * @param ManagerInterface $eventManager
+     * @param RequestInterface $request
      * @param Data $helperData
      */
     public function __construct(
         Context $context,
         DateTime $date,
         ManagerInterface $eventManager,
+        RequestInterface $request,
         Data $helperData
     ) {
         $this->helperData   = $helperData;
         $this->date         = $date;
         $this->eventManager = $eventManager;
+        $this->request      = $request;
 
         parent::__construct($context);
 
@@ -189,7 +198,7 @@ class Topic extends AbstractDb
             $update = $_update;
         }
         $adapter = $this->getConnection();
-        if ($posts === null) {
+        if ($posts === null && $this->request->getActionName() === 'save') {
             foreach (array_keys($oldPosts) as $value) {
                 $condition = ['post_id =?' => (int) $value, 'topic_id=?' => (int) $id];
                 $adapter->delete($this->topicPostTable, $condition);

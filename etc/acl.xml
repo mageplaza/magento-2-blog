@@ -25,7 +25,7 @@
         <resources>
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::content">
-                    <resource id="Mageplaza_Blog::blog" title="Better Blog" sortOrder="25">
+                    <resource id="Mageplaza_Blog::blog" title="Mageplaza Better Blog" sortOrder="25">
                         <resource id="Mageplaza_Blog::post" title="Posts" sortOrder="10"/>
                         <resource id="Mageplaza_Blog::tag" title="Tags" sortOrder="20"/>
                         <resource id="Mageplaza_Blog::topic" title="Topics" sortOrder="30"/>

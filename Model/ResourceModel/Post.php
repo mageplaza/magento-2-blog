@@ -441,6 +441,7 @@ class Post extends AbstractDb
         $id          = $post->getId();
         $products    = $post->getProductsData();
         $oldProducts = $post->getProductsPosition();
+
         if (is_array($products)) {
             $insert  = array_diff_key($products, $oldProducts);
             $delete  = array_diff_key($oldProducts, $products);
@@ -454,7 +455,7 @@ class Post extends AbstractDb
             $update = $_update;
         }
         $adapter = $this->getConnection();
-        if ($products === null) {
+        if ($products === null && $this->_request->getActionName() === 'save') {
             foreach (array_keys($oldProducts) as $value) {
                 $condition = ['entity_id =?' => (int) $value, 'post_id=?' => (int) $id];
                 $adapter->delete($this->postProductTable, $condition);

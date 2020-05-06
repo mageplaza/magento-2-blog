@@ -25,6 +25,7 @@ use Exception;
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Url;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
@@ -143,6 +144,11 @@ class Frontend extends Template
     protected $themeProvider;
 
     /**
+     * @var EncryptorInterface
+     */
+    public $enc;
+
+    /**
      * Frontend constructor.
      *
      * @param Context $context
@@ -161,6 +167,7 @@ class Frontend extends Template
      * @param TopicOptions $topic
      * @param TagOptions $tag
      * @param ThemeProviderInterface $themeProvider
+     * @param EncryptorInterface $enc
      * @param AuthorStatus $authorStatus
      * @param array $data
      */
@@ -181,6 +188,7 @@ class Frontend extends Template
         TopicOptions $topic,
         TagOptions $tag,
         ThemeProviderInterface $themeProvider,
+        EncryptorInterface $enc,
         AuthorStatus $authorStatus,
         array $data = []
     ) {
@@ -201,6 +209,7 @@ class Frontend extends Template
         $this->authorStatusType   = $authorStatus;
         $this->themeProvider      = $themeProvider;
         $this->store              = $context->getStoreManager();
+        $this->enc                = $enc;
 
         parent::__construct($context, $data);
     }
@@ -229,7 +238,7 @@ class Frontend extends Template
      */
     public function getPageFilter($content)
     {
-        return $this->filterProvider->getPageFilter()->filter($content);
+        return $this->filterProvider->getPageFilter()->filter((string) $content);
     }
 
     /**

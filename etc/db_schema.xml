@@ -56,10 +56,6 @@
         <constraint xsi:type="foreign" referenceId="Mageplaza_Blog_Post_Blog_Author" table="mageplaza_blog_post"
                     column="author_id" referenceTable="mageplaza_blog_author" referenceColumn="user_id"
                     onDelete="CASCADE"/>
-        <index referenceId="mageplaza_blog_post" indexType="btree">
-            <column name="post_id"/>
-            <column name="store_ids"/>
-        </index>
     </table>
     <table name="mageplaza_blog_post_history" resource="default" engine="innodb" comment="Mageplaza Blog Post History Table">
         <column xsi:type="int" name="history_id" padding="10" unsigned="true" nullable="false" identity="true"
@@ -103,11 +99,6 @@
         <constraint xsi:type="foreign" referenceId="Mageplaza_Blog_Post_History_Blog_Author" table="mageplaza_blog_post_history"
                     column="author_id" referenceTable="mageplaza_blog_author" referenceColumn="user_id"
                     onDelete="CASCADE"/>
-        <index referenceId="mageplaza_blog_post" indexType="btree">
-            <column name="history_id"/>
-            <column name="post_id"/>
-            <column name="store_ids"/>
-        </index>
     </table>
     <table name="mageplaza_blog_author" resource="default" engine="innodb" comment="Mageplaza Blog Author Table">
         <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="false" identity="true"
@@ -131,9 +122,6 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="user_id"/>
         </constraint>
-        <index referenceId="mageplaza_blog_author" indexType="btree">
-            <column name="user_id"/>
-        </index>
     </table>
     <table name="mageplaza_blog_tag" resource="default" engine="innodb" comment="Mageplaza Blog Tag Table">
         <column xsi:type="int" name="tag_id" padding="10" unsigned="true" nullable="false" identity="true"
@@ -155,10 +143,6 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="tag_id"/>
         </constraint>
-        <index referenceId="mageplaza_blog_tag" indexType="btree">
-            <column name="tag_id"/>
-            <column name="store_ids"/>
-        </index>
     </table>
     <table name="mageplaza_blog_topic" resource="default" engine="innodb" comment="Mageplaza Blog Topic Table">
         <column xsi:type="int" name="topic_id" padding="10" unsigned="true" nullable="false" identity="true"
@@ -180,10 +164,6 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="topic_id"/>
         </constraint>
-        <index referenceId="mageplaza_blog_topic" indexType="btree">
-            <column name="topic_id"/>
-            <column name="store_ids"/>
-        </index>
     </table>
     <table name="mageplaza_blog_category" resource="default" engine="innodb" comment="Mageplaza Blog Category Table">
         <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="false" identity="true"
@@ -210,10 +190,6 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="category_id"/>
         </constraint>
-        <index referenceId="mageplaza_blog_category" indexType="btree">
-            <column name="category_id"/>
-            <column name="store_ids"/>
-        </index>
     </table>
     <table name="mageplaza_blog_comment" resource="default" engine="innodb" comment="Mageplaza Blog Comment Table">
         <column xsi:type="int" name="comment_id" padding="10" unsigned="true" nullable="false" identity="true"
@@ -236,10 +212,6 @@
         <constraint xsi:type="foreign" referenceId="Mageplaza_Blog_Comment_Blog_Post" table="mageplaza_blog_comment"
                     column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id"
                     onDelete="CASCADE"/>
-        <index referenceId="mageplaza_blog_comment" indexType="btree">
-            <column name="comment_id"/>
-            <column name="store_ids"/>
-        </index>
     </table>
     <table name="mageplaza_blog_comment_like" resource="default" engine="innodb"
            comment="Mageplaza Blog Comment Like Table">
@@ -258,9 +230,6 @@
                     table="mageplaza_blog_comment_like"
                     column="entity_id" referenceTable="customer_entity" referenceColumn="entity_id"
                     onDelete="CASCADE"/>
-        <index referenceId="mageplaza_blog_comment_like" indexType="btree">
-            <column name="like_id"/>
-        </index>
     </table>
     <table name="mageplaza_blog_post_category" resource="default" engine="innodb"
            comment="Mageplaza Blog Post Category Table">
@@ -279,10 +248,6 @@
                     table="mageplaza_blog_post_category"
                     column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id"
                     onDelete="CASCADE"/>
-        <index referenceId="mageplaza_blog_post_category" indexType="btree">
-            <column name="post_id"/>
-            <column name="category_id"/>
-        </index>
     </table>
     <table name="mageplaza_blog_post_tag" resource="default" engine="innodb" comment="Mageplaza Blog Post Tag Table">
         <column xsi:type="int" name="tag_id" padding="10" unsigned="true" nullable="false" comment="Tag ID"/>
@@ -298,10 +263,6 @@
         <constraint xsi:type="foreign" referenceId="Mageplaza_Blog_Post_Tag_Blog_Post" table="mageplaza_blog_post_tag"
                     column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id"
                     onDelete="CASCADE"/>
-        <index referenceId="mageplaza_blog_post_tag" indexType="btree">
-            <column name="post_id"/>
-            <column name="tag_id"/>
-        </index>
     </table>
     <table name="mageplaza_blog_post_topic" resource="default" engine="innodb"
            comment="Mageplaza Blog Post Topic Table">
@@ -320,10 +281,6 @@
                     table="mageplaza_blog_post_topic"
                     column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id"
                     onDelete="CASCADE"/>
-        <index referenceId="mageplaza_blog_post_topic" indexType="btree">
-            <column name="topic_id"/>
-            <column name="post_id"/>
-        </index>
     </table>
     <table name="mageplaza_blog_post_product" resource="default" engine="innodb"
            comment="Mageplaza Blog Post Product Table">
@@ -342,10 +299,6 @@
                     table="mageplaza_blog_post_product"
                     column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id"
                     onDelete="CASCADE"/>
-        <index referenceId="mageplaza_blog_post_product" indexType="btree">
-            <column name="post_id"/>
-            <column name="entity_id"/>
-        </index>
     </table>
     <table name="mageplaza_blog_post_traffic" resource="default" engine="innodb"
            comment="Mageplaza Blog Post Traffic Table">
@@ -360,9 +313,6 @@
                     table="mageplaza_blog_post_traffic"
                     column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id"
                     onDelete="CASCADE"/>
-        <index referenceId="mageplaza_blog_post_product" indexType="btree">
-            <column name="traffic_id"/>
-        </index>
     </table>
     <table name="mageplaza_blog_post_like" resource="default" engine="innodb" comment="Mageplaza Blog Post Like Table">
         <column xsi:type="int" name="like_id" padding="10" unsigned="true" identity="true" nullable="false"
@@ -376,8 +326,5 @@
         <constraint xsi:type="foreign" referenceId="Mageplaza_Blog_Post_Like_Blog_Post" table="mageplaza_blog_post_like"
                     column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id"
                     onDelete="CASCADE"/>
-        <index referenceId="mageplaza_blog_post_like" indexType="btree">
-            <column name="like_id"/>
-        </index>
     </table>
 </schema>

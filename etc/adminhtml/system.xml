@@ -39,83 +39,86 @@
                         </ul>
                         ]]></comment>
                 </field>
-                <field id="enabled" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enabled" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="name" translate="label comment" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="name" translate="label comment" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Blog Name</label>
                 </field>
-                <field id="url_prefix" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="url_prefix" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Route Name</label>
+                    <validate>validate-data</validate>
                 </field>
-                <field id="url_suffix" translate="label comment" type="text" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="url_suffix" translate="label comment" type="text" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>URL Suffix</label>
                     <comment>Leave empty for no suffix. Default: .html</comment>
                 </field>
-                <field id="toplinks" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="toplinks" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Show Blog Link in Top Menu</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="footer" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="footer" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Show Blog Link in Footer links</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="display_author" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="display_author" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Display author</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="display_sitemap" translate="label comment" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="display_sitemap" translate="label comment" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Display sitemap</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="date_type" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="date_type" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Date format</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\DateFormat\Type</source_model>
                 </field>
-                <field id="related_post" translate="label comment" type="text" sortOrder="45" showInDefault="1" showInStore="1" showInWebsite="1">
+                <field id="related_post" translate="label comment" type="text" sortOrder="45" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                     <label>Limit related post</label>
                     <comment>Number of related post in post view page</comment>
+                    <validate>validate-digits</validate>
                 </field>
-                <field id="related_mode" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInStore="1" showInWebsite="1">
+                <field id="related_mode" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                     <label>Display Related Posts Mode</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\RelatedMode</source_model>
                 </field>
-                <field id="display_style" translate="label comment" type="select" sortOrder="55" showInDefault="1" showInStore="1" showInWebsite="1">
+                <field id="display_style" translate="label comment" type="select" sortOrder="55" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                     <label>Display Blogs Mode</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\DisplayType</source_model>
                 </field>
-                <field id="pagination" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInStore="1" showInWebsite="1">
+                <field id="pagination" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                     <label>Blogs per Page Allowed Values</label>
                     <comment>Comma-separated.</comment>
+                    <backend_model>Mageplaza\Blog\Model\Config\Backend\Pagination</backend_model>
                 </field>
-                <field id="font_color" translate="label comment" type="text" sortOrder="65" showInWebsite="1" showInStore="1" showInDefault="1">
+                <field id="font_color" translate="label comment" type="text" sortOrder="65" showInWebsite="1" showInStore="1" showInDefault="1" canRestore="1">
                     <label>Choose blog's color</label>
                     <validate>jscolor {hash:true,refine:false}</validate>
                 </field>
-                <field id="customer_approve" translate="label comment" type="select" sortOrder="75" showInDefault="1" showInStore="1" showInWebsite="1">
+                <field id="customer_approve" translate="label comment" type="select" sortOrder="75" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                     <label>Allows customers to register as an author</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="auto_approve" translate="label comment" type="select" sortOrder="85" showInDefault="1" showInStore="1" showInWebsite="1">
+                <field id="auto_approve" translate="label comment" type="select" sortOrder="85" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                     <label>Automatically approve requests</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="auto_post" translate="label comment" type="select" sortOrder="95" showInDefault="1" showInStore="1" showInWebsite="1">
+                <field id="auto_post" translate="label comment" type="select" sortOrder="95" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                     <label>Automatically approve customer's posts</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="history_limit" translate="label comment" type="text" sortOrder="100" showInDefault="1">
+                <field id="history_limit" translate="label comment" type="text" sortOrder="100" showInDefault="1" canRestore="1">
                     <label>Limit of Posts History</label>
-                    <validate>required-number</validate>
+                    <validate>validate-digits</validate>
                     <comment>Limit number of post history</comment>
                 </field>
-                <field id="is_review" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="is_review" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Allow Voting for Helpfulness</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Select Yes to allow selected group(s) below to vote for helpfulness.</comment>
                 </field>
-                <field id="review_mode" translate="label comment" type="multiselect" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="review_mode" translate="label comment" type="multiselect" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                 <label>Restrict Rating for</label>
                 <source_model>Magento\Customer\Model\ResourceModel\Group\Collection</source_model>
                 <comment>Select customer group(s) allowed to vote for helpfulness.</comment>
@@ -125,19 +128,20 @@
                 <label>Related Products Content</label>
                 <group id="product_detail" translate="label" showInDefault="1" sortOrder="10" showInWebsite="1" showInStore="1">
                     <label>Product Detail Page</label>
-                    <field id="enable_post" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="enable_post" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Enable Related Posts</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <comment>Show/Hide related posts tab in product page</comment>
                     </field>
-                    <field id="post_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="post_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Limit of Related Posts</label>
+                        <validate>validate-digits</validate>
                         <comment>Limit number of related posts in product page tab</comment>
                     </field>
                 </group>
                 <group id="post_detail" translate="label" showInDefault="1" sortOrder="10" showInWebsite="1" showInStore="1">
                     <label>Post View Page</label>
-                    <field id="enable_product" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="enable_product" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Enable Related Products</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <comment><![CDATA[Show/Hide related products in post view page. Setup related products, up-sell, cross-sell products with ease, 
@@ -145,15 +149,16 @@
                         ]]>
                         </comment>
                     </field>
-                    <field id="related_mode" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <field id="related_mode" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                         <label>Display Related Products Mode</label>
                         <source_model>Mageplaza\Blog\Model\Config\Source\RelatedMode</source_model>
                     </field>
-                    <field id="product_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="product_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Limit of Related Products</label>
+                        <validate>validate-digits</validate>
                         <comment>Limit number of related products in post view page</comment>
                     </field>
-                    <field id="title" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="title" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Title of Related Products</label>
                         <comment>Title of related products in post view page</comment>
                     </field>
@@ -161,19 +166,21 @@
             </group>
             <group id="sidebar" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Sidebar</label>
-                <field id="number_recent_posts" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="number_recent_posts" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Number of recent posts</label>
+                    <validate>validate-digits</validate>
                 </field>
-                <field id="number_mostview_posts" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="number_mostview_posts" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Number of most view posts</label>
+                    <validate>validate-digits</validate>
                 </field>
-                <field id="sidebar_left_right" translate="label comment" type="select" sortOrder="40" showInDefault="20" showInWebsite="1" showInStore="1">
+                <field id="sidebar_left_right" translate="label comment" type="select" sortOrder="40" showInDefault="20" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Sidebar Location</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\SideBarLR</source_model>
                 </field>
                 <group id="search" translate="label" showInDefault="1" sortOrder="100" showInWebsite="1" showInStore="1">
                     <label>Search</label>
-                    <field id="enable_search" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="enable_search" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Enable Search Box</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <comment><![CDATA[This feature is using Ajax Search technology, same as  
@@ -181,42 +188,46 @@
                         ]]>
                         </comment>
                     </field>
-                    <field id="search_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="search_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Maximum Query Result</label>
+                        <validate>validate-digits</validate>
                     </field>
-                    <field id="min_chars" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="min_chars" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Min Chars</label>
+                        <validate>validate-digits</validate>
                     </field>
-                    <field id="show_image" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="show_image" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Visible Image</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
-                    <field id="description" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="description" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Description length</label>
+                        <validate>validate-digits</validate>
                     </field>
                 </group>
             </group>
             <group id="monthly_archive" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Monthly Archive</label>
-                <field id="enable_monthly" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enable_monthly" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable Monthly Archive</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="number_records" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="number_records" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Number of records</label>
+                    <validate>validate-digits</validate>
                 </field>
-                <field id="date_type_monthly" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="date_type_monthly" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Type of Datetime</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\DateFormat\TypeMonth</source_model>
                 </field>
             </group>
             <group id="comment" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Comments</label>
-                <field id="type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Type of comment</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Type</source_model>
                 </field>
-                <field id="need_approve" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="need_approve" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Need for Approval</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>If yes, the comment will not be shown until approved by Admin.</comment>
@@ -224,28 +235,30 @@
                         <field id="type">1</field>
                     </depends>
                 </field>
-                <field id="disqus" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="disqus" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Disqus unique name</label>
                     <comment><![CDATA[Create at <a href="https://disqus.com/admin/create/" target="_blank">Disqus</a>]]></comment>
                     <depends>
                         <field id="type">3</field>
                     </depends>
                 </field>
-                <field id="facebook_appid" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="facebook_appid" translate="label" type="obscure" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Facebook: AppID</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <comment><![CDATA[Regiter AppID <a href="https://developers.facebook.com/apps/" target="_blank">here</a>. Let visitors login via Facebook account <a href="https://www.mageplaza.com/magento-2-social-login-extension/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">explore now</a>]]></comment>
                     <depends>
                         <field id="type">2</field>
                     </depends>
                 </field>
-                <field id="facebook_number_comment" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="facebook_number_comment" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Facebook: Number of comment</label>
                     <comment><![CDATA[The number of comments to show by default. The minimum value is 1.]]></comment>
+                    <validate>validate-digits</validate>
                     <depends>
                         <field id="type">2</field>
                     </depends>
                 </field>
-                <field id="facebook_colorscheme" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="facebook_colorscheme" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Facebook: Color scheme</label>
                     <depends>
                         <field id="type">2</field>
@@ -253,7 +266,7 @@
                     <comment><![CDATA[Light/Dark]]></comment>
                     <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Facebook\Colorscheme</source_model>
                 </field>
-                <field id="facebook_order_by" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="facebook_order_by" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Facebook: Order by</label>
                     <depends>
                         <field id="type">2</field>
@@ -264,32 +277,32 @@
             </group>
             <group id="seo" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>SEO</label>
-                <field id="meta_title" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="meta_title" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Meta title</label>
                     <comment><![CDATA[Fully compatible with  
                     <a href="https://www.mageplaza.com/magento-2-seo-extension/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">Mageplaza SEO</a>.
                     ]]></comment>
                 </field>
-                <field id="meta_description" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="meta_description" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Meta description</label>
                 </field>
-                <field id="meta_keywords" translate="label" type="textarea" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="meta_keywords" translate="label" type="textarea" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Meta keywords</label>
                 </field>
-                <field id="meta_robots" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="meta_robots" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Meta robots</label>
                     <source_model>Magento\Config\Model\Config\Source\Design\Robots</source_model>
                 </field>
                 <group id="snippet" translate="label" showInStore="1" showInWebsite="1" sortOrder="100" showInDefault="1">
                     <label>Article Snippet</label>
-                    <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Enable</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
-                    <field id="organize_name" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="organize_name" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Organize or Website name</label>
                     </field>
-                    <field id="upload_image_id" translate="label comment" type="image" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="upload_image_id" translate="label comment" type="image" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Logo</label>
                         <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
                         <upload_dir config="system/filesystem/media" scope_info="1">mageplaza/blog/logo</upload_dir>
@@ -300,11 +313,12 @@
             </group>
             <group id="share" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Social Sharing</label>
-                <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="pubid_id" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="2">
+                <field id="pubid_id" translate="label" type="obscure" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="2" canRestore="1">
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <label>Addthis.com PubId</label>
                 </field>
             </group>

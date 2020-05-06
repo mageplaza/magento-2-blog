@@ -405,36 +405,36 @@ interface PostInterface
     public function setLayout($layout);
 
     /**
-     * @return array|null
+     * @return int[]|null
      */
     public function getCategoryIds();
 
     /**
-     * @param array $array
+     * @param int[] $array
      *
      * @return $this
      */
     public function setCategoryIds($array);
 
     /**
-     * @return array|null
+     * @return int[]|null
      */
     public function getTagIds();
 
     /**
-     * @param array $array
+     * @param int[] $array
      *
      * @return $this
      */
     public function setTagIds($array);
 
     /**
-     * @return array|null
+     * @return int[]|null
      */
     public function getTopicIds();
 
     /**
-     * @param array $array
+     * @param int[] $array
      *
      * @return $this
      */
