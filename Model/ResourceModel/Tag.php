@@ -86,7 +86,7 @@ class Tag extends AbstractDb
         $this->helperData   = $helperData;
         $this->date         = $date;
         $this->eventManager = $eventManager;
-        $this->request = $request;
+        $this->request      = $request;
 
         parent::__construct($context);
 

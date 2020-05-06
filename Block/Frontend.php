@@ -238,7 +238,7 @@ class Frontend extends Template
      */
     public function getPageFilter($content)
     {
-        return $this->filterProvider->getPageFilter()->filter((string)$content);
+        return $this->filterProvider->getPageFilter()->filter((string) $content);
     }
 
     /**
@@ -351,9 +351,9 @@ class Frontend extends Template
         $categoryHtml = [];
         foreach ($categories as $_cat) {
             $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl(
-                    $_cat,
-                    HelperData::TYPE_CATEGORY
-                ) . '">' . $_cat->getName() . '</a>';
+                $_cat,
+                HelperData::TYPE_CATEGORY
+            ) . '">' . $_cat->getName() . '</a>';
         }
 
         return implode(', ', $categoryHtml);

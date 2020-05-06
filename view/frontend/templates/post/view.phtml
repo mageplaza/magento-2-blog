@@ -159,7 +159,7 @@ $color = $helper->getBlogConfig('general/font_color');
                                  $author->getImage(),
                                  '135x',
                                  \Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH
-                             ) : $block->getDefaultAuthorImage() ?>">
+                              ) : $block->getDefaultAuthorImage() ?>">
                 </div>
                 <div class="author-content-information">
                     <div class="author-name"><?= /* @noEscape */ $authorName ?></div>
@@ -187,7 +187,9 @@ $color = $helper->getBlogConfig('general/font_color');
                                         <a href="<?= /* @noEscape */ $post->getUrl() ?>">
                                             <img class="img-responsive"
                                                  src="<?= /* @noEscape */ $block->resizeImage(
-                                                         $post->getImage(), '400x') ?>"
+                                                     $post->getImage(),
+                                                     '400x'
+                                                      ) ?>"
                                                  alt="<?= /* @noEscape */ $block->escapeHtml($post->getName()) ?>"/>
                                         </a>
                                     <?php endif; ?>

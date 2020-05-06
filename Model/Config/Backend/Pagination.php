@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Model\Config\Backend;
 
 use Magento\Framework\App\Config\Value;
+use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Class Author
@@ -31,7 +32,7 @@ class Pagination extends Value
 {
     /**
      * @return Value|void
-     * @throws \Magento\Framework\Exception\ValidatorException
+     * @throws ValidatorException
      */
     public function beforeSave()
     {
@@ -39,7 +40,7 @@ class Pagination extends Value
             $valueArray = explode(',', $this->getValue());
             foreach ($valueArray as $value) {
                 if (!is_numeric($value) || $value < 1) {
-                    throw new \Magento\Framework\Exception\ValidatorException(__('Pagination value must be a positive integer.'));
+                    throw new ValidatorException(__('Pagination value must be a positive integer.'));
                 }
             }
         }
