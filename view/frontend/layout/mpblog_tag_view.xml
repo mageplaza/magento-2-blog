@@ -24,7 +24,7 @@
     <update handle="mpblog_design"/>
     <body>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Tag\Listpost" name="mpblog.tag.post.list" template="post/list.phtml"/>
+            <block class="Mageplaza\Blog\Block\Tag\Listpost" name="mpblog.tag.post.list" template="Mageplaza_Blog::post/list.phtml"/>
         </referenceContainer>
     </body>
 </page>

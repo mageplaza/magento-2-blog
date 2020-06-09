@@ -32,7 +32,7 @@
             </block>
         </referenceBlock>
         <referenceBlock name="footer_links">
-            <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_footer_link" template="html/footer.phtml"/>
+            <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_footer_link" template="Mageplaza_Blog::html/footer.phtml"/>
         </referenceBlock>
     </body>
 </page>

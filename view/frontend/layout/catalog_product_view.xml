@@ -27,7 +27,7 @@
     </head>
     <body>
         <referenceBlock name="product.info.details">
-            <block class="Mageplaza\Blog\Block\Post\RelatedPost" name="related.post.tab" template="post/relatedpost.phtml" group="detailed_info" ifconfig="blog/product_post/product_detail/enable_post"/>
+            <block class="Mageplaza\Blog\Block\Post\RelatedPost" name="related.post.tab" template="Mageplaza_Blog::post/relatedpost.phtml" group="detailed_info" ifconfig="blog/product_post/product_detail/enable_post"/>
         </referenceBlock>
     </body>
 </page>
