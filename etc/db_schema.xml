@@ -28,7 +28,7 @@
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Post Name"/>
         <column xsi:type="mediumtext" name="short_description" nullable="true" comment="Post Short Description"/>
         <column xsi:type="mediumtext" name="post_content" nullable="true" comment="Post Content"/>
-        <column xsi:type="int" name="store_ids" nullable="false" comment="Store Id"/>
+        <column xsi:type="varchar" name="store_ids" nullable="false" comment="Store Id"/>
         <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Post Image"/>
         <column xsi:type="int" name="views" nullable="true" comment="Post Views	"/>
         <column xsi:type="int" name="enabled" padding="2" nullable="true" default="1" comment="Post Enabled"/>
@@ -64,7 +64,7 @@
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Post Name"/>
         <column xsi:type="mediumtext" name="short_description" nullable="true" comment="Post Short Description"/>
         <column xsi:type="mediumtext" name="post_content" nullable="true" comment="Post Content"/>
-        <column xsi:type="int" name="store_ids" nullable="false" comment="Store Id"/>
+        <column xsi:type="varchar" name="store_ids" nullable="false" comment="Store Id"/>
         <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Post Image"/>
         <column xsi:type="int" name="views" nullable="true" comment="Post Views	"/>
         <column xsi:type="int" name="enabled" padding="2" nullable="true" default="1" comment="Post Enabled"/>
@@ -129,7 +129,7 @@
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Tag Name"/>
         <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Tag URL Key"/>
         <column xsi:type="mediumtext" name="description" nullable="true" comment="Tag Description"/>
-        <column xsi:type="int" name="store_ids" nullable="false" default="0" comment="Store Id"/>
+        <column xsi:type="varchar" name="store_ids" nullable="false" default="0" comment="Store Id"/>
         <column xsi:type="int" name="enabled" padding="2" nullable="true" default="1" comment="Tag Enabled"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" default="CURRENT_TIMESTAMP"
                 comment="Tag Created At"/>
@@ -150,7 +150,7 @@
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Topic Name"/>
         <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Topic URL Key"/>
         <column xsi:type="mediumtext" name="description" nullable="true" comment="Topic Description"/>
-        <column xsi:type="int" name="store_ids" nullable="false" default="0" comment="Store Id"/>
+        <column xsi:type="varchar" name="store_ids" nullable="false" default="0" comment="Store Id"/>
         <column xsi:type="int" name="enabled" padding="2" nullable="true" default="1" comment="Topic Enabled"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" default="CURRENT_TIMESTAMP"
                 comment="Topic Created At"/>
@@ -171,7 +171,7 @@
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Category Name"/>
         <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Category URL Key"/>
         <column xsi:type="mediumtext" name="description" nullable="true" comment="Category Description"/>
-        <column xsi:type="int" name="store_ids" nullable="false" default="0" comment="Store Id"/>
+        <column xsi:type="varchar" name="store_ids" nullable="false" default="0" comment="Store Id"/>
         <column xsi:type="int" name="enabled" padding="2" nullable="true" default="1" comment="Category Enabled"/>
         <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Meta Title"/>
         <column xsi:type="mediumtext" name="meta_keywords" nullable="true" comment="Meta Keywords"/>
@@ -202,7 +202,7 @@
         <column xsi:type="mediumtext" name="content" nullable="true"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" default="CURRENT_TIMESTAMP"/>
         <column xsi:type="int" name="status" padding="5" unsigned="true" default="3" nullable="false" comment="Status"/>
-        <column xsi:type="int" name="store_ids" nullable="false" default="0" comment="Store Id"/>
+        <column xsi:type="varchar" name="store_ids" nullable="false" default="0" comment="Store Id"/>
         <column xsi:type="mediumtext" name="user_name" nullable="true" comment="User Name"/>
         <column xsi:type="mediumtext" name="user_email" nullable="true" comment="User Email"/>
         <column xsi:type="mediumtext" name="import_source" nullable="true" comment="Import Source"/>
