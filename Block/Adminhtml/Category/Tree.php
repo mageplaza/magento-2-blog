@@ -27,6 +27,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory as CatalogCategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Tree as TreeResource;
 use Magento\Framework\Data\Tree\Node;
+use Magento\Framework\DataObject;
 use Magento\Framework\DB\Helper;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Registry;
@@ -142,7 +143,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     /**
      * Get category name
      *
-     * @param \Magento\Framework\DataObject $node
+     * @param DataObject $node
+     *
      * @return string
      */
     public function buildNodeName($node)
@@ -152,6 +154,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         if ($this->_withProductCount) {
             $result .= ' (' . $node->getProductCount() . ')';
         }
+
         return $result;
     }
 

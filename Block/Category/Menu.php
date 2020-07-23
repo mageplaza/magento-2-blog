@@ -106,6 +106,7 @@ class Menu extends Template
     {
         $collection = $this->categoryCollection->create()
             ->addAttributeToFilter('level', '1')->addAttributeToFilter('enabled', '1');
+
         return $this->helper->addStoreFilter($collection, $this->storeManager->getStore()->getId());
     }
 

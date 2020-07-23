@@ -82,6 +82,7 @@ class Collection extends SearchResult
         if ($field === 'customer_name') {
             parent::setOrder('	user_name', $direction);
         }
+
         return parent::setOrder($field, $direction);
     }
 

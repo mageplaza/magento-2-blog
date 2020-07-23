@@ -392,7 +392,7 @@ class Data extends CoreHelper
     public function getUrlSuffix($store = null)
     {
         return $this->getConfigGeneral('url_suffix', $store)
-            ?'.'.$this->getConfigGeneral('url_suffix', $store): '';
+            ? '.' . $this->getConfigGeneral('url_suffix', $store) : '';
     }
 
     /**

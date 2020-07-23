@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Blog\Model\ResourceModel\PostHistory;
 
+use DateTime;
+use DateTimeZone;
 use Exception;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
@@ -72,7 +74,7 @@ class Collection extends AbstractCollection
         AbstractDb $resource = null
     ) {
         $this->localeDate = $localeDate;
-        $this->locale = $localeResolver->getLocale();
+        $this->locale     = $localeResolver->getLocale();
 
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
@@ -93,7 +95,7 @@ class Collection extends AbstractCollection
     {
         foreach ($this->getItems() as $item) {
             $convertedDate = $this->localeDate->date(
-                new \DateTime($item->getData('updated_at'), new \DateTimeZone('UTC')),
+                new DateTime($item->getData('updated_at'), new DateTimeZone('UTC')),
                 $this->locale,
                 true
             );
