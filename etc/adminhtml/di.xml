@@ -47,4 +47,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Collection">
+        <plugin name="blog-post-product-sort" type="Mageplaza\Blog\Plugin\Catalog\AttributeSort"/>
+    </type>
 </config>

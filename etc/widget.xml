@@ -36,12 +36,12 @@
                        source_model="Mageplaza\Blog\Model\Config\Source\WidgetShowType">
                 <label>Show Type</label>
             </parameter>
-            <parameter name="category_id" xsi:type="text" required="true" visible="true">
-                <label>Category ID</label>
+            <parameter name="category_id" xsi:type="select" required="true" visible="true"
+                       source_model="Mageplaza\Blog\Model\Config\Source\WidgetCategory">
+                <label>Category</label>
                 <depends>
                     <parameter name="show_type" value="category"/>
                 </depends>
-                <value>2</value>
             </parameter>
             <parameter name="template" xsi:type="select" required="true" visible="true">
                 <label>Template</label>

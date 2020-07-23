@@ -117,6 +117,16 @@ class View extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
+     * @return mixed|string
+     */
+    public function getPubId()
+    {
+        return $this->helperData->getBlogConfig('share/pubid_id') === 'ra-5983d393d9a9b2c9'?
+            $this->helperData->getBlogConfig('share/pubid_id') :
+            $this->getDecrypt($this->helperData->getBlogConfig('share/pubid_id'));
+    }
+
+    /**
      * @param $tag
      *
      * @return string
