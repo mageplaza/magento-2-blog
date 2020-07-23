@@ -38,7 +38,7 @@
             </parameter>
             <parameter name="category_id" xsi:type="select" required="true" visible="true"
                        source_model="Mageplaza\Blog\Model\Config\Source\WidgetCategory">
-                <label>Category ID</label>
+                <label>Category</label>
                 <depends>
                     <parameter name="show_type" value="category"/>
                 </depends>

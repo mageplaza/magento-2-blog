@@ -35,10 +35,14 @@ class WidgetCategory implements ArrayInterface
      */
     private $category;
 
+    /**
+     * WidgetCategory constructor.
+     *
+     * @param CollectionFactory $category
+     */
     public function __construct(
         CollectionFactory $category
-    )
-    {
+    ) {
         $this->category = $category;
     }
 
@@ -48,13 +52,14 @@ class WidgetCategory implements ArrayInterface
     public function toOptionArray()
     {
         $collection = $this->category->create();
-        $ar = [];
+        $ar         = [];
         foreach ($collection->getItems() as $item) {
             if ($item->getId() === '1') {
                 continue;
             }
             $ar[] = ['value' => $item->getId(), 'label' => $item->getName()];
         }
+
         return $ar;
     }
 }

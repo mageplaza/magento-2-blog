@@ -21,7 +21,6 @@
 
 namespace Mageplaza\Blog\Plugin\Catalog;
 
-
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\App\RequestInterface;
 use Mageplaza\Blog\Helper\Data;
@@ -51,7 +50,7 @@ class AttributeSort
         RequestInterface $request,
         Data $helper
     ) {
-        $this->helper = $helper;
+        $this->helper  = $helper;
         $this->request = $request;
     }
 
@@ -62,11 +61,16 @@ class AttributeSort
         $attribute,
         $dir
     ) {
-        if (in_array($this->request->getFullActionName(), ['mageplaza_blog_post_products','mageplaza_blog_post_productsGrid'], true)) {
+        if (in_array(
+            $this->request->getFullActionName(),
+            ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid'],
+            true
+        )) {
             $productCollection->getSelect()->order('position ' . $dir);
+
             return $productCollection;
         }
 
-        return $proceed($attribute,$dir);
+        return $proceed($attribute, $dir);
     }
 }
