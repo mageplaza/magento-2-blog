@@ -140,6 +140,22 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     }
 
     /**
+     * Get category name
+     *
+     * @param \Magento\Framework\DataObject $node
+     * @return string
+     */
+    public function buildNodeName($node)
+    {
+        $result = $this->escapeHtml($node->getName());
+
+        if ($this->_withProductCount) {
+            $result .= ' (' . $node->getProductCount() . ')';
+        }
+        return $result;
+    }
+
+    /**
      * Get JSON of a tree node or an associative array
      *
      * @param Node|array $node

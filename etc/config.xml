@@ -31,7 +31,7 @@
                 <enabled>1</enabled>
                 <name>Blog</name>
                 <url_prefix>blog</url_prefix>
-                <url_suffix>.html</url_suffix>
+                <url_suffix>html</url_suffix>
                 <toplinks>1</toplinks>
                 <footer>1</footer>
                 <display_author>1</display_author>

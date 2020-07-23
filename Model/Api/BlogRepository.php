@@ -616,6 +616,12 @@ class BlogRepository implements BlogRepositoryInterface
     {
         $category = $this->_helperData->getFactoryByType('category')->create()->load($categoryId);
 
+        if ($categoryId === '1') {
+            throw new NoSuchEntityException(
+                __('The ROOT Category can not remove.')
+            );
+        }
+
         if ($category) {
             $category->delete();
 

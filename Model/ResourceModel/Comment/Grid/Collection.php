@@ -72,6 +72,20 @@ class Collection extends SearchResult
     }
 
     /**
+     * @param string $field
+     * @param string $direction
+     *
+     * @return Collection
+     */
+    public function setOrder($field, $direction = self::SORT_ORDER_DESC)
+    {
+        if ($field === 'customer_name') {
+            parent::setOrder('	user_name', $direction);
+        }
+        return parent::setOrder($field, $direction);
+    }
+
+    /**
      * @param array|string $field
      * @param null $condition
      *

@@ -48,6 +48,10 @@ class Product extends Extended implements TabInterface
      * @var Registry
      */
     public $coreRegistry;
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
+     */
+    private $postCollectionFactory;
 
     /**
      * Product constructor.
@@ -63,10 +67,12 @@ class Product extends Extended implements TabInterface
         Registry $coreRegistry,
         Data $backendHelper,
         CollectionFactory $productCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
         array $data = []
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->coreRegistry             = $coreRegistry;
+        $this->postCollectionFactory = $postCollectionFactory;
 
         parent::__construct($context, $backendHelper, $data);
     }
@@ -96,6 +102,13 @@ class Product extends Extended implements TabInterface
     {
         /** @var Collection $collection */
         $collection = $this->productCollectionFactory->create();
+        $collection->clear();
+
+        $collection->getSelect()->joinLeft(
+            ['mp_p' => $collection->getTable('mageplaza_blog_post_product')],
+            'e.entity_id = mp_p.entity_id',
+            ['position']
+        );
 
         $this->setCollection($collection);
 
@@ -137,7 +150,8 @@ class Product extends Extended implements TabInterface
             'type'           => 'number',
             'validate_class' => 'validate-number',
             'index'          => 'position',
-            'editable'       => true
+            'editable'       => true,
+            'edit_only'       => true,
         ]);
 
         return $this;

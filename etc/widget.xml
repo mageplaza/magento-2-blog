@@ -28,9 +28,9 @@
             <parameter name="title" xsi:type="text" required="false" visible="true">
                 <label>Title</label>
             </parameter>
-            <parameter name="post_count" xsi:type="text" required="true" visible="true">
+            <parameter name="post_count" xsi:type="block" required="true" visible="true">
                 <label>Numbers of Posts Display</label>
-                <value>5</value>
+                <block class="Mageplaza\Blog\Block\Adminhtml\Widget\Number"/>
             </parameter>
             <parameter name="show_type" xsi:type="select" required="false" visible="true"
                        source_model="Mageplaza\Blog\Model\Config\Source\WidgetShowType">
