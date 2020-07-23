@@ -31,11 +31,22 @@ A: Read solution: https://github.com/mageplaza/module-core/issues/3
 ## ✓ Install via composer (recommend)
 Run the following command in Magento 2 root folder:
 
+With Social Proof (recommend):
+
+```
+composer require mageplaza/magento-2-blog-extension avada/module-proofo
+php bin/magento setup:upgrade
+php bin/magento setup:static-content:deploy
+```
+
+Without Social Proof:
+
 ```
 composer require mageplaza/magento-2-blog-extension
 php bin/magento setup:upgrade
 php bin/magento setup:static-content:deploy
 ```
+
 
 ### ✓ Install ready-to-paste package
 
