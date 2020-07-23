@@ -48,11 +48,12 @@
                 </field>
                 <field id="url_prefix" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Route Name</label>
-                    <validate>validate-data</validate>
+                    <validate>validate-alphanum</validate>
                 </field>
                 <field id="url_suffix" translate="label comment" type="text" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>URL Suffix</label>
-                    <comment>Leave empty for no suffix. Default: .html</comment>
+                    <comment>Leave empty for no suffix. Default: html</comment>
+                    <validate>validate-alphanum</validate>
                 </field>
                 <field id="toplinks" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Show Blog Link in Top Menu</label>
@@ -144,7 +145,7 @@
                     <field id="enable_product" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Enable Related Products</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <comment><![CDATA[Show/Hide related products in post view page. Setup related products, up-sell, cross-sell products with ease, 
+                        <comment><![CDATA[Show/Hide related products in post view page. Setup related products, up-sell, cross-sell products with ease,
                         <a href="https://www.mageplaza.com/magento-2-automatic-related-products/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">explore now</a>
                         ]]>
                         </comment>
@@ -183,7 +184,7 @@
                     <field id="enable_search" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Enable Search Box</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <comment><![CDATA[This feature is using Ajax Search technology, same as  
+                        <comment><![CDATA[This feature is using Ajax Search technology, same as
                         <a href="https://www.mageplaza.com/magento-2-search-extension/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">Mageplaza Search</a>.
                         ]]>
                         </comment>
@@ -279,7 +280,7 @@
                 <label>SEO</label>
                 <field id="meta_title" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Meta title</label>
-                    <comment><![CDATA[Fully compatible with  
+                    <comment><![CDATA[Fully compatible with
                     <a href="https://www.mageplaza.com/magento-2-seo-extension/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">Mageplaza SEO</a>.
                     ]]></comment>
                 </field>
@@ -317,7 +318,7 @@
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="pubid_id" translate="label" type="obscure" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="2" canRestore="1">
+                <field id="pubid_id" translate="label" type="obscure" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="2">
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <label>Addthis.com PubId</label>
                 </field>

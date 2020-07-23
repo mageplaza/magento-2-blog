@@ -127,10 +127,14 @@ $color = $helper->getBlogConfig('general/font_color');
         </script>
     <?php endif;?>
     <?php if ($helper->getBlogConfig('share/enabled')) : ?>
+        <?php
+            $pubId= $helper->getBlogConfig('share/pubid_id') === 'ra-5983d393d9a9b2c9'?
+                $helper->getBlogConfig('share/pubid_id') :
+                $block->getDecrypt($helper->getBlogConfig('share/pubid_id'));
+        ?>
         <div class="mp-clear"></div>
         <script type="text/javascript"
-                src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?=
-                /* @noEscape */ $block->getDecrypt($helper->getBlogConfig('share/pubid_id')) ?>"
+                src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?= /* @noEscape */ $pubId ?>"
                 async="async"></script>
         <div class="mpcss">
             <div id="sharing">
@@ -159,7 +163,7 @@ $color = $helper->getBlogConfig('general/font_color');
                                  $author->getImage(),
                                  '135x',
                                  \Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH
-                              ) : $block->getDefaultAuthorImage() ?>">
+                             ) : $block->getDefaultAuthorImage() ?>">
                 </div>
                 <div class="author-content-information">
                     <div class="author-name"><?= /* @noEscape */ $authorName ?></div>
@@ -189,7 +193,7 @@ $color = $helper->getBlogConfig('general/font_color');
                                                  src="<?= /* @noEscape */ $block->resizeImage(
                                                      $post->getImage(),
                                                      '400x'
-                                                      ) ?>"
+                                                 ) ?>"
                                                  alt="<?= /* @noEscape */ $block->escapeHtml($post->getName()) ?>"/>
                                         </a>
                                     <?php endif; ?>

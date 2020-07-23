@@ -46,6 +46,9 @@ class Collection extends SearchResult
             ['qty_post' => 'COUNT(post_id)']
         )->group('main_table.user_id');
 
+        $this->addFilterToMap('name', 'main_table.name');
+        $this->addFilterToMap('url_key', 'main_table.url_key');
+
         return $this;
     }
 }

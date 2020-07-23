@@ -21,8 +21,10 @@
 
 namespace Mageplaza\Blog\Block\Category;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Api\Data\CategoryInterface;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Model\Category;
@@ -52,12 +54,18 @@ class Menu extends Template
     protected $helper;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Menu constructor.
      *
      * @param Context $context
      * @param CollectionFactory $collectionFactory
      * @param CategoryFactory $categoryFactory
      * @param HelperData $helperData
+     * @param StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -65,11 +73,13 @@ class Menu extends Template
         CollectionFactory $collectionFactory,
         CategoryFactory $categoryFactory,
         HelperData $helperData,
+        StoreManagerInterface $storeManager,
         array $data = []
     ) {
         $this->categoryCollection = $collectionFactory;
         $this->category           = $categoryFactory;
         $this->helper             = $helperData;
+        $this->storeManager       = $storeManager;
         parent::__construct($context, $data);
     }
 
@@ -77,20 +87,27 @@ class Menu extends Template
      * @param $id
      *
      * @return CategoryInterface[]
+     * @throws NoSuchEntityException
      */
     public function getChildCategory($id)
     {
-        return $this->categoryCollection->create()->addAttributeToFilter('parent_id', $id)
-            ->addAttributeToFilter('enabled', '1')->getItems();
+        $collection = $this->categoryCollection->create()->addAttributeToFilter('parent_id', $id)
+            ->addAttributeToFilter('enabled', '1');
+        $this->helper->addStoreFilter($collection, $this->storeManager->getStore()->getId());
+
+        return $collection->getItems();
     }
 
     /**
      * @return Collection
+     * @throws NoSuchEntityException
      */
     public function getCollections()
     {
-        return $this->categoryCollection->create()
+        $collection = $this->categoryCollection->create()
             ->addAttributeToFilter('level', '1')->addAttributeToFilter('enabled', '1');
+
+        return $this->helper->addStoreFilter($collection, $this->storeManager->getStore()->getId());
     }
 
     /**
