@@ -35,6 +35,7 @@ class AttributeSort
      * @var Data
      */
     protected $helper;
+
     /**
      * @var RequestInterface
      */
@@ -53,7 +54,6 @@ class AttributeSort
         $this->helper  = $helper;
         $this->request = $request;
     }
-
 
     public function aroundAddAttributeToSort(
         Collection $productCollection,

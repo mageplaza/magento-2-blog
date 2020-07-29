@@ -121,9 +121,9 @@ class Form extends AbstractCategory
                 'id'      => 'delete',
                 'label'   => __('Delete Category'),
                 'onclick' => "categoryDelete('" . $this->getUrl(
-                    'mageplaza_blog/*/delete',
-                    ['_current' => true]
-                ) . "')",
+                        'mageplaza_blog/*/delete',
+                        ['_current' => true]
+                    ) . "')",
                 'class'   => 'delete'
             ]);
         }

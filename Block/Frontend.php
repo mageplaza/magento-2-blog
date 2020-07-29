@@ -351,9 +351,9 @@ class Frontend extends Template
         $categoryHtml = [];
         foreach ($categories as $_cat) {
             $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl(
-                $_cat,
-                HelperData::TYPE_CATEGORY
-            ) . '">' . $_cat->getName() . '</a>';
+                    $_cat,
+                    HelperData::TYPE_CATEGORY
+                ) . '">' . $_cat->getName() . '</a>';
         }
 
         return implode(', ', $categoryHtml);
