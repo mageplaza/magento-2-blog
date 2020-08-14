@@ -61,7 +61,8 @@ class AttributeSort
         $attribute,
         $dir
     ) {
-        if (in_array(
+        if ( $attribute === 'position' &&
+            in_array(
             $this->request->getFullActionName(),
             ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid'],
             true

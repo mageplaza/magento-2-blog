@@ -95,8 +95,10 @@ class Collection extends SearchResult
     public function addFieldToFilter($field, $condition = null)
     {
         if ($field === 'customer_name') {
-            return parent::addFieldToFilter(['firstname', 'lastname'], [$condition, $condition]);
-        } elseif ($field === 'post_name') {
+            return parent::addFieldToFilter('user_name', $condition);
+        }
+
+        if ($field === 'post_name') {
             $field = 'mp.name';
         } elseif ($field === 'created_at') {
             $field = 'main_table.created_at';
