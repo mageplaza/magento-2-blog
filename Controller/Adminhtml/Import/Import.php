@@ -169,27 +169,27 @@ class Import extends Action
         $messagesBlock = $this->_view->getLayout()->createBlock(Messages::class);
         if ($object->run($data, $connection)) {
             $postStatistic = $this->registry->registry('mageplaza_import_post_statistic');
-            if ($postStatistic['has_data']) {
+            if ($postStatistic && $postStatistic['has_data']) {
                 $statisticHtml = $this->getStatistic($postStatistic, $messagesBlock, $data);
             }
 
             $tagStatistic = $this->registry->registry('mageplaza_import_tag_statistic');
-            if ($tagStatistic['has_data']) {
+            if ($tagStatistic && $tagStatistic['has_data']) {
                 $statisticHtml = $this->getStatistic($tagStatistic, $messagesBlock, $data);
             }
 
             $categoryStatistic = $this->registry->registry('mageplaza_import_category_statistic');
-            if ($categoryStatistic['has_data']) {
+            if ($categoryStatistic && $categoryStatistic['has_data']) {
                 $statisticHtml = $this->getStatistic($categoryStatistic, $messagesBlock, $data);
             }
 
             $authorStatistic = $this->registry->registry('mageplaza_import_user_statistic');
-            if ($authorStatistic['has_data']) {
+            if ($authorStatistic && $authorStatistic['has_data']) {
                 $statisticHtml = $this->getStatistic($authorStatistic, $messagesBlock, $data);
             }
 
             $commentStatistic = $this->registry->registry('mageplaza_import_comment_statistic');
-            if ($commentStatistic['has_data']) {
+            if ($commentStatistic && $commentStatistic['has_data']) {
                 $statisticHtml = $this->getStatistic($commentStatistic, $messagesBlock, $data);
             }
 
