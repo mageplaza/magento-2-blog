@@ -137,8 +137,10 @@ class Import extends Action
             case 'delete':
                 $statisticHtml = $messagesBlock
                     ->{'addsuccess'}(__(
-                        'You have deleted %1 successful.',
-                        $statisticData['type']
+                        'You have deleted %1 %2 successful. Skipped %3 %2.',
+                        $statisticData['success_count'],
+                        $statisticData['type'],
+                        $statisticData['error_count']
                     ))
                     ->toHtml();
                 break;
