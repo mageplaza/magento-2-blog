@@ -50,11 +50,6 @@ class Product extends Extended implements TabInterface
     public $coreRegistry;
 
     /**
-     * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
-     */
-    private $postCollectionFactory;
-
-    /**
      * Product constructor.
      *
      * @param CollectionFactory $productCollectionFactory
@@ -68,12 +63,10 @@ class Product extends Extended implements TabInterface
         Registry $coreRegistry,
         Data $backendHelper,
         CollectionFactory $productCollectionFactory,
-        \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
         array $data = []
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->coreRegistry             = $coreRegistry;
-        $this->postCollectionFactory    = $postCollectionFactory;
 
         parent::__construct($context, $backendHelper, $data);
     }
@@ -108,8 +101,8 @@ class Product extends Extended implements TabInterface
         $collection->getSelect()->joinLeft(
             ['mp_p' => $collection->getTable('mageplaza_blog_post_product')],
             'e.entity_id = mp_p.entity_id',
-            ['position']
-        )->group('e.entity_id');
+            ['position','post_id']
+        );
 
         $this->setCollection($collection);
 
@@ -240,7 +233,8 @@ class Product extends Extended implements TabInterface
                     $this->getCollection()->addFieldToFilter('entity_id', ['nin' => $productIds]);
                 }
             }
-        } else {
+        }
+        else {
             parent::_addColumnFilterToCollection($column);
         }
 
