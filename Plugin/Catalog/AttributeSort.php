@@ -76,7 +76,7 @@ class AttributeSort
         Collection $productCollection,
         callable $proceed,
         $attribute,
-        $dir
+        $dir = 'ASC'
     ) {
         if (in_array(
             $this->request->getFullActionName(),
@@ -113,8 +113,8 @@ class AttributeSort
         Collection $productCollection,
         callable $proceed,
         $attribute,
-        $condition,
-        $joinType
+        $condition = null,
+        $joinType = 'inner'
     ) {
         if (in_array(
             $this->request->getFullActionName(),
