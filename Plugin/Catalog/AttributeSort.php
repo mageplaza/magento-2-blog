@@ -80,7 +80,7 @@ class AttributeSort
     ) {
         if (in_array(
             $this->request->getFullActionName(),
-            ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid'],
+            ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid', 'mageplaza_blog_post_edit'],
             true
         )) {
             $post_id = $this->getPostId();
@@ -118,7 +118,7 @@ class AttributeSort
     ) {
         if (in_array(
             $this->request->getFullActionName(),
-            ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid'],
+            ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid', 'mageplaza_blog_post_edit'],
             true
         )) {
             $post_id = $this->getPostId();
