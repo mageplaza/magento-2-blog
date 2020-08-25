@@ -78,22 +78,23 @@ class AttributeSort
         $attribute,
         $dir
     ) {
-        $post_id = $this->getPostId();
-        if ($post_id && $attribute === 'position') {
-            $productCollection->getSelect()->where('mp_p.post_id = ' . $post_id);
-        } else {
-            $productCollection->getSelect()->group('e.entity_id');
-        }
+        if (in_array(
+            $this->request->getFullActionName(),
+            ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid'],
+            true
+        )) {
+            $post_id = $this->getPostId();
+            if ($post_id && $attribute === 'position') {
+                $productCollection->getSelect()->where('mp_p.post_id = ' . $post_id);
+            } else {
+                $productCollection->getSelect()->group('e.entity_id');
+            }
 
-        if ($attribute === 'position' &&
-            in_array(
-                $this->request->getFullActionName(),
-                ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid'],
-                true
-            )) {
-            $productCollection->getSelect()->order('position ' . $dir);
+            if ($attribute === 'position') {
+                $productCollection->getSelect()->order('position ' . $dir);
 
-            return $productCollection;
+                return $productCollection;
+            }
         }
 
         return $proceed($attribute, $dir);
@@ -115,40 +116,41 @@ class AttributeSort
         $condition,
         $joinType
     ) {
-        $post_id = $this->getPostId();
-        if ($post_id && $attribute === 'position') {
-            $productCollection->getSelect()->where('mp_p.post_id = ' . $post_id);
-        } else {
-            $productCollection->getSelect()->group('e.entity_id');
-        }
-
-        if ($attribute === 'position' &&
-            in_array(
-                $this->request->getFullActionName(),
-                ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid'],
-                true
-            )) {
-            $from = isset($condition['from']) ? $attribute . ' >= ' . $condition['from'] : '';
-            $to   = isset($condition['to']) ? $attribute . ' <= ' . $condition['to'] : '';
-
-            if ($from && $to) {
-                if ($condition['to'] === $condition['from']) {
-                    $conditionSql = $attribute . ' = ' . $condition['to'];
-                } else {
-                    $conditionSql = $to . ' && ' . $from;
-                }
-            } elseif ($from) {
-                $conditionSql = $from;
-            } elseif ($to) {
-                $conditionSql = $to;
+        if (in_array(
+            $this->request->getFullActionName(),
+            ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid'],
+            true
+        )) {
+            $post_id = $this->getPostId();
+            if ($post_id && $attribute === 'position') {
+                $productCollection->getSelect()->where('mp_p.post_id = ' . $post_id);
             } else {
-                $conditionSql = '';
+                $productCollection->getSelect()->group('e.entity_id');
             }
 
-            if ($conditionSql) {
-                $productCollection->getSelect()->where($conditionSql);
+            if ($attribute === 'position') {
+                $from = isset($condition['from']) ? $attribute . ' >= ' . $condition['from'] : '';
+                $to   = isset($condition['to']) ? $attribute . ' <= ' . $condition['to'] : '';
 
-                return $productCollection;
+                if ($from && $to) {
+                    if ($condition['to'] === $condition['from']) {
+                        $conditionSql = $attribute . ' = ' . $condition['to'];
+                    } else {
+                        $conditionSql = $to . ' && ' . $from;
+                    }
+                } elseif ($from) {
+                    $conditionSql = $from;
+                } elseif ($to) {
+                    $conditionSql = $to;
+                } else {
+                    $conditionSql = '';
+                }
+
+                if ($conditionSql) {
+                    $productCollection->getSelect()->where($conditionSql);
+
+                    return $productCollection;
+                }
             }
         }
 
@@ -164,6 +166,7 @@ class AttributeSort
             return null;
         }
         $post = $this->coreRegistry->registry('mageplaza_blog_post');
-        return $post->getId()?:$this->request->getParam('post_id');
+
+        return $post->getId() ?: $this->request->getParam('post_id');
     }
 }
