@@ -101,7 +101,7 @@ class Product extends Extended implements TabInterface
         $collection->getSelect()->joinLeft(
             ['mp_p' => $collection->getTable('mageplaza_blog_post_product')],
             'e.entity_id = mp_p.entity_id',
-            ['position','post_id']
+            ['position', 'post_id']
         );
 
         $this->setCollection($collection);
@@ -145,6 +145,7 @@ class Product extends Extended implements TabInterface
             'validate_class' => 'validate-number',
             'index'          => 'position',
             'editable'       => true,
+            'sortable'       => false,
             'edit_only'      => true,
         ]);
 
@@ -233,8 +234,7 @@ class Product extends Extended implements TabInterface
                     $this->getCollection()->addFieldToFilter('entity_id', ['nin' => $productIds]);
                 }
             }
-        }
-        else {
+        } else {
             parent::_addColumnFilterToCollection($column);
         }
 
