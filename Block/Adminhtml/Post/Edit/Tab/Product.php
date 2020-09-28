@@ -109,7 +109,7 @@ class Product extends Extended implements TabInterface
             ['mp_p' => $collection->getTable('mageplaza_blog_post_product')],
             'e.entity_id = mp_p.entity_id',
             ['position']
-        );
+        )->where('mp_p.post_id=' . $this->getPost()->getId());
 
         $this->setCollection($collection);
 
