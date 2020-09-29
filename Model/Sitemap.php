@@ -68,8 +68,10 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
      */
     public function getBlogPostsSiteMapCollection()
     {
-        $urlSuffix             = $this->blogDataHelper->getUrlSuffix();
-        $postCollection        = $this->blogDataHelper->postFactory->create()->getCollection();
+        $urlSuffix      = $this->blogDataHelper->getUrlSuffix();
+        $postCollection = $this->blogDataHelper->postFactory->create()->getCollection();
+        $currentStoreId = $this->getStoreId();
+        $this->blogDataHelper->addStoreFilter($postCollection, $currentStoreId);
         $postSiteMapCollection = [];
         if (!$this->router) {
             $this->router = 'blog';
@@ -100,12 +102,15 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
 
     /**
      * @return array
+     * @throws NoSuchEntityException
      */
     public function getBlogCategoriesSiteMapCollection()
     {
         $urlSuffix                 = $this->blogDataHelper->getUrlSuffix();
         $categoryCollection        = $this->blogDataHelper->categoryFactory->create()->getCollection();
         $categorySiteMapCollection = [];
+        $currentStoreId            = $this->getStoreId();
+        $this->blogDataHelper->addStoreFilter($categoryCollection, $currentStoreId);
         foreach ($categoryCollection as $item) {
             if ($item->getEnabled() !== null) {
                 $categorySiteMapCollection[$item->getId()] = new DataObject([
@@ -121,12 +126,15 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
 
     /**
      * @return array
+     * @throws NoSuchEntityException
      */
     public function getBlogTagsSiteMapCollection()
     {
         $urlSuffix            = $this->blogDataHelper->getUrlSuffix();
         $tagCollection        = $this->blogDataHelper->tagFactory->create()->getCollection();
         $tagSiteMapCollection = [];
+        $currentStoreId       = $this->getStoreId();
+        $this->blogDataHelper->addStoreFilter($tagCollection, $currentStoreId);
         foreach ($tagCollection as $item) {
             if ($item->getEnabled() !== null) {
                 $tagSiteMapCollection[$item->getId()] = new DataObject([
@@ -142,12 +150,15 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
 
     /**
      * @return array
+     * @throws NoSuchEntityException
      */
     public function getBlogTopicsSiteMapCollection()
     {
         $urlSuffix              = $this->blogDataHelper->getUrlSuffix();
         $topicCollection        = $this->blogDataHelper->topicFactory->create()->getCollection();
         $topicSiteMapCollection = [];
+        $currentStoreId         = $this->getStoreId();
+        $this->blogDataHelper->addStoreFilter($topicCollection, $currentStoreId);
         foreach ($topicCollection as $item) {
             if ($item->getEnabled() !== null) {
                 $topicSiteMapCollection[$item->getId()] = new DataObject([
