@@ -47,11 +47,6 @@ php bin/magento setup:upgrade
 php bin/magento setup:static-content:deploy
 ```
 
-```
-composer require mageplaza/magento-2-blog-extension
-php bin/magento setup:upgrade
-php bin/magento setup:static-content:deploy
-```
 
 ### ✓ Install Magento 2 Blog GraphQL module only
 
