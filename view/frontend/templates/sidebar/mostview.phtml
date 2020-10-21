@@ -32,8 +32,8 @@ $postsRecent = $block->getRecentPost();
             </a>
         </div>
         <div class="data item content" id="tab-content-popular" data-role="content">
-            <?php if ($posts->getSize()) : ?>
-                <?php foreach ($posts as $post) : ?>
+            <?php if ($posts->getSize()): ?>
+                <?php foreach ($posts as $post): ?>
                     <div class="list-post-tabs">
                         <div class="post-left">
                             <a href="<?= $post->getUrl() ?>">
@@ -50,7 +50,7 @@ $postsRecent = $block->getRecentPost();
                         <div class="mp-clear"></div>
                     </div>
                 <?php endforeach; ?>
-            <?php else : ?>
+            <?php else: ?>
                 <div class="mostview-nopost"><?= __('No Posts'); ?></div>
             <?php endif; ?>
         </div>
@@ -61,8 +61,8 @@ $postsRecent = $block->getRecentPost();
             </a>
         </div>
         <div class="data item content" id="tab-content-mostview" data-role="content">
-            <?php if ($postsRecent->getSize()) : ?>
-                <?php foreach ($postsRecent as $post) : ?>
+            <?php if ($postsRecent->getSize()): ?>
+                <?php foreach ($postsRecent as $post): ?>
                     <div class="list-post-tabs" href="<?= $post->getUrl() ?>">
                         <div class="post-left">
                             <a href="<?= $post->getUrl() ?>">
@@ -79,7 +79,7 @@ $postsRecent = $block->getRecentPost();
                         <div class="mp-clear"></div>
                     </div>
                 <?php endforeach; ?>
-            <?php else : ?>
+            <?php else: ?>
                 <div class="mostview-nopost"><?= __('No Posts'); ?></div>
             <?php endif; ?>
         </div>

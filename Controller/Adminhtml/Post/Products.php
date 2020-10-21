@@ -64,7 +64,7 @@ class Products extends Post
         parent::__construct($productFactory, $registry, $context);
 
         $this->resultLayoutFactory = $resultLayoutFactory;
-        $this->postHistoryFactory  = $postHistoryFactory;
+        $this->postHistoryFactory = $postHistoryFactory;
     }
 
     /**

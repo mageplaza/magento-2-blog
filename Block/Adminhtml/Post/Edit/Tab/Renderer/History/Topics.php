@@ -61,11 +61,11 @@ class Topics extends Text
     public function render(DataObject $row)
     {
         if (!empty($row->getData($this->getColumn()->getIndex()))) {
-            $text     = '';
+            $text = '';
             $topicIds = explode(',', $row->getData($this->getColumn()->getIndex()));
             foreach ($topicIds as $topicId) {
                 $topic = $this->_helperData->getFactoryByType('topic')->create()->load($topicId);
-                $text  .= $topic->getName() . ',';
+                $text .= $topic->getName() . ',';
             }
             $row->setData($this->getColumn()->getIndex(), trim($text, ','));
         }

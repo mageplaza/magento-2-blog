@@ -85,8 +85,8 @@ class Save extends Topic
         JsonFactory $resultJsonFactory,
         TopicFactory $topicFactory
     ) {
-        $this->jsHelper          = $jsHelper;
-        $this->layoutFactory     = $layoutFactory;
+        $this->jsHelper = $jsHelper;
+        $this->layoutFactory = $layoutFactory;
         $this->resultJsonFactory = $resultJsonFactory;
 
         parent::__construct($context, $registry, $topicFactory);
@@ -98,10 +98,10 @@ class Save extends Topic
     public function execute()
     {
         if ($this->getRequest()->getPost('return_session_messages_only')) {
-            $topic                      = $this->initTopic();
-            $topicPostData              = $this->getRequest()->getPostValue();
+            $topic = $this->initTopic();
+            $topicPostData = $this->getRequest()->getPostValue();
             $topicPostData['store_ids'] = 0;
-            $topicPostData['enabled']   = 1;
+            $topicPostData['enabled'] = 1;
 
             $topic->addData($topicPostData);
 
@@ -119,16 +119,16 @@ class Save extends Topic
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             }
 
-            $hasError = (bool) $this->messageManager->getMessages()->getCountByType(
+            $hasError = (bool)$this->messageManager->getMessages()->getCountByType(
                 MessageInterface::TYPE_ERROR
             );
 
             $topic->load($topic->getId());
             $topic->addData([
-                'level'     => 1,
+                'level' => 1,
                 'entity_id' => $topic->getId(),
                 'is_active' => $topic->getEnabled(),
-                'parent'    => 0
+                'parent' => 0
             ]);
 
             // to obtain truncated category name
@@ -142,7 +142,7 @@ class Save extends Topic
             return $resultJson->setData(
                 [
                     'messages' => $block->getGroupedHtml(),
-                    'error'    => $hasError,
+                    'error' => $hasError,
                     'category' => $topic->toArray(),
                 ]
             );

@@ -64,7 +64,7 @@ class InlineEdit extends Action
         JsonFactory $jsonFactory,
         TopicFactory $topicFactory
     ) {
-        $this->jsonFactory  = $jsonFactory;
+        $this->jsonFactory = $jsonFactory;
         $this->topicFactory = $topicFactory;
 
         parent::__construct($context);
@@ -77,19 +77,19 @@ class InlineEdit extends Action
     {
         /** @var Json $resultJson */
         $resultJson = $this->jsonFactory->create();
-        $error      = false;
-        $messages   = [];
-        $postItems  = $this->getRequest()->getParam('items', []);
+        $error = false;
+        $messages = [];
+        $postItems = $this->getRequest()->getParam('items', []);
 
         if (!($this->getRequest()->getParam('isAjax') && !empty($postItems))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
-                'error'    => true,
+                'error' => true,
             ]);
         }
 
-        $key     = array_keys($postItems);
-        $topicId = !empty($key) ? (int) $key[0] : '';
+        $key = array_keys($postItems);
+        $topicId = !empty($key) ? (int)$key[0] : '';
         /** @var Topic $topic */
         $topic = $this->topicFactory->create()->load($topicId);
         try {
@@ -97,21 +97,21 @@ class InlineEdit extends Action
                 ->save();
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithTopicId($topic, $e->getMessage());
-            $error      = true;
+            $error = true;
         } catch (RuntimeException $e) {
             $messages[] = $this->getErrorWithTopicId($topic, $e->getMessage());
-            $error      = true;
+            $error = true;
         } catch (Exception $e) {
             $messages[] = $this->getErrorWithTopicId(
                 $topic,
                 __('Something went wrong while saving the Topic.')
             );
-            $error      = true;
+            $error = true;
         }
 
         return $resultJson->setData([
             'messages' => $messages,
-            'error'    => $error
+            'error' => $error
         ]);
     }
 

@@ -83,10 +83,10 @@ class Topic extends AbstractDb
         RequestInterface $request,
         Data $helperData
     ) {
-        $this->helperData   = $helperData;
-        $this->date         = $date;
+        $this->helperData = $helperData;
+        $this->date = $date;
         $this->eventManager = $eventManager;
-        $this->request      = $request;
+        $this->request = $request;
 
         parent::__construct($context);
 
@@ -114,10 +114,10 @@ class Topic extends AbstractDb
     public function getTopicNameById($id)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()
+        $select = $adapter->select()
             ->from($this->getMainTable(), 'name')
             ->where('topic_id = :topic_id');
-        $binds   = ['topic_id' => (int) $id];
+        $binds = ['topic_id' => (int)$id];
 
         return $adapter->fetchOne($select, $binds);
     }
@@ -169,7 +169,7 @@ class Topic extends AbstractDb
             ->where(
                 'topic_id = :topic_id'
             );
-        $bind   = ['topic_id' => (int) $topic->getId()];
+        $bind = ['topic_id' => (int)$topic->getId()];
 
         return $this->getConnection()->fetchPairs($select, $bind);
     }
@@ -182,13 +182,13 @@ class Topic extends AbstractDb
     protected function savePostRelation(\Mageplaza\Blog\Model\Topic $topic)
     {
         $topic->setIsChangedPostList(false);
-        $id       = $topic->getId();
-        $posts    = $topic->getPostsData();
+        $id = $topic->getId();
+        $posts = $topic->getPostsData();
         $oldPosts = $topic->getPostsPosition();
         if (is_array($posts)) {
-            $insert  = array_diff_key($posts, $oldPosts);
-            $delete  = array_diff_key($oldPosts, $posts);
-            $update  = array_intersect_key($posts, $oldPosts);
+            $insert = array_diff_key($posts, $oldPosts);
+            $delete = array_diff_key($oldPosts, $posts);
+            $update = array_intersect_key($posts, $oldPosts);
             $_update = [];
             foreach ($update as $key => $settings) {
                 if (isset($oldPosts[$key]) && $oldPosts[$key] != $settings['position']) {
@@ -200,7 +200,7 @@ class Topic extends AbstractDb
         $adapter = $this->getConnection();
         if ($posts === null && $this->request->getActionName() === 'save') {
             foreach (array_keys($oldPosts) as $value) {
-                $condition = ['post_id =?' => (int) $value, 'topic_id=?' => (int) $id];
+                $condition = ['post_id =?' => (int)$value, 'topic_id=?' => (int)$id];
                 $adapter->delete($this->topicPostTable, $condition);
             }
 
@@ -208,7 +208,7 @@ class Topic extends AbstractDb
         }
         if (!empty($delete)) {
             foreach (array_keys($delete) as $value) {
-                $condition = ['post_id =?' => (int) $value, 'topic_id=?' => (int) $id];
+                $condition = ['post_id =?' => (int)$value, 'topic_id=?' => (int)$id];
                 $adapter->delete($this->topicPostTable, $condition);
             }
         }
@@ -216,17 +216,17 @@ class Topic extends AbstractDb
             $data = [];
             foreach ($insert as $postId => $position) {
                 $data[] = [
-                    'topic_id' => (int) $id,
-                    'post_id'  => (int) $postId,
-                    'position' => (int) $position['position']
+                    'topic_id' => (int)$id,
+                    'post_id' => (int)$postId,
+                    'position' => (int)$position['position']
                 ];
             }
             $adapter->insertMultiple($this->topicPostTable, $data);
         }
         if (!empty($update)) {
             foreach ($update as $postId => $position) {
-                $where = ['topic_id = ?' => (int) $id, 'post_id = ?' => (int) $postId];
-                $bind  = ['position' => (int) $position['position']];
+                $where = ['topic_id = ?' => (int)$id, 'post_id = ?' => (int)$postId];
+                $bind = ['position' => (int)$position['position']];
                 $adapter->update($this->topicPostTable, $bind, $where);
             }
         }
@@ -258,10 +258,10 @@ class Topic extends AbstractDb
     public function isImported($importSource, $oldId)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()
+        $select = $adapter->select()
             ->from($this->getMainTable(), 'topic_id')
             ->where('import_source = :import_source');
-        $binds   = ['import_source' => $importSource . '-' . $oldId];
+        $binds = ['import_source' => $importSource . '-' . $oldId];
 
         return $adapter->fetchOne($select, $binds);
     }

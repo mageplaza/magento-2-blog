@@ -60,7 +60,7 @@ class Edit extends Container
         array $data = []
     ) {
         $this->coreRegistry = $coreRegistry;
-        $this->_helperData  = $helperData;
+        $this->_helperData = $helperData;
 
         parent::__construct($context, $data);
     }
@@ -70,7 +70,7 @@ class Edit extends Container
      */
     protected function _construct()
     {
-        $this->_objectId   = 'id';
+        $this->_objectId = 'id';
         $this->_blockGroup = 'Mageplaza_Blog';
         $this->_controller = 'adminhtml_category';
 
@@ -83,8 +83,8 @@ class Edit extends Container
             $this->buttonList->add(
                 'duplicate',
                 [
-                    'label'   => __('Duplicate'),
-                    'class'   => 'duplicate',
+                    'label' => __('Duplicate'),
+                    'class' => 'duplicate',
                     'onclick' => sprintf("location.href = '%s';", $this->getDuplicateUrl()),
                 ],
                 -101
@@ -116,6 +116,6 @@ class Edit extends Container
      */
     public function getMagentoVersion()
     {
-        return (int) $this->_helperData->versionCompare('2.3.0') ? '4' : '';
+        return (int)$this->_helperData->versionCompare('2.3.0') ? '4' : '';
     }
 }

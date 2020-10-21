@@ -67,7 +67,7 @@ class Edit extends Post
     public function execute()
     {
         /** @var \Mageplaza\Blog\Model\Post $post */
-        $post      = $this->initPost();
+        $post = $this->initPost();
         $duplicate = $this->getRequest()->getParam('duplicate');
 
         if (!$post) {

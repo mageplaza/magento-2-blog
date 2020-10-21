@@ -46,8 +46,8 @@ class Edit extends Container
         $this->buttonList->add(
             'check-connection',
             [
-                'label'          => __('Check Connection'),
-                'class'          => 'primary',
+                'label' => __('Check Connection'),
+                'class' => 'primary',
                 'data_attribute' => [
                     'mage-init' => [
                         'button' => [
@@ -56,11 +56,11 @@ class Edit extends Container
                         ]
                     ]
                 ],
-                'onclick'        => 'mpBlogImport.initImportCheckConnection();'
+                'onclick' => 'mpBlogImport.initImportCheckConnection();'
             ],
             -100
         );
-        $this->_objectId   = 'import_id';
+        $this->_objectId = 'import_id';
         $this->_blockGroup = 'Mageplaza_Blog';
         $this->_controller = 'adminhtml_import';
     }

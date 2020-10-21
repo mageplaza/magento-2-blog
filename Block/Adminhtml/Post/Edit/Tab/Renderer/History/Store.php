@@ -42,10 +42,10 @@ class Store extends CoreStore
      */
     public function render(DataObject $row)
     {
-        $out                  = '';
-        $skipAllStoresLabel   = $this->_getShowAllStoresLabelFlag();
+        $out = '';
+        $skipAllStoresLabel = $this->_getShowAllStoresLabelFlag();
         $skipEmptyStoresLabel = $this->_getShowEmptyStoresLabelFlag();
-        $origStores           = $row->getData($this->getColumn()->getIndex());
+        $origStores = $row->getData($this->getColumn()->getIndex());
 
         if ($origStores === '0') {
             $origStores = [0 => '0'];

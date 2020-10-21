@@ -74,10 +74,10 @@ class Review extends Action
         PostLikeFactory $postLikeFactory,
         Data $helperData
     ) {
-        $this->_helperBlog         = $helperData;
+        $this->_helperBlog = $helperData;
         $this->_postLikeCollection = $postLikeCollection;
-        $this->_postLike           = $postLikeFactory;
-        $this->postFactory         = $postFactory;
+        $this->_postLike = $postLikeFactory;
+        $this->postFactory = $postFactory;
 
         parent::__construct($context);
     }
@@ -88,15 +88,15 @@ class Review extends Action
      */
     public function execute()
     {
-        $id         = $this->getRequest()->getParam('post_id');
-        $action     = $this->getRequest()->getParam('action');
-        $mode       = $this->getRequest()->getParam('mode');
-        $likeId     = $this->getRequest()->getParam('likeId');
+        $id = $this->getRequest()->getParam('post_id');
+        $action = $this->getRequest()->getParam('action');
+        $mode = $this->getRequest()->getParam('mode');
+        $likeId = $this->getRequest()->getParam('likeId');
         $customerId = $this->_helperBlog->getCurrentUser() ?: 0;
-        $post       = $this->postFactory->create()->load($id);
+        $post = $this->postFactory->create()->load($id);
 
         if ($mode === '1') {
-            $like   = $this->_postLikeCollection->addFieldToFilter('entity_id', $customerId)
+            $like = $this->_postLikeCollection->addFieldToFilter('entity_id', $customerId)
                 ->addFieldToFilter('post_id', $post->getId());
             $likeId = $like->getFirstItem()->getId();
 
@@ -104,7 +104,7 @@ class Review extends Action
                 return $this->getResponse()->representJson(Data::jsonEncode([
                     'status' => $like->count() > 0 ? 0 : 1,
                     'action' => $like->getFirstItem()->getAction(),
-                    'type'   => $action
+                    'type' => $action
                 ]));
             }
 
@@ -117,7 +117,7 @@ class Review extends Action
 
                 return $this->getResponse()->representJson(Data::jsonEncode([
                     'status' => 0,
-                    'type'   => $action
+                    'type' => $action
                 ]));
             }
         }
@@ -131,31 +131,31 @@ class Review extends Action
             } else {
                 $postLike->addData(
                     [
-                        'post_id'   => $post->getId(),
-                        'action'    => $action,
+                        'post_id' => $post->getId(),
+                        'action' => $action,
                         'entity_id' => $customerId
                     ]
                 )->save();
             }
 
-            $sumLike    = $this->_postLike->create()->getCollection()->addFieldToFilter('action', '1')
+            $sumLike = $this->_postLike->create()->getCollection()->addFieldToFilter('action', '1')
                 ->addFieldToFilter('post_id', $id);
             $sumDislike = $this->_postLike->create()->getCollection()->addFieldToFilter('action', '0')
                 ->addFieldToFilter('post_id', $id);
 
             return $this->getResponse()->representJson(Data::jsonEncode([
-                'status'     => 1,
-                'type'       => $action,
-                'sumLike'    => $sumLike->count(),
+                'status' => 1,
+                'type' => $action,
+                'sumLike' => $sumLike->count(),
                 'sumDislike' => $sumDislike->count(),
-                'postLike'   => $postLike->getId()
+                'postLike' => $postLike->getId()
             ]));
         } catch (Exception $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
 
             return $this->getResponse()->representJson(Data::jsonEncode([
                 'status' => 0,
-                'type'   => $action
+                'type' => $action
             ]));
         }
     }

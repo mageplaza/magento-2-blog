@@ -69,7 +69,7 @@ class CustomerGrid extends Extended
         array $data = []
     ) {
         $this->_customerCollectionFactory = $customerFactory;
-        $this->customerGroup              = $customerGroup;
+        $this->customerGroup = $customerGroup;
 
         parent::__construct($context, $backendHelper, $data);
     }
@@ -110,41 +110,41 @@ class CustomerGrid extends Extended
     {
         $this->addColumn('customer_id', [
             'header_css_class' => 'a-center',
-            'type'             => 'radio',
-            'html_name'        => 'customer_id',
-            'align'            => 'center',
-            'index'            => 'entity_id',
-            'filter'           => false,
-            'sortable'         => false
+            'type' => 'radio',
+            'html_name' => 'customer_id',
+            'align' => 'center',
+            'index' => 'entity_id',
+            'filter' => false,
+            'sortable' => false
         ]);
         $this->addColumn('entity_id', [
-            'header'   => __('ID'),
+            'header' => __('ID'),
             'sortable' => true,
-            'index'    => 'entity_id'
+            'index' => 'entity_id'
         ]);
         $this->addColumn('firstname', [
-            'header'   => __('First Name'),
-            'index'    => 'firstname',
-            'type'     => 'text',
+            'header' => __('First Name'),
+            'index' => 'firstname',
+            'type' => 'text',
             'sortable' => true,
         ]);
         $this->addColumn('lastname', [
-            'header'   => __('Last Name'),
-            'index'    => 'lastname',
-            'type'     => 'text',
+            'header' => __('Last Name'),
+            'index' => 'lastname',
+            'type' => 'text',
             'sortable' => true,
         ]);
         $this->addColumn('email', [
-            'header'   => __('Email'),
-            'index'    => 'email',
-            'type'     => 'text',
+            'header' => __('Email'),
+            'index' => 'email',
+            'type' => 'text',
             'sortable' => true,
         ]);
         $this->addColumn('group_id', [
-            'header'   => __('Group'),
-            'index'    => 'group_id',
-            'type'     => 'options',
-            'options'  => $this->customerGroup->create()->toOptionHash(),
+            'header' => __('Group'),
+            'index' => 'group_id',
+            'type' => 'options',
+            'options' => $this->customerGroup->create()->toOptionHash(),
             'sortable' => true,
         ]);
 

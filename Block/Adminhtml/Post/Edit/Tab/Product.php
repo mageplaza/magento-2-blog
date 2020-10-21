@@ -74,8 +74,8 @@ class Product extends Extended implements TabInterface
         array $data = []
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->coreRegistry             = $coreRegistry;
-        $this->request                  = $request;
+        $this->coreRegistry = $coreRegistry;
+        $this->request = $request;
 
         parent::__construct($context, $backendHelper, $data);
     }
@@ -126,51 +126,51 @@ class Product extends Extended implements TabInterface
     {
         $this->addColumn('in_products', [
             'header_css_class' => 'a-center',
-            'type'             => 'checkbox',
-            'name'             => 'in_product',
-            'values'           => $this->_getSelectedProducts(),
-            'align'            => 'center',
-            'index'            => 'entity_id'
+            'type' => 'checkbox',
+            'name' => 'in_product',
+            'values' => $this->_getSelectedProducts(),
+            'align' => 'center',
+            'index' => 'entity_id'
         ]);
         $this->addColumn('entity_id', [
-            'header'           => __('ID'),
-            'sortable'         => true,
-            'index'            => 'entity_id',
-            'type'             => 'number',
+            'header' => __('ID'),
+            'sortable' => true,
+            'index' => 'entity_id',
+            'type' => 'number',
             'header_css_class' => 'col-id',
             'column_css_class' => 'col-id'
         ]);
         $this->addColumn('title', [
-            'header'           => __('Sku'),
-            'index'            => 'sku',
+            'header' => __('Sku'),
+            'index' => 'sku',
             'header_css_class' => 'col-name',
             'column_css_class' => 'col-name'
         ]);
 
         if ($this->request->getParam('post_id') || $this->getPost()->getId()) {
             $this->addColumn('position', [
-                'header'         => __('Position'),
-                'name'           => 'position',
-                'width'          => 60,
-                'type'           => 'number',
+                'header' => __('Position'),
+                'name' => 'position',
+                'width' => 60,
+                'type' => 'number',
                 'validate_class' => 'validate-number',
-                'index'          => 'position',
-                'editable'       => true,
-                'sortable'       => false,
-                'edit_only'      => true,
+                'index' => 'position',
+                'editable' => true,
+                'sortable' => false,
+                'edit_only' => true,
             ]);
         } else {
             $this->addColumn('position', [
-                'header'         => __('Position'),
-                'name'           => 'position',
-                'width'          => 60,
-                'type'           => 'number',
+                'header' => __('Position'),
+                'name' => 'position',
+                'width' => 60,
+                'type' => 'number',
                 'validate_class' => 'validate-number',
-                'index'          => 'position',
-                'editable'       => true,
-                'sortable'       => false,
-                'filter'         => false,
-                'edit_only'      => true,
+                'index' => 'position',
+                'editable' => true,
+                'sortable' => false,
+                'filter' => false,
+                'edit_only' => true,
             ]);
         }
 

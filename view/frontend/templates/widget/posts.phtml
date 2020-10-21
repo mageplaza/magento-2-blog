@@ -29,10 +29,10 @@ $posts = $block->getCollection();
         <a href="<?= $block->getBlogUrl(''); ?>"><?= $block->getTitle(); ?></a>
     </div>
     <div class="row">
-        <?php foreach ($posts as $post) : ?>
+        <?php foreach ($posts as $post): ?>
             <div class="post-list-item" style="margin-left: 5px">
                 <div class="post-item-wraper">
-                    <?php if ($post->getImage()) : ?>
+                    <?php if ($post->getImage()): ?>
                         <div class="post-image">
                             <a href="<?= $post->getUrl() ?>">
                                 <img class="img-responsive" style="height: 220px"

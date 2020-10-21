@@ -64,8 +64,8 @@ class UpgradeData implements UpgradeDataInterface
         AuthorFactory $authorFactory
     ) {
         $this->comment = $commentFactory;
-        $this->author  = $authorFactory;
-        $this->date    = $date;
+        $this->author = $authorFactory;
+        $this->date = $date;
     }
 
     /**
@@ -85,7 +85,7 @@ class UpgradeData implements UpgradeDataInterface
                 /** Add create at old comment */
                 $sampleTemplates = [
                     'created_at' => $this->date->date(),
-                    'status'     => 3
+                    'status' => 3
                 ];
                 $setup->getConnection()->update(
                     $setup->getTable('mageplaza_blog_comment'),
@@ -99,9 +99,9 @@ class UpgradeData implements UpgradeDataInterface
             if ($this->author->create()->getCollection()->count() < 1) {
                 $this->author->create()->addData(
                     [
-                        'name'       => 'Admin',
-                        'type'       => 0,
-                        'status'     => 1,
+                        'name' => 'Admin',
+                        'type' => 0,
+                        'status' => 1,
                         'created_at' => $this->date->date()
                     ]
                 )->save();

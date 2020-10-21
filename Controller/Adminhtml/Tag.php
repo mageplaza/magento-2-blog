@@ -61,7 +61,7 @@ abstract class Tag extends Action
         Registry $coreRegistry,
         TagFactory $tagFactory
     ) {
-        $this->tagFactory   = $tagFactory;
+        $this->tagFactory = $tagFactory;
         $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);
@@ -74,7 +74,7 @@ abstract class Tag extends Action
      */
     protected function initTag($register = false)
     {
-        $tagId = (int) $this->getRequest()->getParam('id');
+        $tagId = (int)$this->getRequest()->getParam('id');
 
         /** @var \Mageplaza\Blog\Model\Tag $tag */
         $tag = $this->tagFactory->create();

@@ -64,13 +64,13 @@ use Mageplaza\Core\Helper\AbstractData as CoreHelper;
 class Data extends CoreHelper
 {
     const CONFIG_MODULE_PATH = 'blog';
-    const TYPE_POST          = 'post';
-    const TYPE_CATEGORY      = 'category';
-    const TYPE_TAG           = 'tag';
-    const TYPE_TOPIC         = 'topic';
-    const TYPE_HISTORY       = 'history';
-    const TYPE_AUTHOR        = 'author';
-    const TYPE_MONTHLY       = 'month';
+    const TYPE_POST = 'post';
+    const TYPE_CATEGORY = 'category';
+    const TYPE_TAG = 'tag';
+    const TYPE_TOPIC = 'topic';
+    const TYPE_HISTORY = 'history';
+    const TYPE_AUTHOR = 'author';
+    const TYPE_MONTHLY = 'month';
 
     /**
      * @var PostFactory
@@ -161,17 +161,17 @@ class Data extends CoreHelper
         HttpContext $httpContext,
         DateTime $dateTime
     ) {
-        $this->postFactory        = $postFactory;
-        $this->categoryFactory    = $categoryFactory;
-        $this->tagFactory         = $tagFactory;
-        $this->topicFactory       = $topicFactory;
-        $this->authorFactory      = $authorFactory;
+        $this->postFactory = $postFactory;
+        $this->categoryFactory = $categoryFactory;
+        $this->tagFactory = $tagFactory;
+        $this->topicFactory = $topicFactory;
+        $this->authorFactory = $authorFactory;
         $this->postHistoryFactory = $postHistoryFactory;
-        $this->translitUrl        = $translitUrl;
-        $this->dateTime           = $dateTime;
-        $this->customerSession    = $customerSession;
-        $this->_httpContext       = $httpContext;
-        $this->_productMetadata   = $productMetadata;
+        $this->translitUrl = $translitUrl;
+        $this->dateTime = $dateTime;
+        $this->customerSession = $customerSession;
+        $this->_httpContext = $httpContext;
+        $this->_productMetadata = $productMetadata;
 
         parent::__construct($context, $objectManager, $storeManager);
     }
@@ -181,7 +181,7 @@ class Data extends CoreHelper
      */
     public function isEnabledReview()
     {
-        $groupId = (string) $this->_httpContext->getValue(CustomerContext::CONTEXT_GROUP);
+        $groupId = (string)$this->_httpContext->getValue(CustomerContext::CONTEXT_GROUP);
 
         if ($this->getConfigGeneral('is_review')
             && in_array($groupId, explode(',', $this->getConfigGeneral('review_mode')), true)
@@ -564,9 +564,9 @@ class Data extends CoreHelper
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url    = $this->getUrl($this->getRoute($store) . '/' . $urlKey);
-        $url    = explode('?', $url);
-        $url    = $url[0];
+        $url = $this->getUrl($this->getRoute($store) . '/' . $urlKey);
+        $url = explode('?', $url);
+        $url = $url[0];
 
         return rtrim($url, '/') . $this->getUrlSuffix($store);
     }
@@ -658,15 +658,15 @@ class Data extends CoreHelper
         }
 
         $adapter = $resource->getConnection();
-        $select  = $adapter->select()
+        $select = $adapter->select()
             ->from($resource->getMainTable(), '*')
             ->where('url_key = :url_key');
 
-        $binds = ['url_key' => (string) $urlKey];
+        $binds = ['url_key' => (string)$urlKey];
 
         if ($id = $object->getId()) {
             $select->where($resource->getIdFieldName() . ' != :object_id');
-            $binds['object_id'] = (int) $id;
+            $binds['object_id'] = (int)$id;
         }
 
         return $adapter->fetchOne($select, $binds);
@@ -722,6 +722,6 @@ class Data extends CoreHelper
         $storeEnable = explode(',', $object->getStoreIds());
 
         return in_array('0', $storeEnable, true)
-            || in_array((string) $this->storeManager->getStore()->getId(), $storeEnable, true);
+            || in_array((string)$this->storeManager->getStore()->getId(), $storeEnable, true);
     }
 }

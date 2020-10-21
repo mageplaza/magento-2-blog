@@ -95,7 +95,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     protected function _prepareLayout()
     {
         $this->addTab('category', [
-            'label'   => __('Category information'),
+            'label' => __('Category information'),
             'content' => $this->getLayout()
                 ->createBlock(
                     Tab\Category::class,
@@ -104,7 +104,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
                 ->toHtml()
         ]);
         $this->addTab('post', [
-            'label'   => __('Posts'),
+            'label' => __('Posts'),
             'content' => $this->getLayout()
                 ->createBlock(
                     Tab\Post::class,

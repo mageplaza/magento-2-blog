@@ -56,7 +56,7 @@ class Edit extends Action
         PageFactory $resultPageFactory,
         Registry $registry
     ) {
-        $this->registry          = $registry;
+        $this->registry = $registry;
         $this->resultPageFactory = $resultPageFactory;
 
         parent::__construct($context);

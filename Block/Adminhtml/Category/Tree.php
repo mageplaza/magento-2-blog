@@ -82,8 +82,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
             $data
         );
 
-        $this->_categoryTree     = $blogCategoryTree;
-        $this->_categoryFactory  = $blogCategoryFactory;
+        $this->_categoryTree = $blogCategoryTree;
+        $this->_categoryFactory = $blogCategoryFactory;
         $this->_withProductCount = false;
     }
 
@@ -186,10 +186,10 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         $node->setIsActive(true);
 
         if ($item = parent::_getNodeJson($node, $level)) {
-            $item['url']       = $node->getData('url_key');
-            $item['storeIds']  = $node->getData('store_ids');
+            $item['url'] = $node->getData('url_key');
+            $item['storeIds'] = $node->getData('store_ids');
             $item['allowDrag'] = $this->_isCategoryMoveable($node) && ($node->getLevel() == 0 ? false : true);
-            $item['enabled']   = $node->getData('enabled');
+            $item['enabled'] = $node->getData('enabled');
 
             return $item;
         }

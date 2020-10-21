@@ -37,9 +37,9 @@ class Search extends Frontend
      */
     public function getSearchBlogData()
     {
-        $result    = [];
-        $posts     = $this->helperData->getPostList();
-        $limitDesc = (int) $this->getSidebarConfig('search/description');
+        $result = [];
+        $posts = $this->helperData->getPostList();
+        $limitDesc = (int)$this->getSidebarConfig('search/description');
         if (!empty($posts)) {
             foreach ($posts as $item) {
                 $shortDescription = ($item->getShortDescription() && $limitDesc > 0) ?
@@ -50,9 +50,9 @@ class Search extends Frontend
 
                 $result[] = [
                     'value' => $item->getName(),
-                    'url'   => $item->getUrl(),
+                    'url' => $item->getUrl(),
                     'image' => $this->resizeImage($item->getImage(), '100x'),
-                    'desc'  => $shortDescription
+                    'desc' => $shortDescription
                 ];
             }
         }

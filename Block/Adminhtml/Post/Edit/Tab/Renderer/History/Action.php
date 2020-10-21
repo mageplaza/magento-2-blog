@@ -64,43 +64,43 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
     public function render(DataObject $row)
     {
         $actions[] = [
-            'url'     =>
+            'url' =>
                 $this->getUrl('*/history/edit', [
-                    'id'      => $row->getId(),
+                    'id' => $row->getId(),
                     'post_id' => $row->getPostId(),
                     'history' => true
                 ]),
-            'popup'   => false,
+            'popup' => false,
             'caption' => __('Edit'),
         ];
         try {
             $actions[] = [
-                'url'     => $this->_storeManager->getStore()->getBaseUrl()
+                'url' => $this->_storeManager->getStore()->getBaseUrl()
                     . 'mpblog/post/preview?id=' . $row->getPostId() . '&historyId=' . $row->getId(),
-                'popup'   => true,
+                'popup' => true,
                 'caption' => __('Preview'),
             ];
         } catch (Exception $exception) {
             $actions[] = [];
         }
         $actions[] = [
-            'url'     =>
+            'url' =>
                 $this->getUrl('*/history/restore', [
-                    'id'      => $row->getId(),
+                    'id' => $row->getId(),
                     'post_id' => $row->getPostId()
                 ]),
-            'popup'   => false,
+            'popup' => false,
             'caption' => __('Restore'),
             'confirm' => 'Are you sure you want to do this?'
         ];
 
         $actions[] = [
-            'url'     =>
+            'url' =>
                 $this->getUrl('*/history/delete', [
-                    'id'      => $row->getId(),
+                    'id' => $row->getId(),
                     'post_id' => $row->getPostId()
                 ]),
-            'popup'   => false,
+            'popup' => false,
             'caption' => __('Delete'),
             'confirm' => 'Are you sure you want to do this?'
         ];

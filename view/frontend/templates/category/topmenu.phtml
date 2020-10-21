@@ -24,14 +24,14 @@ $categorys = $block->getCollections();
 ?>
 <li class="level0 category-item level-top parent ui-menu-item" role="presentation">
     <a href="<?= /* @noEscape */ $block->getBlogHomeUrl() ?>" class="level-top ui-corner-all" aria-haspopup="true" id="ui-id-6" tabindex="-1" role="menuitem">
-        <?php if (sizeof($categorys)) :?>
+        <?php if (sizeof($categorys)):?>
             <span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>
         <?php endif; ?>
         <span><?= /* @noEscape */ $block->getBlogHomePageTitle()?></span>
     </a>
-    <?php if (sizeof($categorys)) :?>
+    <?php if (sizeof($categorys)):?>
         <ul class="level0 submenu ui-menu ui-widget ui-widget-content ui-corner-all" role="menu" aria-expanded="false" style="display: none; top: 47px; left: -0.15625px;" aria-hidden="true">
-            <?php foreach ($categorys as $category) : ?>
+            <?php foreach ($categorys as $category): ?>
                 <?= /* @noEscape */ $block->getMenuHtml($category)?>
             <?php endforeach; ?>
         </ul>

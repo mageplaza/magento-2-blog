@@ -34,13 +34,13 @@ class CreateTopic implements ButtonProviderInterface
     public function getButtonData()
     {
         return [
-            'label'          => __('Create Topic'),
-            'class'          => 'save primary',
+            'label' => __('Create Topic'),
+            'class' => 'save primary',
             'data_attribute' => [
                 'mage-init' => ['button' => ['event' => 'save']],
                 'form-role' => 'save',
             ],
-            'sort_order'     => 10
+            'sort_order' => 10
         ];
     }
 }

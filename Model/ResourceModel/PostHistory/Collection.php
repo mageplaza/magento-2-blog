@@ -74,7 +74,7 @@ class Collection extends AbstractCollection
         AbstractDb $resource = null
     ) {
         $this->localeDate = $localeDate;
-        $this->locale     = $localeResolver->getLocale();
+        $this->locale = $localeResolver->getLocale();
 
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }

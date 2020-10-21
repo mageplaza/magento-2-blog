@@ -67,8 +67,8 @@ class Signup extends Action
         ForwardFactory $resultForwardFactory,
         Data $helperData
     ) {
-        $this->_helperBlog          = $helperData;
-        $this->resultPageFactory    = $resultPageFactory;
+        $this->_helperBlog = $helperData;
+        $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
 
         parent::__construct($context);

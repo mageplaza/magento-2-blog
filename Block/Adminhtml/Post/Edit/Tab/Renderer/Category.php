@@ -73,8 +73,8 @@ class Category extends Multiselect
         array $data = []
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->authorization     = $authorization;
-        $this->_urlBuilder       = $urlBuilder;
+        $this->authorization = $authorization;
+        $this->_urlBuilder = $urlBuilder;
 
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
@@ -129,7 +129,7 @@ class Category extends Multiselect
 
         $categoryById = [
             CategoryModel::TREE_ROOT_ID => [
-                'value'    => CategoryModel::TREE_ROOT_ID,
+                'value' => CategoryModel::TREE_ROOT_ID,
                 'optgroup' => null,
             ],
         ];
@@ -141,8 +141,8 @@ class Category extends Multiselect
                 }
             }
 
-            $categoryById[$category->getId()]['is_active']        = 1;
-            $categoryById[$category->getId()]['label']            = $category->getName();
+            $categoryById[$category->getId()]['is_active'] = 1;
+            $categoryById[$category->getId()]['label'] = $category->getName();
             $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
         }
 

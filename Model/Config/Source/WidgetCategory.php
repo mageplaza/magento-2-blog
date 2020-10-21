@@ -52,7 +52,7 @@ class WidgetCategory implements ArrayInterface
     public function toOptionArray()
     {
         $collection = $this->category->create();
-        $ar         = [];
+        $ar = [];
         foreach ($collection->getItems() as $item) {
             if ($item->getId() === '1') {
                 continue;

@@ -79,9 +79,9 @@ abstract class History extends Action
         Context $context
     ) {
         $this->postHistoryFactory = $postHistoryFactory;
-        $this->postFactory        = $postFactory;
-        $this->coreRegistry       = $coreRegistry;
-        $this->date               = $date;
+        $this->postFactory = $postFactory;
+        $this->coreRegistry = $coreRegistry;
+        $this->date = $date;
 
         parent::__construct($context);
     }
@@ -93,7 +93,7 @@ abstract class History extends Action
      */
     protected function initPostHistory($register = false)
     {
-        $historyId = (int) $this->getRequest()->getParam('id');
+        $historyId = (int)$this->getRequest()->getParam('id');
 
         /** @var \Mageplaza\Blog\Model\Post $post */
         $history = $this->postHistoryFactory->create();

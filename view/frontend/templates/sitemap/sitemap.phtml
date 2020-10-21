@@ -29,19 +29,19 @@ $tags = $helper->getObjectList(Data::TYPE_TAG);
 $topics = $helper->getObjectList(Data::TYPE_TOPIC);
 ?>
 
-<?php if ($size = $posts->getSize()) : ?>
+<?php if ($size = $posts->getSize()): ?>
     <h2><?= ($size == 1) ? __('Post') : __('Posts') ?></h2>
     <ul>
-        <?php foreach ($posts as $post) : ?>
+        <?php foreach ($posts as $post): ?>
             <li><a href="<?= $post->getUrl() ?>"><?= $post->getName(); ?></a></li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
 
-<?php if ($size = $categories->getSize()) : ?>
+<?php if ($size = $categories->getSize()): ?>
     <h2><?= ($size == 1) ? __('Category') : __('Categories') ?></h2>
     <ul>
-        <?php foreach ($categories as $category) : ?>
+        <?php foreach ($categories as $category): ?>
             <li>
                 <a href="<?= $helper->getBlogUrl($category, Data::TYPE_CATEGORY) ?>"><?= $category->getName(); ?></a>
             </li>
@@ -49,20 +49,20 @@ $topics = $helper->getObjectList(Data::TYPE_TOPIC);
     </ul>
 <?php endif; ?>
 
-<?php if ($size = $tags->getSize()) : ?>
+<?php if ($size = $tags->getSize()): ?>
     <h2><?= ($size == 1) ? __('Tag') : __('Tags') ?></h2>
     <ul>
-        <?php foreach ($tags as $tag) : ?>
+        <?php foreach ($tags as $tag): ?>
             <li><a href="<?= $helper->getBlogUrl($tag, Data::TYPE_TAG) ?>"><?= $tag->getName(); ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
 
-<?php if ($size = $topics->getSize()) : ?>
+<?php if ($size = $topics->getSize()): ?>
     <h2><?= ($size == 1) ? __('Topic') : __('Topics') ?></h2>
     <ul>
-        <?php foreach ($topics as $topic) : ?>
+        <?php foreach ($topics as $topic): ?>
             <li>
                 <a href="<?= $helper->getBlogUrl($topic, Data::TYPE_TOPIC) ?>"><?= $topic->getName(); ?></a>
             </li>

@@ -104,13 +104,13 @@ class BlogRepository implements BlogRepositoryInterface
         RequestInterface $request,
         DateTime $date
     ) {
-        $this->_request                     = $request;
-        $this->_helperData                  = $helperData;
+        $this->_request = $request;
+        $this->_helperData = $helperData;
         $this->_customerRepositoryInterface = $customerRepositoryInterface;
-        $this->date                         = $date;
-        $this->_commentFactory              = $commentFactory;
-        $this->_likeFactory                 = $likeFactory;
-        $this->collectionProcessor          = $collectionProcessor;
+        $this->date = $date;
+        $this->_commentFactory = $commentFactory;
+        $this->_likeFactory = $likeFactory;
+        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
@@ -861,7 +861,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     protected function getAllItem($collection)
     {
-        $page  = $this->_request->getParam('page', 1);
+        $page = $this->_request->getParam('page', 1);
         $limit = $this->_request->getParam('limit', 10);
 
         $collection->getSelect()->limitPage($page, $limit);

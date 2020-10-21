@@ -61,14 +61,14 @@ class InstallSchema implements InstallSchemaInterface
         $installer = $setup;
 
         $installer->startSetup();
-        if (!$this->helperData->versionCompare('2.3.0')) :
+        if (!$this->helperData->versionCompare('2.3.0')):
             if (!$installer->tableExists('mageplaza_blog_post')) {
                 $table = $installer->getConnection()
                     ->newTable($installer->getTable('mageplaza_blog_post'))
                     ->addColumn('post_id', Table::TYPE_INTEGER, null, [
                         'identity' => true,
                         'nullable' => false,
-                        'primary'  => true,
+                        'primary' => true,
                         'unsigned' => true,
                     ], 'Post ID')
                     ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable => false'], 'Post Name')
@@ -104,7 +104,7 @@ class InstallSchema implements InstallSchemaInterface
                     ->addColumn('tag_id', Table::TYPE_INTEGER, null, [
                         'identity' => true,
                         'nullable' => false,
-                        'primary'  => true,
+                        'primary' => true,
                         'unsigned' => true,
                     ], 'Tag ID')
                     ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable => false'], 'Tag Name')
@@ -131,7 +131,7 @@ class InstallSchema implements InstallSchemaInterface
                     ->addColumn('topic_id', Table::TYPE_INTEGER, null, [
                         'identity' => true,
                         'nullable' => false,
-                        'primary'  => true,
+                        'primary' => true,
                         'unsigned' => true,
                     ], 'Topic ID')
                     ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable => false'], 'Topic Name')
@@ -162,7 +162,7 @@ class InstallSchema implements InstallSchemaInterface
                     ->addColumn('category_id', Table::TYPE_INTEGER, null, [
                         'identity' => true,
                         'nullable' => false,
-                        'primary'  => true,
+                        'primary' => true,
                         'unsigned' => true,
                     ], 'Category ID')
                     ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable => false'], 'Category Name')
@@ -197,17 +197,17 @@ class InstallSchema implements InstallSchemaInterface
                     ->newTable($installer->getTable('mageplaza_blog_post_tag'))
                     ->addColumn('tag_id', Table::TYPE_INTEGER, null, [
                         'unsigned' => true,
-                        'primary'  => true,
+                        'primary' => true,
                         'nullable' => false
                     ], 'Tag ID')
                     ->addColumn('post_id', Table::TYPE_INTEGER, null, [
                         'unsigned' => true,
-                        'primary'  => true,
+                        'primary' => true,
                         'nullable' => false
                     ], 'Post ID')
                     ->addColumn('position', Table::TYPE_INTEGER, null, [
                         'nullable' => false,
-                        'default'  => '0'
+                        'default' => '0'
                     ], 'Position')
                     ->addIndex($installer->getIdxName('mageplaza_blog_post_tag', ['post_id']), ['post_id'])
                     ->addIndex($installer->getIdxName('mageplaza_blog_post_tag', ['tag_id']), ['tag_id'])
@@ -244,12 +244,12 @@ class InstallSchema implements InstallSchemaInterface
                     ->newTable($installer->getTable('mageplaza_blog_post_topic'))
                     ->addColumn('topic_id', Table::TYPE_INTEGER, null, [
                         'unsigned' => true,
-                        'primary'  => true,
+                        'primary' => true,
                         'nullable' => false
                     ], 'Topic ID')
                     ->addColumn('post_id', Table::TYPE_INTEGER, null, [
                         'unsigned' => true,
-                        'primary'  => true,
+                        'primary' => true,
                         'nullable' => false
                     ], 'Post ID')
                     ->addColumn(
@@ -299,12 +299,12 @@ class InstallSchema implements InstallSchemaInterface
                     ->newTable($installer->getTable('mageplaza_blog_post_category'))
                     ->addColumn('category_id', Table::TYPE_INTEGER, null, [
                         'unsigned' => true,
-                        'primary'  => true,
+                        'primary' => true,
                         'nullable' => false
                     ], 'Category ID')
                     ->addColumn('post_id', Table::TYPE_INTEGER, null, [
                         'unsigned' => true,
-                        'primary'  => true,
+                        'primary' => true,
                         'nullable' => false
                     ], 'Post ID')
                     ->addColumn(

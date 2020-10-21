@@ -70,10 +70,10 @@ class NewCategoryDataProvider extends AbstractDataProvider
             [
                 'config' => [
                     'data' => [
-                        'is_active'                    => 1,
-                        'include_in_menu'              => 1,
+                        'is_active' => 1,
+                        'include_in_menu' => 1,
                         'return_session_messages_only' => 1,
-                        'use_config'                   => ['available_sort_by', 'default_sort_by']
+                        'use_config' => ['available_sort_by', 'default_sort_by']
                     ]
                 ]
             ]

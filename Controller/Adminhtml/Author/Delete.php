@@ -67,7 +67,7 @@ class Delete extends Author
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if ($id = $this->getRequest()->getParam('id')) {
-            $post               = $this->_postFactory->create();
+            $post = $this->_postFactory->create();
             $postCollectionSize = $post->getCollection()->addFieldToFilter('author_id', ['eq' => $id])->getSize();
             if ($postCollectionSize > 0) {
                 $this->messageManager->addErrorMessage(__('You can not delete this author.'

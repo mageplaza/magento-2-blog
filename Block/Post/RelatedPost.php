@@ -74,7 +74,7 @@ class RelatedPost extends Template
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
-        $this->helperData    = $helperData;
+        $this->helperData = $helperData;
 
         parent::__construct($context, $data);
 
@@ -123,7 +123,7 @@ class RelatedPost extends Template
     public function getLimitPosts()
     {
         if (!$this->_limitPost) {
-            $this->_limitPost = (int) $this->helperData->getBlogConfig('product_post/product_detail/post_limit') ?: 1;
+            $this->_limitPost = (int)$this->helperData->getBlogConfig('product_post/product_detail/post_limit') ?: 1;
         }
 
         return $this->_limitPost;
@@ -138,7 +138,7 @@ class RelatedPost extends Template
     public function setTabTitle()
     {
         $relatedSize = min($this->getRelatedPostList()->getSize(), $this->getLimitPosts());
-        $title       = $relatedSize
+        $title = $relatedSize
             ? __('Related Posts %1', '<span class="counter">' . $relatedSize . '</span>')
             : __('Related Posts');
         if ($this->helperData->isEnabled()) {
@@ -159,7 +159,7 @@ class RelatedPost extends Template
      */
     public function getRelatedMode()
     {
-        return (int) $this->helperData->getConfigGeneral('related_mode') === 1;
+        return (int)$this->helperData->getConfigGeneral('related_mode') === 1;
     }
 
     /**

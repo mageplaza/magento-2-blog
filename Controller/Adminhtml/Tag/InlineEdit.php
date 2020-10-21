@@ -61,7 +61,7 @@ class InlineEdit extends Action
         TagFactory $tagFactory
     ) {
         $this->jsonFactory = $jsonFactory;
-        $this->tagFactory  = $tagFactory;
+        $this->tagFactory = $tagFactory;
 
         parent::__construct($context);
     }
@@ -73,18 +73,18 @@ class InlineEdit extends Action
     {
         /** @var Json $resultJson */
         $resultJson = $this->jsonFactory->create();
-        $error      = false;
-        $messages   = [];
-        $postItems  = $this->getRequest()->getParam('items', []);
+        $error = false;
+        $messages = [];
+        $postItems = $this->getRequest()->getParam('items', []);
         if (!($this->getRequest()->getParam('isAjax') && !empty($postItems))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
-                'error'    => true,
+                'error' => true,
             ]);
         }
 
-        $key   = array_keys($postItems);
-        $tagId = !empty($key) ? (int) $key[0] : '';
+        $key = array_keys($postItems);
+        $tagId = !empty($key) ? (int)$key[0] : '';
         /** @var Tag $tag */
         $tag = $this->tagFactory->create()->load($tagId);
         try {
@@ -92,18 +92,18 @@ class InlineEdit extends Action
                 ->save();
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithTagId($tag, $e->getMessage());
-            $error      = true;
+            $error = true;
         } catch (RuntimeException $e) {
             $messages[] = $this->getErrorWithTagId($tag, $e->getMessage());
-            $error      = true;
+            $error = true;
         } catch (Exception $e) {
             $messages[] = $this->getErrorWithTagId($tag, __('Something went wrong while saving the Tag.'));
-            $error      = true;
+            $error = true;
         }
 
         return $resultJson->setData([
             'messages' => $messages,
-            'error'    => $error
+            'error' => $error
         ]);
     }
 

@@ -65,8 +65,8 @@ class View extends Action
         ForwardFactory $resultForwardFactory,
         Data $helperData
     ) {
-        $this->_helperBlog          = $helperData;
-        $this->resultPageFactory    = $resultPageFactory;
+        $this->_helperBlog = $helperData;
+        $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
 
         parent::__construct($context);
@@ -77,7 +77,7 @@ class View extends Action
      */
     public function execute()
     {
-        $id   = $this->getRequest()->getParam('id');
+        $id = $this->getRequest()->getParam('id');
         $page = $this->resultPageFactory->create();
         $page->getConfig()->setPageLayout($this->_helperBlog->getSidebarLayout());
 

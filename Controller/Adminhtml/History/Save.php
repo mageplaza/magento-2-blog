@@ -101,10 +101,10 @@ class Save extends History
         TimezoneInterface $timezone,
         Context $context
     ) {
-        $this->jsHelper    = $jsHelper;
+        $this->jsHelper = $jsHelper;
         $this->_helperData = $helperData;
         $this->imageHelper = $imageHelper;
-        $this->_timezone   = $timezone;
+        $this->_timezone = $timezone;
 
         parent::__construct($postHistoryFactory, $postFactory, $coreRegistry, $date, $context);
     }
@@ -140,9 +140,9 @@ class Save extends History
         }
 
         $resultRedirect->setPath('mageplaza_blog/*/edit', [
-            'id'       => $this->getRequest()->getParam('id'),
-            'post_id'  => $this->getRequest()->getParam('post_id'),
-            'history'  => true,
+            'id' => $this->getRequest()->getParam('id'),
+            'post_id' => $this->getRequest()->getParam('post_id'),
+            'history' => true,
             '_current' => true
         ]);
 
@@ -169,16 +169,16 @@ class Save extends History
         }
 
         /** Set specify field data */
-        $data['publish_date']   = $this->_timezone->convertConfigTimeToUtc(isset($data['publish_date'])
+        $data['publish_date'] = $this->_timezone->convertConfigTimeToUtc(isset($data['publish_date'])
             ? $data['publish_date'] : null);
-        $data['modifier_id']    = $this->_auth->getUser()->getId();
+        $data['modifier_id'] = $this->_auth->getUser()->getId();
         $data['categories_ids'] = (isset($data['categories_ids']) && $data['categories_ids']) ? explode(
             ',',
             $data['categories_ids']
         ) : [];
-        $data['tags_ids']       = (isset($data['tags_ids']) && $data['tags_ids'])
+        $data['tags_ids'] = (isset($data['tags_ids']) && $data['tags_ids'])
             ? explode(',', $data['tags_ids']) : [];
-        $data['topics_ids']     = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(
+        $data['topics_ids'] = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(
             ',',
             $data['topics_ids']
         ) : [];

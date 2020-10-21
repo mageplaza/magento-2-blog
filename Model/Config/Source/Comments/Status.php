@@ -30,8 +30,8 @@ use Magento\Framework\Option\ArrayInterface;
 class Status implements ArrayInterface
 {
     const APPROVED = 1;
-    const SPAM     = 2;
-    const PENDING  = 3;
+    const SPAM = 2;
+    const PENDING = 3;
 
     /**
      * @return array
@@ -58,8 +58,8 @@ class Status implements ArrayInterface
     {
         return [
             self::APPROVED => __('Approved'),
-            self::PENDING  => __('Pending'),
-            self::SPAM     => __('Spam')
+            self::PENDING => __('Pending'),
+            self::SPAM => __('Spam')
         ];
     }
 }
