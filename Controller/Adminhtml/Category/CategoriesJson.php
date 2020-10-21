@@ -68,7 +68,7 @@ class CategoriesJson extends Category
         LayoutFactory $layoutFactory
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory     = $layoutFactory;
+        $this->layoutFactory = $layoutFactory;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }
@@ -81,11 +81,11 @@ class CategoriesJson extends Category
     public function execute()
     {
         $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->setIsTreeWasExpanded(
-            (boolean) $this->getRequest()->getParam('expand_all')
+            (boolean)$this->getRequest()->getParam('expand_all')
         );
 
         $resultJson = $this->resultJsonFactory->create();
-        if ($categoryId = (int) $this->getRequest()->getPost('id')) {
+        if ($categoryId = (int)$this->getRequest()->getPost('id')) {
             $this->getRequest()->setParam('id', $categoryId);
 
             $category = $this->initCategory(true);

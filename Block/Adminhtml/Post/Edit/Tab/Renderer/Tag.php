@@ -74,8 +74,8 @@ class Tag extends Multiselect
         array $data = []
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->authorization     = $authorization;
-        $this->_urlBuilder       = $urlBuilder;
+        $this->authorization = $authorization;
+        $this->_urlBuilder = $urlBuilder;
 
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
@@ -125,11 +125,11 @@ class Tag extends Multiselect
     {
         /* @var $collection Collection */
         $collection = $this->collectionFactory->create();
-        $tagById    = [];
+        $tagById = [];
         foreach ($collection as $tag) {
-            $tagById[$tag->getId()]['value']     = $tag->getId();
+            $tagById[$tag->getId()]['value'] = $tag->getId();
             $tagById[$tag->getId()]['is_active'] = 1;
-            $tagById[$tag->getId()]['label']     = $tag->getName();
+            $tagById[$tag->getId()]['label'] = $tag->getName();
         }
 
         return $tagById;
@@ -251,7 +251,7 @@ class Tag extends Multiselect
             $this->_urlBuilder->getUrl(
                 'mui/index/render_handle',
                 [
-                    'handle'  => 'mageplaza_blog_tag_create',
+                    'handle' => 'mageplaza_blog_tag_create',
                     'buttons' => 1
                 ]
             ) . '",

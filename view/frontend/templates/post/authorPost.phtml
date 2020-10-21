@@ -22,11 +22,11 @@
 /** @var \Mageplaza\Blog\Block\Post\AuthorPost $block */
 ?>
 
-<?php if (!$block->getAuthorStatus()) : ?>
+<?php if (!$block->getAuthorStatus()): ?>
     <div>
         <h3><?= /* @noEscape */ __('Your account must be licensed in order to perform the Post creation and management function') ?></h3>
     </div>
-<?php else : ?>
+<?php else: ?>
 <div class="mp-blog-new-post">
     <button type="button" class="action primary" title="<?= /* @noEscape */
     __('Add New Post') ?>"><?= /* @noEscape */
@@ -34,16 +34,16 @@
 </div>
 <div class="post-list-content" id="mpblog-list-container">
     <?php $postCollection = $block->getPostCollection(); ?>
-    <?php if ($postCollection && count($postCollection) > 0) : ?>
+    <?php if ($postCollection && count($postCollection) > 0): ?>
         <div class="post-list-body">
             <?php $i = 1 ?>
             <?php /** @var \Mageplaza\Blog\Model\Post $post */
-            foreach ($postCollection as $post) : ?>
+            foreach ($postCollection as $post): ?>
                 <div data-post-id="<?= $block->escapeHtml($post->getId()); ?>"
                      class="post-list-item col-mp post-item-list mp-12">
                     <div class="post-item-wraper">
                         <?= /* @noEscape */ $block->getStatusHtmlById($post->getEnabled()) ?>
-                        <?php if ($post->getImage()) : ?>
+                        <?php if ($post->getImage()): ?>
                             <div class="post-image">
                                 <a href="<?= $post->getUrl() ?>">
                                     <img class="img-responsive"
@@ -103,14 +103,14 @@
                         </div>
                     </div>
                 </div>
-                <?php if ($i++ % 2 == 0) : ?>
+                <?php if ($i++ % 2 == 0): ?>
                     <div class="mp-clear"></div>
                 <?php endif; ?>
             <?php endforeach; ?>
             <div class="mp-clear"></div>
         </div>
         <?= $block->getPagerHtml() ?>
-    <?php else : ?>
+    <?php else: ?>
         <?= __('There are no posts at this moment'); ?>
     <?php endif; ?>
     <?= $this->getChildHtml('additional'); ?>

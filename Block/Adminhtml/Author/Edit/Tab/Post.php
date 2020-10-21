@@ -76,8 +76,8 @@ class Post extends Extended implements TabInterface
         CollectionFactory $postCollectionFactory,
         array $data = []
     ) {
-        $this->coreRegistry          = $coreRegistry;
-        $this->postFactory           = $postFactory;
+        $this->coreRegistry = $coreRegistry;
+        $this->postFactory = $postFactory;
         $this->postCollectionFactory = $postCollectionFactory;
 
         parent::__construct($context, $backendHelper, $data);
@@ -116,22 +116,22 @@ class Post extends Extended implements TabInterface
     protected function _prepareColumns()
     {
         $this->addColumn('post_id', [
-            'header'           => __('ID'),
-            'sortable'         => true,
-            'index'            => 'post_id',
-            'type'             => 'number',
+            'header' => __('ID'),
+            'sortable' => true,
+            'index' => 'post_id',
+            'type' => 'number',
             'header_css_class' => 'col-id',
             'column_css_class' => 'col-id'
         ]);
         $this->addColumn('title', [
-            'header'           => __('Name'),
-            'index'            => 'name',
+            'header' => __('Name'),
+            'index' => 'name',
             'header_css_class' => 'col-name',
             'column_css_class' => 'col-name'
         ]);
         $this->addColumn('publish_date', [
-            'header'           => __('Published'),
-            'index'            => 'publish_date',
+            'header' => __('Published'),
+            'index' => 'publish_date',
             'header_css_class' => 'col-name',
             'column_css_class' => 'col-name'
         ]);

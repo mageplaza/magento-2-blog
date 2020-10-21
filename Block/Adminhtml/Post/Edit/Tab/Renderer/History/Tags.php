@@ -61,10 +61,10 @@ class Tags extends Text
     public function render(DataObject $row)
     {
         if (!empty($row->getData($this->getColumn()->getIndex()))) {
-            $text   = '';
+            $text = '';
             $tagIds = explode(',', $row->getData($this->getColumn()->getIndex()));
             foreach ($tagIds as $tagId) {
-                $tag  = $this->_helperData->getFactoryByType('tag')->create()->load($tagId);
+                $tag = $this->_helperData->getFactoryByType('tag')->create()->load($tagId);
                 $text .= $tag->getName() . ',';
             }
             $row->setData($this->getColumn()->getIndex(), trim($text, ','));

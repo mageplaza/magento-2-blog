@@ -41,13 +41,13 @@ class Restore extends History
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $postId         = $this->getRequest()->getParam('post_id');
-        $historyId      = $this->getRequest()->getParam('id');
+        $postId = $this->getRequest()->getParam('post_id');
+        $historyId = $this->getRequest()->getParam('id');
         if ($historyId) {
             try {
                 $history = $this->postHistoryFactory->create()
                     ->load($historyId);
-                $post    = $this->postFactory->create()->load($postId);
+                $post = $this->postFactory->create()->load($postId);
 
                 $data = $this->prepareData($history);
 

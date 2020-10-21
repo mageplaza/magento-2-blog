@@ -22,14 +22,14 @@
 /** @var \Mageplaza\Blog\Model\ResourceModel\Tag\Collection $tags */
 $tags = $block->getTagList();
 
-if ($tags && $tags->getSize()) : ?>
+if ($tags && $tags->getSize()): ?>
     <div class="mp-sidebar mpcss">
         <div class="row">
             <div class="block-title col-xs-12 sidebar-tags">
                 <p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?= __('Tags') ?></p>
             </div>
             <div class="col-xs-12">
-                <?php foreach ($tags as $tag) : ?>
+                <?php foreach ($tags as $tag): ?>
                     <a class="label label-default tags-list"
                        style="font-size:<?= $block->getTagSize($tag) . 'px'; ?>"
                        href="<?= $block->getTagUrl($tag) ?>">

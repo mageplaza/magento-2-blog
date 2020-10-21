@@ -64,7 +64,7 @@ class MassDelete extends Action
         Filter $filter,
         CollectionFactory $collectionFactory
     ) {
-        $this->filter            = $filter;
+        $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
 
         parent::__construct($context);

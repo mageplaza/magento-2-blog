@@ -30,7 +30,7 @@ use Magento\Framework\Option\ArrayInterface;
 class RelatedMode implements ArrayInterface
 {
     const SLIDER = 1;
-    const GRID   = 2;
+    const GRID = 2;
 
     /**
      * @return array

@@ -29,7 +29,7 @@ use Mageplaza\Core\Helper\Media;
  */
 class Image extends Media
 {
-    const TEMPLATE_MEDIA_PATH      = 'mageplaza/blog';
+    const TEMPLATE_MEDIA_PATH = 'mageplaza/blog';
     const TEMPLATE_MEDIA_TYPE_AUTH = 'auth';
     const TEMPLATE_MEDIA_TYPE_POST = 'post';
 }

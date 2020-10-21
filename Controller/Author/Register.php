@@ -90,12 +90,12 @@ class Register extends Action
         AuthorFactory $authorFactory,
         HelperData $helperData
     ) {
-        $this->_helperBlog          = $helperData;
-        $this->resultPageFactory    = $resultPageFactory;
+        $this->_helperBlog = $helperData;
+        $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->customerSession      = $customerSession;
-        $this->imageHelper          = $imageHelper;
-        $this->author               = $authorFactory;
+        $this->customerSession = $customerSession;
+        $this->imageHelper = $imageHelper;
+        $this->author = $authorFactory;
 
         parent::__construct($context);
     }
@@ -106,7 +106,7 @@ class Register extends Action
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $data           = $this->getRequest()->getParams();
+        $data = $this->getRequest()->getParams();
         $this->_helperBlog->setCustomerContextId();
 
         if (!$this->_helperBlog->isEnabledAuthor()) {
@@ -117,12 +117,12 @@ class Register extends Action
 
         if ($data) {
             if ($this->_helperBlog->isAuthor()) {
-                $data   = $this->prepareData($data);
+                $data = $this->prepareData($data);
                 $author = $this->author->create()->addData($data);
                 $notify = __('Register Successful');
             } else {
                 $author = $this->_helperBlog->getCurrentAuthor();
-                $data   = $this->prepareData($data, $author);
+                $data = $this->prepareData($data, $author);
                 $author->addData($data);
                 $notify = __('Author Edited Successful');
             }
@@ -152,8 +152,8 @@ class Register extends Action
             unset($data['status']);
         } else {
             $data['customer_id'] = $this->customerSession->getId();
-            $data['type']        = '1';
-            $data['status']      = $this->_helperBlog->getConfigGeneral('auto_approve');
+            $data['type'] = '1';
+            $data['status'] = $this->_helperBlog->getConfigGeneral('auto_approve');
         }
 
         if ($this->getRequest()->getFiles()['image']['size'] > 0) {

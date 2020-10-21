@@ -59,8 +59,8 @@ class AttributeSort
         Registry $coreRegistry,
         Data $helper
     ) {
-        $this->helper       = $helper;
-        $this->request      = $request;
+        $this->helper = $helper;
+        $this->request = $request;
         $this->coreRegistry = $coreRegistry;
     }
 
@@ -130,7 +130,7 @@ class AttributeSort
 
             if ($attribute === 'position') {
                 $from = isset($condition['from']) ? $attribute . ' >= ' . $condition['from'] : '';
-                $to   = isset($condition['to']) ? $attribute . ' <= ' . $condition['to'] : '';
+                $to = isset($condition['to']) ? $attribute . ' <= ' . $condition['to'] : '';
 
                 if ($from && $to) {
                     if ($condition['to'] === $condition['from']) {

@@ -64,7 +64,7 @@ class MassDelete extends Action
         Filter $filter,
         CollectionFactory $collectionFactory
     ) {
-        $this->filter            = $filter;
+        $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
 
         parent::__construct($context);
@@ -76,7 +76,7 @@ class MassDelete extends Action
      */
     public function execute()
     {
-        $collection   = $this->filter->getCollection($this->collectionFactory->create());
+        $collection = $this->filter->getCollection($this->collectionFactory->create());
         $authorRemove = 0;
 
         foreach ($collection->getItems() as $author) {

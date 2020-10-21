@@ -91,12 +91,12 @@ class Information extends Action
         Registry $coreRegistry,
         Data $helperData
     ) {
-        $this->_helperBlog          = $helperData;
-        $this->resultPageFactory    = $resultPageFactory;
+        $this->_helperBlog = $helperData;
+        $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->authorCollection     = $authorCollection;
-        $this->customerSession      = $customerSession;
-        $this->coreRegistry         = $coreRegistry;
+        $this->authorCollection = $authorCollection;
+        $this->customerSession = $customerSession;
+        $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);
     }

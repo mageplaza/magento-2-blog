@@ -75,18 +75,18 @@ class Edit extends Container
             $this->buttonList->add(
                 'save',
                 [
-                    'label'          => __('Save'),
-                    'class'          => 'save primary',
+                    'label' => __('Save'),
+                    'class' => 'save primary',
                     'data_attribute' => [
                         'mage-init' => [
                             'button' => [
-                                'event'  => 'save',
+                                'event' => 'save',
                                 'target' => '#edit_form'
                             ]
                         ]
                     ],
-                    'class_name'     => \Magento\Ui\Component\Control\Container::SPLIT_BUTTON,
-                    'options'        => $this->getOptions($post),
+                    'class_name' => \Magento\Ui\Component\Control\Container::SPLIT_BUTTON,
+                    'options' => $this->getOptions($post),
                 ],
                 -100
             );
@@ -94,12 +94,12 @@ class Edit extends Container
             $this->buttonList->add(
                 'save-and-continue',
                 [
-                    'label'          => __('Save and Continue Edit'),
-                    'class'          => 'save',
+                    'label' => __('Save and Continue Edit'),
+                    'class' => 'save',
                     'data_attribute' => [
                         'mage-init' => [
                             'button' => [
-                                'event'  => 'saveAndContinueEdit',
+                                'event' => 'saveAndContinueEdit',
                                 'target' => '#edit_form'
                             ]
                         ]
@@ -111,8 +111,8 @@ class Edit extends Container
                 $this->buttonList->add(
                     'duplicate',
                     [
-                        'label'   => __('Duplicate'),
-                        'class'   => 'duplicate',
+                        'label' => __('Duplicate'),
+                        'class' => 'duplicate',
                         'onclick' => sprintf("location.href = '%s';", $this->getDuplicateUrl()),
                     ],
                     -101
@@ -134,13 +134,13 @@ class Edit extends Container
     {
         if ($post->getId() && !$this->_request->getParam('duplicate')) {
             $options[] = [
-                'id_hard'        => 'save_and_draft',
-                'label'          => __('Save as Draft'),
+                'id_hard' => 'save_and_draft',
+                'label' => __('Save as Draft'),
                 'data_attribute' => [
                     'mage-init' => [
                         'button' => [
-                            'event'     => 'save',
-                            'target'    => '#edit_form',
+                            'event' => 'save',
+                            'target' => '#edit_form',
                             'eventData' => [
                                 'action' => ['args' => ['action' => 'draft']]
                             ],
@@ -150,13 +150,13 @@ class Edit extends Container
             ];
         }
         $options[] = [
-            'id_hard'        => 'save_and_history',
-            'label'          => __(' Save & add History'),
+            'id_hard' => 'save_and_history',
+            'label' => __(' Save & add History'),
             'data_attribute' => [
                 'mage-init' => [
                     'button' => [
-                        'event'     => 'save',
-                        'target'    => '#edit_form',
+                        'event' => 'save',
+                        'target' => '#edit_form',
                         'eventData' => [
                             'action' => ['args' => ['action' => 'add']]
                         ],

@@ -60,7 +60,7 @@ abstract class Comment extends Action
         Context $context
     ) {
         $this->commentFactory = $commentFactory;
-        $this->coreRegistry   = $coreRegistry;
+        $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);
     }

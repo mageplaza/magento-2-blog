@@ -67,10 +67,10 @@ class Comment extends AbstractDb
     public function isImported($importSource, $oldId)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()
+        $select = $adapter->select()
             ->from($this->getMainTable(), 'comment_id')
             ->where('import_source = :import_source');
-        $binds   = ['import_source' => $importSource . '-' . $oldId];
+        $binds = ['import_source' => $importSource . '-' . $oldId];
 
         return $adapter->fetchOne($select, $binds);
     }

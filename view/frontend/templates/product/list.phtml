@@ -34,9 +34,9 @@ use Magento\Framework\App\Action\Action;
 $_productCollection = $block->getLoadedProductCollection();
 $_helper = $block->getHelper();
 ?>
-<?php if (!$_productCollection->count()) :?>
+<?php if (!$_productCollection->count()):?>
     <div class="message info empty"><div><?= $block->escapeHtml(__('We can\'t find products matching the selection.')) ?></div></div>
-<?php else :?>
+<?php else:?>
     <?= $block->getToolbarHtml() ?>
     <?= $block->getAdditionalHtml() ?>
     <?php
@@ -57,10 +57,10 @@ $_helper = $block->getHelper();
     $pos = $block->getPositioned();
     ?>
     <div class="products wrapper <?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
-        <?php if ($block->relatedMode() !== '1') :?>
+        <?php if ($block->relatedMode() !== '1'):?>
             <ol class="products list items product-items">
                 <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
-                <?php foreach ($_productCollection as $_product) :?>
+                <?php foreach ($_productCollection as $_product):?>
                 <li class="item product product-item">
                     <div class="product-item-info" data-container="product-<?= /* @noEscape */ $viewMode ?>">
                         <?php
@@ -93,7 +93,7 @@ $_helper = $block->getHelper();
                             <div class="product-item-inner">
                                 <div class="product actions product-item-actions"<?= strpos($pos, $viewMode . '-actions') ? $block->escapeHtmlAttr($position) : '' ?>>
                                     <div class="actions-primary"<?= strpos($pos, $viewMode . '-primary') ? $block->escapeHtmlAttr($position) : '' ?>>
-                                        <?php if ($_product->isSaleable()) :?>
+                                        <?php if ($_product->isSaleable()):?>
                                             <?php $postParams = $block->getAddToCartPostParams($_product); ?>
                                             <form data-role="tocart-form"
                                                   data-product-sku="<?= $block->escapeHtml($_product->getSku()) ?>"
@@ -111,21 +111,21 @@ $_helper = $block->getHelper();
                                                     <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                 </button>
                                             </form>
-                                        <?php else :?>
-                                            <?php if ($_product->isAvailable()) :?>
+                                        <?php else:?>
+                                            <?php if ($_product->isAvailable()):?>
                                                 <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
-                                            <?php else :?>
+                                            <?php else:?>
                                                 <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     </div>
                                     <div data-role="add-to-links" class="actions-secondary"<?= strpos($pos, $viewMode . '-secondary') ? $block->escapeHtmlAttr($position) : '' ?>>
-                                        <?php if ($addToBlock = $block->getChildBlock('addto')) :?>
+                                        <?php if ($addToBlock = $block->getChildBlock('addto')):?>
                                             <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
                                         <?php endif; ?>
                                     </div>
                                 </div>
-                                <?php if ($showDescription) :?>
+                                <?php if ($showDescription):?>
                                     <div class="product description product-item-description">
                                         <?= /* @noEscape */ $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
                                         <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
@@ -139,10 +139,10 @@ $_helper = $block->getHelper();
                 </li>
                 <?php endforeach; ?>
             </ol>
-        <?php else :?>
+        <?php else:?>
             <div class="owl-carousel owl-theme">
                 <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
-                <?php foreach ($_productCollection as $_product) :?>
+                <?php foreach ($_productCollection as $_product):?>
                     <div class="item product product-item mp-blog-slider-item">
                         <div class="product-item-info" data-container="product-<?= /* @noEscape */ $viewMode ?>">
                             <?php
@@ -175,7 +175,7 @@ $_helper = $block->getHelper();
                                 <div class="product-item-inner">
                                     <div class="product actions product-item-actions"<?= strpos($pos, $viewMode . '-actions') ? $block->escapeHtmlAttr($position) : '' ?>>
                                         <div class="actions-primary"<?= strpos($pos, $viewMode . '-primary') ? $block->escapeHtmlAttr($position) : '' ?>>
-                                            <?php if ($_product->isSaleable()) :?>
+                                            <?php if ($_product->isSaleable()):?>
                                                 <?php $postParams = $block->getAddToCartPostParams($_product); ?>
                                                 <form data-role="tocart-form"
                                                       data-product-sku="<?= $block->escapeHtml($_product->getSku()) ?>"
@@ -193,21 +193,21 @@ $_helper = $block->getHelper();
                                                         <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                     </button>
                                                 </form>
-                                            <?php else :?>
-                                                <?php if ($_product->isAvailable()) :?>
+                                            <?php else:?>
+                                                <?php if ($_product->isAvailable()):?>
                                                     <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
-                                                <?php else :?>
+                                                <?php else:?>
                                                     <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
                                                 <?php endif; ?>
                                             <?php endif; ?>
                                         </div>
                                         <div data-role="add-to-links" class="actions-secondary"<?= strpos($pos, $viewMode . '-secondary') ? $block->escapeHtmlAttr($position) : '' ?>>
-                                            <?php if ($addToBlock = $block->getChildBlock('addto')) :?>
+                                            <?php if ($addToBlock = $block->getChildBlock('addto')):?>
                                                 <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
                                             <?php endif; ?>
                                         </div>
                                     </div>
-                                    <?php if ($showDescription) :?>
+                                    <?php if ($showDescription):?>
                                         <div class="product description product-item-description">
                                             <?= /* @noEscape */ $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
                                             <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
@@ -255,7 +255,7 @@ $_helper = $block->getHelper();
         <?php endif;?>
     </div>
     <?= $block->getToolbarHtml() ?>
-    <?php if (!$block->isRedirectToCartEnabled()) :?>
+    <?php if (!$block->isRedirectToCartEnabled()):?>
         <script type="text/x-magento-init">
         {
             "[data-role=tocart-form], .form.map.checkout": {

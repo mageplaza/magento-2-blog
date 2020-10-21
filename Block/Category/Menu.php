@@ -77,9 +77,9 @@ class Menu extends Template
         array $data = []
     ) {
         $this->categoryCollection = $collectionFactory;
-        $this->category           = $categoryFactory;
-        $this->helper             = $helperData;
-        $this->storeManager       = $storeManager;
+        $this->category = $categoryFactory;
+        $this->helper = $helperData;
+        $this->storeManager = $storeManager;
         parent::__construct($context, $data);
     }
 
@@ -118,7 +118,7 @@ class Menu extends Template
     public function getMenuHtml($parentCategory)
     {
         $categoryUrl = $this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey());
-        $html        = '<li class="level' . $parentCategory->getLevel()
+        $html = '<li class="level' . $parentCategory->getLevel()
             . ' category-item ui-menu-item" role="presentation">'
             . '<a href="' . $categoryUrl . '" class="ui-corner-all" tabindex="-1" role="menuitem">'
             . '<span>' . $parentCategory->getName() . '</span></a>';
@@ -150,7 +150,7 @@ class Menu extends Template
     public function getPortoMenuHtml($parentCategory)
     {
         $categoryUrl = $this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey());
-        $html        = '<li class="ui-menu-item level' . $parentCategory->getLevel() . ' parent" role="presentation">'
+        $html = '<li class="ui-menu-item level' . $parentCategory->getLevel() . ' parent" role="presentation">'
             . '<div class="open-children-toggle"></div>'
             . '<a href="' . $categoryUrl . '" class="ui-corner-all" tabindex="-1" role="menuitem">'
             . '<span>' . $parentCategory->getName() . '</span></a>';

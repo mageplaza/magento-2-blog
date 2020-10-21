@@ -62,7 +62,7 @@ class Author extends AbstractDb
         DateTime $dateTime
     ) {
         $this->helperData = $helperData;
-        $this->dateTime   = $dateTime;
+        $this->dateTime = $dateTime;
 
         parent::__construct($context);
         $this->postTable = $this->getTable('mageplaza_blog_post');
@@ -102,13 +102,13 @@ class Author extends AbstractDb
     public function getPostIds(\Mageplaza\Blog\Model\Author $author)
     {
         $adapter = $this->getConnection();
-        $select  = $adapter->select()->from(
+        $select = $adapter->select()->from(
             $this->postTable,
             'post_id'
         )
             ->where(
                 'author_id = ?',
-                (int) $author->getId()
+                (int)$author->getId()
             );
 
         return $adapter->fetchCol($select);

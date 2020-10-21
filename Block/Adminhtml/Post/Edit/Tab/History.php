@@ -69,7 +69,7 @@ class History extends Extended implements TabInterface
         Collection $historyCollection,
         array $data = []
     ) {
-        $this->coreRegistry      = $coreRegistry;
+        $this->coreRegistry = $coreRegistry;
         $this->historyCollection = $historyCollection;
 
         parent::__construct($context, $backendHelper, $data);
@@ -96,7 +96,7 @@ class History extends Extended implements TabInterface
     {
         /** @var Collection $collection */
         $collection = $this->historyCollection;
-        $id         = $this->getRequest()->getParam('id', 0);
+        $id = $this->getRequest()->getParam('id', 0);
         $collection->addFieldToFilter('post_id', $id);
         $this->setCollection($collection);
 
@@ -110,82 +110,82 @@ class History extends Extended implements TabInterface
     protected function _prepareColumns()
     {
         $this->addColumn('history_id', [
-            'header'           => __('ID'),
-            'sortable'         => true,
-            'index'            => 'history_id',
-            'type'             => 'number',
+            'header' => __('ID'),
+            'sortable' => true,
+            'index' => 'history_id',
+            'type' => 'number',
             'header_css_class' => 'col-id',
             'column_css_class' => 'col-id'
         ]);
         $this->addColumn('name', [
-            'header'           => __('Name'),
-            'index'            => 'name',
+            'header' => __('Name'),
+            'index' => 'name',
             'header_css_class' => 'col-name',
             'column_css_class' => 'col-name'
         ]);
         $this->addColumn('short_description', [
-            'header'           => __('Short Description'),
-            'index'            => 'short_description',
+            'header' => __('Short Description'),
+            'index' => 'short_description',
             'header_css_class' => 'col-short-description',
             'column_css_class' => 'col-short-description'
         ]);
         $this->addColumn('store_ids', [
-            'header'           => __('Store View'),
-            'index'            => 'store_ids',
-            'renderer'         => Store::class,
-            'filter'           => false,
+            'header' => __('Store View'),
+            'index' => 'store_ids',
+            'renderer' => Store::class,
+            'filter' => false,
             'header_css_class' => 'col-store-ids',
             'column_css_class' => 'col-store-ids'
         ]);
         $this->addColumn('category_ids', [
-            'header'           => __('Categories'),
-            'index'            => 'category_ids',
-            'filter'           => false,
-            'renderer'         => Categories::class,
+            'header' => __('Categories'),
+            'index' => 'category_ids',
+            'filter' => false,
+            'renderer' => Categories::class,
             'header_css_class' => 'col-category-ids',
             'column_css_class' => 'col-category-ids'
         ]);
         $this->addColumn('topic_ids', [
-            'header'           => __('Topics'),
-            'index'            => 'topic_ids',
-            'filter'           => false,
-            'renderer'         => Topics::class,
+            'header' => __('Topics'),
+            'index' => 'topic_ids',
+            'filter' => false,
+            'renderer' => Topics::class,
             'header_css_class' => 'col-topic-ids',
             'column_css_class' => 'col-topic-ids'
         ]);
         $this->addColumn('tag_ids', [
-            'header'           => __('Tags'),
-            'index'            => 'tag_ids',
-            'filter'           => false,
-            'renderer'         => Tags::class,
+            'header' => __('Tags'),
+            'index' => 'tag_ids',
+            'filter' => false,
+            'renderer' => Tags::class,
             'header_css_class' => 'col-tag-ids',
             'column_css_class' => 'col-tag-ids'
         ]);
         $this->addColumn('modifier_id', [
-            'header'           => __('Modified by'),
-            'index'            => 'modifier_id',
-            'renderer'         => Author::class,
-            'filter'           => false,
-            'sortable'         => false,
+            'header' => __('Modified by'),
+            'index' => 'modifier_id',
+            'renderer' => Author::class,
+            'filter' => false,
+            'sortable' => false,
             'header_css_class' => 'col-modifier-id',
             'column_css_class' => 'col-modifier-id'
         ]);
         $this->addColumn('updated_at', [
-            'header'           => __('Modified At'),
-            'index'            => 'updated_at',
-            'filter'           => false,
+            'header' => __('Modified At'),
+            'index' => 'updated_at',
+            'filter' => false,
             'header_css_class' => 'col-updated-at',
             'column_css_class' => 'col-updated-at'
         ]);
         $this->addColumn(
             'action',
             [
-                'header'           => __('Action'),
-                'index'            => 'template_id',
-                'sortable'         => false,
-                'filter'           => false,
-                'no_link'          => true,
-                'renderer'         => Action::class,
+                'header' => __('Action'),
+                'index' => 'template_id',
+                'sortable' => false,
+                'filter' => false,
+                'no_link' => true,
+                'renderer' => Action::class,
                 'header_css_class' => 'col-actions',
                 'column_css_class' => 'col-actions'
             ]

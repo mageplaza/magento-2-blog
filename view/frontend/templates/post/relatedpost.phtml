@@ -22,11 +22,11 @@
 /** @var \Mageplaza\Blog\Model\ResourceModel\Post\Collection $posts */
 /** @var \Mageplaza\Blog\Block\Post\RelatedPost $block */
 $posts = $block->getRelatedPostList();
-if ($posts && $block->isEnabledBlog()) : ?>
+if ($posts && $block->isEnabledBlog()): ?>
     <h2><?= $posts->getSize() ? __('Related Posts') : __('No Related Posts') ?></h2>
-    <?php if ($block->getRelatedMode()) :?>
+    <?php if ($block->getRelatedMode()):?>
         <div class="owl-carousel owl-theme">
-            <?php foreach ($posts as $post) : ?>
+            <?php foreach ($posts as $post): ?>
                 <div class="item post-list-item col-mp post-item-list mp-4">
                     <div class="post-item-wraper">
                         <div class="post-info-wraper">
@@ -64,9 +64,9 @@ if ($posts && $block->isEnabledBlog()) : ?>
             });
         });
     </script>
-    <?php else :?>
+    <?php else:?>
         <ul>
-            <?php foreach ($posts as $post) : ?>
+            <?php foreach ($posts as $post): ?>
                 <li><a href="<?= $post->getUrl() ?>"><?= $post->getName(); ?></a></li>
             <?php endforeach; ?>
         </ul>

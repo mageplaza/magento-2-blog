@@ -65,7 +65,7 @@ class InlineEdit extends Action
         JsonFactory $jsonFactory,
         CommentFactory $commentFactory
     ) {
-        $this->jsonFactory    = $jsonFactory;
+        $this->jsonFactory = $jsonFactory;
         $this->commentFactory = $commentFactory;
 
         parent::__construct($context);
@@ -77,9 +77,9 @@ class InlineEdit extends Action
     public function execute()
     {
         /** @var Json $resultJson */
-        $resultJson   = $this->jsonFactory->create();
-        $error        = false;
-        $messages     = [];
+        $resultJson = $this->jsonFactory->create();
+        $error = false;
+        $messages = [];
         $commentItems = $this->getRequest()->getParam('items', []);
 
         if (!($this->getRequest()->getParam('isAjax') && !empty($commentItems))) {
@@ -87,12 +87,12 @@ class InlineEdit extends Action
                 'messages' => [
                     __('Please correct the data sent.')
                 ],
-                'error'    => true,
+                'error' => true,
             ]);
         }
 
-        $key       = array_keys($commentItems);
-        $commentId = !empty($key) ? (int) $key[0] : '';
+        $key = array_keys($commentItems);
+        $commentId = !empty($key) ? (int)$key[0] : '';
 
         /** @var Post $post */
         $comment = $this->commentFactory->create()->load($commentId);
@@ -102,21 +102,21 @@ class InlineEdit extends Action
             $comment->save();
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithCommentId($comment, $e->getMessage());
-            $error      = true;
+            $error = true;
         } catch (RuntimeException $e) {
             $messages[] = $this->getErrorWithCommentId($comment, $e->getMessage());
-            $error      = true;
+            $error = true;
         } catch (Exception $e) {
             $messages[] = $this->getErrorWithCommentId(
                 $comment,
                 __('Something went wrong while saving the Comment.')
             );
-            $error      = true;
+            $error = true;
         }
 
         return $resultJson->setData([
             'messages' => $messages,
-            'error'    => $error
+            'error' => $error
         ]);
     }
 

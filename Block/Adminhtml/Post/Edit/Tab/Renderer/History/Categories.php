@@ -61,11 +61,11 @@ class Categories extends Text
     public function render(DataObject $row)
     {
         if (!empty($row->getData($this->getColumn()->getIndex()))) {
-            $text        = '';
+            $text = '';
             $CategoryIds = explode(',', $row->getData($this->getColumn()->getIndex()));
             foreach ($CategoryIds as $categoryId) {
                 $category = $this->_helperData->getFactoryByType('category')->create()->load($categoryId);
-                $text     .= $category->getName() . ',';
+                $text .= $category->getName() . ',';
             }
             $row->setData($this->getColumn()->getIndex(), trim($text, ','));
         }

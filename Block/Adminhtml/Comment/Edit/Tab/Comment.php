@@ -87,11 +87,11 @@ class Comment extends Generic implements TabInterface
         Store $systemStore,
         array $data = []
     ) {
-        $this->_commentStatus      = $commentStatus;
+        $this->_commentStatus = $commentStatus;
         $this->_customerRepository = $customerRepository;
-        $this->_postFactory        = $postFactory;
-        $this->systemStore         = $systemStore;
-        $this->storeManager        = $context->getStoreManager();
+        $this->_postFactory = $postFactory;
+        $this->systemStore = $systemStore;
+        $this->storeManager = $context->getStoreManager();
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -118,13 +118,13 @@ class Comment extends Generic implements TabInterface
             $fieldset->addField('comment_id', 'hidden', ['name' => 'comment_id']);
         }
 
-        $post     = $this->_postFactory->create()->load($comment->getPostId());
+        $post = $this->_postFactory->create()->load($comment->getPostId());
         $postText = '<a href="' . $this->getUrl('mageplaza_blog/post/edit', ['id' => $comment->getPostId()])
             . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($post->getName()) . '</a>';
         $fieldset->addField('post_name', 'note', ['text' => $postText, 'label' => __('Post'), 'name' => 'post_name']);
 
         if ($comment->getEntityId() > 0) {
-            $customer     = $this->_customerRepository->getById($comment->getEntityId());
+            $customer = $this->_customerRepository->getById($comment->getEntityId());
             $customerText = '<a href="'
                 . $this->getUrl(
                     'customer/index/edit',
@@ -144,16 +144,16 @@ class Comment extends Generic implements TabInterface
         );
 
         $fieldset->addField('status', 'select', [
-            'label'    => __('Status'),
+            'label' => __('Status'),
             'required' => true,
-            'name'     => 'status',
-            'values'   => $this->_commentStatus->toArray()
+            'name' => 'status',
+            'values' => $this->_commentStatus->toArray()
         ]);
         $fieldset->addField('content', 'textarea', [
-            'label'    => __('Content'),
+            'label' => __('Content'),
             'required' => true,
-            'name'     => 'content',
-            'style'    => 'height:24em;'
+            'name' => 'content',
+            'style' => 'height:24em;'
         ]);
         $viewText = '';
         foreach ($this->storeManager->getStores() as $store) {

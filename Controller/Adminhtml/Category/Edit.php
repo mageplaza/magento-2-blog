@@ -76,7 +76,7 @@ class Edit extends Category
         PageFactory $resultPageFactory,
         JsonFactory $resultJsonFactory
     ) {
-        $this->dataObject        = $dataObject;
+        $this->dataObject = $dataObject;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
 
@@ -92,9 +92,9 @@ class Edit extends Category
      */
     public function execute()
     {
-        $categoryId = (int) $this->getRequest()->getParam('id');
-        $duplicate  = $this->getRequest()->getParam('duplicate');
-        $category   = $this->initCategory();
+        $categoryId = (int)$this->getRequest()->getParam('id');
+        $duplicate = $this->getRequest()->getParam('duplicate');
+        $category = $this->initCategory();
         if ($duplicate) {
             $category->setId(null);
             $category->setData('duplicate', true);
@@ -140,14 +140,14 @@ class Edit extends Category
                 }
             }
 
-            $layout        = $resultPage->getLayout();
-            $content       = $layout->getBlock('mageplaza.blog.category.edit')->getFormHtml()
+            $layout = $resultPage->getLayout();
+            $content = $layout->getBlock('mageplaza.blog.category.edit')->getFormHtml()
                 . $layout->getBlock('mageplaza.blog.category.tree')
                     ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs');
             $eventResponse = $this->dataObject->addData([
-                'content'  => $content,
+                'content' => $content,
                 'messages' => $layout->getMessagesBlock()->getGroupedHtml(),
-                'toolbar'  => $layout->getBlock('page.actions.toolbar')->toHtml()
+                'toolbar' => $layout->getBlock('page.actions.toolbar')->toHtml()
             ]);
 
             $this->_eventManager->dispatch(
@@ -169,7 +169,7 @@ class Edit extends Category
         if ($categoryId) {
             $title = __('%1 (ID: %2)', $category->getName(), $categoryId);
         } else {
-            $parentId = (int) $this->getRequest()->getParam('parent');
+            $parentId = (int)$this->getRequest()->getParam('parent');
             if ($parentId && $parentId != CategoryModel::TREE_ROOT_ID) {
                 $title = __('New Child Category');
             } else {

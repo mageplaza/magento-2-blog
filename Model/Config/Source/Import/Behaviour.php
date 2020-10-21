@@ -29,9 +29,9 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class Behaviour implements ArrayInterface
 {
-    const UPDATE  = "update";
+    const UPDATE = "update";
     const REPLACE = "replace";
-    const DELETE  = "delete";
+    const DELETE = "delete";
 
     /**
      * @return array
@@ -57,9 +57,9 @@ class Behaviour implements ArrayInterface
     public function toArray()
     {
         return [
-            self::UPDATE  => __('Add / Update'),
+            self::UPDATE => __('Add / Update'),
             self::REPLACE => __('Replace'),
-            self::DELETE  => __('Delete')
+            self::DELETE => __('Delete')
         ];
     }
 }

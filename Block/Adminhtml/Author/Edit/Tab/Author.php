@@ -100,11 +100,11 @@ class Author extends Generic implements TabInterface
         CustomerRepositoryInterface $customerRepository,
         array $data = []
     ) {
-        $this->wysiwygConfig      = $wysiwygConfig;
-        $this->systemStore        = $systemStore;
-        $this->imageHelper        = $imageHelper;
-        $this->authorStatus       = $authorStatus;
-        $this->_helperData        = $helperData;
+        $this->wysiwygConfig = $wysiwygConfig;
+        $this->systemStore = $systemStore;
+        $this->imageHelper = $imageHelper;
+        $this->authorStatus = $authorStatus;
+        $this->_helperData = $helperData;
         $this->customerRepository = $customerRepository;
 
         parent::__construct($context, $registry, $formFactory, $data);
@@ -124,7 +124,7 @@ class Author extends Generic implements TabInterface
         $form->setFieldNameSuffix('author');
         $fieldset = $form->addFieldset('base_fieldset', [
             'legend' => __('Author Information'),
-            'class'  => 'fieldset-wide'
+            'class' => 'fieldset-wide'
         ]);
 
         if ($author->getId()) {
@@ -133,20 +133,20 @@ class Author extends Generic implements TabInterface
 
         if ($this->checkCustomerId($author->getCustomerId())) {
             $fieldset->addField('customer_id', 'hidden', [
-                'name'  => 'customer_id',
+                'name' => 'customer_id',
                 'value' => $author->getCustomerId()
             ]);
             $customer = $this->customerRepository->getById($author->getCustomerId());
 
             $fieldset->addField('customer', 'label', [
-                'name'  => 'customer',
+                'name' => 'customer',
                 'label' => __('Customer'),
                 'title' => __('Customer'),
                 'value' => $customer->getFirstname() . ' ' . $customer->getLastname()
             ]);
         } else {
             $fieldset->addField('customer', 'text', [
-                'name'  => 'customer',
+                'name' => 'customer',
                 'label' => __('Customer'),
                 'title' => __('Customer')
             ])->setAfterElementHtml(
@@ -162,59 +162,59 @@ class Author extends Generic implements TabInterface
                 </script>'
             );
             $fieldset->addField('customer_id', 'hidden', [
-                'name'  => 'customer_id',
+                'name' => 'customer_id',
                 'value' => 0
             ]);
         }
 
         $fieldset->addField('name', 'text', [
-            'name'     => 'name',
-            'label'    => __('Display Name'),
-            'title'    => __('Display Name'),
+            'name' => 'name',
+            'label' => __('Display Name'),
+            'title' => __('Display Name'),
             'required' => true,
-            'note'     => __('This name will be displayed on frontend')
+            'note' => __('This name will be displayed on frontend')
         ]);
 
         $fieldset->addField('status', 'select', [
-            'name'   => 'status',
-            'label'  => __('Status'),
-            'title'  => __('Status'),
+            'name' => 'status',
+            'label' => __('Status'),
+            'title' => __('Status'),
             'values' => $this->authorStatus->toArray()
         ]);
 
         $fieldset->addField('type', 'hidden', [
-            'name'  => 'type',
+            'name' => 'type',
             'value' => 0
         ]);
 
         $fieldset->addField('short_description', 'editor', [
-            'name'   => 'short_description',
-            'label'  => __('Short Description'),
-            'title'  => __('Short Description'),
-            'note'   => __('Short Description'),
+            'name' => 'short_description',
+            'label' => __('Short Description'),
+            'title' => __('Short Description'),
+            'note' => __('Short Description'),
             'config' => $this->wysiwygConfig->getConfig([
-                'add_variables'  => false,
-                'add_widgets'    => false,
+                'add_variables' => false,
+                'add_widgets' => false,
                 'add_directives' => true
             ])
         ]);
 
         $fieldset->addField('image', Image::class, [
-            'name'  => 'image',
+            'name' => 'image',
             'label' => __('Avatar'),
             'title' => __('Avatar'),
-            'path'  => $this->imageHelper->getBaseMediaPath(ImageHelper::TEMPLATE_MEDIA_TYPE_AUTH)
+            'path' => $this->imageHelper->getBaseMediaPath(ImageHelper::TEMPLATE_MEDIA_TYPE_AUTH)
         ]);
 
         $fieldset->addField('url_key', 'text', [
-            'name'  => 'url_key',
+            'name' => 'url_key',
             'label' => __('URL Key'),
             'title' => __('URL Key')
         ]);
 
         $authorUrlFormat = $this->_storeManager->getDefaultStoreView()->getBaseUrl(UrlInterface::URL_TYPE_LINK)
             . 'blog/author/';
-        $urlSuffix       = $this->_helperData->getUrlSuffix();
+        $urlSuffix = $this->_helperData->getUrlSuffix();
 
         $fieldset->addField(
             'full_url',
@@ -228,7 +228,7 @@ class Author extends Generic implements TabInterface
                 require(['jquery'], function($){
                     $('#author_url_key').on('keyup', function() {
                         var url = '" . $authorUrlFormat . "'+$(this).val()+'" . $urlSuffix . "';
-                        
+
                         if ($(this).val() === ''){
                             url = '';
                         }
@@ -239,21 +239,21 @@ class Author extends Generic implements TabInterface
         );
 
         $fieldset->addField('facebook_link', 'text', [
-            'name'     => 'facebook_link',
-            'label'    => __('Facebook'),
-            'title'    => __('Facebook'),
-            'note'     => __('Facebook URL'),
+            'name' => 'facebook_link',
+            'label' => __('Facebook'),
+            'title' => __('Facebook'),
+            'note' => __('Facebook URL'),
             'required' => false,
-            'class'    => 'validate-url'
+            'class' => 'validate-url'
         ]);
 
         $fieldset->addField('twitter_link', 'text', [
-            'name'     => 'twitter_link',
-            'label'    => __('Twitter'),
-            'title'    => __('Twitter'),
-            'note'     => __('Twitter URL'),
+            'name' => 'twitter_link',
+            'label' => __('Twitter'),
+            'title' => __('Twitter'),
+            'note' => __('Twitter URL'),
             'required' => false,
-            'class'    => 'validate-url'
+            'class' => 'validate-url'
         ]);
 
         $form->addValues($author->getData());

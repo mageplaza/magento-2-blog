@@ -139,16 +139,16 @@ class Post extends Generic implements TabInterface
         AuthorStatus $status,
         array $data = []
     ) {
-        $this->wysiwygConfig     = $wysiwygConfig;
-        $this->booleanOptions    = $booleanOptions;
+        $this->wysiwygConfig = $wysiwygConfig;
+        $this->booleanOptions = $booleanOptions;
         $this->metaRobotsOptions = $metaRobotsOptions;
-        $this->systemStore       = $systemStore;
-        $this->authSession       = $authSession;
-        $this->_date             = $dateTime;
-        $this->_layoutOptions    = $layoutOption;
-        $this->imageHelper       = $imageHelper;
-        $this->_author           = $author;
-        $this->_status           = $status;
+        $this->systemStore = $systemStore;
+        $this->authSession = $authSession;
+        $this->_date = $dateTime;
+        $this->_layoutOptions = $layoutOption;
+        $this->imageHelper = $imageHelper;
+        $this->_author = $author;
+        $this->_status = $status;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -170,32 +170,32 @@ class Post extends Generic implements TabInterface
 
         $fieldset = $form->addFieldset('base_fieldset', [
             'legend' => __('Post Information'),
-            'class'  => 'fieldset-wide'
+            'class' => 'fieldset-wide'
         ]);
 
         if ($this->_request->getParam('duplicate')) {
             $fieldset->addField('duplicate', 'hidden', [
-                'name'  => 'duplicate',
+                'name' => 'duplicate',
                 'value' => 1
             ]);
         }
         $fieldset->addField('name', 'text', [
-            'name'     => 'name',
-            'label'    => __('Name'),
-            'title'    => __('Name'),
+            'name' => 'name',
+            'label' => __('Name'),
+            'title' => __('Name'),
             'required' => true
         ]);
         $fieldset->addField('author_id', 'select', [
-            'name'     => 'author_id',
-            'label'    => __('Author'),
-            'title'    => __('Author'),
+            'name' => 'author_id',
+            'label' => __('Author'),
+            'title' => __('Author'),
             'required' => true,
-            'values'   => $this->_author->toOptionArray()
+            'values' => $this->_author->toOptionArray()
         ]);
         $fieldset->addField('enabled', 'select', [
-            'name'   => 'enabled',
-            'label'  => __('Status'),
-            'title'  => __('Status'),
+            'name' => 'enabled',
+            'label' => __('Status'),
+            'title' => __('Status'),
             'values' => $this->_status->toOptionArray()
         ]);
         if (!$post->hasData('enabled')) {
@@ -203,33 +203,33 @@ class Post extends Generic implements TabInterface
         }
 
         $fieldset->addField('short_description', 'textarea', [
-            'name'  => 'short_description',
+            'name' => 'short_description',
             'label' => __('Short Description'),
             'title' => __('Short Description')
         ]);
         $fieldset->addField('post_content', 'editor', [
-            'name'   => 'post_content',
-            'label'  => __('Content'),
-            'title'  => __('Content'),
+            'name' => 'post_content',
+            'label' => __('Content'),
+            'title' => __('Content'),
             'config' => $this->wysiwygConfig->getConfig([
-                'add_variables'  => false,
-                'add_widgets'    => true,
+                'add_variables' => false,
+                'add_widgets' => true,
                 'add_directives' => true
             ])
         ]);
 
         if ($this->_storeManager->isSingleStoreMode()) {
             $fieldset->addField('store_ids', 'hidden', [
-                'name'  => 'store_ids',
+                'name' => 'store_ids',
                 'value' => $this->_storeManager->getStore()->getId()
             ]);
         } else {
             /** @var RendererInterface $rendererBlock */
             $rendererBlock = $this->getLayout()->createBlock(Element::class);
             $fieldset->addField('store_ids', 'multiselect', [
-                'name'   => 'store_ids',
-                'label'  => __('Store Views'),
-                'title'  => __('Store Views'),
+                'name' => 'store_ids',
+                'label' => __('Store Views'),
+                'title' => __('Store Views'),
                 'values' => $this->systemStore->getStoreValuesForForm(false, true)
             ])->setRenderer($rendererBlock);
 
@@ -239,14 +239,14 @@ class Post extends Generic implements TabInterface
         }
 
         $fieldset->addField('image', \Mageplaza\Blog\Block\Adminhtml\Renderer\Image::class, [
-            'name'  => 'image',
+            'name' => 'image',
             'label' => __('Image'),
             'title' => __('Image'),
-            'path'  => $this->imageHelper->getBaseMediaPath(Image::TEMPLATE_MEDIA_TYPE_POST),
-            'note'  => __('The appropriate size is 265px * 250px.')
+            'path' => $this->imageHelper->getBaseMediaPath(Image::TEMPLATE_MEDIA_TYPE_POST),
+            'note' => __('The appropriate size is 265px * 250px.')
         ]);
         $fieldset->addField('categories_ids', Category::class, [
-            'name'  => 'categories_ids',
+            'name' => 'categories_ids',
             'label' => __('Categories'),
             'title' => __('Categories'),
         ]);
@@ -255,7 +255,7 @@ class Post extends Generic implements TabInterface
         }
 
         $fieldset->addField('topics_ids', Topic::class, [
-            'name'  => 'topics_ids',
+            'name' => 'topics_ids',
             'label' => __('Topics'),
             'title' => __('Topics'),
         ]);
@@ -264,7 +264,7 @@ class Post extends Generic implements TabInterface
         }
 
         $fieldset->addField('tags_ids', Tag::class, [
-            'name'  => 'tags_ids',
+            'name' => 'tags_ids',
             'label' => __('Tags'),
             'title' => __('Tags'),
         ]);
@@ -273,80 +273,80 @@ class Post extends Generic implements TabInterface
         }
 
         $fieldset->addField('in_rss', 'select', [
-            'name'   => 'in_rss',
-            'label'  => __('In RSS'),
-            'title'  => __('In RSS'),
+            'name' => 'in_rss',
+            'label' => __('In RSS'),
+            'title' => __('In RSS'),
             'values' => $this->booleanOptions->toOptionArray(),
         ]);
         $fieldset->addField('allow_comment', 'select', [
-            'name'   => 'allow_comment',
-            'label'  => __('Allow Comment'),
-            'title'  => __('Allow Comment'),
+            'name' => 'allow_comment',
+            'label' => __('Allow Comment'),
+            'title' => __('Allow Comment'),
             'values' => $this->booleanOptions->toOptionArray(),
         ]);
         $fieldset->addField(
             'publish_date',
             'date',
             [
-                'name'        => 'publish_date',
-                'label'       => __('Publish Date'),
-                'title'       => __('Publish Date'),
+                'name' => 'publish_date',
+                'label' => __('Publish Date'),
+                'title' => __('Publish Date'),
                 'date_format' => 'yyyy-MM-dd',
-                'timezone'    => false,
+                'timezone' => false,
                 'time_format' => 'hh:mm:ss'
             ]
         );
 
         $seoFieldset = $form->addFieldset('seo_fieldset', [
             'legend' => __('Search Engine Optimization'),
-            'class'  => 'fieldset-wide'
+            'class' => 'fieldset-wide'
         ]);
         $seoFieldset->addField('url_key', 'text', [
-            'name'  => 'url_key',
+            'name' => 'url_key',
             'label' => __('URL Key'),
             'title' => __('URL Key')
         ]);
         $seoFieldset->addField('meta_title', 'text', [
-            'name'  => 'meta_title',
+            'name' => 'meta_title',
             'label' => __('Meta Title'),
             'title' => __('Meta Title')
         ]);
         $seoFieldset->addField('meta_description', 'textarea', [
-            'name'  => 'meta_description',
+            'name' => 'meta_description',
             'label' => __('Meta Description'),
             'title' => __('Meta Description')
         ]);
         $seoFieldset->addField('meta_keywords', 'textarea', [
-            'name'  => 'meta_keywords',
+            'name' => 'meta_keywords',
             'label' => __('Meta Keywords'),
             'title' => __('Meta Keywords')
         ]);
         $seoFieldset->addField('meta_robots', 'select', [
-            'name'   => 'meta_robots',
-            'label'  => __('Meta Robots'),
-            'title'  => __('Meta Robots'),
+            'name' => 'meta_robots',
+            'label' => __('Meta Robots'),
+            'title' => __('Meta Robots'),
             'values' => $this->metaRobotsOptions->toOptionArray()
         ]);
 
         $designFieldset = $form->addFieldset('design_fieldset', [
             'legend' => __('Design'),
-            'class'  => 'fieldset-wide'
+            'class' => 'fieldset-wide'
         ]);
 
         $designFieldset->addField('layout', 'select', [
-            'name'   => 'layout',
-            'label'  => __('Layout'),
-            'title'  => __('Layout'),
+            'name' => 'layout',
+            'label' => __('Layout'),
+            'title' => __('Layout'),
             'values' => $this->_layoutOptions->toOptionArray()
         ]);
 
         if (!$post->getId()) {
             $post->addData([
-                'allow_comment'    => 1,
-                'meta_title'       => $this->_scopeConfig->getValue('blog/seo/meta_title'),
+                'allow_comment' => 1,
+                'meta_title' => $this->_scopeConfig->getValue('blog/seo/meta_title'),
                 'meta_description' => $this->_scopeConfig->getValue('blog/seo/meta_description'),
-                'meta_keywords'    => $this->_scopeConfig->getValue('blog/seo/meta_keywords'),
-                'meta_robots'      => $this->_scopeConfig->getValue('blog/seo/meta_robots'),
+                'meta_keywords' => $this->_scopeConfig->getValue('blog/seo/meta_keywords'),
+                'meta_robots' => $this->_scopeConfig->getValue('blog/seo/meta_robots'),
             ]);
         }
 

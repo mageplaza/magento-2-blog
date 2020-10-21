@@ -77,7 +77,7 @@ class DeletePost extends Action
         $postId = $this->getRequest()->getParam('post_id');
         $this->_helperBlog->setCustomerContextId();
         $author = $this->_helperBlog->getCurrentAuthor();
-        $post   = $this->postFactory->create();
+        $post = $this->postFactory->create();
 
         if (!$author || !$postId) {
             return null;
@@ -88,7 +88,7 @@ class DeletePost extends Action
             $this->messageManager->addSuccessMessage(__('The post has been deleted.'));
 
             return $this->getResponse()->representJson(Data::jsonEncode([
-                'status'  => 1,
+                'status' => 1,
                 'post_id' => $postId
             ]));
         } catch (Exception $exception) {

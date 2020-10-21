@@ -30,8 +30,8 @@ use Magento\Framework\Option\ArrayInterface;
 class AuthorStatus implements ArrayInterface
 {
 
-    const PENDING     = '0';
-    const APPROVED    = '1';
+    const PENDING = '0';
+    const APPROVED = '1';
     const DISAPPROVED = '2';
 
     /**
@@ -58,8 +58,8 @@ class AuthorStatus implements ArrayInterface
     public function toArray()
     {
         return [
-            self::PENDING     => __('Pending'),
-            self::APPROVED    => __('Approved'),
+            self::PENDING => __('Pending'),
+            self::APPROVED => __('Approved'),
             self::DISAPPROVED => __('Disapproved')
         ];
     }

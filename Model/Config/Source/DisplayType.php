@@ -30,7 +30,7 @@ use Magento\Framework\Option\ArrayInterface;
 class DisplayType implements ArrayInterface
 {
     const LIST_VIEW = 1;
-    const GRID      = 2;
+    const GRID = 2;
 
     /**
      * @return array

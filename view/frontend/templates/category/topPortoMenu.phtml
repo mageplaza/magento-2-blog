@@ -22,17 +22,17 @@
 /** @var \Mageplaza\Blog\Block\Category\Menu $block */
 $categorys = $block->getCollections();
 ?>
-<li class="ui-menu-item level0 fullwidth <?php if (sizeof($categorys)) :?>parent<?php endif;?>" role="presentation">
+<li class="ui-menu-item level0 fullwidth <?php if (sizeof($categorys)):?>parent<?php endif;?>" role="presentation">
     <div class="open-children-toggle"></div>
     <a href="<?= /* @noEscape */ $block->getBlogHomeUrl() ?>" class="level-top" aria-haspopup="true" id="ui-id-6" tabindex="-1" role="menuitem">
         <span><?= /* @noEscape */ $block->getBlogHomePageTitle()?></span>
     </a>
-    <?php if (sizeof($categorys)) :?>
+    <?php if (sizeof($categorys)):?>
         <div class="level0 submenu">
             <div class="container">
                 <div class="row">
                     <ul class="subchildmenu col-md-12 mega-columns columns4" role="menu" aria-expanded="false" aria-hidden="true">
-                        <?php foreach ($categorys as $category) : ?>
+                        <?php foreach ($categorys as $category): ?>
                             <?= /* @noEscape */ $block->getPortoMenuHtml($category)?>
                         <?php endforeach; ?>
                     </ul>

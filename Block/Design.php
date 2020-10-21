@@ -59,7 +59,7 @@ class Design extends Template
         ThemeProviderInterface $_themeProvider,
         array $data = []
     ) {
-        $this->helperData     = $helperData;
+        $this->helperData = $helperData;
         $this->_themeProvider = $_themeProvider;
 
         parent::__construct($context, $data);

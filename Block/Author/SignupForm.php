@@ -46,23 +46,23 @@ class SignupForm extends Frontend
 
         if ($author) {
             return [
-                'name'              => $author->getName(),
-                'status'            => $this->authorStatusType->toArray()[$author->getStatus()],
-                'url_key'           => $author->getUrlKey(),
+                'name' => $author->getName(),
+                'status' => $this->authorStatusType->toArray()[$author->getStatus()],
+                'url_key' => $author->getUrlKey(),
                 'short_description' => $author->getShortDescription(),
-                'image'             => $author->getImage(),
-                'facebook_link'     => $author->getFacebookLink(),
-                'twitter_link'      => $author->getTwitterLink(),
+                'image' => $author->getImage(),
+                'facebook_link' => $author->getFacebookLink(),
+                'twitter_link' => $author->getTwitterLink(),
             ];
         }
 
         return [
-            'name'              => '',
-            'url_key'           => '',
+            'name' => '',
+            'url_key' => '',
             'short_description' => '',
-            'image'             => '',
-            'facebook_link'     => '',
-            'twitter_link'      => '',
+            'image' => '',
+            'facebook_link' => '',
+            'twitter_link' => '',
         ];
     }
 
@@ -84,6 +84,6 @@ class SignupForm extends Frontend
      */
     public function getMagentoVersion()
     {
-        return (int) $this->helperData->versionCompare('2.3.0') ? 3 : 2;
+        return (int)$this->helperData->versionCompare('2.3.0') ? 3 : 2;
     }
 }

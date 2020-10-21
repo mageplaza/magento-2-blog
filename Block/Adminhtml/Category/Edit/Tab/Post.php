@@ -73,8 +73,8 @@ class Post extends Extended implements TabInterface
         array $data = []
     ) {
         $this->postCollectionFactory = $postCollectionFactory;
-        $this->coreRegistry          = $coreRegistry;
-        $this->postFactory           = $postFactory;
+        $this->coreRegistry = $coreRegistry;
+        $this->postFactory = $postFactory;
 
         parent::__construct($context, $backendHelper, $data);
     }
@@ -104,7 +104,7 @@ class Post extends Extended implements TabInterface
         $collection = $this->postCollectionFactory->create();
         $collection->getSelect()->joinLeft(
             ['related' => $collection->getTable('mageplaza_blog_post_category')],
-            'related.post_id=main_table.post_id AND related.category_id=' . (int) $this->getRequest()->getParam(
+            'related.post_id=main_table.post_id AND related.category_id=' . (int)$this->getRequest()->getParam(
                 'id',
                 0
             ),
@@ -126,34 +126,34 @@ class Post extends Extended implements TabInterface
     {
         $this->addColumn('in_posts', [
             'header_css_class' => 'a-center',
-            'type'             => 'checkbox',
-            'name'             => 'in_post',
-            'values'           => $this->_getSelectedPosts(),
-            'align'            => 'center',
-            'index'            => 'post_id'
+            'type' => 'checkbox',
+            'name' => 'in_post',
+            'values' => $this->_getSelectedPosts(),
+            'align' => 'center',
+            'index' => 'post_id'
         ]);
         $this->addColumn('post_id', [
-            'header'           => __('ID'),
-            'sortable'         => true,
-            'index'            => 'post_id',
-            'type'             => 'number',
+            'header' => __('ID'),
+            'sortable' => true,
+            'index' => 'post_id',
+            'type' => 'number',
             'header_css_class' => 'col-id',
             'column_css_class' => 'col-id'
         ]);
         $this->addColumn('title', [
-            'header'           => __('Name'),
-            'index'            => 'name',
+            'header' => __('Name'),
+            'index' => 'name',
             'header_css_class' => 'col-name',
             'column_css_class' => 'col-name'
         ]);
         $this->addColumn('position', [
-            'header'         => __('Position'),
-            'name'           => 'position',
-            'width'          => 60,
-            'type'           => 'number',
+            'header' => __('Position'),
+            'name' => 'position',
+            'width' => 60,
+            'type' => 'number',
             'validate_class' => 'validate-number',
-            'index'          => 'position',
-            'editable'       => true,
+            'index' => 'position',
+            'editable' => true,
         ]);
 
         return $this;

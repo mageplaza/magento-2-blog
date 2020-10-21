@@ -114,15 +114,15 @@ class Manage extends Action
         Image $imageHelper,
         Data $helperData
     ) {
-        $this->_helperBlog          = $helperData;
-        $this->resultPageFactory    = $resultPageFactory;
+        $this->_helperBlog = $helperData;
+        $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->authorCollection     = $authorCollection;
-        $this->customerSession      = $customerSession;
-        $this->coreRegistry         = $coreRegistry;
-        $this->postFactory          = $postFactory;
-        $this->date                 = $date;
-        $this->imageHelper          = $imageHelper;
+        $this->authorCollection = $authorCollection;
+        $this->customerSession = $customerSession;
+        $this->coreRegistry = $coreRegistry;
+        $this->postFactory = $postFactory;
+        $this->date = $date;
+        $this->imageHelper = $imageHelper;
 
         parent::__construct($context);
     }
@@ -136,7 +136,7 @@ class Manage extends Action
         $data = $this->getRequest()->getParams();
         $this->_helperBlog->setCustomerContextId();
         $author = $this->_helperBlog->getCurrentAuthor();
-        $post   = $this->postFactory->create();
+        $post = $this->postFactory->create();
 
         if (!$author) {
             return null;
@@ -158,9 +158,9 @@ class Manage extends Action
             ',',
             $data['categories_ids']
         ) : [];
-        $data['tags_ids']       = (isset($data['tags_ids']) && $data['tags_ids'])
+        $data['tags_ids'] = (isset($data['tags_ids']) && $data['tags_ids'])
             ? explode(',', $data['tags_ids']) : [];
-        $data['topics_ids']     = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(
+        $data['topics_ids'] = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(
             ',',
             $data['topics_ids']
         ) : [];

@@ -61,18 +61,18 @@ class Edit extends Container
      */
     protected function _construct()
     {
-        $this->_objectId   = 'user_id';
+        $this->_objectId = 'user_id';
         $this->_blockGroup = 'Mageplaza_Blog';
         $this->_controller = 'adminhtml_author';
 
         parent::_construct();
 
         $this->buttonList->add('save-and-continue', [
-            'label'          => __('Save And Continue Edit'),
+            'label' => __('Save And Continue Edit'),
             'data_attribute' => [
                 'mage-init' => [
                     'button' => [
-                        'event'  => 'saveAndContinueEdit',
+                        'event' => 'saveAndContinueEdit',
                         'target' => '#edit_form'
                     ]
                 ]
@@ -82,11 +82,11 @@ class Edit extends Container
         $this->buttonList->add(
             'delete',
             [
-                'label'   => __('Delete'),
-                'class'   => 'delete',
+                'label' => __('Delete'),
+                'class' => 'delete',
                 'onclick' => "setLocation('{$this->getUrl('mageplaza_blog/author/delete', [
                     'id' => $this->getCurrentAuthor()->getId(),
-                    '_current' => true, 
+                    '_current' => true,
                     'back' => 'edit'
                 ])}')",
             ],

@@ -43,7 +43,7 @@ $author = $block->getAuthor();
                        class="input-text" data-validate="{required:true, 'validate-no-empty':true}">
             </div>
         </div>
-        <?php if (isset($author['status'])) :?>
+        <?php if (isset($author['status'])):?>
             <div class="field mp-field">
                 <label for="name" class="label"><span><?= /* @noEscape */
                         __('Status') ?></span></label>
@@ -66,7 +66,7 @@ $author = $block->getAuthor();
             <label for="image" class="label"><span><?= /* @noEscape */
                     __('Avatar') ?></span></label>
             <div class="control">
-                <?php if (!empty($author['image'])) :?>
+                <?php if (!empty($author['image'])):?>
                     <a class="mp-image-link" href="<?= $block->getImageUrl($author['image'], 'auth')?>" >
                         <img src="<?= $block->getImageUrl($author['image'], 'auth')?>" id="post_image_image"
                         title="<?= $author['image'] ?>" alt="<?= $author['image'] ?>" height="22" width="22"
@@ -78,7 +78,7 @@ $author = $block->getAuthor();
                         __('Avatar') ?>"
                        class="input-file"
                        style="width: 90%;position: relative;top: -5px">
-                <?php if (!empty($author['image'])) :?>
+                <?php if (!empty($author['image'])):?>
                     <span class="delete-image">
                     <input style="width: 8%" type="checkbox" name="image[delete]" value="1" class="checkbox" id="post_image_delete">
                     <label for="post_image_delete"> Delete Image</label>

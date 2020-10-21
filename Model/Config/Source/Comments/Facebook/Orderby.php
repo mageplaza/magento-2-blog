@@ -29,9 +29,9 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class Orderby implements ArrayInterface
 {
-    const SOCIAL       = 'social';
+    const SOCIAL = 'social';
     const REVERSE_TIME = 'reverse_time';
-    const TIME         = 'time';
+    const TIME = 'time';
 
     /**
      * @return array
