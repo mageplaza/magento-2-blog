@@ -29,6 +29,7 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\Tag;
@@ -50,30 +51,31 @@ class Product extends Extended implements TabInterface
     public $coreRegistry;
 
     /**
-     * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
+     * @var RequestInterface
      */
-    private $postCollectionFactory;
+    protected $request;
 
     /**
      * Product constructor.
      *
-     * @param CollectionFactory $productCollectionFactory
-     * @param Registry $coreRegistry
      * @param Context $context
+     * @param Registry $coreRegistry
      * @param Data $backendHelper
+     * @param RequestInterface $request
+     * @param CollectionFactory $productCollectionFactory
      * @param array $data
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
         Data $backendHelper,
+        RequestInterface $request,
         CollectionFactory $productCollectionFactory,
-        \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
         array $data = []
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->coreRegistry             = $coreRegistry;
-        $this->postCollectionFactory    = $postCollectionFactory;
+        $this->request                  = $request;
 
         parent::__construct($context, $backendHelper, $data);
     }
@@ -108,7 +110,7 @@ class Product extends Extended implements TabInterface
         $collection->getSelect()->joinLeft(
             ['mp_p' => $collection->getTable('mageplaza_blog_post_product')],
             'e.entity_id = mp_p.entity_id',
-            ['position']
+            ['position', 'post_id']
         );
 
         $this->setCollection($collection);
@@ -144,16 +146,33 @@ class Product extends Extended implements TabInterface
             'header_css_class' => 'col-name',
             'column_css_class' => 'col-name'
         ]);
-        $this->addColumn('position', [
-            'header'         => __('Position'),
-            'name'           => 'position',
-            'width'          => 60,
-            'type'           => 'number',
-            'validate_class' => 'validate-number',
-            'index'          => 'position',
-            'editable'       => true,
-            'edit_only'      => true,
-        ]);
+
+        if ($this->request->getParam('post_id') || $this->getPost()->getId()) {
+            $this->addColumn('position', [
+                'header'         => __('Position'),
+                'name'           => 'position',
+                'width'          => 60,
+                'type'           => 'number',
+                'validate_class' => 'validate-number',
+                'index'          => 'position',
+                'editable'       => true,
+                'sortable'       => false,
+                'edit_only'      => true,
+            ]);
+        } else {
+            $this->addColumn('position', [
+                'header'         => __('Position'),
+                'name'           => 'position',
+                'width'          => 60,
+                'type'           => 'number',
+                'validate_class' => 'validate-number',
+                'index'          => 'position',
+                'editable'       => true,
+                'sortable'       => false,
+                'filter'         => false,
+                'edit_only'      => true,
+            ]);
+        }
 
         return $this;
     }

@@ -102,6 +102,8 @@ class Post extends Extended implements TabInterface
             ['position']
         );
 
+        $collection->addFilterToMap('post_id', 'main_table.post_id');
+
         $this->setCollection($collection);
 
         return parent::_prepareCollection();

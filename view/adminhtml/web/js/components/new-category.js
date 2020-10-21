@@ -57,6 +57,26 @@ define([
 
     return Category.extend({
         /**
+         * Get path to current option
+         *
+         * @param {Object} data - option data
+         * @returns {String} path
+         */
+        getPath: function (data) {
+            var pathParts,
+                createdPath = '';
+
+            if (this.renderPath && typeof data.path !== "undefined") {
+                pathParts = data.path.split('.');
+                _.each(pathParts, function (curData) {
+                    createdPath = createdPath ? createdPath + ' / ' + curData : curData;
+                });
+
+                return createdPath;
+            }
+        },
+
+        /**
          * Set option to options array.
          *
          * @param {Object} option

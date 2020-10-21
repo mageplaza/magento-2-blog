@@ -225,6 +225,7 @@ class View extends Action
                         'is_reply'   => $isReply,
                         'reply_id'   => $replyId,
                         'content'    => $cmtText,
+                        'user_name'  => $customerData->getFirstname().' '.$customerData->getLastname(),
                         'created_at' => $this->dateTime->date(),
                         'status'     => $this->helperBlog->getBlogConfig('comment/need_approve')
                             ? Status::PENDING : Status::APPROVED,

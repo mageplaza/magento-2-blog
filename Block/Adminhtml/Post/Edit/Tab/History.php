@@ -165,12 +165,15 @@ class History extends Extended implements TabInterface
             'header'           => __('Modified by'),
             'index'            => 'modifier_id',
             'renderer'         => Author::class,
+            'filter'           => false,
+            'sortable'         => false,
             'header_css_class' => 'col-modifier-id',
             'column_css_class' => 'col-modifier-id'
         ]);
         $this->addColumn('updated_at', [
             'header'           => __('Modified At'),
             'index'            => 'updated_at',
+            'filter'           => false,
             'header_css_class' => 'col-updated-at',
             'column_css_class' => 'col-updated-at'
         ]);

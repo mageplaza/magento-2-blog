@@ -51,4 +51,24 @@ class Collection extends SearchResult
 
         return $this;
     }
+
+    /**
+     * @param array|string $field
+     * @param null $condition
+     *
+     * @return SearchResult
+     */
+    public function addFieldToFilter($field, $condition = null)
+    {
+        if ($field === 'qty_post') {
+            foreach ($condition as $key => $value) {
+                if ($key === 'like') {
+                    $this->getSelect()->having('COUNT(post_id) LIKE ?', $value);
+                }
+            }
+            return $this;
+        }
+
+        return parent::addFieldToFilter($field, $condition);
+    }
 }

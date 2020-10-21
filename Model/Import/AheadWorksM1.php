@@ -632,7 +632,7 @@ class AheadWorksM1 extends AbstractImport
                             'user_name'     => $comment['user_name'],
                             'user_email'    => $comment['user_email'],
                             'import_source' => $comment['import_source']
-                            ], $where);
+                        ], $where);
                     $this->_successCount++;
                     $this->_hasData = true;
                 } else {
@@ -765,7 +765,7 @@ class AheadWorksM1 extends AbstractImport
                 'meta_description'  => $post['meta_description'],
                 'author_id'         => $post['author_id'],
                 'import_source'     => $post['import_source']
-                ], $where);
+            ], $where);
         $this->_resourceConnection->getConnection()
             ->delete($this->_resourceConnection
                 ->getTableName('mageplaza_blog_post_category'), $where);
@@ -803,7 +803,7 @@ class AheadWorksM1 extends AbstractImport
                 'store_ids'     => $tag['store_ids'],
                 'enabled'       => $tag['enabled'],
                 'import_source' => $tag['import_source']
-                ], $where);
+            ], $where);
     }
 
     /**
@@ -842,6 +842,6 @@ class AheadWorksM1 extends AbstractImport
                 'meta_description' => $category['meta_description'],
                 'meta_keywords'    => $category['meta_keywords'],
                 'import_source'    => $category['import_source']
-                ], $where);
+            ], $where);
     }
 }
