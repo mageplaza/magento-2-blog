@@ -107,11 +107,18 @@ class Product extends Extended implements TabInterface
         $collection = $this->productCollectionFactory->create();
         $collection->clear();
 
+        $postId = (int) $this->getRequest()->getParam('id', 0);
+        $cond = 'e.entity_id = mp_p.entity_id';
+        if ($postId) {
+            $cond .= ' ' . 'AND mp_p.post_id = ' . $postId;
+        }
+
         $collection->getSelect()->joinLeft(
             ['mp_p' => $collection->getTable('mageplaza_blog_post_product')],
-            'e.entity_id = mp_p.entity_id',
-            ['position', 'post_id']
+            $cond,
+            ['position']
         );
+        $collection->getSelect()->group('e.entity_id');
 
         $this->setCollection($collection);
 
