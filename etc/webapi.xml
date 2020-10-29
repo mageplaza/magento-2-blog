@@ -27,6 +27,12 @@
             <resource ref="Mageplaza_Blog::blog" />
         </resources>
     </route>
+    <route url="/V1/mpblog/config" method="GET">
+        <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getConfig"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
     <route url="/V1/mpblog/post/view/:post_id" method="GET">
         <service class="Mageplaza\Blog\Api\BlogRepositoryInterface" method="getPostView"/>
         <resources>

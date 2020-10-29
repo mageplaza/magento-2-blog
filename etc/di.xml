@@ -72,6 +72,10 @@
     <preference for="Mageplaza\Blog\Api\Data\CategoryInterface" type="Mageplaza\Blog\Model\Category" />
     <preference for="Mageplaza\Blog\Api\Data\TopicInterface" type="Mageplaza\Blog\Model\Topic" />
     <preference for="Mageplaza\Blog\Api\Data\AuthorInterface" type="Mageplaza\Blog\Model\Author" />
+    <preference for="Mageplaza\Blog\Api\Data\BlogConfigInterface" type="General" />
+    <preference for="Mageplaza\Blog\Api\Data\Config\GeneralInterface" type="Mageplaza\Blog\Model\Config\General" />
+    <preference for="Mageplaza\Blog\Api\Data\Config\SidebarInterface" type="Mageplaza\Blog\Model\Sidebar" />
+    <preference for="Mageplaza\Blog\Api\Data\Config\SeoInterface" type="Mageplaza\Blog\Model\Seo" />
     <preference for="Mageplaza\Blog\Api\BlogRepositoryInterface" type="Mageplaza\Blog\Model\Api\BlogRepository" />
 
     <preference for="Mageplaza\Blog\Api\Data\SearchResult\PostSearchResultInterface" type="Mageplaza\Blog\Model\ResourceModel\Post\Collection" />

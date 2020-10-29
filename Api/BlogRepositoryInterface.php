@@ -381,4 +381,11 @@ interface BlogRepositoryInterface
      * @throws Exception
      */
     public function updateAuthor($authorId, $author);
+
+    /**
+     * @return \Mageplaza\Blog\Api\Data\BlogConfigInterface
+     *
+     * @throws InputException
+     */
+    public function getConfig();
 }
