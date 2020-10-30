@@ -770,7 +770,7 @@ class BlogRepository implements BlogRepositoryInterface
         $general->setBlogName($blogConfig['general']['name']);
         $general->setIsLinkInMenu($blogConfig['general']['toplinks']);
         $general->setIsDisplayAuthor($blogConfig['general']['display_author']);
-        $general->setBlogModel($blogConfig['general']['display_style']);
+        $general->setBlogMode($blogConfig['general']['display_style']);
         $general->setBlogColor($blogConfig['general']['font_color']);
         $sidebar = new Sidebar();
         $sidebar->setNumberMostView($blogConfig['sidebar']['number_recent_posts']);

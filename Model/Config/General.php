@@ -88,7 +88,7 @@ class General extends DataObject implements GeneralInterface
     /**
      * {@inheritdoc}
      */
-    public function getBlogModel()
+    public function getBlogMode()
     {
         return $this->getData(self::BLOG_MODE);
     }
@@ -96,7 +96,7 @@ class General extends DataObject implements GeneralInterface
     /**
      * {@inheritdoc}
      */
-    public function setBlogModel($value)
+    public function setBlogMode($value)
     {
         $this->setData(self::BLOG_MODE, $value);
 

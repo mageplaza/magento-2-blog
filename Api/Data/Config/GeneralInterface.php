@@ -72,14 +72,14 @@ interface GeneralInterface
     /**
      * @return string/null
      */
-    public function getBlogModel();
+    public function getBlogMode();
 
     /**
      * @param string $value
      *
      * @return $this
      */
-    public function setBlogModel($value);
+    public function setBlogMode($value);
 
     /**
      * @return string/null
