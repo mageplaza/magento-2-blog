@@ -104,6 +104,11 @@ class Post extends AbstractDb
     protected $postTrafficTable;
 
     /**
+     * @var string
+     */
+    protected $postAuthorTable;
+
+    /**
      * Post constructor.
      *
      * @param Context $context
@@ -137,6 +142,7 @@ class Post extends AbstractDb
         $this->postCategoryTable = $this->getTable('mageplaza_blog_post_category');
         $this->postProductTable  = $this->getTable('mageplaza_blog_post_product');
         $this->postTrafficTable  = $this->getTable('mageplaza_blog_post_traffic');
+        $this->postAuthorTable   = $this->getTable('mageplaza_blog_author');
     }
 
     /**

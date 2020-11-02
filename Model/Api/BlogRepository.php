@@ -45,6 +45,8 @@ use Mageplaza\Blog\Model\Config\General;
 use Mageplaza\Blog\Model\Config\Sidebar;
 use Mageplaza\Blog\Model\Config\Seo;
 use Mageplaza\Blog\Model\BlogConfig;
+use Mageplaza\Blog\Model\MonthlyArchive;
+use Mageplaza\Blog\Block\MonthlyArchive\Widget as MonthlyWidget;
 use Mageplaza\Blog\Model\PostLikeFactory;
 
 /**
@@ -91,7 +93,12 @@ class BlogRepository implements BlogRepositoryInterface
     /**
      * @var BlogConfig
      */
-    private $blogConfig;
+    protected $blogConfig;
+
+    /**
+     * @var MonthlyWidget
+     */
+    protected $monthlyWidget;
 
     /**
      * BlogRepository constructor.
@@ -103,6 +110,7 @@ class BlogRepository implements BlogRepositoryInterface
      * @param PostLikeFactory $likeFactory
      * @param RequestInterface $request
      * @param BlogConfig $blogConfig
+     * @param MonthlyWidget $monthlyWidget
      * @param DateTime $date
      */
     public function __construct(
@@ -113,6 +121,7 @@ class BlogRepository implements BlogRepositoryInterface
         PostLikeFactory $likeFactory,
         RequestInterface $request,
         BlogConfig $blogConfig,
+        MonthlyWidget $monthlyWidget,
         DateTime $date
     ) {
         $this->_request                     = $request;
@@ -123,6 +132,7 @@ class BlogRepository implements BlogRepositoryInterface
         $this->_likeFactory                 = $likeFactory;
         $this->collectionProcessor          = $collectionProcessor;
         $this->blogConfig                   = $blogConfig;
+        $this->monthlyWidget                = $monthlyWidget;
     }
 
     /**
@@ -138,9 +148,46 @@ class BlogRepository implements BlogRepositoryInterface
     /**
      * @inheritDoc
      */
+    public function getMonthlyArchive()
+    {
+        $dateArrayCount  = $this->monthlyWidget->getDateArrayCount();
+        $dateArrayUnique = $this->monthlyWidget->getDateArrayUnique();
+        $dateLabel       = $this->monthlyWidget->getDateLabel();
+        $monthlyAr       = [];
+        for ($i = 0; $i < $this->monthlyWidget->getDateCount(); $i++) {
+            $monthly = new MonthlyArchive();
+            $monthly->setLabel($dateLabel[$i])->setPostCount((int) $dateArrayCount[$i])
+                ->setLink(
+                    $this->_helperData->getBlogUrl(
+                        date(
+                            'Y-m',
+                            $this->date->timestamp($dateArrayUnique[$i])),
+                        Data::TYPE_MONTHLY
+                    )
+                );
+            $monthlyAr[] = $monthly;
+        }
+
+        return $monthlyAr;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPostMonthlyArchive($monthly, $year) {
+
+        return $this->_helperData->getPostCollection(Data::TYPE_MONTHLY, $year.'-'.$monthly)->getItems();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getPostView($postId)
     {
-        return $this->_helperData->getFactoryByType()->create()->load($postId);
+        $post = $this->_helperData->getFactoryByType()->create()->load($postId);
+        $post->updateViewTraffic();
+
+        return $post;
     }
 
     /**
