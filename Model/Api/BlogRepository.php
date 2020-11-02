@@ -174,9 +174,10 @@ class BlogRepository implements BlogRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function getPostMonthlyArchive($monthly, $year) {
+    public function getPostMonthlyArchive($monthly, $year)
+    {
 
-        return $this->_helperData->getPostCollection(Data::TYPE_MONTHLY, $year.'-'.$monthly)->getItems();
+        return $this->_helperData->getPostCollection(Data::TYPE_MONTHLY, $year . '-' . $monthly)->getItems();
     }
 
     /**
