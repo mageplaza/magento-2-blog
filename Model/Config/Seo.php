@@ -26,7 +26,7 @@ use Mageplaza\Blog\Api\Data\Config\SeoInterface;
 
 /**
  * Class Seo
- * @package Mageplaza\Blog\Model\Config
+ * @package Mageplaza\Blog\Model\Seo
  */
 class Seo extends DataObject implements SeoInterface
 {

@@ -37,9 +37,25 @@ interface BlogRepositoryInterface
     public function getAllPost();
 
     /**
+     * @return \Mageplaza\Blog\Api\Data\MonthlyArchiveInterface[]
+     * @throws NoSuchEntityException
+     * @throws Exception
+     */
+    public function getMonthlyArchive();
+
+    /**
+     * @param string $monthly
+     * @param string $year
+     *
+     * @return \Mageplaza\Blog\Api\Data\PostInterface[]
+     */
+    public function getPostMonthlyArchive($monthly, $year);
+
+    /**
      * @param string $postId
      *
      * @return \Mageplaza\Blog\Api\Data\PostInterface
+     * @throws Exception
      */
     public function getPostView($postId);
 
