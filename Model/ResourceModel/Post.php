@@ -424,6 +424,19 @@ class Post extends AbstractDb
 
     /**
      * @param \Mageplaza\Blog\Model\Post $post
+     * @return array
+     */
+    public function getAuthor(\Mageplaza\Blog\Model\Post $post)
+    {
+        $adapter = $this->getConnection();
+        $select  = $adapter->select()->from($this->postAuthorTable, '*')
+            ->where('user_id = ?', (int) $post->getAuthorId());
+
+        return $adapter->fetchRow($select);
+    }
+
+    /**
+     * @param \Mageplaza\Blog\Model\Post $post
      *
      * @return array
      */

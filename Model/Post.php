@@ -487,6 +487,21 @@ class Post extends AbstractModel
     }
 
     /**
+     * @return int
+     * @throws LocalizedException
+     */
+    public function getAuthorUrlKey()
+    {
+        if (!$this->hasData('author_url_key')) {
+            $author = $this->_getResource()->getAuthor($this);
+
+            $this->setData('author_url_key', $author['url_key']);
+        }
+
+        return $this->_getData('author_url_key');
+    }
+
+    /**
      * @throws Exception
      */
     public function updateViewTraffic()
