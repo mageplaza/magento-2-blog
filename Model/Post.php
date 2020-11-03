@@ -25,6 +25,7 @@ use Exception;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -501,6 +502,11 @@ class Post extends AbstractModel
         return $this->_getData('author_url_key');
     }
 
+
+    /**
+     * @return mixed
+     * @throws NoSuchEntityException
+     */
     public function getUrlImage()
     {
         $imageHelper = $this->helperData->getImageHelper();
