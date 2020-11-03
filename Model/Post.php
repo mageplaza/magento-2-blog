@@ -501,6 +501,15 @@ class Post extends AbstractModel
         return $this->_getData('author_url_key');
     }
 
+    public function getUrlImage()
+    {
+        $imageHelper = $this->helperData->getImageHelper();
+        $imageFile   = $imageHelper->getMediaPath($this->getImage(), 'post');
+
+        $this->setData('image', $this->helperData->getImageHelper()->getMediaUrl($imageFile));
+        return $this->_getData('image');
+    }
+
     /**
      * @throws Exception
      */
