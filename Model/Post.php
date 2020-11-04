@@ -510,9 +510,10 @@ class Post extends AbstractModel
     public function getUrlImage()
     {
         $imageHelper = $this->helperData->getImageHelper();
-        $imageFile   = $imageHelper->getMediaPath($this->getImage(), 'post');
+        $imageFile   = $this->getImage() ? $imageHelper->getMediaPath($this->getImage(), 'post') : '';
+        $imageUrl    = $imageFile ? $this->helperData->getImageHelper()->getMediaUrl($imageFile) : '';
 
-        $this->setData('image', $this->helperData->getImageHelper()->getMediaUrl($imageFile));
+        $this->setData('image', $imageUrl);
         return $this->_getData('image');
     }
 
