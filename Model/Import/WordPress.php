@@ -22,10 +22,12 @@
 namespace Mageplaza\Blog\Model\Import;
 
 use Exception;
+use Magento\Customer\Model\CustomerFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\User\Model\UserFactory;
+use Mageplaza\Blog\Model\Author;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\CommentFactory;
+use Mageplaza\Blog\Model\Config\Source\AuthorType;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\TagFactory;
@@ -132,10 +134,10 @@ class WordPress extends AbstractImport
         $importSource = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
-        if ($data['behaviour'] == 'delete' || $data['behaviour'] == 'replace') {
+        if ($data['behaviour'] === 'delete' || $data['behaviour'] === 'replace') {
             $postModel->getResource()->deleteImportItems($data['type']);
             $this->_hasData = true;
-            if ($data['behaviour'] == 'delete') {
+            if ($data['behaviour'] === 'delete') {
                 $isReplace = false;
             } else {
                 $isReplace = true;
@@ -167,7 +169,7 @@ class WordPress extends AbstractImport
                     || !$post['post_date_gmt']) ? $this->date->date() : ($post['post_date_gmt']),
                 'updated_at'        => ($post['post_modified_gmt']) ?: $this->date->date(),
                 'publish_date'      => ($post['post_date_gmt']) ?: $this->date->date(),
-                'enabled'           => ($post['post_status'] == 'trash') ? 0 : 1,
+                'enabled'           => ($post['post_status'] === 'trash') ? 0 : 1,
                 'in_rss'            => 0,
                 'allow_comment'     => 1,
                 'store_ids'         => $this->_storeManager->getStore()->getId(),
@@ -203,7 +205,7 @@ class WordPress extends AbstractImport
                     /**
                      * Update posts
                      */
-                    if ($data['behaviour'] == 'update'
+                    if ($data['behaviour'] === 'update'
                         && $data['expand_behaviour'] == '1'
                         && $post['is_duplicated_url'] != null) {
                         $where = ['post_id = ?' => (int) $post['is_duplicated_url']];
@@ -306,14 +308,10 @@ class WordPress extends AbstractImport
         $importSource = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
-        if ($data['behaviour'] == 'delete' || $data['behaviour'] == 'replace') {
+        if ($data['behaviour'] === 'delete' || $data['behaviour'] === 'replace') {
             $tagModel->getResource()->deleteImportItems($data['type']);
             $this->_hasData = true;
-            if ($data['behaviour'] == 'delete') {
-                $isReplace = false;
-            } else {
-                $isReplace = true;
-            }
+            $isReplace      = ($data['behaviour'] !== 'delete');
         }
 
         /** fetch all items from import source */
@@ -446,14 +444,10 @@ class WordPress extends AbstractImport
         $importSource = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
-        if ($data['behaviour'] == 'delete' || $data['behaviour'] == 'replace') {
+        if ($data['behaviour'] === 'delete' || $data['behaviour'] === 'replace') {
             $categoryModel->getResource()->deleteImportItems($data['type']);
             $this->_hasData = true;
-            if ($data['behaviour'] == 'delete') {
-                $isReplace = false;
-            } else {
-                $isReplace = true;
-            }
+            $isReplace      = ($data['behaviour'] !== 'delete');
         }
 
         /** fetch all items from import source */
@@ -485,7 +479,7 @@ class WordPress extends AbstractImport
                 if ($category['is_imported']) {
                     /** update category that has duplicate URK key */
                     if (($category['is_duplicated_url'] != null || $data['expand_behaviour'] == '1')
-                        && $category['url_key'] != 'root') {
+                        && $category['url_key'] !== 'root') {
                         try {
                             $where = ['category_id = ?' => (int) $category['is_imported']];
                             $this->_updateCategories($category, $where);
@@ -514,10 +508,10 @@ class WordPress extends AbstractImport
                     /**
                      * Update categories
                      */
-                    if ($data['behaviour'] == 'update'
+                    if ($data['behaviour'] === 'update'
                         && $data['expand_behaviour'] == '1'
                         && $category['is_duplicated_url'] != null
-                        && $category['url_key'] != 'root') {
+                        && $category['url_key'] !== 'root') {
                         try {
                             $where = ['category_id = ?' => (int) $category['is_duplicated_url']];
                             $this->_updateCategories($category, $where);
@@ -607,38 +601,44 @@ class WordPress extends AbstractImport
         $magentoUserEmail = [];
 
         /**
-         * @var UserFactory
+         * @var CustomerFactory
          */
-        $userModel = $this->_userFactory->create();
+        $customerModel = $this->_customerFactory->create();
 
-        foreach ($userModel->getCollection() as $user) {
-            $magentoUserEmail [] = $user->getEmail();
+        foreach ($customerModel->getCollection() as $customer) {
+            $magentoUserEmail[$customer->getEmail()] = $customer->getId();
         }
         while ($user = mysqli_fetch_assoc($result)) {
-            if (!in_array($user['user_email'], $magentoUserEmail)) {
-                $createDate = ($user['user_registered']) ?: $this->date->date();
+            /**
+             * @var Author
+             */
+            $userModel = $this->authorFactory->create();
+            if (array_key_exists($user['user_email'], $magentoUserEmail)) {
+                $customerId = $magentoUserEmail[$user['user_email']];
+                $userModel->load($customerId, 'customer_id');
+            } else {
+                $customerId = 0;
+            }
+
+            if (!$userModel->getId()) {
                 try {
                     $userModel->setData([
-                        'username'         => $user['user_login'],
-                        'firstname'        => 'WP-',
-                        'lastname'         => $user['display_name'],
-                        'password'         => $this->_generatePassword(12),
-                        'email'            => $user['user_email'],
-                        'is_active'        => 1,
-                        'interface_locale' => 'en_US',
-                        'created'          => $createDate
-                    ])->setRoleId(1)->save();
+                        'name'        => $user['user_login'],
+                        'url_key'     => $user['user_login'],
+                        'customer_id' => $customerId,
+                        'type'        => AuthorType::ADMIN
+                    ])->save();
                     $this->_successCount++;
-                    $this->_hasData                  = true;
-                    $oldUserIds[$userModel->getId()] = $user['ID'];
+                    $this->_hasData = true;
                 } catch (Exception $e) {
                     $this->_errorCount++;
                     $this->_hasData = true;
                     continue;
                 }
-            } else {
-                $oldUserIds[$user['ID']] = $user['ID'];
             }
+
+            $oldUserIds[$userModel->getId()] = $user['ID'];
+
         }
 
         mysqli_free_result($result);
@@ -779,7 +779,7 @@ class WordPress extends AbstractImport
                             'user_name'     => $comment['user_name'],
                             'user_email'    => $comment['user_email'],
                             'import_source' => $comment['import_source']
-                            ], $where);
+                        ], $where);
                     $this->_successCount++;
                     $this->_hasData = true;
                 } else {
@@ -949,7 +949,7 @@ class WordPress extends AbstractImport
                 'store_ids'         => $post['store_ids'],
                 'meta_robots'       => $post['meta_robots'],
                 'import_source'     => $post['import_source']
-                ], $where);
+            ], $where);
         $this->_resourceConnection->getConnection()
             ->delete($this->_resourceConnection
                 ->getTableName('mageplaza_blog_post_category'), $where);
@@ -991,7 +991,7 @@ class WordPress extends AbstractImport
                 'store_ids'     => $tag['store_ids'],
                 'enabled'       => $tag['enabled'],
                 'import_source' => $tag['import_source']
-                ], $where);
+            ], $where);
     }
 
     /**
@@ -1028,6 +1028,6 @@ class WordPress extends AbstractImport
                 'store_ids'     => $category['store_ids'],
                 'enabled'       => $category['enabled'],
                 'import_source' => $category['import_source']
-                ], $where);
+            ], $where);
     }
 }

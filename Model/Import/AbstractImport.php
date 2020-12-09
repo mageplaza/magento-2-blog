@@ -41,6 +41,7 @@ use Mageplaza\Blog\Model\Config\Source\Import\Type;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\TagFactory;
 use Mageplaza\Blog\Model\TopicFactory;
+use Mageplaza\Blog\Model\AuthorFactory;
 
 /**
  * Class Author
@@ -146,6 +147,11 @@ abstract class AbstractImport extends AbstractModel
     protected $_type;
 
     /**
+     * @var AuthorFactory
+     */
+    protected $authorFactory;
+
+    /**
      * AbstractImport constructor.
      *
      * @param Context $context
@@ -155,6 +161,7 @@ abstract class AbstractImport extends AbstractModel
      * @param CategoryFactory $categoryFactory
      * @param TopicFactory $topicFactory
      * @param CommentFactory $commentFactory
+     * @param AuthorFactory $authorFactory
      * @param UserFactory $userFactory
      * @param CustomerFactory $customerFactory
      * @param ObjectManagerInterface $objectManager
@@ -177,6 +184,7 @@ abstract class AbstractImport extends AbstractModel
         CategoryFactory $categoryFactory,
         TopicFactory $topicFactory,
         CommentFactory $commentFactory,
+        AuthorFactory $authorFactory,
         UserFactory $userFactory,
         CustomerFactory $customerFactory,
         ObjectManagerInterface $objectManager,
@@ -207,6 +215,7 @@ abstract class AbstractImport extends AbstractModel
         $this->_authSession        = $authSession;
         $this->_storeManager       = $storeManager;
         $this->_helperImage        = $helperImage;
+        $this->authorFactory       = $authorFactory;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }

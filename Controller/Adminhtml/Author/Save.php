@@ -128,7 +128,7 @@ class Save extends Author
                 $data['image'] = isset($data['image']['value']) ? $data['image']['value'] : '';
             }
         }
-        if ($this->getRequest()->getParam('image')['delete']) {
+        if ($this->getRequest()->getParam('image') && $this->getRequest()->getParam('image')['delete']) {
             $data['image'] = '';
         }
         // set data

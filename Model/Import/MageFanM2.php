@@ -22,10 +22,12 @@
 namespace Mageplaza\Blog\Model\Import;
 
 use Exception;
+use Magento\Customer\Model\CustomerFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\User\Model\UserFactory;
+use Mageplaza\Blog\Model\Author;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\CommentFactory;
+use Mageplaza\Blog\Model\Config\Source\AuthorType;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\TagFactory;
@@ -144,11 +146,11 @@ class MageFanM2 extends AbstractImport
         $importSource = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
-        if ($data['behaviour'] == 'delete' || $data['behaviour'] == 'replace') {
+        if ($data['behaviour'] === 'delete' || $data['behaviour'] === 'replace') {
             $postModel->getResource()->deleteImportItems($data['type']);
             $topicModel->getResource()->deleteImportItems($data['type']);
             $this->_hasData = true;
-            $isReplace      = ($data['behaviour'] != 'delete');
+            $isReplace      = ($data['behaviour'] !== 'delete');
         }
         /** fetch all items from import source */
         while ($post = mysqli_fetch_assoc($result)) {
@@ -210,7 +212,7 @@ class MageFanM2 extends AbstractImport
                     /** check the posts isn't imported
                      *  Update posts
                      */
-                    if ($data['behaviour'] == 'update'
+                    if ($data['behaviour'] === 'update'
                         && $data['expand_behaviour'] == '1'
                         && $post['is_duplicated_url'] != null) {
                         $where = ['post_id = ?' => (int) $post['is_duplicated_url']];
@@ -325,14 +327,10 @@ class MageFanM2 extends AbstractImport
         $importSource = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
-        if ($data['behaviour'] == 'delete' || $data['behaviour'] == 'replace') {
+        if ($data['behaviour'] === 'delete' || $data['behaviour'] === 'replace') {
             $tagModel->getResource()->deleteImportItems($data['type']);
             $this->_hasData = true;
-            if ($data['behaviour'] == 'delete') {
-                $isReplace = false;
-            } else {
-                $isReplace = true;
-            }
+            $isReplace      = !($data['behaviour'] === 'delete');
         }
 
         /** fetch all items from import source */
@@ -392,7 +390,7 @@ class MageFanM2 extends AbstractImport
                      * check the posts isn't imported
                      * Update tags
                      */
-                    if ($data['behaviour'] == 'update'
+                    if ($data['behaviour'] === 'update'
                         && $data['expand_behaviour'] == '1'
                         && $tag['is_duplicated_url'] != null) {
                         try {
@@ -481,14 +479,10 @@ class MageFanM2 extends AbstractImport
         $importSource = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
-        if ($data['behaviour'] == 'delete' || $data['behaviour'] == 'replace') {
+        if ($data['behaviour'] === 'delete' || $data['behaviour'] === 'replace') {
             $categoryModel->getResource()->deleteImportItems($data['type']);
             $this->_hasData = true;
-            if ($data['behaviour'] == 'delete') {
-                $isReplace = false;
-            } else {
-                $isReplace = true;
-            }
+            $isReplace      = !($data['behaviour'] === 'delete');
         }
 
         /** fetch all items from import source */
@@ -524,7 +518,7 @@ class MageFanM2 extends AbstractImport
                 if ($category['is_imported']) {
                     /** update category that has duplicate URK key */
                     if (($category['is_duplicated_url'] != null || $data['expand_behaviour'] == '1')
-                        && $category['url_key'] != 'root') {
+                        && $category['url_key'] !== 'root') {
                         try {
                             $where = ['category_id = ?' => (int) $category['is_imported']];
                             $this->_updateCategories($category, $where);
@@ -553,7 +547,7 @@ class MageFanM2 extends AbstractImport
                     /**
                      * Update categories
                      */
-                    if ($data['behaviour'] == 'update'
+                    if ($data['behaviour'] === 'update'
                         && $data['expand_behaviour'] == '1'
                         && $category['is_duplicated_url'] != null
                         && $category['url_key'] != 'root') {
@@ -669,10 +663,10 @@ class MageFanM2 extends AbstractImport
         $importSource  = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
-        if ($data['behaviour'] == 'delete' || $data['behaviour'] == 'replace') {
+        if ($data['behaviour'] === 'delete' || $data['behaviour'] === 'replace') {
             $commentModel->getResource()->deleteImportItems($data['type']);
             $this->_hasData = true;
-            if ($data['behaviour'] == 'delete') {
+            if ($data['behaviour'] === 'delete') {
                 $isReplace = false;
             } else {
                 $isReplace = true;
@@ -756,7 +750,7 @@ class MageFanM2 extends AbstractImport
                             'user_name'     => $comment['user_name'],
                             'user_email'    => $comment['user_email'],
                             'import_source' => $comment['import_source']
-                            ], $where);
+                        ], $where);
                     $this->_successCount++;
                     $this->_hasData = true;
                 } else {
@@ -835,40 +829,42 @@ class MageFanM2 extends AbstractImport
         $oldUserIds       = [];
         $magentoUserEmail = [];
 
-        /** @var UserFactory */
-        $userModel = $this->_userFactory->create();
+        /** @var CustomerFactory */
+        $customerModel = $this->_customerFactory->create();
 
-        foreach ($userModel->getCollection() as $user) {
-            $magentoUserEmail [] = $user->getEmail();
+        foreach ($customerModel->getCollection() as $customer) {
+            $magentoUserEmail [$customer->getEmail()] = $customer->getId();
         }
         while ($user = mysqli_fetch_assoc($result)) {
-            if (!in_array($user['email'], $magentoUserEmail)) {
+            /**
+             * @var Author
+             */
+            $userModel = $this->authorFactory->create();
+            if (array_key_exists($user['email'], $magentoUserEmail)) {
+                $customerId = $magentoUserEmail[$user['email']];
+                $userModel->load($customerId, 'customer_id');
+            } else {
+                $customerId = 0;
+            }
+
+            if (!$userModel->getId()) {
                 try {
                     $userModel->setData([
-                        'username'         => $importSource = $data['type'] . '-' . $data['database']
-                            . $user['username'],
-                        'firstname'        => $user['firstname'],
-                        'lastname'         => $user['lastname'],
-                        'password'         => $this->_generatePassword(12),
-                        'email'            => $user['email'],
-                        'is_active'        => (int) $user['is_active'],
-                        'interface_locale' => $user['interface_locale'],
-                        'created'          => ($user['created']) ?: $this->date->date(),
-                        'modified'         => ($user['modified']) ?: $this->date->date(),
-                        'logdate'          => ($user['logdate']) ?: $this->date->date(),
-                        'lognum'           => (int) $user['lognum']
-                    ])->setRoleId(1)->save();
+                        'name'        => $user['firstname'],
+                        'url_key'     => $user['firstname'],
+                        'customer_id' => $customerId,
+                        'type'        => $userModel->getId() ? AuthorType::CUSTOMER : AuthorType::ADMIN
+                    ])->save();
                     $this->_successCount++;
-                    $this->_hasData                  = true;
-                    $oldUserIds[$userModel->getId()] = $user['user_id'];
+                    $this->_hasData = true;
                 } catch (Exception $e) {
                     $this->_errorCount++;
                     $this->_hasData = true;
                     continue;
                 }
-            } else {
-                $oldUserIds[$user['user_id']] = $user['user_id'];
             }
+
+            $oldUserIds[$userModel->getId()] = $user['user_id'];
         }
         mysqli_free_result($result);
 
@@ -952,7 +948,7 @@ class MageFanM2 extends AbstractImport
                 'meta_keywords'     => $post['meta_keywords'],
                 'meta_description'  => $post['meta_description'],
                 'import_source'     => $post['import_source']
-                ], $where);
+            ], $where);
         $this->_resourceConnection->getConnection()
             ->delete($this->_resourceConnection
                 ->getTableName('mageplaza_blog_post_category'), $where);
@@ -998,7 +994,7 @@ class MageFanM2 extends AbstractImport
                 'store_ids'        => $tag['store_ids'],
                 'enabled'          => $tag['enabled'],
                 'import_source'    => $tag['import_source']
-                ], $where);
+            ], $where);
     }
 
     /**
@@ -1039,6 +1035,6 @@ class MageFanM2 extends AbstractImport
                 'meta_keywords'    => $category['meta_keywords'],
                 'meta_title'       => $category['meta_title'],
                 'import_source'    => $category['import_source']
-                ], $where);
+            ], $where);
     }
 }
