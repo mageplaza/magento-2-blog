@@ -618,6 +618,7 @@ class WordPress extends AbstractImport
                 $userModel->load($customerId, 'customer_id');
             } else {
                 $customerId = 0;
+                $userModel->load($user['user_email'], 'email');
             }
 
             if (!$userModel->getId()) {

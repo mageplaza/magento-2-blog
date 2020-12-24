@@ -21,11 +21,13 @@
 
 namespace Mageplaza\Blog\Setup;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Model\AuthorFactory;
+use Mageplaza\Blog\Model\Author;
 use Mageplaza\Blog\Model\CommentFactory;
 
 /**
@@ -52,20 +54,28 @@ class UpgradeData implements UpgradeDataInterface
     public $author;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * UpgradeData constructor.
      *
      * @param DateTime $date
      * @param CommentFactory $commentFactory
+     * @param CustomerRepositoryInterface $customerRepository
      * @param AuthorFactory $authorFactory
      */
     public function __construct(
         DateTime $date,
         CommentFactory $commentFactory,
+        CustomerRepositoryInterface $customerRepository,
         AuthorFactory $authorFactory
     ) {
-        $this->comment = $commentFactory;
-        $this->author  = $authorFactory;
-        $this->date    = $date;
+        $this->comment            = $commentFactory;
+        $this->author             = $authorFactory;
+        $this->date               = $date;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -105,6 +115,19 @@ class UpgradeData implements UpgradeDataInterface
                         'created_at' => $this->date->date()
                     ]
                 )->save();
+            }
+        }
+        if (version_compare($context->getVersion(), '2.5.3', '<')) {
+            /** @var Author $author */
+            foreach ($this->author->create()->getCollection()->getItems() as $author) {
+                if ($customerId = $author->getCustomerId()) {
+                    try {
+                        $author->setEmail($this->customerRepository->getById($customerId)->getEmail());
+                        $author->save();
+                    } catch (\Exception $e) {
+                        continue;
+                    }
+                }
             }
         }
         $installer->endSetup();

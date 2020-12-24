@@ -845,6 +845,7 @@ class MageFanM2 extends AbstractImport
                 $userModel->load($customerId, 'customer_id');
             } else {
                 $customerId = 0;
+                $userModel->load($user['email'], 'email');
             }
 
             if (!$userModel->getId()) {
