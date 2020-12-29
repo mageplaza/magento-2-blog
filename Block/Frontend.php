@@ -192,24 +192,24 @@ class Frontend extends Template
         AuthorStatus $authorStatus,
         array $data = []
     ) {
-        $this->filterProvider = $filterProvider;
-        $this->cmtFactory = $commentFactory;
-        $this->likeFactory = $likeFactory;
+        $this->filterProvider     = $filterProvider;
+        $this->cmtFactory         = $commentFactory;
+        $this->likeFactory        = $likeFactory;
         $this->customerRepository = $customerRepository;
-        $this->helperData = $helperData;
-        $this->coreRegistry = $coreRegistry;
-        $this->dateTime = $dateTime;
-        $this->categoryFactory = $categoryFactory;
-        $this->postFactory = $postFactory;
-        $this->customerUrl = $customerUrl;
-        $this->postLikeFactory = $postLikeFactory;
-        $this->categoryOptions = $category;
-        $this->topicOptions = $topic;
-        $this->tagOptions = $tag;
-        $this->authorStatusType = $authorStatus;
-        $this->themeProvider = $themeProvider;
-        $this->store = $context->getStoreManager();
-        $this->enc = $enc;
+        $this->helperData         = $helperData;
+        $this->coreRegistry       = $coreRegistry;
+        $this->dateTime           = $dateTime;
+        $this->categoryFactory    = $categoryFactory;
+        $this->postFactory        = $postFactory;
+        $this->customerUrl        = $customerUrl;
+        $this->postLikeFactory    = $postLikeFactory;
+        $this->categoryOptions    = $category;
+        $this->topicOptions       = $topic;
+        $this->tagOptions         = $tag;
+        $this->authorStatusType   = $authorStatus;
+        $this->themeProvider      = $themeProvider;
+        $this->store              = $context->getStoreManager();
+        $this->enc                = $enc;
 
         parent::__construct($context, $data);
     }
@@ -238,7 +238,7 @@ class Frontend extends Template
      */
     public function getPageFilter($content)
     {
-        return $this->filterProvider->getPageFilter()->filter((string)$content);
+        return $this->filterProvider->getPageFilter()->filter((string) $content);
     }
 
     /**
@@ -251,7 +251,7 @@ class Frontend extends Template
     public function getImageUrl($image, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
     {
         $imageHelper = $this->helperData->getImageHelper();
-        $imageFile = $imageHelper->getMediaPath($image, $type);
+        $imageFile   = $imageHelper->getMediaPath($image, $type);
 
         return $this->helperData->getImageHelper()->getMediaUrl($imageFile);
     }
@@ -269,7 +269,7 @@ class Frontend extends Template
         }
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
-        $url = $this->helperData->getUrl($this->helperData->getRoute() . '/' . $urlKey);
+        $url    = $this->helperData->getUrl($this->helperData->getRoute() . '/' . $urlKey);
 
         return rtrim($url, '/') . '.xml';
     }
@@ -283,9 +283,9 @@ class Frontend extends Template
     public function getPostInfo($post)
     {
         $likeCollection = $this->postLikeFactory->create()->getCollection();
-        $couldLike = $likeCollection->addFieldToFilter('post_id', $post->getId())
+        $couldLike      = $likeCollection->addFieldToFilter('post_id', $post->getId())
             ->addFieldToFilter('action', '1')->count();
-        $html = __(
+        $html           = __(
             '<i class="mp-blog-icon mp-blog-calendar-times"></i> %1',
             $this->getDateFormat($post->getPublishDate())
         );
@@ -347,7 +347,7 @@ class Frontend extends Template
             return null;
         }
 
-        $categories = $this->helperData->getCategoryCollection($post->getCategoryIds());
+        $categories   = $this->helperData->getCategoryCollection($post->getCategoryIds());
         $categoryHtml = [];
         foreach ($categories as $_cat) {
             $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl(

@@ -81,11 +81,11 @@ class Import extends Action
         BlogHelper $blogHelper,
         Registry $registry
     ) {
-        $this->blogHelper = $blogHelper;
-        $this->_wordpressModel = $wordPress;
+        $this->blogHelper         = $blogHelper;
+        $this->_wordpressModel    = $wordPress;
         $this->_aheadWorksM1Model = $aheadWorksM1;
-        $this->_mageFanM2Model = $mageFanM2;
-        $this->registry = $registry;
+        $this->_mageFanM2Model    = $mageFanM2;
+        $this->registry           = $registry;
 
         parent::__construct($context);
     }
