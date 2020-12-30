@@ -30,7 +30,9 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\Author;
 use Mageplaza\Blog\Model\AuthorFactory;
+use Mageplaza\Blog\Model\Post as PostModel;
 
 /**
  * Class Post
@@ -213,25 +215,25 @@ class Post extends AbstractDb
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Post $post
+     * @param PostModel $post
      *
      * @return $this
      * @throws LocalizedException
      */
-    public function saveTagRelation(\Mageplaza\Blog\Model\Post $post)
+    public function saveTagRelation(PostModel $post)
     {
         $post->setIsChangedTagList(false);
-        $id   = $post->getId();
-        $tags = $post->getTagsIds();
-
-        if ($tags === null) {
-            return $this;
-        }
+        $id      = $post->getId();
+        $tags    = $post->getTagsIds();
         $oldTags = $post->getTagIds();
 
-        $insert = array_diff($tags, $oldTags);
-        $delete = array_diff($oldTags, $tags);
+        if ($tags === null) {
+            $tags    = $oldTags;
+            $oldTags = [];
+        }
 
+        $insert  = array_diff($tags, $oldTags);
+        $delete  = array_diff($oldTags, $tags);
         $adapter = $this->getConnection();
         if (!empty($delete)) {
             $condition = ['tag_id IN(?)' => $delete, 'post_id=?' => $id];
@@ -266,25 +268,25 @@ class Post extends AbstractDb
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Post $post
+     * @param PostModel $post
      *
      * @return $this
      * @throws LocalizedException
      */
-    public function saveTopicRelation(\Mageplaza\Blog\Model\Post $post)
+    public function saveTopicRelation(PostModel $post)
     {
         $post->setIsChangedTopicList(false);
-        $id     = $post->getId();
-        $topics = $post->getTopicsIds();
-
-        if ($topics === null) {
-            return $this;
-        }
+        $id        = $post->getId();
+        $topics    = $post->getTopicsIds();
         $oldTopics = $post->getTopicIds();
 
-        $insert = array_diff($topics, $oldTopics);
-        $delete = array_diff($oldTopics, $topics);
+        if ($topics === null) {
+            $topics    = $oldTopics;
+            $oldTopics = [];
+        }
 
+        $insert  = array_diff($topics, $oldTopics);
+        $delete  = array_diff($oldTopics, $topics);
         $adapter = $this->getConnection();
         if (!empty($delete)) {
             $condition = ['topic_id IN(?)' => $delete, 'post_id=?' => $id];
@@ -319,20 +321,23 @@ class Post extends AbstractDb
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Post $post
+     * @param PostModel $post
      *
      * @return $this
      * @throws LocalizedException
      */
-    public function saveCategoryRelation(\Mageplaza\Blog\Model\Post $post)
+    public function saveCategoryRelation(PostModel $post)
     {
         $post->setIsChangedCategoryList(false);
-        $id         = $post->getId();
-        $categories = $post->getCategoriesIds();
-        if ($categories === null) {
-            return $this;
-        }
+        $id             = $post->getId();
+        $categories     = $post->getCategoriesIds();
         $oldCategoryIds = $post->getCategoryIds();
+
+        if ($categories === null) {
+            $categories     = $oldCategoryIds;
+            $oldCategoryIds = [];
+        }
+
         $insert         = array_diff($categories, $oldCategoryIds);
         $delete         = array_diff($oldCategoryIds, $categories);
         $adapter        = $this->getConnection();
@@ -369,11 +374,11 @@ class Post extends AbstractDb
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Post $post
+     * @param PostModel $post
      *
      * @return array
      */
-    public function getCategoryIds(\Mageplaza\Blog\Model\Post $post)
+    public function getCategoryIds(PostModel $post)
     {
         $adapter = $this->getConnection();
         $select  = $adapter->select()->from(
@@ -389,11 +394,11 @@ class Post extends AbstractDb
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Post $post
+     * @param PostModel $post
      *
      * @return array
      */
-    public function getTagIds(\Mageplaza\Blog\Model\Post $post)
+    public function getTagIds(PostModel $post)
     {
         $adapter = $this->getConnection();
         $select  = $adapter->select()->from(
@@ -409,11 +414,11 @@ class Post extends AbstractDb
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Post $post
+     * @param PostModel $post
      *
      * @return array
      */
-    public function getTopicIds(\Mageplaza\Blog\Model\Post $post)
+    public function getTopicIds(PostModel $post)
     {
         $adapter = $this->getConnection();
         $select  = $adapter->select()->from($this->postTopicTable, 'topic_id')
@@ -423,10 +428,10 @@ class Post extends AbstractDb
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Post $post
+     * @param PostModel $post
      * @return array
      */
-    public function getAuthor(\Mageplaza\Blog\Model\Post $post)
+    public function getAuthor(PostModel $post)
     {
         $adapter = $this->getConnection();
         $select  = $adapter->select()->from($this->postAuthorTable, '*')
@@ -436,11 +441,11 @@ class Post extends AbstractDb
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Post $post
+     * @param PostModel $post
      *
      * @return array
      */
-    public function getViewTraffic(\Mageplaza\Blog\Model\Post $post)
+    public function getViewTraffic(PostModel $post)
     {
         $adapter = $this->getConnection();
         $select  = $adapter->select()->from($this->postTrafficTable, 'numbers_view')
@@ -450,11 +455,11 @@ class Post extends AbstractDb
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Post $post
+     * @param PostModel $post
      *
      * @return $this
      */
-    public function saveProductRelation(\Mageplaza\Blog\Model\Post $post)
+    public function saveProductRelation(PostModel $post)
     {
         $post->setIsChangedProductList(false);
         $id          = $post->getId();
@@ -523,11 +528,11 @@ class Post extends AbstractDb
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Post $post
+     * @param PostModel $post
      *
      * @return array
      */
-    public function getProductsPosition(\Mageplaza\Blog\Model\Post $post)
+    public function getProductsPosition(PostModel $post)
     {
         $select = $this->getConnection()->select()->from(
             $this->postProductTable,
@@ -569,7 +574,7 @@ class Post extends AbstractDb
 
         if ($currentUser) {
             $currentUserId = $currentUser->getId();
-            /** @var \Mageplaza\Blog\Model\Author $author */
+            /** @var Author $author */
             $author = $this->_authorFactory->create()->load($currentUserId);
 
             /** Create the new author if that author isn't exist */
