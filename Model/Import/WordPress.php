@@ -626,6 +626,7 @@ class WordPress extends AbstractImport
                     $userModel->setData([
                         'name'        => $user['user_login'],
                         'url_key'     => $user['user_login'],
+                        'email'       => $user['user_email'],
                         'customer_id' => $customerId,
                         'type'        => AuthorType::ADMIN
                     ])->save();

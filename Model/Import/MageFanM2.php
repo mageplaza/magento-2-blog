@@ -853,6 +853,7 @@ class MageFanM2 extends AbstractImport
                     $userModel->setData([
                         'name'        => $user['firstname'],
                         'url_key'     => $user['firstname'],
+                        'email'       => $user['email'],
                         'customer_id' => $customerId,
                         'type'        => $userModel->getId() ? AuthorType::CUSTOMER : AuthorType::ADMIN
                     ])->save();
