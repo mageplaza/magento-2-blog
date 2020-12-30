@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Controller\Adminhtml\Author;
 
 use Exception;
 use Magento\Backend\App\Action\Context;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
@@ -45,20 +46,28 @@ class Save extends Author
     protected $imageHelper;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * Save constructor.
      *
      * @param Context $context
      * @param Registry $registry
      * @param AuthorFactory $authorFactory
+     * @param CustomerRepositoryInterface $customerRepository
      * @param Image $imageHelper
      */
     public function __construct(
         Context $context,
         Registry $registry,
         AuthorFactory $authorFactory,
+        CustomerRepositoryInterface $customerRepository,
         Image $imageHelper
     ) {
-        $this->imageHelper = $imageHelper;
+        $this->imageHelper        = $imageHelper;
+        $this->customerRepository = $customerRepository;
 
         parent::__construct($context, $registry, $authorFactory);
     }
@@ -133,6 +142,14 @@ class Save extends Author
         }
         // set data
         if (!empty($data)) {
+            if (!empty($data['customer_id'])) {
+                try {
+                    $data['email'] = $this->customerRepository->getById($data['customer_id'])->getEmail();
+                } catch (Exception $e) {
+                    $data['email'] = '';
+                }
+            }
+
             $author->addData($data);
         }
 
