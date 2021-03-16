@@ -372,7 +372,7 @@ Learn more https://www.mageplaza.com/releases/blog/
 
 ☞ [Magento 2 SEO extension](https://marketplace.magento.com/mageplaza-magento-2-seo-extension.html)
 
-☞ [Magento 2 Reward Pionts](https://marketplace.magento.com/mageplaza-module-reward-points.html)
+☞ [Magento 2 Reward Points](https://marketplace.magento.com/mageplaza-module-reward-points.html)
 
 ☞ [Magento 2 Blog extension](https://marketplace.magento.com/mageplaza-magento-2-blog-extension.html)
 
