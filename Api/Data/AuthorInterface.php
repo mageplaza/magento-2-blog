@@ -152,7 +152,7 @@ interface AuthorInterface
      *
      * @return $this
      */
-    public function setCustomerIdId($id);
+    public function setCustomerId($id);
 
     /**
      * @return int|null
