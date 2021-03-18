@@ -74,8 +74,8 @@ class Product extends Extended implements TabInterface
         array $data = []
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->coreRegistry = $coreRegistry;
-        $this->request = $request;
+        $this->coreRegistry             = $coreRegistry;
+        $this->request                  = $request;
 
         parent::__construct($context, $backendHelper, $data);
     }
@@ -111,7 +111,7 @@ class Product extends Extended implements TabInterface
             ['mp_p' => $collection->getTable('mageplaza_blog_post_product')],
             'e.entity_id = mp_p.entity_id',
             ['position', 'post_id']
-        );
+        )->distinct(true);
 
         $this->setCollection($collection);
 
@@ -179,6 +179,7 @@ class Product extends Extended implements TabInterface
 
     /**
      * Retrieve selected Tags
+     *
      * @return array
      */
     protected function _getSelectedProducts()
@@ -195,6 +196,7 @@ class Product extends Extended implements TabInterface
 
     /**
      * Retrieve selected Tags
+     *
      * @return array
      */
     public function getSelectedProducts()
