@@ -31,10 +31,12 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
+use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory as PostCollectionFactory;
 use Mageplaza\Blog\Model\Tag;
 
 /**
  * Class Product
+ *
  * @package Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab
  */
 class Product extends Extended implements TabInterface
@@ -50,17 +52,18 @@ class Product extends Extended implements TabInterface
     public $coreRegistry;
 
     /**
-     * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
+     * @var PostCollectionFactory
      */
-    private $postCollectionFactory;
+    protected $postCollectionFactory;
 
     /**
      * Product constructor.
      *
-     * @param CollectionFactory $productCollectionFactory
-     * @param Registry $coreRegistry
      * @param Context $context
+     * @param Registry $coreRegistry
      * @param Data $backendHelper
+     * @param CollectionFactory $productCollectionFactory
+     * @param PostCollectionFactory $postCollectionFactory
      * @param array $data
      */
     public function __construct(
@@ -68,7 +71,7 @@ class Product extends Extended implements TabInterface
         Registry $coreRegistry,
         Data $backendHelper,
         CollectionFactory $productCollectionFactory,
-        \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
+        PostCollectionFactory $postCollectionFactory,
         array $data = []
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
@@ -109,7 +112,7 @@ class Product extends Extended implements TabInterface
             ['mp_p' => $collection->getTable('mageplaza_blog_post_product')],
             'e.entity_id = mp_p.entity_id',
             ['position']
-        );
+        )->distinct(true);
 
         $this->setCollection($collection);
 
@@ -160,6 +163,7 @@ class Product extends Extended implements TabInterface
 
     /**
      * Retrieve selected Tags
+     *
      * @return array
      */
     protected function _getSelectedProducts()
@@ -176,6 +180,7 @@ class Product extends Extended implements TabInterface
 
     /**
      * Retrieve selected Tags
+     *
      * @return array
      */
     public function getSelectedProducts()
