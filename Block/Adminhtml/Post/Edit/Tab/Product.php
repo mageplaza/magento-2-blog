@@ -110,7 +110,7 @@ class Product extends Extended implements TabInterface
         $collection->getSelect()->joinLeft(
             ['mp_p' => $collection->getTable('mageplaza_blog_post_product')],
             'e.entity_id = mp_p.entity_id',
-            ['position', 'post_id']
+            ['position']
         )->distinct(true);
 
         $this->setCollection($collection);
