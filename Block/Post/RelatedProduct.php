@@ -21,12 +21,16 @@
 
 namespace Mageplaza\Blog\Block\Post;
 
+use Exception;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Helper\Output;
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\Url\Helper\Data;
 use Mageplaza\Blog\Helper\Data as HelperData;
@@ -62,6 +66,16 @@ class RelatedProduct extends ListProduct
     protected $outputHelper;
 
     /**
+     * @var Configurable
+     */
+    protected $catalogProductTypeConfigurable;
+
+    /**
+     * @var ProductRepository
+     */
+    protected $productRepository;
+
+    /**
      * RelatedProduct constructor.
      *
      * @param Context $context
@@ -69,6 +83,8 @@ class RelatedProduct extends ListProduct
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
      * @param CollectionFactory $productCollectionFactory
+     * @param Configurable $catalogProductTypeConfigurable
+     * @param ProductRepository $productRepository
      * @param HelperData $helperData
      * @param Output $output
      * @param Data $urlHelper
@@ -80,14 +96,18 @@ class RelatedProduct extends ListProduct
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         CollectionFactory $productCollectionFactory,
+        Configurable $catalogProductTypeConfigurable,
+        ProductRepository $productRepository,
         HelperData $helperData,
         Output $output,
         Data $urlHelper,
         array $data = []
     ) {
-        $this->_productCollectionFactory = $productCollectionFactory;
-        $this->helper = $helperData;
-        $this->outputHelper = $output;
+        $this->_productCollectionFactory      = $productCollectionFactory;
+        $this->helper                         = $helperData;
+        $this->outputHelper                   = $output;
+        $this->catalogProductTypeConfigurable = $catalogProductTypeConfigurable;
+        $this->productRepository              = $productRepository;
 
         parent::__construct($context, $postDataHelper, $layerResolver, $categoryRepository, $urlHelper, $data);
     }
@@ -119,8 +139,9 @@ class RelatedProduct extends ListProduct
     }
 
     /**
+     * Get ProductCollection in same brand (filter by Attribute Option_Id)
+     *
      * @return mixed
-     * get ProductCollection in same brand ( filter by Atrribute Option_Id )
      */
     public function _getProductCollection()
     {
@@ -175,5 +196,24 @@ class RelatedProduct extends ListProduct
     protected function _beforeToHtml()
     {
         return $this;
+    }
+
+    /**
+     * @param Product $product
+     * @return mixed
+     */
+    public function getParentProductUrl($product)
+    {
+        $parentByChild = $this->catalogProductTypeConfigurable->getParentIdsByChild($product->getId());
+        if(isset($parentByChild[0])){
+            try {
+                $parentProduct = $this->productRepository->getById($parentByChild[0]);
+                return $parentProduct->getProductUrl();
+            } catch (Exception $e) {
+                return $product->getProductUrl();
+            }
+        }
+
+        return $product->getProductUrl();
     }
 }

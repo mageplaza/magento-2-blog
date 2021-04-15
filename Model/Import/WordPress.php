@@ -25,12 +25,12 @@ use Exception;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Model\Author;
-use Mageplaza\Blog\Model\CategoryFactory;
-use Mageplaza\Blog\Model\CommentFactory;
+use Mageplaza\Blog\Model\Category;
+use Mageplaza\Blog\Model\Comment;
 use Mageplaza\Blog\Model\Config\Source\AuthorType;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
-use Mageplaza\Blog\Model\PostFactory;
-use Mageplaza\Blog\Model\TagFactory;
+use Mageplaza\Blog\Model\Post;
+use Mageplaza\Blog\Model\Tag;
 
 /**
  * Class WordPress
@@ -44,36 +44,42 @@ class WordPress extends AbstractImport
      * @var string
      */
     const TABLE_POST = 'posts';
+
     /**
      * Wordpress Post meta table name
      *
      * @var string
      */
     const TABLE_POSTMETA = 'postmeta';
+
     /**
      * Wordpress Category/Tag table name
      *
      * @var string
      */
     const TABLE_TERMS = 'terms';
+
     /**
      * Wordpress Category/Tag identify table name
      *
      * @var string
      */
     const TABLE_TERMTAXONOMY = 'term_taxonomy';
+
     /**
      * Wordpress Category/Tag relationship table name
      *
      * @var string
      */
     const TABLE_TERMRELATIONSHIP = 'term_relationships';
+
     /**
      * Magento User table name
      *
      * @var string
      */
     const TABLE_USERS = 'users';
+
     /**
      * Wordpress Comment table name
      *
@@ -84,8 +90,8 @@ class WordPress extends AbstractImport
     /**
      * Run imports
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return bool
      * @throws LocalizedException
@@ -109,8 +115,8 @@ class WordPress extends AbstractImport
     /**
      * Import posts
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return bool|mixed
      * @throws LocalizedException
@@ -126,16 +132,14 @@ class WordPress extends AbstractImport
         }
 
         $this->_resetRecords();
-        /**
-         * @var PostFactory
-         */
+        /** @var Post $postModel */
         $postModel    = $this->_postFactory->create();
         $oldPostIds   = [];
         $importSource = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
         if ($data['behaviour'] === 'delete' || $data['behaviour'] === 'replace') {
-            $postModel->getResource()->deleteImportItems($data['type']);
+            $this->_successCount = $postModel->getResource()->deleteImportItems($data['type']);
             $this->_hasData = true;
             if ($data['behaviour'] === 'delete') {
                 $isReplace = false;
@@ -284,8 +288,8 @@ class WordPress extends AbstractImport
     }
 
     /**
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return mixed|void
      * @throws LocalizedException
@@ -301,9 +305,7 @@ class WordPress extends AbstractImport
         $oldTagIds = [];
         $this->_resetRecords();
         $isReplace = true;
-        /**
-         * @var TagFactory
-         */
+        /** @var Tag $tagModel */
         $tagModel     = $this->_tagFactory->create();
         $importSource = $data['type'] . '-' . $data['database'];
 
@@ -419,8 +421,8 @@ class WordPress extends AbstractImport
     }
 
     /**
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return mixed|void
      * @throws LocalizedException
@@ -435,7 +437,7 @@ class WordPress extends AbstractImport
                           AND " . $data['table_prefix'] . self::TABLE_TERMS . ".name <> 'uncategorized' ";
         $result    = mysqli_query($connection, $sqlString);
         $isReplace = true;
-        /** @var CategoryFactory */
+        /** @var Category */
         $categoryModel  = $this->_categoryFactory->create();
         $newCategories  = [];
         $oldCategories  = [];
@@ -589,8 +591,10 @@ class WordPress extends AbstractImport
     /**
      * Import authors
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
+     *
+     * @return mixed|void
      */
     protected function _importAuthors($data, $connection)
     {
@@ -609,9 +613,7 @@ class WordPress extends AbstractImport
             $magentoUserEmail[$customer->getEmail()] = $customer->getId();
         }
         while ($user = mysqli_fetch_assoc($result)) {
-            /**
-             * @var Author
-             */
+            /** @var Author $userModel */
             $userModel = $this->authorFactory->create();
             if (array_key_exists($user['user_email'], $magentoUserEmail)) {
                 $customerId = $magentoUserEmail[$user['user_email']];
@@ -678,8 +680,8 @@ class WordPress extends AbstractImport
     /**
      * Import comments
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @throws LocalizedException
      */
@@ -690,9 +692,7 @@ class WordPress extends AbstractImport
         $result        = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
         $isReplace = true;
-        /**
-         * @var CommentFactory
-         */
+        /** @var Comment $commentModel */
         $commentModel  = $this->_commentFactory->create();
         $customerModel = $this->_customerFactory->create();
         $websiteId     = $this->_storeManager->getWebsite()->getId();
@@ -856,11 +856,11 @@ class WordPress extends AbstractImport
     }
 
     /**
-     * @param $data
-     * @param $connection
-     * @param $oldTermIds
-     * @param $relationTable
-     * @param $termType
+     * @param array $data
+     * @param null $connection
+     * @param array $oldTermIds
+     * @param string $relationTable
+     * @param string $termType
      * @param null $isCategory
      */
     protected function _importRelationships(
@@ -907,8 +907,10 @@ class WordPress extends AbstractImport
     }
 
     /**
-     * @param $postModel
-     * @param $post
+     * @param Post $postModel
+     * @param array $post
+     *
+     * @throws Exception
      */
     private function _addPosts($postModel, $post)
     {
@@ -930,8 +932,8 @@ class WordPress extends AbstractImport
     }
 
     /**
-     * @param $post
-     * @param $where
+     * @param array $post
+     * @param array $where
      */
     private function _updatePosts($post, $where)
     {
@@ -961,8 +963,10 @@ class WordPress extends AbstractImport
     }
 
     /**
-     * @param $tagModel
-     * @param $tag
+     * @param Tag $tagModel
+     * @param array $tag
+     *
+     * @throws Exception
      */
     private function _addTags($tagModel, $tag)
     {
@@ -978,8 +982,8 @@ class WordPress extends AbstractImport
     }
 
     /**
-     * @param $tag
-     * @param $where
+     * @param array $tag
+     * @param array $where
      */
     private function _updateTags($tag, $where)
     {
@@ -997,8 +1001,10 @@ class WordPress extends AbstractImport
     }
 
     /**
-     * @param $categoryModel
-     * @param $category
+     * @param Category $categoryModel
+     * @param array $category
+     *
+     * @throws Exception
      */
     private function _addCategories($categoryModel, $category)
     {
@@ -1015,8 +1021,8 @@ class WordPress extends AbstractImport
     }
 
     /**
-     * @param $category
-     * @param $where
+     * @param array $category
+     * @param array $where
      */
     private function _updateCategories($category, $where)
     {

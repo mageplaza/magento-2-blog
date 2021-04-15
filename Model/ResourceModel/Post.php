@@ -160,7 +160,7 @@ class Post extends AbstractDb
     /**
      * Retrieves Post Name from DB by passed id.
      *
-     * @param $id
+     * @param int $id
      *
      * @return string
      * @throws LocalizedException
@@ -198,7 +198,9 @@ class Post extends AbstractDb
     }
 
     /**
-     * @inheritdoc
+     * @param PostModel|AbstractModel $object
+     * @return AbstractDb
+     * @throws LocalizedException
      */
     protected function _afterSave(AbstractModel $object)
     {
@@ -228,8 +230,7 @@ class Post extends AbstractDb
         $oldTags = $post->getTagIds();
 
         if ($tags === null) {
-            $tags    = $oldTags;
-            $oldTags = [];
+            return $this;
         }
 
         $insert  = array_diff($tags, $oldTags);
@@ -281,8 +282,7 @@ class Post extends AbstractDb
         $oldTopics = $post->getTopicIds();
 
         if ($topics === null) {
-            $topics    = $oldTopics;
-            $oldTopics = [];
+            return $this;
         }
 
         $insert  = array_diff($topics, $oldTopics);
@@ -334,8 +334,7 @@ class Post extends AbstractDb
         $oldCategoryIds = $post->getCategoryIds();
 
         if ($categories === null) {
-            $categories     = $oldCategoryIds;
-            $oldCategoryIds = [];
+            return $this;
         }
 
         $insert         = array_diff($categories, $oldCategoryIds);
@@ -549,7 +548,7 @@ class Post extends AbstractDb
     /**
      * Check post url key is exists
      *
-     * @param $urlKey
+     * @param string $urlKey
      *
      * @return string
      * @throws LocalizedException
@@ -588,8 +587,8 @@ class Post extends AbstractDb
     /**
      * Check is imported post
      *
-     * @param $importSource
-     * @param $oldId
+     * @param string $importSource
+     * @param string $oldId
      *
      * @return string
      * @throws LocalizedException
@@ -606,13 +605,15 @@ class Post extends AbstractDb
     }
 
     /**
-     * @param $importType
+     * @param string $importType
      *
+     * @return int
      * @throws LocalizedException
      */
     public function deleteImportItems($importType)
     {
         $adapter = $this->getConnection();
-        $adapter->delete($this->getMainTable(), "`import_source` LIKE '" . $importType . "%'");
+
+        return $adapter->delete($this->getMainTable(), "`import_source` LIKE '" . $importType . "%'");
     }
 }

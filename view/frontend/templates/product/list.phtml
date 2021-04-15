@@ -18,21 +18,17 @@
  * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
-use Magento\Framework\App\Action\Action;
 
-?>
-<?php
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+use Magento\Catalog\Block\Product\ReviewRendererInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\App\Action\Action;
+use Mageplaza\Blog\Block\Post\RelatedProduct;
 
 /**
- * Product list template
- *
- * @var $block \Mageplaza\Blog\Block\Post\RelatedProduct
+ * @var $block RelatedProduct
  */
-?>
-<?php
 $_productCollection = $block->getLoadedProductCollection();
-$_helper = $block->getHelper();
+$_helper            = $block->getHelper();
 ?>
 <?php if (!$_productCollection->count()):?>
     <div class="message info empty"><div><?= $block->escapeHtml(__('We can\'t find products matching the selection.')) ?></div></div>
@@ -41,15 +37,15 @@ $_helper = $block->getHelper();
     <?= $block->getAdditionalHtml() ?>
     <?php
     if ($block->getMode() == 'grid') {
-        $viewMode = 'grid';
+        $viewMode         = 'grid';
         $imageDisplayArea = 'category_page_grid';
-        $showDescription = false;
-        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+        $showDescription  = false;
+        $templateType     = ReviewRendererInterface::SHORT_VIEW;
     } else {
-        $viewMode = 'list';
+        $viewMode         = 'list';
         $imageDisplayArea = 'category_page_list';
-        $showDescription = true;
-        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+        $showDescription  = true;
+        $templateType     = ReviewRendererInterface::FULL_VIEW;
     }
     /**
      * Position for actions regarding image size changing in vde if needed
@@ -59,7 +55,7 @@ $_helper = $block->getHelper();
     <div class="products wrapper <?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
         <?php if ($block->relatedMode() !== '1'):?>
             <ol class="products list items product-items">
-                <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+                <?php /** @var Product $_product */ ?>
                 <?php foreach ($_productCollection as $_product):?>
                 <li class="item product product-item">
                     <div class="product-item-info" data-container="product-<?= /* @noEscape */ $viewMode ?>">
@@ -71,7 +67,7 @@ $_helper = $block->getHelper();
                         }
                         ?>
                         <?php // Product Image ?>
-                        <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
+                        <a href="<?= $block->escapeUrl($block->getParentProductUrl($_product)) ?>"
                            class="product photo product-item-photo"
                            tabindex="-1">
                             <?= $productImage->toHtml() ?>
@@ -82,7 +78,7 @@ $_helper = $block->getHelper();
                             ?>
                             <strong class="product name product-item-name">
                                 <a class="product-item-link"
-                                   href="<?= $block->escapeUrl($_product->getProductUrl()) ?>">
+                                   href="<?= $block->escapeUrl($block->getParentProductUrl($_product)) ?>">
                                     <?= /* @noEscape */ $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
                                 </a>
                             </strong>
@@ -128,7 +124,7 @@ $_helper = $block->getHelper();
                                 <?php if ($showDescription):?>
                                     <div class="product description product-item-description">
                                         <?= /* @noEscape */ $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
-                                        <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
+                                        <a href="<?= $block->escapeUrl($block->getParentProductUrl($_product)) ?>"
                                            title="<?= /* @noEscape */ $_productNameStripped ?>"
                                            class="action more"><?= $block->escapeHtml(__('Learn More')) ?></a>
                                     </div>
@@ -141,7 +137,7 @@ $_helper = $block->getHelper();
             </ol>
         <?php else:?>
             <div class="owl-carousel owl-theme">
-                <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+                <?php /** @var $_product Product */ ?>
                 <?php foreach ($_productCollection as $_product):?>
                     <div class="item product product-item mp-blog-slider-item">
                         <div class="product-item-info" data-container="product-<?= /* @noEscape */ $viewMode ?>">
@@ -153,7 +149,7 @@ $_helper = $block->getHelper();
                             }
                             ?>
                             <?php // Product Image ?>
-                            <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
+                            <a href="<?= $block->escapeUrl($block->getParentProductUrl($_product)) ?>"
                                class="product photo product-item-photo"
                                tabindex="-1">
                                 <?= $productImage->toHtml() ?>
@@ -164,7 +160,7 @@ $_helper = $block->getHelper();
                                 ?>
                                 <strong class="product name product-item-name">
                                     <a class="product-item-link"
-                                       href="<?= $block->escapeUrl($_product->getProductUrl()) ?>">
+                                       href="<?= $block->escapeUrl($block->getParentProductUrl($_product)) ?>">
                                         <?= /* @noEscape */ $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
                                     </a>
                                 </strong>
@@ -210,7 +206,7 @@ $_helper = $block->getHelper();
                                     <?php if ($showDescription):?>
                                         <div class="product description product-item-description">
                                             <?= /* @noEscape */ $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
-                                            <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
+                                            <a href="<?= $block->escapeUrl($block->getParentProductUrl($_product)) ?>"
                                                title="<?= /* @noEscape */ $_productNameStripped ?>"
                                                class="action more"><?= $block->escapeHtml(__('Learn More')) ?></a>
                                         </div>

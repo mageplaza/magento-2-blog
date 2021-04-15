@@ -23,6 +23,8 @@ namespace Mageplaza\Blog\Controller\Post;
 
 use Exception;
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Action\Action;
@@ -210,42 +212,30 @@ class View extends Action
             $result       = [];
             if (isset($params['cmt_text'])) {
                 $cmt_text   = $params['cmt_text'];
-                $content    = htmlentities($cmt_text, ENT_COMPAT, 'UTF-8') . "<br />";
+                $content    = htmlentities($cmt_text, ENT_COMPAT, 'UTF-8');
                 $htmlEntity = htmlentities($content, ENT_COMPAT, 'UTF-8');
                 $content    = html_entity_decode($htmlEntity);
 
                 $cmtText = $content;
                 $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
                 $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
-                if ($this->session->isLoggedIn()) {
-                    $commentData = [
-                        'post_id'    => $id,
-                        '',
-                        'entity_id'  => $customerData->getId(),
-                        'is_reply'   => $isReply,
-                        'reply_id'   => $replyId,
-                        'content'    => $cmtText,
-                        'created_at' => $this->dateTime->date(),
-                        'status'     => $this->helperBlog->getBlogConfig('comment/need_approve')
-                            ? Status::PENDING : Status::APPROVED,
-                        'store_ids'  => $this->storeManager->getStore()->getId()
-                    ];
-                } else {
-                    $commentData = [
-                        'post_id'    => $id,
-                        '',
-                        'entity_id'  => 0,
-                        'is_reply'   => $isReply,
-                        'reply_id'   => $replyId,
-                        'content'    => $cmtText,
-                        'user_name'  => $params['guestName'],
-                        'user_email' => $params['guestEmail'],
-                        'created_at' => $this->dateTime->date(),
-                        'status'     => $this->helperBlog->getBlogConfig('comment/need_approve')
-                            ? Status::PENDING : Status::APPROVED,
-                        'store_ids'  => $this->storeManager->getStore()->getId()
-                    ];
-                }
+
+                $userName = $this->session->isLoggedIn() ?
+                    $customerData->getFirstname() . ' ' . $customerData->getLastname() : $params['guestName'] . ' (Guest)';
+                $commentData = [
+                    'post_id'    => $id,
+                    '',
+                    'entity_id'  => $this->session->isLoggedIn() ? $customerData->getId() : 0,
+                    'is_reply'   => $isReply,
+                    'reply_id'   => $replyId,
+                    'content'    => $cmtText,
+                    'user_name'  => $userName,
+                    'user_email' => $this->session->isLoggedIn() ? $customerData->getEmail() : $params['guestEmail'],
+                    'created_at' => $this->dateTime->date(),
+                    'status'     => $this->helperBlog->getBlogConfig('comment/need_approve')
+                        ? Status::PENDING : Status::APPROVED,
+                    'store_ids'  => $this->storeManager->getStore()->getId()
+                ];
 
                 $commentModel = $this->cmtFactory->create();
                 $result       = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
@@ -269,10 +259,10 @@ class View extends Action
     }
 
     /**
-     * @param $action
-     * @param $user
-     * @param $data
-     * @param $model
+     * @param int $action
+     * @param CustomerInterface|Customer|null $user
+     * @param array $data
+     * @param LikeFactory|CommentFactory $model
      * @param null $cmtId
      *
      * @return array
@@ -335,9 +325,9 @@ class View extends Action
     /**
      * check if user like a comment
      *
-     * @param $cmtId
-     * @param $userId
-     * @param $model
+     * @param int $cmtId
+     * @param int $userId
+     * @param LikeFactory $model
      *
      * @return bool
      */
