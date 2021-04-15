@@ -62,7 +62,7 @@ class LinkMenu
                 if ($link->getPath() === 'mpblog/author/signup') {
                     $this->helper->setCustomerContextId();
                     $author = $this->helper->getCurrentAuthor();
-                    if ($author === 'null' || !$author->getId()) {
+                    if ($author === null || !$author->getId()) {
                         unset($links[$key]);
                     }
                 }
