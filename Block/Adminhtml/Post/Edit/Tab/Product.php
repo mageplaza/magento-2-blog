@@ -156,7 +156,6 @@ class Product extends Extended implements TabInterface
                 'validate_class' => 'validate-number',
                 'index' => 'position',
                 'editable' => true,
-                'sortable' => false,
                 'edit_only' => true,
             ]);
         } else {
@@ -168,7 +167,6 @@ class Product extends Extended implements TabInterface
                 'validate_class' => 'validate-number',
                 'index' => 'position',
                 'editable' => true,
-                'sortable' => false,
                 'filter' => false,
                 'edit_only' => true,
             ]);
