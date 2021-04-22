@@ -28,8 +28,10 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Mageplaza\Blog\Controller\Adminhtml\Post;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Image;
@@ -72,6 +74,11 @@ class Save extends Post
     protected $_postHistory;
 
     /**
+     * @var TimezoneInterface
+     */
+    protected $timezone;
+
+    /**
      * Save constructor.
      *
      * @param Context $context
@@ -82,6 +89,7 @@ class Save extends Post
      * @param Data $helperData
      * @param PostHistoryFactory $postHistory
      * @param DateTime $date
+     * @param TimezoneInterface $timezone
      */
     public function __construct(
         Context $context,
@@ -91,24 +99,27 @@ class Save extends Post
         Image $imageHelper,
         Data $helperData,
         PostHistoryFactory $postHistory,
-        DateTime $date
+        DateTime $date,
+        TimezoneInterface $timezone
     ) {
-        $this->jsHelper = $jsHelper;
-        $this->_helperData = $helperData;
+        $this->jsHelper     = $jsHelper;
+        $this->_helperData  = $helperData;
         $this->_postHistory = $postHistory;
-        $this->imageHelper = $imageHelper;
-        $this->date = $date;
+        $this->imageHelper  = $imageHelper;
+        $this->date         = $date;
+        $this->timezone     = $timezone;
 
         parent::__construct($postFactory, $registry, $context);
     }
 
     /**
      * @return ResponseInterface|Redirect|ResultInterface
+     * @throws LocalizedException
      */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $action = $this->getRequest()->getParam('action');
+        $action         = $this->getRequest()->getParam('action');
 
         if ($data = $this->getRequest()->getPost('post')) {
             /** @var PostModel $post */
@@ -161,7 +172,7 @@ class Save extends Post
     protected function addHistory($post, $action = null)
     {
         if (!empty($action)) {
-            $history = $this->_postHistory->create();
+            $history      = $this->_postHistory->create();
             $historyCount = $history->getSumPostHistory($post->getPostId());
             $limitHistory = (int)$this->_helperData->getConfigGeneral('history_limit');
             try {
@@ -196,7 +207,7 @@ class Save extends Post
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return DataObject|null
      */
@@ -210,9 +221,9 @@ class Save extends Post
             return null;
         }
         $data['category_ids'] = implode(',', $data['categories_ids']);
-        $data['topic_ids'] = implode(',', $data['topics_ids']);
-        $data['tag_ids'] = implode(',', $data['tags_ids']);
-        $data['product_ids'] = Data::jsonEncode($data['products_data']);
+        $data['topic_ids']    = implode(',', $data['topics_ids']);
+        $data['tag_ids']      = implode(',', $data['tags_ids']);
+        $data['product_ids']  = Data::jsonEncode($data['products_data']);
 
         $result = null;
         foreach ($historyItems as $historyItem) {
@@ -245,10 +256,11 @@ class Save extends Post
     }
 
     /**
-     * @param $post
+     * @param PostModel $post
      * @param array $data
      *
      * @return $this
+     * @throws LocalizedException
      */
     protected function prepareData($post, $data = [])
     {
@@ -263,9 +275,12 @@ class Save extends Post
         }
 
         /** Set specify field data */
-        $timezone = $this->_objectManager->create('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $data['publish_date'] = $timezone->convertConfigTimeToUtc(isset($data['publish_date'])
-            ? $data['publish_date'] : null);
+        try {
+            $data['publish_date'] = $this->timezone->convertConfigTimeToUtc($data['publish_date']);
+        } catch (Exception $e) {
+            $data['publish_date'] = $this->timezone->convertConfigTimeToUtc($this->date->date());
+        }
+
         $data['modifier_id'] = $this->_auth->getUser()->getId();
         $data['categories_ids'] = (isset($data['categories_ids']) && $data['categories_ids']) ? explode(
             ',',
