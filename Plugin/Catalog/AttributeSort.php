@@ -61,11 +61,12 @@ class AttributeSort
         $attribute,
         $dir
     ) {
-        if (in_array(
-            $this->request->getFullActionName(),
-            ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid'],
-            true
-        )) {
+        if ($attribute === 'position' &&
+            in_array(
+                $this->request->getFullActionName(),
+                ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid'],
+                true
+            )) {
             $productCollection->getSelect()->order('position ' . $dir);
 
             return $productCollection;
