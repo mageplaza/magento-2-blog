@@ -35,13 +35,14 @@ class AttributeSort
      * @var Data
      */
     protected $helper;
+
     /**
      * @var RequestInterface
      */
-    private $request;
+    protected $request;
 
     /**
-     * Topmenu constructor.
+     * AttributeSort constructor.
      *
      * @param RequestInterface $request
      * @param Data $helper
@@ -53,7 +54,6 @@ class AttributeSort
         $this->helper  = $helper;
         $this->request = $request;
     }
-
 
     public function aroundAddAttributeToSort(
         Collection $productCollection,
