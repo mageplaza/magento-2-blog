@@ -35,13 +35,14 @@ class AttributeSort
      * @var Data
      */
     protected $helper;
+
     /**
      * @var RequestInterface
      */
-    private $request;
+    protected $request;
 
     /**
-     * Topmenu constructor.
+     * AttributeSort constructor.
      *
      * @param RequestInterface $request
      * @param Data $helper
@@ -54,18 +55,18 @@ class AttributeSort
         $this->request = $request;
     }
 
-
     public function aroundAddAttributeToSort(
         Collection $productCollection,
         callable $proceed,
         $attribute,
         $dir
     ) {
-        if (in_array(
-            $this->request->getFullActionName(),
-            ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid'],
-            true
-        )) {
+        if ($attribute === 'position' &&
+            in_array(
+                $this->request->getFullActionName(),
+                ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid'],
+                true
+            )) {
             $productCollection->getSelect()->order('position ' . $dir);
 
             return $productCollection;

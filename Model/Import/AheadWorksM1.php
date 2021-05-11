@@ -99,7 +99,6 @@ class AheadWorksM1 extends AbstractImport
      */
     protected function _importPosts($data, $connection)
     {
-        $authorId  = $this->_authSession->getUser()->getId();
         $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POST . "`";
         $result    = mysqli_query($connection, $sqlString);
         $isReplace = true;
@@ -152,7 +151,7 @@ class AheadWorksM1 extends AbstractImport
                 'meta_robots'       => 'INDEX,FOLLOW', //Default value
                 'meta_keywords'     => $post['meta_keywords'],
                 'meta_description'  => $post['meta_description'],
-                'author_id'         => (int) $authorId,
+                'author_id'         => 1,
                 'import_source'     => $importSource . '-' . $post['post_id'],
                 'tags'              => $post['tags']
             ];
@@ -384,7 +383,7 @@ class AheadWorksM1 extends AbstractImport
             }
         }
 
-        $statistics = $this->_getStatistics("tags", $this->_successCount, $this->_errorCount, $this->_hasData);
+        $statistics = $this->_getStatistics('tags', $this->_successCount, $this->_errorCount, $this->_hasData);
         $this->_registry->register('mageplaza_import_tag_statistic', $statistics);
     }
 
@@ -409,14 +408,10 @@ class AheadWorksM1 extends AbstractImport
         $importSource = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
-        if ($data['behaviour'] == 'delete' || $data['behaviour'] == 'replace') {
+        if ($data['behaviour'] === 'delete' || $data['behaviour'] === 'replace') {
             $categoryModel->getResource()->deleteImportItems($data['type']);
             $this->_hasData = true;
-            if ($data['behaviour'] == 'delete') {
-                $isReplace = false;
-            } else {
-                $isReplace = true;
-            }
+            $isReplace = !($data['behaviour'] === 'delete');
         }
 
         /** fetch all items from import source */
@@ -552,14 +547,10 @@ class AheadWorksM1 extends AbstractImport
         $importSource  = $data['type'] . '-' . $data['database'];
 
         /** delete behaviour action */
-        if ($data['behaviour'] == 'delete' || $data['behaviour'] == 'replace') {
+        if ($data['behaviour'] === 'delete' || $data['behaviour'] === 'replace') {
             $commentModel->getResource()->deleteImportItems($data['type']);
             $this->_hasData = true;
-            if ($data['behaviour'] == 'delete') {
-                $isReplace = false;
-            } else {
-                $isReplace = true;
-            }
+            $isReplace = !($data['behaviour'] === 'delete');
         }
 
         /** fetch all items from import source */
@@ -587,8 +578,8 @@ class AheadWorksM1 extends AbstractImport
                 $customerModel->setWebsiteId($websiteId);
                 $customerModel->loadByEmail($comment['email']);
                 $entityId  = $customerModel->getEntityId();
-                $userName  = "";
-                $userEmail = "";
+                $userName  = '';
+                $userEmail = '';
             }
 
             /** store the source item */
@@ -726,7 +717,7 @@ class AheadWorksM1 extends AbstractImport
             'created_at'        => $post['created_at'],
             'updated_at'        => $post['updated_at'],
             'publish_date'      => $post['publish_date'],
-            "enabled"           => $post['enabled'],
+            'enabled'           => $post['enabled'],
             'in_rss'            => $post['in_rss'],
             'allow_comment'     => $post['allow_comment'],
             'store_ids'         => $post['store_ids'],
@@ -756,7 +747,7 @@ class AheadWorksM1 extends AbstractImport
                 'created_at'        => $post['created_at'],
                 'updated_at'        => $post['updated_at'],
                 'publish_date'      => $post['publish_date'],
-                "enabled"           => $post['enabled'],
+                'enabled'           => $post['enabled'],
                 'in_rss'            => $post['in_rss'],
                 'allow_comment'     => $post['allow_comment'],
                 'store_ids'         => $post['store_ids'],

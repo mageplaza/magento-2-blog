@@ -41,6 +41,12 @@ use Mageplaza\Blog\Api\Data\TagInterface;
 use Mageplaza\Blog\Api\Data\TopicInterface;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\CommentFactory;
+use Mageplaza\Blog\Model\Config\General;
+use Mageplaza\Blog\Model\Config\Sidebar;
+use Mageplaza\Blog\Model\Config\Seo;
+use Mageplaza\Blog\Model\BlogConfig;
+use Mageplaza\Blog\Model\MonthlyArchive;
+use Mageplaza\Blog\Block\MonthlyArchive\Widget as MonthlyWidget;
 use Mageplaza\Blog\Model\PostLikeFactory;
 
 /**
@@ -85,6 +91,16 @@ class BlogRepository implements BlogRepositoryInterface
     protected $_request;
 
     /**
+     * @var BlogConfig
+     */
+    protected $blogConfig;
+
+    /**
+     * @var MonthlyWidget
+     */
+    protected $monthlyWidget;
+
+    /**
      * BlogRepository constructor.
      *
      * @param Data $helperData
@@ -93,6 +109,8 @@ class BlogRepository implements BlogRepositoryInterface
      * @param CommentFactory $commentFactory
      * @param PostLikeFactory $likeFactory
      * @param RequestInterface $request
+     * @param BlogConfig $blogConfig
+     * @param MonthlyWidget $monthlyWidget
      * @param DateTime $date
      */
     public function __construct(
@@ -102,6 +120,8 @@ class BlogRepository implements BlogRepositoryInterface
         CommentFactory $commentFactory,
         PostLikeFactory $likeFactory,
         RequestInterface $request,
+        BlogConfig $blogConfig,
+        MonthlyWidget $monthlyWidget,
         DateTime $date
     ) {
         $this->_request                     = $request;
@@ -111,6 +131,8 @@ class BlogRepository implements BlogRepositoryInterface
         $this->_commentFactory              = $commentFactory;
         $this->_likeFactory                 = $likeFactory;
         $this->collectionProcessor          = $collectionProcessor;
+        $this->blogConfig                   = $blogConfig;
+        $this->monthlyWidget                = $monthlyWidget;
     }
 
     /**
@@ -126,9 +148,46 @@ class BlogRepository implements BlogRepositoryInterface
     /**
      * @inheritDoc
      */
+    public function getMonthlyArchive()
+    {
+        $dateArrayCount  = $this->monthlyWidget->getDateArrayCount();
+        $dateArrayUnique = $this->monthlyWidget->getDateArrayUnique();
+        $dateLabel       = $this->monthlyWidget->getDateLabel();
+        $monthlyAr       = [];
+        for ($i = 0; $i < $this->monthlyWidget->getDateCount(); $i++) {
+            $monthly = new MonthlyArchive();
+            $monthly->setLabel($dateLabel[$i])->setPostCount((int) $dateArrayCount[$i])
+                ->setLink(
+                    $this->_helperData->getBlogUrl(
+                        date(
+                            'Y-m',
+                            $this->date->timestamp($dateArrayUnique[$i])),
+                        Data::TYPE_MONTHLY
+                    )
+                );
+            $monthlyAr[] = $monthly;
+        }
+
+        return $monthlyAr;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPostMonthlyArchive($monthly, $year) {
+
+        return $this->_helperData->getPostCollection(Data::TYPE_MONTHLY, $year.'-'.$monthly)->getItems();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getPostView($postId)
     {
-        return $this->_helperData->getFactoryByType()->create()->load($postId);
+        $post = $this->_helperData->getFactoryByType()->create()->load($postId);
+        $post->updateViewTraffic();
+
+        return $post;
     }
 
     /**
@@ -742,6 +801,37 @@ class BlogRepository implements BlogRepositoryInterface
         $subAuthor->addData($author->getData())->save();
 
         return $subAuthor;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getConfig()
+    {
+        if (!$this->_helperData->isEnabled()) {
+            throw new InputException(__('Module Blog is disabled'));
+        }
+
+        $blogConfig = $this->_helperData->getConfigValue(Data::CONFIG_MODULE_PATH);
+        $general    = new General();
+        $general->setBlogName($blogConfig['general']['name']);
+        $general->setIsLinkInMenu($blogConfig['general']['toplinks']);
+        $general->setIsDisplayAuthor($blogConfig['general']['display_author']);
+        $general->setBlogMode($blogConfig['general']['display_style']);
+        $general->setBlogColor($blogConfig['general']['font_color']);
+        $sidebar = new Sidebar();
+        $sidebar->setNumberMostView($blogConfig['sidebar']['number_recent_posts']);
+        $sidebar->setNumberRecent($blogConfig['sidebar']['number_mostview_posts']);
+        $seo = new Seo();
+        if (isset($blogConfig['seo']['meta_title'])) {
+            $seo->setMetaTitle($blogConfig['seo']['meta_title']);
+        }
+        if (isset($blogConfig['seo']['meta_description'])) {
+            $seo->setMetaDescription($blogConfig['seo']['meta_description']);
+        }
+        $this->blogConfig->setGeneral($general)->setSidebar($sidebar)->setSeo($seo);
+
+        return $this->blogConfig;
     }
 
     /**

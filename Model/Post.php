@@ -21,9 +21,11 @@
 
 namespace Mageplaza\Blog\Model;
 
+use Exception;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -453,6 +455,84 @@ class Post extends AbstractModel
         }
 
         return $this->_getData('view_traffic');
+    }
+
+    /**
+     * @return int
+     * @throws LocalizedException
+     */
+    public function getAuthorName()
+    {
+        if (!$this->hasData('author_name')) {
+            $author = $this->_getResource()->getAuthor($this);
+
+            $this->setData('author_name', $author['name']);
+        }
+
+        return $this->_getData('author_name');
+    }
+
+    /**
+     * @return int
+     * @throws LocalizedException
+     */
+    public function getAuthorUrl()
+    {
+        if (!$this->hasData('author_url')) {
+            $author = $this->_getResource()->getAuthor($this);
+
+            $this->setData('author_url', $this->helperData->getBlogUrl($author['url_key'], Data::TYPE_AUTHOR));
+        }
+
+        return $this->_getData('author_url');
+    }
+
+    /**
+     * @return int
+     * @throws LocalizedException
+     */
+    public function getAuthorUrlKey()
+    {
+        if (!$this->hasData('author_url_key')) {
+            $author = $this->_getResource()->getAuthor($this);
+
+            $this->setData('author_url_key', $author['url_key']);
+        }
+
+        return $this->_getData('author_url_key');
+    }
+
+
+    /**
+     * @return mixed
+     * @throws NoSuchEntityException
+     */
+    public function getUrlImage()
+    {
+        $imageHelper = $this->helperData->getImageHelper();
+        $imageFile   = $this->getImage() ? $imageHelper->getMediaPath($this->getImage(), 'post') : '';
+        $imageUrl    = $imageFile ? $this->helperData->getImageHelper()->getMediaUrl($imageFile) : '';
+
+        $this->setData('image', $imageUrl);
+        return $this->_getData('image');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function updateViewTraffic()
+    {
+        if ($this->getId()) {
+            $trafficModel = $this->trafficFactory->create()->load($this->getId(), 'post_id');
+
+            if ($trafficModel->getId()) {
+                $trafficModel->setNumbersView($trafficModel->getNumbersView() + 1);
+                $trafficModel->save();
+            } else {
+                $traffic = $this->trafficFactory->create();
+                $traffic->addData(['post_id' => $this->getId(), 'numbers_view' => 1])->save();
+            }
+        }
     }
 
     /**

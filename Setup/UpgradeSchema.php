@@ -1007,6 +1007,22 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     $installer->getConnection()->createTable($table);
                 }
             }
+
+            if (version_compare($context->getVersion(), '2.5.3', '<')
+                && $installer->tableExists('mageplaza_blog_author')
+            ) {
+                $connection->addColumn(
+                    $installer->getTable('mageplaza_blog_author'),
+                    'email',
+                    [
+                        'type'     => Table::TYPE_TEXT,
+                        'nullable' => true,
+                        'default'  => '',
+                        'comment'  => 'Author email',
+                        'after'    => 'url_key'
+                    ]
+                );
+            }
         endif;
         $installer->endSetup();
     }
