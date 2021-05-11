@@ -54,6 +54,9 @@ interface PostInterface
     const CATEGORY_IDS      = 'category_ids';
     const TAG_IDS           = 'tag_ids';
     const TOPIC_IDS         = 'topic_ids';
+    const AUTHOR_URL        = 'author_url';
+    const AUTHOR_NAME       = 'author_name';
+    const VIEW_TRAFFIC      = 'view_traffic';
 
     const ATTRIBUTES = [
         self::POST_ID,
@@ -77,7 +80,10 @@ interface PostInterface
         self::LAYOUT,
         self::CATEGORY_IDS,
         self::TAG_IDS,
-        self::TOPIC_IDS
+        self::TOPIC_IDS,
+        self::AUTHOR_NAME,
+        self::AUTHOR_URL,
+        self::VIEW_TRAFFIC
     ];
 
     /**
@@ -439,4 +445,19 @@ interface PostInterface
      * @return $this
      */
     public function setTopicIds($array);
+
+    /**
+     * @return string|null
+     */
+    public function getAuthorName();
+
+    /**
+     * @return string|null
+     */
+    public function getAuthorUrl();
+
+    /**
+     * @return int
+     */
+    public function getViewTraffic();
 }

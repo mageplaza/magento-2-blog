@@ -105,6 +105,7 @@
                 comment="Author ID"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Author Name"/>
         <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Author URL Key"/>
+        <column xsi:type="varchar" name="email" nullable="true" length="255" comment="Author Email"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" default="0" nullable="true"
                 comment="Customer ID"/>
         <column xsi:type="int" name="type" padding="10" unsigned="true" default="0" nullable="true"

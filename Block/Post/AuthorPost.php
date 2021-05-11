@@ -78,14 +78,14 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
 
         switch ($statusId) {
             case '2':
-                $html = '<div class="mp-post-status mp-post-disapproved">' . $statusText . '</div>';
+                $html = '<div class="mp-post-status mp-post-disapproved">' . __($statusText) . '</div>';
                 break;
             case '1':
-                $html = '<div class="mp-post-status mp-post-approved">' . $statusText . '</div>';
+                $html = '<div class="mp-post-status mp-post-approved">' . __($statusText) . '</div>';
                 break;
             case '0':
             default:
-                $html = '<div class="mp-post-status mp-post-pending">' . $statusText . '</div>';
+                $html = '<div class="mp-post-status mp-post-pending">' . __($statusText) . '</div>';
                 break;
         }
 

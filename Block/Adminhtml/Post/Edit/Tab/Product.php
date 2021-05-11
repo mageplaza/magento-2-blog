@@ -74,8 +74,8 @@ class Product extends Extended implements TabInterface
         array $data = []
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->coreRegistry = $coreRegistry;
-        $this->request = $request;
+        $this->coreRegistry             = $coreRegistry;
+        $this->request                  = $request;
 
         parent::__construct($context, $backendHelper, $data);
     }
@@ -110,8 +110,8 @@ class Product extends Extended implements TabInterface
         $collection->getSelect()->joinLeft(
             ['mp_p' => $collection->getTable('mageplaza_blog_post_product')],
             'e.entity_id = mp_p.entity_id',
-            ['position', 'post_id']
-        );
+            ['position']
+        )->distinct(true);
 
         $this->setCollection($collection);
 
@@ -126,23 +126,23 @@ class Product extends Extended implements TabInterface
     {
         $this->addColumn('in_products', [
             'header_css_class' => 'a-center',
-            'type' => 'checkbox',
-            'name' => 'in_product',
-            'values' => $this->_getSelectedProducts(),
-            'align' => 'center',
-            'index' => 'entity_id'
+            'type'             => 'checkbox',
+            'name'             => 'in_product',
+            'values'           => $this->_getSelectedProducts(),
+            'align'            => 'center',
+            'index'            => 'entity_id'
         ]);
         $this->addColumn('entity_id', [
-            'header' => __('ID'),
-            'sortable' => true,
-            'index' => 'entity_id',
-            'type' => 'number',
+            'header'           => __('ID'),
+            'sortable'         => true,
+            'index'            => 'entity_id',
+            'type'             => 'number',
             'header_css_class' => 'col-id',
             'column_css_class' => 'col-id'
         ]);
         $this->addColumn('title', [
-            'header' => __('Sku'),
-            'index' => 'sku',
+            'header'           => __('Sku'),
+            'index'            => 'sku',
             'header_css_class' => 'col-name',
             'column_css_class' => 'col-name'
         ]);
@@ -156,7 +156,6 @@ class Product extends Extended implements TabInterface
                 'validate_class' => 'validate-number',
                 'index' => 'position',
                 'editable' => true,
-                'sortable' => false,
                 'edit_only' => true,
             ]);
         } else {
@@ -168,7 +167,6 @@ class Product extends Extended implements TabInterface
                 'validate_class' => 'validate-number',
                 'index' => 'position',
                 'editable' => true,
-                'sortable' => false,
                 'filter' => false,
                 'edit_only' => true,
             ]);
@@ -179,6 +177,7 @@ class Product extends Extended implements TabInterface
 
     /**
      * Retrieve selected Tags
+     *
      * @return array
      */
     protected function _getSelectedProducts()
@@ -195,6 +194,7 @@ class Product extends Extended implements TabInterface
 
     /**
      * Retrieve selected Tags
+     *
      * @return array
      */
     public function getSelectedProducts()

@@ -21,9 +21,11 @@
 
 namespace Mageplaza\Blog\Model;
 
+use Exception;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -244,14 +246,14 @@ class Post extends AbstractModel
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->tagCollectionFactory = $tagCollectionFactory;
-        $this->topicCollectionFactory = $topicCollectionFactory;
+        $this->tagCollectionFactory      = $tagCollectionFactory;
+        $this->topicCollectionFactory    = $topicCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
-        $this->postCollectionFactory = $postCollectionFactory;
-        $this->productCollectionFactory = $productCollectionFactory;
-        $this->helperData = $helperData;
-        $this->dateTime = $dateTime;
-        $this->trafficFactory = $trafficFactory;
+        $this->postCollectionFactory     = $postCollectionFactory;
+        $this->productCollectionFactory  = $productCollectionFactory;
+        $this->helperData                = $helperData;
+        $this->dateTime                  = $dateTime;
+        $this->trafficFactory            = $trafficFactory;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -276,7 +278,7 @@ class Post extends AbstractModel
                 ->load($this->getId(), 'post_id');
             if (!$trafficModel->getId()) {
                 $trafficModel->setData([
-                    'post_id' => $this->getId(),
+                    'post_id'      => $this->getId(),
                     'numbers_view' => 0
                 ])->save();
             }
@@ -329,11 +331,11 @@ class Post extends AbstractModel
      */
     public function getDefaultValues()
     {
-        $values = [];
-        $values['in_rss'] = '1';
-        $values['enabled'] = '1';
+        $values                  = [];
+        $values['in_rss']        = '1';
+        $values['enabled']       = '1';
         $values['allow_comment'] = '1';
-        $values['store_ids'] = '1';
+        $values['store_ids']     = '1';
 
         return $values;
     }
@@ -407,7 +409,7 @@ class Post extends AbstractModel
             $this->setData('category_ids', $ids);
         }
 
-        return (array)$this->_getData('category_ids');
+        return (array) $this->_getData('category_ids');
     }
 
     /**
@@ -422,7 +424,7 @@ class Post extends AbstractModel
             $this->setData('tag_ids', $ids);
         }
 
-        return (array)$this->_getData('tag_ids');
+        return (array) $this->_getData('tag_ids');
     }
 
     /**
@@ -437,7 +439,7 @@ class Post extends AbstractModel
             $this->setData('topic_ids', $ids);
         }
 
-        return (array)$this->_getData('topic_ids');
+        return (array) $this->_getData('topic_ids');
     }
 
     /**
@@ -453,6 +455,84 @@ class Post extends AbstractModel
         }
 
         return $this->_getData('view_traffic');
+    }
+
+    /**
+     * @return int
+     * @throws LocalizedException
+     */
+    public function getAuthorName()
+    {
+        if (!$this->hasData('author_name')) {
+            $author = $this->_getResource()->getAuthor($this);
+
+            $this->setData('author_name', $author['name']);
+        }
+
+        return $this->_getData('author_name');
+    }
+
+    /**
+     * @return int
+     * @throws LocalizedException
+     */
+    public function getAuthorUrl()
+    {
+        if (!$this->hasData('author_url')) {
+            $author = $this->_getResource()->getAuthor($this);
+
+            $this->setData('author_url', $this->helperData->getBlogUrl($author['url_key'], Data::TYPE_AUTHOR));
+        }
+
+        return $this->_getData('author_url');
+    }
+
+    /**
+     * @return int
+     * @throws LocalizedException
+     */
+    public function getAuthorUrlKey()
+    {
+        if (!$this->hasData('author_url_key')) {
+            $author = $this->_getResource()->getAuthor($this);
+
+            $this->setData('author_url_key', $author['url_key']);
+        }
+
+        return $this->_getData('author_url_key');
+    }
+
+
+    /**
+     * @return mixed
+     * @throws NoSuchEntityException
+     */
+    public function getUrlImage()
+    {
+        $imageHelper = $this->helperData->getImageHelper();
+        $imageFile   = $this->getImage() ? $imageHelper->getMediaPath($this->getImage(), 'post') : '';
+        $imageUrl    = $imageFile ? $this->helperData->getImageHelper()->getMediaUrl($imageFile) : '';
+
+        $this->setData('image', $imageUrl);
+        return $this->_getData('image');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function updateViewTraffic()
+    {
+        if ($this->getId()) {
+            $trafficModel = $this->trafficFactory->create()->load($this->getId(), 'post_id');
+
+            if ($trafficModel->getId()) {
+                $trafficModel->setNumbersView($trafficModel->getNumbersView() + 1);
+                $trafficModel->save();
+            } else {
+                $traffic = $this->trafficFactory->create();
+                $traffic->addData(['post_id' => $this->getId(), 'numbers_view' => 1])->save();
+            }
+        }
     }
 
     /**
@@ -474,7 +554,7 @@ class Post extends AbstractModel
                     ['position']
                 )->group('main_table.post_id');
 
-            if ($limit = (int)$this->helperData->getBlogConfig('general/related_post')) {
+            if ($limit = (int) $this->helperData->getBlogConfig('general/related_post')) {
                 $collection->getSelect()
                     ->limit($limit);
             }
