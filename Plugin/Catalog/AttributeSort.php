@@ -55,6 +55,14 @@ class AttributeSort
         $this->request = $request;
     }
 
+    /**
+     * @param Collection $productCollection
+     * @param callable $proceed
+     * @param string $attribute
+     * @param string $dir
+     *
+     * @return Collection
+     */
     public function aroundAddAttributeToSort(
         Collection $productCollection,
         callable $proceed,
@@ -66,7 +74,8 @@ class AttributeSort
                 $this->request->getFullActionName(),
                 ['mageplaza_blog_post_products', 'mageplaza_blog_post_productsGrid'],
                 true
-            )) {
+            )
+        ) {
             $productCollection->getSelect()->order('position ' . $dir);
 
             return $productCollection;
