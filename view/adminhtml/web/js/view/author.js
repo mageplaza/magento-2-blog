@@ -45,7 +45,8 @@ define([
          * Popup will automatic open
          */
         initPopup: function () {
-            var options = {
+            var customerId = $("#author_customer_id").val(),
+                options    = {
                 type: 'popup',
                 responsive: true,
                 innerScroll: true,
@@ -56,6 +57,14 @@ define([
 
             modal(options, customerGridEl);
             customerGridEl.modal('openModal');
+
+            if (customerId) {
+                $.each(customerGridEl.find('input[name="customer_id"]'), function() {
+                    if ($(this).val() === customerId) {
+                        $(this).prop('checked', true);
+                    }
+                });
+            }
         },
 
         /**
