@@ -25,11 +25,14 @@ use Exception;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Model\Author;
+use Mageplaza\Blog\Model\Category;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\Config\Source\AuthorType;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
+use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\PostFactory;
+use Mageplaza\Blog\Model\Tag;
 use Mageplaza\Blog\Model\TagFactory;
 use Mageplaza\Blog\Model\TopicFactory;
 
@@ -45,48 +48,56 @@ class MageFanM2 extends AbstractImport
      * @var string
      */
     const TABLE_POST = 'magefan_blog_post';
+
     /**
      * Magefan Related Post table name
      *
      * @var string
      */
     const TABLE_POST_RELATED = 'magefan_blog_post_relatedpost';
+
     /**
      * Magefan Tag table name
      *
      * @var string
      */
     const TABLE_TAG = 'magefan_blog_tag';
+
     /**
      * Magefan Post-Tag Relationship table name
      *
      * @var string
      */
     const TABLE_POST_TAG = 'magefan_blog_post_tag';
+
     /**
      * Magefan Category table name
      *
      * @var string
      */
     const TABLE_CATEGORY = 'magefan_blog_category';
+
     /**
      * Magefan Post-Category Relationship table name
      *
      * @var string
      */
     const TABLE_POST_CATEGORY = 'magefan_blog_post_category';
+
     /**
      * Magefan Comment table name
      *
      * @var string
      */
     const TABLE_COMMENT = 'magefan_blog_comment';
+
     /**
      * Magefan Customer table name
      *
      * @var string
      */
     const TABLE_CUSTOMER = 'customer_entity';
+
     /**
      * Magefan Admin user table name
      *
@@ -95,11 +106,8 @@ class MageFanM2 extends AbstractImport
     const TABLE_ADMIN_USER = 'admin_user';
 
     /**
-     * Run imports
-     *
-     * @param $data
-     * @param $connection
-     *
+     * @param array $data
+     * @param null $connection
      * @return bool
      * @throws LocalizedException
      */
@@ -122,8 +130,8 @@ class MageFanM2 extends AbstractImport
     /**
      * Import posts
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return bool|mixed
      * @throws LocalizedException
@@ -248,9 +256,7 @@ class MageFanM2 extends AbstractImport
             }
             mysqli_free_result($result);
 
-            /**
-             * Insert topics
-             */
+            /** Insert topics */
             $topicSql    = "SELECT post_id FROM `" . $data['table_prefix'] . self::TABLE_POST_RELATED
                 . "` GROUP BY post_id";
             $topicCount  = 1;
@@ -306,8 +312,8 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return mixed|void
      * @throws LocalizedException
@@ -457,8 +463,8 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return mixed|void
      * @throws LocalizedException
@@ -604,6 +610,9 @@ class MageFanM2 extends AbstractImport
                     $parentPaths     = explode('/', $categoryModel->getPath());
                     $level           = count($parentPaths);
                     $newPath         = $parentPath . '/' . $newCatId;
+                    $newPaths        = explode('/', $newPath);
+                    $newPaths        = array_unique($newPaths);
+                    $newPath         = implode('/', $newPaths);
                     $currentCategory = $categoryModel->load($newCatId);
                     $currentCategory->setPath($newPath)->setParentId($parentId)->setLevel($level)->save();
                 }
@@ -638,16 +647,16 @@ class MageFanM2 extends AbstractImport
     /**
      * Import comments
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @throws LocalizedException
      */
     protected function _importComments($data, $connection)
     {
         $accountManage = $this->_objectManager->create('\Magento\Customer\Model\AccountManagement');
-        $sqlString     = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_COMMENT . "` 
-                      LEFT JOIN `" . $data['table_prefix'] . self::TABLE_CUSTOMER . "` 
+        $sqlString     = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_COMMENT . "`
+                      LEFT JOIN `" . $data['table_prefix'] . self::TABLE_CUSTOMER . "`
                       ON `" . $data['table_prefix'] . self::TABLE_COMMENT . "`.`customer_id` = `"
             . $data['table_prefix'] . self::TABLE_CUSTOMER . "`.`entity_id`";
         $result        = mysqli_query($connection, $sqlString);
@@ -816,8 +825,8 @@ class MageFanM2 extends AbstractImport
     /**
      * Import Author
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return mixed|void
      */
@@ -876,7 +885,7 @@ class MageFanM2 extends AbstractImport
         $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
         $updateData = [];
         foreach ($oldUserIds as $newUserId => $oldUserId) {
-            $relationshipSql = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POST . "` 
+            $relationshipSql = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POST . "`
                                 WHERE author_id = " . $oldUserId;
             $result          = mysqli_query($connection, $relationshipSql);
             while ($postAuthor = mysqli_fetch_assoc($result)) {
@@ -899,8 +908,10 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $postModel
-     * @param $post
+     * @param Post $postModel
+     * @param array $post
+     *
+     * @throws Exception
      */
     private function _addPosts($postModel, $post)
     {
@@ -926,8 +937,8 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $post
-     * @param $where
+     * @param array $post
+     * @param array $where
      */
     private function _updatePosts($post, $where)
     {
@@ -960,8 +971,10 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $tagModel
-     * @param $tag
+     * @param Tag $tagModel
+     * @param array $tag
+     *
+     * @throws Exception
      */
     private function _addTags($tagModel, $tag)
     {
@@ -979,8 +992,8 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $tag
-     * @param $where
+     * @param array $tag
+     * @param array $where
      */
     private function _updateTags($tag, $where)
     {
@@ -1000,8 +1013,10 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $categoryModel
-     * @param $category
+     * @param Category $categoryModel
+     * @param array $category
+     *
+     * @throws Exception
      */
     private function _addCategories($categoryModel, $category)
     {
@@ -1020,8 +1035,8 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $category
-     * @param $where
+     * @param array $category
+     * @param array $where
      */
     private function _updateCategories($category, $where)
     {
