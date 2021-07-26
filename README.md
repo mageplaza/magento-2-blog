@@ -31,6 +31,14 @@ A: Read solution: https://github.com/mageplaza/module-core/issues/3
 ## ✓ Install via composer (recommend)
 Run the following command in Magento 2 root folder:
 
+With Marketing Automation + GraphQL (Support PWA) (recommend):
+
+```
+composer require mageplaza/magento-2-blog-extension mageplaza/module-blog-graphql mageplaza/module-smtp
+php bin/magento setup:upgrade
+php bin/magento setup:static-content:deploy
+```
+
 With GraphQL (Support PWA):
 
 ```
@@ -42,7 +50,7 @@ php bin/magento setup:static-content:deploy
 Without GraphQL:
 
 ```
-composer require mageplaza/magento-2-blog-extension
+composer require mageplaza/magento-2-blog-extension mageplaza/module-smtp
 php bin/magento setup:upgrade
 php bin/magento setup:static-content:deploy
 ```
