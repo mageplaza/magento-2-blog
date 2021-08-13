@@ -1,6 +1,6 @@
 # Magento 2 Blog extension FREE
 
-**Magento 2 Blog by Mageplaza** is integrated right into the Magento backend so you can manage your blog and your e-commerce store all in the one place. It is the perfect marketing tool for your bussiness that not only provides update information to your existing customers but also drive more visitors to your online store.
+**[Magento 2 Better Blog by Mageplaza](https://www.mageplaza.com/magento-2-blog-extension/)** is integrated right into the Magento backend so you can manage your blog and your e-commerce store all in the one place. It is the perfect marketing tool for your bussiness that not only provides update information to your existing customers but also drive more visitors to your online store.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7f52db083c5f47648e26d92060d75b73)](https://app.codacy.com/app/mageplaza/magento-2-blog?utm_source=github.com&utm_medium=referral&utm_content=mageplaza/magento-2-blog&utm_campaign=Badge_Grade_Dashboard)
 [![Latest Stable Version](https://poser.pugx.org/mageplaza/magento-2-blog-extension/v/stable)](https://packagist.org/packages/mageplaza/magento-2-blog-extension)
@@ -31,6 +31,14 @@ A: Read solution: https://github.com/mageplaza/module-core/issues/3
 ## ✓ Install via composer (recommend)
 Run the following command in Magento 2 root folder:
 
+With Marketing Automation + GraphQL (Support PWA) (recommend):
+
+```
+composer require mageplaza/magento-2-blog-extension mageplaza/module-blog-graphql mageplaza/module-smtp
+php bin/magento setup:upgrade
+php bin/magento setup:static-content:deploy
+```
+
 With GraphQL (Support PWA):
 
 ```
@@ -42,7 +50,7 @@ php bin/magento setup:static-content:deploy
 Without GraphQL:
 
 ```
-composer require mageplaza/magento-2-blog-extension
+composer require mageplaza/magento-2-blog-extension mageplaza/module-smtp
 php bin/magento setup:upgrade
 php bin/magento setup:static-content:deploy
 ```
@@ -370,14 +378,15 @@ Learn more https://www.mageplaza.com/releases/blog/
 
 ☞ [Magento 2 One Step Checkout extension](https://marketplace.magento.com/mageplaza-magento-2-one-step-checkout-extension.html)
 
-☞ [Magento 2 SEO Module](https://marketplace.magento.com/mageplaza-magento-2-seo-extension.html)
+☞ [Magento 2 SEO extension](https://marketplace.magento.com/mageplaza-magento-2-seo-extension.html)
+
+☞ [Magento 2 Reward Points](https://marketplace.magento.com/mageplaza-module-reward-points.html)
 
 ☞ [Magento 2 Blog extension](https://marketplace.magento.com/mageplaza-magento-2-blog-extension.html)
 
 ☞ [Magento 2 Layered Navigation extension](https://marketplace.magento.com/mageplaza-layered-navigation-m2.html)
 
-☞ [Magento One Step Checkout](https://github.com/magento-2/one-step-checkout)
-
+☞ [Magento 2 Google Tag Manager Enhanced eCommerce](https://www.mageplaza.com/magento-2-google-tag-manager/)
 
 ☞ [Magento 2 Social Login on Github](https://github.com/mageplaza/magento-2-social-login)
 
@@ -389,4 +398,4 @@ Learn more https://www.mageplaza.com/releases/blog/
 
 ☞ [Magento 2 Banner on Github](https://github.com/mageplaza/magento-2-banner-slider)
 
-
+☞ [Magento 2 GDPR](https://marketplace.magento.com/mageplaza-module-gdpr.html)

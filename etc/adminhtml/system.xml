@@ -36,8 +36,9 @@
                             <li><a href="https://docs.mageplaza.com/blog-m2/" target="_blank">User Guide</a>    </li>
                             <li><a href="https://github.com/mageplaza/magento-2-blog/issues" target="_blank">Technical Support</a> </li>
                             <li><strong><a href="https://www.mageplaza.com/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">Find more extensions</a></strong> </li>
-                        </ul>
-                        ]]></comment>
+                            <li>Magento stores see upwards of 30% revenue 💰 with AVADA. <a href="https://go.avada.io/mageplaza">Learn more</a></li>
+                            
+                        </ul>]]></comment>
                 </field>
                 <field id="enabled" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable</label>
