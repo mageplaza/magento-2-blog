@@ -78,6 +78,7 @@ class CreateAuthor implements ObserverInterface
         if ($this->_helper->isEnabled() && $accountController->getRequest()->getParam('is_mp_author')) {
             $data   = [
                 'customer_id' => $customer->getId(),
+                'email'       => $customer->getEmail(),
                 'name'        => $customer->getFirstname(),
                 'type'        => '1',
                 'status'      => $this->_helper->getConfigGeneral('auto_approve') ? 1 : 0

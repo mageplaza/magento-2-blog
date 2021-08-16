@@ -29,14 +29,13 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
-use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory as PostCollectionFactory;
 use Mageplaza\Blog\Model\Tag;
 
 /**
  * Class Product
- *
  * @package Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab
  */
 class Product extends Extended implements TabInterface
@@ -52,9 +51,9 @@ class Product extends Extended implements TabInterface
     public $coreRegistry;
 
     /**
-     * @var PostCollectionFactory
+     * @var RequestInterface
      */
-    protected $postCollectionFactory;
+    protected $request;
 
     /**
      * Product constructor.
@@ -62,21 +61,21 @@ class Product extends Extended implements TabInterface
      * @param Context $context
      * @param Registry $coreRegistry
      * @param Data $backendHelper
+     * @param RequestInterface $request
      * @param CollectionFactory $productCollectionFactory
-     * @param PostCollectionFactory $postCollectionFactory
      * @param array $data
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
         Data $backendHelper,
+        RequestInterface $request,
         CollectionFactory $productCollectionFactory,
-        PostCollectionFactory $postCollectionFactory,
         array $data = []
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->coreRegistry             = $coreRegistry;
-        $this->postCollectionFactory    = $postCollectionFactory;
+        $this->request                  = $request;
 
         parent::__construct($context, $backendHelper, $data);
     }
@@ -147,16 +146,31 @@ class Product extends Extended implements TabInterface
             'header_css_class' => 'col-name',
             'column_css_class' => 'col-name'
         ]);
-        $this->addColumn('position', [
-            'header'         => __('Position'),
-            'name'           => 'position',
-            'width'          => 60,
-            'type'           => 'number',
-            'validate_class' => 'validate-number',
-            'index'          => 'position',
-            'editable'       => true,
-            'edit_only'      => true,
-        ]);
+
+        if ($this->request->getParam('post_id') || $this->getPost()->getId()) {
+            $this->addColumn('position', [
+                'header'         => __('Position'),
+                'name'           => 'position',
+                'width'          => 60,
+                'type'           => 'number',
+                'validate_class' => 'validate-number',
+                'index'          => 'position',
+                'editable'       => true,
+                'edit_only'      => true,
+            ]);
+        } else {
+            $this->addColumn('position', [
+                'header'         => __('Position'),
+                'name'           => 'position',
+                'width'          => 60,
+                'type'           => 'number',
+                'validate_class' => 'validate-number',
+                'index'          => 'position',
+                'editable'       => true,
+                'filter'         => false,
+                'edit_only'      => true,
+            ]);
+        }
 
         return $this;
     }
@@ -233,13 +247,34 @@ class Product extends Extended implements TabInterface
      */
     protected function _addColumnFilterToCollection($column)
     {
-        if ($column->getId() === 'in_products') {
+        if ($column->getId() === 'in_products' || $column->getId() === 'position') {
             $productIds = $this->_getSelectedProducts();
             if (empty($productIds)) {
                 $productIds = 0;
             }
             if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('entity_id', ['in' => $productIds]);
+                if ($column->getId() === 'position') {
+                    $conditions = $column->getFilter()->getValue();
+                    /** @var Collection $collection */
+                    $collection = $this->productCollectionFactory->create();
+                    $collection->clear();
+                    $collection->getSelect()->joinLeft(
+                        ['mp_p' => $collection->getTable('mageplaza_blog_post_product')],
+                        'e.entity_id = mp_p.entity_id'
+                    );
+
+                    if (isset($conditions['from'])) {
+                        $collection->getSelect()->where('mp_p.position >= ?', $conditions['from']);
+                    }
+
+                    if (isset($conditions['to'])) {
+                        $collection->getSelect()->where('mp_p.position <= ?', $conditions['to']);
+                    }
+
+                    $this->setCollection($collection);
+                } else {
+                    $this->getCollection()->addFieldToFilter('entity_id', ['in' => $productIds]);
+                }
             } else {
                 if ($productIds) {
                     $this->getCollection()->addFieldToFilter('entity_id', ['nin' => $productIds]);

@@ -132,6 +132,7 @@ class Post extends Extended implements TabInterface
         $this->addColumn('publish_date', [
             'header'           => __('Published'),
             'index'            => 'publish_date',
+            'renderer'         => Renderer\PublishDate::class,
             'header_css_class' => 'col-name',
             'column_css_class' => 'col-name'
         ]);

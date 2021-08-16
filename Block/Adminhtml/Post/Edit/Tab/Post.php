@@ -293,7 +293,7 @@ class Post extends Generic implements TabInterface
                 'title'       => __('Publish Date'),
                 'date_format' => 'yyyy-MM-dd',
                 'timezone'    => false,
-                'time_format' => 'hh:mm:ss'
+                'time_format' => 'H:m:s'
             ]
         );
 
