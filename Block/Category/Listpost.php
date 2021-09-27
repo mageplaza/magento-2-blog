@@ -76,10 +76,11 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
 
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
             $category = $this->getBlogObject();
+            $categoryName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $category->getName());
             if ($category) {
                 $breadcrumbs->addCrumb($category->getUrlKey(), [
-                    'label' => __('Category'),
-                    'title' => __('Category')
+                    'label' => __($categoryName),
+                    'title' => __($categoryName)
                 ]);
             }
         }
