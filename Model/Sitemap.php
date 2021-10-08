@@ -84,7 +84,8 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
                         'url'     => $this->imageHelper->getMediaUrl($imageFile),
                         'caption' => null,
                     ]);
-                    $images             = new DataObject(['collection' => $imagesCollection]);
+
+                    $images = new DataObject(['collection' => $imagesCollection, 'title' => $item->getName()]);
                 }
                 $postSiteMapCollection[$item->getId()] = new DataObject([
                     'id'         => $item->getId(),
