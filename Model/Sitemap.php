@@ -70,24 +70,31 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
     {
         $urlSuffix             = $this->blogDataHelper->getUrlSuffix();
         $postCollection        = $this->blogDataHelper->postFactory->create()->getCollection();
-        $currentStoreId =  $this->getStoreId();
-        $postCollection = $this->blogDataHelper->addStoreFilter($postCollection,$currentStoreId);
+        $currentStoreId        = $this->getStoreId();
+        $postCollection        = $this->blogDataHelper->addStoreFilter($postCollection, $currentStoreId);
         $postSiteMapCollection = [];
 
         if (!$this->router) {
             $this->router = 'blog';
         }
+
         foreach ($postCollection as $item) {
             $images = null;
             if ($item->getEnabled() !== null) {
                 if ($item->getImage()) {
-                    $imageFile = $this->imageHelper->getMediaPath($item->getImage(), Image::TEMPLATE_MEDIA_TYPE_POST);
-                    $imagesCollection = null;
+                    $imageFile          = $this->imageHelper->getMediaPath(
+                        $item->getImage(),
+                        Image::TEMPLATE_MEDIA_TYPE_POST
+                    );
+                    $imagesCollection   = null;
                     $imagesCollection[] = new DataObject([
                         'url'     => $this->imageHelper->getMediaUrl($imageFile),
                         'caption' => null,
                     ]);
-                    $images             = new DataObject(['collection' => $imagesCollection, 'title' => $item->getName()]);
+                    $images             = new DataObject([
+                        'collection' => $imagesCollection,
+                        'title'      => $item->getName()
+                    ]);
                 }
                 $postSiteMapCollection[] = new DataObject([
                     'id'         => $item->getId(),
@@ -103,14 +110,16 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
 
     /**
      * @return array
+     * @throws NoSuchEntityException
      */
     public function getBlogCategoriesSiteMapCollection()
     {
         $urlSuffix                 = $this->blogDataHelper->getUrlSuffix();
         $categoryCollection        = $this->blogDataHelper->categoryFactory->create()->getCollection();
         $categorySiteMapCollection = [];
-        $currentStoreId =  $this->getStoreId();
-        $categoryCollection = $this->blogDataHelper->addStoreFilter($categoryCollection,$currentStoreId);
+        $currentStoreId            = $this->getStoreId();
+        $categoryCollection        = $this->blogDataHelper->addStoreFilter($categoryCollection, $currentStoreId);
+
         foreach ($categoryCollection as $item) {
             if ($item->getEnabled() !== null) {
                 $categorySiteMapCollection[$item->getId()] = new DataObject([
@@ -126,14 +135,16 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
 
     /**
      * @return array
+     * @throws NoSuchEntityException
      */
     public function getBlogTagsSiteMapCollection()
     {
         $urlSuffix            = $this->blogDataHelper->getUrlSuffix();
         $tagCollection        = $this->blogDataHelper->tagFactory->create()->getCollection();
         $tagSiteMapCollection = [];
-        $currentStoreId =  $this->getStoreId();
-        $tagCollection = $this->blogDataHelper->addStoreFilter($tagCollection,$currentStoreId);
+        $currentStoreId       = $this->getStoreId();
+        $tagCollection        = $this->blogDataHelper->addStoreFilter($tagCollection, $currentStoreId);
+
         foreach ($tagCollection as $item) {
             if ($item->getEnabled() !== null) {
                 $tagSiteMapCollection[$item->getId()] = new DataObject([
@@ -149,14 +160,16 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
 
     /**
      * @return array
+     * @throws NoSuchEntityException
      */
     public function getBlogTopicsSiteMapCollection()
     {
         $urlSuffix              = $this->blogDataHelper->getUrlSuffix();
         $topicCollection        = $this->blogDataHelper->topicFactory->create()->getCollection();
         $topicSiteMapCollection = [];
-        $currentStoreId =  $this->getStoreId();
-        $topicCollection = $this->blogDataHelper->addStoreFilter($topicCollection,$currentStoreId);
+        $currentStoreId         = $this->getStoreId();
+        $topicCollection        = $this->blogDataHelper->addStoreFilter($topicCollection, $currentStoreId);
+
         foreach ($topicCollection as $item) {
             if ($item->getEnabled() !== null) {
                 $topicSiteMapCollection[$item->getId()] = new DataObject([
