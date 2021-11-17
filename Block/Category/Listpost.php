@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Blog\Block\Category;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Phrase;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
@@ -38,7 +40,8 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     /**
      * Override this function to apply collection for each type
      *
-     * @return Collection
+     * @return Collection|null
+     * @throws NoSuchEntityException
      */
     protected function getCollection()
     {
@@ -76,10 +79,11 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
 
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
             $category = $this->getBlogObject();
+            $categoryName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $category->getName());
             if ($category) {
                 $breadcrumbs->addCrumb($category->getUrlKey(), [
-                    'label' => __('Category'),
-                    'title' => __('Category')
+                    'label' => __($categoryName),
+                    'title' => __($categoryName)
                 ]);
             }
         }
@@ -88,12 +92,12 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     /**
      * @param bool $meta
      *
-     * @return array
+     * @return array|Phrase|string
      */
     public function getBlogTitle($meta = false)
     {
         $blogTitle = parent::getBlogTitle($meta);
-        $category = $this->getBlogObject();
+        $category  = $this->getBlogObject();
         if (!$category) {
             return $blogTitle;
         }
