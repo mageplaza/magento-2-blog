@@ -559,6 +559,7 @@ class Post extends AbstractModel
                     ->limit($limit);
             }
             $collection->addFieldToFilter('enabled', '1');
+            $this->helperData->addStoreFilter($collection);
 
             return $collection;
         }
