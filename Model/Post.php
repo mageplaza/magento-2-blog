@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Model;
 
 use Exception;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\LocalizedException;
@@ -205,7 +206,7 @@ class Post extends AbstractModel
     public $productCollectionFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @var ProductCollection
      */
     public $productCollection;
 
@@ -502,7 +503,6 @@ class Post extends AbstractModel
         return $this->_getData('author_url_key');
     }
 
-
     /**
      * @return mixed
      * @throws NoSuchEntityException
@@ -514,6 +514,7 @@ class Post extends AbstractModel
         $imageUrl    = $imageFile ? $this->helperData->getImageHelper()->getMediaUrl($imageFile) : '';
 
         $this->setData('image', $imageUrl);
+
         return $this->_getData('image');
     }
 
@@ -568,7 +569,7 @@ class Post extends AbstractModel
     }
 
     /**
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @return ProductCollection
      */
     public function getSelectedProductsCollection()
     {
