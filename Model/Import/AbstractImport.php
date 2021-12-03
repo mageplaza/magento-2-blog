@@ -44,8 +44,8 @@ use Mageplaza\Blog\Model\TopicFactory;
 use Mageplaza\Blog\Model\AuthorFactory;
 
 /**
- * Class Author
- * @package Mageplaza\Blog\Controller\Adminhtml
+ * Class AbstractImport
+ * @package Mageplaza\Blog\Model\Import
  */
 abstract class AbstractImport extends AbstractModel
 {
@@ -223,8 +223,8 @@ abstract class AbstractImport extends AbstractModel
     /**
      * Import Post Function
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return mixed
      */
@@ -233,8 +233,8 @@ abstract class AbstractImport extends AbstractModel
     /**
      * Import Tag Function
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return mixed
      */
@@ -243,8 +243,8 @@ abstract class AbstractImport extends AbstractModel
     /**
      * Import Category Function
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return mixed
      */
@@ -253,8 +253,8 @@ abstract class AbstractImport extends AbstractModel
     /**
      * Import Comment Function
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return mixed
      */
@@ -263,8 +263,8 @@ abstract class AbstractImport extends AbstractModel
     /**
      * Import Author Function
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return mixed
      */
@@ -273,10 +273,10 @@ abstract class AbstractImport extends AbstractModel
     /**
      * Get import statistics
      *
-     * @param $type
-     * @param $successCount
-     * @param $errorCount
-     * @param $hasData
+     * @param string $type
+     * @param int $successCount
+     * @param int $errorCount
+     * @param bool $hasData
      *
      * @return array
      */
@@ -333,6 +333,7 @@ abstract class AbstractImport extends AbstractModel
             $all      .= $set;
         }
         $all = str_split($all);
+        // phpcs:disable Generic.CodeAnalysis
         for ($i = 0; $i < $length - count($sets); $i++) {
             $password .= $all[array_rand($all)];
         }

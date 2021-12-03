@@ -45,6 +45,7 @@ class RelatedProduct extends ListProduct
      * Default related product page title
      */
     const TITLE = 'Related Products';
+
     /**
      * Default limit related products
      */
@@ -146,7 +147,7 @@ class RelatedProduct extends ListProduct
     public function _getProductCollection()
     {
         if ($this->_productCollection === null) {
-            $postId = $this->getRequest()->getParam('id');
+            $postId     = $this->getRequest()->getParam('id');
             $collection = $this->_productCollectionFactory->create()
                 ->addAttributeToSelect('*')
                 ->addStoreFilter();
@@ -158,7 +159,7 @@ class RelatedProduct extends ListProduct
                 )
                 ->where('product_post.post_id = ' . $postId)
                 ->order('product_post.position ASC')
-                ->limit((int)$this->helper->getBlogConfig('product_post/post_detail/product_limit') ?: self::LIMIT);
+                ->limit((int) $this->helper->getBlogConfig('product_post/post_detail/product_limit') ?: self::LIMIT);
 
             $this->_productCollection = $collection;
         }
@@ -200,14 +201,16 @@ class RelatedProduct extends ListProduct
 
     /**
      * @param Product $product
+     *
      * @return mixed
      */
     public function getParentProductUrl($product)
     {
         $parentByChild = $this->catalogProductTypeConfigurable->getParentIdsByChild($product->getId());
-        if(isset($parentByChild[0])){
+        if (isset($parentByChild[0])) {
             try {
                 $parentProduct = $this->productRepository->getById($parentByChild[0]);
+
                 return $parentProduct->getProductUrl();
             } catch (Exception $e) {
                 return $product->getProductUrl();

@@ -25,7 +25,6 @@ use Exception;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Controller\Adminhtml\Comment;
-use Mageplaza\Blog\Model\CommentFactory;
 use RuntimeException;
 
 /**

@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Setup;
 
+use Exception;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -28,6 +29,7 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Model\AuthorFactory;
 use Mageplaza\Blog\Model\Author;
+use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\CommentFactory;
 
 /**
@@ -41,22 +43,27 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @var DateTime
      */
-    public $date;
+    protected $date;
 
     /**
      * @var CommentFactory
      */
-    public $comment;
+    protected $comment;
 
     /**
      * @var AuthorFactory
      */
-    public $author;
+    protected $author;
 
     /**
      * @var CustomerRepositoryInterface
      */
     protected $customerRepository;
+
+    /**
+     * @var CategoryFactory
+     */
+    protected $categoryFactory;
 
     /**
      * UpgradeData constructor.
@@ -65,23 +72,27 @@ class UpgradeData implements UpgradeDataInterface
      * @param CommentFactory $commentFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param AuthorFactory $authorFactory
+     * @param CategoryFactory $categoryFactory
      */
     public function __construct(
         DateTime $date,
         CommentFactory $commentFactory,
         CustomerRepositoryInterface $customerRepository,
-        AuthorFactory $authorFactory
+        AuthorFactory $authorFactory,
+        CategoryFactory $categoryFactory
     ) {
         $this->comment            = $commentFactory;
         $this->author             = $authorFactory;
         $this->date               = $date;
         $this->customerRepository = $customerRepository;
+        $this->categoryFactory    = $categoryFactory;
     }
 
     /**
-     * {@inheritdoc}
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
      *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws Exception
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -105,18 +116,30 @@ class UpgradeData implements UpgradeDataInterface
             }
         }
 
-        if (version_compare($context->getVersion(), '2.5.2', '<')) {
-            if ($this->author->create()->getCollection()->count() < 1) {
-                $this->author->create()->addData(
-                    [
-                        'name'       => 'Admin',
-                        'type'       => 0,
-                        'status'     => 1,
-                        'created_at' => $this->date->date()
-                    ]
-                )->save();
-            }
+        if (!$this->author->create()->getCollection()->getSize()) {
+            $this->author->create()->addData(
+                [
+                    'name'       => 'Admin',
+                    'type'       => 0,
+                    'status'     => 1,
+                    'created_at' => $this->date->date()
+                ]
+            )->save();
         }
+
+        if (!$this->categoryFactory->create()->getCollection()->getSize()) {
+            $this->categoryFactory->create()->addData(
+                [
+                    'path'           => '1',
+                    'position'       => 0,
+                    'children_count' => 0,
+                    'level'          => 0,
+                    'name'           => 'ROOT',
+                    'url_key'        => 'root'
+                ]
+            )->save();
+        }
+
         if (version_compare($context->getVersion(), '2.5.3', '<')) {
             /** @var Author $author */
             foreach ($this->author->create()->getCollection()->getItems() as $author) {
@@ -124,12 +147,13 @@ class UpgradeData implements UpgradeDataInterface
                     try {
                         $author->setEmail($this->customerRepository->getById($customerId)->getEmail());
                         $author->save();
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         continue;
                     }
                 }
             }
         }
+
         $installer->endSetup();
     }
 }

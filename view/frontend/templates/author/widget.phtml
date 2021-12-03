@@ -19,47 +19,49 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-/** @var \Mageplaza\Blog\Block\Author\Widget $block */
+use Mageplaza\Blog\Block\Author\Widget;
+use Mageplaza\Blog\Helper\Image;
 
+/** @var Widget $block */
 $author = $block->getCurrentAuthor();
-if ($author): ?>
+if ($author) : ?>
     <div class="mp-sidebar mpcss">
         <div class="row">
             <div class="author-name col-xs-12">
-                <h3><?= $author->getName() ?></h3>
+                <h3><?= $block->escapeHtml($author->getName()) ?></h3>
             </div>
             <div class="author-image col-xs-12">
                 <img class="img-responsive"
-                     src="<?= ($author->getImage()) ? $block->resizeImage($author->getImage(), '135x', \Mageplaza\Blog\Helper\Image::TEMPLATE_MEDIA_TYPE_AUTH) : $block->getDefaultAuthorImage(); ?>"
+                     src="<?= $block->escapeUrl($author->getImage() ? $block->resizeImage($author->getImage(), '135x', Image::TEMPLATE_MEDIA_TYPE_AUTH) : $block->getDefaultAuthorImage()) ?>"
                      alt="<?= $block->escapeHtml($author->getName()); ?>"/>
             </div>
             <div class="author-content col-xs-12">
-                <?= $block->getPageFilter(($author->getShortDescription())) ? $block->getPageFilter(($author->getShortDescription())) : 'No info'; ?>
+                <?= $block->getPageFilter(($author->getShortDescription())) ?: $block->escapeHtml(__('No info')) ?>
             </div>
             <div class="author-social col-xs-12">
-                <?php if ($author->getFacebookLink()): ?>
-                    <a href="<?= $author->getFacebookLink() ?>" target="_blank">
+                <?php if ($author->getFacebookLink()) : ?>
+                    <a href="<?= $block->escapeUrl($author->getFacebookLink()) ?>" target="_blank">
                         <img class="img-responsive"
-                             src="<?= $this->getViewFileUrl('Mageplaza_Blog::media/images/facebook.png') ?>"
+                             src="<?= $block->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/facebook.png')) ?>"
                              align="middle"
                              alt="<?= $block->escapeHtml($author->getName()); ?>"/>
                     </a>
-                <?php else: ?>
+                <?php else : ?>
                     <img class="img-responsive"
-                         src="<?= $this->getViewFileUrl('Mageplaza_Blog::media/images/facebookoff.png') ?>"
+                         src="<?= $block->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/facebookoff.png')) ?>"
                          align="middle"
                          alt="<?= $block->escapeHtml($author->getName()); ?>"/>
                 <?php endif; ?>
-                <?php if ($author->getTwitterLink()): ?>
-                    <a href="<?= $author->getTwitterLink() ?>" target="_blank">
+                <?php if ($author->getTwitterLink()) : ?>
+                    <a href="<?= $block->escapeUrl($author->getTwitterLink()) ?>" target="_blank">
                         <img class="img-responsive"
-                             src="<?= $this->getViewFileUrl('Mageplaza_Blog::media/images/twitter.png') ?>"
+                             src="<?= $block->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/twitter.png')) ?>"
                              align="middle"
                              alt="<?= $block->escapeHtml($author->getName()); ?>"/>
                     </a>
-                <?php else: ?>
+                <?php else : ?>
                     <img class="img-responsive"
-                         src="<?= $this->getViewFileUrl('Mageplaza_Blog::media/images/twitter-off.png') ?>"
+                         src="<?= $block->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/twitter-off.png')) ?>"
                          align="middle"
                          alt="<?= $block->escapeHtml($author->getName()); ?>"/>
                 <?php endif; ?>

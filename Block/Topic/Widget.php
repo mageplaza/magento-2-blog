@@ -21,8 +21,15 @@
 
 namespace Mageplaza\Blog\Block\Topic;
 
+use Exception;
+use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
+use Mageplaza\Blog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
+use Mageplaza\Blog\Model\ResourceModel\Tag\Collection as TagCollection;
+use Mageplaza\Blog\Model\ResourceModel\Topic\Collection as TopicCollection;
 use Mageplaza\Blog\Block\Frontend;
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\Topic;
 
 /**
  * Class Widget
@@ -31,17 +38,19 @@ use Mageplaza\Blog\Helper\Data;
 class Widget extends Frontend
 {
     /**
-     * @return array|string
+     * @return AuthorCollection|CategoryCollection|Collection|TagCollection|TopicCollection|null
      */
     public function getTopicList()
     {
-        $collection = $this->helperData->getObjectList(Data::TYPE_TOPIC);
-
-        return $collection;
+        try {
+            return $this->helperData->getObjectList(Data::TYPE_TOPIC);
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     /**
-     * @param $topic
+     * @param Topic $topic
      *
      * @return string
      */

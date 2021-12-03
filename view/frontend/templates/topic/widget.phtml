@@ -19,21 +19,23 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
+use Mageplaza\Blog\Block\Topic\Widget;
+
+/** @var Widget $block */
 $topics = $block->getTopicList();
-if ($topics && $topics->getSize()):
-    ?>
+if ($topics && $topics->getSize()) : ?>
     <div class="mp-sidebar mpcss">
         <div class="row">
             <div class="block-title col-xs-12 sidebar-categories">
-                <p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?= __('Topics') ?></p>
+                <p class="block-mp-sidebar-heading" role="heading" aria-level="2"><?= $block->escapeHtml(__('Topics')) ?></p>
             </div>
             <div class="col-xs-12">
                 <ul class="block-content menu-categories">
-                    <?php foreach ($topics as $topic): ?>
+                    <?php foreach ($topics as $topic) : ?>
                         <li class="category-item">
-                            <a class="list-categories" href="<?= $block->getTopicUrl($topic) ?>">
+                            <a class="list-categories" href="<?= $block->escapeUrl($block->getTopicUrl($topic)) ?>">
                                 <i class="fa fa-folder-o" aria-hidden="true">&nbsp;</i>
-                                <?= ucfirst($topic->getName()) ?>
+                                <?= $block->escapeHtml(ucfirst($topic->getName())) ?>
                             </a>
                         </li>
                     <?php endforeach; ?>

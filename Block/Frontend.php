@@ -43,12 +43,12 @@ use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\Config\Source\AuthorStatus;
 use Mageplaza\Blog\Model\LikeFactory;
+use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\PostLikeFactory;
 
 /**
  * Class Frontend
- *
  * @package Mageplaza\Blog\Block
  */
 class Frontend extends Template
@@ -231,18 +231,21 @@ class Frontend extends Template
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return string
-     * @throws Exception
      */
     public function getPageFilter($content)
     {
-        return $this->filterProvider->getPageFilter()->filter((string) $content);
+        try {
+            return $this->filterProvider->getPageFilter()->filter((string) $content);
+        } catch (Exception $e) {
+            return '';
+        }
     }
 
     /**
-     * @param $image
+     * @param string $image
      * @param string $type
      *
      * @return string
@@ -257,7 +260,7 @@ class Frontend extends Template
     }
 
     /**
-     * @param $urlKey
+     * @param string|Object $urlKey
      * @param null $type
      *
      * @return string
@@ -275,55 +278,58 @@ class Frontend extends Template
     }
 
     /**
-     * @param $post
+     * @param Post $post
      *
      * @return Phrase|string
-     * @throws Exception
      */
     public function getPostInfo($post)
     {
-        $likeCollection = $this->postLikeFactory->create()->getCollection();
-        $couldLike      = $likeCollection->addFieldToFilter('post_id', $post->getId())
-            ->addFieldToFilter('action', '1')->count();
-        $html           = __(
-            '<i class="mp-blog-icon mp-blog-calendar-times"></i> %1',
-            $this->getDateFormat($post->getPublishDate())
-        );
-
-        if ($categoryPost = $this->getPostCategoryHtml($post)) {
-            $html .= __('| Posted in %1', $categoryPost);
-        }
-
-        $author = $this->helperData->getAuthorByPost($post);
-        if ($author && $author->getName() && $this->helperData->showAuthorInfo()) {
-            $aTag = '<a class="mp-info" href="' . $author->getUrl() . '">'
-                . $this->escapeHtml($author->getName()) . '</a>';
-            $html .= __('| <i class="mp-blog-icon mp-blog-user"></i> %1', $aTag);
-        }
-
-        if ($this->getCommentinPost($post)) {
-            $html .= __(
-                '| <i class="mp-blog-icon mp-blog-comments" aria-hidden="true"></i> %1',
-                $this->getCommentinPost($post)
+        try {
+            $likeCollection = $this->postLikeFactory->create()->getCollection();
+            $couldLike      = $likeCollection->addFieldToFilter('post_id', $post->getId())
+                ->addFieldToFilter('action', '1')->count();
+            $html           = __(
+                '<i class="mp-blog-icon mp-blog-calendar-times"></i> %1',
+                $this->getDateFormat($post->getPublishDate())
             );
-        }
 
-        if ($post->getViewTraffic()) {
-            $html .= __(
-                '| <i class="mp-blog-icon mp-blog-traffic" aria-hidden="true"></i> %1',
-                $post->getViewTraffic()
-            );
-        }
+            if ($categoryPost = $this->getPostCategoryHtml($post)) {
+                $html .= __('| Posted in %1', $categoryPost);
+            }
 
-        if ($couldLike > 0) {
-            $html .= __('| <i class="mp-blog-icon mp-blog-thumbs-up" aria-hidden="true"></i> %1', $couldLike);
+            $author = $this->helperData->getAuthorByPost($post);
+            if ($author && $author->getName() && $this->helperData->showAuthorInfo()) {
+                $aTag = '<a class="mp-info" href="' . $author->getUrl() . '">'
+                    . $this->escapeHtml($author->getName()) . '</a>';
+                $html .= __('| <i class="mp-blog-icon mp-blog-user"></i> %1', $aTag);
+            }
+
+            if ($this->getCommentinPost($post)) {
+                $html .= __(
+                    '| <i class="mp-blog-icon mp-blog-comments" aria-hidden="true"></i> %1',
+                    $this->getCommentinPost($post)
+                );
+            }
+
+            if ($post->getViewTraffic()) {
+                $html .= __(
+                    '| <i class="mp-blog-icon mp-blog-traffic" aria-hidden="true"></i> %1',
+                    $post->getViewTraffic()
+                );
+            }
+
+            if ($couldLike > 0) {
+                $html .= __('| <i class="mp-blog-icon mp-blog-thumbs-up" aria-hidden="true"></i> %1', $couldLike);
+            }
+        } catch (Exception $e) {
+            $html = '';
         }
 
         return $html;
     }
 
     /**
-     * @param $post
+     * @param Post $post
      *
      * @return int
      */
@@ -335,44 +341,56 @@ class Frontend extends Template
     }
 
     /**
-     * get list category html of post
+     * Get list category html of post
      *
-     * @param $post
+     * @param Post $post
      *
-     * @return null|string
+     * @return string|null
      */
     public function getPostCategoryHtml($post)
     {
-        if (!$post->getCategoryIds()) {
-            return null;
-        }
-
-        $categories   = $this->helperData->getCategoryCollection($post->getCategoryIds());
         $categoryHtml = [];
-        foreach ($categories as $_cat) {
-            $categoryHtml[] = '<a class="mp-info" href="' . $this->helperData->getBlogUrl(
-                $_cat,
-                HelperData::TYPE_CATEGORY
-            ) . '">' . $_cat->getName() . '</a>';
+
+        try {
+            if (!$post->getCategoryIds()) {
+                return null;
+            }
+
+            $categories = $this->helperData->getCategoryCollection($post->getCategoryIds());
+            foreach ($categories as $_cat) {
+                $categoryHtml[] = '<a class="mp-info" href="'
+                    . $this->helperData->getBlogUrl(
+                        $_cat,
+                        HelperData::TYPE_CATEGORY
+                    )
+                    . '">' . $_cat->getName() . '</a>';
+            }
+        } catch (Exception $e) {
+            return null;
         }
 
         return implode(', ', $categoryHtml);
     }
 
     /**
-     * @param $date
+     * @param string $date
      * @param bool $monthly
      *
-     * @return false|string
-     * @throws Exception
+     * @return false|string|null
      */
     public function getDateFormat($date, $monthly = false)
     {
-        return $this->helperData->getDateFormat($date, $monthly);
+        try {
+            $date = $this->helperData->getDateFormat($date, $monthly);
+        } catch (Exception $e) {
+            $date = null;
+        }
+
+        return $date;
     }
 
     /**
-     * @param $image
+     * @param string $image
      * @param null $size
      * @param string $type
      *

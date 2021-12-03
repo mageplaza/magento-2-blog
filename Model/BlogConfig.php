@@ -24,7 +24,6 @@ namespace Mageplaza\Blog\Model;
 use Magento\Framework\DataObject;
 use Mageplaza\Blog\Api\Data\BlogConfigInterface;
 
-
 /**
  * Class BlogConfig
  * @package Mageplaza\Blog\Model

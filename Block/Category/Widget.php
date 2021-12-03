@@ -21,8 +21,8 @@
 
 namespace Mageplaza\Blog\Block\Category;
 
+use Exception;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Mageplaza\Blog\Block\Adminhtml\Category\Tree;
 use Mageplaza\Blog\Block\Frontend;
@@ -35,19 +35,22 @@ use Mageplaza\Blog\Helper\Data;
 class Widget extends Frontend
 {
     /**
-     * @return mixed
-     * @throws NoSuchEntityException
+     * @return mixed|null
      */
     public function getTree()
     {
-        $tree = ObjectManager::getInstance()->create(Tree::class);
-        $tree = $tree->getTree(null, $this->store->getStore()->getId());
+        try {
+            $tree = ObjectManager::getInstance()->create(Tree::class);
+            $tree = $tree->getTree(null, $this->store->getStore()->getId());
 
-        return $tree;
+            return $tree;
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     /**
-     * @param $tree
+     * @param array $tree
      *
      * @return Phrase|string
      */
@@ -82,7 +85,7 @@ class Widget extends Frontend
     }
 
     /**
-     * @param $category
+     * @param string $category
      *
      * @return string
      */

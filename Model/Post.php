@@ -537,12 +537,11 @@ class Post extends AbstractModel
     }
 
     /**
-     * @param null $limit
-     *
-     * @return ResourceModel\Post\Collection|null
+     * @return Collection|null
      * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
-    public function getRelatedPostsCollection($limit = null)
+    public function getRelatedPostsCollection()
     {
         $topicIds = $this->_getResource()->getTopicIds($this);
         if (count($topicIds)) {

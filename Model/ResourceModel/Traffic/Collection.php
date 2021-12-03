@@ -22,6 +22,8 @@
 namespace Mageplaza\Blog\Model\ResourceModel\Traffic;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Mageplaza\Blog\Model\Traffic;
+use Mageplaza\Blog\Model\ResourceModel\Traffic as TrafficResourceModel;
 
 /**
  * Class Collection
@@ -34,6 +36,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\Traffic', 'Mageplaza\Blog\Model\ResourceModel\Traffic');
+        $this->_init(Traffic::class, TrafficResourceModel::class);
     }
 }

@@ -19,52 +19,60 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
+use \Mageplaza\Blog\Block\Sitemap;
 use Mageplaza\Blog\Helper\Data;
 
-/** @var Data $helper */
-$helper = $this->helper(Data::class);
-$posts = $helper->getPostList();
+/** @var Sitemap $block */
+$helper     = $block->getBlogHelper();
+$posts      = $helper->getPostList();
 $categories = $helper->getObjectList(Data::TYPE_CATEGORY);
-$tags = $helper->getObjectList(Data::TYPE_TAG);
-$topics = $helper->getObjectList(Data::TYPE_TOPIC);
+$tags       = $helper->getObjectList(Data::TYPE_TAG);
+$topics     = $helper->getObjectList(Data::TYPE_TOPIC);
 ?>
 
-<?php if ($size = $posts->getSize()): ?>
-    <h2><?= ($size == 1) ? __('Post') : __('Posts') ?></h2>
+<?php if ($size = $posts->getSize()) : ?>
+    <h2><?= ($size == 1) ? $block->escapeHtml(__('Post')) : $block->escapeHtml(__('Posts')) ?></h2>
     <ul>
-        <?php foreach ($posts as $post): ?>
-            <li><a href="<?= $post->getUrl() ?>"><?= $post->getName(); ?></a></li>
+        <?php foreach ($posts as $post) : ?>
+            <li><a href="<?= $block->escapeUrl($post->getUrl()) ?>"><?= $block->escapeHtml($post->getName()) ?></a></li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
 
-<?php if ($size = $categories->getSize()): ?>
-    <h2><?= ($size == 1) ? __('Category') : __('Categories') ?></h2>
+<?php if ($size = $categories->getSize()) : ?>
+    <h2><?= ($size == 1) ? $block->escapeHtml(__('Category')) : $block->escapeHtml(__('Categories')) ?></h2>
     <ul>
-        <?php foreach ($categories as $category): ?>
+        <?php foreach ($categories as $category) : ?>
             <li>
-                <a href="<?= $helper->getBlogUrl($category, Data::TYPE_CATEGORY) ?>"><?= $category->getName(); ?></a>
+                <a href="<?= $block->escapeUrl($helper->getBlogUrl($category, Data::TYPE_CATEGORY)) ?>">
+                    <?= $block->escapeHtml($category->getName()) ?>
+                </a>
             </li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
 
-<?php if ($size = $tags->getSize()): ?>
-    <h2><?= ($size == 1) ? __('Tag') : __('Tags') ?></h2>
+<?php if ($size = $tags->getSize()) : ?>
+    <h2><?= ($size == 1) ? $block->escapeHtml(__('Tag')) : $block->escapeHtml(__('Tags')) ?></h2>
     <ul>
-        <?php foreach ($tags as $tag): ?>
-            <li><a href="<?= $helper->getBlogUrl($tag, Data::TYPE_TAG) ?>"><?= $tag->getName(); ?></a>
+        <?php foreach ($tags as $tag) : ?>
+            <li>
+                <a href="<?= $block->escapeUrl($helper->getBlogUrl($tag, Data::TYPE_TAG)) ?>">
+                    <?= $block->escapeHtml($tag->getName()) ?>
+                </a>
             </li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
 
-<?php if ($size = $topics->getSize()): ?>
-    <h2><?= ($size == 1) ? __('Topic') : __('Topics') ?></h2>
+<?php if ($size = $topics->getSize()) : ?>
+    <h2><?= ($size == 1) ? $block->escapeHtml(__('Topic')) : $block->escapeHtml(__('Topics')) ?></h2>
     <ul>
-        <?php foreach ($topics as $topic): ?>
+        <?php foreach ($topics as $topic) : ?>
             <li>
-                <a href="<?= $helper->getBlogUrl($topic, Data::TYPE_TOPIC) ?>"><?= $topic->getName(); ?></a>
+                <a href="<?= $block->escapeUrl($helper->getBlogUrl($topic, Data::TYPE_TOPIC)) ?>">
+                    <?= $block->escapeHtml($topic->getName()) ?>
+                </a>
             </li>
         <?php endforeach; ?>
     </ul>

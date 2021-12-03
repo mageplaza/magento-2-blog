@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Class Sitemap
@@ -48,7 +49,7 @@ class Sitemap extends Frontend
     /**
      * @param bool $meta
      *
-     * @return array
+     * @return array|Phrase
      */
     public function getBlogTitle($meta = false)
     {

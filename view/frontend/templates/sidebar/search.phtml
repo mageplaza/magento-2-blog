@@ -19,7 +19,9 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-/** @var \Mageplaza\Blog\Block\Sidebar\Search $block */
+use Mageplaza\Blog\Block\Sidebar\Search;
+
+/** @var Search $block */
 ?>
 <style>
     .sidebar.sidebar-main:before {
@@ -29,14 +31,14 @@
 <div class="mpblog-search">
     <div class="field search">
         <label class="label" for="mpblog-search-box" data-role="minisearch-label">
-            <span><?= __('Search'); ?></span>
+            <span><?= $block->escapeHtml(__('Search')) ?></span>
         </label>
         <div class="control">
             <input id="mpblog-search-box"
                    type="text"
                    name="query"
-                   value="<?= $this->getRequest()->getParam('query') ?>"
-                   placeholder="<?= __('Search blogs here...'); ?>"
+                   value="<?= $block->escapeHtmlAttr($block->getRequest()->getParam('query')) ?>"
+                   placeholder="<?= $block->escapeHtmlAttr(__('Search blogs here...')) ?>"
                    class="input-text"
                    role="combobox"
                    aria-haspopup="false"
@@ -45,16 +47,17 @@
         </div>
     </div>
     <div class="actions">
-        <button type="submit" title="<?= __('Search') ?>" class="action search">
+        <button type="submit" title="<?= $block->escapeHtmlAttr(__('Search')) ?>" class="action search">
             <i class="fa fa-search" aria-hidden="true" style="font-size: 16px;margin-top: 5px;"></i>
         </button>
     </div>
 </div>
 <script>
     require(['jquery', 'mpDevbridgeAutocomplete'], function ($) {
-        var visibleImage = <?= $block->getSidebarConfig('search/show_image'); ?>;
+        var visibleImage = <?= /** @noEscape */ $block->getSidebarConfig('search/show_image') ?>;
+
         $('#mpblog-search-box').autocomplete({
-            lookup: <?= $block->getSearchBlogData();?>,
+            lookup: <?= /** @noEscape */ $block->getSearchBlogData() ?>,
             lookupLimit: <?= $block->getSidebarConfig('search/search_limit') ?: 10; ?>,
             maxHeight: 2000,
             minChars: <?= $block->getSidebarConfig('search/min_chars') ?: 1; ?>,
@@ -65,12 +68,14 @@
                 window.location.href = suggestion.url;
             },
             formatResult: function (suggestion, currentValue) {
-                var additionClass = '';
-                var html = "<div class='mpblog-suggestion'>";
+                var additionClass = '',
+                    html          = "<div class='mpblog-suggestion'>";
+
                 if (visibleImage) {
                     html += "<div class='mpblog-suggestion-left'><img class='img-responsive' src='" + suggestion.image + "' /></div>";
                     additionClass = 'image-visible';
                 }
+
                 html += "<div class='mpblog-suggestion-right " + additionClass + "'>" +
                     "<div class='mpblog-product-line mpblog-product-name'>" + suggestion.value + "</div>" +
                     "<div class='mpblog-product-des'><p class='mpblog-short-des'>" + suggestion.desc + "</p></div></div></div>";

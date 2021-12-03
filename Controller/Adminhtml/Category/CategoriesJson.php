@@ -22,12 +22,14 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutFactory;
+use Mageplaza\Blog\Block\Adminhtml\Category\Tree;
 use Mageplaza\Blog\Controller\Adminhtml\Category;
 use Mageplaza\Blog\Model\CategoryFactory;
 
@@ -68,7 +70,7 @@ class CategoriesJson extends Category
         LayoutFactory $layoutFactory
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory = $layoutFactory;
+        $this->layoutFactory     = $layoutFactory;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }
@@ -80,12 +82,12 @@ class CategoriesJson extends Category
      */
     public function execute()
     {
-        $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->setIsTreeWasExpanded(
-            (boolean)$this->getRequest()->getParam('expand_all')
+        $this->_objectManager->get(Session::class)->setIsTreeWasExpanded(
+            (boolean) $this->getRequest()->getParam('expand_all')
         );
 
         $resultJson = $this->resultJsonFactory->create();
-        if ($categoryId = (int)$this->getRequest()->getPost('id')) {
+        if ($categoryId = (int) $this->getRequest()->getPost('id')) {
             $this->getRequest()->setParam('id', $categoryId);
 
             $category = $this->initCategory(true);
@@ -97,7 +99,7 @@ class CategoriesJson extends Category
             }
 
             $treeJson = $this->layoutFactory->create()
-                ->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Tree')
+                ->createBlock(Tree::class)
                 ->getTreeJson($category);
 
             /** @var Json $resultJson */

@@ -131,7 +131,7 @@ class Form extends Generic
             'title' => __('Import Type'),
             'values' => $this->_importType->toOptionArray(),
             'required' => true,
-            'onchange' => 'mpBlogImport.initImportFieldsSet();'
+            'onchange' => 'mpBlogImport.initImportFieldsSet()'
         ]);
 
         $fieldsetList = $this->_importType->toOptionArray();
