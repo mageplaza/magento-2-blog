@@ -21,9 +21,16 @@
 
 namespace Mageplaza\Blog\Block\Tag;
 
+use Exception;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Mageplaza\Blog\Block\Frontend;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
+use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
+use Mageplaza\Blog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Mageplaza\Blog\Model\ResourceModel\Tag\Collection as TagCollection;
+use Mageplaza\Blog\Model\ResourceModel\Topic\Collection as TopicCollection;
+use Mageplaza\Blog\Model\Tag;
 
 /**
  * Class Widget
@@ -32,24 +39,28 @@ use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 class Widget extends Frontend
 {
     /**
-     * @var \Mageplaza\Blog\Model\ResourceModel\Tag\Collection
+     * @var TagCollection
      */
     protected $_tagList;
 
     /**
-     * @return array|string
+     * @return AuthorCollection|CategoryCollection|Collection|TagCollection|TopicCollection|null
      */
     public function getTagList()
     {
-        if (!$this->_tagList) {
-            $this->_tagList = $this->helperData->getObjectList(Data::TYPE_TAG);
-        }
+        try {
+            if (!$this->_tagList) {
+                $this->_tagList = $this->helperData->getObjectList(Data::TYPE_TAG);
+            }
 
-        return $this->_tagList;
+            return $this->_tagList;
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     /**
-     * @param $tag
+     * @param Tag $tag
      *
      * @return string
      */
@@ -59,11 +70,12 @@ class Widget extends Frontend
     }
 
     /**
-     * get tags size based on num of post
+     * Get tags size based on num of post
      *
      * @param $tag
      *
-     * @return float|string
+     * @return false|float|int
+     * @throws NoSuchEntityException
      */
     public function getTagSize($tag)
     {

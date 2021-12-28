@@ -18,23 +18,27 @@
  * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
+use Mageplaza\Blog\Block\Adminhtml\Import\Edit\Import;
+
+/** @var Import $block */
 ?>
 <script>
     require(['jquery'], function ($) {
-        var dataImport = {};
-        var defaultTablePrefix = ['wp_', 'm1_', 'm2_'];
-        var imagePathHint = [
-            '*Please copy the <b>wp_content/uploads</b> folder to <b>pub/media/wysiwyg/</b> folder for post image content <br>' +
-            '*Please copy the <b>wp_content/uploads</b> folder to <b>pub/media/mageplaza/blog/post/</b> folder for post image banner <br>',
-            '*Please copy the <b>media</b> folder to <b>pub/media/</b> folder',
-            '*Please copy the <b>pub/media/magefan_blog</b> folder to <b>pub/media/mageplaza/blog/post/</b> folder for post image banner '
-        ];
+        var dataImport         = {},
+            defaultTablePrefix = ['wp_', 'm1_', 'm2_'],
+            imagePathHint      = [
+                '*Please copy the <b>wp_content/uploads</b> folder to <b>pub/media/wysiwyg/</b> folder for post image content <br>' +
+                '*Please copy the <b>wp_content/uploads</b> folder to <b>pub/media/mageplaza/blog/post/</b> folder for post image banner <br>',
+                '*Please copy the <b>media</b> folder to <b>pub/media/</b> folder',
+                '*Please copy the <b>pub/media/magefan_blog</b> folder to <b>pub/media/mageplaza/blog/post/</b> folder for post image banner '
+            ];
 
         mpBlogImport = {
-            typeSelector: <?= $block->getTypeSelector();?>,
+            typeSelector: <?= /** noEscape */ $block->getTypeSelector() ?>,
             initImportFieldsSet: function () {
-                for (var i = 0; i < this.typeSelector.length; i++) {
-                    if ($('#import_type').attr("value") == this.typeSelector[i]) {
+                for (var i = 0; i < this.typeSelector.length; i++){
+                    if ($('#import_type').attr("value") === this.typeSelector[i]) {
                         this.showFieldSet('#' + this.typeSelector[i] + '_fieldset');
                         dataImport = {
                             type: this.typeSelector[i],
@@ -63,7 +67,7 @@
             },
 
             initExpandBehaviour: function () {
-                if ($(dataImport.behaviourSelector).attr("value") == 'update') {
+                if ($(dataImport.behaviourSelector).attr("value") === 'update') {
                     $(dataImport.expandBehaviourSelector).parent().parent().removeClass('hidden');
                 } else {
                     $(dataImport.expandBehaviourSelector).parent().parent().addClass('hidden');
@@ -82,7 +86,10 @@
                 if ($('#edit_form').valid()) {
                     $('body').loader('show');
                     $.ajax({
-                        url: '<?= $block->getUrl('mageplaza_blog/import/validate', ['form_key' => $block->getFormKey()]);?>',
+                        url: '<?= $block->escapeUrl($block->getUrl(
+                            'mageplaza_blog/import/validate',
+                            ['form_key' => $block->getFormKey()]
+                        )) ?>',
                         data: {
                             type: dataImport.type,
                             import_name: $(dataImport.importName).val(),
@@ -97,13 +104,20 @@
                         cache: false,
                         success: function (result) {
                             var messageHtml;
-                            if (result.status == 'false') {
-                                messageHtml = '<?= $block->getMessagesHtml('adderror', 'False connection. Please check the credentials and try again!') ?>';
+                            if (result.status === 'false') {
+                                messageHtml = '<?= $block->getMessagesHtml(
+                                    'adderror',
+                                    'False connection. Please check the credentials and try again!'
+                                ) ?>';
                                 $(".message-error").hide();
                                 $(messageHtml).appendTo($(".page-columns"));
                                 $(".message-success").hide();
                             } else {
-                                messageHtml = '<?= $block->getMessagesHtml('addsuccess', 'Connect successfully. To start import process press "Import" button' . $block->getImportButtonHtml()) ?>';
+                                messageHtml = '<?= $block->getMessagesHtml(
+                                    'addsuccess',
+                                    'Connect successfully. To start import process press "Import" button'
+                                    . $block->getImportButtonHtml()
+                                ) ?>';
                                 $(".message-success").hide();
                                 $(messageHtml).appendTo($(".page-columns"));
                                 $(".message-error").hide();
@@ -119,7 +133,10 @@
             importAction: function () {
                 $('body').loader('show');
                 $.ajax({
-                    url: '<?= $block->getUrl('mageplaza_blog/import/import', ['form_key' => $block->getFormKey()]);?>',
+                    url: '<?= $block->escapeUrl($block->getUrl(
+                        'mageplaza_blog/import/import',
+                        ['form_key' => $block->getFormKey()]
+                    ))?>',
                     cache: false,
                     success: function (result) {
                         var statisticMessage = result.statistic;

@@ -40,8 +40,10 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Data as HelperBlog;
+use Mageplaza\Blog\Model\Comment;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
+use Mageplaza\Blog\Model\Like;
 use Mageplaza\Blog\Model\LikeFactory;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\TrafficFactory;
@@ -185,6 +187,7 @@ class View extends Action
      */
     public function execute()
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $id   = $this->getRequest()->getParam('id');
         $post = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($id);
         $this->helperBlog->setCustomerContextId();
@@ -220,8 +223,9 @@ class View extends Action
                 $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
                 $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
 
-                $userName = $this->session->isLoggedIn() ?
-                    $customerData->getFirstname() . ' ' . $customerData->getLastname() : $params['guestName'] . ' (Guest)';
+                $userName    = $this->session->isLoggedIn()
+                    ? $customerData->getFirstname() . ' ' . $customerData->getLastname()
+                    : $params['guestName'] . ' (Guest)';
                 $commentData = [
                     'post_id'    => $id,
                     '',
@@ -262,7 +266,7 @@ class View extends Action
      * @param int $action
      * @param CustomerInterface|Customer|null $user
      * @param array $data
-     * @param LikeFactory|CommentFactory $model
+     * @param Like|Comment $model
      * @param null $cmtId
      *
      * @return array
@@ -323,11 +327,11 @@ class View extends Action
     }
 
     /**
-     * check if user like a comment
+     * Check if user like a comment
      *
      * @param int $cmtId
      * @param int $userId
-     * @param LikeFactory $model
+     * @param Like $model
      *
      * @return bool
      */

@@ -21,7 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Post;
 
-use Magento\Framework\Exception\LocalizedException;
+use Exception;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\UrlInterface;
@@ -36,39 +36,37 @@ use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
  */
 class AuthorPost extends \Mageplaza\Blog\Block\Listpost
 {
-
     /**
-     * @return AbstractCollection|Collection
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
+     * @return AbstractCollection|Collection|null
      */
     public function getPostCollection()
     {
-        $collection = $this->helperData->getFactoryByType()->create()->getCollection();
-        $this->helperData->addStoreFilter($collection, $this->store->getStore()->getId());
+        try {
+            $collection = $this->helperData->getFactoryByType()->create()->getCollection();
+            $this->helperData->addStoreFilter($collection, $this->store->getStore()->getId());
 
-        $userId = $this->getAuthor()->getId();
+            $userId = $this->getAuthor()->getId();
 
-        $collection->addFieldToFilter('author_id', $userId);
+            $collection->addFieldToFilter('author_id', $userId);
 
-        if ($collection && $collection->getSize()) {
-            $pager = $this->getLayout()->createBlock(Pager::class, 'mpblog.post.pager');
+            if ($collection && $collection->getSize()) {
+                $pager         = $this->getLayout()->createBlock(Pager::class, 'mpblog.post.pager');
+                $perPageValues = (string) $this->helperData->getConfigGeneral('pagination');
+                $perPageValues = explode(',', $perPageValues);
+                $perPageValues = array_combine($perPageValues, $perPageValues);
 
-            $perPageValues = (string)$this->helperData->getConfigGeneral('pagination');
-            $perPageValues = explode(',', $perPageValues);
-            $perPageValues = array_combine($perPageValues, $perPageValues);
-
-            $pager->setAvailableLimit($perPageValues)
-                ->setCollection($collection);
-
-            $this->setChild('pager', $pager);
+                $pager->setAvailableLimit($perPageValues)->setCollection($collection);
+                $this->setChild('pager', $pager);
+            }
+        } catch (Exception $e) {
+            $collection = null;
         }
 
         return $collection;
     }
 
     /**
-     * @param $statusId
+     * @param string $statusId
      *
      * @return mixed
      */
@@ -110,28 +108,33 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
      */
     public function getMagentoVersion()
     {
-        return (int)$this->helperData->versionCompare('2.3.0') ? 3 : 2;
+        return (int) $this->helperData->versionCompare('2.3.0') ? 3 : 2;
     }
 
     /**
-     * @param $postCollection
+     * @param AbstractCollection|Collection|null $postCollection
      *
      * @return string
-     * @throws LocalizedException
      */
     public function getPostDatas($postCollection)
     {
         $result = [];
 
-        /** @var Post $post */
-        foreach ($postCollection->getItems() as $post) {
-            $post->getCategoryIds();
-            $post->getTopicIds();
-            $post->getTagIds();
-            if ($post->getPostContent()) {
-                $post->setData('post_content', $this->getPageFilter($post->getPostContent()));
+        if ($postCollection) {
+            try {
+                /** @var Post $post */
+                foreach ($postCollection->getItems() as $post) {
+                    $post->getCategoryIds();
+                    $post->getTopicIds();
+                    $post->getTagIds();
+                    if ($post->getPostContent()) {
+                        $post->setData('post_content', $this->getPageFilter($post->getPostContent()));
+                    }
+                    $result[$post->getId()] = $post->getData();
+                }
+            } catch (Exception $e) {
+                $result = [];
             }
-            $result[$post->getId()] = $post->getData();
         }
 
         return Data::jsonEncode($result);

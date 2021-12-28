@@ -24,7 +24,6 @@ namespace Mageplaza\Blog\Model;
 use Magento\Framework\DataObject;
 use Mageplaza\Blog\Api\Data\MonthlyArchiveInterface;
 
-
 /**
  * Class MonthlyArchive
  * @package Mageplaza\Blog\Model

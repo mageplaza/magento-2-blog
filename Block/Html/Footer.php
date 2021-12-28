@@ -71,11 +71,7 @@ class Footer extends Link
      */
     public function getLabel()
     {
-        if ($this->helper->getBlogConfig('general/name') == "") {
-            return __("Blog");
-        }
-
-        return $this->helper->getBlogConfig('general/name');
+        return $this->helper->getBlogConfig('general/name') ? : __('Blog');
     }
 
     /**
@@ -84,5 +80,13 @@ class Footer extends Link
     public function getHtmlSiteMapUrl()
     {
         return $this->helper->getBlogUrl('sitemap');
+    }
+
+    /**
+     * @return Data
+     */
+    public function getHelperData()
+    {
+        return $this->helper;
     }
 }

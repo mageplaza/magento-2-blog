@@ -19,11 +19,14 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-$helper = $this->helper('Mageplaza\Blog\Helper\Data');
-if ($helper->isEnabled() && $helper->getBlogConfig('general/toplinks')): ?>
+use Mageplaza\Blog\Helper\Data;
+
+$helper = $this->helper(Data::class);
+
+if ($helper->isEnabled() && $helper->getBlogConfig('general/toplinks')) : ?>
     <li class="nav-item level0 nav-5 level-top classic">
-        <a href="<?= $helper->getBlogUrl('') ?>" class="level-top">
-            <span><?= $helper->getBlogConfig('general/name') ?: __('Blog') ?></span>
+        <a href="<?= /** @noEscape */ $helper->getBlogUrl('') ?>" class="level-top">
+            <span><?= $helper->getBlogConfig('general/name') ?: /** @noEscape */ __('Blog') ?></span>
         </a>
     </li>
 <?php endif; ?>

@@ -114,9 +114,9 @@ class Import extends Action
     }
 
     /**
-     * @param $statisticData
-     * @param $messagesBlock
-     * @param $data
+     * @param array $statisticData
+     * @param Object $messagesBlock
+     * @param array $data
      *
      * @return mixed
      */
@@ -159,15 +159,16 @@ class Import extends Action
     }
 
     /**
-     * @param $object
-     * @param $data
+     * @param Object $object
+     * @param array $data
      *
      * @return mixed
      */
     protected function processImport($object, $data)
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $statisticHtml = '';
-        $connection = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
+        $connection    = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
         $messagesBlock = $this->_view->getLayout()->createBlock(Messages::class);
         if ($object->run($data, $connection)) {
             $postStatistic = $this->registry->registry('mageplaza_import_post_statistic');
@@ -209,7 +210,7 @@ class Import extends Action
             $statisticHtml = $messagesBlock
                 ->{'adderror'}(__('Can not make import, please check your table prefix OR import type and try again.'))
                 ->toHtml();
-            $result = ['statistic' => $statisticHtml, 'status' => 'ok'];
+            $result        = ['statistic' => $statisticHtml, 'status' => 'ok'];
 
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         }

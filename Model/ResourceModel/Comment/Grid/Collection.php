@@ -26,6 +26,7 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
+use Mageplaza\Blog\Model\ResourceModel\Comment;
 use Psr\Log\LoggerInterface as Logger;
 use Zend_Db_Expr;
 
@@ -43,17 +44,18 @@ class Collection extends SearchResult
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
      * @param string $mainTable
-     * @param $resourceModel
+     * @param string $resourceModel
      *
      * @throws LocalizedException
      */
+    // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
     public function __construct(
         EntityFactory $entityFactory,
         Logger $logger,
         FetchStrategy $fetchStrategy,
         EventManager $eventManager,
         $mainTable = 'mageplaza_blog_comment',
-        $resourceModel = '\Mageplaza\Blog\Model\ResourceModel\Comment'
+        $resourceModel = Comment::class
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }
@@ -75,7 +77,7 @@ class Collection extends SearchResult
      * @param string $field
      * @param string $direction
      *
-     * @return Collection
+     * @return SearchResult
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
     {

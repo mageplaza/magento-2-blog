@@ -27,12 +27,11 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Session;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Helper\Data as BlogHelper;
 use RuntimeException;
 
 /**
- * Class Import
+ * Class Validate
  * @package Mageplaza\Blog\Controller\Adminhtml\Import
  */
 class Validate extends Action
@@ -62,10 +61,11 @@ class Validate extends Action
      */
     public function execute()
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $data = $this->getRequest()->getParams();
 
         try {
-            $connect = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
+            $connect    = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
             $importName = $data['import_name'];
 
             /** @var Session */
@@ -73,10 +73,6 @@ class Validate extends Action
             $result = ['import_name' => $importName, 'status' => 'ok'];
 
             mysqli_close($connect);
-
-            return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
-        } catch (LocalizedException $e) {
-            $result = ['import_name' => $data["import_name"], 'status' => 'false'];
 
             return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
         } catch (RuntimeException $e) {

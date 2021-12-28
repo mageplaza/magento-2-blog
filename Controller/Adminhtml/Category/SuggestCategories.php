@@ -53,11 +53,11 @@ class SuggestCategories extends Category
     /**
      * SuggestCategories constructor.
      *
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param CategoryFactory $categoryFactory
      * @param JsonFactory $resultJsonFactory
      * @param LayoutFactory $layoutFactory
-     * @param CategoryFactory $categoryFactory
-     * @param Registry $coreRegistry
-     * @param Context $context
      */
     public function __construct(
         Context $context,
@@ -67,7 +67,7 @@ class SuggestCategories extends Category
         LayoutFactory $layoutFactory
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory = $layoutFactory;
+        $this->layoutFactory     = $layoutFactory;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }
@@ -80,8 +80,8 @@ class SuggestCategories extends Category
     public function execute()
     {
         /** @var Tree $treeBlock */
-        $treeBlock = $this->layoutFactory->create()->createBlock('Mageplaza\Blog\Block\Adminhtml\Category\Tree');
-        $data = $treeBlock->getSuggestedCategoriesJson($this->getRequest()->getParam('label_part'));
+        $treeBlock = $this->layoutFactory->create()->createBlock(Tree::class);
+        $data      = $treeBlock->getSuggestedCategoriesJson($this->getRequest()->getParam('label_part'));
 
         /** @var Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();

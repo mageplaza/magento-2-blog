@@ -19,68 +19,75 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-/** @var \Mageplaza\Blog\Block\Sidebar\MostView $block */
+use Mageplaza\Blog\Block\Sidebar\MostView;
 
-$posts = $block->getMostViewPosts();
+/** @var MostView $block */
+$posts       = $block->getMostViewPosts();
 $postsRecent = $block->getRecentPost();
 ?>
 <div class="mp-sidebar product info detailed">
     <div class="product data items" data-mage-init='{"tabs":{"openedState":"active"}}'>
         <div class="data item title" data-role="collapsible" id="tab-label-popular">
             <a class="data switch" tabindex="-1" data-toggle="switch" id="tab-label-popular-title">
-                <div><?= __('Popular') ?></div>
+                <div><?= $block->escapeHtml(__('Popular')) ?></div>
             </a>
         </div>
         <div class="data item content" id="tab-content-popular" data-role="content">
-            <?php if ($posts->getSize()): ?>
-                <?php foreach ($posts as $post): ?>
+            <?php if ($posts->getSize()) : ?>
+                <?php foreach ($posts as $post) : ?>
                     <div class="list-post-tabs">
                         <div class="post-left">
-                            <a href="<?= $post->getUrl() ?>">
+                            <a href="<?= $block->escapeUrl($post->getUrl()) ?>">
                                 <img class="img-responsive"
-                                     src="<?= $block->resizeImage($post->getImage(), '100x'); ?>">
+                                     src="<?= $block->escapeUrl($block->resizeImage($post->getImage(), '100x')) ?>">
                             </a>
                         </div>
                         <div class="post-right">
-                            <a href="<?= $post->getUrl() ?>"><span><?= $post->getName() ?></span></a>
+                            <a href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                <span><?= $block->escapeHtml($post->getName()) ?></span>
+                            </a>
                             <span class="create-at">
-                                <?= $post->getPublishDate() ? $block->getDateFormat($post->getPublishDate()) : ''; ?>
+                                <?= $post->getPublishDate()
+                                    ? $block->escapeHtml($block->getDateFormat($post->getPublishDate())) : '' ?>
                             </span>
                         </div>
                         <div class="mp-clear"></div>
                     </div>
                 <?php endforeach; ?>
-            <?php else: ?>
-                <div class="mostview-nopost"><?= __('No Posts'); ?></div>
+            <?php else : ?>
+                <div class="mostview-nopost"><?= $block->escapeHtml(__('No Posts')) ?></div>
             <?php endif; ?>
         </div>
 
         <div class="data item title" data-role="collapsible" id="tab-label-mostview">
             <a class="data switch" tabindex="-1" data-toggle="switch" id="tab-label-mostview-title">
-                <div><?= __('Latest') ?></div>
+                <div><?= $block->escapeHtml(__('Latest')) ?></div>
             </a>
         </div>
         <div class="data item content" id="tab-content-mostview" data-role="content">
-            <?php if ($postsRecent->getSize()): ?>
-                <?php foreach ($postsRecent as $post): ?>
-                    <div class="list-post-tabs" href="<?= $post->getUrl() ?>">
+            <?php if ($postsRecent->getSize()) : ?>
+                <?php foreach ($postsRecent as $post) : ?>
+                    <div class="list-post-tabs" href="<?= $block->escapeUrl($post->getUrl()) ?>">
                         <div class="post-left">
-                            <a href="<?= $post->getUrl() ?>">
+                            <a href="<?= $block->escapeUrl($post->getUrl()) ?>">
                                 <img class="img-responsive"
-                                     src="<?= $block->resizeImage($post->getImage(), '100x') ?>">
+                                     src="<?= $block->escapeUrl($block->resizeImage($post->getImage(), '100x')) ?>">
                             </a>
                         </div>
                         <div class="post-right">
-                            <a href="<?= $post->getUrl() ?>"><span><?= $post->getName() ?></span></a>
+                            <a href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                <span><?= $block->escapeHtml($post->getName()) ?></span>
+                            </a>
                             <span class="create-at">
-                                <?= $post->getPublishDate() ? $block->getDateFormat($post->getPublishDate()) : ''; ?>
+                                <?= $post->getPublishDate()
+                                    ? $block->escapeHtml($block->getDateFormat($post->getPublishDate())) : '' ?>
                             </span>
                         </div>
                         <div class="mp-clear"></div>
                     </div>
                 <?php endforeach; ?>
-            <?php else: ?>
-                <div class="mostview-nopost"><?= __('No Posts'); ?></div>
+            <?php else : ?>
+                <div class="mostview-nopost"><?= $block->escapeHtml(__('No Posts')) ?></div>
             <?php endif; ?>
         </div>
     </div>

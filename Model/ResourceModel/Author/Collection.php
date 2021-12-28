@@ -22,6 +22,8 @@
 namespace Mageplaza\Blog\Model\ResourceModel\Author;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Mageplaza\Blog\Model\Author;
+use Mageplaza\Blog\Model\ResourceModel\Author as AuthorResourceModel;
 
 /**
  * Class Collection
@@ -39,6 +41,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Blog\Model\Author', 'Mageplaza\Blog\Model\ResourceModel\Author');
+        $this->_init(Author::class, AuthorResourceModel::class);
     }
 }

@@ -19,103 +19,106 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-/** @var \Mageplaza\Blog\Block\Post\AuthorPost $block */
-?>
+use Mageplaza\Blog\Block\Post\AuthorPost;
+use Mageplaza\Blog\Model\Post;
 
-<?php if (!$block->getAuthorStatus()): ?>
+/** @var AuthorPost $block */
+$postCollection = $block->getPostCollection();
+?>
+<?php if (!$block->getAuthorStatus()) : ?>
     <div>
-        <h3><?= /* @noEscape */ __('Your account must be licensed in order to perform the Post creation and management function') ?></h3>
+        <h3><?= $block->escapeHtml(__('Your account must be licensed in order to perform the Post creation and management function')) ?></h3>
     </div>
-<?php else: ?>
-<div class="mp-blog-new-post">
-    <button type="button" class="action primary" title="<?= /* @noEscape */
-    __('Add New Post') ?>"><?= /* @noEscape */
-        __('Add New Post') ?></button>
-</div>
-<div class="post-list-content" id="mpblog-list-container">
-    <?php $postCollection = $block->getPostCollection(); ?>
-    <?php if ($postCollection && count($postCollection) > 0): ?>
-        <div class="post-list-body">
-            <?php $i = 1 ?>
-            <?php /** @var \Mageplaza\Blog\Model\Post $post */
-            foreach ($postCollection as $post): ?>
-                <div data-post-id="<?= $block->escapeHtml($post->getId()); ?>"
-                     class="post-list-item col-mp post-item-list mp-12">
-                    <div class="post-item-wraper">
-                        <?= /* @noEscape */ $block->getStatusHtmlById($post->getEnabled()) ?>
-                        <?php if ($post->getImage()): ?>
-                            <div class="post-image">
-                                <a href="<?= $post->getUrl() ?>">
-                                    <img class="img-responsive"
-                                         src="<?= $block->resizeImage($post->getImage(), '400x'); ?>"
-                                         alt="<?= $block->escapeHtml($post->getName()); ?>"/>
-                                </a>
-                            </div>
-                        <?php endif; ?>
-                        <div class="post-info-wraper">
-                            <h2 class="mp-post-title">
-                                <a class="post-link-title" title="<?= $block->escapeHtml($post->getName()); ?>"
-                                   href="<?= $post->getUrl() ?>">
-                                    <?= $post->getName(); ?>
-                                </a>
-                            </h2>
-                            <div class="mp-post-info">
-                                <?= $block->getPostInfo($post); ?>
-                            </div>
-                            <div class="post-short-description">
-                                <p><?= $block->maxShortDescription($post->getShortDescription()); ?></p>
-                            </div>
-                            <div class="mp-clearfix"></div>
-                            <div class="mp-post-meta-info mp-alignright">
-                                <div class="actions">
-                                    <a class="mp-read-more" href="<?= $post->getUrl(); ?>"
-                                       title="<?= __('Read More'); ?>">
-                                        <?= __('Read More'); ?>
+<?php else : ?>
+    <div class="mp-blog-new-post">
+        <button type="button" class="action primary" title="<?= $block->escapeHtmlAttr(__('Add New Post')) ?>">
+            <?= $block->escapeHtml(__('Add New Post')) ?>
+        </button>
+    </div>
+    <div class="post-list-content" id="mpblog-list-container">
+        <?php if ($postCollection && count($postCollection) > 0) : ?>
+            <div class="post-list-body">
+                <?php $i = 1 ?>
+                <?php /** @var Post $post */
+                foreach ($postCollection as $post) : ?>
+                    <div data-post-id="<?= $block->escapeHtml($post->getId()); ?>"
+                         class="post-list-item col-mp post-item-list mp-12">
+                        <div class="post-item-wraper">
+                            <?= /* @noEscape */ $block->getStatusHtmlById($post->getEnabled()) ?>
+                            <?php if ($post->getImage()) : ?>
+                                <div class="post-image">
+                                    <a href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                        <img class="img-responsive"
+                                             src="<?= $block->escapeUrl($block->resizeImage($post->getImage(), '400x')) ?>"
+                                             alt="<?= $block->escapeHtmlAttr($post->getName()) ?>"/>
                                     </a>
+                                </div>
+                            <?php endif; ?>
+                            <div class="post-info-wraper">
+                                <h2 class="mp-post-title">
+                                    <a class="post-link-title" title="<?= $block->escapeHtml($post->getName()); ?>"
+                                       href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                        <?= $block->escapeHtml($post->getName()) ?>
+                                    </a>
+                                </h2>
+                                <div class="mp-post-info">
+                                    <?= /* @noEscape */ $block->getPostInfo($post) ?>
+                                </div>
+                                <div class="post-short-description">
+                                    <p>
+                                        <?= /* @noEscape */ $block->maxShortDescription($post->getShortDescription()) ?>
+                                    </p>
+                                </div>
+                                <div class="mp-clearfix"></div>
+                                <div class="mp-post-meta-info mp-alignright">
+                                    <div class="actions">
+                                        <a class="mp-read-more" href="<?= $block->escapeUrl($post->getUrl()) ?>"
+                                           title="<?= $block->escapeHtmlAttr(__('Read More')) ?>">
+                                            <?= $block->escapeHtml(__('Read More')) ?>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-info-action" data-postId="<?= $block->escapeHtml($post->getId()); ?>">
+                                <div class="mpblog-post-duplicate">
+                                    <img
+                                        src="<?= $block->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/duplicate.svg')) ?>"
+                                        align="middle"
+                                        alt="<?= $block->escapeHtmlAttr(__('Duplicate')); ?>"
+                                        title="<?= $block->escapeHtmlAttr(__('Duplicate')) ?>"
+                                    />
+                                </div>
+                                <div class="mpblog-post-edit">
+                                    <img src="<?= $block->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/writing.svg')) ?>"
+                                         align="middle"
+                                         alt="<?= $block->escapeHtmlAttr(__('Edit')); ?>"
+                                         title="<?= $block->escapeHtmlAttr(__('Edit')) ?>"
+                                    />
+                                </div>
+                                <div class="mpblog-post-delete">
+                                    <img src="<?= $block->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/delete.svg')) ?>"
+                                         align="middle"
+                                         alt="<?= $block->escapeHtmlAttr(__('Delete')) ?>"
+                                         title="<?= $block->escapeHtmlAttr(__('Delete')) ?>"
+                                    />
                                 </div>
                             </div>
                         </div>
-                        <div class="post-info-action" data-postId="<?= $block->escapeHtml($post->getId()); ?>">
-                            <div class="mpblog-post-duplicate">
-                                <img src="<?= $this->getViewFileUrl('Mageplaza_Blog::media/images/duplicate.svg') ?>"
-                                     align="middle"
-                                     alt="<?= $block->escapeHtml(__('Duplicate')); ?>"
-                                     title="<?= /* @noEscape */
-                                        __('Duplicate') ?>"
-                                />
-                            </div>
-                            <div class="mpblog-post-edit">
-                                <img src="<?= $this->getViewFileUrl('Mageplaza_Blog::media/images/writing.svg') ?>"
-                                     align="middle"
-                                     alt="<?= $block->escapeHtml(__('Edit')); ?>"
-                                     title="<?= /* @noEscape */
-                                        __('Edit') ?>"
-                                />
-                            </div>
-                            <div class="mpblog-post-delete">
-                                <img src="<?= $this->getViewFileUrl('Mageplaza_Blog::media/images/delete.svg') ?>"
-                                     align="middle"
-                                     alt="<?= $block->escapeHtml(__('Delete')) ?>"
-                                     title="<?= /* @noEscape */
-                                        __('Delete') ?>"
-                                />
-                            </div>
-                        </div>
                     </div>
-                </div>
-                <?php if ($i++ % 2 == 0): ?>
-                    <div class="mp-clear"></div>
-                <?php endif; ?>
-            <?php endforeach; ?>
-            <div class="mp-clear"></div>
-        </div>
-        <?= $block->getPagerHtml() ?>
-    <?php else: ?>
-        <?= __('There are no posts at this moment'); ?>
-    <?php endif; ?>
-    <?= $this->getChildHtml('additional'); ?>
-</div>
-<script type="text/x-magento-init">
+                    <?php $i++; ?>
+                    <?php if ($i % 2 == 0) : ?>
+                        <div class="mp-clear"></div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                <div class="mp-clear"></div>
+            </div>
+            <?= $block->getPagerHtml() ?>
+        <?php else : ?>
+            <?= $block->escapeHtml(__('There are no posts at this moment')) ?>
+        <?php endif; ?>
+        <?= /* @noEscape */ $block->getChildHtml('additional') ?>
+    </div>
+    <script type="text/x-magento-init">
             {
                 "*": {
                     "Mageplaza_Blog/js/managePost": {
@@ -127,12 +130,11 @@
                     }
                 }
             }
-
-</script>
-<script>
-    require(['jquery'], function ($) {
-        $('.limiter').css('float', 'right');
-    });
-</script>
-<div id="mp-blog-new-post-popup" style="display: none"><?= $block->getChildHtml('mpblog_manage_post') ?></div>
+    </script>
+    <script>
+        require(['jquery'], function ($) {
+            $('.limiter').css('float', 'right');
+        });
+    </script>
+    <div id="mp-blog-new-post-popup" style="display: none"><?= $block->getChildHtml('mpblog_manage_post') ?></div>
 <?php endif; ?>

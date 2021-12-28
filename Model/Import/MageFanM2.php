@@ -22,16 +22,18 @@
 namespace Mageplaza\Blog\Model\Import;
 
 use Exception;
+use Magento\Catalog\Model\Category;
+use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Model\Author;
 use Mageplaza\Blog\Model\CategoryFactory;
-use Mageplaza\Blog\Model\CommentFactory;
+use Mageplaza\Blog\Model\Comment;
 use Mageplaza\Blog\Model\Config\Source\AuthorType;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
-use Mageplaza\Blog\Model\PostFactory;
-use Mageplaza\Blog\Model\TagFactory;
-use Mageplaza\Blog\Model\TopicFactory;
+use Mageplaza\Blog\Model\Post;
+use Mageplaza\Blog\Model\Tag;
+use Mageplaza\Blog\Model\Topic;
 
 /**
  * Class MageFanM2
@@ -45,48 +47,56 @@ class MageFanM2 extends AbstractImport
      * @var string
      */
     const TABLE_POST = 'magefan_blog_post';
+
     /**
      * Magefan Related Post table name
      *
      * @var string
      */
     const TABLE_POST_RELATED = 'magefan_blog_post_relatedpost';
+
     /**
      * Magefan Tag table name
      *
      * @var string
      */
     const TABLE_TAG = 'magefan_blog_tag';
+
     /**
      * Magefan Post-Tag Relationship table name
      *
      * @var string
      */
     const TABLE_POST_TAG = 'magefan_blog_post_tag';
+
     /**
      * Magefan Category table name
      *
      * @var string
      */
     const TABLE_CATEGORY = 'magefan_blog_category';
+
     /**
      * Magefan Post-Category Relationship table name
      *
      * @var string
      */
     const TABLE_POST_CATEGORY = 'magefan_blog_post_category';
+
     /**
      * Magefan Comment table name
      *
      * @var string
      */
     const TABLE_COMMENT = 'magefan_blog_comment';
+
     /**
      * Magefan Customer table name
      *
      * @var string
      */
     const TABLE_CUSTOMER = 'customer_entity';
+
     /**
      * Magefan Admin user table name
      *
@@ -95,16 +105,15 @@ class MageFanM2 extends AbstractImport
     const TABLE_ADMIN_USER = 'admin_user';
 
     /**
-     * Run imports
-     *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return bool
      * @throws LocalizedException
      */
     public function run($data, $connection)
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         mysqli_query($connection, 'SET NAMES "utf8"');
 
         if ($this->_importPosts($data, $connection) && $data['type'] == $this->_type['magefan']) {
@@ -122,14 +131,15 @@ class MageFanM2 extends AbstractImport
     /**
      * Import posts
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return bool|mixed
      * @throws LocalizedException
      */
     protected function _importPosts($data, $connection)
     {
+        // phpcs:disable Magento2.SQL.RawQuery
         $sqlString = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POST . "`";
         $result    = mysqli_query($connection, $sqlString);
         $isReplace = true;
@@ -138,9 +148,9 @@ class MageFanM2 extends AbstractImport
         }
 
         $this->_resetRecords();
-        /** @var PostFactory */
+        /** @var Post $postModel */
         $postModel = $this->_postFactory->create();
-        /** @var TopicFactory */
+        /** @var Topic $topicModel */
         $topicModel   = $this->_topicFactory->create();
         $oldPostIds   = [];
         $importSource = $data['type'] . '-' . $data['database'];
@@ -255,8 +265,7 @@ class MageFanM2 extends AbstractImport
                 . "` GROUP BY post_id";
             $topicCount  = 1;
             $oldTopicIds = [];
-
-            $result = mysqli_query($connection, $topicSql);
+            $result      = mysqli_query($connection, $topicSql);
 
             while ($topic = mysqli_fetch_assoc($result)) {
                 if ($topicModel->getResource()->isImported($importSource, $topic['post_id']) == false) {
@@ -282,6 +291,7 @@ class MageFanM2 extends AbstractImport
             $topicPostTable = $this->_resourceConnection->getTableName('mageplaza_blog_post_topic');
             $topicPostSql   = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POST_RELATED . "`";
             $result         = mysqli_query($connection, $topicPostSql);
+
             while ($topicPost = mysqli_fetch_assoc($result)) {
                 $newPostId  = array_search($topicPost['related_id'], $oldPostIds);
                 $newTopicId = array_search($topicPost['post_id'], $oldTopicIds);
@@ -306,8 +316,8 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return mixed|void
      * @throws LocalizedException
@@ -320,9 +330,7 @@ class MageFanM2 extends AbstractImport
         $isReplace = true;
         $oldTagIds = [];
 
-        /**
-         * @var TagFactory
-         */
+        /** @var Tag $tagModel */
         $tagModel     = $this->_tagFactory->create();
         $importSource = $data['type'] . '-' . $data['database'];
 
@@ -457,8 +465,8 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return mixed|void
      * @throws LocalizedException
@@ -638,22 +646,22 @@ class MageFanM2 extends AbstractImport
     /**
      * Import comments
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @throws LocalizedException
      */
     protected function _importComments($data, $connection)
     {
-        $accountManage = $this->_objectManager->create('\Magento\Customer\Model\AccountManagement');
-        $sqlString     = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_COMMENT . "` 
-                      LEFT JOIN `" . $data['table_prefix'] . self::TABLE_CUSTOMER . "` 
+        $accountManage = $this->_objectManager->create(AccountManagement::class);
+        $sqlString     = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_COMMENT . "`
+                      LEFT JOIN `" . $data['table_prefix'] . self::TABLE_CUSTOMER . "`
                       ON `" . $data['table_prefix'] . self::TABLE_COMMENT . "`.`customer_id` = `"
             . $data['table_prefix'] . self::TABLE_CUSTOMER . "`.`entity_id`";
         $result        = mysqli_query($connection, $sqlString);
         $this->_resetRecords();
         $isReplace = true;
-        /** @var CommentFactory */
+        /** @var Comment $commentModel */
         $commentModel  = $this->_commentFactory->create();
         $oldCommentIds = [];
         $newComments   = [];
@@ -736,21 +744,24 @@ class MageFanM2 extends AbstractImport
                     /** update comments */
                     $where = ['comment_id = ?' => (int) $comment['is_imported']];
                     $this->_resourceConnection->getConnection()
-                        ->update($this->_resourceConnection
-                            ->getTableName('mageplaza_blog_comment'), [
-                            'post_id'       => $comment['post_id'],
-                            'entity_id'     => $comment['entity_id'],
-                            'has_reply'     => $comment['has_reply'],
-                            'is_reply'      => $comment['is_reply'],
-                            'reply_id'      => $comment['reply_id'],
-                            'content'       => $comment['content'],
-                            'created_at'    => $comment['created_at'],
-                            'status'        => $comment['status'],
-                            'store_ids'     => $comment['store_ids'],
-                            'user_name'     => $comment['user_name'],
-                            'user_email'    => $comment['user_email'],
-                            'import_source' => $comment['import_source']
-                        ], $where);
+                        ->update(
+                            $this->_resourceConnection->getTableName('mageplaza_blog_comment'),
+                            [
+                                'post_id'       => $comment['post_id'],
+                                'entity_id'     => $comment['entity_id'],
+                                'has_reply'     => $comment['has_reply'],
+                                'is_reply'      => $comment['is_reply'],
+                                'reply_id'      => $comment['reply_id'],
+                                'content'       => $comment['content'],
+                                'created_at'    => $comment['created_at'],
+                                'status'        => $comment['status'],
+                                'store_ids'     => $comment['store_ids'],
+                                'user_name'     => $comment['user_name'],
+                                'user_email'    => $comment['user_email'],
+                                'import_source' => $comment['import_source']
+                            ],
+                            $where
+                        );
                     $this->_successCount++;
                     $this->_hasData = true;
                 } else {
@@ -816,8 +827,8 @@ class MageFanM2 extends AbstractImport
     /**
      * Import Author
      *
-     * @param $data
-     * @param $connection
+     * @param array $data
+     * @param null $connection
      *
      * @return mixed|void
      */
@@ -876,8 +887,8 @@ class MageFanM2 extends AbstractImport
         $oldPostIds = $this->_registry->registry('mageplaza_import_post_ids_collection');
         $updateData = [];
         foreach ($oldUserIds as $newUserId => $oldUserId) {
-            $relationshipSql = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POST . "` 
-                                WHERE author_id = " . $oldUserId;
+            $relationshipSql = "SELECT * FROM `" . $data['table_prefix'] . self::TABLE_POST . "` WHERE author_id = "
+                . $oldUserId;
             $result          = mysqli_query($connection, $relationshipSql);
             while ($postAuthor = mysqli_fetch_assoc($result)) {
                 $newPostId              = array_search($postAuthor['post_id'], $oldPostIds);
@@ -899,8 +910,10 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $postModel
-     * @param $post
+     * @param Post $postModel
+     * @param array $post
+     *
+     * @throws Exception
      */
     private function _addPosts($postModel, $post)
     {
@@ -926,42 +939,45 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $post
-     * @param $where
+     * @param array $post
+     * @param array $where
      */
     private function _updatePosts($post, $where)
     {
         $this->_resourceConnection->getConnection()
-            ->update($this->_resourceConnection
-                ->getTableName('mageplaza_blog_post'), [
-                'name'              => $post['name'],
-                'short_description' => $post['short_description'],
-                'post_content'      => $post['post_content'],
-                'url_key'           => $post['url_key'],
-                'image'             => $post['image'],
-                'created_at'        => $post['created_at'],
-                'updated_at'        => $post['updated_at'],
-                'publish_date'      => $post['publish_date'],
-                'enabled'           => $post['enabled'],
-                'in_rss'            => $post['in_rss'],
-                'allow_comment'     => $post['allow_comment'],
-                'store_ids'         => $post['store_ids'],
-                'meta_robots'       => $post['meta_robots'],
-                'meta_keywords'     => $post['meta_keywords'],
-                'meta_description'  => $post['meta_description'],
-                'import_source'     => $post['import_source']
-            ], $where);
-        $this->_resourceConnection->getConnection()
-            ->delete($this->_resourceConnection
-                ->getTableName('mageplaza_blog_post_category'), $where);
-        $this->_resourceConnection->getConnection()
-            ->delete($this->_resourceConnection
-                ->getTableName('mageplaza_blog_post_tag'), $where);
+            ->update(
+                $this->_resourceConnection->getTableName('mageplaza_blog_post'),
+                [
+                    'name'              => $post['name'],
+                    'short_description' => $post['short_description'],
+                    'post_content'      => $post['post_content'],
+                    'url_key'           => $post['url_key'],
+                    'image'             => $post['image'],
+                    'created_at'        => $post['created_at'],
+                    'updated_at'        => $post['updated_at'],
+                    'publish_date'      => $post['publish_date'],
+                    'enabled'           => $post['enabled'],
+                    'in_rss'            => $post['in_rss'],
+                    'allow_comment'     => $post['allow_comment'],
+                    'store_ids'         => $post['store_ids'],
+                    'meta_robots'       => $post['meta_robots'],
+                    'meta_keywords'     => $post['meta_keywords'],
+                    'meta_description'  => $post['meta_description'],
+                    'import_source'     => $post['import_source']
+                ],
+                $where
+            );
+        $this->_resourceConnection->getConnection()->delete($this->_resourceConnection
+            ->getTableName('mageplaza_blog_post_category'), $where);
+        $this->_resourceConnection->getConnection()->delete($this->_resourceConnection
+            ->getTableName('mageplaza_blog_post_tag'), $where);
     }
 
     /**
-     * @param $tagModel
-     * @param $tag
+     * @param Tag $tagModel
+     * @param array $tag
+     *
+     * @throws Exception
      */
     private function _addTags($tagModel, $tag)
     {
@@ -979,29 +995,34 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $tag
-     * @param $where
+     * @param array $tag
+     * @param array $where
      */
     private function _updateTags($tag, $where)
     {
         $this->_resourceConnection->getConnection()
-            ->update($this->_resourceConnection
-                ->getTableName('mageplaza_blog_tag'), [
-                'name'             => $tag['name'],
-                'url_key'          => $tag['url_key'],
-                'meta_robots'      => $tag['meta_robots'],
-                'meta_description' => $tag['meta_description'],
-                'meta_keywords'    => $tag['meta_keywords'],
-                'meta_title'       => $tag['meta_title'],
-                'store_ids'        => $tag['store_ids'],
-                'enabled'          => $tag['enabled'],
-                'import_source'    => $tag['import_source']
-            ], $where);
+            ->update(
+                $this->_resourceConnection->getTableName('mageplaza_blog_tag'),
+                [
+                    'name'             => $tag['name'],
+                    'url_key'          => $tag['url_key'],
+                    'meta_robots'      => $tag['meta_robots'],
+                    'meta_description' => $tag['meta_description'],
+                    'meta_keywords'    => $tag['meta_keywords'],
+                    'meta_title'       => $tag['meta_title'],
+                    'store_ids'        => $tag['store_ids'],
+                    'enabled'          => $tag['enabled'],
+                    'import_source'    => $tag['import_source']
+                ],
+                $where
+            );
     }
 
     /**
-     * @param $categoryModel
-     * @param $category
+     * @param Category $categoryModel
+     * @param array $category
+     *
+     * @throws Exception
      */
     private function _addCategories($categoryModel, $category)
     {
@@ -1020,23 +1041,26 @@ class MageFanM2 extends AbstractImport
     }
 
     /**
-     * @param $category
-     * @param $where
+     * @param array $category
+     * @param array $where
      */
     private function _updateCategories($category, $where)
     {
         $this->_resourceConnection->getConnection()
-            ->update($this->_resourceConnection
-                ->getTableName('mageplaza_blog_category'), [
-                'name'             => $category['name'],
-                'url_key'          => $category['url_key'],
-                'meta_robots'      => $category['meta_robots'],
-                'store_ids'        => $category['store_ids'],
-                'enabled'          => $category['enabled'],
-                'meta_description' => $category['meta_description'],
-                'meta_keywords'    => $category['meta_keywords'],
-                'meta_title'       => $category['meta_title'],
-                'import_source'    => $category['import_source']
-            ], $where);
+            ->update(
+                $this->_resourceConnection->getTableName('mageplaza_blog_category'),
+                [
+                    'name'             => $category['name'],
+                    'url_key'          => $category['url_key'],
+                    'meta_robots'      => $category['meta_robots'],
+                    'store_ids'        => $category['store_ids'],
+                    'enabled'          => $category['enabled'],
+                    'meta_description' => $category['meta_description'],
+                    'meta_keywords'    => $category['meta_keywords'],
+                    'meta_title'       => $category['meta_title'],
+                    'import_source'    => $category['import_source']
+                ],
+                $where
+            );
     }
 }

@@ -19,13 +19,15 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
+use Mageplaza\Blog\Block\Category\Widget;
+
+/** @var Widget $block */
 $tree = $block->getTree();
-if ($tree):
-    ?>
+if ($tree) : ?>
     <div class="mp-sidebar mpcss">
         <div class="row">
             <div class="block-title col-xs-12 sidebar-categories">
-                <p class="block-mp-sidebar-heading" role="heading" aria-label="2"><?= __('Categories') ?></p>
+                <p class="block-mp-sidebar-heading" role="heading" aria-label="2"><?= $block->escapeHtml(__('Categories')) ?></p>
             </div>
             <div class="col-xs-12">
                 <?= $block->getCategoryTreeHtml($tree) ?>

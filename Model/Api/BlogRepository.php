@@ -31,11 +31,11 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection as SalesAbstractCollection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Api\BlogRepositoryInterface;
 use Mageplaza\Blog\Api\Data\AuthorInterface;
 use Mageplaza\Blog\Api\Data\CategoryInterface;
-use Mageplaza\Blog\Api\Data\CommentInterface;
 use Mageplaza\Blog\Api\Data\PostInterface;
 use Mageplaza\Blog\Api\Data\TagInterface;
 use Mageplaza\Blog\Api\Data\TopicInterface;
@@ -50,7 +50,7 @@ use Mageplaza\Blog\Block\MonthlyArchive\Widget as MonthlyWidget;
 use Mageplaza\Blog\Model\PostLikeFactory;
 
 /**
- * Class PostRepositoryInterface
+ * Class BlogRepository
  * @package Mageplaza\Blog\Model\Api
  */
 class BlogRepository implements BlogRepositoryInterface
@@ -154,14 +154,13 @@ class BlogRepository implements BlogRepositoryInterface
         $dateArrayUnique = $this->monthlyWidget->getDateArrayUnique();
         $dateLabel       = $this->monthlyWidget->getDateLabel();
         $monthlyAr       = [];
+        // phpcs:disable Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         for ($i = 0; $i < $this->monthlyWidget->getDateCount(); $i++) {
             $monthly = new MonthlyArchive();
             $monthly->setLabel($dateLabel[$i])->setPostCount((int) $dateArrayCount[$i])
                 ->setLink(
                     $this->_helperData->getBlogUrl(
-                        date(
-                            'Y-m',
-                            $this->date->timestamp($dateArrayUnique[$i])),
+                        date('Y-m', $this->date->timestamp($dateArrayUnique[$i])),
                         Data::TYPE_MONTHLY
                     )
                 );
@@ -172,11 +171,16 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * @param string $monthly
+     * @param string $year
+     *
+     * @return PostInterface[]
+     * @throws NoSuchEntityException
      */
-    public function getPostMonthlyArchive($monthly, $year) {
+    public function getPostMonthlyArchive($monthly, $year)
+    {
 
-        return $this->_helperData->getPostCollection(Data::TYPE_MONTHLY, $year.'-'.$monthly)->getItems();
+        return $this->_helperData->getPostCollection(Data::TYPE_MONTHLY, $year . '-' . $monthly)->getItems();
     }
 
     /**
@@ -874,7 +878,7 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return bool
      */
@@ -915,7 +919,7 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param $authorId
+     * @param string $authorId
      *
      * @return bool
      */
@@ -928,7 +932,7 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
     /**
-     * @param \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $searchResult
+     * @param SalesAbstractCollection|AbstractCollection $searchResult
      * @param SearchCriteriaInterface $searchCriteria
      *
      * @return mixed
@@ -943,11 +947,8 @@ class BlogRepository implements BlogRepositoryInterface
 
     /**
      * @param AbstractCollection $collection
-     */
-    /**
-     * @param $collection
      *
-     * @return PostInterface[]|CategoryInterface[]|TagInterface[]|TopicInterface[]|CommentInterface[]
+     * @return mixed
      */
     protected function getAllItem($collection)
     {

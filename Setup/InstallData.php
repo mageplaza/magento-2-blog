@@ -32,7 +32,8 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class InstallData implements InstallDataInterface
 {
     /**
-     * {@inheritdoc}
+     * @param ModuleDataSetupInterface $setup
+     * @param ModuleContextInterface $context
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -41,13 +42,14 @@ class InstallData implements InstallDataInterface
 
         /** Add root category */
         $sampleTemplates = [
-            'path' => '1',
-            'position' => 0,
+            'path'           => '1',
+            'position'       => 0,
             'children_count' => 0,
-            'level' => 0,
-            'name' => 'ROOT',
-            'url_key' => 'root'
+            'level'          => 0,
+            'name'           => 'ROOT',
+            'url_key'        => 'root'
         ];
+
         $setup->getConnection()->insert($setup->getTable('mageplaza_blog_category'), $sampleTemplates);
 
         $installer->endSetup();

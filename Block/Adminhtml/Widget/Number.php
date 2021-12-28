@@ -25,8 +25,8 @@ use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
- * Class Collection
- * @package Mageplaza\Blog\Model\ResourceModel\PostLike
+ * Class Number
+ * @package Mageplaza\Blog\Block\Adminhtml\Widget
  */
 class Number extends Column
 {
@@ -37,8 +37,9 @@ class Number extends Column
      */
     public function prepareElementHtml(AbstractElement $element)
     {
-        $html = '<input type="text" name="' . $element->getName() . '" id="' . $element->getId() . '"
-        class=" input-text admin__control-text required-entry _required validate-digits" value="' . $element->getValue() . '">';
+        $html = '<input type="text" name="' . $element->getName() . '" id="' . $element->getId()
+            . '" class=" input-text admin__control-text required-entry _required validate-digits" value="'
+            . $element->getValue() . '">';
         $element->setData('value', '');
         $element->setData('after_element_html', $html);
 

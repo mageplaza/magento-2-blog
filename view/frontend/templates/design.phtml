@@ -19,9 +19,11 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-/** @var \Mageplaza\Blog\Block\Design $block */
-?>
+use Mageplaza\Blog\Block\Design;
 
+/** @var Design $block */
+
+?>
 <script type="text/javascript">
     require(['jquery'], function ($) {
         $(window).load(function () {
@@ -30,23 +32,24 @@
             if (body.hasClass('page-layout-1column')) {
                 $('.columns').find('.sidebar.sidebar-main').remove();
             }
-            <?php if ($block->getCurrentTheme() == "Etheme/yourstore"):?>
+            <?php if ($block->getCurrentTheme() === "Etheme/yourstore") : ?>
             body.addClass('mpblog-etheme-yourstore');
             <?php endif; ?>
         });
     });
 </script>
-
 <?php $color = $block->getHelper()->getBlogConfig('general/font_color'); ?>
 <style type="text/css">
-    .mp-blog-review-title{
+    .mp-blog-review-title {
         text-align: center;
     }
-    #mp-blog-review{
+
+    #mp-blog-review {
         position: relative;
         height: 65px;
     }
-    #mp-blog-review  div{
+
+    #mp-blog-review div {
         padding: 10px 20px;
         color: #ffffff;
         cursor: pointer;
@@ -55,26 +58,31 @@
         position: absolute;
         margin-top: 10px;
     }
-    .mp-blog-like{
+
+    .mp-blog-like {
         background-color: #6AA84F;
         left: 33%;
     }
-    .mp-blog-dislike{
+
+    .mp-blog-dislike {
         background-color: #EC3A3C;
         left: 52%;
     }
+
     @media (max-width: 1024px) {
-        .mp-blog-like{
+        .mp-blog-like {
             left: 28%;
         }
     }
+
     @media (max-width: 768px) {
-        .mp-blog-like{
+        .mp-blog-like {
             left: 20%;
         }
     }
+
     @media (max-width: 375px) {
-        .mp-blog-like{
+        .mp-blog-like {
             left: 0;
         }
     }
@@ -111,7 +119,7 @@
         text-decoration: none;
     }
 
-    .post-view-image{
+    .post-view-image {
         text-align: center;
     }
 
@@ -124,41 +132,41 @@
     .products-same-post a.product-item-link:hover,
     a.mp-relate-link,
     .mpblog-product-name {
-        color: <?= $color ?> !important;
+        color: <?= /** @noEscape */ $color ?> !important;
     }
 
     a.label.label-default.tags-list:hover,
     a.label.label-default.tags-list:focus {
-        background: <?= $color ?>;
+        background: <?= /** @noEscape */ $color ?>;
         color: #fff !important;
     }
 
     .list-post-tabs a {
         background: #fbfbfb;
-        color: <?= $color ?>;
+        color: <?= /** @noEscape */ $color ?>;
     }
 
     /*Site Map CSS*/
     .mp-sidebar a.sitemap-link,
     .menu-archives a.list-archives:hover {
         text-decoration: none !important;
-        color: <?= $color ?> !important;
+        color: <?= /** @noEscape */ $color ?> !important;
     }
 
-    .mp-sidebar .row div{
+    .mp-sidebar .row div {
         width: 100%;
     }
 
     /*Comment CSS*/
     button.default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit {
-        background: <?= $color ?> !important;
+        background: <?= /** @noEscape */ $color ?> !important;
         color: #fff;
         border-color: #999 !important;
     }
 
     span.cmt-row__cmt-username {
         font-weight: 600;
-        color: <?= $color ?>;
+        color: <?= /** @noEscape */ $color ?>;
     }
 
     a.interactions__btn-actions.mpblog-like {
@@ -166,23 +174,23 @@
     }
 
     a.interactions__btn-actions.mpblog-liked {
-        color: <?= $color ?>;
+        color: <?= /** @noEscape */ $color ?>;
     }
 
     a.interactions__btn-actions {
-        color: <?= $color ?>;
+        color: <?= /** @noEscape */ $color ?>;
 
     }
 
     /*Widget CSS*/
     .widget-title a {
-        color: <?= $color ?>;
+        color: <?= /** @noEscape */ $color ?>;
         font-size: 26px;
     }
 
     /*Author CSS*/
     .author-name h3 {
-        color: <?= $color ?>;
+        color: <?= /** @noEscape */ $color ?>;
         text-align: center;
     }
 </style>
