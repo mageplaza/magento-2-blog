@@ -86,7 +86,7 @@ class Form extends AbstractCategory
     }
 
     /**
-     * @inheritdoc
+     * @return AbstractCategory
      * @throws LocalizedException
      */
     protected function _prepareLayout()
@@ -116,14 +116,14 @@ class Form extends AbstractCategory
         ]);
 
         // Delete button
-        if ($categoryId && !in_array($categoryId, $this->getRootIds()) && !$this->getRequest()->getParam('duplicate')) {
+        if ($categoryId && !in_array($categoryId, [1]) && !$this->getRequest()->getParam('duplicate')) {
             $this->addButton('delete', [
                 'id'      => 'delete',
                 'label'   => __('Delete Category'),
                 'onclick' => "categoryDelete('" . $this->getUrl(
-                    'mageplaza_blog/*/delete',
-                    ['_current' => true]
-                ) . "')",
+                        'mageplaza_blog/*/delete',
+                        ['_current' => true]
+                    ) . "')",
                 'class'   => 'delete'
             ]);
         }
@@ -190,8 +190,8 @@ class Form extends AbstractCategory
     }
 
     /**
-     * @param $alias
-     * @param $config
+     * @param string $alias
+     * @param array $config
      *
      * @return $this
      * @throws LocalizedException
@@ -305,7 +305,7 @@ class Form extends AbstractCategory
     }
 
     /**
-     * @param $buttonId
+     * @param int $buttonId
      * @param array $data
      *
      * @throws LocalizedException
@@ -333,7 +333,7 @@ class Form extends AbstractCategory
     }
 
     /**
-     * @param $childId
+     * @param int $childId
      * @param null $blockClassName
      *
      * @return BlockInterface

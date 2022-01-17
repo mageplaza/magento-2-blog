@@ -22,7 +22,9 @@
 namespace Mageplaza\Blog\Controller\Adminhtml\Category;
 
 use Exception;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Mageplaza\Blog\Controller\Adminhtml\Category;
 
 /**
@@ -32,22 +34,35 @@ use Mageplaza\Blog\Controller\Adminhtml\Category;
 class Delete extends Category
 {
     /**
-     * @return Redirect
+     * @return ResponseInterface|Redirect|ResultInterface
      */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id = $this->getRequest()->getParam('id')) {
             try {
-                $this->categoryFactory->create()
-                    ->load($id)
-                    ->delete();
+                $categoryFactory = $this->categoryFactory->create();
+                if ($id !== 1) {
+                    $parentCategoryCollection = $categoryFactory->getCollection()
+                        ->addFieldToFilter('category_id', ['eq' => $id])
+                        ->addFieldToFilter('parent_id', ['eq' => 1]);
+                    if ($parentCategoryCollection->getSize()) {
+                        $pathCategory = $categoryFactory->load($id)->getPath();
+                        $collections  = $categoryFactory->getCollection()
+                            ->addFieldToFilter('path', ['like' => $pathCategory . '%']);
+                        foreach ($collections as $collection) {
+                            $collection->delete();
+                        }
+                    } else {
+                        $categoryFactory->load($id)->delete();
+                    }
 
-                $this->messageManager->addSuccessMessage(__('The Blog Category has been deleted.'));
+                    $this->messageManager->addSuccessMessage(__('The Blog Category has been deleted.'));
 
-                $resultRedirect->setPath('mageplaza_blog/*/');
+                    $resultRedirect->setPath('mageplaza_blog/*/');
 
-                return $resultRedirect;
+                    return $resultRedirect;
+                }
             } catch (Exception $e) {
                 // display error message
                 $this->messageManager->addErrorMessage($e->getMessage());
