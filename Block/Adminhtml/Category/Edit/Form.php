@@ -32,6 +32,7 @@ use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\BlockInterface;
+use Mageplaza\Blog\Model\Category as BlogCategory;
 use Mageplaza\Blog\Model\CategoryFactory as BlogCategoryFactory;
 use Mageplaza\Blog\Model\ResourceModel\Category\Tree as BlogResourceTree;
 
@@ -120,10 +121,7 @@ class Form extends AbstractCategory
             $this->addButton('delete', [
                 'id'      => 'delete',
                 'label'   => __('Delete Category'),
-                'onclick' => "categoryDelete('" . $this->getUrl(
-                        'mageplaza_blog/*/delete',
-                        ['_current' => true]
-                    ) . "')",
+                'onclick' => "categoryDelete('" . $this->getUrl('mageplaza_blog/*/delete', ['_current' => true]) . "')",
                 'class'   => 'delete'
             ]);
         }
@@ -170,7 +168,7 @@ class Form extends AbstractCategory
      */
     public function getSaveUrl(array $args = [])
     {
-        /** @var \Mageplaza\Blog\Model\Category $category */
+        /** @var BlogCategory $category */
         $category = $this->_coreRegistry->registry('category');
         $params   = ['_current' => false, '_query' => false];
         if ($category->getDuplicate()) {
