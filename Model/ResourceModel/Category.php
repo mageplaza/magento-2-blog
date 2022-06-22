@@ -30,6 +30,7 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\Category as CategoryModel;
+use Zend_Db_Expr;
 
 /**
  * Class Category
@@ -77,9 +78,9 @@ class Category extends AbstractDb
         ManagerInterface $eventManager,
         Data $helperData
     ) {
-        $this->helperData        = $helperData;
-        $this->date              = $date;
-        $this->eventManager      = $eventManager;
+        $this->helperData   = $helperData;
+        $this->date         = $date;
+        $this->eventManager = $eventManager;
 
         parent::__construct($context);
 
@@ -357,7 +358,7 @@ class Category extends AbstractDb
         $childrenCount = (int) $this->getChildrenCount($category->getId()) + 1;
         $table         = $this->getMainTable();
         $adapter       = $this->getConnection();
-        $levelFiled    = $adapter->quoteIdentifier('level');
+        $levelField    = $adapter->quoteIdentifier('level');
         $pathField     = $adapter->quoteIdentifier('path');
 
         /**
@@ -365,7 +366,7 @@ class Category extends AbstractDb
          */
         $adapter->update(
             $table,
-            ['children_count' => 'children_count - ' . $childrenCount],
+            ['children_count' => new Zend_Db_Expr('children_count - ' . $childrenCount)],
             ['category_id IN(?)' => $category->getParentIds()]
         );
 
@@ -374,7 +375,7 @@ class Category extends AbstractDb
          */
         $adapter->update(
             $table,
-            ['children_count' => 'children_count + ' . $childrenCount],
+            ['children_count' => new Zend_Db_Expr('children_count + ' . $childrenCount)],
             ['category_id IN(?)' => $newParent->getPathIds()]
         );
 
@@ -389,9 +390,14 @@ class Category extends AbstractDb
         $adapter->update(
             $table,
             [
-                'path'  => 'REPLACE(' . $pathField . ',' . $adapter->quote($category->getPath() . '/') . ', '
-                    . $adapter->quote($newPath . '/') . ')',
-                'level' => $levelFiled . ' + ' . $levelDisposition
+                'path'  => new Zend_Db_Expr(
+                    'REPLACE(' . $pathField . ',' . $adapter->quote(
+                        $category->getPath() . '/'
+                    ) . ', ' . $adapter->quote(
+                        $newPath . '/'
+                    ) . ')'
+                ),
+                'level' => new Zend_Db_Expr($levelField . ' + ' . $levelDisposition)
             ],
             [$pathField . ' LIKE ?' => $category->getPath() . '/%']
         );

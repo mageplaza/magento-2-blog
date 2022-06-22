@@ -32,6 +32,7 @@ use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\BlockInterface;
+use Mageplaza\Blog\Model\Category as BlogCategory;
 use Mageplaza\Blog\Model\CategoryFactory as BlogCategoryFactory;
 use Mageplaza\Blog\Model\ResourceModel\Category\Tree as BlogResourceTree;
 
@@ -86,7 +87,7 @@ class Form extends AbstractCategory
     }
 
     /**
-     * @inheritdoc
+     * @return AbstractCategory
      * @throws LocalizedException
      */
     protected function _prepareLayout()
@@ -116,14 +117,11 @@ class Form extends AbstractCategory
         ]);
 
         // Delete button
-        if ($categoryId && !in_array($categoryId, $this->getRootIds()) && !$this->getRequest()->getParam('duplicate')) {
+        if ($categoryId && $categoryId != 1 && !$this->getRequest()->getParam('duplicate')) {
             $this->addButton('delete', [
                 'id'      => 'delete',
                 'label'   => __('Delete Category'),
-                'onclick' => "categoryDelete('" . $this->getUrl(
-                    'mageplaza_blog/*/delete',
-                    ['_current' => true]
-                ) . "')",
+                'onclick' => "categoryDelete('" . $this->getUrl('mageplaza_blog/*/delete', ['_current' => true]) . "')",
                 'class'   => 'delete'
             ]);
         }
@@ -170,7 +168,7 @@ class Form extends AbstractCategory
      */
     public function getSaveUrl(array $args = [])
     {
-        /** @var \Mageplaza\Blog\Model\Category $category */
+        /** @var BlogCategory $category */
         $category = $this->_coreRegistry->registry('category');
         $params   = ['_current' => false, '_query' => false];
         if ($category->getDuplicate()) {
@@ -190,8 +188,8 @@ class Form extends AbstractCategory
     }
 
     /**
-     * @param $alias
-     * @param $config
+     * @param string $alias
+     * @param array $config
      *
      * @return $this
      * @throws LocalizedException
@@ -305,7 +303,7 @@ class Form extends AbstractCategory
     }
 
     /**
-     * @param $buttonId
+     * @param int $buttonId
      * @param array $data
      *
      * @throws LocalizedException
@@ -333,7 +331,7 @@ class Form extends AbstractCategory
     }
 
     /**
-     * @param $childId
+     * @param int $childId
      * @param null $blockClassName
      *
      * @return BlockInterface
