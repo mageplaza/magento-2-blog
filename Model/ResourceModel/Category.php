@@ -29,6 +29,8 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\Category as CategoryModel;
+use Zend_Db_Expr;
 
 /**
  * Class Category
@@ -98,7 +100,7 @@ class Category extends AbstractDb
     /**
      * Retrieves Blog Category Name from DB by passed id.
      *
-     * @param $id
+     * @param int $id
      *
      * @return string
      * @throws LocalizedException
@@ -128,7 +130,7 @@ class Category extends AbstractDb
         if ($object->isObjectNew()) {
             $object->setCreatedAt($this->date->date());
         }
-        /** @var \Mageplaza\Blog\Model\Category $object */
+        /** @var CategoryModel $object */
         parent::_beforeSave($object);
 
         if (!$object->getChildrenCount()) {
@@ -182,7 +184,7 @@ class Category extends AbstractDb
      */
     protected function _afterSave(AbstractModel $object)
     {
-        /** @var \Mageplaza\Blog\Model\Category $object */
+        /** @var CategoryModel $object */
         if (substr($object->getPath(), -1) === '/') {
             $object->setPath($object->getPath() . $object->getId());
             $this->savePath($object);
@@ -193,7 +195,7 @@ class Category extends AbstractDb
     }
 
     /**
-     * @param $path
+     * @param string $path
      *
      * @return int|string
      */
@@ -223,7 +225,7 @@ class Category extends AbstractDb
     /**
      * Check category url key is exists
      *
-     * @param $urlKey
+     * @param string $urlKey
      *
      * @return string
      * @throws LocalizedException
@@ -242,8 +244,8 @@ class Category extends AbstractDb
     /**
      * Check is imported category
      *
-     * @param $importSource
-     * @param $oldId
+     * @param string $importSource
+     * @param int $oldId
      *
      * @return string
      * @throws LocalizedException
@@ -262,7 +264,7 @@ class Category extends AbstractDb
     /**
      * Update path field
      *
-     * @param $object
+     * @param Object $object
      *
      * @return $this
      * @throws LocalizedException
@@ -341,22 +343,22 @@ class Category extends AbstractDb
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Category $category
-     * @param \Mageplaza\Blog\Model\Category $newParent
+     * @param CategoryModel $category
+     * @param CategoryModel $newParent
      * @param null $afterCategoryId
      *
      * @return $this
      * @throws LocalizedException
      */
     public function changeParent(
-        \Mageplaza\Blog\Model\Category $category,
-        \Mageplaza\Blog\Model\Category $newParent,
+        CategoryModel $category,
+        CategoryModel $newParent,
         $afterCategoryId = null
     ) {
         $childrenCount = (int) $this->getChildrenCount($category->getId()) + 1;
         $table         = $this->getMainTable();
         $adapter       = $this->getConnection();
-        $levelFiled    = $adapter->quoteIdentifier('level');
+        $levelField    = $adapter->quoteIdentifier('level');
         $pathField     = $adapter->quoteIdentifier('path');
 
         /**
@@ -364,7 +366,7 @@ class Category extends AbstractDb
          */
         $adapter->update(
             $table,
-            ['children_count' => 'children_count - ' . $childrenCount],
+            ['children_count' => new Zend_Db_Expr('children_count - ' . $childrenCount)],
             ['category_id IN(?)' => $category->getParentIds()]
         );
 
@@ -373,7 +375,7 @@ class Category extends AbstractDb
          */
         $adapter->update(
             $table,
-            ['children_count' => 'children_count + ' . $childrenCount],
+            ['children_count' => new Zend_Db_Expr('children_count + ' . $childrenCount)],
             ['category_id IN(?)' => $newParent->getPathIds()]
         );
 
@@ -388,9 +390,14 @@ class Category extends AbstractDb
         $adapter->update(
             $table,
             [
-                'path'  => 'REPLACE(' . $pathField . ',' . $adapter->quote($category->getPath() . '/') . ', '
-                    . $adapter->quote($newPath . '/') . ')',
-                'level' => $levelFiled . ' + ' . $levelDisposition
+                'path'  => new Zend_Db_Expr(
+                    'REPLACE(' . $pathField . ',' . $adapter->quote(
+                        $category->getPath() . '/'
+                    ) . ', ' . $adapter->quote(
+                        $newPath . '/'
+                    ) . ')'
+                ),
+                'level' => new Zend_Db_Expr($levelField . ' + ' . $levelDisposition)
             ],
             [$pathField . ' LIKE ?' => $category->getPath() . '/%']
         );
@@ -413,16 +420,16 @@ class Category extends AbstractDb
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Category $category
-     * @param \Mageplaza\Blog\Model\Category $newParent
-     * @param $afterCategoryId
+     * @param CategoryModel $category
+     * @param CategoryModel $newParent
+     * @param int|null $afterCategoryId
      *
      * @return int|string
      * @throws LocalizedException
      */
     public function processPositions(
-        \Mageplaza\Blog\Model\Category $category,
-        \Mageplaza\Blog\Model\Category $newParent,
+        CategoryModel $category,
+        CategoryModel $newParent,
         $afterCategoryId
     ) {
         $table   = $this->getMainTable();
@@ -444,6 +451,7 @@ class Category extends AbstractDb
                 $positionNew = 0;
             }
             $positionNew++;
+            // phpcs:disable Magento2.SQL.RawQuery
             $sql = "UPDATE `" . $table . "` SET `position`= (`position`-1) WHERE `parent_id`= "
                 . $category->getParentId() . " AND `position` >= " . $positionOld;
             $connect->query($sql);
@@ -479,7 +487,7 @@ class Category extends AbstractDb
     }
 
     /**
-     * @param $categoryId
+     * @param int $categoryId
      *
      * @return string
      * @throws LocalizedException
@@ -498,11 +506,11 @@ class Category extends AbstractDb
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Category $category
+     * @param CategoryModel $category
      *
      * @return array
      */
-    public function getPostsPosition(\Mageplaza\Blog\Model\Category $category)
+    public function getPostsPosition(CategoryModel $category)
     {
         $select = $this->getConnection()->select()->from(
             $this->categoryPostTable,
@@ -517,11 +525,11 @@ class Category extends AbstractDb
     }
 
     /**
-     * @param \Mageplaza\Blog\Model\Category $category
+     * @param CategoryModel $category
      *
      * @return $this
      */
-    public function savePostRelation(\Mageplaza\Blog\Model\Category $category)
+    public function savePostRelation(CategoryModel $category)
     {
         $category->setIsChangedPostList(false);
         $id    = $category->getId();
@@ -580,7 +588,7 @@ class Category extends AbstractDb
     }
 
     /**
-     * @param $importType
+     * @param string $importType
      *
      * @throws LocalizedException
      */
