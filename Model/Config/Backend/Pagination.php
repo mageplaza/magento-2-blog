@@ -37,7 +37,7 @@ class Pagination extends Value
     public function beforeSave()
     {
         if (!empty($this->getValue())) {
-            $valueArray = explode(',', $this->getValue());
+            $valueArray = explode(',', $this->getValue() ?? '');
             foreach ($valueArray as $value) {
                 if (!is_numeric($value) || $value < 1) {
                     throw new ValidatorException(__('Pagination value must be a positive integer.'));

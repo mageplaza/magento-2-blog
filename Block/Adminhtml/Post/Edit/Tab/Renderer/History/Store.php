@@ -53,7 +53,7 @@ class Store extends CoreStore
 
         if ($origStores === null && $row->getStoreName()) {
             $scopes = [];
-            foreach (explode("\n", $row->getStoreName()) as $k => $label) {
+            foreach (explode("\n", $row->getStoreName() ?? '') as $k => $label) {
                 $scopes[] = str_repeat('&nbsp;', $k * 3) . $label;
             }
             $out .= implode('<br/>', $scopes) . __(' [deleted]');

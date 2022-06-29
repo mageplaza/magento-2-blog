@@ -157,8 +157,8 @@ class Category extends Multiselect
     public function getValues()
     {
         $values = $this->getValue();
-        if (!is_array($values)) {
-            $values = explode(',', $values);
+        if (!is_array($values)) { 
+            $values = explode('/', $values ?? '');
         }
 
         if (!count($values)) {

@@ -83,8 +83,8 @@ class Router implements RouterInterface
         } elseif (strpos($identifier, $rssAction) !== false) {
             $identifier = $this->checkRssIdentifier($identifier);
         }
-
-        $routePath = explode('/', $identifier);
+ 
+        $ids = explode('/', $identifier ?? '');
         $routeSize = count($routePath);
         if (!$routeSize || ($routeSize > 3) || (array_shift($routePath) !== $this->helper->getRoute())) {
             return null;
@@ -163,9 +163,9 @@ class Router implements RouterInterface
      */
     public function isRss($identifier)
     {
-        $routePath = explode('/', $identifier);
+        $routePath = explode('/', $identifier ?? '');
         $routePath = array_pop($routePath);
-        $routePath = explode('.', $routePath);
+        $routePath = explode('.', $routePath ?? '');
         $action = array_shift($routePath);
 
         return $action === 'rss';

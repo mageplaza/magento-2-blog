@@ -111,7 +111,7 @@ class Collection extends AbstractCollection implements TagSearchResultInterface
         } elseif (is_numeric($tagIds)) {
             $condition = $tagIds;
         } elseif (is_string($tagIds)) {
-            $ids = explode(',', $tagIds);
+            $ids = explode(',', $tagIds ?? '');
             if (empty($ids)) {
                 $condition = $tagIds;
             } else {

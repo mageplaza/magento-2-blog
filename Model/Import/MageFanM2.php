@@ -248,7 +248,7 @@ class MageFanM2 extends AbstractImport
              */
             foreach ($postModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
-                    $postImportSource = explode('-', $item->getImportSource());
+                    $postImportSource = explode('-', $item->getImportSource() ?? '');
                     $importType       = array_shift($postImportSource);
                     if ($importType == $this->_type['magefan']) {
                         $oldPostId                  = array_pop($postImportSource);
@@ -430,7 +430,7 @@ class MageFanM2 extends AbstractImport
             /** Store old tag ids */
             foreach ($tagModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
-                    $tagImportSource = explode('-', $item->getImportSource());
+                    $tagImportSource = explode('-', $item->getImportSource() ?? '');
                     $importType      = array_shift($tagImportSource);
                     if ($importType == $this->_type['magefan']) {
                         $oldTagId                  = array_pop($tagImportSource);
@@ -593,7 +593,7 @@ class MageFanM2 extends AbstractImport
              */
             foreach ($categoryModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
-                    $catImportSource = explode('-', $item->getImportSource());
+                    $catImportSource = explode('-', $item->getImportSource() ?? '');
                     $importType      = array_shift($catImportSource);
                     if ($importType == $this->_type['magefan']) {
                         $oldCategoryId                  = array_pop($catImportSource);
@@ -605,11 +605,11 @@ class MageFanM2 extends AbstractImport
             /** Import parent-child category */
             foreach ($newCategories as $newCatId => $newCategory) {
                 if ($newCategory['path'] != '0' && $newCategory['path'] != null) {
-                    $oldParentId     = explode('/', $newCategory['path']);
+                    $oldParentId     = explode('/', $newCategory['path'] ?? '');
                     $oldParentId     = array_pop($oldParentId);
                     $parentId        = array_search($oldParentId, $oldCategoryIds);
                     $parentPath      = $categoryModel->load($parentId)->getPath();
-                    $parentPaths     = explode('/', $categoryModel->getPath());
+                    $parentPaths     = explode('/', $categoryModel->getPath() ?? '');
                     $level           = count($parentPaths);
                     $newPath         = $parentPath . '/' . $newCatId;
                     $currentCategory = $categoryModel->load($newCatId);
@@ -796,7 +796,7 @@ class MageFanM2 extends AbstractImport
             /** Store old comment ids */
             foreach ($commentModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
-                    $commentImportSource = explode('-', $item->getImportSource());
+                    $commentImportSource = explode('-', $item->getImportSource() ?? '');
                     $importType          = array_shift($commentImportSource);
                     if ($importType == $this->_type['magefan']) {
                         $oldCommentId                  = array_pop($commentImportSource);

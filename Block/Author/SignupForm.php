@@ -71,7 +71,7 @@ class SignupForm extends Frontend
      */
     public function getVersion()
     {
-        $array = explode('/', $this->helperData->getConfigValue('cms/wysiwyg/editor'));
+        $array = explode('/', $this->helperData->getConfigValue('cms/wysiwyg/editor') ?? '');
         if ($array[count($array) - 1] === 'tinymce4Adapter') {
             return 4;
         }

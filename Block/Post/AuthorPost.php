@@ -52,7 +52,7 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
             if ($collection && $collection->getSize()) {
                 $pager         = $this->getLayout()->createBlock(Pager::class, 'mpblog.post.pager');
                 $perPageValues = (string) $this->helperData->getConfigGeneral('pagination');
-                $perPageValues = explode(',', $perPageValues);
+                $perPageValues = explode(',', $perPageValues ?? '');
                 $perPageValues = array_combine($perPageValues, $perPageValues);
 
                 $pager->setAvailableLimit($perPageValues)->setCollection($collection);
@@ -95,7 +95,7 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
      */
     public function getVersion()
     {
-        $array = explode('/', $this->helperData->getConfigValue('cms/wysiwyg/editor'));
+        $array = explode('/', $this->helperData->getConfigValue('cms/wysiwyg/editor') ?? '');
         if ($array[count($array) - 1] === 'tinymce4Adapter') {
             return 4;
         }

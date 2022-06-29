@@ -130,7 +130,7 @@ class Edit extends Category
                 $breadcrumbsPath = $this->_objectManager->get(Session::class)
                     ->getDeletedPath(true);
                 if (!empty($breadcrumbsPath)) {
-                    $breadcrumbsPath = explode('/', $breadcrumbsPath);
+                    $breadcrumbsPath = explode('/', $breadcrumbsPath ?? '');
                     // no need to get parent breadcrumbs if deleting Blog category level 1
                     if (count($breadcrumbsPath) <= 1) {
                         $breadcrumbsPath = '';

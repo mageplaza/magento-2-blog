@@ -844,13 +844,13 @@ class BlogRepository implements BlogRepositoryInterface
     protected function prepareData(&$data)
     {
         if (!empty($data['categories_ids'])) {
-            $data['categories_ids'] = explode(',', $data['categories_ids']);
+            $data['categories_ids'] = explode(',', $data['categories_ids'] ?? '');
         }
         if (!empty($data['tags_ids'])) {
-            $data['tags_ids'] = explode(',', $data['tags_ids']);
+            $data['tags_ids'] = explode(',', $data['tags_ids'] ?? '');
         }
         if (!empty($data['topics_ids'])) {
-            $data['topics_ids'] = explode(',', $data['topics_ids']);
+            $data['topics_ids'] = explode(',', $data['topics_ids'] ?? '');
         }
         if (empty($data['enabled'])) {
             $data['enabled'] = 0;
@@ -890,7 +890,7 @@ class BlogRepository implements BlogRepositoryInterface
 
         if (!empty($data['categories_ids'])) {
             $collection = $this->_helperData->getFactoryByType('category')->create()->getCollection();
-            foreach (explode(',', $data['categories_ids']) as $id) {
+            foreach (explode(',', $data['categories_ids'] ?? '') as $id) {
                 if ($collection->addFieldToFilter('category_id', $id)->count() < 1) {
                     return false;
                 }
@@ -899,7 +899,7 @@ class BlogRepository implements BlogRepositoryInterface
 
         if (!empty($data['tags_ids'])) {
             $collection = $this->_helperData->getFactoryByType('tag')->create()->getCollection();
-            foreach (explode(',', $data['tags_ids']) as $id) {
+            foreach (explode(',', $data['tags_ids'] ?? '') as $id) {
                 if ($collection->addFieldToFilter('tag_id', $id)->count() < 1) {
                     return false;
                 }
@@ -908,7 +908,7 @@ class BlogRepository implements BlogRepositoryInterface
 
         if (!empty($data['topics_ids'])) {
             $collection = $this->_helperData->getFactoryByType('topic')->create()->getCollection();
-            foreach (explode(',', $data['topics_ids']) as $id) {
+            foreach (explode(',', $data['topics_ids'] ?? '') as $id) {
                 if ($collection->addFieldToFilter('topic_id', $id)->count() < 1) {
                     return false;
                 }

@@ -253,7 +253,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
     public function commentHtml($comment)
     {
         $html = '';
-        foreach (explode("\n", trim($comment)) as $value) {
+        foreach (explode("\n", trim($comment) ?? '') as $value) {
             $html .= '<p>' . $value . '</p>';
         }
 

@@ -62,7 +62,7 @@ class Topics extends Text
     {
         if (!empty($row->getData($this->getColumn()->getIndex()))) {
             $text = '';
-            $topicIds = explode(',', $row->getData($this->getColumn()->getIndex()));
+            $topicIds = explode(',', $row->getData($this->getColumn()->getIndex()) ?? '');
             foreach ($topicIds as $topicId) {
                 $topic = $this->_helperData->getFactoryByType('topic')->create()->load($topicId);
                 $text .= $topic->getName() . ',';

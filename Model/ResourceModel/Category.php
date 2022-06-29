@@ -141,7 +141,7 @@ class Category extends AbstractDb
             if ($object->getPosition() === null) {
                 $object->setPosition($this->getMaxPosition($object->getPath()) + 1);
             }
-            $path          = explode('/', $object->getPath());
+            $path          = explode('/', $object->getPath() ?? '');
             $level         = count($path) - ($object->getId() ? 1 : 0);
             $toUpdateChild = array_diff($path, [$object->getId()]);
 
@@ -203,7 +203,7 @@ class Category extends AbstractDb
     {
         $adapter       = $this->getConnection();
         $positionField = $adapter->quoteIdentifier('position');
-        $level         = count(explode('/', $path));
+        $level         = count(explode('/', $path ?? ''));
         $bind          = ['c_level' => $level, 'c_path' => $path . '/%'];
         $select        = $adapter->select()->from(
             $this->getTable('mageplaza_blog_category'),

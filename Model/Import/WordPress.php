@@ -237,7 +237,7 @@ class WordPress extends AbstractImport
             }
             foreach ($postModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
-                    $postImportSource = explode('-', $item->getImportSource());
+                    $postImportSource = explode('-', $item->getImportSource() ?? '');
                     $importType       = array_shift($postImportSource);
 
                     if ($importType == $this->_type['wordpress']) {
@@ -408,7 +408,7 @@ class WordPress extends AbstractImport
              */
             foreach ($tagModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
-                    $tagImportSource = explode('-', $item->getImportSource());
+                    $tagImportSource = explode('-', $item->getImportSource() ?? '');
                     $importType      = array_shift($tagImportSource);
                     if ($importType == $this->_type['wordpress']) {
                         $oldTagId                  = array_pop($tagImportSource);
@@ -551,7 +551,7 @@ class WordPress extends AbstractImport
              */
             foreach ($categoryModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
-                    $catImportSource = explode('-', $item->getImportSource());
+                    $catImportSource = explode('-', $item->getImportSource() ?? '');
                     $importType      = array_shift($catImportSource);
                     if ($importType == $this->_type['wordpress']) {
                         $oldCategoryId                  = array_pop($catImportSource);
@@ -568,7 +568,7 @@ class WordPress extends AbstractImport
                     if (isset($oldCategories[$newCategory['parent']])) {
                         $parentId        = array_search($newCategory['parent'], $oldCategoryIds);
                         $parentPath      = $categoryModel->load($parentId)->getPath();
-                        $parentPaths     = explode('/', $categoryModel->getPath());
+                        $parentPaths     = explode('/', $categoryModel->getPath() ?? '');
                         $level           = count($parentPaths);
                         $newPath         = $parentPath . '/' . $newCatId;
                         $currentCategory = $categoryModel->load($newCatId);

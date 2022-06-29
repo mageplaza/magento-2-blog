@@ -66,7 +66,7 @@ class Widget extends Frontend
                 continue;
             }
             if ($value['enabled']) {
-                $level = count(explode('/', ($value['path'])));
+                $level = count(explode('/', ($value['path']) ?? ''));
                 $hasChild = isset($value['children']) && $level < 4;
                 $html .= '<ul class="block-content menu-categories category-level'
                     . $level . '" style="margin-bottom:0px;margin-top:8px;">';

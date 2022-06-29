@@ -145,7 +145,7 @@ class Tag extends Multiselect
         $values = $this->getValue();
 
         if (!is_array($values)) {
-            $values = explode(',', $values);
+            $values = explode('/', $values ?? '');
         }
 
         if (!count($values)) {

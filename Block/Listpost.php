@@ -46,7 +46,7 @@ class Listpost extends Frontend
             $pager = $this->getLayout()->createBlock(Pager::class, 'mpblog.post.pager');
 
             $perPageValues = (string)$this->helperData->getConfigGeneral('pagination');
-            $perPageValues = explode(',', $perPageValues);
+            $perPageValues = explode('/', $perPageValues ?? ''); 
             $perPageValues = array_combine($perPageValues, $perPageValues);
 
             $pager->setAvailableLimit($perPageValues)
@@ -69,7 +69,7 @@ class Listpost extends Frontend
     {
         if (is_string($description)) {
             $html = '';
-            foreach (explode("\n", trim($description)) as $value) {
+            foreach (explode('/', trim($description) ?? '') as $value) {
                 $html .= '<p>' . $value . '</p>';
             }
 

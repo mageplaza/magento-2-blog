@@ -215,7 +215,7 @@ class AheadWorksM1 extends AbstractImport
                  * Store post-tags
                  */
                 if (!empty($postTag)) {
-                    $tagNames = explode(',', $postTag);
+                    $tagNames = explode(',', $postTag ?? '');
                     $id       = [];
                     foreach ($tagNames as $name) {
                         // phpcs:disable Magento2.Files.LineLength
@@ -235,7 +235,7 @@ class AheadWorksM1 extends AbstractImport
              */
             foreach ($postModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
-                    $postImportSource = explode('-', $item->getImportSource());
+                    $postImportSource = explode('-', $item->getImportSource() ?? '');
                     $importType       = array_shift($postImportSource);
                     if ($importType == $this->_type['aheadworksm1']) {
                         $oldPostId                  = array_pop($postImportSource);
@@ -362,7 +362,7 @@ class AheadWorksM1 extends AbstractImport
             /** Store old tag ids */
             foreach ($tagModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
-                    $tagImportSource = explode('-', $item->getImportSource());
+                    $tagImportSource = explode('-', $item->getImportSource() ?? '');
                     $importType      = array_shift($tagImportSource);
                     if ($importType == $this->_type['aheadworksm1']) {
                         $oldTagId                  = array_pop($tagImportSource);
@@ -511,7 +511,7 @@ class AheadWorksM1 extends AbstractImport
             /** Store old category ids */
             foreach ($categoryModel->getCollection() as $item) {
                 if ($item->getImportSource() != null) {
-                    $catImportSource = explode('-', $item->getImportSource());
+                    $catImportSource = explode('-', $item->getImportSource() ?? '');
                     $importType      = array_shift($catImportSource);
                     if ($importType == $this->_type['aheadworksm1']) {
                         $oldCategoryId                  = array_pop($catImportSource);

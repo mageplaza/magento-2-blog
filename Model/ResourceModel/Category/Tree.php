@@ -431,7 +431,7 @@ class Tree extends Dbp
         $where  = [$levelField . '=0' => true];
 
         foreach ($this->_conn->fetchAll($select) as $item) {
-            $pathIds = explode('/', $item['path']);
+            $pathIds = explode('/', $item['path'] ?? '');
             $level   = (int) $item['level'];
             while ($level > 0) {
                 $lastId                                                          = end($pathIds);
@@ -461,7 +461,7 @@ class Tree extends Dbp
         }
         $childrenItems = [];
         foreach ($arrNodes as $key => $nodeInfo) {
-            $pathToParent = explode('/', $nodeInfo[$this->_pathField]);
+            $pathToParent = explode('/', $nodeInfo[$this->_pathField] ?? '');
             array_pop($pathToParent);
             $pathToParent                   = implode('/', $pathToParent);
             $childrenItems[$pathToParent][] = $nodeInfo;
@@ -482,7 +482,7 @@ class Tree extends Dbp
      */
     public function loadBreadcrumbsArray($path, $addCollectionData = true, $withRootNode = false)
     {
-        $pathIds = explode('/', $path);
+        $pathIds = explode('/', $path ?? '');
         if (!$withRootNode) {
             array_shift($pathIds);
         }

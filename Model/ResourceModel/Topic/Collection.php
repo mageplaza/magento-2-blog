@@ -109,7 +109,7 @@ class Collection extends AbstractCollection implements TopicSearchResultInterfac
         } elseif (is_numeric($topicIds)) {
             $condition = $topicIds;
         } elseif (is_string($topicIds)) {
-            $ids = explode(',', $topicIds);
+            $ids = explode(',', $topicIds ?? '');
             if (empty($ids)) {
                 $condition = $topicIds;
             } else {

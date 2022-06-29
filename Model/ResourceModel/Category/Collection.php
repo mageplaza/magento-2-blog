@@ -172,7 +172,7 @@ class Collection extends AbstractCollection implements CategorySearchResultInter
         } elseif (is_numeric($categoryIds)) {
             $condition = $categoryIds;
         } elseif (is_string($categoryIds)) {
-            $ids = explode(',', $categoryIds);
+            $ids = explode(',', $categoryIds ?? '');
             if (empty($ids)) {
                 $condition = $categoryIds;
             } else {
