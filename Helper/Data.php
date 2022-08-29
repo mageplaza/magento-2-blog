@@ -184,7 +184,7 @@ class Data extends CoreHelper
         $groupId = (string)$this->_httpContext->getValue(CustomerContext::CONTEXT_GROUP);
 
         if ($this->getConfigGeneral('is_review')
-            && in_array($groupId, explode(',', $this->getConfigGeneral('review_mode')), true)
+            && in_array($groupId, explode(',', (string)$this->getConfigGeneral('review_mode')), true)
         ) {
             return true;
         }
