@@ -258,7 +258,7 @@ class Frontend extends Template
             $imageFile = $imageHelper->getMediaPath($image, $type);
         }
 
-        return $image ? $imageFile : '';
+        return $image ? $this->helperData->getImageHelper()->getMediaUrl($imageFile) : '';
     }
 
     /**
