@@ -254,9 +254,11 @@ class Frontend extends Template
     public function getImageUrl($image, $type = Image::TEMPLATE_MEDIA_TYPE_POST)
     {
         $imageHelper = $this->helperData->getImageHelper();
-        $imageFile   = $imageHelper->getMediaPath($image, $type);
+        if ($image) {
+            $imageFile = $imageHelper->getMediaPath($image, $type);
+        }
 
-        return $this->helperData->getImageHelper()->getMediaUrl($imageFile);
+        return $image ? $imageFile : '';
     }
 
     /**
