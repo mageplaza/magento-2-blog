@@ -84,7 +84,7 @@ class Router implements RouterInterface
             $identifier = $this->checkRssIdentifier($identifier);
         }
 
-        $routePath = explode('/', $identifier);
+        $routePath = explode('/', (string)$identifier);
         $routeSize = count($routePath);
         if (!$routeSize || ($routeSize > 3) || (array_shift($routePath) !== $this->helper->getRoute())) {
             return null;
