@@ -25,7 +25,6 @@ use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DB\Select;
 use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
-use Magento\Tests\NamingConvention\true\mixed;
 use Mageplaza\Blog\Api\Data\SearchResult\CategorySearchResultInterface;
 use Mageplaza\Blog\Model\Category;
 use Mageplaza\Blog\Model\ResourceModel\Category as CategoryResourceModel;
