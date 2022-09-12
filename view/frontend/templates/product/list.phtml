@@ -89,10 +89,10 @@ $_helper            = $block->getHelper();
                                 <?= $block->getProductDetailsHtml($_product) ?>
                                 <div class="product-item-inner">
                                     <div class="product actions product-item-actions"
-                                         <?= strpos($pos, $viewMode . '-actions')
+                                         <?= strpos((string) $pos, $viewMode . '-actions')
                                              ? $block->escapeHtmlAttr($position) : '' ?>>
                                         <div class="actions-primary"
-                                             <?= strpos($pos, $viewMode . '-primary')
+                                             <?= strpos((string) $pos, $viewMode . '-primary')
                                                  ? $block->escapeHtmlAttr($position) : '' ?>>
                                             <?php if ($_product->isSaleable()) : ?>
                                                 <?php $postParams = $block->getAddToCartPostParams($_product); ?>
@@ -123,7 +123,7 @@ $_helper            = $block->getHelper();
                                             <?php endif; ?>
                                         </div>
                                         <div data-role="add-to-links" class="actions-secondary"
-                                             <?= strpos($pos, $viewMode . '-secondary')
+                                             <?= strpos((string) $pos, $viewMode . '-secondary')
                                                  ? $block->escapeHtmlAttr($position) : '' ?>>
                                             <?php if ($addToBlock = $block->getChildBlock('addto')) : ?>
                                                 <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
@@ -183,10 +183,10 @@ $_helper            = $block->getHelper();
                                 <?= $block->getProductDetailsHtml($_product) ?>
                                 <div class="product-item-inner">
                                     <div class="product actions product-item-actions"
-                                         <?= strpos($pos, $viewMode . '-actions')
+                                         <?= strpos((string) $pos, $viewMode . '-actions')
                                              ? $block->escapeHtmlAttr($position) : '' ?>>
                                         <div class="actions-primary"
-                                             <?= strpos($pos, $viewMode . '-primary')
+                                             <?= strpos((string) $pos, $viewMode . '-primary')
                                                  ? $block->escapeHtmlAttr($position) : '' ?>>
                                             <?php if ($_product->isSaleable()) : ?>
                                                 <?php $postParams = $block->getAddToCartPostParams($_product); ?>
@@ -218,7 +218,7 @@ $_helper            = $block->getHelper();
                                             <?php endif; ?>
                                         </div>
                                         <div data-role="add-to-links" class="actions-secondary"
-                                             <?= strpos($pos, $viewMode . '-secondary')
+                                             <?= strpos((string) $pos, $viewMode . '-secondary')
                                                  ? $block->escapeHtmlAttr($position) : '' ?>>
                                             <?php if ($addToBlock = $block->getChildBlock('addto')) : ?>
                                                 <?= $addToBlock->setProduct($_product)->getChildHtml() ?>

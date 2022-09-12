@@ -192,7 +192,7 @@ class Category extends AbstractModel
     {
         $ids = $this->getData('path_ids');
         if ($ids === null) {
-            $ids = explode('/', $this->getPath());
+            $ids = explode('/', (string) $this->getPath());
             $this->setData('path_ids', $ids);
         }
 

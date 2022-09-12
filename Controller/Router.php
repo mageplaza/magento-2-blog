@@ -56,7 +56,7 @@ class Router implements RouterInterface
         Data $helper
     ) {
         $this->actionFactory = $actionFactory;
-        $this->helper = $helper;
+        $this->helper        = $helper;
     }
 
     /**
@@ -70,9 +70,9 @@ class Router implements RouterInterface
             return null;
         }
 
-        $rssAction = "rss.xml";
+        $rssAction  = "rss.xml";
         $identifier = trim($request->getPathInfo(), '/');
-        $urlSuffix = $this->helper->getUrlSuffix();
+        $urlSuffix  = $this->helper->getUrlSuffix();
 
         if ($length = strlen($urlSuffix)) {
             if (substr($identifier, -$length) === $urlSuffix && !$this->isRss($identifier)) {
@@ -84,7 +84,7 @@ class Router implements RouterInterface
             $identifier = $this->checkRssIdentifier($identifier);
         }
 
-        $routePath = explode('/', $identifier);
+        $routePath = explode('/', (string)$identifier);
         $routeSize = count($routePath);
         if (!$routeSize || ($routeSize > 3) || (array_shift($routePath) !== $this->helper->getRoute())) {
             return null;
@@ -166,7 +166,7 @@ class Router implements RouterInterface
         $routePath = explode('/', $identifier);
         $routePath = array_pop($routePath);
         $routePath = explode('.', $routePath);
-        $action = array_shift($routePath);
+        $action    = array_shift($routePath);
 
         return $action === 'rss';
     }
