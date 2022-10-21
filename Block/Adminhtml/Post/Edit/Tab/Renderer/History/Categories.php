@@ -62,7 +62,7 @@ class Categories extends Text
     {
         if (!empty($row->getData($this->getColumn()->getIndex()))) {
             $text = '';
-            $CategoryIds = explode(',', $row->getData($this->getColumn()->getIndex()));
+            $CategoryIds = explode(',', $row->getData($this->getColumn()->getIndex()) ?? '');
             foreach ($CategoryIds as $categoryId) {
                 $category = $this->_helperData->getFactoryByType('category')->create()->load($categoryId);
                 $text .= $category->getName() . ',';
