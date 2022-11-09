@@ -166,9 +166,11 @@ class Listpost extends Frontend
         $robots = $object ? $object->getMetaRobots() : $this->helperData->getSeoConfig('meta_robots');
         $this->pageConfig->setRobots($robots);
 
-        if ($this->getRequest()->getFullActionName() === 'mpblog_post_view') {
+        $url = $object ? $object->getUrl() : $this->helperData->getSeoConfig('url_key');
+
+        if ($this->getRequest()->getFullActionName() === 'mpblog_post_view' && $url) {
             $this->pageConfig->addRemotePageAsset(
-                $object->getUrl(),
+                $url,
                 'canonical',
                 ['attributes' => ['rel' => 'canonical']]
             );
