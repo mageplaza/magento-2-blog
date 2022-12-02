@@ -431,6 +431,7 @@ class Data extends CoreHelper
                     'main_table.post_id=category.post_id AND category.category_id=' . $id,
                     ['position']
                 );
+                $collection->getSelect()->order('position asc');
                 break;
             case self::TYPE_TAG:
                 $collection->join(
@@ -438,6 +439,7 @@ class Data extends CoreHelper
                     'main_table.post_id=tag.post_id AND tag.tag_id=' . $id,
                     ['position']
                 );
+                $collection->getSelect()->order('position asc');
                 break;
             case self::TYPE_TOPIC:
                 $collection->join(
@@ -445,6 +447,7 @@ class Data extends CoreHelper
                     'main_table.post_id=topic.post_id AND topic.topic_id=' . $id,
                     ['position']
                 );
+                $collection->getSelect()->order('position asc');
                 break;
             case self::TYPE_MONTHLY:
                 $collection->addFieldToFilter('publish_date', ['like' => $id . '%']);
