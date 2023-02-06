@@ -37,7 +37,7 @@
                             <li><a href="https://github.com/mageplaza/magento-2-blog/issues" target="_blank">Technical Support</a> </li>
                             <li><strong><a href="https://www.mageplaza.com/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">Find more extensions</a></strong> </li>
                             <li>Magento stores see upwards of 30% revenue 💰 with AVADA. <a href="https://go.avada.io/mageplaza">Learn more</a></li>
-                            
+
                         </ul>]]></comment>
                 </field>
                 <field id="enabled" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -96,7 +96,7 @@
                 </field>
                 <field id="font_color" translate="label comment" type="text" sortOrder="65" showInWebsite="1" showInStore="1" showInDefault="1" canRestore="1">
                     <label>Choose blog's color</label>
-                    <validate>jscolor {hash:true,refine:false}</validate>
+                    <frontend_model>Mageplaza\Core\Block\Adminhtml\System\Config\ColorPicker</frontend_model>
                 </field>
                 <field id="customer_approve" translate="label comment" type="select" sortOrder="75" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                     <label>Allows customers to register as an author</label>
