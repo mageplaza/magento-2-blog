@@ -200,7 +200,7 @@ class Data extends CoreHelper
         $login = $this->_httpContext->getValue(CustomerContext::CONTEXT_AUTH);
 
         if (!$login
-            && in_array('0', explode(',', $this->getConfigGeneral('review_mode')), true)
+            && in_array('0', explode(',', $this->getConfigGeneral('review_mode') ?? ''), true)
         ) {
             return '0';
         }
@@ -568,7 +568,7 @@ class Data extends CoreHelper
 
         $urlKey = ($type ? $type . '/' : '') . $urlKey;
         $url    = $this->getUrl($this->getRoute($store) . '/' . $urlKey);
-        $url    = explode('?', $url);
+        $url    = explode('?', $url ?? '');
         $url    = $url[0];
 
         return rtrim($url, '/') . $this->getUrlSuffix($store);
@@ -722,7 +722,7 @@ class Data extends CoreHelper
      */
     public function checkStore($object)
     {
-        $storeEnable = explode(',', $object->getStoreIds());
+        $storeEnable = explode(',', $object->getStoreIds() ?? '');
 
         return in_array('0', $storeEnable, true)
             || in_array((string)$this->storeManager->getStore()->getId(), $storeEnable, true);

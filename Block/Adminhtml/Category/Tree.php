@@ -175,7 +175,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
             $node = new Node($node, 'category_id', new \Magento\Framework\Data\Tree());
         }
 
-        $storeIds = $node->getStoreIds() ? explode(',', $node->getStoreIds()) : [];
+        $storeIds = $node->getStoreIds() ? explode(',', $node->getStoreIds() ?? '') : [];
         if (!($this->_blogStore === null)
             && !empty($storeIds)
             && !in_array(0, $storeIds, false)
