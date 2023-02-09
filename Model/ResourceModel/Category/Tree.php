@@ -31,7 +31,6 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Model\ResourceModel\Category;
 use Mageplaza\Blog\Model\Category as CategoryModel;
-use Zend_Db_Select;
 
 /**
  * Class Tree
@@ -506,11 +505,8 @@ class Tree extends Dbp
     }
 
     /**
-     * Obtain select for Categories
-     *
      * @param bool $sorted
-     *
-     * @return Zend_Db_Select
+     * @return Select
      */
     public function createCollectionDataSelect($sorted = true)
     {

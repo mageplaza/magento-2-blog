@@ -26,7 +26,6 @@ use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
 use Mageplaza\Blog\Api\Data\SearchResult\TagSearchResultInterface;
 use Mageplaza\Blog\Model\Tag;
 use Mageplaza\Blog\Model\ResourceModel\Tag as TagResourceModel;
-use Zend_Db_Select;
 
 /**
  * Class Collection
@@ -74,7 +73,7 @@ class Collection extends AbstractCollection implements TagSearchResultInterface
     public function getSelectCountSql()
     {
         $countSelect = parent::getSelectCountSql();
-        $countSelect->reset(Zend_Db_Select::GROUP);
+        $countSelect->reset(Select::GROUP);
 
         return $countSelect;
     }
@@ -83,7 +82,6 @@ class Collection extends AbstractCollection implements TagSearchResultInterface
      * @param null $valueField
      * @param string $labelField
      * @param array $additional
-     *
      * @return array
      */
     protected function _toOptionArray($valueField = null, $labelField = 'name', $additional = [])
@@ -94,7 +92,7 @@ class Collection extends AbstractCollection implements TagSearchResultInterface
     }
 
     /**
-     * add if filter
+     * Add if filter
      *
      * @param array|int|string $tagIds
      *
