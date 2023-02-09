@@ -156,13 +156,13 @@ class Manage extends Action
 
         $data['categories_ids'] = (isset($data['categories_ids']) && $data['categories_ids']) ? explode(
             ',',
-            $data['categories_ids']
+            $data['categories_ids'] ?? ''
         ) : [];
         $data['tags_ids'] = (isset($data['tags_ids']) && $data['tags_ids'])
-            ? explode(',', $data['tags_ids']) : [];
+            ? explode(',', $data['tags_ids'] ?? '') : [];
         $data['topics_ids'] = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(
             ',',
-            $data['topics_ids']
+            $data['topics_ids'] ?? ''
         ) : [];
 
         $data['author_id'] = $author->getId();

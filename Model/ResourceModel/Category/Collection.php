@@ -28,7 +28,6 @@ use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
 use Mageplaza\Blog\Api\Data\SearchResult\CategorySearchResultInterface;
 use Mageplaza\Blog\Model\Category;
 use Mageplaza\Blog\Model\ResourceModel\Category as CategoryResourceModel;
-use Zend_Db_Select;
 
 /**
  * Class Collection
@@ -134,7 +133,7 @@ class Collection extends AbstractCollection implements CategorySearchResultInter
     public function getSelectCountSql()
     {
         $countSelect = parent::getSelectCountSql();
-        $countSelect->reset(Zend_Db_Select::GROUP);
+        $countSelect->reset(Select::GROUP);
 
         return $countSelect;
     }

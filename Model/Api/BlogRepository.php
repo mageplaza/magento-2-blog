@@ -844,13 +844,13 @@ class BlogRepository implements BlogRepositoryInterface
     protected function prepareData(&$data)
     {
         if (!empty($data['categories_ids'])) {
-            $data['categories_ids'] = explode(',', $data['categories_ids']);
+            $data['categories_ids'] = explode(',', $data['categories_ids'] ?? '');
         }
         if (!empty($data['tags_ids'])) {
-            $data['tags_ids'] = explode(',', $data['tags_ids']);
+            $data['tags_ids'] = explode(',', $data['tags_ids'] ?? '');
         }
         if (!empty($data['topics_ids'])) {
-            $data['topics_ids'] = explode(',', $data['topics_ids']);
+            $data['topics_ids'] = explode(',', $data['topics_ids'] ?? '');
         }
         if (empty($data['enabled'])) {
             $data['enabled'] = 0;

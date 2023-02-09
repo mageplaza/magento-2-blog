@@ -75,9 +75,9 @@ class Restore extends History
     {
         $history->setUpdatedAt($this->date->date());
         $history->setData('categories_ids', empty($history->getCategoryIds())
-            ? [] : explode(',', $history->getCategoryIds()));
-        $history->setData('tags_ids', empty($history->getTagIds()) ? [] : explode(',', $history->getTagIds()));
-        $history->setData('topics_ids', empty($history->getTopicIds()) ? [] : explode(',', $history->getTopicIds()));
+            ? [] : explode(',', $history->getCategoryIds() ?? ''));
+        $history->setData('tags_ids', empty($history->getTagIds()) ? [] : explode(',', $history->getTagIds() ?? ''));
+        $history->setData('topics_ids', empty($history->getTopicIds()) ? [] : explode(',', $history->getTopicIds() ?? ''));
         $history->setData('products_data', empty($history->getProductIds())
             ? [] : Data::jsonDecode($history->getProductIds()));
         $data = $history->getData();

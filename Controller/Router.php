@@ -163,9 +163,9 @@ class Router implements RouterInterface
      */
     public function isRss($identifier)
     {
-        $routePath = explode('/', $identifier);
+        $routePath = explode('/', $identifier ?? '');
         $routePath = array_pop($routePath);
-        $routePath = explode('.', $routePath);
+        $routePath = explode('.', $routePath ?? '');
         $action    = array_shift($routePath);
 
         return $action === 'rss';
