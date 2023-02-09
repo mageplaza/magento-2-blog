@@ -178,7 +178,7 @@ Comments,Comments
 "The post history has been saved.","The post history has been saved."
 Import,Import
 "You have replaced and updated %1 %2 successful. Skipped %3 %2.","You have replaced and updated %1 %2 successful. Skipped %3 %2."
-"You have deleted %1 successful.","You have deleted %1 successful."
+"You have deleted %1 %2 successful. Skipped %3 %2.","You have deleted %1 %2 successful. Skipped %3 %2."
 "You have imported %1 %2 successful. Skipped %3 %2.","You have imported %1 %2 successful. Skipped %3 %2."
 "There are no records are updated.","There are no records are updated."
 "Can not make import, please check your table prefix OR import type and try again.","Can not make import, please check your table prefix OR import type and try again."
@@ -227,6 +227,7 @@ Import,Import
 "The ""%1"" Category doesn't exist.","The ""%1"" Category doesn't exist."
 "Invalid author id %1","Invalid author id %1"
 "The ""%1"" Author doesn't exist.","The ""%1"" Author doesn't exist."
+"Module Blog is disabled","Module Blog is disabled"
 "Sorry, but we can't move the Blog Category because we can't find the new parent Blog Category you selected.","Sorry, but we can't move the Blog Category because we can't find the new parent Blog Category you selected."
 "We can't perform this Blog Category move operation because the parent Blog Category matches the child Blog Category.","We can't perform this Blog Category move operation because the parent Blog Category matches the child Blog Category."
 "Pagination value must be a positive integer.","Pagination value must be a positive integer."
@@ -280,6 +281,7 @@ Back,Back
 "Facebook Link","Facebook Link"
 "Twitter Link","Twitter Link"
 Submit,Submit
+"No info","No info"
 Sitemap,Sitemap
 "Monthly Archive","Monthly Archive"
 "Your account must be licensed in order to perform the Post creation and management function","Your account must be licensed in order to perform the Post creation and management function"
@@ -321,6 +323,7 @@ Latest,Latest
 Search,Search
 "Search blogs here...","Search blogs here..."
 "Read more","Read more"
+Close,Close
 "Warning message","Warning message"
 Ok,Ok
 Cancel,Cancel
