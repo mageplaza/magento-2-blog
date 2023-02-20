@@ -92,7 +92,7 @@ class Menu extends Template
     public function getChildCategory($id)
     {
         $collection = $this->categoryCollection->create()->addAttributeToFilter('parent_id', $id)
-            ->addAttributeToFilter('enabled', '1');
+            ->addAttributeToFilter('enabled', '1')->setOrder('position','asc');
         $this->helper->addStoreFilter($collection, $this->storeManager->getStore()->getId());
 
         return $collection->getItems();
