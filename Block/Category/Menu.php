@@ -92,7 +92,7 @@ class Menu extends Template
     public function getChildCategory($id)
     {
         $collection = $this->categoryCollection->create()->addAttributeToFilter('parent_id', $id)
-            ->addAttributeToFilter('enabled', '1')->setOrder('position','asc');
+            ->addAttributeToFilter('enabled', '1');
         $this->helper->addStoreFilter($collection, $this->storeManager->getStore()->getId());
 
         return $collection->getItems();
@@ -105,7 +105,7 @@ class Menu extends Template
     public function getCollections()
     {
         $collection = $this->categoryCollection->create()
-            ->addAttributeToFilter('level', '1')->addAttributeToFilter('enabled', '1');
+            ->addAttributeToFilter('level', '1')->addAttributeToFilter('enabled', '1')->setOrder('position','asc');
 
         return $this->helper->addStoreFilter($collection, $this->storeManager->getStore()->getId());
     }
