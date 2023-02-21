@@ -105,7 +105,7 @@ class Menu extends Template
     public function getCollections()
     {
         $collection = $this->categoryCollection->create()
-            ->addAttributeToFilter('level', '1')->addAttributeToFilter('enabled', '1')->setOrder('position','asc');
+            ->addAttributeToFilter('level', '1')->addAttributeToFilter('enabled', '1')->setOrder('position','ASC');
 
         return $this->helper->addStoreFilter($collection, $this->storeManager->getStore()->getId());
     }
