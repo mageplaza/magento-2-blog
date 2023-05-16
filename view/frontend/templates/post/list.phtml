@@ -33,12 +33,11 @@ use Mageplaza\Blog\Model\Post;
 <div class="post-list-content" id="mpblog-list-container">
     <?php $postCollection = $block->getPostCollection(); ?>
     <?php if ($postCollection && $postCollection->getSize()) : ?>
-        <div class="post-list-body">
-            <?php $i = 1 ?>
+        <div class="post-list-body <?= $block->isGridView() ? /* @noEscape */ 'grid products-grid' : '' ?>">
             <?php /** @var Post $post */
             foreach ($postCollection as $post) : ?>
-                <div class="post-list-item col-mp<?= $block->isGridView()
-                    ? ' post-item-grid mp-6 mp-xs-12' : ' post-item-list mp-12'; ?>">
+                <div class="item product product-item post-list-item <?= $block->isGridView()
+                    ? ' post-item-grid  ' : ' post-item-list  '; ?>">
                     <div class="post-item-wraper">
                         <?php if ($post->getImage()) : ?>
                             <div class="post-image">
@@ -74,12 +73,7 @@ use Mageplaza\Blog\Model\Post;
                         </div>
                     </div>
                 </div>
-                <?php $i++; ?>
-                <?php if ($i % 2 == 0) : ?>
-                    <div class="mp-clear"></div>
-                <?php endif; ?>
             <?php endforeach; ?>
-            <div class="mp-clear"></div>
         </div>
         <?= $block->getPagerHtml() ?>
     <?php else : ?>
