@@ -26,6 +26,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Action;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Author;
@@ -33,6 +34,7 @@ use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Categories;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Store;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Tags;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Topics;
+use Mageplaza\Blog\Model\AuthorFactory;
 use Mageplaza\Blog\Model\ResourceModel\PostHistory\Collection;
 use Mageplaza\Blog\Model\Tag;
 
@@ -54,12 +56,18 @@ class History extends Extended implements TabInterface
     protected $historyCollection;
 
     /**
+     * @var \Mageplaza\Blog\Helper\Data
+     */
+    protected $_helperData;
+
+    /**
      * Product constructor.
      *
      * @param Context $context
      * @param Registry $coreRegistry
      * @param Data $backendHelper
      * @param Collection $historyCollection
+     * @param \Mageplaza\Blog\Helper\Data $_helperData
      * @param array $data
      */
     public function __construct(
@@ -67,16 +75,19 @@ class History extends Extended implements TabInterface
         Registry $coreRegistry,
         Data $backendHelper,
         Collection $historyCollection,
+        \Mageplaza\Blog\Helper\Data $_helperData,
         array $data = []
     ) {
         $this->coreRegistry      = $coreRegistry;
         $this->historyCollection = $historyCollection;
+        $this->_helperData       = $_helperData;
 
         parent::__construct($context, $backendHelper, $data);
     }
 
     /**
      * Set grid params
+     * @throws FileSystemException
      */
     public function _construct()
     {
@@ -162,17 +173,22 @@ class History extends Extended implements TabInterface
             'column_css_class' => 'col-tag-ids'
         ]);
         $this->addColumn('modifier_id', [
-            'header'           => __('Modified by'),
-            'index'            => 'modifier_id',
-            'renderer'         => Author::class,
-            'header_css_class' => 'col-modifier-id',
-            'column_css_class' => 'col-modifier-id'
+            'header'                    => __('Modified by'),
+            'index'                     => 'modifier_id',
+            'type'                      => 'options',
+            'options'                   => $this->_getModifierOptions(),
+            'renderer'                  => Author::class,
+            'filter_condition_callback' => [$this, '_filterByModifierId'],
+            'header_css_class'          => 'col-modifier-id',
+            'column_css_class'          => 'col-modifier-id'
         ]);
         $this->addColumn('updated_at', [
-            'header'           => __('Modified At'),
-            'index'            => 'updated_at',
-            'header_css_class' => 'col-updated-at',
-            'column_css_class' => 'col-updated-at'
+            'header'                    => __('Modified At'),
+            'index'                     => 'updated_at',
+            'header_css_class'          => 'col-updated-at',
+            'column_css_class'          => 'col-updated-at',
+            'type'                      => 'datetime',
+            'filter_condition_callback' => [$this, '_filterByUpdatedAt'],
         ]);
         $this->addColumn(
             'action',
@@ -265,5 +281,73 @@ class History extends Extended implements TabInterface
     public function getTabClass()
     {
         return 'ajax only';
+    }
+
+    /**
+     * Get Modifiers as Author of Post
+     *
+     * @return array
+     */
+    private function _getModifierOptions()
+    {
+        /** @var AuthorFactory $authors */
+        $authors = $this->_helperData->getFactoryByType('author');
+
+        $authors = $authors->create()->getCollection()->addFieldToSelect(['user_id', 'name'])->getItems();
+        $options = [];
+        foreach ($authors as $author) {
+            $options[$author->getUserId()] = $author->getName();
+        }
+
+        return $options;
+    }
+
+    /**
+     * @param Collection $collection
+     * @param \Magento\Backend\Block\Widget\Grid\Column\Extended $column
+     *
+     * @return $this
+     */
+    public function _filterByModifierId(
+        Collection $collection,
+        \Magento\Backend\Block\Widget\Grid\Column\Extended $column
+    ) {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+
+        $collection->addFieldToFilter('modifier_id', $value);
+
+        return $this;
+    }
+
+    /**
+     * @param Collection $collection
+     * @param \Magento\Backend\Block\Widget\Grid\Column\Extended $column
+     *
+     * @return $this
+     */
+    public function _filterByUpdatedAt(
+        Collection $collection,
+        \Magento\Backend\Block\Widget\Grid\Column\Extended $column
+    ) {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+
+        $formValue = $value['from'] ?? '';
+        $toValue   = $value['to'] ?? '';
+
+        if ($formValue && $toValue) {
+            $updateFilter = ['from' => $formValue, 'to' => $toValue];
+        } elseif ($formValue) {
+            $updateFilter = ['from' => $formValue];
+        } else {
+            $updateFilter = ['to' => $toValue];
+        }
+
+        $collection->addFieldToFilter('updated_at', $updateFilter);
+
+        return $this;
     }
 }

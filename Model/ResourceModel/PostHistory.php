@@ -72,11 +72,14 @@ class PostHistory extends AbstractDb
         return parent::_beforeSave($object);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _afterLoad(AbstractModel $object)
     {
-        $object->setData('categories_ids', explode(',', $object->getCategoryIds()));
-        $object->setData('tags_ids', explode(',', $object->getTagIds()));
-        $object->setData('topics_ids', explode(',', $object->getTopicIds()));
+        $object->setData('categories_ids', explode(',', $object->getCategoryIds() ?? ''));
+        $object->setData('tags_ids', explode(',', $object->getTagIds() ?? ''));
+        $object->setData('topics_ids', explode(',', $object->getTopicIds() ?? ''));
 
         return parent::_afterLoad($object);
     }
