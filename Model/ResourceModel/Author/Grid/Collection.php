@@ -30,17 +30,13 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 class Collection extends SearchResult
 {
     /**
-     * @return $this|SearchResult|void
+     * @return Collection
      */
-    protected function _initSelect()
+    protected function _initSelect(): Collection
     {
         parent::_initSelect();
 
         $this->getSelect()->joinLeft(
-            ['cus' => $this->getTable('customer_entity')],
-            'main_table.customer_id = cus.entity_id',
-            ['email']
-        )->joinLeft(
             ['post' => $this->getTable('mageplaza_blog_post')],
             'main_table.user_id = post.author_id',
             ['qty_post' => 'COUNT(post_id)']
@@ -48,6 +44,16 @@ class Collection extends SearchResult
 
         $this->addFilterToMap('name', 'main_table.name');
         $this->addFilterToMap('url_key', 'main_table.url_key');
+        $this->addExpressionFieldToSelect(
+            'mp_created_at',
+            'main_table.created_at',
+            ['mp_created_at' => 'created_at']
+        );
+        $this->addExpressionFieldToSelect(
+            'mp_updated_at',
+            'main_table.updated_at',
+            ['mp_created_at' => 'created_at']
+        );
 
         return $this;
     }
@@ -60,15 +66,45 @@ class Collection extends SearchResult
      */
     public function addFieldToFilter($field, $condition = null)
     {
-        if ($field === 'qty_post') {
-            foreach ($condition as $key => $value) {
-                if ($key === 'like') {
-                    $this->getSelect()->having('COUNT(post_id) LIKE ?', $value);
+        switch ($field) {
+            case 'qty_post':
+                foreach ($condition as $key => $value) {
+                    if ($key === 'like') {
+                        $this->getSelect()->having('COUNT(post_id) LIKE ?', $value);
+                    }
                 }
-            }
-            return $this;
+
+                return $this;
+            case 'mp_created_at':
+                $field = 'main_table.created_at';
+                break;
+            case 'mp_updated_at':
+                $field = 'main_table.updated_at';
+                break;
         }
 
         return parent::addFieldToFilter($field, $condition);
+    }
+
+    /**
+     * @param string $field
+     * @param string $direction
+     *
+     * @return SearchResult
+     */
+    public function setOrder($field, $direction = self::SORT_ORDER_DESC)
+    {
+        switch ($field) {
+            case 'customer_name':
+                return parent::setOrder('user_name', $direction);
+            case 'mp_updated_at':
+                $field = 'main_table.updated_at';
+                break;
+            case 'mp_created_at':
+                $field = 'main_table.updated_at';
+                break;
+        }
+
+        return parent::setOrder($field, $direction);
     }
 }
