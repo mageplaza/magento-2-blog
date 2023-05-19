@@ -26,10 +26,13 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Mageplaza\Blog\Model\AuthorFactory;
 
 /**
-* Patch is mechanism, that allows to do atomic upgrade data changes
-*/
+ * Class InsertData
+ *
+ * @package Mageplaza\Blog\Setup\Patch\Data
+ */
 class InsertData implements
     DataPatchInterface,
     PatchRevertableInterface
@@ -47,16 +50,23 @@ class InsertData implements
     protected $date;
 
     /**
+     * @var AuthorFactory
+     */
+    protected $authorFactory;
+
+    /**
      * InsertData constructor.
-     *
      * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param AuthorFactory $authorFactory
      * @param DateTime $date
      */
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
+        AuthorFactory $authorFactory,
         DateTime $date
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
+        $this->authorFactory   = $authorFactory;
         $this->date            = $date;
     }
 
@@ -67,15 +77,16 @@ class InsertData implements
      */
     public function apply()
     {
-        $authorData = [
-            'name'       => 'Admin',
-            'type'       => 0,
-            'status'     => 1,
-            'created_at' => $this->date->date()
-        ];
-
-        $this->moduleDataSetup->getConnection()
-            ->insert($this->moduleDataSetup->getTable('mageplaza_blog_author'), $authorData);
+        if (!$this->authorFactory->create()->getCollection()->getSize()) {
+            $this->authorFactory->create()->addData(
+                [
+                    'name'       => 'Admin',
+                    'type'       => 0,
+                    'status'     => 1,
+                    'created_at' => $this->date->date()
+                ]
+            )->save();
+        }
     }
 
     /**

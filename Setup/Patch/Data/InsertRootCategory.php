@@ -25,10 +25,13 @@ namespace Mageplaza\Blog\Setup\Patch\Data;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchRevertableInterface;
+use Mageplaza\Blog\Model\CategoryFactory;
 
 /**
-* Patch is mechanism, that allows to do atomic upgrade data changes
-*/
+ * Class InsertRootCategory
+ *
+ * @package Mageplaza\Blog\Setup\Patch\Data
+ */
 class InsertRootCategory implements
     DataPatchInterface,
     PatchRevertableInterface
@@ -39,11 +42,19 @@ class InsertRootCategory implements
     private $moduleDataSetup;
 
     /**
+     * @var CategoryFactory
+     */
+    private $categoryFactory;
+
+    /**
      * @param ModuleDataSetupInterface $moduleDataSetup
      */
-    public function __construct(ModuleDataSetupInterface $moduleDataSetup)
-    {
+    public function __construct(
+        ModuleDataSetupInterface $moduleDataSetup,
+        CategoryFactory $categoryFactory
+    ) {
         $this->moduleDataSetup = $moduleDataSetup;
+        $this->categoryFactory = $categoryFactory;
     }
 
     /**
@@ -53,17 +64,18 @@ class InsertRootCategory implements
      */
     public function apply()
     {
-        /** Add root category */
-        $sampleTemplates = [
-            'path'           => '1',
-            'position'       => 0,
-            'children_count' => 0,
-            'level'          => 0,
-            'name'           => 'ROOT',
-            'url_key'        => 'root'
-        ];
-        $this->moduleDataSetup->getConnection()
-            ->insert($this->moduleDataSetup->getTable('mageplaza_blog_category'), $sampleTemplates);
+        if (!$this->categoryFactory->create()->getCollection()->getSize()) {
+            $this->categoryFactory->create()->addData(
+                [
+                    'path'           => '1',
+                    'position'       => 0,
+                    'children_count' => 0,
+                    'level'          => 0,
+                    'name'           => 'ROOT',
+                    'url_key'        => 'root'
+                ]
+            )->save();
+        }
     }
 
     /**
