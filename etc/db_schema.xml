@@ -1,0 +1,302 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="mageplaza_blog_post" resource="default" engine="innodb" comment="Post Table">
+    <column xsi:type="int" name="post_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Post ID"/>
+    <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Post Name"/>
+    <column xsi:type="text" name="short_description" nullable="true" comment="Post Short Description"/>
+    <column xsi:type="text" name="post_content" nullable="true" comment="Post Content"/>
+    <column xsi:type="text" name="store_ids" nullable="false" comment="Store Id"/>
+    <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Post Image"/>
+    <column xsi:type="int" name="views" padding="11" unsigned="false" nullable="true" identity="false" comment="Post Views"/>
+    <column xsi:type="int" name="enabled" padding="11" unsigned="false" nullable="true" identity="false" comment="Post Enabled"/>
+    <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Post URL Key"/>
+    <column xsi:type="int" name="in_rss" padding="11" unsigned="false" nullable="true" identity="false" comment="Post In RSS"/>
+    <column xsi:type="int" name="allow_comment" padding="11" unsigned="false" nullable="true" identity="false" comment="Post Allow Comment"/>
+    <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Post Meta Title"/>
+    <column xsi:type="text" name="meta_description" nullable="true" comment="Post Meta Description"/>
+    <column xsi:type="text" name="meta_keywords" nullable="true" comment="Post Meta Keywords"/>
+    <column xsi:type="text" name="meta_robots" nullable="true"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true"/>
+    <column xsi:type="int" name="author_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Author ID"/>
+    <column xsi:type="int" name="modifier_id" padding="10" unsigned="true" nullable="true" identity="false" comment="Modifier ID"/>
+    <column xsi:type="timestamp" name="publish_date" on_update="false" nullable="true"/>
+    <column xsi:type="text" name="import_source" nullable="true" comment="Import Source"/>
+    <column xsi:type="text" name="layout" nullable="true" comment="Post Layout"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="post_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_POST_AUTHOR_ID_MAGEPLAZA_BLOG_AUTHOR_USER_ID" table="mageplaza_blog_post" column="author_id" referenceTable="mageplaza_blog_author" referenceColumn="user_id" onDelete="CASCADE"/>
+  </table>
+  <table name="mageplaza_blog_tag" resource="default" engine="innodb" comment="Tag Table">
+    <column xsi:type="int" name="tag_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Tag ID"/>
+    <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Tag Name"/>
+    <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Tag URL Key"/>
+    <column xsi:type="text" name="description" nullable="true" comment="Tag Description"/>
+    <column xsi:type="text" name="store_ids" nullable="false" comment="Store Id"/>
+    <column xsi:type="int" name="enabled" padding="11" unsigned="false" nullable="true" identity="false" comment="Tag Enabled"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true"/>
+    <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Post Meta Title"/>
+    <column xsi:type="text" name="meta_description" nullable="true" comment="Post Meta Description"/>
+    <column xsi:type="text" name="meta_keywords" nullable="true" comment="Post Meta Keywords"/>
+    <column xsi:type="text" name="meta_robots" nullable="true"/>
+    <column xsi:type="text" name="import_source" nullable="true" comment="Import Source"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="tag_id"/>
+    </constraint>
+  </table>
+  <table name="mageplaza_blog_topic" resource="default" engine="innodb" comment="Topic Table">
+    <column xsi:type="int" name="topic_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Topic ID"/>
+    <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Topic Name"/>
+    <column xsi:type="text" name="description" nullable="true" comment="Topic Description"/>
+    <column xsi:type="text" name="store_ids" nullable="false" comment="Store Id"/>
+    <column xsi:type="int" name="enabled" padding="11" unsigned="false" nullable="true" identity="false" comment="Topic Enabled"/>
+    <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Topic URL Key"/>
+    <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Topic Meta Title"/>
+    <column xsi:type="text" name="meta_description" nullable="true" comment="Topic Meta Description"/>
+    <column xsi:type="text" name="meta_keywords" nullable="true" comment="Topic Meta Keywords"/>
+    <column xsi:type="text" name="meta_robots" nullable="true"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true"/>
+    <column xsi:type="text" name="import_source" nullable="true" comment="Import Source"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="topic_id"/>
+    </constraint>
+  </table>
+  <table name="mageplaza_blog_category" resource="default" engine="innodb" comment="Category Table">
+    <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Category ID"/>
+    <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Category Name"/>
+    <column xsi:type="text" name="description" nullable="true" comment="Category Description"/>
+    <column xsi:type="text" name="store_ids" nullable="false" comment="Store Id"/>
+    <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Category URL Key"/>
+    <column xsi:type="int" name="enabled" padding="11" unsigned="false" nullable="true" identity="false" comment="Category Enabled"/>
+    <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Category Meta Title"/>
+    <column xsi:type="text" name="meta_description" nullable="true" comment="Category Meta Description"/>
+    <column xsi:type="text" name="meta_keywords" nullable="true" comment="Category Meta Keywords"/>
+    <column xsi:type="text" name="meta_robots" nullable="true"/>
+    <column xsi:type="int" name="parent_id" padding="11" unsigned="false" nullable="true" identity="false" comment="Category Parent Id"/>
+    <column xsi:type="varchar" name="path" nullable="true" length="255" comment="Category Path"/>
+    <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="true" identity="false" comment="Category Position"/>
+    <column xsi:type="int" name="level" padding="11" unsigned="false" nullable="true" identity="false" comment="Category Level"/>
+    <column xsi:type="int" name="children_count" padding="11" unsigned="false" nullable="true" identity="false" comment="Category Children Count"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true"/>
+    <column xsi:type="text" name="import_source" nullable="true" comment="Import Source"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="category_id"/>
+    </constraint>
+  </table>
+  <table name="mageplaza_blog_post_tag" resource="default" engine="innodb" comment="Post To Tag Link Table">
+    <column xsi:type="int" name="tag_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Tag ID"/>
+    <column xsi:type="int" name="post_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Post ID"/>
+    <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="false" identity="false" default="0" comment="Position"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="tag_id"/>
+      <column name="post_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_POST_TAG_POST_ID_MAGEPLAZA_BLOG_POST_POST_ID" table="mageplaza_blog_post_tag" column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_POST_TAG_TAG_ID_MAGEPLAZA_BLOG_TAG_TAG_ID" table="mageplaza_blog_post_tag" column="tag_id" referenceTable="mageplaza_blog_tag" referenceColumn="tag_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" referenceId="MAGEPLAZA_BLOG_POST_TAG_POST_ID_TAG_ID">
+      <column name="post_id"/>
+      <column name="tag_id"/>
+    </constraint>
+    <index referenceId="MAGEPLAZA_BLOG_POST_TAG_POST_ID" indexType="btree">
+      <column name="post_id"/>
+    </index>
+    <index referenceId="MAGEPLAZA_BLOG_POST_TAG_TAG_ID" indexType="btree">
+      <column name="tag_id"/>
+    </index>
+  </table>
+  <table name="mageplaza_blog_post_topic" resource="default" engine="innodb" comment="Post To Topic Link Table">
+    <column xsi:type="int" name="topic_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Topic ID"/>
+    <column xsi:type="int" name="post_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Post ID"/>
+    <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="false" identity="false" default="0" comment="Position"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="topic_id"/>
+      <column name="post_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_POST_TOPIC_POST_ID_MAGEPLAZA_BLOG_POST_POST_ID" table="mageplaza_blog_post_topic" column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_POST_TOPIC_TOPIC_ID_MAGEPLAZA_BLOG_TOPIC_TOPIC_ID" table="mageplaza_blog_post_topic" column="topic_id" referenceTable="mageplaza_blog_topic" referenceColumn="topic_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" referenceId="MAGEPLAZA_BLOG_POST_TOPIC_POST_ID_TOPIC_ID">
+      <column name="post_id"/>
+      <column name="topic_id"/>
+    </constraint>
+    <index referenceId="MAGEPLAZA_BLOG_POST_TOPIC_POST_ID" indexType="btree">
+      <column name="post_id"/>
+    </index>
+    <index referenceId="MAGEPLAZA_BLOG_POST_TOPIC_TOPIC_ID" indexType="btree">
+      <column name="topic_id"/>
+    </index>
+  </table>
+  <table name="mageplaza_blog_post_category" resource="default" engine="innodb" comment="Category To Post Link Table">
+    <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Category ID"/>
+    <column xsi:type="int" name="post_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Post ID"/>
+    <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="false" identity="false" default="0" comment="Position"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="category_id"/>
+      <column name="post_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_POST_CTGR_CTGR_ID_MAGEPLAZA_BLOG_CTGR_CTGR_ID" table="mageplaza_blog_post_category" column="category_id" referenceTable="mageplaza_blog_category" referenceColumn="category_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_POST_CATEGORY_POST_ID_MAGEPLAZA_BLOG_POST_POST_ID" table="mageplaza_blog_post_category" column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" referenceId="MAGEPLAZA_BLOG_POST_CATEGORY_CATEGORY_ID_POST_ID">
+      <column name="category_id"/>
+      <column name="post_id"/>
+    </constraint>
+    <index referenceId="MAGEPLAZA_BLOG_POST_CATEGORY_CATEGORY_ID" indexType="btree">
+      <column name="category_id"/>
+    </index>
+    <index referenceId="MAGEPLAZA_BLOG_POST_CATEGORY_POST_ID" indexType="btree">
+      <column name="post_id"/>
+    </index>
+  </table>
+  <table name="mageplaza_blog_post_traffic" resource="default" engine="innodb" comment="Traffic Post Table">
+    <column xsi:type="int" name="traffic_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Traffic ID"/>
+    <column xsi:type="int" name="post_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Post ID"/>
+    <column xsi:type="int" name="numbers_view" nullable="true" padding="11" unsigned="false" identity="false"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="traffic_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_POST_TRAFFIC_POST_ID_MAGEPLAZA_BLOG_POST_POST_ID" table="mageplaza_blog_post_traffic" column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" referenceId="MAGEPLAZA_BLOG_POST_TRAFFIC_POST_ID_TRAFFIC_ID">
+      <column name="post_id"/>
+      <column name="traffic_id"/>
+    </constraint>
+    <index referenceId="MAGEPLAZA_BLOG_POST_TRAFFIC_POST_ID" indexType="btree">
+      <column name="post_id"/>
+    </index>
+    <index referenceId="MAGEPLAZA_BLOG_POST_TRAFFIC_TRAFFIC_ID" indexType="btree">
+      <column name="traffic_id"/>
+    </index>
+  </table>
+  <table name="mageplaza_blog_author" resource="default" engine="innodb" comment="Author Table">
+    <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Author ID" onCreate="migrateDataFrom(user_id)"/>
+    <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Display Name"/>
+    <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Author URL Key"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Author Updated At"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" default="CURRENT_TIMESTAMP" comment="Author Created At"/>
+    <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Author Image"/>
+    <column xsi:type="text" name="short_description" nullable="true" comment="Author Short Description"/>
+    <column xsi:type="varchar" name="facebook_link" nullable="true" length="255" comment="Facebook Link"/>
+    <column xsi:type="varchar" name="twitter_link" nullable="true" length="255" comment="Twitter Link"/>
+    <column xsi:type="int" name="status" padding="10" unsigned="true" nullable="true" identity="false" default="0" comment="Author Status"/>
+    <column xsi:type="int" name="type" padding="10" unsigned="true" nullable="true" identity="false" default="0" comment="Author Type"/>
+    <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false" default="0" comment="Customer ID"/>
+    <column xsi:type="text" name="email" nullable="true" comment="Author email"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="user_id"/>
+    </constraint>
+    <constraint xsi:type="primary" referenceId="STAGING_PRIMARY">
+      <column name="user_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_AUTHOR_USER_ID_ADMIN_USER_USER_ID" table="mageplaza_blog_author" column="user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE" disabled="true"/>
+    <constraint xsi:type="unique" referenceId="MAGEPLAZA_BLOG_AUTHOR_USER_ID">
+      <column name="user_id"/>
+    </constraint>
+  </table>
+  <table name="mageplaza_blog_comment" resource="default" engine="innodb" comment="mageplaza_blog_comment">
+    <column xsi:type="int" name="comment_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Comment ID"/>
+    <column xsi:type="int" name="post_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Post ID"/>
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false" comment="User Comment ID"/>
+    <column xsi:type="smallint" name="has_reply" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Comment has reply"/>
+    <column xsi:type="smallint" name="is_reply" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Is reply comment"/>
+    <column xsi:type="int" name="reply_id" padding="10" unsigned="true" nullable="true" identity="false" default="0" comment="Reply ID"/>
+    <column xsi:type="text" name="content" nullable="true"/>
+    <column xsi:type="timestamp" name="created_at" nullable="true" on_update="false"/>
+    <column xsi:type="smallint" name="status" padding="5" unsigned="true" nullable="false" identity="false" default="3" comment="Status"/>
+    <column xsi:type="text" name="store_ids" nullable="false" comment="Store Id"/>
+    <column xsi:type="text" name="user_name" nullable="true" comment="User Name"/>
+    <column xsi:type="text" name="user_email" nullable="true" comment="User Email"/>
+    <column xsi:type="text" name="import_source" nullable="true" comment="Import Source"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="comment_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_COMMENT_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID" table="mageplaza_blog_comment" column="entity_id" referenceTable="customer_entity" referenceColumn="entity_id" onDelete="CASCADE" disabled="true"/>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_COMMENT_POST_ID_MAGEPLAZA_BLOG_POST_POST_ID" table="mageplaza_blog_comment" column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id" onDelete="CASCADE"/>
+    <index referenceId="MAGEPLAZA_BLOG_COMMENT_COMMENT_ID" indexType="btree">
+      <column name="comment_id"/>
+    </index>
+    <index referenceId="MAGEPLAZA_BLOG_COMMENT_ENTITY_ID" indexType="btree">
+      <column name="entity_id"/>
+    </index>
+  </table>
+  <table name="mageplaza_blog_comment_like" resource="default" engine="innodb" comment="mageplaza_blog_comment_like">
+    <column xsi:type="int" name="like_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Like ID"/>
+    <column xsi:type="int" name="comment_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Comment ID"/>
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false" comment="User Like ID"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="like_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="FK_1AA6C994694449283752B6F4C2373B42" table="mageplaza_blog_comment_like" column="comment_id" referenceTable="mageplaza_blog_comment" referenceColumn="comment_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_COMMENT_LIKE_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID" table="mageplaza_blog_comment_like" column="entity_id" referenceTable="customer_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <index referenceId="MAGEPLAZA_BLOG_COMMENT_LIKE_LIKE_ID" indexType="btree">
+      <column name="like_id"/>
+    </index>
+  </table>
+  <table name="mageplaza_blog_post_product" resource="default" engine="innodb" comment="Post To Product Link Table">
+    <column xsi:type="int" name="post_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Post ID"/>
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Entity ID"/>
+    <column xsi:type="int" name="position" padding="11" unsigned="false" nullable="false" identity="false" default="0" comment="Position"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="post_id"/>
+      <column name="entity_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_POST_PRODUCT_POST_ID_MAGEPLAZA_BLOG_POST_POST_ID" table="mageplaza_blog_post_product" column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_POST_PRD_ENTT_ID_CAT_PRD_ENTT_ENTT_ID" table="mageplaza_blog_post_product" column="entity_id" referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" referenceId="MAGEPLAZA_BLOG_POST_PRODUCT_POST_ID_ENTITY_ID">
+      <column name="post_id"/>
+      <column name="entity_id"/>
+    </constraint>
+    <index referenceId="MAGEPLAZA_BLOG_POST_PRODUCT_POST_ID" indexType="btree">
+      <column name="post_id"/>
+    </index>
+    <index referenceId="MAGEPLAZA_BLOG_POST_PRODUCT_ENTITY_ID" indexType="btree">
+      <column name="entity_id"/>
+    </index>
+  </table>
+  <table name="mageplaza_blog_post_like" resource="default" engine="innodb" comment="mageplaza_blog_post_like">
+    <column xsi:type="int" name="like_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Like ID"/>
+    <column xsi:type="int" name="post_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Post ID"/>
+    <column xsi:type="int" name="action" padding="10" unsigned="true" nullable="false" identity="false" comment="type like"/>
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false" comment="User Like ID"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="like_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="MAGEPLAZA_BLOG_POST_LIKE_POST_ID_MAGEPLAZA_BLOG_POST_POST_ID" table="mageplaza_blog_post_like" column="post_id" referenceTable="mageplaza_blog_post" referenceColumn="post_id" onDelete="CASCADE"/>
+    <index referenceId="MAGEPLAZA_BLOG_POST_LIKE_LIKE_ID" indexType="btree">
+      <column name="like_id"/>
+    </index>
+  </table>
+  <table name="mageplaza_blog_post_history" resource="default" engine="innodb" comment="Post History Table">
+    <column xsi:type="int" name="history_id" padding="10" unsigned="true" nullable="false" identity="true" comment="History ID"/>
+    <column xsi:type="int" name="post_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Post ID"/>
+    <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Post Name"/>
+    <column xsi:type="text" name="short_description" nullable="true" comment="Post Short Description"/>
+    <column xsi:type="text" name="post_content" nullable="true" comment="Post Content"/>
+    <column xsi:type="text" name="store_ids" nullable="false" comment="Store Id"/>
+    <column xsi:type="varchar" name="image" nullable="true" length="255" comment="Post Image"/>
+    <column xsi:type="int" name="views" padding="11" unsigned="false" nullable="true" identity="false" comment="Post Views"/>
+    <column xsi:type="int" name="enabled" padding="11" unsigned="false" nullable="true" identity="false" comment="Post Enabled"/>
+    <column xsi:type="varchar" name="url_key" nullable="true" length="255" comment="Post URL Key"/>
+    <column xsi:type="int" name="in_rss" padding="11" unsigned="false" nullable="true" identity="false" comment="Post In RSS"/>
+    <column xsi:type="int" name="allow_comment" padding="11" unsigned="false" nullable="true" identity="false" comment="Post Allow Comment"/>
+    <column xsi:type="varchar" name="meta_title" nullable="true" length="255" comment="Post Meta Title"/>
+    <column xsi:type="text" name="meta_description" nullable="true" comment="Post Meta Description"/>
+    <column xsi:type="text" name="meta_keywords" nullable="true" comment="Post Meta Keywords"/>
+    <column xsi:type="text" name="meta_robots" nullable="true" comment="Post Meta Robots"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Post Updated At"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Post Created At"/>
+    <column xsi:type="int" name="author_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Author ID"/>
+    <column xsi:type="int" name="modifier_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Modifier ID"/>
+    <column xsi:type="timestamp" name="publish_date" on_update="false" nullable="true" comment="Publish Date"/>
+    <column xsi:type="text" name="import_source" nullable="true" comment="Import Source"/>
+    <column xsi:type="text" name="layout" nullable="true" comment="Post Layout"/>
+    <column xsi:type="varchar" name="category_ids" nullable="true" length="255" comment="Post Category Id"/>
+    <column xsi:type="varchar" name="tag_ids" nullable="true" length="255" comment="Post Tag Id"/>
+    <column xsi:type="varchar" name="topic_ids" nullable="true" length="255" comment="Post Topic Id"/>
+    <column xsi:type="text" name="product_ids" nullable="true" comment="Post Product Id"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="history_id"/>
+    </constraint>
+  </table>
+</schema>

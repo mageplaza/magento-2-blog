@@ -73,6 +73,9 @@ define([
                         theme_advanced_buttons2: null,
                         theme_advanced_buttons3: null,
                         theme_advanced_buttons4: null
+                    },
+                    tinymce : {
+                        content_css : null
                     }
                 });
                 editor = new wysiwygSetup(

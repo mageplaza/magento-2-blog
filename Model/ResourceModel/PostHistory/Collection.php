@@ -27,6 +27,7 @@ use Exception;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
@@ -85,6 +86,34 @@ class Collection extends AbstractCollection
     protected function _construct()
     {
         $this->_init(PostHistory::class, \Mageplaza\Blog\Model\ResourceModel\PostHistory::class);
+    }
+
+    /**
+     * Add field filter to collection
+     *
+     * @param string|array $field
+     * @param null|string|array $condition
+     *
+     * @return \Magento\Framework\Data\Collection\AbstractDb
+     * @see self::_getConditionSql for $condition
+     *
+     */
+    public function addFieldToFilter($field, $condition = null)
+    {
+        if (is_array($field)) {
+            $conditions = [];
+            foreach ($field as $key => $value) {
+                $conditions[] = $this->_translateCondition($value, isset($condition[$key]) ? $condition[$key] : null);
+            }
+
+            $resultCondition = '(' . implode(') ' . \Magento\Framework\DB\Select::SQL_OR . ' (', $conditions) . ')';
+        } else {
+            $resultCondition = $this->_translateCondition($field, $condition);
+        }
+
+        $this->_select->where($resultCondition, null, Select::TYPE_CONDITION);
+
+        return $this;
     }
 
     /**

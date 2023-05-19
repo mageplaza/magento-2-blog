@@ -310,7 +310,7 @@ $color        = $helper->getBlogConfig('general/font_color');
                             if (d.getElementById(id)) return;
                             js     = d.createElement(s);
                             js.id  = id;
-                            js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.5&appId=<?=
+                            js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v12.0&appId=<?=
                                 /* @noEscape */ $block->getDecrypt($block->helperComment('facebook_appid')) ?>";
                             fjs.parentNode.insertBefore(js, fjs);
                         }(document, 'script', 'facebook-jssdk'));

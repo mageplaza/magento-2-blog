@@ -1,0 +1,293 @@
+{
+    "mageplaza_blog_post": {
+        "column": {
+            "post_id": true,
+            "name": true,
+            "short_description": true,
+            "post_content": true,
+            "store_ids": true,
+            "image": true,
+            "views": true,
+            "enabled": true,
+            "url_key": true,
+            "in_rss": true,
+            "allow_comment": true,
+            "meta_title": true,
+            "meta_description": true,
+            "meta_keywords": true,
+            "meta_robots": true,
+            "updated_at": true,
+            "created_at": true,
+            "author_id": true,
+            "modifier_id": true,
+            "publish_date": true,
+            "import_source": true,
+            "layout": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGEPLAZA_BLOG_POST_AUTHOR_ID_MAGEPLAZA_BLOG_AUTHOR_USER_ID": true
+        }
+    },
+    "mageplaza_blog_tag": {
+        "column": {
+            "tag_id": true,
+            "name": true,
+            "url_key": true,
+            "description": true,
+            "store_ids": true,
+            "enabled": true,
+            "updated_at": true,
+            "created_at": true,
+            "meta_title": true,
+            "meta_description": true,
+            "meta_keywords": true,
+            "meta_robots": true,
+            "import_source": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "mageplaza_blog_topic": {
+        "column": {
+            "topic_id": true,
+            "name": true,
+            "description": true,
+            "store_ids": true,
+            "enabled": true,
+            "url_key": true,
+            "meta_title": true,
+            "meta_description": true,
+            "meta_keywords": true,
+            "meta_robots": true,
+            "updated_at": true,
+            "created_at": true,
+            "import_source": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "mageplaza_blog_category": {
+        "column": {
+            "category_id": true,
+            "name": true,
+            "description": true,
+            "store_ids": true,
+            "url_key": true,
+            "enabled": true,
+            "meta_title": true,
+            "meta_description": true,
+            "meta_keywords": true,
+            "meta_robots": true,
+            "parent_id": true,
+            "path": true,
+            "position": true,
+            "level": true,
+            "children_count": true,
+            "updated_at": true,
+            "created_at": true,
+            "import_source": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "mageplaza_blog_post_tag": {
+        "column": {
+            "tag_id": true,
+            "post_id": true,
+            "position": true
+        },
+        "index": {
+            "MAGEPLAZA_BLOG_POST_TAG_POST_ID": true,
+            "MAGEPLAZA_BLOG_POST_TAG_TAG_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGEPLAZA_BLOG_POST_TAG_POST_ID_MAGEPLAZA_BLOG_POST_POST_ID": true,
+            "MAGEPLAZA_BLOG_POST_TAG_TAG_ID_MAGEPLAZA_BLOG_TAG_TAG_ID": true,
+            "MAGEPLAZA_BLOG_POST_TAG_POST_ID_TAG_ID": true
+        }
+    },
+    "mageplaza_blog_post_topic": {
+        "column": {
+            "topic_id": true,
+            "post_id": true,
+            "position": true
+        },
+        "index": {
+            "MAGEPLAZA_BLOG_POST_TOPIC_POST_ID": true,
+            "MAGEPLAZA_BLOG_POST_TOPIC_TOPIC_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGEPLAZA_BLOG_POST_TOPIC_POST_ID_MAGEPLAZA_BLOG_POST_POST_ID": true,
+            "MAGEPLAZA_BLOG_POST_TOPIC_TOPIC_ID_MAGEPLAZA_BLOG_TOPIC_TOPIC_ID": true,
+            "MAGEPLAZA_BLOG_POST_TOPIC_POST_ID_TOPIC_ID": true
+        }
+    },
+    "mageplaza_blog_post_category": {
+        "column": {
+            "category_id": true,
+            "post_id": true,
+            "position": true
+        },
+        "index": {
+            "MAGEPLAZA_BLOG_POST_CATEGORY_CATEGORY_ID": true,
+            "MAGEPLAZA_BLOG_POST_CATEGORY_POST_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGEPLAZA_BLOG_POST_CTGR_CTGR_ID_MAGEPLAZA_BLOG_CTGR_CTGR_ID": true,
+            "MAGEPLAZA_BLOG_POST_CATEGORY_POST_ID_MAGEPLAZA_BLOG_POST_POST_ID": true,
+            "MAGEPLAZA_BLOG_POST_CATEGORY_CATEGORY_ID_POST_ID": true
+        }
+    },
+    "mageplaza_blog_post_traffic": {
+        "column": {
+            "traffic_id": true,
+            "post_id": true,
+            "numbers_view": true
+        },
+        "index": {
+            "MAGEPLAZA_BLOG_POST_TRAFFIC_POST_ID": true,
+            "MAGEPLAZA_BLOG_POST_TRAFFIC_TRAFFIC_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGEPLAZA_BLOG_POST_TRAFFIC_POST_ID_MAGEPLAZA_BLOG_POST_POST_ID": true,
+            "MAGEPLAZA_BLOG_POST_TRAFFIC_POST_ID_TRAFFIC_ID": true
+        }
+    },
+    "mageplaza_blog_author": {
+        "column": {
+            "user_id": true,
+            "name": true,
+            "url_key": true,
+            "updated_at": true,
+            "created_at": true,
+            "image": true,
+            "short_description": true,
+            "facebook_link": true,
+            "twitter_link": true,
+            "status": true,
+            "type": true,
+            "customer_id": true,
+            "email": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGEPLAZA_BLOG_AUTHOR_USER_ID_ADMIN_USER_USER_ID": true,
+            "MAGEPLAZA_BLOG_AUTHOR_USER_ID": true
+        }
+    },
+    "mageplaza_blog_comment": {
+        "column": {
+            "comment_id": true,
+            "post_id": true,
+            "entity_id": true,
+            "has_reply": true,
+            "is_reply": true,
+            "reply_id": true,
+            "content": true,
+            "created_at": true,
+            "status": true,
+            "store_ids": true,
+            "user_name": true,
+            "user_email": true,
+            "import_source": true
+        },
+        "index": {
+            "MAGEPLAZA_BLOG_COMMENT_COMMENT_ID": true,
+            "MAGEPLAZA_BLOG_COMMENT_ENTITY_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGEPLAZA_BLOG_COMMENT_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "MAGEPLAZA_BLOG_COMMENT_POST_ID_MAGEPLAZA_BLOG_POST_POST_ID": true
+        }
+    },
+    "mageplaza_blog_comment_like": {
+        "column": {
+            "like_id": true,
+            "comment_id": true,
+            "entity_id": true
+        },
+        "index": {
+            "MAGEPLAZA_BLOG_COMMENT_LIKE_LIKE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_1AA6C994694449283752B6F4C2373B42": true,
+            "MAGEPLAZA_BLOG_COMMENT_LIKE_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID": true
+        }
+    },
+    "mageplaza_blog_post_product": {
+        "column": {
+            "post_id": true,
+            "entity_id": true,
+            "position": true
+        },
+        "index": {
+            "MAGEPLAZA_BLOG_POST_PRODUCT_POST_ID": true,
+            "MAGEPLAZA_BLOG_POST_PRODUCT_ENTITY_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGEPLAZA_BLOG_POST_PRODUCT_POST_ID_MAGEPLAZA_BLOG_POST_POST_ID": true,
+            "MAGEPLAZA_BLOG_POST_PRD_ENTT_ID_CAT_PRD_ENTT_ENTT_ID": true,
+            "MAGEPLAZA_BLOG_POST_PRODUCT_POST_ID_ENTITY_ID": true
+        }
+    },
+    "mageplaza_blog_post_like": {
+        "column": {
+            "like_id": true,
+            "post_id": true,
+            "action": true,
+            "entity_id": true
+        },
+        "index": {
+            "MAGEPLAZA_BLOG_POST_LIKE_LIKE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGEPLAZA_BLOG_POST_LIKE_POST_ID_MAGEPLAZA_BLOG_POST_POST_ID": true
+        }
+    },
+    "mageplaza_blog_post_history": {
+        "column": {
+            "history_id": true,
+            "post_id": true,
+            "name": true,
+            "short_description": true,
+            "post_content": true,
+            "store_ids": true,
+            "image": true,
+            "views": true,
+            "enabled": true,
+            "url_key": true,
+            "in_rss": true,
+            "allow_comment": true,
+            "meta_title": true,
+            "meta_description": true,
+            "meta_keywords": true,
+            "meta_robots": true,
+            "updated_at": true,
+            "created_at": true,
+            "author_id": true,
+            "modifier_id": true,
+            "publish_date": true,
+            "import_source": true,
+            "layout": true,
+            "category_ids": true,
+            "tag_ids": true,
+            "topic_ids": true,
+            "product_ids": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

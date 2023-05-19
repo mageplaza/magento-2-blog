@@ -70,6 +70,12 @@ class Collection extends SearchResult
         $this->addPostName();
         $this->addCustomerName();
 
+        $this->addExpressionFieldToSelect(
+            'mp_created_at',
+            'main_table.created_at',
+            ['mp_created_at' => 'created_at']
+        );
+
         return $this;
     }
 
@@ -81,8 +87,11 @@ class Collection extends SearchResult
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
     {
-        if ($field === 'customer_name') {
-            parent::setOrder('	user_name', $direction);
+        switch ($field) {
+            case 'customer_name':
+                return parent::setOrder('user_name', $direction);
+            case 'mp_created_at':
+                return parent::setOrder('main_table.created_at', $direction);
         }
 
         return parent::setOrder($field, $direction);
@@ -102,7 +111,7 @@ class Collection extends SearchResult
 
         if ($field === 'post_name') {
             $field = 'mp.name';
-        } elseif ($field === 'created_at') {
+        } elseif ($field === 'mp_created_at') {
             $field = 'main_table.created_at';
         }
 
