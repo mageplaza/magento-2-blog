@@ -67,6 +67,7 @@ class InsertRootCategory implements
     public function apply()
     {
         $defaultData = [
+            'store_ids'      => 0,
             'parent_id'      => null,
             'path'           => '1',
             'position'       => 0,
