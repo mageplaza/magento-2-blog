@@ -297,7 +297,7 @@ class Category extends AbstractModel
             $collection = $this->postCollectionFactory->create();
             $collection->join(
                 ['cat' => $this->getResource()->getTable('mageplaza_blog_post_category')],
-                'main_table.post_id=cat.post_id AND cat.category_id=' . $this->getId(),
+                'main_table.post_id=cat.post_id AND cat.category_id=' . (int) $this->getId(),
                 ['position']
             );
             $collection->setOrder('post_id','DESC');

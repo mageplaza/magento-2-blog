@@ -77,15 +77,18 @@ class InsertData implements
      */
     public function apply()
     {
+        $defaultData = [
+            'name'       => 'Admin',
+            'type'       => 0,
+            'status'     => 1,
+            'created_at' => $this->date->date()
+        ];
+
         if (!$this->authorFactory->create()->getCollection()->getSize()) {
-            $this->authorFactory->create()->addData(
-                [
-                    'name'       => 'Admin',
-                    'type'       => 0,
-                    'status'     => 1,
-                    'created_at' => $this->date->date()
-                ]
-            )->save();
+            $this->moduleDataSetup->getConnection()->insertOnDuplicate(
+                $this->moduleDataSetup->getTable('mageplaza_blog_author'),
+                $defaultData
+            );
         }
     }
 
