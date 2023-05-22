@@ -47,7 +47,9 @@ class InsertRootCategory implements
     private $categoryFactory;
 
     /**
+     * InsertRootCategory constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param CategoryFactory $categoryFactory
      */
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
@@ -64,17 +66,20 @@ class InsertRootCategory implements
      */
     public function apply()
     {
+        $defaultData = [
+            'parent_id'      => null,
+            'path'           => '1',
+            'position'       => 0,
+            'children_count' => 0,
+            'level'          => 0,
+            'name'           => 'ROOT',
+            'url_key'        => 'root'
+        ];
         if (!$this->categoryFactory->create()->getCollection()->getSize()) {
-            $this->categoryFactory->create()->addData(
-                [
-                    'path'           => '1',
-                    'position'       => 0,
-                    'children_count' => 0,
-                    'level'          => 0,
-                    'name'           => 'ROOT',
-                    'url_key'        => 'root'
-                ]
-            )->save();
+            $this->moduleDataSetup->getConnection()->insertOnDuplicate(
+                $this->moduleDataSetup->getTable('mageplaza_blog_category'),
+                $defaultData
+            );
         }
     }
 
