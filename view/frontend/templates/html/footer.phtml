@@ -25,7 +25,7 @@ use Mageplaza\Blog\Block\Html\Footer;
 $helper = $block->getHelperData();
 ?>
 <?php if ($helper->isEnabled()) : ?>
-    <?php if ($helper->getBlogConfig('general/footer')) : ?>
+    <?php if ($helper->getBlogConfig('display/footer')) : ?>
         <li>
             <a <?= /** @noEscape */ $block->getLinkAttributes() ?>>
                 <?= $block->escapeHtml($block->getLabel()); ?>
@@ -33,7 +33,7 @@ $helper = $block->getHelperData();
             </a>
         </li>
     <?php endif; ?>
-    <?php if ($helper->getBlogConfig('general/display_sitemap')) : ?>
+    <?php if ($helper->getBlogConfig('post_view_page/display_sitemap')) : ?>
         <li>
             <a href="<?= $block->getHtmlSiteMapUrl() ?>">
                 <?= $block->escapeHtml(__('Sitemap')) ?>

@@ -77,9 +77,10 @@ class Menu extends Template
         array $data = []
     ) {
         $this->categoryCollection = $collectionFactory;
-        $this->category = $categoryFactory;
-        $this->helper = $helperData;
-        $this->storeManager = $storeManager;
+        $this->category           = $categoryFactory;
+        $this->helper             = $helperData;
+        $this->storeManager       = $storeManager;
+
         parent::__construct($context, $data);
     }
 
@@ -175,11 +176,12 @@ class Menu extends Template
     }
 
     /**
-     * @return string
+     * @return \Magento\Framework\Phrase|mixed
+     * @throws NoSuchEntityException
      */
     public function getBlogHomePageTitle()
     {
-        return $this->helper->getBlogConfig('general/name') ?: __('Blog');
+        return $this->helper->getBlogConfig('display/name', $this->helper->getCurrentStoreId()) ?: __('Blog');
     }
 
     /**

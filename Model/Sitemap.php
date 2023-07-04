@@ -204,6 +204,6 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
 
         $this->blogDataHelper = ObjectManager::getInstance()->get(Data::class);
         $this->imageHelper    = ObjectManager::getInstance()->get(Image::class);
-        $this->router         = $this->blogDataHelper->getBlogConfig('general/url_prefix');
+        $this->router         = $this->blogDataHelper->getBlogConfig('display/url_prefix');
     }
 }

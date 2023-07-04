@@ -348,20 +348,69 @@ class Data extends CoreHelper
     /**
      * @param $code
      * @param null $storeId
-     *
      * @return mixed
      */
-    public function getSeoConfig($code, $storeId = null)
+    public function getDisplayConfig($code, $storeId = null)
     {
-        return $this->getBlogConfig('seo/' . $code, $storeId);
+        return $this->getBlogConfig('display/' . $code, $storeId);
+    }
+
+    /**
+     * @param $code
+     * @param null $storeId
+     * @return mixed
+     */
+    public function getIndexPageConfig($code, $storeId = null)
+    {
+        return $this->getBlogConfig('index_page/' . $code, $storeId);
+    }
+
+    /**
+     * @param $code
+     * @param null $storeId
+     * @return mixed
+     */
+    public function getPostViewPageConfig($code, $storeId = null)
+    {
+        return $this->getBlogConfig('post_view_page/' . $code, $storeId);
+    }
+
+    /**
+     * @param $code
+     * @param null $storeId
+     * @return mixed
+     */
+    public function getProductPostConfig($code, $storeId = null)
+    {
+        return $this->getBlogConfig('product_post/' . $code, $storeId);
+    }
+
+    /**
+     * @param $code
+     * @param null $storeId
+     * @return mixed
+     */
+    public function getSidebarConfig($code, $storeId = null)
+    {
+        return $this->getBlogConfig('sidebar/' . $code, $storeId);
+    }
+
+    /**
+     * @param $code
+     * @param null $storeId
+     * @return mixed
+     */
+    public function getCommentConfig($code, $storeId = null)
+    {
+        return $this->getBlogConfig('comment/' . $code, $storeId);
     }
 
     /**
      * @return mixed
      */
-    public function showAuthorInfo()
+    public function showAuthorInfo($storeId = null)
     {
-        return $this->getConfigGeneral('display_author');
+        return $this->getPostViewPageConfig('display_author', $storeId);
     }
 
     /**
@@ -371,7 +420,7 @@ class Data extends CoreHelper
      */
     public function getBlogName($store = null)
     {
-        return $this->getConfigGeneral('name', $store) ?: __('Blog');
+        return $this->getDisplayConfig('name', $store) ?: __('Blog');
     }
 
     /**
@@ -391,8 +440,8 @@ class Data extends CoreHelper
      */
     public function getUrlSuffix($store = null)
     {
-        return $this->getConfigGeneral('url_suffix', $store)
-            ? '.' . $this->getConfigGeneral('url_suffix', $store) : '';
+        return $this->getDisplayConfig('url_suffix', $store)
+            ? '.' . $this->getDisplayConfig('url_suffix', $store) : '';
     }
 
     /**
@@ -689,7 +738,7 @@ class Data extends CoreHelper
         $dateTime = new \DateTime($date, new DateTimeZone('UTC'));
         $dateTime->setTimezone(new DateTimeZone($this->getTimezone()));
 
-        $dateType = $this->getBlogConfig($monthly ? 'monthly_archive/date_type_monthly' : 'general/date_type');
+        $dateType = $this->getBlogConfig($monthly ? 'sidebar/monthly_archive/date_type_monthly' : 'post_view_page/date_type');
 
         return $dateTime->format($dateType);
     }

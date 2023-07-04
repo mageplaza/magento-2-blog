@@ -49,14 +49,14 @@ class View extends \Mageplaza\Blog\Block\Listpost
     {
         parent::_construct();
 
-        $post = $this->postFactory->create();
-        $id = $this->getRequest()->getParam('id');
+        $post      = $this->postFactory->create();
+        $id        = $this->getRequest()->getParam('id');
         $historyId = $this->getRequest()->getParam('historyId');
 
         if ($historyId) {
             $history = $this->helperData->getFactoryByType(Data::TYPE_HISTORY)->create()->load($historyId);
-            $post = $this->helperData->getFactoryByType(Data::TYPE_POST)->create()->load($history->getPostId());
-            $data = $history->getData();
+            $post    = $this->helperData->getFactoryByType(Data::TYPE_POST)->create()->load($history->getPostId());
+            $data    = $history->getData();
             $post->addData($data);
         } elseif ($id) {
             $post->load($id);
@@ -69,7 +69,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
      */
     public function getRelatedMode()
     {
-        return (int)$this->helperData->getConfigGeneral('related_mode') === 1 ? true : false;
+        return (int)$this->helperData->getPostViewPageConfig('related_mode') === 1 ? true : false;
     }
 
     /**
@@ -114,16 +114,6 @@ class View extends \Mageplaza\Blog\Block\Listpost
     public function getTopicUrl($topic)
     {
         return $this->helperData->getBlogUrl($topic, Data::TYPE_TOPIC);
-    }
-
-    /**
-     * @return mixed|string
-     */
-    public function getPubId()
-    {
-        return $this->helperData->getBlogConfig('share/pubid_id') === 'ra-5983d393d9a9b2c9' ?
-            $this->helperData->getBlogConfig('share/pubid_id') :
-            $this->getDecrypt($this->helperData->getBlogConfig('share/pubid_id'));
     }
 
     /**

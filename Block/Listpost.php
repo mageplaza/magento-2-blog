@@ -106,7 +106,7 @@ class Listpost extends Frontend
      */
     public function isGridView()
     {
-        return $this->helperData->getBlogConfig('general/display_style') == DisplayType::GRID;
+        return $this->helperData->getBlogConfig('post_view_page/display_style', $this->helperData->getCurrentStoreId()) == DisplayType::GRID;
     }
 
     /**
@@ -118,7 +118,7 @@ class Listpost extends Frontend
             $breadcrumbs->addCrumb('home', [
                 'label' => __('Home'),
                 'title' => __('Go to Home Page'),
-                'link' => $this->_storeManager->getStore()->getBaseUrl()
+                'link'  => $this->_storeManager->getStore()->getBaseUrl()
             ])
                 ->addCrumb($this->helperData->getRoute(), $this->getBreadcrumbsData());
         }
@@ -202,7 +202,7 @@ class Listpost extends Frontend
      */
     public function getBlogTitle($meta = false)
     {
-        $pageTitle = $this->helperData->getConfigGeneral('name') ?: __('Blog');
+        $pageTitle = $this->helperData->getDisplayConfig('name') ?: __('Blog');
         if ($meta) {
             $title = $this->helperData->getSeoConfig('meta_title') ?: $pageTitle;
 

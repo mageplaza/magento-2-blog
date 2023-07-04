@@ -554,7 +554,7 @@ class Post extends AbstractModel
                     ['position']
                 )->group('main_table.post_id');
 
-            if ($limit = (int) $this->helperData->getBlogConfig('general/related_post')) {
+            if ($limit = (int) $this->helperData->getPostViewPageConfig('related_post')) {
                 $collection->getSelect()
                     ->limit($limit);
             }

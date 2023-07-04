@@ -31,7 +31,7 @@ $authorName   = $author !== null ? $author->getName() : '';
 $modifier     = $helper->getAuthorByPost($_post, true);
 $modifierName = $modifier !== null ? $modifier->getName() : '';
 $isLogged     = ($block->isLoggedIn()) ? 'Yes' : 'No';
-$color        = $helper->getBlogConfig('general/font_color');
+$color        = $helper->getBlogConfig('index_page/font_color');
 ?>
 <div class="mp-blog-view">
     <div class="mp-blog-rss">
@@ -135,10 +135,6 @@ $color        = $helper->getBlogConfig('general/font_color');
     <?php endif; ?>
     <?php if ($helper->getBlogConfig('share/enabled')) : ?>
         <div class="mp-clear"></div>
-        <script type="text/javascript"
-                src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?= /* @noEscape */
-                $block->getPubId() ?>"
-                async="async"></script>
         <div class="mpcss">
             <div id="sharing">
                 <div class="share-col-left">
