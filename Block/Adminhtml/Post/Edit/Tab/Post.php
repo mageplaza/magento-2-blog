@@ -297,37 +297,6 @@ class Post extends Generic implements TabInterface
             ]
         );
 
-        $seoFieldset = $form->addFieldset('seo_fieldset', [
-            'legend' => __('Search Engine Optimization'),
-            'class' => 'fieldset-wide'
-        ]);
-        $seoFieldset->addField('url_key', 'text', [
-            'name' => 'url_key',
-            'label' => __('URL Key'),
-            'title' => __('URL Key')
-        ]);
-        $seoFieldset->addField('meta_title', 'text', [
-            'name' => 'meta_title',
-            'label' => __('Meta Title'),
-            'title' => __('Meta Title')
-        ]);
-        $seoFieldset->addField('meta_description', 'textarea', [
-            'name' => 'meta_description',
-            'label' => __('Meta Description'),
-            'title' => __('Meta Description')
-        ]);
-        $seoFieldset->addField('meta_keywords', 'textarea', [
-            'name' => 'meta_keywords',
-            'label' => __('Meta Keywords'),
-            'title' => __('Meta Keywords')
-        ]);
-        $seoFieldset->addField('meta_robots', 'select', [
-            'name' => 'meta_robots',
-            'label' => __('Meta Robots'),
-            'title' => __('Meta Robots'),
-            'values' => $this->metaRobotsOptions->toOptionArray()
-        ]);
-
         $designFieldset = $form->addFieldset('design_fieldset', [
             'legend' => __('Design'),
             'class' => 'fieldset-wide'
@@ -340,16 +309,6 @@ class Post extends Generic implements TabInterface
             'values' => $this->_layoutOptions->toOptionArray()
         ]);
 
-        if (!$post->getId()) {
-            $post->addData([
-                'allow_comment' => 1,
-                'meta_title' => $this->_scopeConfig->getValue('blog/seo/meta_title'),
-                'meta_description' => $this->_scopeConfig->getValue('blog/seo/meta_description'),
-                'meta_keywords' => $this->_scopeConfig->getValue('blog/seo/meta_keywords'),
-                'meta_robots' => $this->_scopeConfig->getValue('blog/seo/meta_robots'),
-            ]);
-        }
-
         /** Get the public_date from database */
         if ($post->getData('publish_date')) {
             $publicDateTime = new \DateTime($post->getData('publish_date'), new DateTimeZone('UTC'));
@@ -360,6 +319,8 @@ class Post extends Generic implements TabInterface
 
         $form->addValues($post->getData());
         $this->setForm($form);
+
+        $this->_eventManager->dispatch('adminhtml_blog_post_edit_form_prepare_form', ['block' => $this]);
 
         return parent::_prepareForm();
     }

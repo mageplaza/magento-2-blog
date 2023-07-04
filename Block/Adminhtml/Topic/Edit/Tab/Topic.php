@@ -166,44 +166,10 @@ class Topic extends Generic implements TabInterface
             ]);
         }
 
-        $fieldset->addField('url_key', 'text', [
-            'name' => 'url_key',
-            'label' => __('URL Key'),
-            'title' => __('URL Key'),
-        ]);
-        $fieldset->addField('meta_title', 'text', [
-            'name' => 'meta_title',
-            'label' => __('Meta Title'),
-            'title' => __('Meta Title'),
-        ]);
-        $fieldset->addField('meta_description', 'textarea', [
-            'name' => 'meta_description',
-            'label' => __('Meta Description'),
-            'title' => __('Meta Description'),
-        ]);
-        $fieldset->addField('meta_keywords', 'textarea', [
-            'name' => 'meta_keywords',
-            'label' => __('Meta Keywords'),
-            'title' => __('Meta Keywords'),
-        ]);
-        $fieldset->addField('meta_robots', 'select', [
-            'name' => 'meta_robots',
-            'label' => __('Meta Robots'),
-            'title' => __('Meta Robots'),
-            'values' => $this->metaRobotsOptions->toOptionArray(),
-        ]);
-
-        if (!$topic->getId()) {
-            $topic->addData([
-                'meta_title' => $this->_scopeConfig->getValue('blog/seo/meta_title'),
-                'meta_description' => $this->_scopeConfig->getValue('blog/seo/meta_description'),
-                'meta_keywords' => $this->_scopeConfig->getValue('blog/seo/meta_keywords'),
-                'meta_robots' => $this->_scopeConfig->getValue('blog/seo/meta_robots'),
-            ]);
-        }
-
         $form->addValues($topic->getData());
         $this->setForm($form);
+
+        $this->_eventManager->dispatch('adminhtml_blog_topic_edit_form_prepare_form', ['block' => $this]);
 
         return parent::_prepareForm();
     }
