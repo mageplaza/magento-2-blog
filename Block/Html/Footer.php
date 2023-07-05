@@ -76,14 +76,6 @@ class Footer extends Link
     }
 
     /**
-     * @return string
-     */
-    public function getHtmlSiteMapUrl()
-    {
-        return $this->helper->getBlogUrl('sitemap');
-    }
-
-    /**
      * @return Data
      */
     public function getHelperData()

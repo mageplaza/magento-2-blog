@@ -33,12 +33,5 @@ $helper = $block->getHelperData();
             </a>
         </li>
     <?php endif; ?>
-    <?php if ($helper->getBlogConfig('display/display_sitemap')) : ?>
-        <li>
-            <a href="<?= $block->getHtmlSiteMapUrl() ?>">
-                <?= $block->escapeHtml(__('Sitemap')) ?>
-                <?= ($block->getCounter()) ? '<span>' . $block->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
-            </a>
-        </li>
-    <?php endif; ?>
+    <?= $block->getChildHtml('mp_blog_footer_add') ?>
 <?php endif; ?>
