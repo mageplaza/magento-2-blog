@@ -43,7 +43,6 @@
             </index_page>
             <post_view_page>
                 <display_author>1</display_author>
-                <display_sitemap>1</display_sitemap>
                 <date_type>F j, Y</date_type>
                 <related_post>5</related_post>
                 <related_mode>1</related_mode>

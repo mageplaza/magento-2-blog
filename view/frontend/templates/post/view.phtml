@@ -405,9 +405,9 @@ $color        = $helper->getBlogConfig('index_page/font_color');
             <?php endif; ?>
         </div>
     <?php endif; ?>
-    <?php if ($helper->getSeoConfig('snippet/enabled')) : ?>
+    <?php if ($helper->getBlogConfig('seo/snippet/enabled')) : ?>
         <?php
-        $logo = $helper->getSeoConfig('snippet/upload_image_id');
+        $logo = $helper->getBlogConfig('seo/snippet/upload_image_id');
         $logo = $logo ? $helper->getImageHelper()->getMediaUrl($logo) : $block->getDefaultImageUrl();
         ?>
         <script type="application/ld+json">
@@ -433,7 +433,7 @@ $color        = $helper->getBlogConfig('index_page/font_color');
                 },
                 "publisher": {
                     "@type": "Organization",
-                    "name": "<?= /* @noEscape */ $helper->getSeoConfig('snippet/organize_name') ?>",
+                    "name": "<?= /* @noEscape */ $helper->getBlogConfig('seo/snippet/organize_name') ?>",
                     "logo": {
                         "@type": "ImageObject",
                         "url": "<?= /* @noEscape */ $logo ?>",
