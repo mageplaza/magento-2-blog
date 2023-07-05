@@ -405,44 +405,6 @@ $color        = $helper->getBlogConfig('index_page/font_color');
             <?php endif; ?>
         </div>
     <?php endif; ?>
-    <?php if ($helper->getBlogConfig('seo/snippet/enabled')) : ?>
-        <?php
-        $logo = $helper->getBlogConfig('seo/snippet/upload_image_id');
-        $logo = $logo ? $helper->getImageHelper()->getMediaUrl($logo) : $block->getDefaultImageUrl();
-        ?>
-        <script type="application/ld+json">
-            {
-                "@context": "http://schema.org",
-                "@type": "NewsArticle",
-                "mainEntityOfPage": {
-                    "@type": "WebPage",
-                    "@id": "https://google.com/article"
-                },
-                "headline": "<?= /* @noEscape */ $_post->getName() ?>",
-                "image": {
-                    "@type": "ImageObject",
-                    "url": "<?= /* @noEscape */ $_post->getImage() ? $block->getImageUrl($_post->getImage()) : $block->getDefaultImageUrl() ?>",
-                    "height": 800,
-                    "width": 800
-                },
-                "datePublished": "<?= /* @noEscape */ $block->getDateFormat($_post->getPublishDate()) ?>",
-                "dateModified": "<?= /* @noEscape */ $block->getDateFormat($_post->getUpdatedAt()) ?>",
-                "author": {
-                    "@type": "Person",
-                    "name": "<?= /* @noEscape */ $authorName; ?>"
-                },
-                "publisher": {
-                    "@type": "Organization",
-                    "name": "<?= /* @noEscape */ $helper->getBlogConfig('seo/snippet/organize_name') ?>",
-                    "logo": {
-                        "@type": "ImageObject",
-                        "url": "<?= /* @noEscape */ $logo ?>",
-                        "width": 600,
-                        "height": 60
-                    }
-                },
-                "description": "<?= /* @noEscape */ $_post->getShortDescription() ?>"
-            }
-        </script>
-    <?php endif; ?>
+
+    <?= $block->getChildHtml('mp_blog_post_view_add') ?>
 </div>
