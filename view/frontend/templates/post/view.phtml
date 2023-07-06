@@ -53,6 +53,8 @@ $color        = $helper->getBlogConfig('index_page/font_color');
             </div>
             <div class="mp-clear"></div>
             <?= $block->getChildHtml('mp_blog_post_info') ?>
+
+            <?= $block->getChildHtml('mp_blog_post_slider') ?>
         </div>
     </div>
     <?php if ($helper->isEnabledReview()) : ?>
