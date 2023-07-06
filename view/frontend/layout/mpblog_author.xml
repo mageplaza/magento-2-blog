@@ -60,7 +60,7 @@
             </block>
         </referenceContainer>
         <referenceBlock name="head.additional">
-            <block class="Mageplaza\Blog\Block\Design" ifconfig="blog/general/customer_approve" name="mpblog.design" template="Mageplaza_Blog::design.phtml"/>
+            <block class="Mageplaza\Blog\Block\Design" ifconfig="blog/post_view_page/customer_approve" name="mpblog.design" template="Mageplaza_Blog::design.phtml"/>
         </referenceBlock>
     </body>
 </page>

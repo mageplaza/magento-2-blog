@@ -26,7 +26,7 @@
             <action method="setTemplate">
                 <argument name="template" xsi:type="string">Mageplaza_Blog::account/register.phtml</argument>
             </action>
-            <block class="Mageplaza\Blog\Block\Frontend" ifconfig="blog/general/customer_approve" name="mpblog.author.create" as="mpblog.author.create" template="Mageplaza_Blog::author/create.phtml" />
+            <block class="Mageplaza\Blog\Block\Frontend" ifconfig="blog/post_view_page/customer_approve" name="mpblog.author.create" as="mpblog.author.create" template="Mageplaza_Blog::author/create.phtml" />
         </referenceBlock>
     </body>
 </page>
