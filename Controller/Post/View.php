@@ -284,6 +284,7 @@ class View extends Action
                     if ($cmtHasReply->getId()) {
                         $cmtHasReply->setHasReply(1)->save();
                     }
+                    $this->_eventManager->dispatch('blog_post_comment', ['comment_data' => $data]);
 
                     $lastCmt   = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
                     $lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
