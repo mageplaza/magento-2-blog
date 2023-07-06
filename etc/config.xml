@@ -78,6 +78,7 @@
                     <description>100</description>
                 </search>
                 <recent_post>
+                    <enable_widget>1</enable_widget>
                     <number_recent_posts>5</number_recent_posts>
                     <number_mostview_posts>5</number_mostview_posts>
                 </recent_post>

@@ -52,48 +52,7 @@ $color        = $helper->getBlogConfig('index_page/font_color');
                 <?= /** @noEscape */ $block->getPageFilter($_post->getPostContent() ?: '') ?>
             </div>
             <div class="mp-clear"></div>
-            <div class="col-xs-12">
-                <hr/>
-                <div class="mp-post-info">
-                    <span><i class="fa fa-calendar-times-o">&nbsp;</i>
-                        <?= $block->escapeHtml($block->getDateFormat($_post->getPublishDate())) ?>
-                    </span>
-                    <?php if ($_post->getViewTraffic()) : ?>
-                        |
-                        <span><i class="mp-blog-icon mp-blog-traffic" aria-hidden="true"></i>
-                            <?= /* @noEscape */ __('View: %1', $_post->getViewTraffic()) ?>
-                        </span>
-                    <?php endif; ?>
-                    <?php if ($categoryHtml = $block->getPostCategoryHtml($_post)) : ?>
-                        |
-                        <span><i class="fa fa-folder-open-o">&nbsp;</i>
-                            <?= /* @noEscape */ __('Categories: %1', $categoryHtml); ?>
-                        </span>
-                    <?php endif; ?>
-                    <?php if ($tagList = $block->getTagList($_post)) : ?>
-                        | <span><i class="fa fa-tags"></i>
-                            <?= /* @noEscape */ __('Tags: %1', $tagList); ?></span>
-                    <?php endif; ?>
-                    <?php if ($authorName && $helper->showAuthorInfo()) : ?>
-                        |
-                        <span><i class="fa fa-user">&nbsp;</i>
-                            <?= /* @noEscape */ __(
-                                'By: %1',
-                                '<a class="mp-info" href="' . $author->getUrl() . '">' . $authorName . '</a>'
-                            ) ?></span>
-                        <?php if ($authorName != $modifierName && $modifierName) : ?>
-                            |
-                            <span><i class="fa fa-edit">&nbsp;</i>
-                                <?= /* @noEscape */ __(
-                                    'Modify By: %1 at %2',
-                                    '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>',
-                                    $block->getDateFormat($_post->getUpdatedAt())
-                                ) ?></span>
-                        <?php endif; ?>
-                    <?php endif; ?>
-                </div>
-                <hr/>
-            </div>
+            <?= $block->getChildHtml('mp_blog_post_info') ?>
         </div>
     </div>
     <?php if ($helper->isEnabledReview()) : ?>

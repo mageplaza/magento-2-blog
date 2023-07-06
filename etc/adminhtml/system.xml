@@ -202,6 +202,10 @@
                 </group>
                 <group id="recent_post" translate="label" showInDefault="1" sortOrder="10" showInWebsite="1" showInStore="1">
                     <label>Recent posts and Popular posts</label>
+                    <field id="enable_widget" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Enable widget</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
                     <field id="number_recent_posts" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                         <label>Number of recent posts</label>
                         <validate>validate-digits</validate>
