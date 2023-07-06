@@ -24,22 +24,9 @@ use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\Config\Source\Comments\Type;
 
 /** @var View $block */
+$_post = $block->getPost();
 ?>
-<div class="col-xs-12">
-    <hr/>
-    <div class="mp-post-info">
-        <?= $block->getChildHtml('mp_blog_post_info_date') ?>
-
-        <?= $block->getChildHtml('mp_blog_post_info_edited') ?>
-
-        <?= $block->getChildHtml('mp_blog_post_info_traffic') ?>
-
-        <?= $block->getChildHtml('mp_blog_post_info_category') ?>
-
-        <?= $block->getChildHtml('mp_blog_post_info_tag') ?>
-
-        <?= $block->getChildHtml('mp_blog_post_info_author') ?>
-
-    </div>
-    <hr/>
-</div>
+|
+<span><i class="fa fa-pencil-square-o">&nbsp;</i>
+    <?= /* @noEscape */ __('Edited at: %1', $block->getDateFormat($_post->getUpdatedAt())) ?>
+</span>
