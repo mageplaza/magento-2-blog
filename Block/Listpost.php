@@ -45,7 +45,8 @@ class Listpost extends Frontend
         if ($collection && $collection->getSize()) {
             $pager = $this->getLayout()->createBlock(Pager::class, 'mpblog.post.pager');
 
-            $perPageValues = (string)$this->helperData->getConfigGeneral('pagination');
+            $perPageValues = (string) $this->helperData
+                ->getIndexPageConfig('pagination', $this->store->getStore()->getId());
             $perPageValues = explode(',', $perPageValues ?? '');
             $perPageValues = array_combine($perPageValues, $perPageValues);
 
@@ -106,7 +107,8 @@ class Listpost extends Frontend
      */
     public function isGridView()
     {
-        return $this->helperData->getBlogConfig('post_view_page/display_style', $this->helperData->getCurrentStoreId()) == DisplayType::GRID;
+        return $this->helperData->getBlogConfig('post_view_page/display_style',
+                $this->helperData->getCurrentStoreId()) == DisplayType::GRID;
     }
 
     /**
@@ -190,7 +192,7 @@ class Listpost extends Frontend
      */
     public function getTitleSeparator()
     {
-        $separator = (string)$this->helperData->getConfigValue('catalog/seo/title_separator');
+        $separator = (string) $this->helperData->getConfigValue('catalog/seo/title_separator');
 
         return ' ' . $separator . ' ';
     }
