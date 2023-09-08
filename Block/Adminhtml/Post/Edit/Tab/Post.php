@@ -185,6 +185,11 @@ class Post extends Generic implements TabInterface
             'title' => __('Name'),
             'required' => true
         ]);
+        $fieldset->addField('url_key', 'text', [
+            'name'  => 'url_key',
+            'label' => __('URL Key'),
+            'title' => __('URL Key')
+        ]);
         $fieldset->addField('author_id', 'select', [
             'name' => 'author_id',
             'label' => __('Author'),
