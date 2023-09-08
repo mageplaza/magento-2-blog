@@ -93,11 +93,11 @@ class Topic extends Generic implements TabInterface
         Store $systemStore,
         array $data = []
     ) {
-        $this->wysiwygConfig = $wysiwygConfig;
-        $this->booleanOptions = $booleanOptions;
-        $this->enableDisable = $enableDisable;
+        $this->wysiwygConfig     = $wysiwygConfig;
+        $this->booleanOptions    = $booleanOptions;
+        $this->enableDisable     = $enableDisable;
         $this->metaRobotsOptions = $metaRobotsOptions;
-        $this->systemStore = $systemStore;
+        $this->systemStore       = $systemStore;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -116,22 +116,27 @@ class Topic extends Generic implements TabInterface
 
         $fieldset = $form->addFieldset('base_fieldset', [
             'legend' => __('Topic Information'),
-            'class' => 'fieldset-wide'
+            'class'  => 'fieldset-wide'
         ]);
         if ($topic->getId()) {
             $fieldset->addField('topic_id', 'hidden', ['name' => 'topic_id']);
         }
 
         $fieldset->addField('name', 'text', [
-            'name' => 'name',
-            'label' => __('Name'),
-            'title' => __('Name'),
+            'name'     => 'name',
+            'label'    => __('Name'),
+            'title'    => __('Name'),
             'required' => true,
         ]);
+        $fieldset->addField('url_key', 'text', [
+            'name'  => 'url_key',
+            'label' => __('URL Key'),
+            'title' => __('URL Key')
+        ]);
         $fieldset->addField('enabled', 'select', [
-            'name' => 'enabled',
-            'label' => __('Status'),
-            'title' => __('Status'),
+            'name'   => 'enabled',
+            'label'  => __('Status'),
+            'title'  => __('Status'),
             'values' => $this->enableDisable->toOptionArray(),
         ]);
         if (!$topic->hasData('enabled')) {
@@ -139,9 +144,9 @@ class Topic extends Generic implements TabInterface
         }
 
         $fieldset->addField('description', 'editor', [
-            'name' => 'description',
-            'label' => __('Description'),
-            'title' => __('Description'),
+            'name'   => 'description',
+            'label'  => __('Description'),
+            'title'  => __('Description'),
             'config' => $this->wysiwygConfig->getConfig(['add_variables' => false, 'add_widgets' => false])
         ]);
 
@@ -151,9 +156,9 @@ class Topic extends Generic implements TabInterface
                 Element::class
             );
             $fieldset->addField('store_ids', 'multiselect', [
-                'name' => 'store_ids',
-                'label' => __('Store Views'),
-                'title' => __('Store Views'),
+                'name'   => 'store_ids',
+                'label'  => __('Store Views'),
+                'title'  => __('Store Views'),
                 'values' => $this->systemStore->getStoreValuesForForm(false, true)
             ])->setRenderer($rendererBlock);
             if (!$topic->hasData('store_ids')) {
@@ -161,7 +166,7 @@ class Topic extends Generic implements TabInterface
             }
         } else {
             $fieldset->addField('store_ids', 'hidden', [
-                'name' => 'store_ids',
+                'name'  => 'store_ids',
                 'value' => $this->_storeManager->getStore()->getId()
             ]);
         }
@@ -169,7 +174,7 @@ class Topic extends Generic implements TabInterface
         $form->addValues($topic->getData());
         $this->setForm($form);
 
-        $this->_eventManager->dispatch('adminhtml_blog_topic_edit_form_prepare_form', ['block' => $this]);
+        $this->_eventManager->dispatch('adminhtml_blog_edit_form_prepare_form', ['block' => $this]);
 
         return parent::_prepareForm();
     }

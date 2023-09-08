@@ -95,11 +95,11 @@ class Category extends Generic implements TabInterface
         Store $systemStore,
         array $data = []
     ) {
-        $this->wysiwygConfig = $wysiwygConfig;
-        $this->booleanOptions = $booleanOptions;
-        $this->enableDisable = $enableDisable;
+        $this->wysiwygConfig     = $wysiwygConfig;
+        $this->booleanOptions    = $booleanOptions;
+        $this->enableDisable     = $enableDisable;
         $this->metaRobotsOptions = $metaRobotsOptions;
-        $this->systemStore = $systemStore;
+        $this->systemStore       = $systemStore;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -120,7 +120,7 @@ class Category extends Generic implements TabInterface
 
         $fieldset = $form->addFieldset('base_fieldset', [
             'legend' => __('Category Information'),
-            'class' => 'fieldset-wide'
+            'class'  => 'fieldset-wide'
         ]);
 
         if ($category->getId()) {
@@ -135,22 +135,27 @@ class Category extends Generic implements TabInterface
         }
 
         $fieldset->addField('name', 'text', [
-            'name' => 'name',
-            'label' => __('Name'),
-            'title' => __('Name'),
+            'name'     => 'name',
+            'label'    => __('Name'),
+            'title'    => __('Name'),
             'required' => true,
         ]);
+        $fieldset->addField('url_key', 'text', [
+            'name'  => 'url_key',
+            'label' => __('URL Key'),
+            'title' => __('URL Key')
+        ]);
         $fieldset->addField('enabled', 'select', [
-            'name' => 'enabled',
-            'label' => __('Status'),
-            'title' => __('Status'),
+            'name'   => 'enabled',
+            'label'  => __('Status'),
+            'title'  => __('Status'),
             'values' => $this->enableDisable->toOptionArray(),
         ]);
 
         if ($this->_storeManager->isSingleStoreMode()) {
             $storeId = $this->_storeManager->getStore()->getId();
             $fieldset->addField('store_ids', 'hidden', [
-                'name' => 'store_ids',
+                'name'  => 'store_ids',
                 'value' => $storeId
             ]);
         } else {
@@ -158,9 +163,9 @@ class Category extends Generic implements TabInterface
             $rendererBlock = $this->getLayout()->createBlock(Element::class);
 
             $fieldset->addField('store_ids', 'multiselect', [
-                'name' => 'store_ids',
-                'label' => __('Store Views'),
-                'title' => __('Store Views'),
+                'name'   => 'store_ids',
+                'label'  => __('Store Views'),
+                'title'  => __('Store Views'),
                 'values' => $this->systemStore->getStoreValuesForForm(false, true)
             ])->setRenderer($rendererBlock);
 
@@ -172,7 +177,7 @@ class Category extends Generic implements TabInterface
         $form->addValues($category->getData());
         $this->setForm($form);
 
-        $this->_eventManager->dispatch('adminhtml_blog_categories_edit_form_prepare_form', ['block' => $this]);
+        $this->_eventManager->dispatch('adminhtml_blog_edit_form_prepare_form', ['block' => $this]);
 
         return parent::_prepareForm();
     }

@@ -301,6 +301,7 @@ class Post extends Generic implements TabInterface
                 'time_format' => 'hh:mm:ss'
             ]
         );
+        $this->_eventManager->dispatch('after_adminhtml_blog_post_info_tab', ['fieldset' => $fieldset]);
 
         $designFieldset = $form->addFieldset('design_fieldset', [
             'legend' => __('Design'),
@@ -331,7 +332,7 @@ class Post extends Generic implements TabInterface
         $form->addValues($post->getData());
         $this->setForm($form);
 
-        $this->_eventManager->dispatch('adminhtml_blog_post_edit_form_prepare_form', ['block' => $this]);
+        $this->_eventManager->dispatch('adminhtml_blog_edit_form_prepare_form', ['block' => $this]);
 
         return parent::_prepareForm();
     }
