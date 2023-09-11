@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block\MonthlyArchive;
 
+use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
@@ -31,9 +32,8 @@ use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 class Listpost extends \Mageplaza\Blog\Block\Listpost
 {
     /**
-     * Override this function to apply collection for each type
-     *
-     * @return Collection
+     * @return Collection|null
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function getCollection()
     {
@@ -50,6 +50,7 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
 
     /**
      * @return false|string
+     * @throws \Exception
      */
     protected function getMonthLabel()
     {
@@ -57,7 +58,8 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
-     * @inheritdoc
+     * @return void
+     * @throws LocalizedException
      */
     protected function _prepareLayout()
     {
@@ -78,14 +80,6 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
      */
     public function getBlogTitle($meta = false)
     {
-        $blogTitle = parent::getBlogTitle($meta);
-
-        if ($meta) {
-            array_push($blogTitle, $this->getMonthLabel());
-
-            return $blogTitle;
-        }
-
-        return $this->getMonthLabel();
+        return ucfirst($this->getMonthLabel());
     }
 }

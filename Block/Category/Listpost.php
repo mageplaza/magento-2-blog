@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Category;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Mageplaza\Blog\Helper\Data;
@@ -72,6 +73,7 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
 
     /**
      * @inheritdoc
+     * @throws LocalizedException
      */
     protected function _prepareLayout()
     {
@@ -99,16 +101,6 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
         $blogTitle = parent::getBlogTitle($meta);
         $category  = $this->getBlogObject();
         if (!$category) {
-            return $blogTitle;
-        }
-
-        if ($meta) {
-            if ($category->getMetaTitle()) {
-                array_push($blogTitle, $category->getMetaTitle());
-            } else {
-                array_push($blogTitle, ucfirst($category->getName()));
-            }
-
             return $blogTitle;
         }
 
