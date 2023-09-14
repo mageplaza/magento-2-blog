@@ -187,7 +187,6 @@ class View extends Action
      */
     public function execute()
     {
-        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $id   = $this->getRequest()->getParam('id');
         $post = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($id);
         $this->helperBlog->setCustomerContextId();
