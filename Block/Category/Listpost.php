@@ -104,6 +104,16 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
             return $blogTitle;
         }
 
+        if ($meta) {
+            if ($category->getMetaTitle()) {
+                array_push($blogTitle, $category->getMetaTitle());
+            } else {
+                array_push($blogTitle, ucfirst($category->getName()));
+            }
+
+            return $blogTitle;
+        }
+
         return ucfirst($category->getName());
     }
 }

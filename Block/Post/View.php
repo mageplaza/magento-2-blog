@@ -393,6 +393,16 @@ class View extends \Mageplaza\Blog\Block\Listpost
             return $blogTitle;
         }
 
+        if ($meta) {
+            if ($post->getMetaTitle()) {
+                $blogTitle[] = $post->getMetaTitle();
+            } else {
+                $blogTitle[] = ucfirst($post->getName());
+            }
+
+            return $blogTitle;
+        }
+
         return ucfirst($post->getName());
     }
 

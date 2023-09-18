@@ -23,7 +23,6 @@ namespace Mageplaza\Blog\Block;
 
 use Exception;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Theme\Block\Html\Pager;
 use Mageplaza\Blog\Model\Config\Source\DisplayType;
@@ -46,8 +45,7 @@ class Listpost extends Frontend
         if ($collection && $collection->getSize()) {
             $pager = $this->getLayout()->createBlock(Pager::class, 'mpblog.post.pager');
 
-            $perPageValues = (string) $this->helperData
-                ->getIndexPageConfig('pagination', $this->store->getStore()->getId());
+            $perPageValues = (string)$this->helperData->getConfigGeneral('pagination');
             $perPageValues = explode(',', $perPageValues ?? '');
             $perPageValues = array_combine($perPageValues, $perPageValues);
 
@@ -108,12 +106,13 @@ class Listpost extends Frontend
      */
     public function isGridView()
     {
-        return $this->helperData->getBlogConfig('post_view_page/display_style',
-                $this->helperData->getCurrentStoreId()) == DisplayType::GRID;
+        return $this->helperData->getBlogConfig('general/display_style') == DisplayType::GRID;
     }
 
     /**
-     * @inheritdoc
+     * @return Listpost
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _prepareLayout()
     {
@@ -121,30 +120,14 @@ class Listpost extends Frontend
             $breadcrumbs->addCrumb('home', [
                 'label' => __('Home'),
                 'title' => __('Go to Home Page'),
-                'link'  => $this->_storeManager->getStore()->getBaseUrl()
+                'link' => $this->_storeManager->getStore()->getBaseUrl()
             ])
                 ->addCrumb($this->helperData->getRoute(), $this->getBreadcrumbsData());
         }
 
-        $this->pageConfig->getTitle()->set(join($this->getTitleSeparator(), array_reverse([$this->getBlogTitle(true)])));
-        $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
-        if ($pageMainTitle) {
-            $pageMainTitle->setPageTitle($this->getBlogTitle());
-        }
+        $this->applySeoCode();
 
         return parent::_prepareLayout();
-    }
-
-    /**
-     * Retrieve HTML title value separator (with space)
-     *
-     * @return string
-     */
-    protected function getTitleSeparator()
-    {
-        $separator = (string) $this->helperData->getConfigValue('catalog/seo/title_separator');
-
-        return ' ' . $separator . ' ';
     }
 
     /**
@@ -167,6 +150,54 @@ class Listpost extends Frontend
     }
 
     /**
+     * @return $this
+     * @throws LocalizedException
+     */
+    public function applySeoCode()
+    {
+        $this->pageConfig->getTitle()->set(join($this->getTitleSeparator(), array_reverse($this->getBlogTitle(true))));
+
+        $object = $this->getBlogObject();
+        $storeId = $this->store->getStore()->getId();
+        $description = $object ? $object->getMetaDescription() : $this->getBlogConfig('seo/meta_description', $storeId);
+        $this->pageConfig->setDescription($description);
+
+        $keywords = $object ? $object->getMetaKeywords() : $this->getBlogConfig('seo/meta_keywords', $storeId);
+        $this->pageConfig->setKeywords($keywords);
+
+        $robots = $object ? $object->getMetaRobots() : $this->getBlogConfig('seo/meta_robots', $storeId);
+        $this->pageConfig->setRobots($robots);
+
+        $url = $object ? $object->getUrl() : $this->getBlogConfig('seo/url_key', $storeId);
+
+        if ($this->getRequest()->getFullActionName() === 'mpblog_post_view' && $url) {
+            $this->pageConfig->addRemotePageAsset(
+                $url,
+                'canonical',
+                ['attributes' => ['rel' => 'canonical']]
+            );
+        }
+        $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
+        if ($pageMainTitle) {
+            $pageMainTitle->setPageTitle($this->getBlogTitle());
+        }
+
+        return $this;
+    }
+
+    /**
+     * Retrieve HTML title value separator (with space)
+     *
+     * @return string
+     */
+    public function getTitleSeparator()
+    {
+        $separator = (string)$this->helperData->getConfigValue('catalog/seo/title_separator');
+
+        return ' ' . $separator . ' ';
+    }
+
+    /**
      * @param bool $meta
      *
      * @return array|Phrase
@@ -174,16 +205,12 @@ class Listpost extends Frontend
     public function getBlogTitle($meta = false)
     {
         $pageTitle = $this->helperData->getDisplayConfig('name') ?: __('Blog');
+        if ($meta) {
+            $title = $this->helperData->getBlogConfig('seo/meta_title', $this->store->getStore()->getId()) ?: $pageTitle;
+
+            return [$title];
+        }
 
         return $pageTitle;
-    }
-
-    /**
-     * @return int
-     * @throws NoSuchEntityException
-     */
-    public function getStoreId()
-    {
-        return $this->store->getStore()->getId();
     }
 }
