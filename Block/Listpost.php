@@ -126,7 +126,25 @@ class Listpost extends Frontend
                 ->addCrumb($this->helperData->getRoute(), $this->getBreadcrumbsData());
         }
 
+        $this->pageConfig->getTitle()->set(join($this->getTitleSeparator(), array_reverse([$this->getBlogTitle(true)])));
+        $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
+        if ($pageMainTitle) {
+            $pageMainTitle->setPageTitle($this->getBlogTitle());
+        }
+
         return parent::_prepareLayout();
+    }
+
+    /**
+     * Retrieve HTML title value separator (with space)
+     *
+     * @return string
+     */
+    protected function getTitleSeparator()
+    {
+        $separator = (string) $this->helperData->getConfigValue('catalog/seo/title_separator');
+
+        return ' ' . $separator . ' ';
     }
 
     /**

@@ -69,7 +69,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
      */
     public function getRelatedMode()
     {
-        return (int)$this->helperData->getPostViewPageConfig('related_mode') === 1 ? true : false;
+        return (int) $this->helperData->getPostViewPageConfig('related_mode') === 1 ? true : false;
     }
 
     /**
@@ -192,7 +192,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
     {
         if ($this->helperData->isLogin()) {
             $customerId = $this->helperData->getCustomerIdByContext();
-            $likes = $this->likeFactory->create()->getCollection();
+            $likes      = $this->likeFactory->create()->getCollection();
             foreach ($likes as $like) {
                 if ($like->getEntityId() == $customerId && $like->getCommentId() == $cmtId) {
                     return true;
@@ -210,7 +210,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
      */
     public function getPostComments($postId)
     {
-        $result = [];
+        $result   = [];
         $comments = $this->cmtFactory->create()->getCollection()
             ->addFieldToFilter('main_table.post_id', $postId);
         foreach ($comments as $comment) {
@@ -262,17 +262,17 @@ class View extends \Mageplaza\Blog\Block\Listpost
         $this->commentTree .= '<ul class="default-cmt__content__cmt-content row">';
         foreach ($comments as $comment) {
             if ($comment['reply_id'] == $cmtId && $comment['status'] == 1) {
-                $isReply = (bool)$comment['is_reply'];
+                $isReply = (bool) $comment['is_reply'];
                 $replyId = $isReply ? $comment['reply_id'] : '';
                 if ($comment['entity_id'] == 0) {
                     $userName = $comment['user_name'];
                 } else {
-                    $userCmt = $this->getUserComment($comment['entity_id']);
+                    $userCmt  = $this->getUserComment($comment['entity_id']);
                     $userName = $userCmt->getFirstName() . ' '
                         . $userCmt->getLastName();
                 }
-                $countLikes = $this->getCommentLikes($comment['comment_id']);
-                $isLiked = ($this->isLiked($comment['comment_id'])) ? "mpblog-liked" : "mpblog-like";
+                $countLikes        = $this->getCommentLikes($comment['comment_id']);
+                $isLiked           = ($this->isLiked($comment['comment_id'])) ? "mpblog-liked" : "mpblog-like";
                 $this->commentTree .= '<li id="cmt-id-' . $comment['comment_id']
                     . '" class="default-cmt__content__cmt-content__cmt-row cmt-row-'
                     . $comment['comment_id'] . ' cmt-row col-md-12'
@@ -324,7 +324,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
     public function getTagList($post)
     {
         $tagCollection = $post->getSelectedTagsCollection();
-        $result = '';
+        $result        = '';
         if (!empty($tagCollection)) {
             $listTags = [];
             foreach ($tagCollection as $tag) {
@@ -367,7 +367,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
                     $breadcrumbs->addCrumb($category->getUrlKey(), [
                         'label' => $category->getName(),
                         'title' => $category->getName(),
-                        'link' => $this->helperData->getBlogUrl($category, Data::TYPE_CATEGORY)
+                        'link'  => $this->helperData->getBlogUrl($category, Data::TYPE_CATEGORY)
                     ]);
                 }
             }
@@ -388,18 +388,8 @@ class View extends \Mageplaza\Blog\Block\Listpost
     public function getBlogTitle($meta = false)
     {
         $blogTitle = parent::getBlogTitle($meta);
-        $post = $this->getBlogObject();
+        $post      = $this->getBlogObject();
         if (!$post) {
-            return $blogTitle;
-        }
-
-        if ($meta) {
-            if ($post->getMetaTitle()) {
-                $blogTitle[] = $post->getMetaTitle();
-            } else {
-                $blogTitle[] = ucfirst($post->getName());
-            }
-
             return $blogTitle;
         }
 
