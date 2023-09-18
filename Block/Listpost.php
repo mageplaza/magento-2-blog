@@ -45,7 +45,8 @@ class Listpost extends Frontend
         if ($collection && $collection->getSize()) {
             $pager = $this->getLayout()->createBlock(Pager::class, 'mpblog.post.pager');
 
-            $perPageValues = (string)$this->helperData->getConfigGeneral('pagination');
+            $perPageValues = (string) $this->helperData
+                ->getIndexPageConfig('pagination', $this->store->getStore()->getId());
             $perPageValues = explode(',', $perPageValues ?? '');
             $perPageValues = array_combine($perPageValues, $perPageValues);
 
