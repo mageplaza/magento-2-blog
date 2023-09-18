@@ -183,8 +183,8 @@ class Data extends CoreHelper
     {
         $groupId = (string)$this->_httpContext->getValue(CustomerContext::CONTEXT_GROUP);
 
-        if ($this->getConfigGeneral('is_review')
-            && in_array($groupId, explode(',', (string) $this->getConfigGeneral('review_mode')), true)
+        if ($this->getPostViewPageConfig('is_review')
+            && in_array($groupId, explode(',', (string) $this->getPostViewPageConfig('review_mode')), true)
         ) {
             return true;
         }
@@ -200,7 +200,7 @@ class Data extends CoreHelper
         $login = $this->_httpContext->getValue(CustomerContext::CONTEXT_AUTH);
 
         if (!$login
-            && in_array('0', explode(',', $this->getConfigGeneral('review_mode') ?? ''), true)
+            && in_array('0', explode(',', $this->getPostViewPageConfig('review_mode') ?? ''), true)
         ) {
             return '0';
         }
