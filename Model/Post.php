@@ -297,9 +297,11 @@ class Post extends AbstractModel
     {
         $shortDescription = $this->getData('short_description');
 
-        $maxLength = 200;
-        if ($shorten && strlen($shortDescription) > $maxLength) {
-            $shortDescription = substr($shortDescription, 0, $maxLength) . '...';
+        $maxLength = 20;
+        $descArr   = explode(' ', $shortDescription);
+        if ($shorten && count($descArr) > $maxLength) {
+            $descArr          = array_slice($descArr, 0, $maxLength);
+            $shortDescription = implode(' ', $descArr) . '...';
         }
 
         return $shortDescription;
