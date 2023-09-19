@@ -84,7 +84,10 @@ class MassStatus extends Action
             try {
                 $post->setEnabled($status)
                     ->save();
-
+                $this->_eventManager->dispatch(
+                    'mageplaza_blog_post_auto_pub',
+                    ['post' => $post, 'request' => $this->getRequest()]
+                );
                 $postUpdated++;
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());

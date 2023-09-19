@@ -125,15 +125,13 @@ class Save extends Post
             /** @var PostModel $post */
             $post = $this->initPost(false, true);
             $this->prepareData($post, $data);
-
-            $this->_eventManager->dispatch(
-                'mageplaza_blog_post_prepare_save',
-                ['post' => $post, 'request' => $this->getRequest()]
-            );
-
             try {
                 if (empty($action) || $action === 'add') {
                     $post->save();
+                    $this->_eventManager->dispatch(
+                        'mageplaza_blog_post_prepare_save',
+                        ['post' => $post, 'request' => $this->getRequest()]
+                    );
                     $this->messageManager->addSuccessMessage(__('The post has been saved.'));
                 }
                 $this->addHistory($post, $action);
