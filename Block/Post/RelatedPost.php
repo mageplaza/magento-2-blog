@@ -123,7 +123,7 @@ class RelatedPost extends Template
     public function getLimitPosts()
     {
         if (!$this->_limitPost) {
-            $this->_limitPost = (int)$this->helperData->getBlogConfig('product_post/product_detail/post_limit') ?: 1;
+            $this->_limitPost = (int) $this->helperData->getBlogConfig('product_post/product_detail/post_limit') ?: 1;
         }
 
         return $this->_limitPost;
@@ -160,7 +160,7 @@ class RelatedPost extends Template
      */
     public function getRelatedMode()
     {
-        return (int)$this->helperData->getConfigGeneral('related_mode') === 1;
+        return (int) $this->helperData->getPostViewPageConfig('related_mode') === 1;
     }
 
     /**

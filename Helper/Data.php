@@ -181,7 +181,7 @@ class Data extends CoreHelper
      */
     public function isEnabledReview()
     {
-        $groupId = (string)$this->_httpContext->getValue(CustomerContext::CONTEXT_GROUP);
+        $groupId = (string) $this->_httpContext->getValue(CustomerContext::CONTEXT_GROUP);
 
         if ($this->getPostViewPageConfig('is_review')
             && in_array($groupId, explode(',', (string) $this->getPostViewPageConfig('review_mode')), true)
@@ -348,6 +348,7 @@ class Data extends CoreHelper
     /**
      * @param $code
      * @param null $storeId
+     *
      * @return mixed
      */
     public function getDisplayConfig($code, $storeId = null)
@@ -358,6 +359,7 @@ class Data extends CoreHelper
     /**
      * @param $code
      * @param null $storeId
+     *
      * @return mixed
      */
     public function getIndexPageConfig($code, $storeId = null)
@@ -368,6 +370,7 @@ class Data extends CoreHelper
     /**
      * @param $code
      * @param null $storeId
+     *
      * @return mixed
      */
     public function getPostViewPageConfig($code, $storeId = null)
@@ -378,6 +381,7 @@ class Data extends CoreHelper
     /**
      * @param $code
      * @param null $storeId
+     *
      * @return mixed
      */
     public function getProductPostConfig($code, $storeId = null)
@@ -388,6 +392,7 @@ class Data extends CoreHelper
     /**
      * @param $code
      * @param null $storeId
+     *
      * @return mixed
      */
     public function getSidebarConfig($code, $storeId = null)
@@ -398,6 +403,7 @@ class Data extends CoreHelper
     /**
      * @param $code
      * @param null $storeId
+     *
      * @return mixed
      */
     public function getCommentConfig($code, $storeId = null)
@@ -430,7 +436,7 @@ class Data extends CoreHelper
      */
     public function getRoute($store = null)
     {
-        return $this->getConfigGeneral('url_prefix', $store) ?: 'blog';
+        return $this->getDisplayConfig('url_prefix', $store) ?: 'blog';
     }
 
     /**
@@ -714,11 +720,11 @@ class Data extends CoreHelper
             ->from($resource->getMainTable(), '*')
             ->where('url_key = :url_key');
 
-        $binds = ['url_key' => (string)$urlKey];
+        $binds = ['url_key' => (string) $urlKey];
 
         if ($id = $object->getId()) {
             $select->where($resource->getIdFieldName() . ' != :object_id');
-            $binds['object_id'] = (int)$id;
+            $binds['object_id'] = (int) $id;
         }
 
         return $adapter->fetchOne($select, $binds);
@@ -774,6 +780,6 @@ class Data extends CoreHelper
         $storeEnable = explode(',', $object->getStoreIds() ?? '');
 
         return in_array('0', $storeEnable, true)
-            || in_array((string)$this->storeManager->getStore()->getId(), $storeEnable, true);
+            || in_array((string) $this->storeManager->getStore()->getId(), $storeEnable, true);
     }
 }

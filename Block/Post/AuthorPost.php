@@ -51,7 +51,7 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
 
             if ($collection && $collection->getSize()) {
                 $pager         = $this->getLayout()->createBlock(Pager::class, 'mpblog.post.pager');
-                $perPageValues = (string) $this->helperData->getConfigGeneral('pagination');
+                $perPageValues = (string) $this->helperData->getIndexPageConfig('pagination');
                 $perPageValues = explode(',', $perPageValues ?? '');
                 $perPageValues = array_combine($perPageValues, $perPageValues);
 
@@ -108,7 +108,7 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
      */
     public function getMagentoVersion()
     {
-        return (int)$this->helperData->versionCompare('2.4.0', '>=') ? '' : '4';
+        return (int) $this->helperData->versionCompare('2.4.0', '>=') ? '' : '4';
     }
 
     /**
