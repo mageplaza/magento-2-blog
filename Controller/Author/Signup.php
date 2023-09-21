@@ -67,8 +67,8 @@ class Signup extends Action
         ForwardFactory $resultForwardFactory,
         Data $helperData
     ) {
-        $this->_helperBlog = $helperData;
-        $this->resultPageFactory = $resultPageFactory;
+        $this->_helperBlog          = $helperData;
+        $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
 
         parent::__construct($context);
@@ -84,7 +84,7 @@ class Signup extends Action
 
         if (!$this->_helperBlog->isEnabled()
             || !$this->_helperBlog->isEnabledAuthor()
-            || ($this->_helperBlog->isAuthor() && !$this->_helperBlog->getConfigGeneral('customer_approve'))) {
+            || ($this->_helperBlog->isAuthor() && !$this->_helperBlog->getPostViewPageConfig('customer_approve'))) {
             $resultRedirect->setPath('customer/account');
 
             return $resultRedirect;
