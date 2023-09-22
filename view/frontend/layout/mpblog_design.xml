@@ -32,7 +32,7 @@
             <container name="div.sidebar.main" htmlTag="div" htmlClass="sidebar sidebar-main" after="main">
                 <container name="blog.sidebar.main" as="sidebar_main" label="Sidebar Main">
                     <block class="Mageplaza\Blog\Block\Sidebar\Search" name="mpblog.sidebar.search" template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search"/>
-                    <block class="Mageplaza\Blog\Block\Sidebar\MostView" name="mpblog.sidebar.mostview" template="Mageplaza_Blog::sidebar/mostview.phtml"/>
+                    <block class="Mageplaza\Blog\Block\Sidebar\MostView" name="mpblog.sidebar.mostview" template="Mageplaza_Blog::sidebar/mostview.phtml" ifconfig="blog/sidebar/search/enable_search"/>
                     <block class="Mageplaza\Blog\Block\Category\Widget" name="mpblog.sidebar.category" template="Mageplaza_Blog::category/widget.phtml"/>
                     <block class="Mageplaza\Blog\Block\MonthlyArchive\Widget" name="mpblog.sidebar.monthly" template="Mageplaza_Blog::monthly/widget.phtml"/>
                     <block class="Mageplaza\Blog\Block\Topic\Widget" name="mpblog.sidebar.topic" template="Mageplaza_Blog::topic/widget.phtml"/>
