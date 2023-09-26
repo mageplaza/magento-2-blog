@@ -173,6 +173,10 @@
             </group>
             <group id="sidebar" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Sidebar</label>
+                <field id="sidebar_left_right" translate="label comment" type="select" sortOrder="1" showInDefault="20" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Sidebar Location</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\SideBarLR</source_model>
+                </field>
                 <group id="search" translate="label" showInDefault="1" sortOrder="5" showInWebsite="1" showInStore="1">
                     <label>Search</label>
                     <field id="enable_search" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -215,10 +219,6 @@
                         <validate>validate-digits</validate>
                     </field>
                 </group>
-                <field id="sidebar_left_right" translate="label comment" type="select" sortOrder="40" showInDefault="20" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Sidebar Location</label>
-                    <source_model>Mageplaza\Blog\Model\Config\Source\SideBarLR</source_model>
-                </field>
                 <group id="monthly_archive" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Monthly Archive</label>
                     <field id="enable_monthly" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
