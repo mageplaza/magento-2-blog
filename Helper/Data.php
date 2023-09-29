@@ -297,7 +297,7 @@ class Data extends CoreHelper
      */
     public function getAuthorCollection()
     {
-        if ($customerId = $this->_httpContext->getValue('mp_customer_id')) {
+        if ($customerId = $this->getCustomerIdByContext()) {
             return $this->getFactoryByType('author')->create()->getCollection()
                 ->addFieldToFilter('customer_id', $customerId);
         }
