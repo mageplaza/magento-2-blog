@@ -207,10 +207,7 @@ class Listpost extends Frontend
     {
         $pageTitle = $this->helperData->getDisplayConfig('name') ?: __('Blog');
         if ($meta) {
-            $title = $this->helperData->getBlogConfig('seo/meta_title',
-                $this->store->getStore()->getId()) ?: $pageTitle;
-
-            return [$title];
+            return [$pageTitle];
         }
 
         return $pageTitle;
