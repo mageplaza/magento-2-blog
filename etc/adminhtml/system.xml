@@ -67,17 +67,17 @@
                     <label>Show Blog Link in Footer links</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-            </group>
-            <group id="index_page" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Blog Index Page</label>
-                <field id="pagination" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
-                    <label>Blogs per Page Allowed Values</label>
-                    <comment>Comma-separated.</comment>
-                    <backend_model>Mageplaza\Blog\Model\Config\Backend\Pagination</backend_model>
-                </field>
                 <field id="font_color" translate="label comment" type="text" sortOrder="15" showInWebsite="1" showInStore="1" showInDefault="1" canRestore="1">
                     <label>Choose blog's color</label>
                     <frontend_model>Mageplaza\Core\Block\Adminhtml\System\Config\ColorPicker</frontend_model>
+                </field>
+            </group>
+            <group id="index_page" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Blog Index Page</label>
+                <field id="pagination" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
+                    <label>Blogs per Page Allowed Values</label>
+                    <comment>Comma-separated.</comment>
+                    <backend_model>Mageplaza\Blog\Model\Config\Backend\Pagination</backend_model>
                 </field>
             </group>
             <group id="post_view_page" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -180,7 +180,7 @@
                 <group id="search" translate="label" showInDefault="1" sortOrder="5" showInWebsite="1" showInStore="1">
                     <label>Search</label>
                     <field id="enable_search" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                        <label>Enable Search Box</label>
+                        <label>Enable</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <comment><![CDATA[This feature is using Ajax Search technology, same as
                         <a href="https://www.mageplaza.com/magento-2-search-extension/?utm_source=store&utm_medium=documents&utm_campaign=m2-blog" target="_blank">Mageplaza Search</a>.
@@ -207,7 +207,7 @@
                 <group id="recent_post" translate="label" showInDefault="1" sortOrder="10" showInWebsite="1" showInStore="1">
                     <label>Recent posts and Popular posts</label>
                     <field id="enable_widget" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                        <label>Enable widget</label>
+                        <label>Enable</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                     <field id="number_recent_posts" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
