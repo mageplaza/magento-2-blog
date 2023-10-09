@@ -44,6 +44,23 @@
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="customer_approve" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
+                    <label>Allows customers to register as an author</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="auto_approve" translate="label comment" type="select" sortOrder="55" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
+                    <label>Automatically approve requests</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="auto_post" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
+                    <label>Automatically approve customer's posts</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="history_limit" translate="label comment" type="text" sortOrder="65" showInDefault="1" canRestore="1">
+                    <label>Limit of Posts History</label>
+                    <validate>validate-digits</validate>
+                    <comment>Limit number of post history</comment>
+                </field>
             </group>
             <group id="display" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Display</label>
@@ -67,13 +84,13 @@
                     <label>Show Blog Link in Footer links</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="font_color" translate="label comment" type="text" sortOrder="15" showInWebsite="1" showInStore="1" showInDefault="1" canRestore="1">
+                <field id="font_color" translate="label comment" type="text" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1" canRestore="1">
                     <label>Choose blog's color</label>
                     <frontend_model>Mageplaza\Core\Block\Adminhtml\System\Config\ColorPicker</frontend_model>
                 </field>
             </group>
             <group id="index_page" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Blog Index Page</label>
+                <label>Blog Home</label>
                 <field id="pagination" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                     <label>Blogs per Page Allowed Values</label>
                     <comment>Comma-separated.</comment>
@@ -81,7 +98,7 @@
                 </field>
             </group>
             <group id="post_view_page" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Post View Page</label>
+                <label><![CDATA[Blog List Page & Post View Page]]></label>
                 <field id="display_author" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Display author</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -102,23 +119,6 @@
                 <field id="display_style" translate="label comment" type="select" sortOrder="45" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                     <label>Display Blogs Mode</label>
                     <source_model>Mageplaza\Blog\Model\Config\Source\DisplayType</source_model>
-                </field>
-                <field id="customer_approve" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
-                    <label>Allows customers to register as an author</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="auto_approve" translate="label comment" type="select" sortOrder="55" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
-                    <label>Automatically approve requests</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="auto_post" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
-                    <label>Automatically approve customer's posts</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="history_limit" translate="label comment" type="text" sortOrder="65" showInDefault="1" canRestore="1">
-                    <label>Limit of Posts History</label>
-                    <validate>validate-digits</validate>
-                    <comment>Limit number of post history</comment>
                 </field>
                 <field id="is_review" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Allow Voting for Helpfulness</label>

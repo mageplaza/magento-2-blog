@@ -153,7 +153,7 @@ class Register extends Action
         } else {
             $data['customer_id'] = $this->customerSession->getId();
             $data['type']        = '1';
-            $data['status']      = $this->_helperBlog->getPostViewPageConfig('auto_approve');
+            $data['status']      = $this->_helperBlog->getConfigGeneral('auto_approve');
         }
 
         if ($this->getRequest()->getFiles()['image']['size'] > 0) {

@@ -167,7 +167,7 @@ class Manage extends Action
 
         $data['author_id']    = $author->getId();
         $data['store_ids']    = $this->_helperBlog->getCurrentStoreId();
-        $data['enabled']      = $this->_helperBlog->getPostViewPageConfig('auto_post') ? 1 : 0;
+        $data['enabled']      = $this->_helperBlog->getConfigGeneral('auto_post') ? 1 : 0;
         $data['in_rss']       = '0';
         $data['meta_robots']  = 'INDEX,FOLLOW';
         $data['layout']       = 'empty';

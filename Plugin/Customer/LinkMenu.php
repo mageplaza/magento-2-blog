@@ -57,7 +57,7 @@ class LinkMenu
         Links $subject,
         $links
     ) {
-        if ($links && $this->helper->isEnabled() && !$this->helper->getPostViewPageConfig('customer_approve')) {
+        if ($links && $this->helper->isEnabled() && !$this->helper->getConfigGeneral('customer_approve')) {
             foreach ($links as $key => $link) {
                 if ($link->getPath() === 'mpblog/author/signup') {
                     $this->helper->setCustomerContextId();

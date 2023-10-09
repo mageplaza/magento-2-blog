@@ -84,7 +84,7 @@ class Signup extends Action
 
         if (!$this->_helperBlog->isEnabled()
             || !$this->_helperBlog->isEnabledAuthor()
-            || ($this->_helperBlog->isAuthor() && !$this->_helperBlog->getPostViewPageConfig('customer_approve'))) {
+            || ($this->_helperBlog->isAuthor() && !$this->_helperBlog->getConfigGeneral('customer_approve'))) {
             $resultRedirect->setPath('customer/account');
 
             return $resultRedirect;
