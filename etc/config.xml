@@ -40,11 +40,9 @@
                 <url_suffix>html</url_suffix>
                 <toplinks>1</toplinks>
                 <footer>1</footer>
-            </display>
-            <index_page>
-                <pagination>1,2,3</pagination>
                 <font_color>#1abc9c</font_color>
-            </index_page>
+                <pagination>10,20,50</pagination>
+            </display>
             <post_view_page>
                 <display_author>1</display_author>
                 <date_type>F j, Y</date_type>

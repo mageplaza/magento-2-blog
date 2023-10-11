@@ -88,10 +88,7 @@
                     <label>Choose blog's color</label>
                     <frontend_model>Mageplaza\Core\Block\Adminhtml\System\Config\ColorPicker</frontend_model>
                 </field>
-            </group>
-            <group id="index_page" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Blog Home</label>
-                <field id="pagination" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
+                <field id="pagination" translate="label comment" type="text" sortOrder="35" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                     <label>Blogs per Page Allowed Values</label>
                     <comment>Comma-separated.</comment>
                     <backend_model>Mageplaza\Blog\Model\Config\Backend\Pagination</backend_model>

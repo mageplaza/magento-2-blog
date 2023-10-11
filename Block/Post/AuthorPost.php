@@ -51,7 +51,7 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
 
             if ($collection && $collection->getSize()) {
                 $pager         = $this->getLayout()->createBlock(Pager::class, 'mpblog.post.pager');
-                $perPageValues = (string) $this->helperData->getIndexPageConfig('pagination');
+                $perPageValues = (string) $this->helperData->getDisplayConfig('pagination');
                 $perPageValues = explode(',', $perPageValues ?? '');
                 $perPageValues = array_combine($perPageValues, $perPageValues);
 
