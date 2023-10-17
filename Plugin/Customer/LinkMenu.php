@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Plugin\Customer;
 
+use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\View\Element\Html\Link;
 use Magento\Framework\View\Element\Html\Links;
 use Mageplaza\Blog\Helper\Data;
@@ -32,19 +33,27 @@ use Mageplaza\Blog\Helper\Data;
 class LinkMenu
 {
     /**
+     * @var ModuleManager
+     */
+    protected $_moduleManager;
+
+    /**
      * @var Data
      */
-    protected $helper;
+    protected $_helper;
 
     /**
      * Topmenu constructor.
      *
      * @param Data $helper
+     * @param ModuleManager $moduleManager
      */
     public function __construct(
+        ModuleManager $moduleManager,
         Data $helper
     ) {
-        $this->helper = $helper;
+        $this->_moduleManager = $moduleManager;
+        $this->_helper        = $helper;
     }
 
     /**
@@ -57,11 +66,27 @@ class LinkMenu
         Links $subject,
         $links
     ) {
-        if ($links && $this->helper->isEnabled() && !$this->helper->getConfigGeneral('customer_approve')) {
+        if ($this->_moduleManager->isEnabled('Mageplaza_BlogPro') && !$this->_helper->getPostViewPageConfig('enable_to_save')) {
+            $links = $this->unsetLinks($links);
+        } else {
+            $links = $this->unsetLinks($links);
+        }
+
+        return $links;
+    }
+
+    /**
+     * @param $links
+     *
+     * @return mixed
+     */
+    protected function unsetLinks($links)
+    {
+        if ($links && $this->_helper->isEnabled() && !$this->_helper->getConfigGeneral('customer_approve')) {
             foreach ($links as $key => $link) {
                 if ($link->getPath() === 'mpblog/author/signup') {
-                    $this->helper->setCustomerContextId();
-                    $author = $this->helper->getCurrentAuthor();
+                    $this->_helper->setCustomerContextId();
+                    $author = $this->_helper->getCurrentAuthor();
                     if ($author === null || !$author->getId()) {
                         unset($links[$key]);
                     }
@@ -71,4 +96,5 @@ class LinkMenu
 
         return $links;
     }
+
 }
