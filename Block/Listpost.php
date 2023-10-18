@@ -160,16 +160,16 @@ class Listpost extends Frontend
 
         $object      = $this->getBlogObject();
         $storeId     = $this->store->getStore()->getId();
-        $description = $object ? $object->getMetaDescription() : $this->getBlogConfig('seo/meta_description', $storeId);
+        $description = $object ? $object->getMetaDescription() : $this->helperData->getBlogConfig('seo/meta_description', $storeId);
         $this->pageConfig->setDescription($description);
 
-        $keywords = $object ? $object->getMetaKeywords() : $this->getBlogConfig('seo/meta_keywords', $storeId);
+        $keywords = $object ? $object->getMetaKeywords() : $this->helperData->getBlogConfig('seo/meta_keywords', $storeId);
         $this->pageConfig->setKeywords($keywords);
 
-        $robots = $object ? $object->getMetaRobots() : $this->getBlogConfig('seo/meta_robots', $storeId);
+        $robots = $object ? $object->getMetaRobots() : $this->helperData->getBlogConfig('seo/meta_robots', $storeId);
         $this->pageConfig->setRobots($robots);
 
-        $url = $object ? $object->getUrl() : $this->getBlogConfig('seo/url_key', $storeId);
+        $url = $object ? $object->getUrl() : $this->helperData->getBlogConfig('seo/url_key', $storeId);
 
         if ($this->getRequest()->getFullActionName() === 'mpblog_post_view' && $url) {
             $this->pageConfig->addRemotePageAsset(
@@ -207,7 +207,9 @@ class Listpost extends Frontend
     {
         $pageTitle = $this->helperData->getDisplayConfig('name') ?: __('Blog');
         if ($meta) {
-            return [$pageTitle];
+            $title = $this->helperData->getBlogConfig('seo/meta_title') ?: $pageTitle;
+
+            return [$title];
         }
 
         return $pageTitle;
