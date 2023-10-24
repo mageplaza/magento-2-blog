@@ -66,8 +66,8 @@ class LinkMenu
         Links $subject,
         $links
     ) {
-        if ($this->_moduleManager->isEnabled('Mageplaza_BlogPro') && !$this->_helper->getPostViewPageConfig('enable_to_save')) {
-            $links = $this->unsetLinks($links);
+        if ($this->_moduleManager->isEnabled('Mageplaza_BlogPro') && $this->_helper->getPostViewPageConfig('enable_to_save')) {
+            return $links;
         } else {
             $links = $this->unsetLinks($links);
         }
@@ -82,7 +82,7 @@ class LinkMenu
      */
     protected function unsetLinks($links)
     {
-        if ($links && $this->_helper->isEnabled() && !$this->_helper->getConfigGeneral('customer_approve')) {
+        if ($links && !$this->_helper->getConfigGeneral('customer_approve')) {
             foreach ($links as $key => $link) {
                 if ($link->getPath() === 'mpblog/author/signup') {
                     $this->_helper->setCustomerContextId();
