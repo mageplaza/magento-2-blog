@@ -554,7 +554,7 @@ class Post extends AbstractModel
                     'main_table.post_id=topic.post_id AND topic.post_id != "' . $this->getId()
                     . '" AND topic.topic_id IN (' . implode(',', $topicIds) . ')',
                     ['position']
-                )->group('main_table.post_id');
+                )->group('main_table.post_id')->order('topic.position');
 
             if ($limit = (int) $this->helperData->getPostViewPageConfig('related_post')) {
                 $collection->getSelect()
