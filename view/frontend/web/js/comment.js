@@ -298,5 +298,7 @@ require([
             likeComment(cmtRow.find('.btn-like'));
             showReply(cmtRow.find('.btn-reply'));
         }
+        var cmtCount = defaultCmt.find('li').length;
+        $('.mp-cmt-count').text(cmtCount);
     }
 });
