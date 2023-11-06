@@ -130,6 +130,7 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
                     if ($post->getPostContent()) {
                         $post->setData('post_content', $this->getPageFilter($post->getPostContent()));
                     }
+                    $post = $this->helperData->formatPublishDate($post);
                     $result[$post->getId()] = $post->getData();
                 }
             } catch (Exception $e) {

@@ -750,6 +750,22 @@ class Data extends CoreHelper
     }
 
     /**
+     * @param $post
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function formatPublishDate($post)
+    {
+        $publicDateTime = new \DateTime($post->getData('publish_date'), new DateTimeZone('UTC'));
+        $publicDateTime->setTimezone(new DateTimeZone($this->getTimezone()));
+        $publicDateTime = $publicDateTime->format('m/d/Y H:i:s');
+        $post->setData('publish_date', $publicDateTime);
+
+        return $post;
+    }
+
+    /**
      * get configuration zone
      * @return mixed
      */
