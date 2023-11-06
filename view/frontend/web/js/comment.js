@@ -232,6 +232,8 @@ require([
                         break;
                     case 1:
                         displayComment(response, displayReply);
+                        var cmtCount = defaultCmt.find('li').length;
+                        $('.mp-cmt-count').text(cmtCount);
                         inputEl.val('');
                         break;
                     case 'error':
@@ -298,7 +300,5 @@ require([
             likeComment(cmtRow.find('.btn-like'));
             showReply(cmtRow.find('.btn-reply'));
         }
-        var cmtCount = defaultCmt.find('li').length;
-        $('.mp-cmt-count').text(cmtCount);
     }
 });
