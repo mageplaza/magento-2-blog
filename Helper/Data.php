@@ -744,7 +744,7 @@ class Data extends CoreHelper
         $dateTime = new \DateTime($date, new DateTimeZone('UTC'));
         $dateTime->setTimezone(new DateTimeZone($this->getTimezone()));
 
-        $dateType = $this->getBlogConfig($monthly ? 'sidebar/monthly_archive/date_type_monthly' : 'post_view_page/date_type');
+        $dateType = $this->getBlogConfig($monthly ? 'sidebar/monthly_archive/date_type_monthly' : 'display/date_type');
 
         return $dateTime->format($dateType);
     }

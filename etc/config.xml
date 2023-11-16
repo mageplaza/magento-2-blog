@@ -41,11 +41,11 @@
                 <toplinks>1</toplinks>
                 <footer>1</footer>
                 <font_color>#1abc9c</font_color>
+                <date_type>F j, Y</date_type>
                 <pagination>10,20,50</pagination>
             </display>
             <post_view_page>
                 <display_author>1</display_author>
-                <date_type>F j, Y</date_type>
                 <related_post>5</related_post>
                 <related_mode>1</related_mode>
                 <display_style>1</display_style>

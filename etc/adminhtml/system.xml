@@ -88,7 +88,11 @@
                     <label>Choose blog's color</label>
                     <frontend_model>Mageplaza\Core\Block\Adminhtml\System\Config\ColorPicker</frontend_model>
                 </field>
-                <field id="pagination" translate="label comment" type="text" sortOrder="35" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
+                <field id="date_type" translate="label" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Date format</label>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\DateFormat\Type</source_model>
+                </field>
+                <field id="pagination" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                     <label>Blogs per Page Allowed Values</label>
                     <comment>Comma-separated.</comment>
                     <backend_model>Mageplaza\Blog\Model\Config\Backend\Pagination</backend_model>
@@ -99,10 +103,6 @@
                 <field id="display_author" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Display author</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="date_type" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Date format</label>
-                    <source_model>Mageplaza\Blog\Model\Config\Source\DateFormat\Type</source_model>
                 </field>
                 <field id="related_post" translate="label comment" type="text" sortOrder="35" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                     <label>Limit related post</label>
