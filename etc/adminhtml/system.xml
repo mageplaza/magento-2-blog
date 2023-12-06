@@ -106,7 +106,7 @@
                 </field>
                 <field id="related_post" translate="label comment" type="text" sortOrder="35" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
                     <label>Limit related post</label>
-                    <comment>Number of related post in post view page (Related posts are posts with the same tags)</comment>
+                    <comment>Number of related post in post view page (Related posts are posts with the same topics)</comment>
                     <validate>validate-digits</validate>
                 </field>
                 <field id="related_mode" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInStore="1" showInWebsite="1" canRestore="1">
