@@ -96,6 +96,14 @@
                 <facebook_colorscheme>light</facebook_colorscheme>
                 <facebook_order_by>social</facebook_order_by>
             </comment>
+            <platforms>
+                <fb_platform>
+                    <fb_share>0</fb_share>
+                </fb_platform>
+                <x_platform>
+                    <x_share>0</x_share>
+                </x_platform>
+            </platforms>
         </blog>
     </default>
 </config>

@@ -286,6 +286,23 @@
                     <source_model>Mageplaza\Blog\Model\Config\Source\Comments\Facebook\Orderby</source_model>
                 </field>
             </group>
+            <group id="platforms" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Social platforms</label>
+                <group id="fb_platform" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Facebook</label>
+                    <field id="fb_share" translate="label comment" type="select" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Allow sharing posts to Facebook</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="x_platform" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Twitter</label>
+                    <field id="x_share" translate="label comment" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Allow sharing posts to X</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+            </group>
         </section>
     </system>
 </config>

@@ -19,10 +19,12 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
+use Magento\Framework\Escaper;
 use Mageplaza\Blog\Block\Post\View;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\Config\Source\Comments\Type;
 
+/** @var Escaper $escaper */
 /** @var View $block */
 $helper       = $block->getBlogHelper();
 $_post        = $block->getPost();
@@ -94,7 +96,7 @@ $color        = $helper->getDisplayConfig('font_color');
             }
         </script>
     <?php endif; ?>
-    <?php if ($helper->getBlogConfig('share/enabled')) : ?>
+    <?php if ($helper->getBlogConfig('platforms/fb_platform/fb_share') || $helper->getBlogConfig('platforms/x_platform/x_share')) : ?>
         <div class="mp-clear"></div>
         <div class="mpcss">
             <div id="sharing">
@@ -103,7 +105,24 @@ $color        = $helper->getDisplayConfig('font_color');
                 </div>
                 <div class="share-col-right">
                     <div class="post-sharing-button">
-                        <div class="addthis_inline_share_toolbox"></div>
+                        <?php if ($helper->getBlogConfig('platforms/x_platform/x_share')) : ?>
+                            <img class="img-responsive"
+                                 src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/twitter.png')) ?>"
+                                 alt="Share on Twitter"
+                                 onclick="window.open('https://twitter.com/share?text=&amp;url=<?= /* @noEscape */
+                                 $_post->getUrl() ?>','Twitter-dialog','width=626,height=436'); return false;"
+                                 style="cursor: pointer;width: 43%;position: relative; left: 1rem"
+                            />
+                        <?php endif; ?>
+                        <?php if ($helper->getBlogConfig('platforms/fb_platform/fb_share')) : ?>
+                            <img class="img-responsive"
+                                 src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/facebook.png')) ?>"
+                                 alt="Share on Facebook"
+                                 onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('<?= /* @noEscape */
+                                 $_post->getUrl() ?>'),'facebook-share-dialog','width=626,height=436'); return false;"
+                                 style="cursor: pointer;"
+                            />
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
