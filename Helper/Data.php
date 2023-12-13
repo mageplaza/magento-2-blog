@@ -669,6 +669,12 @@ class Data extends CoreHelper
 
         if ($id = $object->getId()) {
             $select->where($resource->getIdFieldName() . ' != :object_id');
+            $storeIds = $object->getStoreIds();
+            if (!empty($storeIds)) {
+                foreach (explode(',', $storeIds) ?? [] as $store) {
+                    $select->where("FIND_IN_SET(${store}, store_ids)");
+                }
+            }
             $binds['object_id'] = (int)$id;
         }
 
