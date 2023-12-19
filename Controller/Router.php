@@ -103,26 +103,10 @@ class Router implements RouterInterface
 
         $action = array_shift($routePath) ?: 'index';
 
-        [$controller, $request, $action] = $this->switchController($controller, $request, $action);
-
-        $request->setControllerName($controller)
-            ->setActionName($action)
-            ->setPathInfo('/mpblog/' . $controller . '/' . $action);
-
-        return $this->actionFactory->create(Forward::class);
-    }
-
-    /**
-     * @param $controller
-     * @param $request
-     * @param $action
-     */
-    public function switchController($controller, $request, $action)
-    {
         switch ($controller) {
             case 'post':
                 if (!in_array($action, ['index', 'rss'])) {
-                    $post   = $this->helper->getObjectByParam($action, 'url_key');
+                    $post = $this->helper->getObjectByParam($action, 'url_key');
                     $request->setParam('id', $post->getId());
                     $action = 'view';
                 }
@@ -131,18 +115,21 @@ class Router implements RouterInterface
                 if (!in_array($action, ['index', 'rss'])) {
                     $category = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_CATEGORY);
                     $request->setParam('id', $category->getId());
-                    $action   = 'view';
+                    $action = 'view';
                 }
                 break;
             case 'tag':
-                $tag    = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_TAG);
+                $tag = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_TAG);
                 $request->setParam('id', $tag->getId());
                 $action = 'view';
                 break;
             case 'topic':
-                $topic  = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_TOPIC);
+                $topic = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_TOPIC);
                 $request->setParam('id', $topic->getId());
                 $action = 'view';
+                break;
+            case 'sitemap':
+                $action = 'index';
                 break;
             case 'author':
                 $author = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_AUTHOR);
@@ -154,13 +141,17 @@ class Router implements RouterInterface
                 $action = 'view';
                 break;
             default:
-                $post       = $this->helper->getObjectByParam($controller, 'url_key');
+                $post = $this->helper->getObjectByParam($controller, 'url_key');
                 $request->setParam('id', $post->getId());
                 $controller = 'post';
-                $action     = 'view';
+                $action = 'view';
         }
 
-        return [$controller, $request, $action];
+        $request->setControllerName($controller)
+            ->setActionName($action)
+            ->setPathInfo('/mpblog/' . $controller . '/' . $action);
+
+        return $this->actionFactory->create(Forward::class);
     }
 
     /**

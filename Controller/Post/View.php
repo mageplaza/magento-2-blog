@@ -187,6 +187,7 @@ class View extends Action
      */
     public function execute()
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $id   = $this->getRequest()->getParam('id');
         $post = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($id);
         $this->helperBlog->setCustomerContextId();
@@ -283,7 +284,6 @@ class View extends Action
                     if ($cmtHasReply->getId()) {
                         $cmtHasReply->setHasReply(1)->save();
                     }
-                    $this->_eventManager->dispatch('blog_post_comment', ['comment_data' => $data]);
 
                     $lastCmt   = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
                     $lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;

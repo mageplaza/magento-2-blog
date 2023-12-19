@@ -21,8 +21,6 @@
 
 namespace Mageplaza\Blog\Block\Tag;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 use Mageplaza\Blog\Model\TagFactory;
@@ -42,7 +40,6 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
      * Override this function to apply collection for each type
      *
      * @return Collection
-     * @throws NoSuchEntityException
      */
     protected function getCollection()
     {
@@ -74,19 +71,17 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
 
     /**
      * @inheritdoc
-     * @throws LocalizedException
      */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
 
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
-            $tag     = $this->getBlogObject();
-            $tagName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $tag->getName());
+            $tag = $this->getBlogObject();
             if ($tag) {
                 $breadcrumbs->addCrumb($tag->getUrlKey(), [
-                    'label' => __($tagName),
-                    'title' => __($tagName)
+                    'label' => __('Tag'),
+                    'title' => __('Tag')
                 ]);
             }
         }
@@ -100,7 +95,7 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     public function getBlogTitle($meta = false)
     {
         $blogTitle = parent::getBlogTitle($meta);
-        $tag       = $this->getBlogObject();
+        $tag = $this->getBlogObject();
         if (!$tag) {
             return $blogTitle;
         }

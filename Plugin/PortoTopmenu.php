@@ -54,7 +54,7 @@ class PortoTopmenu
      */
     public function afterGetMegamenuHtml(\Smartwave\Megamenu\Block\Topmenu $topmenu, $html)
     {
-        if ($this->helper->isEnabled() && $this->helper->getBlogConfig('display/toplinks')) {
+        if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
             $blogHtml = $topmenu->getLayout()->createBlock(Menu::class)
                 ->setTemplate('Mageplaza_Blog::category/topPortoMenu.phtml')->toHtml();
 

@@ -21,9 +21,6 @@
 
 namespace Mageplaza\Blog\Block\Topic;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Phrase;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 use Mageplaza\Blog\Model\TopicFactory;
@@ -43,7 +40,6 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
      * Override this function to apply collection for each type
      *
      * @return Collection
-     * @throws NoSuchEntityException
      */
     protected function getCollection()
     {
@@ -75,19 +71,17 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
 
     /**
      * @inheritdoc
-     * @throws LocalizedException
      */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
 
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
-            $topic     = $this->getBlogObject();
-            $topicName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $topic->getName());
+            $topic = $this->getBlogObject();
             if ($topic) {
                 $breadcrumbs->addCrumb($topic->getUrlKey(), [
-                    'label' => __($topicName),
-                    'title' => __($topicName)
+                    'label' => __('Topic'),
+                    'title' => __('Topic')
                 ]);
             }
         }
@@ -96,12 +90,12 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     /**
      * @param bool $meta
      *
-     * @return array|Phrase|string
+     * @return array
      */
     public function getBlogTitle($meta = false)
     {
         $blogTitle = parent::getBlogTitle($meta);
-        $topic     = $this->getBlogObject();
+        $topic = $this->getBlogObject();
         if (!$topic) {
             return $blogTitle;
         }

@@ -83,7 +83,6 @@ class MassStatus extends Action
         foreach ($collection as $comment) {
             try {
                 $comment->setStatus($status)->save();
-                $this->_eventManager->dispatch('blog_post_comment', ['comment_data' => $comment]);
                 $commentUpdated++;
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());

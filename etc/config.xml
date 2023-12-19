@@ -29,32 +29,29 @@
             </module>
             <general>
                 <enabled>1</enabled>
-                <customer_approve>0</customer_approve>
-                <auto_approve>0</auto_approve>
-                <auto_post>0</auto_post>
-                <history_limit>5</history_limit>
-            </general>
-            <display>
                 <name>Blog</name>
                 <url_prefix>blog</url_prefix>
                 <url_suffix>html</url_suffix>
                 <toplinks>1</toplinks>
                 <footer>1</footer>
-                <font_color>#1abc9c</font_color>
-                <date_type>F j, Y</date_type>
-                <pagination>10,20,50</pagination>
-            </display>
-            <post_view_page>
                 <display_author>1</display_author>
+                <display_sitemap>1</display_sitemap>
+                <date_type>F j, Y</date_type>
                 <related_post>5</related_post>
                 <related_mode>1</related_mode>
                 <display_style>1</display_style>
+                <font_color>#1abc9c</font_color>
+                <pagination>10,20,50</pagination>
+                <customer_approve>0</customer_approve>
+                <auto_approve>0</auto_approve>
+                <auto_post>0</auto_post>
+                <history_limit>5</history_limit>
                 <is_review>1</is_review>
                 <resize_image>
                     <resize_width>900</resize_width>
                     <resize_height>500</resize_height>
                 </resize_image>
-            </post_view_page>
+            </general>
             <product_post>
                 <product_detail>
                     <enable_post>1</enable_post>
@@ -68,6 +65,9 @@
                 </post_detail>
             </product_post>
             <sidebar>
+                <number_recent_posts>5</number_recent_posts>
+                <number_mostview_posts>5</number_mostview_posts>
+                <sidebar_left_right>2columns-right</sidebar_left_right>
                 <search>
                     <enable_search>1</enable_search>
                     <search_limit>10</search_limit>
@@ -75,18 +75,12 @@
                     <show_image>1</show_image>
                     <description>100</description>
                 </search>
-                <recent_post>
-                    <enable_widget>1</enable_widget>
-                    <number_recent_posts>5</number_recent_posts>
-                    <number_mostview_posts>5</number_mostview_posts>
-                </recent_post>
-                <sidebar_left_right>2columns-right</sidebar_left_right>
-                <monthly_archive>
-                    <enable_monthly>1</enable_monthly>
-                    <number_records>5</number_records>
-                    <date_type_monthly>F , Y</date_type_monthly>
-                </monthly_archive>
             </sidebar>
+            <monthly_archive>
+                <enable_monthly>1</enable_monthly>
+                <number_records>5</number_records>
+                <date_type_monthly>F , Y</date_type_monthly>
+            </monthly_archive>
             <comment>
                 <type>4</type>
                 <need_approve>0</need_approve>
@@ -96,14 +90,15 @@
                 <facebook_colorscheme>light</facebook_colorscheme>
                 <facebook_order_by>social</facebook_order_by>
             </comment>
-            <platforms>
-                <fb_platform>
-                    <fb_share>0</fb_share>
-                </fb_platform>
-                <x_platform>
-                    <x_share>0</x_share>
-                </x_platform>
-            </platforms>
+            <share>
+                <enabled>1</enabled>
+                <pubid_id>ra-5983d393d9a9b2c9</pubid_id>
+            </share>
+            <seo>
+                <snippet>
+                    <enabled>1</enabled>
+                </snippet>
+            </seo>
         </blog>
     </default>
 </config>

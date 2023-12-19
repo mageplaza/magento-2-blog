@@ -359,13 +359,7 @@ class Frontend extends Template
             }
 
             $categories = $this->helperData->getCategoryCollection($post->getCategoryIds());
-            $count      = 0;
             foreach ($categories as $_cat) {
-                $count++;
-                $maximum = $this->helperData->getSidebarConfig('categories/maximum');
-                if ($maximum && $count > $maximum) {
-                    continue;
-                }
                 $categoryHtml[] = '<a class="mp-info" href="'
                     . $this->helperData->getBlogUrl(
                         $_cat,

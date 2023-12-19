@@ -27,29 +27,29 @@
     </head>
     <body>
         <referenceContainer name="sidebar.main">
-            <block class="Magento\Framework\View\Element\Template" name="sidebar.main.blog_nav" template="Magento_Theme::html/collapsible.phtml" before="-">
+            <block class="Magento\Framework\View\Element\Template" name="sidebar.main.reward_nav" template="Magento_Theme::html/collapsible.phtml" before="-">
                 <arguments>
                     <argument name="block_css" xsi:type="string">block-collapsible-nav</argument>
                 </arguments>
-                <block class="Mageplaza\Blog\Block\Navigation" name="blog_account_navigation" before="-">
+                <block class="Mageplaza\Blog\Block\Navigation" name="reward_account_navigation" before="-">
                     <arguments>
                         <argument name="css_class" xsi:type="string">nav items</argument>
                     </arguments>
-                    <block class="Magento\Framework\View\Element\Html\Link\Current" name="blog-navigation-info">
+                    <block class="Magento\Framework\View\Element\Html\Link\Current" name="reward-navigation-dashboard">
                         <arguments>
                             <argument name="label" xsi:type="string" translate="true">Author Information</argument>
                             <argument name="path" xsi:type="string">mpblog/author/information</argument>
                             <argument name="sortOrder" xsi:type="number">10</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Framework\View\Element\Html\Link\Current" name="blog-navigation-post-list">
+                    <block class="Magento\Framework\View\Element\Html\Link\Current" name="reward-navigation-transaction">
                         <arguments>
                             <argument name="label" xsi:type="string" translate="true">Post List</argument>
                             <argument name="path" xsi:type="string">mpblog/post/history</argument>
                             <argument name="sortOrder" xsi:type="number">20</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Framework\View\Element\Html\Link\Current" name="blog-navigation-back">
+                    <block class="Magento\Framework\View\Element\Html\Link\Current" name="reward-navigation-back">
                         <arguments>
                             <argument name="label" xsi:type="string" translate="true">Back</argument>
                             <argument name="path" xsi:type="string">customer/account/</argument>

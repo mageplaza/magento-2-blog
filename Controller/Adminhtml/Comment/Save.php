@@ -53,7 +53,6 @@ class Save extends Comment
 
             try {
                 $comment->save();
-                $this->_eventManager->dispatch('blog_post_comment', ['comment_data' => $comment]);
 
                 $this->messageManager->addSuccessMessage(__('The comment has been saved.'));
                 $this->_getSession()->setData('mageplaza_blog_comment_data', false);

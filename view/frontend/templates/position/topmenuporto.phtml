@@ -23,10 +23,10 @@ use Mageplaza\Blog\Helper\Data;
 
 $helper = $this->helper(Data::class);
 
-if ($helper->isEnabled() && $helper->getBlogConfig('display/toplinks')) : ?>
+if ($helper->isEnabled() && $helper->getBlogConfig('general/toplinks')) : ?>
     <li class="ui-menu-item level0 fullwidth">
         <a href="<?= /** @noEscape */ $helper->getBlogUrl('') ?>" class="level-top">
-            <span><?= $helper->getBlogConfig('display/name') ?: /** @noEscape */ __('Blog') ?></span>
+            <span><?= $helper->getBlogConfig('general/name') ?: /** @noEscape */ __('Blog') ?></span>
         </a>
     </li>
 <?php endif; ?>

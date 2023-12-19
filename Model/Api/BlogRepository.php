@@ -818,14 +818,14 @@ class BlogRepository implements BlogRepositoryInterface
 
         $blogConfig = $this->_helperData->getConfigValue(Data::CONFIG_MODULE_PATH);
         $general    = new General();
-        $general->setBlogName($blogConfig['display']['name']);
-        $general->setIsLinkInMenu($blogConfig['display']['toplinks']);
-        $general->setIsDisplayAuthor($blogConfig['post_view_page']['display_author']);
-        $general->setBlogMode($blogConfig['post_view_page']['display_style']);
-        $general->setBlogColor($blogConfig['index_page']['font_color']);
+        $general->setBlogName($blogConfig['general']['name']);
+        $general->setIsLinkInMenu($blogConfig['general']['toplinks']);
+        $general->setIsDisplayAuthor($blogConfig['general']['display_author']);
+        $general->setBlogMode($blogConfig['general']['display_style']);
+        $general->setBlogColor($blogConfig['general']['font_color']);
         $sidebar = new Sidebar();
-        $sidebar->setNumberMostView($blogConfig['sidebar']['recent_post']['number_recent_posts']);
-        $sidebar->setNumberRecent($blogConfig['sidebar']['recent_post']['number_mostview_posts']);
+        $sidebar->setNumberMostView($blogConfig['sidebar']['number_recent_posts']);
+        $sidebar->setNumberRecent($blogConfig['sidebar']['number_mostview_posts']);
         $seo = new Seo();
         if (isset($blogConfig['seo']['meta_title'])) {
             $seo->setMetaTitle($blogConfig['seo']['meta_title']);

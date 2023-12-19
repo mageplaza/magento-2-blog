@@ -297,11 +297,9 @@ class Post extends AbstractModel
     {
         $shortDescription = $this->getData('short_description');
 
-        $maxLength = 20;
-        $descArr   = explode(' ', $shortDescription ?? '');
-        if ($shorten && count($descArr) > $maxLength) {
-            $descArr          = array_slice($descArr, 0, $maxLength);
-            $shortDescription = implode(' ', $descArr) . '...';
+        $maxLength = 200;
+        if ($shorten && strlen($shortDescription) > $maxLength) {
+            $shortDescription = substr($shortDescription, 0, $maxLength) . '...';
         }
 
         return $shortDescription;
@@ -554,9 +552,9 @@ class Post extends AbstractModel
                     'main_table.post_id=topic.post_id AND topic.post_id != "' . $this->getId()
                     . '" AND topic.topic_id IN (' . implode(',', $topicIds) . ')',
                     ['position']
-                )->group('main_table.post_id')->order('topic.position');
+                )->group('main_table.post_id');
 
-            if ($limit = (int) $this->helperData->getPostViewPageConfig('related_post')) {
+            if ($limit = (int) $this->helperData->getBlogConfig('general/related_post')) {
                 $collection->getSelect()
                     ->limit($limit);
             }

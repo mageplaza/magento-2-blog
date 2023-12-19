@@ -67,12 +67,19 @@ class Footer extends Link
     }
 
     /**
-     * @return \Magento\Framework\Phrase|mixed|string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return string
      */
     public function getLabel()
     {
-        return $this->helper->getBlogConfig('display/name', $this->helper->getCurrentStoreId()) ? : __('Blog');
+        return $this->helper->getBlogConfig('general/name') ? : __('Blog');
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtmlSiteMapUrl()
+    {
+        return $this->helper->getBlogUrl('sitemap');
     }
 
     /**

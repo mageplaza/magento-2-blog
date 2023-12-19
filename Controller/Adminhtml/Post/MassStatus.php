@@ -84,6 +84,7 @@ class MassStatus extends Action
             try {
                 $post->setEnabled($status)
                     ->save();
+
                 $postUpdated++;
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());

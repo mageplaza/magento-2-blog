@@ -58,7 +58,7 @@ class Topmenu
         \Magento\Theme\Block\Html\Topmenu $subject,
         $html
     ) {
-        if ($this->helper->isEnabled() && $this->helper->getBlogConfig('display/toplinks')) {
+        if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
             $blogHtml = $subject->getLayout()->createBlock(Menu::class)
                 ->setTemplate('Mageplaza_Blog::category/topmenu.phtml')->toHtml();
 

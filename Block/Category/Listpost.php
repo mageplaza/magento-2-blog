@@ -21,7 +21,6 @@
 
 namespace Mageplaza\Blog\Block\Category;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Mageplaza\Blog\Helper\Data;
@@ -73,7 +72,6 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
 
     /**
      * @inheritdoc
-     * @throws LocalizedException
      */
     protected function _prepareLayout()
     {

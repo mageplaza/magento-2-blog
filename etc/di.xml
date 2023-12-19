@@ -64,6 +64,7 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Sitemap\Model\Sitemap" type="Mageplaza\Blog\Model\Sitemap"/>
 
     <preference for="Mageplaza\Blog\Api\Data\PostInterface" type="Mageplaza\Blog\Model\Post" />
     <preference for="Mageplaza\Blog\Api\Data\CommentInterface" type="Mageplaza\Blog\Model\Comment" />

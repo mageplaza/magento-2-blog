@@ -21,7 +21,6 @@
 
 namespace Mageplaza\Blog\Plugin\Customer;
 
-use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\View\Element\Html\Link;
 use Magento\Framework\View\Element\Html\Links;
 use Mageplaza\Blog\Helper\Data;
@@ -33,27 +32,19 @@ use Mageplaza\Blog\Helper\Data;
 class LinkMenu
 {
     /**
-     * @var ModuleManager
-     */
-    protected $_moduleManager;
-
-    /**
      * @var Data
      */
-    protected $_helper;
+    protected $helper;
 
     /**
      * Topmenu constructor.
      *
      * @param Data $helper
-     * @param ModuleManager $moduleManager
      */
     public function __construct(
-        ModuleManager $moduleManager,
         Data $helper
     ) {
-        $this->_moduleManager = $moduleManager;
-        $this->_helper        = $helper;
+        $this->helper = $helper;
     }
 
     /**
@@ -66,27 +57,11 @@ class LinkMenu
         Links $subject,
         $links
     ) {
-        if ($this->_moduleManager->isEnabled('Mageplaza_BlogPro') && $this->_helper->getPostViewPageConfig('enable_to_save')) {
-            return $links;
-        } else {
-            $links = $this->unsetLinks($links);
-        }
-
-        return $links;
-    }
-
-    /**
-     * @param $links
-     *
-     * @return mixed
-     */
-    protected function unsetLinks($links)
-    {
-        if ($links && !$this->_helper->getConfigGeneral('customer_approve')) {
+        if ($links && $this->helper->isEnabled() && !$this->helper->getConfigGeneral('customer_approve')) {
             foreach ($links as $key => $link) {
                 if ($link->getPath() === 'mpblog/author/signup') {
-                    $this->_helper->setCustomerContextId();
-                    $author = $this->_helper->getCurrentAuthor();
+                    $this->helper->setCustomerContextId();
+                    $author = $this->helper->getCurrentAuthor();
                     if ($author === null || !$author->getId()) {
                         unset($links[$key]);
                     }
@@ -96,5 +71,4 @@ class LinkMenu
 
         return $links;
     }
-
 }

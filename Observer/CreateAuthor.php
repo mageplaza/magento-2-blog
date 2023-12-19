@@ -61,8 +61,8 @@ class CreateAuthor implements ObserverInterface
         AuthorFactory $authorFactory,
         ManagerInterface $manager
     ) {
-        $this->author         = $authorFactory;
-        $this->_helper        = $helper;
+        $this->author = $authorFactory;
+        $this->_helper = $helper;
         $this->messageManager = $manager;
     }
 
@@ -72,15 +72,15 @@ class CreateAuthor implements ObserverInterface
     public function execute(Observer $observer)
     {
         $accountController = $observer->getData('account_controller');
-        $customer          = $observer->getData('customer');
+        $customer = $observer->getData('customer');
 
         /** @var CreatePost $accountController */
         if ($this->_helper->isEnabled() && $accountController->getRequest()->getParam('is_mp_author')) {
-            $data   = [
+            $data = [
                 'customer_id' => $customer->getId(),
-                'name'        => $customer->getFirstname(),
-                'type'        => '1',
-                'status'      => $this->_helper->getConfigGeneral('auto_approve') ? 1 : 0
+                'name' => $customer->getFirstname(),
+                'type' => '1',
+                'status' => $this->_helper->getConfigGeneral('auto_approve') ? 1 : 0
             ];
             $author = $this->author->create();
             $author->addData($data);
