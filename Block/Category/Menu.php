@@ -77,9 +77,9 @@ class Menu extends Template
         array $data = []
     ) {
         $this->categoryCollection = $collectionFactory;
-        $this->category           = $categoryFactory;
-        $this->helper             = $helperData;
-        $this->storeManager       = $storeManager;
+        $this->category = $categoryFactory;
+        $this->helper = $helperData;
+        $this->storeManager = $storeManager;
         parent::__construct($context, $data);
     }
 
@@ -105,7 +105,7 @@ class Menu extends Template
     public function getCollections()
     {
         $collection = $this->categoryCollection->create()
-            ->addAttributeToFilter('level', '1')->addAttributeToFilter('enabled', '1')->setOrder('position', 'ASC');
+            ->addAttributeToFilter('level', '1')->addAttributeToFilter('enabled', '1')->setOrder('position','ASC');
 
         return $this->helper->addStoreFilter($collection, $this->storeManager->getStore()->getId());
     }
@@ -117,12 +117,14 @@ class Menu extends Template
      */
     public function getMenuHtml($parentCategory)
     {
-        $categoryUrl    = $this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey());
-        $html           = '<li class="level' . $parentCategory->getLevel()
+        $categoryUrl = $this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey());
+        $html = '<li class="level' . $parentCategory->getLevel()
             . ' category-item ui-menu-item" role="presentation">'
             . '<a href="' . $categoryUrl . '" class="ui-corner-all" tabindex="-1" role="menuitem">'
             . '<span>' . $parentCategory->getName() . '</span></a>';
+
         $childCategorys = $this->getChildCategory($parentCategory->getId());
+
         if (count($childCategorys) > 0) {
             $html .= '<ul class="level' . $parentCategory->getLevel() . ' submenu ui-menu ui-widget'
                 . ' ui-widget-content ui-corner-all"'
@@ -148,7 +150,7 @@ class Menu extends Template
     public function getPortoMenuHtml($parentCategory)
     {
         $categoryUrl = $this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey());
-        $html        = '<li class="ui-menu-item level' . $parentCategory->getLevel() . ' parent" role="presentation">'
+        $html = '<li class="ui-menu-item level' . $parentCategory->getLevel() . ' parent" role="presentation">'
             . '<div class="open-children-toggle"></div>'
             . '<a href="' . $categoryUrl . '" class="ui-corner-all" tabindex="-1" role="menuitem">'
             . '<span>' . $parentCategory->getName() . '</span></a>';
@@ -186,39 +188,5 @@ class Menu extends Template
     public function getBlogHomeUrl()
     {
         return $this->helper->getBlogUrl('');
-    }
-
-    public function getBlogUrlByUrlKey($urlKey)
-    {
-        return $this->helper->getBlogUrl('category/' . $urlKey);
-    }
-
-    public function getChildDataCate($category)
-    {
-        $childCategorys    = $this->getChildCategory($category->getId());
-        $childCategoryData = [];
-        if (count($childCategorys) > 0) {
-            foreach ($childCategorys as $childCategory) {
-                $childCategoryUrl = $this->getBlogUrlByUrlKey($childCategory->getUrlKey());
-                array_push($childCategoryData,
-                    [
-                        "name"             => $childCategory->getName(),
-                        "id"               => "mg-blog" . $childCategory->getId(),
-                        "url"              => $childCategoryUrl,
-                        "image"            => false,
-                        "has_active"       => false,
-                        "is_active"        => false,
-                        "is_category"      => true,
-                        "is_parent_active" => true,
-                        "position"         => null,
-                        "path"             => "1/2/38",
-                        "childData"        => $this->getChildDataCate($childCategory)
-                    ]
-                );
-            }
-            return $childCategoryData;
-        } else {
-            return [];
-        }
     }
 }

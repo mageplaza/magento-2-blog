@@ -45,8 +45,4 @@
     <type name="Magento\Framework\View\Element\Html\Links">
         <plugin name="blog-customer-nav" type="Mageplaza\Blog\Plugin\Customer\LinkMenu"/>
     </type>
-
-    <type name="Hyva\Theme\ViewModel\Navigation">
-        <plugin name="blog-customer-hyva-menu" type="Mageplaza\Blog\Plugin\HyvaMenu"/>
-    </type>
 </config>
