@@ -191,4 +191,39 @@ class Menu extends Template
     {
         return $this->helper->getBlogUrl('');
     }
+
+
+    public function getBlogUrlByUrlKey($urlKey)
+    {
+        return $this->helper->getBlogUrl('category/' . $urlKey);
+    }
+
+    public function getChildDataCate($category)
+    {
+        $childCategorys    = $this->getChildCategory($category->getId());
+        $childCategoryData = [];
+        if (count($childCategorys) > 0) {
+            foreach ($childCategorys as $childCategory) {
+                $childCategoryUrl = $this->getBlogUrlByUrlKey($childCategory->getUrlKey());
+                array_push($childCategoryData,
+                    [
+                        "name"             => $childCategory->getName(),
+                        "id"               => "mg-blog" . $childCategory->getId(),
+                        "url"              => $childCategoryUrl,
+                        "image"            => false,
+                        "has_active"       => false,
+                        "is_active"        => false,
+                        "is_category"      => true,
+                        "is_parent_active" => true,
+                        "position"         => null,
+                        "path"             => "1/2/38",
+                        "childData"        => $this->getChildDataCate($childCategory)
+                    ]
+                );
+            }
+            return $childCategoryData;
+        } else {
+            return [];
+        }
+    }
 }

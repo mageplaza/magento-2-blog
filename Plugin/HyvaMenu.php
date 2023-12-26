@@ -64,7 +64,7 @@ class HyvaMenu
         $blockMenu  = $this->layout->createBlock(Menu::class);
         $categories = $blockMenu->getCollections();
         $childData  = [];
-        foreach ($categories as $category) {
+        foreach ($categories as $key => $category) {
             $data              = [
                 "name"             => $category->getName(),
                 "id"               => "mg-blog" . $category->getId(),
@@ -75,11 +75,12 @@ class HyvaMenu
                 "is_category"      => true,
                 "is_parent_active" => true,
                 "position"         => null,
-                "path"             => "1/2/38",
+                "path"             => "1/2/38" . $key,
                 "childData"        => $blockMenu->getChildDataCate($category)
             ];
             array_push($childData, $data);
         };
+       
         $dataSubject['mg-blog']= [
             "name"             => $blockMenu->getBlogHomePageTitle(),
             "id"               => "mg-blog",
@@ -90,7 +91,7 @@ class HyvaMenu
             "is_category"      => true,
             "is_parent_active" => true,
             "position"         => null,
-            "path"             => "1/2/38",
+            "path"             => "1/2/39",
             "childData"        => $childData
         ];
 

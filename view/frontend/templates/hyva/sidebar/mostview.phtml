@@ -29,7 +29,7 @@ $postsRecent = $block->getRecentPost();
     <div class="product data items" data-mage-init='{"tabs":{"openedState":"active"}}' x-data="{ activeTab:  0 }">
         <div class="data item title" data-role="collapsible" id="tab-label-popular" @click="activeTab = 0" :class="{ 'active': activeTab === 0 }">
             <a class="data switch" tabindex="-1" data-toggle="switch" id="tab-label-popular-title" >
-                <div><?= $block->escapeHtml(__('Popular')) ?></div>
+                <div class="text-center"><?= $block->escapeHtml(__('Popular')) ?></div>
             </a>
         </div>
         <div class="data item content" id="tab-content-popular" data-role="content" :class="{ 'active': activeTab === 0 }" x-show.transition.in.opacity.duration.600="activeTab === 0">
@@ -61,7 +61,7 @@ $postsRecent = $block->getRecentPost();
 
         <div class="data item title" data-role="collapsible" id="tab-label-mostview" @click="activeTab = 1" :class="{ 'active': activeTab === 1 }">
             <a class="data switch" tabindex="-1" data-toggle="switch" id="tab-label-mostview-title" >
-                <div><?= $block->escapeHtml(__('Latest')) ?></div>
+                <div class="text-center"><?= $block->escapeHtml(__('Latest')) ?></div>
             </a>
         </div>
         <div class="data item content" id="tab-content-mostview" data-role="content" :class="{ 'active': activeTab === 1 }" x-show.transition.in.opacity.duration.600="activeTab === 1">
