@@ -84,6 +84,6 @@ class SignupForm extends Frontend
      */
     public function getMagentoVersion()
     {
-        return (int)$this->helperData->versionCompare('2.3.0') ? 3 : 2;
+        return (int)$this->helperData->versionCompare('2.4.0', '>=') ? '' : '4';
     }
 }

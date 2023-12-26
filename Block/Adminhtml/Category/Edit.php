@@ -116,6 +116,6 @@ class Edit extends Container
      */
     public function getMagentoVersion()
     {
-        return (int)$this->_helperData->versionCompare('2.3.0') ? '4' : '';
+        return (int)$this->_helperData->versionCompare('2.4.0', '>=') ? '' : '4';
     }
 }
