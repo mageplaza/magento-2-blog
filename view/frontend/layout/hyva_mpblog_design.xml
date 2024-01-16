@@ -30,7 +30,7 @@
     </head>
     <body>
         <referenceContainer name="columns">
-            <container name="div.sidebar.main" htmlTag="div" htmlClass="sidebar sidebar-main" after="main">
+            <container name="div.sidebar.main" htmlTag="div" htmlClass="sidebar sidebar-main" before="main">
                 <container name="blog.sidebar.main" as="sidebar_main" label="Sidebar Main">
                     <block class="Mageplaza\Blog\Block\Sidebar\Search" name="mpblog.sidebar.search" template="Mageplaza_Blog::sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search"/>
                     <block class="Mageplaza\Blog\Block\Sidebar\MostView" name="mpblog.sidebar.mostview" template="Mageplaza_Blog::sidebar/mostview.phtml" ifconfig="blog/sidebar/recent_post/enable_widget"/>
@@ -41,8 +41,6 @@
                 </container>
             </container>
         </referenceContainer>
-        <referenceBlock name="head.additional">
-            <block class="Mageplaza\Blog\Block\Design" name="mpblog.design" template="Mageplaza_Blog::design.phtml"/>
-        </referenceBlock>
+
     </body>
 </page>

@@ -60,40 +60,42 @@ class HyvaMenu
         \Hyva\Theme\ViewModel\Navigation $subject,
         array $dataSubject = []
     ) {
+        if ($this->helper->isEnabled() && $this->helper->getBlogConfig('display/toplinks')) {
+            $blockMenu  = $this->layout->createBlock(Menu::class);
+            $categories = $blockMenu->getCollections();
+            $childData  = [];
+            foreach ($categories as $key => $category) {
+                $data              = [
+                    "name"             => $category->getName(),
+                    "id"               => "mg-blog" . $category->getId(),
+                    "url"              => $blockMenu->getBlogUrlByUrlKey($category->getUrlKey()),
+                    "image"            => false,
+                    "has_active"       => false,
+                    "is_active"        => false,
+                    "is_category"      => true,
+                    "is_parent_active" => true,
+                    "position"         => null,
+                    "path"             => "1/2/38" . $key,
+                    "childData"        => $blockMenu->getChildDataCate($category)
+                ];
+                array_push($childData, $data);
+            };
 
-        $blockMenu  = $this->layout->createBlock(Menu::class);
-        $categories = $blockMenu->getCollections();
-        $childData  = [];
-        foreach ($categories as $key => $category) {
-            $data              = [
-                "name"             => $category->getName(),
-                "id"               => "mg-blog" . $category->getId(),
-                "url"              => $blockMenu->getBlogUrlByUrlKey($category->getUrlKey()),
+            $dataSubject['mg-blog']= [
+                "name"             => $blockMenu->getBlogHomePageTitle(),
+                "id"               => "mg-blog",
+                "url"              => $blockMenu->getBlogHomeUrl(),
                 "image"            => false,
                 "has_active"       => false,
                 "is_active"        => false,
                 "is_category"      => true,
                 "is_parent_active" => true,
                 "position"         => null,
-                "path"             => "1/2/38" . $key,
-                "childData"        => $blockMenu->getChildDataCate($category)
+                "path"             => "1/2/39",
+                "childData"        => $childData
             ];
-            array_push($childData, $data);
-        };
-       
-        $dataSubject['mg-blog']= [
-            "name"             => $blockMenu->getBlogHomePageTitle(),
-            "id"               => "mg-blog",
-            "url"              => $blockMenu->getBlogHomeUrl(),
-            "image"            => false,
-            "has_active"       => false,
-            "is_active"        => false,
-            "is_category"      => true,
-            "is_parent_active" => true,
-            "position"         => null,
-            "path"             => "1/2/39",
-            "childData"        => $childData
-        ];
+        }
+
 
         return $dataSubject;
     }

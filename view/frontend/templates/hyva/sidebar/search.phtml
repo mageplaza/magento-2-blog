@@ -91,7 +91,7 @@ use Mageplaza\Blog\Block\Sidebar\Search;
                             var suggestionDivParrent       = document.createElement('div');
                             suggestionDivParrent.className = 'autocomplete-suggestion list-post-tabs cursor-pointer';
 
-                            if (visibleImage) {
+                            if (visibleImage && visibleImage !== '0') {
                                 var suggestionLeftDiv       = document.createElement('div');
                                 suggestionLeftDiv.className = 'mpblog-suggestion-left';
                                 var img                     = document.createElement('img');

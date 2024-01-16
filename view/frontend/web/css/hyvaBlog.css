@@ -1,11 +1,5 @@
 
-.post-info-wraper h2.mp-post-title a, .about-admin h4.admin-title a, .mp-post-meta-info a.mp-read-more, .mp-post-info a.mp-info, ul.menu-categories a.list-categories:hover, .products-same-post a.product-item-link:hover, a.mp-relate-link, .mpblog-product-name {
-    color: #1abc9c !important;
-}
-.list-post-tabs a {
-    color: #1abc9c;
 
-}
 .mp-blog-view a,
 .mp-sidebar a {
     text-decoration: none;
@@ -102,9 +96,7 @@ a.mp-relate-link img.img-responsive {
     list-style: none;
     padding-left: 8px;
 }
-.menu-archives a.list-archives {
-    color: inherit;
-}
+
 .author-image {
     text-align: center;
 }
@@ -425,7 +417,7 @@ li.default-cmt__content__cmt-content__cmt-row.cmt-row {
 }
 .share-col-right {
     display: inline-block;
-    width: 50%;
+
 }
 /*post view css*/
 .page-layout-1column .column.main {
@@ -674,25 +666,25 @@ input[type="email"] {
     font-weight: 300;
     line-height: 1.1;
     font-size: 2.6rem;
-    margin-bottom: 2rem;
+
 }
 #maincontent h2 {
     font-weight: 300;
     line-height: 1.1;
     font-size: 1.8rem;
-    margin-bottom: 1rem;
+
 }
 #maincontent h3 {
     font-weight: 600;
     line-height: 1.1;
     font-size: 1.8rem;
-    margin-bottom: 1rem;
+
 }
 #maincontent h4 {
     font-weight: 700;
     line-height: 1.1;
     font-size: 1.4rem;
-    margin-bottom: 2rem;
+
 }
 #maincontent h5 {
     font-weight: 700;

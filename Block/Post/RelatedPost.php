@@ -140,7 +140,7 @@ class RelatedPost extends Template
         $relatedSize = min($this->getRelatedPostList()->getSize(), $this->getLimitPosts());
 
         $title = $relatedSize
-            ? __('Related Posts %1', '<span class="counter">' . $relatedSize . '</span>')
+            ? __('Related Posts %1', '(' . $relatedSize . ')')
             : __('Related Posts');
         if ($this->helperData->isEnabled()) {
             $this->setTitle($title);

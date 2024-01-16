@@ -1,0 +1,965 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+use Magento\Framework\Escaper;
+use Mageplaza\Blog\Block\Post\View;
+use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Model\Config\Source\Comments\Type;
+
+/** @var Escaper $escaper */
+/** @var View $block */
+$helper       = $block->getBlogHelper();
+$_post        = $block->getPost();
+$author       = $helper->getAuthorByPost($_post);
+$authorName   = $author !== null ? $author->getName() : '';
+$modifier     = $helper->getAuthorByPost($_post, true);
+$modifierName = $modifier !== null ? $modifier->getName() : '';
+$isLogged     = ($block->isLoggedIn()) ? 'Yes' : 'No';
+$color        = $helper->getDisplayConfig('font_color');
+?>
+<div class="mp-blog-view">
+    <div class="mp-blog-rss">
+        <a href="<?= $block->escapeUrl($block->getRssUrl('post/rss')) ?>" class="bb-rss-icon">
+            <img src="<?= $block->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/rss.png')) ?>"
+                 width="16px">
+        </a>
+    </div>
+    <div class="mpcss post-view" id="mpblog-list-container">
+        <div class="post-list-content col-md-12 col-sm-8">
+            <div class="post-view-image col-xs-12">
+                <?php if ($_post->getImage()) : ?>
+                    <img class="img-responsive" src="<?= $block->escapeUrl($block->getImageUrl($_post->getImage())) ?>"
+                         alt="<?= $block->escapeHtmlAttr($_post->getName()) ?>"/>
+                <?php endif; ?>
+            </div>
+            <div class="post-post_content col-xs-12">
+                <?= /** @noEscape */
+                $block->getPageFilter($_post->getPostContent() ?: '') ?>
+            </div>
+            <div class="mp-clear"></div>
+            <?= $block->getChildHtml('mp_blog_post_info') ?>
+
+            <?= $block->getChildHtml('mp_blog_post_slider') ?>
+        </div>
+    </div>
+    <?php if ($helper->isEnabledReview()) : ?>
+        <div class="mp-blog-review-title">
+            <span><?= $block->escapeHtml(__('Did you find it helpful?')) ?></span>
+        </div>
+        <div id="mp-blog-review">
+            <div class="mp-blog-like" style="width: 155px">
+                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                <span><?= $block->escapeHtml(__('LIKE')) ?></span>
+                <span class="mp-blog-view">
+                    <?php if (!empty($block->getPostLike($_post->getId(), '1'))) : ?>
+                        (<?= $block->escapeHtml($block->getPostLike($_post->getId(), '1')) ?>)
+                    <?php endif; ?>
+                    </span>
+            </div>
+            <div class="mp-blog-dislike" style="width: 155px">
+                <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                <span><?= $block->escapeHtml(__('DISLIKE')) ?></span>
+                <span class="mp-blog-view">
+                    <?php if (!empty($block->getPostLike($_post->getId(), '0'))) : ?>
+                        (<?= $block->escapeHtml($block->getPostLike($_post->getId(), '0')) ?>)
+                    <?php endif; ?>
+                    </span>
+            </div>
+        </div>
+        <div class="mp-blog-review-label"></div>
+        <script type="text/x-magento-init">
+            {
+                "#mp-blog-review": {
+                    "Mageplaza_Blog/js/helpful-rate": {
+                        "url": "<?= /* @noEscape */
+            $block->getUrl('mpblog/post/review') ?>",
+                        "post_id" : <?= /* @noEscape */
+            $_post->getId() ?>,
+                        "mode": <?= /* @noEscape */
+            $helper->getReviewMode() ?>
+                    }
+                }
+            }
+
+
+
+
+
+
+
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var options = {
+                    url: "<?= /* @noEscape */ $block->getUrl('mpblog/post/review') ?>",
+                    post_id: "<?= /* @noEscape */ $_post->getId() ?>",
+                    mode: "<?= /* @noEscape */ $helper->getReviewMode() ?>"
+                };
+
+                function create () {
+                    const formKey = hyva.getFormKey();
+
+                    var post_id   = options.post_id,
+                        url       = options.url,
+                        subPostId = {};
+                    if (options.mode === '1') {
+                        fetch(url, {
+                            "headers": {
+                                "content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+                            },
+                            "body": "form_key=" + formKey + '&post_id=' + post_id + '&action=3&mode=' + options.mode,
+                            "method": "POST",
+                            "mode": "cors",
+                            "credentials": "include"
+                        })
+                        .then(response => response.json())
+                        .then(response => {
+                            if (response.status === 0) {
+                                disableReview(response.action);
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                    } else {
+                        var storedPostData = JSON.parse(getCookie('mpblog_post_data'));
+                        if (storedPostData) {
+                            subPostId = storedPostData;
+                            if (subPostId[post_id] !== undefined) {
+                                disableReview(subPostId[post_id].type);
+                            }
+                        }
+                    }
+
+                    document.querySelectorAll('#mp-blog-review div').forEach(function (el) {
+                        el.addEventListener('click', function () {
+                            var action         = 0,
+                                currentPostIds = {},
+                                likeId         = 0;
+
+                            var storedPostIds = JSON.parse(getCookie('mpblog_post_data'));
+
+                            if (this.classList.contains('mp-blog-like')) {
+                                action = 1;
+                            }
+
+                            if (storedPostIds && storedPostIds[post_id] !== undefined && options.mode === '0') {
+                                likeId = storedPostIds[post_id].likeId;
+                                enableReview(storedPostIds[post_id].type);
+                                if (action === storedPostIds[post_id].type) {
+                                    delete storedPostIds[post_id];
+                                    document.cookie = 'mpblog_post_data=' + JSON.stringify(storedPostIds);
+                                } else {
+                                    storedPostIds[post_id].type = action;
+                                    disableReview(action);
+                                }
+                            }
+
+                            fetch(url, {
+                                "headers": {
+                                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+                                },
+                                "body": "form_key=" + formKey + '&post_id=' + post_id + '&action=' + action + '&mode=' + options.mode + '&likeId=' + likeId,
+                                "method": "POST",
+                                "mode": "cors",
+                                "credentials": "include"
+                            })
+                            .then(response => response.json())
+                            .then(response => {
+                                var storedPostIds, jsonStringIds;
+                                if (response['postLike'] && options.mode === '0' && typeof currentPostIds[post_id] === 'undefined') {
+                                    var storedPostIds = receiveCookiePostIds(post_id, action, response['postLike'], self);
+                                    var jsonStringIds = JSON.stringify(storedPostIds);
+
+                                    document.cookie = 'mpblog_post_data=' + jsonStringIds + '; expires=Sun, 1 Jan 2023 00:00:00 GMT; path=/';
+                                }
+
+                                if (response['status']) {
+                                    if (response.sumLike) {
+                                        document.querySelector('#mp-blog-review .mp-blog-like .mp-blog-view').textContent = '(' + response.sumLike + ')';
+                                    } else {
+                                        document.querySelector('#mp-blog-review .mp-blog-like .mp-blog-view').textContent = '';
+                                    }
+                                    if (response.sumDislike) {
+                                        document.querySelector('#mp-blog-review .mp-blog-dislike .mp-blog-view').textContent = '(' + response.sumDislike + ')';
+                                    } else {
+                                        document.querySelector('#mp-blog-review .mp-blog-dislike .mp-blog-view').textContent = '';
+                                    }
+                                }
+
+                                if (response['status']) {
+                                    enableAllReview();
+                                    if (response['postLike']) {
+                                        disableReview(action);
+                                    }
+                                }
+                                const reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
+                                window.dispatchEvent(reloadCustomerDataEvent);
+                                window.scrollTo({
+                                    top: document.body.offsetTop,
+                                    behavior: 'smooth'
+                                });
+                            })
+                            .catch(error => console.error('Error:', error));
+                        });
+                    });
+                }
+
+                function disableReview (action) {
+                    if (action === '1') {
+                        document.querySelector('.mp-blog-like').style.backgroundColor = '#658259';
+                    } else {
+                        document.querySelector('.mp-blog-dislike').style.backgroundColor = '#9a6464';
+                    }
+                }
+
+                function enableReview (action) {
+                    if (action === '1') {
+                        document.querySelector('.mp-blog-like').style.backgroundColor = '#6AA84F';
+                    } else {
+                        document.querySelector('.mp-blog-dislike').style.backgroundColor = '#EC3A3C';
+                    }
+                }
+
+                function enableAllReview () {
+                    document.querySelector('.mp-blog-like').style.backgroundColor    = '#6AA84F';
+                    document.querySelector('.mp-blog-dislike').style.backgroundColor = '#EC3A3C';
+                }
+
+                function getCookie (name) {
+                    var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+                    return v ? v[2] : null;
+                }
+
+                function receiveCookiePostIds (postId, action, likeId) {
+                    var postData        = {
+                            id: postId,
+                            type: action,
+                            likeId: likeId
+                        },
+                        receivedJsonStr = getCookie('mpblog_post_data'),
+                        postIds         = JSON.parse(receivedJsonStr) || {};
+
+                    if (postIds[postId] !== undefined) {
+                        return postIds;
+                    }
+                    postIds[postId] = postData;
+                    return postIds;
+                }
+
+                create();
+            });
+
+        </script>
+    <?php endif; ?>
+    <?php if ($helper->getBlogConfig('platforms/fb_platform/fb_share') || $helper->getBlogConfig('platforms/x_platform/x_share')) : ?>
+        <div class="mp-clear"></div>
+        <div class="mpcss">
+            <div id="sharing">
+                <div class="share-col-left">
+                    <h5><?= $block->escapeHtml(__('Share this post')) ?></h5>
+                </div>
+                <div class="share-col-right">
+                    <div class="post-sharing-button flex">
+                        <?php if ($helper->getBlogConfig('platforms/x_platform/x_share')) : ?>
+                            <img class="img-responsive"
+                                 src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/twitter.png')) ?>"
+                                 alt="Share on Twitter"
+                                 onclick="window.open('https://twitter.com/share?text=&amp;url=<?= /* @noEscape */
+                                 $_post->getUrl() ?>','Twitter-dialog','width=626,height=436'); return false;"
+                                 style="cursor: pointer;width: 43%;position: relative; left: 0.5rem"
+                            />
+                        <?php endif; ?>
+                        <?php if ($helper->getBlogConfig('platforms/fb_platform/fb_share')) : ?>
+                            <img class="img-responsive"
+                                 src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/facebook.png')) ?>"
+                                 alt="Share on Facebook"
+                                 onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('<?= /* @noEscape */
+                                 $_post->getUrl() ?>'),'facebook-share-dialog','width=626,height=436'); return false;"
+                                 style="cursor: pointer;"
+                            />
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+    <?php if ($authorName && $helper->showAuthorInfo()) :
+        $block->resizeImage($author->getImage(), '135x', Image::TEMPLATE_MEDIA_TYPE_AUTH);
+        ?>
+        <div class="block-blog-related about-admin">
+            <h2><?= $block->escapeHtml(__('About the Author')) ?></h2>
+            <div class="related-content-container">
+                <div class="author-content-image">
+                    <img class="img-responsive"
+                         src="<?= /* @noEscape */
+                         $author->getImage()
+                             ? $block->resizeImage($author->getImage(), '135x', Image::TEMPLATE_MEDIA_TYPE_AUTH)
+                             : $block->getDefaultAuthorImage() ?>">
+                </div>
+                <div class="author-content-information">
+                    <div class="author-name"><?= /* @noEscape */
+                        $authorName ?></div>
+                    <p class="author-description">
+                        <?= /* @noEscape */
+                        $author->getShortDescription() ? $block->getPageFilter($author->getShortDescription()) : '' ?>
+                    </p>
+                </div>
+                <div class="mp-clear"></div>
+            </div>
+        </div>
+    <?php endif; ?>
+    <?php $relatedPosts = $_post->getRelatedPostsCollection(); ?>
+    <?php if ($relatedPosts && count($relatedPosts)) : ?>
+        <div class="block-blog-related topic-list mpcss" style="width: 90%;">
+            <h2><?= $block->escapeHtml(__('Related Posts')) ?></h2>
+            <?php if ($block->getRelatedMode()) : ?>
+                <div class="">
+                    <section id="card-carousel" class="splide" aria-label="Related Posts">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                <?php foreach ($relatedPosts as $post) : ?>
+                                    <li class="splide__slide">
+                                        <div class="item post-list-item" style="margin-right: 10px">
+                                            <div class="post-item-wraper">
+                                                <div class="post-image">
+                                                    <?php if ($post->getImage()) : ?>
+                                                        <a href="<?= /* @noEscape */
+                                                        $post->getUrl() ?>">
+                                                            <img class="img-responsive"
+                                                                 src="<?= $block->escapeUrl($block->resizeImage($post->getImage(),
+                                                                     '400x')) ?>"
+                                                                 alt="<?= $block->escapeHtmlAttr($post->getName()) ?>"/>
+                                                        </a>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <div class="post-info-wraper">
+                                                    <h2 class="mp-post-title">
+                                                        <a class="post-link-title"
+                                                           title="<?= $block->escapeHtmlAttr($post->getName()) ?>"
+                                                           href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                                            <?= $block->escapeHtml($post->getName()) ?>
+                                                        </a>
+                                                    </h2>
+                                                    <div class="mp-post-info">
+                                                        <?= /* @noEscape */
+                                                        $block->getPostInfo($post); ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+                <style>
+                    .splide__pagination {
+                        bottom: -0.5em;
+                    }
+
+                    .splide__arrow {
+                        display: none !important;
+                    }
+
+                    .splide__pagination__page.is-active {
+                        background: #869791
+                    }
+
+
+                </style>
+
+            <?php else : ?>
+                <div class="related-content-container" style="display: flex; flex-wrap: wrap;">
+                    <?php foreach ($relatedPosts as $post) : ?>
+                        <div class="post-list-item col-mp mp-6 mp-lg-4 mp-md-6 mp-xs-12">
+                            <div class="post-item-wraper">
+                                <div class="post-image">
+                                    <?php if ($post->getImage()) : ?>
+                                        <a href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                            <img class="img-responsive"
+                                                 src="<?= $block->escapeUrl($block->resizeImage($post->getImage(),
+                                                     '400x')) ?>"
+                                                 alt="<?= $block->escapeHtmlAttr($post->getName()) ?>"/>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="post-info-wraper">
+                                    <h2 class="mp-post-title">
+                                        <a class="post-link-title"
+                                           title="<?= $block->escapeHtmlAttr($post->getName()); ?>"
+                                           href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                            <?= $block->escapeHtml($post->getName()) ?>
+                                        </a>
+                                    </h2>
+                                    <div class="mp-post-info">
+                                        <?= /* @noEscape */
+                                        $block->getPostInfo($post) ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                    <div class="mp-clear"></div>
+                </div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+    <?php if ($helper->getBlogConfig('product_post/post_detail/enable_product')) : ?>
+        <?php $relatedBlock = $block->getChildBlock('related_products'); ?>
+        <?php if ($relatedBlock->hasProduct()) : ?>
+            <div class="block-blog-related products-same-post page-products mpcss" style="width: 90%;">
+                <h2><?= $helper->getBlogConfig('product_post/post_detail/title') ?: $block->escapeHtml(__('Related Products')) ?></h2>
+                <div class="related-content-container">
+                    <?= $relatedBlock->toHtml(); ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
+    <?php $typeComment = $block->helperComment('type'); ?>
+    <?php if (((int) $typeComment !== Type::DISABLE) && $_post->getAllowComment()) : ?>
+        <div class="block-blog-related blog-comment">
+            <h2><?= $block->escapeHtml(__('Comments')) ?></h2>
+            <?php if ((int) $typeComment === Type::DISQUS) : ?>
+                <div class="related-content-container box-collateral box-reviews" id="post-reviews">
+                    <div id="disqus_thread"></div>
+                    <script type="text/javascript">
+                        var disShortName = '<?= /** @noEscape */ $block->helperComment('disqus'); ?>';
+
+                        /* * * DON'T EDIT BELOW THIS LINE * * */
+                        (function () {
+                            var dsq   = document.createElement('script');
+                            dsq.type  = 'text/javascript';
+                            dsq.async = true;
+                            dsq.src   = '//' + disShortName + '.disqus.com/embed.js';
+                            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                        })();
+                    </script>
+                </div>
+            <?php elseif ($typeComment == Type::FACEBOOK) : ?>
+                <div class="related-content-container box-collateral box-reviews
+                <?= /* @noEscape */
+                $helper->getBlogConfig('comment/facebook_colorscheme') ?>"
+                     id="post-reviews">
+                    <div id="fb-root"></div>
+                    <script>(function (d, s, id) {
+                            var js, fjs = d.getElementsByTagName(s)[0];
+                            if (d.getElementById(id)) return;
+                            js     = d.createElement(s);
+                            js.id  = id;
+                            js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v12.0&appId=<?=
+                                /* @noEscape */ $block->getDecrypt($block->helperComment('facebook_appid')) ?>";
+                            fjs.parentNode.insertBefore(js, fjs);
+                        }(document, 'script', 'facebook-jssdk'));
+                    </script>
+                    <div class="fb-comments" data-href="<?= /* @noEscape */
+                    $_post->getUrl() ?>"
+                         data-numposts="<?= /* @noEscape */
+                         $block->helperComment('facebook_number_comment') ?>"
+                         data-width="100%"
+                         data-colorscheme="<?= /* @noEscape */
+                         $block->helperComment('facebook_colorscheme') ?>"
+                         data-order-by="<?= /* @noEscape */
+                         $block->helperComment('facebook_order_by') ?>">
+                    </div>
+                </div>
+            <?php elseif ($typeComment == Type::DEFAULT_COMMENT) : ?>
+                <div class="related-content-container container default-cmt">
+                    <?php if (!$block->isLoggedIn()) : ?>
+                        <div class="col-mp default-cmt__cmt-login">
+                            <button class="primary btn default-cmt__cmt-login__btn-login">
+                                <?= $block->escapeHtml(__('Login')) ?>
+                            </button>
+                        </div>
+                    <?php endif; ?>
+                    <div class="col-mp mp-12" style="float: left;">
+                        <div class="default-cmt__content">
+                            <div class="default-cmt__content__cmt-block">
+                                <?php if (!$block->isLoggedIn()) : ?>
+                                    <form id="default-cmt__content__cmt-block__guest-form"
+
+                                          x-data="Object.assign(hyva.formValidation($el), initCustomerCommentForm())"
+                                          @submit.prevent="submitForm();"
+                                    >
+                                        <?= /* @noEscape */
+                                        $block->getBlockHtml('formkey'); ?>
+                                        <div class="col-mp mp-6 default-cmt__content__cmt-block__guest-box">
+                                            <label for="default-cmt__content__cmt-block__guest-box__name-input">Name
+                                                *</label>
+                                            <input id="default-cmt__content__cmt-block__guest-box__name-input"
+                                                   type="text"
+                                                   name="default-cmt__content__cmt-block__guest-box__name-input"
+                                                   placeholder="<?= $block->escapeHtmlAttr(__('Your display name')) ?>"
+                                                   data-validate='{"required": true}'>
+                                        </div>
+                                        <div class="col-mp mp-6 default-cmt__content__cmt-block__guest-box">
+                                            <label for="default-cmt__content__cmt-block__guest-box__email-input">Email
+                                                *</label>
+                                            <input id="default-cmt__content__cmt-block__guest-box__email-input"
+                                                   type="text"
+                                                   name="default-cmt__content__cmt-block__guest-box__email-input"
+                                                   placeholder="<?= $block->escapeHtmlAttr(__('Your email')) ?> "
+                                                   data-validate='{"required": true, "email": true}'
+                                            >
+                                        </div>
+                                    </form>
+                                <?php endif; ?>
+                                <div class="default-cmt__content__cmt-block__cmt-box">
+                                    <div class="col-mp mp-12">
+                                        <label for="mp-guest-cmt-commentbox">Comment</label>
+                                        <div>
+                                              <textarea
+                                                      class="default-cmt__content__cmt-block__cmt-box__cmt-input w-full"
+                                                      maxlength="255"
+                                                      placeholder="<?= $block->escapeHtmlAttr(__('Type comments here...')) ?>">
+
+                                        </textarea>
+                                        </div>
+
+                                    </div>
+                                    <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
+                                        <div class="default-cmt_loading" style="display: none">
+                                            <img
+                                                    src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')) ?>"
+                                                    alt="Loading...">
+                                        </div>
+                                        <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit
+                                         primary btn btn-primary" type="submit"
+                                                form="default-cmt__content__cmt-block__guest-form">
+                                            <?= $block->escapeHtml(__('Comment')) ?>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="default-cmt__content__cmt-content">
+                                <?php
+                                $comments = $block->getPostComments($_post->getId());
+                                $block->getCommentsTree($comments, 0);
+                                ?>
+                                <?= $block->getCommentsHtml() ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    //get login url, text of button like, reply
+                    var loginUrl     = '<?= /* @noEscape */ $block->getLoginUrl(); ?>',
+                        like         = '<?= /* @noEscape */ __('Like') ?>',
+                        reply        = '<?= /* @noEscape */ __('Reply') ?>',
+                        isLogged     = '<?= /* @noEscape */ $isLogged ?>',
+                        likedColor   = '<?= /* @noEscape */ $color?>',
+                        messengerBox = {
+                            cmt_warning: '<?= /* @noEscape */ $block->getMessagesHtml('adderror',
+                                'Please write the comment.')?>',
+                            exist_email_warning: '<?= /* @noEscape */$block->getMessagesHtml('adderror',
+                                'This email is exist. Please <a href="' . $block->getLoginUrl() . '"> Login </a> as our customer.')?>',
+                            login_warning: '<?= /* @noEscape */ $block->getMessagesHtml('adderror',
+                                'You are not logged in. Please <a href="' . $block->getLoginUrl() . '"> Login </a> or <a href="' . $block->getRegisterUrl() . '"> Signup </a> to like or send a reply.</div>')?>',
+                            comment_approve: '<?= /* @noEscape */ $block->getMessagesHtml('addsuccess',
+                                'Your comment has been sent successfully. Please wait admin approve !')?>'
+                        };
+
+                    require(['comment']);
+                </script>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+
+    <?= $block->getChildHtml('mp_blog_post_view_add') ?>
+</div>
+<style>
+    .default-cmt__content__cmt-content.row {
+        padding-inline-start: 40px;
+    }
+</style>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        new Splide('#card-carousel', {
+            perPage: 3,
+            breakpoints: {
+                1028: {
+                    perPage: 2
+                }
+            }
+        }).mount();
+    });
+
+    var cmtBox     = document.querySelector('.default-cmt__content__cmt-block__cmt-box__cmt-input');
+    var submitCmt  = document.querySelector('.default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit');
+    var defaultCmt = document.querySelector('ul.default-cmt__content__cmt-content:first-child');
+    var likeBtn    = defaultCmt.querySelectorAll('.btn-like');
+    var replyBtn   = defaultCmt.querySelectorAll('.btn-reply');
+
+    let loginBtnCmt = document.querySelector('.default-cmt__cmt-login__btn-login');
+    if (loginBtnCmt) {
+        loginBtnCmt.addEventListener('click', function () {
+            var socialPopup = document.querySelector(".social-login-popup");
+            if (socialPopup) {
+                openMyDialog();
+                showLogin();
+            } else {
+                window.location.href = loginUrl; // Assuming loginUrl is defined somewhere in your code
+            }
+        });
+    }
+
+    function initCustomerCommentForm () {
+        return {
+            errors: 0,
+            hasCaptchaToken: 0,
+            showPassword: false,
+            displayErrorMessage: false,
+            errorMessages: [],
+            setErrorMessages (messages) {
+                this.errorMessages       = [messages];
+                this.displayErrorMessage = this.errorMessages.length
+            },
+            submitForm () {
+                this.validate()
+                .then(() => {
+                    // do not rename $form, the variable is the expected name in the recaptcha output
+                    const $form = document.querySelector('#default-cmt__content__cmt-block__guest-form');
+                    if (this.errors === 0) {
+                        // $form.submit();
+                        this.dispatchCommentRequest($form);
+                    }
+                })
+                .catch((invalid) => {
+                    if (invalid.length > 0) {
+                        invalid[0].focus();
+                    }
+                });
+            },
+            dispatchCommentRequest: function (form) {
+                callApiSubmitComment();
+
+            }
+        }
+    }
+
+    function submitComment () {
+        if (isLogged === 'Yes') {
+            submitCmt.addEventListener('click', function () {
+                callApiSubmitComment();
+            });
+        }
+    }
+
+    submitComment();
+
+    async function callApiSubmitComment () {
+        var messagesContainer = document.querySelector('.default-cmt__content__cmt-block__cmt-box .messages');
+        if (messagesContainer) {
+            messagesContainer.style.display = 'none';
+        }
+
+        var cmtBox    = document.querySelector('.default-cmt__content__cmt-block__cmt-box__cmt-input');
+        var submitCmt = document.querySelector('.default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit');
+        var cmtText   = cmtBox.value;
+        if (cmtText.trim().length) {
+            document.querySelector('.default-cmt_loading').style.display = 'block';
+            this.disabled                                                = true;
+            await ajaxCommentActions(cmtText, submitCmt);
+            cmtBox.value                                                 = '';
+            document.querySelector('.default-cmt_loading').style.display = 'none';
+            submitCmt.disabled                                           = false;
+
+        } else {
+            var cmtInputParent = document.querySelector('.default-cmt__content__cmt-block__cmt-box__cmt-input').parentElement;
+            cmtInputParent.insertAdjacentHTML('beforeend', messengerBox.cmt_warning);
+        }
+    }
+
+    function ajaxCommentActions (cmtText, inputEl, checkReply, cmtId, parentComment) {
+        var isReply      = (typeof checkReply !== 'undefined') ? 1 : 0,
+            replyId      = (typeof cmtId !== 'undefined') ? cmtId : 0,
+            displayReply = (typeof checkReply !== 'undefined');
+        var guestName    = document.querySelector('#default-cmt__content__cmt-block__guest-box__name-input')?.value;
+
+        var guestEmail = document.querySelector('#default-cmt__content__cmt-block__guest-box__email-input')?.value;
+        let url        = window.location.href;
+        const body     = new URLSearchParams({
+            form_key: hyva.getFormKey(),
+            cmt_text: cmtText,
+            isReply: isReply,
+            replyId: replyId,
+            guestName: guestName,
+            guestEmail: guestEmail
+        });
+        fetch(url, {
+            headers: {
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: body,
+            method: "POST",
+            mode: "cors",
+            credentials: "include"
+
+        })
+        .then(response => response.json())
+        .then(data => {
+            switch (data.status){
+                case 'duplicated':
+                    document.querySelector('.default-cmt__content__cmt-block__cmt-box__cmt-input').parentElement.appendChild(document.createRange().createContextualFragment(messengerBox.exist_email_warning));
+                    break;
+                case 3:
+                    document.querySelector('.default-cmt__content__cmt-block').insertAdjacentHTML('afterbegin', messengerBox.comment_approve);
+                    break;
+                case 1:
+                    displayComment(data, displayReply);
+                    var cmtCount = document.querySelectorAll('.default-cmt li').length;
+                    if (document.querySelector('.mp-cmt-count')) {
+                        document.querySelector('.mp-cmt-count').textContent = cmtCount;
+                    }
+
+                    inputEl.value = '';
+                    break;
+                case 'error':
+                    if (checkReply !== 'undefined') {
+                        parentComment.insertAdjacentHTML('beforeend', data.error);
+                    } else {
+                        document.querySelector('.default-cmt').insertAdjacentHTML('beforeend', data.error);
+                    }
+                    break;
+            }
+
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function displayComment (cmt, isReply) {
+        function htmlComment (text) {
+            var html = '';
+            var sub  = text.split("\n");
+            for (var i = 0; i < sub.length; i++){
+                html += '<p>' + sub[i] + '</p>';
+            }
+            return html;
+        }
+
+        var cmtRow         = document.createElement('li');
+        cmtRow.style.width = '100%';
+        cmtRow.id          = 'cmt-id-' + cmt.cmt_id;
+        cmtRow.className   = 'default-cmt__content__cmt-content__cmt-row cmt-row-' + cmt.cmt_id + ' cmt-row col-m-12' +
+            (isReply ? ' reply-row' : '');
+        cmtRow.setAttribute('data-cmt-id', cmt.cmt_id);
+        if (isReply) {
+            cmtRow.setAttribute('data-reply-id', cmt.reply_cmt);
+        }
+
+        cmtRow.innerHTML = '<div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username username__' + cmt.cmt_id + '">' + cmt.user_cmt + '</span> </div>' +
+            '<div class="cmt-row__cmt-content"> <p>' + htmlComment(cmt.cmt_text) + '</p> </div>' +
+            '<div class="cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> ' +
+            '<a class="interactions__btn-actions action btn-like mpblog-like" data-cmt-id="' + cmt.cmt_id + '" click="1">' +
+            '<i class="fa fa-thumbs-up" aria-hidden="true" style="margin-right: 3px"></i>' +
+            '<span class="count-like__like-text"></span></a>' +
+            '<a class="interactions__btn-actions action btn-reply" data-cmt-id="' + cmt.cmt_id + '">' + reply + '</a> </div>' +
+            '<div class="interactions__cmt-createdat"> <span>' + cmt.created_at + '</span> </div> </div>';
+
+        if (isReply) {
+            var replyCmtId   = cmt.reply_cmt;
+            var replyCmtList = document.querySelectorAll('.default-cmt__content__cmt-content__cmt-row');
+
+            replyCmtList.forEach(function (cmtEl) {
+                if (cmtEl.getAttribute('data-cmt-id') === replyCmtId) {
+                    var replyList = cmtEl.querySelector('ul.default-cmt__content__cmt-content:first-child');
+
+                    if (!replyList) {
+                        var newUl       = document.createElement('ul');
+                        newUl.className = 'default-cmt__content__cmt-content row';
+                        newUl.appendChild(cmtRow);
+                        cmtEl.appendChild(newUl);
+
+                        likeComment(cmtRow.querySelectorAll('.btn-like'));
+                        showReply(cmtRow.querySelectorAll('.btn-reply'));
+                    } else {
+                        replyList.appendChild(cmtRow);
+
+                        likeComment(cmtRow.querySelectorAll('.btn-like'));
+                        showReply(cmtRow.querySelectorAll('.btn-reply'));
+                    }
+
+                    return;
+                }
+            });
+        } else {
+            defaultCmt.appendChild(cmtRow);
+
+            likeComment(cmtRow.querySelectorAll('.btn-like'));
+            showReply(cmtRow.querySelectorAll('.btn-reply'));
+        }
+    }
+
+
+    function likeComment (btns) {
+        btns.forEach(function (likeEl) {
+            likeEl.addEventListener('click', function () {
+                var cmtId           = this.getAttribute('data-cmt-id');
+                var cmtRowContainer = this.closest('.default-cmt__content__cmt-content__cmt-row');
+
+                if (isLogged === 'Yes') {
+                    var likeCountText = this.querySelector('span').textContent.trim();
+                    var likeCount     = parseInt(likeCountText, 10) || 0; // Convert to integer, default to 0 if NaN
+                    if (this.getAttribute('click') === '1') {
+                        if (this.classList.contains('mpblog-liked')) {
+                            this.style.color = '#333333';
+                            likeCount--;
+                            this.querySelector('span').textContent = (likeCount === 0) ? "" : likeCount;
+                            this.classList.remove('mpblog-liked');
+                        } else {
+                            likeCount++;
+                            this.querySelector('span').textContent = likeCount;
+                            this.style.color                       = likedColor;
+                            this.classList.add('mpblog-liked');
+                        }
+
+                        fetch(window.location.href, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                                "X-Requested-With": "XMLHttpRequest"
+                            },
+                            body: 'cmtId=' + cmtId,
+                            mode: "cors",
+                            credentials: "include"
+                        })
+                        .then(response => response.json())
+                        .then(response => {
+                            if (response.status === 'ok') {
+                                likeEl.setAttribute('click', '1');
+                            } else if (response.status === 'error' && response.hasOwnProperty('error')) {
+                                var errorElement       = document.createElement('div');
+                                errorElement.innerHTML = response.error;
+                                defaultCmt.appendChild(errorElement);
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                    }
+
+                    likeEl.setAttribute('click', '0');
+                } else {
+                    cmtRowContainer.insertAdjacentHTML('beforeend', messengerBox.login_warning);
+                    setTimeout(function () {
+                        var errorNotification = document.querySelector('.message.error.message-error');
+                        if (errorNotification) {
+                            errorNotification.parentElement.removeChild(errorNotification);
+                        }
+                    }, 3000);
+                }
+            });
+        });
+    }
+
+    likeComment(likeBtn);
+
+    function showReply (btns) {
+        btns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var cmtId = (typeof closestWithDataAttr(btn, 'data-cmt-id') !== 'undefined') ? closestWithDataAttr(btn, 'data-cmt-id') : btn.getAttribute('data-cmt-id');
+
+                var inputCmtID      = this.getAttribute('data-cmt-id');
+                var cmtRowCmt       = document.querySelector('#cmt-row');
+                var cmtRowContainer = this.closest('.default-cmt__content__cmt-content__cmt-row');
+
+                if (document.querySelectorAll('.cmt-row__reply-row.row__' + inputCmtID).length) {
+                    cmtRowContainer = document.querySelector("#cmt-id-" + cmtId + " ul:last-child");
+                }
+
+                var cmtRow  = cmtRowContainer.querySelector('.cmt-row__reply-row.row__' + inputCmtID);
+                var cmtName = document.querySelector(".username__" + inputCmtID).textContent;
+
+                if (isLogged === 'Yes') {
+                    if (cmtRowCmt) {
+                        cmtRowCmt.style.display = (cmtRowCmt.style.display === 'none') ? 'block' : 'none';
+                        cmtRowCmt.parentElement.removeChild(cmtRowCmt);
+                    }
+
+                    if (cmtRow) {
+                        cmtRow.style.display = (cmtRow.style.display === 'none') ? 'block' : 'none';
+                        cmtRow.parentElement.removeChild(cmtRow);
+                    } else {
+                        cmtRowContainer.insertAdjacentHTML('beforeend', '<div id="cmt-row" class="cmt-row__reply-row row row__' + inputCmtID + ' col-md-12">' +
+                            '<div class="reply-form__form-input form-group col-xs-8 col-md-6">' +
+                            '<label for="reply_cmt' + inputCmtID + '"></label>' +
+                            '<input type="text" id="reply_cmt' + inputCmtID + '" class="form-group__input form-control" placeholder="Press enter to submit reply" value="' + cmtName + ' " autofocus onfocus="this.setSelectionRange(1000,1001);"/>' +
+                            '</div>' +
+                            '</div>');
+
+                        var input = document.getElementById('reply_cmt' + inputCmtID);
+                        input.closest('.form-group').appendChild(
+                            document.querySelector('.default-cmt__content__cmt-block__cmt-box__cmt-btn .default-cmt_loading').cloneNode(true)
+                        );
+                        input.focus();
+
+                        submitReply(input, cmtId, cmtRowContainer);
+                    }
+                } else {
+                    cmtRowContainer.insertAdjacentHTML('beforeend', messengerBox.login_warning);
+                    setTimeout(function () {
+                        var errorNotification = document.querySelector('.message.error.message-error');
+                        if (errorNotification) {
+                            errorNotification.parentElement.removeChild(errorNotification);
+                        }
+                    }, 3000);
+                }
+            });
+        });
+    }
+
+    function closestWithDataAttr (element, attribute) {
+        while (element && !element.getAttribute(attribute)){
+            element = element.parentNode;
+        }
+        return element ? element.getAttribute(attribute) : null;
+    }
+
+    showReply(replyBtn);
+
+    var firstCmtRow = document.querySelector('li.default-cmt__content__cmt-content__cmt-row:first-child');
+    if (firstCmtRow) {
+        firstCmtRow.style.borderTop = 'none';
+    }
+
+
+    function submitReply (input, replyId, parentComment) {
+        input.addEventListener('keypress', async function (e) {
+            var text = input.value;
+            if (text !== '') {
+                if (e.keyCode === 13) {
+                    input.nextElementSibling.style.display = 'block'; // Show loading element
+                    input.disabled                         = true;
+
+                    await ajaxCommentActions(text, input, true, replyId, parentComment);
+
+                    input.closest('.cmt-row__reply-row').style.display = 'none'; // Hide reply row
+                    input.nextElementSibling.style.display             = 'none'; // Hide loading element
+                    input.disabled                                     = false;
+                    var cmtRow                                         = document.getElementById('cmt-row');
+                    if (cmtRow) {
+                        cmtRow.remove();
+                    }
+
+                }
+            }
+        });
+    }
+</script>

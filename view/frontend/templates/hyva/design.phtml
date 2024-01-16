@@ -45,7 +45,8 @@ use Mageplaza\Blog\Block\Design;
         });
     });
 </script>
-<?php $color = $block->getHelper()->getBlogConfig('general/font_color'); ?>
+<?php $color = $block->getHelper()->getDisplayConfig('font_color');
+?>
 <style type="text/css">
     .mp-blog-review-title {
         text-align: center;
@@ -101,7 +102,7 @@ use Mageplaza\Blog\Block\Design;
     .mp-blog-new-post button {
         float: right;
         margin: 10px;
-        padding: 10px 30px
+        padding: 8px 15px
     }
 
     .post-item-wraper {

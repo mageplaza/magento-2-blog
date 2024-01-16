@@ -54,7 +54,6 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
                 $perPageValues = (string) $this->helperData->getDisplayConfig('pagination');
                 $perPageValues = explode(',', $perPageValues ?? '');
                 $perPageValues = array_combine($perPageValues, $perPageValues);
-
                 $pager->setAvailableLimit($perPageValues)->setCollection($collection);
                 $this->setChild('pager', $pager);
             }
