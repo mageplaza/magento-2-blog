@@ -23,6 +23,7 @@ use Mageplaza\Blog\Block\Post\ManagePost;
 
 /** @var ManagePost $block */
 ?>
+<button title="Close (Esc)" type="button" class="mfp-close" style="position: absolute;top: -5px;right: 10px;font-size: 25px;" onclick="hideMyDialogNewPost()">×</button>
 <form enctype="multipart/form-data" data-mage-init='{"validation": {}}'
       action="<?= $block->escapeHtml($block->getUrl('mpblog/post/manage')) ?>" method="post" class="form"
       name="mp_blog_post_form" id="mp_blog_post_form"
@@ -34,7 +35,10 @@ use Mageplaza\Blog\Block\Post\ManagePost;
     $block->getBlockHtml('formkey'); ?>
     <fieldset class="fieldset">
         <div class="field required mp-field">
-            <label for="name" class="label"><span><?= $block->escapeHtml(__('Post Name')) ?></span></label>
+            <label for="name" class="label">
+                <span>
+                    <b><?= $block->escapeHtml(__('Post Name')) ?></b>
+                </span></label>
             <div class="control">
                 <input type="text" name="name" id="name" title="<?= $block->escapeHtmlAttr(__('Post Name')) ?>"
                        class="input-text" data-validate='{"required": true}'>
@@ -42,25 +46,25 @@ use Mageplaza\Blog\Block\Post\ManagePost;
         </div>
         <input type="hidden" name="post_id" id="post_id">
         <div class="field mp-field">
-            <label for="short_description" class="label">
+            <b for="short_description" class="label">
                 <span><?= $block->escapeHtml(__('Short Description')) ?></span>
-            </label>
+            </b>
             <div class="control">
                 <textarea name="short_description" id="short_description" rows="5" cols="19" class="w-full"></textarea>
             </div>
         </div>
         <div class="field mp-field">
-            <label for="post_content" class="label">
+            <b for="post_content" class="label">
                 <span><?= $block->escapeHtml(__('Post Content')) ?></span>
-            </label>
+            </b>
             <div class="control">
                 <textarea name="post_content" id="post_content" class="post_content_hyva" rows="5" cols="19">
                 </textarea>
             </div>
         </div>
-        <div class="field mp-field">
-            <label for="image" class="label"><span><?= $block->escapeHtml(__('Image')) ?></span></label>
-            <div class="control">
+        <div class="field mp-field" style="margin-top: 0.5rem">
+            <label for="image" class="label"><b><?= $block->escapeHtml(__('Image')) ?></b></label>
+            <div class="control" style="display: flex">
                 <input type="file" name="image" id="image" title="<?= $block->escapeHtmlAttr(__('Image')) ?>"
                        class="input-file">
             </div>
@@ -88,7 +92,7 @@ use Mageplaza\Blog\Block\Post\ManagePost;
             </div>
         </div>
         <div class="field mp-field">
-            <label for="allow_comment" class="label"><span><?= $block->escapeHtml(__('Allow Comment')) ?></span></label>
+            <label for="allow_comment" class="label"><b><?= $block->escapeHtml(__('Allow Comment')) ?></b></label>
             <div class="control">
                 <select id="allow_comment" name="allow_comment" class="w-full">
                     <option value="0"><span><?= $block->escapeHtml(__('No')) ?></option>
@@ -97,25 +101,10 @@ use Mageplaza\Blog\Block\Post\ManagePost;
             </div>
         </div>
         <div class="field mp-field">
-            <label for="publish_date" class="label"><span><?= $block->escapeHtml(__('Publish Date')) ?></span></label>
+            <label for="publish_date" class="label"><b><?= $block->escapeHtml(__('Publish Date')) ?></b></label>
             <div class="control">
-                <input name="publish_date" id="publish_date" type="date">
-                <script>
+                <input name="publish_date" id="publish_date"   type="datetime-local">
 
-                    document.addEventListener("DOMContentLoaded", function () {
-                        var publishDateInput = document.getElementById("publish_date");
-                        // if (publishDateInput) {
-                        //     flatpickr(publishDateInput, {
-                        //         dateFormat: 'Y-m-d',
-                        //         disable: [
-                        //             function(date) {
-                        //                 return (date.getDay() === 0 || date.getDay() === 6); // Disable weekends
-                        //             }
-                        //         ],
-                        //     });
-                        // }
-                    });
-                </script>
             </div>
         </div>
         <?= $block->getChildHtml('field_additional') ?>
@@ -217,65 +206,58 @@ use Mageplaza\Blog\Block\Post\ManagePost;
         console.error(err.stack);
     });
 
-    let categories_ids = '';
+    const categories = <?php echo($block->getCategoriesTree()) ?>;
+    const topics     = <?php echo($block->getTopicTree()) ?>;
+    const tags       = <?php echo($block->getTagTree()) ?>;
 
-    let topics_ids = '';
+    const optionsCategories = categories?.map(data => {
+        return {
+            name: data?.label,
+            value: data?.value
+        }
+    });
 
-    let tags_ids = '';
-    document.addEventListener('DOMContentLoaded', function () {
-        const categories = <?php echo($block->getCategoriesTree()) ?>;
-        const topics     = <?php echo($block->getTopicTree()) ?>;
-        const tags       = <?php echo($block->getTagTree()) ?>;
+    const optionsTopics = Object.values(topics)?.map(data => {
+        return {
+            name: data?.label,
+            value: data?.value
+        }
+    });
 
-        const optionsCategories = categories?.map(data => {
-            return {
-                name: data?.label,
-                value: data?.value
-            }
-        });
-
-        const optionsTopics = Object.values(topics)?.map(data => {
-            return {
-                name: data?.label,
-                value: data?.value
-            }
-        });
-
-        const optionsTags          = Object.values(tags)?.map(data => {
-            return {
-                name: data?.label,
-                value: data?.value
-            }
-        });
-        const domElementCategories = document.querySelector('#categories_ids');
-        const treeselectCategories = new Treeselect({
-            parentHtmlContainer: domElementCategories,
-            options: optionsCategories
-
-        });
-        treeselectCategories.srcElement.addEventListener('input', (e) => {
-            categories_ids = e.detail?.join(',')
-        });
-        const domElementTopics = document.querySelector('#topics_ids');
-        const treeselectTopics = new Treeselect({
-            parentHtmlContainer: domElementTopics,
-            options: optionsTopics
-
-        });
-        treeselectTopics.srcElement.addEventListener('input', (e) => {
-            topics_ids = e.detail?.join(',')
-        });
-        const domElementTags = document.querySelector('#tags_ids');
-        const treeselectTags = new Treeselect({
-            parentHtmlContainer: domElementTags,
-            options: optionsTags
-
-        });
-        treeselectTags.srcElement.addEventListener('input', (e) => {
-            tags_ids = e.detail?.join(',')
-        })
+    const optionsTags          = Object.values(tags)?.map(data => {
+        return {
+            name: data?.label,
+            value: data?.value
+        }
+    });
+    const domElementCategories = document.querySelector('#categories_ids');
+    const treeselectCategories = new Treeselect({
+        parentHtmlContainer: domElementCategories,
+        options: optionsCategories,
+        value: []
 
     });
+
+
+    const domElementTopics = document.querySelector('#topics_ids');
+    const treeselectTopics = new Treeselect({
+        parentHtmlContainer: domElementTopics,
+        options: optionsTopics,
+        value: []
+
+    });
+
+    const domElementTags = document.querySelector('#tags_ids');
+    const treeselectTags = new Treeselect({
+        parentHtmlContainer: domElementTags,
+        options: optionsTags,
+        value: []
+
+    });
+    treeselectTags.srcElement.addEventListener('input', (e) => {
+        tags_ids = e.detail?.join(',')
+    });
+
 
     function initAddNewPost () {
         return {
@@ -315,15 +297,31 @@ use Mageplaza\Blog\Block\Post\ManagePost;
                 formData.append('post_id', document.querySelector('#post_id').value);
                 formData.append('short_description', document.querySelector('#short_description').value);
                 formData.append('post_content', document.querySelector('#post_content').value);
-                formData.append('categories_ids', categories_ids);
-                formData.append('topics_ids', topics_ids);
-                formData.append('tags_ids', tags_ids);
+
+                formData.append('categories_ids', treeselectCategories.value?.join(','));
+                formData.append('topics_ids', treeselectTopics.value?.join(','));
+                formData.append('tags_ids', treeselectTags.value?.join(','));
                 formData.append('allow_comment', document.querySelector('#allow_comment').value);
-                formData.append('publish_date', document.querySelector('#publish_date').value);
+
+                const publicDateValue = document.querySelector('#publish_date').value;
+                if(publicDateValue) {
+                    formData.append('publish_date', converDateToSave(publicDateValue));
+                } else {
+                    formData.append('publish_date', '');
+                }
+                var checkboxElement = document.getElementById("post_image_delete");
+                if(checkboxElement && checkboxElement.checked) {
+                    formData.append(checkboxElement.name, checkboxElement.value);
+                }
+                var imgElement= document.getElementById("post_image_image");
+                if(imgElement) {
+
+                    formData.append('image', imgElement.title);
+                }
+
                 fetch("<?= $block->escapeHtml($block->getUrl('mpblog/post/manage')) ?>", {
                     method: 'POST',
                     headers: {
-
                         "X-Requested-With": "XMLHttpRequest"
                     },
                     body: formData,
@@ -332,10 +330,9 @@ use Mageplaza\Blog\Block\Post\ManagePost;
                 })
                 .then(response => response.json())
                 .then(response => {
-                    window.location.reload()
+                    window.location.reload();
                 })
                 .catch(error => console.error('Error:', error));
-
             }
         }
     }

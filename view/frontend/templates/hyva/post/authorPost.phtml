@@ -25,15 +25,30 @@ use Mageplaza\Blog\Model\Post;
 /** @var AuthorPost $block */
 $postCollection = $block->getPostCollection();
 $modalViewModel = $viewModels->require(\Hyva\Theme\ViewModel\Modal::class);
-
+$postDatas      = $block->getPostDatas($postCollection);
+$jsonData       = json_encode($postDatas);
 ?>
 <?php if (!$block->getAuthorStatus()) : ?>
     <div>
         <h3><?= $block->escapeHtml(__('Your account must be licensed in order to perform the Post creation and management function')) ?></h3>
     </div>
 <?php else : ?>
-    <div class="mp-blog-new-post" x-data="hyva.modal()">
-        <button @click="show('add-new-post-name',$event)" type="button" aria-haspopup="dialog" class="action primary btn btn-primary" title="<?= $block->escapeHtmlAttr(__('Add New Post')) ?>">
+    <div class="mp-blog-new-post" x-data="{
+    ...hyva.modal(),
+    init() {
+        window.openDialogNewPost = function (event) {
+            this.show('add-new-post-name', event);
+        }.bind(this);
+       window.hideMyDialogNewPost = function (event) {
+        this.hide('add-new-post-name', event);
+
+        }.bind(this);
+
+
+    }
+}" x-init="init()">
+        <button onclick="handleAddPost()" type="button" aria-haspopup="dialog"
+                class="action primary btn btn-primary" title="<?= $block->escapeHtmlAttr(__('Add New Post')) ?>">
             <?= $block->escapeHtml(__('Add New Post')) ?>
         </button>
         <?= $modalViewModel->createModal()
@@ -42,7 +57,7 @@ $modalViewModel = $viewModels->require(\Hyva\Theme\ViewModel\Modal::class);
             ->withDialogRefName("add-new-post-name")
             ->withContent('<div id="mp-blog-new-post-popup">
 <header class="modal-header mb-3">
-            <h3 id="modal-title-23" class="modal-title text-3xl border-b p-4" data-role="title">Add New Post</h3>
+            <h3 id="popup_author_post" class="modal-title text-3xl border-b p-4" data-role="title">Add New Post</h3>
           
         </header>' . $block->getChildHtml('mpblog_manage_post') . '</div>') ?>
 
@@ -56,12 +71,14 @@ $modalViewModel = $viewModels->require(\Hyva\Theme\ViewModel\Modal::class);
                     <div data-post-id="<?= $block->escapeHtml($post->getId()); ?>"
                          class="post-list-item col-mp post-item-list mp-12">
                         <div class="post-item-wraper">
-                            <?= /* @noEscape */ $block->getStatusHtmlById($post->getEnabled()) ?>
+                            <?= /* @noEscape */
+                            $block->getStatusHtmlById($post->getEnabled()) ?>
                             <?php if ($post->getImage()) : ?>
                                 <div class="post-image">
                                     <a href="<?= $block->escapeUrl($post->getUrl()) ?>">
                                         <img class="img-responsive"
-                                             src="<?= $block->escapeUrl($block->resizeImage($post->getImage(), '400x')) ?>"
+                                             src="<?= $block->escapeUrl($block->resizeImage($post->getImage(),
+                                                 '400x')) ?>"
                                              alt="<?= $block->escapeHtmlAttr($post->getName()) ?>"/>
                                     </a>
                                 </div>
@@ -74,11 +91,13 @@ $modalViewModel = $viewModels->require(\Hyva\Theme\ViewModel\Modal::class);
                                     </a>
                                 </h2>
                                 <div class="mp-post-info">
-                                    <?= /* @noEscape */ $block->getPostInfo($post) ?>
+                                    <?= /* @noEscape */
+                                    $block->getPostInfo($post) ?>
                                 </div>
                                 <div class="post-short-description">
                                     <p>
-                                        <?= /* @noEscape */ $block->maxShortDescription($post->getShortDescription()) ?>
+                                        <?= /* @noEscape */
+                                        $block->maxShortDescription($post->getShortDescription()) ?>
                                     </p>
                                 </div>
                                 <div class="mp-clearfix"></div>
@@ -92,15 +111,18 @@ $modalViewModel = $viewModels->require(\Hyva\Theme\ViewModel\Modal::class);
                                 </div>
                             </div>
                             <div class="post-info-action" data-postId="<?= $block->escapeHtml($post->getId()); ?>">
-                                <div class="mpblog-post-duplicate">
+                                <div class="mpblog-post-duplicate"
+                                     onclick='handleDuplicate(this,<?= json_encode($post->getData()) ?>)'
+                                >
                                     <img
-                                        src="<?= $block->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/duplicate.svg')) ?>"
-                                        align="middle"
-                                        alt="<?= $block->escapeHtmlAttr(__('Duplicate')); ?>"
-                                        title="<?= $block->escapeHtmlAttr(__('Duplicate')) ?>"
+                                            src="<?= $block->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/duplicate.svg')) ?>"
+                                            align="middle"
+                                            alt="<?= $block->escapeHtmlAttr(__('Duplicate')); ?>"
+                                            title="<?= $block->escapeHtmlAttr(__('Duplicate')) ?>"
                                     />
                                 </div>
-                                <div class="mpblog-post-edit" @click="show('add-new-post-name', $event)">
+                                <div class="mpblog-post-edit"
+                                     onclick='handleEdit(this,<?= json_encode($post->getData()) ?>)'>
                                     <img src="<?= $block->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/writing.svg')) ?>"
                                          align="middle"
                                          alt="<?= $block->escapeHtmlAttr(__('Edit')); ?>"
@@ -128,30 +150,16 @@ $modalViewModel = $viewModels->require(\Hyva\Theme\ViewModel\Modal::class);
         <?php else : ?>
             <?= $block->escapeHtml(__('There are no posts at this moment')) ?>
         <?php endif; ?>
-        <?= /* @noEscape */ $block->getChildHtml('additional') ?>
+        <?= /* @noEscape */
+        $block->getChildHtml('additional') ?>
     </div>
-    <script type="text/x-magento-init">
-            {
-                "*": {
-                    "Mageplaza_Blog/js/managePost": {
-                        "deleteUrl": "<?= $block->escapeHtml($block->getUrl('mpblog/post/deletepost')) ?>",
-                        "basePubUrl": "<?= $block->escapeHtml($block->getBaseMediaUrl()) ?>",
-                        "postDatas": <?= /* @noEscape */ $block->getPostDatas($postCollection) ?>,
-                        "editorVersion": "<?= $block->escapeHtml($block->getVersion()) ?>",
-                        "magentoVersion": "<?= $block->escapeHtml($block->getMagentoVersion()) ?>"
-                    }
-                }
-            }
-    </script>
-    <script>
-        require(['jquery'], function ($) {
-            $('.limiter').css('float', 'right');
-        });
-    </script>
 
 
     <script>
-        function handleDelete(element) {
+        let pubUrl = "<?= $block->escapeHtml($block->getBaseMediaUrl()) ?>";
+        let title  = document.querySelector('#popup_author_post');
+
+        function handleDelete (element) {
             var postId = element.closest('.post-info-action').getAttribute('data-postId');
             fetch("<?= $block->escapeHtml($block->getUrl('mpblog/post/deletepost')) ?>", {
                 method: 'POST',
@@ -160,13 +168,13 @@ $modalViewModel = $viewModels->require(\Hyva\Theme\ViewModel\Modal::class);
                     "X-Requested-With": "XMLHttpRequest"
                 },
                 body: new URLSearchParams({
-                    post_id: postId,
-                }),
+                    post_id: postId
+                })
             })
             .then(response => response.json())
             .then(result => {
                 if (result.status === 1) {
-                    var postListItem = document.querySelector('.post-list-item[data-post-id="'+result.post_id+'"]');
+                    var postListItem = document.querySelector('.post-list-item[data-post-id="' + result.post_id + '"]');
                     if (postListItem) {
                         postListItem.remove();
                         const reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
@@ -178,5 +186,141 @@ $modalViewModel = $viewModels->require(\Hyva\Theme\ViewModel\Modal::class);
 
             // Perform your delete action here, e.g., send an AJAX request to delete the post
         }
+
+        let name              = document.querySelector('#name');
+        let post_id           = document.querySelector('#post_id');
+        let short_description = document.querySelector('#short_description');
+        let allow_comment     = document.querySelector('#allow_comment');
+        let publish_date      = document.querySelector('#publish_date');
+
+        function handleAddPost () {
+            resetFormModal();
+            title.innerText = 'Add New Post';
+            openDialogNewPost();
+        }
+
+        function handleEdit (e, data) {
+            resetFormModal();
+            let listDatas           = <?php echo json_decode($jsonData) ?>;
+            let dataSelect          = listDatas[data?.post_id];
+            name.value              = dataSelect?.name;
+            post_id.value           = dataSelect?.post_id;
+            short_description.value = dataSelect?.short_description;
+            editor.setData(dataSelect?.post_content ?? "");
+            allow_comment.value = dataSelect?.allow_comment;
+            publish_date.value  = converDateToDisplay(dataSelect?.publish_date);
+            treeselectCategories.updateValue(dataSelect?.category_ids);
+
+            treeselectTags.updateValue(dataSelect?.tag_ids);
+            treeselectTopics.updateValue(dataSelect?.topic_ids);
+            addPreviewImg(data?.image);
+
+            title.innerText = 'Edit Post';
+            openDialogNewPost()
+        }
+
+        function handleDuplicate (e, data) {
+            resetFormModal();
+            let listDatas           = <?php echo json_decode($jsonData) ?>;
+            let dataSelect          = listDatas[data?.post_id];
+            name.value              = dataSelect?.name;
+            short_description.value = dataSelect?.short_description;
+            editor.setData(dataSelect?.post_content ?? "");
+            allow_comment.value = dataSelect?.allow_comment;
+            publish_date.value  =  converDateToDisplay(dataSelect?.publish_date);
+            treeselectCategories.updateValue(dataSelect?.category_ids);
+            treeselectTags.updateValue(dataSelect?.tag_ids);
+            treeselectTopics.updateValue(dataSelect?.topic_ids);
+            addPreviewImg(data?.image);
+            title.innerText = 'Duplicate Post';
+            openDialogNewPost()
+        }
+
+        function resetFormModal () {
+            name.value              = '';
+            post_id.value           = '';
+            short_description.value = '';
+            editor.setData("");
+            allow_comment.value = 0;
+            publish_date.value  = '';
+            treeselectCategories.updateValue([]);
+            treeselectTags.updateValue([]);
+            treeselectTopics.updateValue([]);
+        }
+
+        function addPreviewImg (value) {
+            if (value) {
+                const imageEl = document.getElementById("image")?.parentElement;
+                // Create link element
+                var linkElement       = document.createElement('a');
+                linkElement.className = 'mp-image-link';
+                linkElement.style = "margin-right: 15px";
+                linkElement.href      = pubUrl + 'mageplaza/blog/post/' + value;
+                linkElement.onclick   = function () {
+                    imagePreview('post_image_image');
+                    return false;
+                };
+                // Create image element
+                var imageElement       = document.createElement('img');
+                imageElement.src       = pubUrl + 'mageplaza/blog/post/' + value;
+                imageElement.id        = 'post_image_image';
+                imageElement.title     = value;
+                imageElement.alt       = value;
+                imageElement.height    = 40;
+                imageElement.width     = 40;
+                imageElement.className = 'small-image-preview v-middle';
+                // Append image element to link element
+                linkElement.appendChild(imageElement);
+                if(imageEl) {
+                    // Prepend link element to the parent of the field
+                    imageEl.insertBefore(linkElement, imageEl.children[0]);
+                }
+
+                // delete
+                var deleteSpan = document.createElement('span');
+                deleteSpan.className = 'delete-image';
+                deleteSpan.style.display='inline-flex';
+                var deleteInput = document.createElement('input');
+                deleteInput.type = 'checkbox';
+                deleteInput.name = 'image[delete]';
+                deleteInput.value = '1';
+                deleteInput.className = 'checkbox';
+                deleteInput.id = 'post_image_delete';
+
+                var deleteLabel = document.createElement('label');
+                deleteLabel.htmlFor = 'post_image_delete';
+                deleteLabel.textContent = 'Delete Image';
+
+                deleteSpan.appendChild(deleteInput);
+                deleteSpan.appendChild(deleteLabel);
+                if (!imageEl.querySelector('.delete-image')) {
+                    imageEl.appendChild(deleteSpan);
+                }
+
+            }
+        }
+
+        function converDateToSave(publicDateValue) {
+            var inputDate = new Date(publicDateValue);
+            var formattedDate = ("0" + (inputDate.getMonth() + 1)).slice(-2) + '/' +
+                ("0" + inputDate.getDate()).slice(-2) + '/' +
+                inputDate.getFullYear() + ' ' +
+                ("0" + inputDate.getHours()).slice(-2) + ':' +
+                ("0" + inputDate.getMinutes()).slice(-2) + ':' +
+                ("0" + inputDate.getSeconds()).slice(-2);
+            return formattedDate
+        }
+        function converDateToDisplay(dateString) {
+            var currentDate = new Date(dateString);
+            var year = currentDate.getFullYear();
+            var month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+            var day = ('0' + currentDate.getDate()).slice(-2);
+            var hours = ('0' + currentDate.getHours()).slice(-2);
+            var minutes = ('0' + currentDate.getMinutes()).slice(-2);
+            var formattedDateTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+            return formattedDateTime;
+        }
+
+
     </script>
 <?php endif; ?>

@@ -98,7 +98,6 @@ define([
                         'innerScroll': true,
                         'buttons': []
                     };
-
                 if (htmlPopup.find('#mp_blog_post_form [name="name"]').length > 0) {
                     self._resetForm(postData['post_content']);
                 }
@@ -111,7 +110,6 @@ define([
                         imageEL,
                         deleteEL,
                         date;
-
                     if (field.is('[type="file"]') && value) {
                         imageEL = '<a class="mp-image-link" href="' + pubUrl + 'mageplaza/blog/post/' + value
                             + '" onclick="imagePreview(\'post_image_image\'); return false;" >' +
