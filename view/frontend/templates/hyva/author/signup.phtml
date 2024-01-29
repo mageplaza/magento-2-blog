@@ -52,7 +52,7 @@ $author = $block->getAuthor();
             </div>
         </div>
         <?php if (isset($author['status'])) : ?>
-            <div class="field mp-field">
+            <div class="field mp-field" style="margin-top: 1.5rem">
                 <label for="name" class="label"><span><?= $block->escapeHtml(__('Status')) ?></span></label>
                 <div class="control">
                     <span><?= $block->escapeHtml($author['status']) ?></span>
@@ -72,17 +72,17 @@ $author = $block->getAuthor();
                 </textarea>
             </div>
         </div>
-        <div class="field mp-field">
+        <div class="field mp-field" style="margin-top: 1.5rem">
             <label for="image" class="label"><span><?= /* @noEscape */
                     __('Avatar') ?></span></label>
-            <div class="control">
+            <div class="control" style="display: flex">
                 <?php if (!empty($author['image'])) : ?>
-                    <a class="mp-image-link"
+                    <a class="mp-image-link" style="margin-right: 15px;"
                        href="<?= $block->escapeUrl($block->getImageUrl($author['image'], 'auth')) ?>">
                         <img src="<?= $block->escapeUrl($block->getImageUrl($author['image'], 'auth')) ?>"
                              id="post_image_image"
                              title="<?= $block->escapeHtmlAttr($author['image']) ?>"
-                             alt="<?= $block->escapeHtmlAttr($author['image']) ?>" height="22" width="22"
+                             alt="<?= $block->escapeHtmlAttr($author['image']) ?>" height="70" width="70"
                              class="small-image-preview v-middle">
                     </a>
                 <?php endif; ?>
@@ -91,15 +91,15 @@ $author = $block->getAuthor();
                        class="input-file"
                        style="width: 90%;position: relative;top: -5px">
                 <?php if (!empty($author['image'])) : ?>
-                    <span class="delete-image">
-                    <input style="width: 8%" type="checkbox" name="image[delete]" value="1" class="checkbox"
+                    <span class="delete-image" style="display: inline-flex;">
+                    <input  type="checkbox" name="image[delete]" value="1" class="checkbox"
                            id="post_image_delete">
                     <label for="post_image_delete"> Delete Image</label>
                     </span>
                 <?php endif; ?>
             </div>
         </div>
-        <div class="field mp-field">
+        <div class="field mp-field" style="margin-top: 1.5rem">
             <label for="url_key" class="label"><span><?= $block->escapeHtml(__('URL Key')) ?></span></label>
             <div class="control">
                 <input type="text" name="url_key" id="url_key" value="<?= $block->escapeHtmlAttr($author['url_key']) ?>"
@@ -107,7 +107,7 @@ $author = $block->getAuthor();
                        class="input-text">
             </div>
         </div>
-        <div class="field mp-field">
+        <div class="field mp-field" style="margin-top: 1.5rem">
             <label for="full_url" class="label"><span><?= $block->escapeHtml(__('Full URL')) ?></span></label>
             <div class="control">
                 <span class="mp_full_url">
@@ -116,7 +116,7 @@ $author = $block->getAuthor();
                 </span>
             </div>
         </div>
-        <div class="field mp-field">
+        <div class="field mp-field" style="margin-top: 1.5rem">
             <label for="facebook_link" class="label"><span><?= $block->escapeHtml(__('Facebook Link')) ?></span></label>
             <div class="control">
                 <input type="url" name="facebook_link" id="facebook_link"
@@ -124,7 +124,7 @@ $author = $block->getAuthor();
                        title="<?= $block->escapeHtmlAttr(__('Facebook Link')) ?>" class="input-text">
             </div>
         </div>
-        <div class="field mp-field">
+        <div class="field mp-field" style="margin-top: 1.5rem">
             <label for="twitter_link" class="label"><span><?= $block->escapeHtml(__('Twitter Link')) ?></span></label>
             <div class="control">
                 <input type="url" name="twitter_link" id="twitter_link"

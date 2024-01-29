@@ -26,7 +26,7 @@ use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 $posts = $block->getRelatedPostList();
 
 if ($posts && $block->isEnabledBlog()) : ?>
-    <h2><?= $posts->getSize() ? $block->escapeHtml(__('Related Posts')) : $block->escapeHtml(__('No Related Posts')) ?></h2>
+    <h2 class="text-xl"><?= $posts->getSize() ? $block->escapeHtml(__('Related Posts')) : $block->escapeHtml(__('No Related Posts')) ?></h2>
     <?php if ($block->getRelatedMode()) : ?>
         <div class="mp-blog-owl-carousel ">
             <section id="relatedposts-carousel" class="splide" aria-label="Related Posts">
@@ -73,7 +73,7 @@ if ($posts && $block->isEnabledBlog()) : ?>
         </script>
 
     <?php else : ?>
-        <ul class="relatedposts-list">
+        <ul class="relatedposts-list" style="list-style-type:disc; padding-left: 30px">
             <?php foreach ($posts as $post) : ?>
                 <li>
                     <a href="<?= $block->escapeUrl($post->getUrl()) ?>"><?= $block->escapeHtml($post->getName()) ?></a>

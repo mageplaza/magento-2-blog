@@ -534,7 +534,7 @@ $color        = $helper->getDisplayConfig('font_color');
                                                     alt="Loading...">
                                         </div>
                                         <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit
-                                         primary btn btn-primary" type="submit"
+                                         primary btn btn-primary" type="submit" style="display: block"
                                                 form="default-cmt__content__cmt-block__guest-form">
                                             <?= $block->escapeHtml(__('Comment')) ?>
                                         </button>
@@ -585,14 +585,17 @@ $color        = $helper->getDisplayConfig('font_color');
 <script>
 
     document.addEventListener('DOMContentLoaded', function () {
-        new Splide('#card-carousel', {
-            perPage: 3,
-            breakpoints: {
-                1028: {
-                    perPage: 2
+        if(document.getElementById('card-carousel')) {
+            new Splide('#card-carousel', {
+                perPage: 3,
+                breakpoints: {
+                    1028: {
+                        perPage: 2
+                    }
                 }
-            }
-        }).mount();
+            }).mount();
+        }
+
     });
 
     var cmtBox     = document.querySelector('.default-cmt__content__cmt-block__cmt-box__cmt-input');

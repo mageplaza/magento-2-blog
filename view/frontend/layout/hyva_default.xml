@@ -51,7 +51,7 @@
 
 
         <referenceBlock name="mpblog.sidebar.mostview" >
-            <action method="setTemplate" ifconfig="blog/sidebar/search/enable_search">
+            <action method="setTemplate">
                 <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/sidebar/mostview.phtml</argument>
             </action>
         </referenceBlock>

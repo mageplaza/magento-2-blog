@@ -45,7 +45,7 @@ use Mageplaza\Blog\Block\Post\ManagePost;
             </div>
         </div>
         <input type="hidden" name="post_id" id="post_id">
-        <div class="field mp-field">
+        <div class="field mp-field" style="margin-top: 1.5rem">
             <b for="short_description" class="label">
                 <span><?= $block->escapeHtml(__('Short Description')) ?></span>
             </b>
@@ -53,7 +53,7 @@ use Mageplaza\Blog\Block\Post\ManagePost;
                 <textarea name="short_description" id="short_description" rows="5" cols="19" class="w-full"></textarea>
             </div>
         </div>
-        <div class="field mp-field">
+        <div class="field mp-field" style="margin-top: 1.5rem">
             <b for="post_content" class="label">
                 <span><?= $block->escapeHtml(__('Post Content')) ?></span>
             </b>
@@ -62,7 +62,7 @@ use Mageplaza\Blog\Block\Post\ManagePost;
                 </textarea>
             </div>
         </div>
-        <div class="field mp-field" style="margin-top: 0.5rem">
+        <div class="field mp-field" style="margin-top: 1.5rem">
             <label for="image" class="label"><b><?= $block->escapeHtml(__('Image')) ?></b></label>
             <div class="control" style="display: flex">
                 <input type="file" name="image" id="image" title="<?= $block->escapeHtmlAttr(__('Image')) ?>"
@@ -70,20 +70,20 @@ use Mageplaza\Blog\Block\Post\ManagePost;
             </div>
         </div>
         <div class="mp-custom">
-            <div class="field mp-field">
+            <div class="field mp-field" style="margin-top: 1.5rem">
                 <label class="label"><span><?= $block->escapeHtml(__('Select Category')) ?></span></label>
                 <div data-bind="scope: 'customCategory'">
                     <div id="categories_ids"></div>
                 </div>
             </div>
-            <div class="field mp-field">
+            <div class="field mp-field" style="margin-top: 1.5rem">
                 <label class="label"><span><?= $block->escapeHtml(__('Select Topic')) ?></span></label>
                 <div data-bind="scope: 'customTopic'">
                     <div id="topics_ids"></div>
                     <!-- ko template: getTemplate() --><!-- /ko -->
                 </div>
             </div>
-            <div class="field mp-field">
+            <div class="field mp-field" style="margin-top: 1.5rem">
                 <label class="label"><span><?= $block->escapeHtml(__('Select Tag')) ?></span></label>
                 <div data-bind="scope: 'customTag'">
                     <div id="tags_ids"></div>
@@ -91,7 +91,7 @@ use Mageplaza\Blog\Block\Post\ManagePost;
                 </div>
             </div>
         </div>
-        <div class="field mp-field">
+        <div class="field mp-field" style="margin-top: 1.5rem">
             <label for="allow_comment" class="label"><b><?= $block->escapeHtml(__('Allow Comment')) ?></b></label>
             <div class="control">
                 <select id="allow_comment" name="allow_comment" class="w-full">
@@ -100,7 +100,7 @@ use Mageplaza\Blog\Block\Post\ManagePost;
                 </select>
             </div>
         </div>
-        <div class="field mp-field">
+        <div class="field mp-field" style="margin-top: 1.5rem">
             <label for="publish_date" class="label"><b><?= $block->escapeHtml(__('Publish Date')) ?></b></label>
             <div class="control">
                 <input name="publish_date" id="publish_date"   type="datetime-local">
