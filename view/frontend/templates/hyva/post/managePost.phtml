@@ -140,10 +140,13 @@ use Mageplaza\Blog\Block\Post\ManagePost;
                 content: '\f800';
                 font-family: 'porto-icons';
             }
+
         </style>
     <?php endif; ?>
 </form>
-
+<style>
+    .ck-editor__editable {min-height: 300px;}
+</style>
 <script>
     CKEDITOR.ClassicEditor.create(document.getElementById("post_content"), {
         toolbar: {
