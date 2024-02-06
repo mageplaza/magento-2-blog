@@ -212,21 +212,18 @@ use Mageplaza\Blog\Block\Post\ManagePost;
     const categories = <?php echo($block->getCategoriesTree()) ?>;
     const topics     = <?php echo($block->getTopicTree()) ?>;
     const tags       = <?php echo($block->getTagTree()) ?>;
-
     const optionsCategories = categories?.map(data => {
         return {
             name: data?.label,
             value: data?.value
         }
     });
-
     const optionsTopics = Object.values(topics)?.map(data => {
         return {
             name: data?.label,
             value: data?.value
         }
     });
-
     const optionsTags          = Object.values(tags)?.map(data => {
         return {
             name: data?.label,
@@ -240,8 +237,6 @@ use Mageplaza\Blog\Block\Post\ManagePost;
         value: []
 
     });
-
-
     const domElementTopics = document.querySelector('#topics_ids');
     const treeselectTopics = new Treeselect({
         parentHtmlContainer: domElementTopics,
@@ -249,7 +244,6 @@ use Mageplaza\Blog\Block\Post\ManagePost;
         value: []
 
     });
-
     const domElementTags = document.querySelector('#tags_ids');
     const treeselectTags = new Treeselect({
         parentHtmlContainer: domElementTags,
@@ -260,8 +254,6 @@ use Mageplaza\Blog\Block\Post\ManagePost;
     treeselectTags.srcElement.addEventListener('input', (e) => {
         tags_ids = e.detail?.join(',')
     });
-
-
     function initAddNewPost () {
         return {
             errors: 0,

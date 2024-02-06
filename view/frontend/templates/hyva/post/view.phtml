@@ -583,7 +583,6 @@ $color        = $helper->getDisplayConfig('font_color');
     }
 </style>
 <script>
-
     document.addEventListener('DOMContentLoaded', function () {
         if(document.getElementById('card-carousel')) {
             new Splide('#card-carousel', {
@@ -597,7 +596,6 @@ $color        = $helper->getDisplayConfig('font_color');
         }
 
     });
-
     var cmtBox     = document.querySelector('.default-cmt__content__cmt-block__cmt-box__cmt-input');
     var submitCmt  = document.querySelector('.default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit');
     var defaultCmt = document.querySelector('ul.default-cmt__content__cmt-content:first-child');
@@ -612,7 +610,7 @@ $color        = $helper->getDisplayConfig('font_color');
                 openMyDialog();
                 showLogin();
             } else {
-                window.location.href = loginUrl; // Assuming loginUrl is defined somewhere in your code
+                window.location.href = loginUrl;
             }
         });
     }
@@ -631,10 +629,8 @@ $color        = $helper->getDisplayConfig('font_color');
             submitForm () {
                 this.validate()
                 .then(() => {
-                    // do not rename $form, the variable is the expected name in the recaptcha output
                     const $form = document.querySelector('#default-cmt__content__cmt-block__guest-form');
                     if (this.errors === 0) {
-                        // $form.submit();
                         this.dispatchCommentRequest($form);
                     }
                 })
@@ -804,8 +800,6 @@ $color        = $helper->getDisplayConfig('font_color');
             showReply(cmtRow.querySelectorAll('.btn-reply'));
         }
     }
-
-
     function likeComment (btns) {
         btns.forEach(function (likeEl) {
             likeEl.addEventListener('click', function () {
@@ -934,22 +928,18 @@ $color        = $helper->getDisplayConfig('font_color');
     if (firstCmtRow) {
         firstCmtRow.style.borderTop = 'none';
     }
-
-
     function submitReply (input, replyId, parentComment) {
         input.addEventListener('keypress', async function (e) {
             var text = input.value;
             if (text !== '') {
                 if (e.keyCode === 13) {
-                    input.nextElementSibling.style.display = 'block'; // Show loading element
+                    input.nextElementSibling.style.display = 'block';
                     input.disabled                         = true;
-
                     await ajaxCommentActions(text, input, true, replyId, parentComment);
-
-                    input.closest('.cmt-row__reply-row').style.display = 'none'; // Hide reply row
-                    input.nextElementSibling.style.display             = 'none'; // Hide loading element
+                    input.closest('.cmt-row__reply-row').style.display = 'none';
+                    input.nextElementSibling.style.display             = 'none';
                     input.disabled                                     = false;
-                    var cmtRow                                         = document.getElementById('cmt-row');
+                    var cmtRow  = document.getElementById('cmt-row');
                     if (cmtRow) {
                         cmtRow.remove();
                     }

@@ -183,10 +183,7 @@ $jsonData       = json_encode($postDatas);
                 }
             })
             .catch(error => console.error('Error:', error));
-
-            // Perform your delete action here, e.g., send an AJAX request to delete the post
         }
-
         let name              = document.querySelector('#name');
         let post_id           = document.querySelector('#post_id');
         let short_description = document.querySelector('#short_description');
@@ -251,7 +248,6 @@ $jsonData       = json_encode($postDatas);
         function addPreviewImg (value) {
             if (value) {
                 const imageEl = document.getElementById("image")?.parentElement;
-                // Create link element
                 var linkElement       = document.createElement('a');
                 linkElement.className = 'mp-image-link';
                 linkElement.style = "margin-right: 15px";
@@ -260,7 +256,6 @@ $jsonData       = json_encode($postDatas);
                     imagePreview('post_image_image');
                     return false;
                 };
-                // Create image element
                 var imageElement       = document.createElement('img');
                 imageElement.src       = pubUrl + 'mageplaza/blog/post/' + value;
                 imageElement.id        = 'post_image_image';
@@ -269,14 +264,10 @@ $jsonData       = json_encode($postDatas);
                 imageElement.height    = 40;
                 imageElement.width     = 40;
                 imageElement.className = 'small-image-preview v-middle';
-                // Append image element to link element
                 linkElement.appendChild(imageElement);
                 if(imageEl) {
-                    // Prepend link element to the parent of the field
                     imageEl.insertBefore(linkElement, imageEl.children[0]);
                 }
-
-                // delete
                 var deleteSpan = document.createElement('span');
                 deleteSpan.className = 'delete-image';
                 deleteSpan.style.display='inline-flex';

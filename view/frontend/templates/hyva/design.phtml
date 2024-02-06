@@ -27,7 +27,6 @@ use Mageplaza\Blog\Block\Design;
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
         var body = document.body;
-
         window.addEventListener('load', function () {
             if (body.classList.contains('page-layout-1column')) {
                 var columns = document.querySelector('.columns');
@@ -36,8 +35,6 @@ use Mageplaza\Blog\Block\Design;
                     columns.removeChild(sidebarMain);
                 }
             }
-
-            // Assuming $block is defined somewhere in your PHP code
             var currentTheme = "<?php echo $block->getCurrentTheme(); ?>";
             if (currentTheme === "Etheme/yourstore") {
                 body.classList.add('mpblog-etheme-yourstore');

@@ -24,7 +24,6 @@ use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 /** @var Collection $posts */
 /** @var RelatedPost $block */
 $posts = $block->getRelatedPostList();
-
 if ($posts && $block->isEnabledBlog()) : ?>
     <h2 class="text-xl"><?= $posts->getSize() ? $block->escapeHtml(__('Related Posts')) : $block->escapeHtml(__('No Related Posts')) ?></h2>
     <?php if ($block->getRelatedMode()) : ?>
@@ -71,7 +70,6 @@ if ($posts && $block->isEnabledBlog()) : ?>
                 }).mount();
             });
         </script>
-
     <?php else : ?>
         <ul class="relatedposts-list" style="list-style-type:disc; padding-left: 30px">
             <?php foreach ($posts as $post) : ?>

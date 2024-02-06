@@ -56,8 +56,6 @@ use Mageplaza\Blog\Block\Sidebar\Search;
     </div>
 </div>
 <script>
-
-
     document.addEventListener('DOMContentLoaded', function () {
         var visibleImage = <?php echo json_encode($block->getSidebarConfig('search/show_image')); ?>;
         var searchBox    = document.getElementById('mpblog-search-box');
@@ -122,10 +120,8 @@ use Mageplaza\Blog\Block\Sidebar\Search;
                             suggestionDivParrent.addEventListener("click", function () {
                                 window.location.href = suggestion.url;
                             });
-
                             autocompleteResults.appendChild(suggestionDivParrent);
                         }
-
                     });
                     if (!existedPost) {
                         var suggestionDivParrent       = document.createElement('div');
@@ -141,7 +137,6 @@ use Mageplaza\Blog\Block\Sidebar\Search;
                 autocompleteResults.style.display = 'none';
             }
         }
-
         searchBox.addEventListener("blur",function (e) {
             setTimeout(() => {
                 var autocompleteResults = document.getElementById('autocomplete-results');
@@ -149,10 +144,6 @@ use Mageplaza\Blog\Block\Sidebar\Search;
             },150);
 
         });
-
-
     });
-
-
 </script>
 
