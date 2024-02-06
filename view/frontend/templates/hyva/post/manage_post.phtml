@@ -31,8 +31,7 @@ use Mageplaza\Blog\Block\Post\ManagePost;
       x-data="Object.assign(hyva.formValidation($el), initAddNewPost())"
       @submit.prevent="submitForm();"
 >
-    <?= /* @noEscape */
-    $block->getBlockHtml('formkey'); ?>
+    <?= /* @noEscape */ $block->getBlockHtml('formkey'); ?>
     <fieldset class="fieldset">
         <div class="field required mp-field">
             <label for="name" class="label">
@@ -300,7 +299,7 @@ use Mageplaza\Blog\Block\Post\ManagePost;
 
                 const publicDateValue = document.querySelector('#publish_date').value;
                 if(publicDateValue) {
-                    formData.append('publish_date', converDateToSave(publicDateValue));
+                    formData.append('publish_date', convertDateToSave(publicDateValue));
                 } else {
                     formData.append('publish_date', '');
                 }

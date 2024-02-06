@@ -27,13 +27,13 @@
     <body>
         <referenceBlock name="mpblog.author.post" >
             <action method="setTemplate" >
-                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/authorPost.phtml</argument>
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/author_post.phtml</argument>
             </action>
         </referenceBlock>
 
         <referenceBlock name="mpblog.manage.post" >
             <action method="setTemplate" >
-                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/managePost.phtml</argument>
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/manage_post.phtml</argument>
             </action>
         </referenceBlock>
 

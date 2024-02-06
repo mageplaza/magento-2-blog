@@ -27,6 +27,7 @@ $postCollection = $block->getPostCollection();
 $modalViewModel = $viewModels->require(\Hyva\Theme\ViewModel\Modal::class);
 $postDatas      = $block->getPostDatas($postCollection);
 $jsonData       = json_encode($postDatas);
+
 ?>
 <?php if (!$block->getAuthorStatus()) : ?>
     <div>
@@ -55,11 +56,15 @@ $jsonData       = json_encode($postDatas);
             ->addDialogClass('overflow-y-hidden overflow-x-hidden fixed z-50 justify-center items-center w-3/4 md:inset-0 h-4/5')
             ->removeDialogClass('p-10')
             ->withDialogRefName("add-new-post-name")
-            ->withContent('<div id="mp-blog-new-post-popup">
-<header class="modal-header mb-3">
+            ->withContent(<<<HTML
+     <div id="mp-blog-new-post-popup">
+        <header class="modal-header mb-3">
             <h3 id="popup_author_post" class="modal-title text-3xl border-b p-4" data-role="title">Add New Post</h3>
-          
-        </header>' . $block->getChildHtml('mpblog_manage_post') . '</div>') ?>
+        </header> 
+            {$block->getChildHtml('mpblog_manage_post')} 
+    </div>
+HTML
+            ) ?>
 
     </div>
     <div class="post-list-content" id="mpblog-list-container">
@@ -184,6 +189,7 @@ $jsonData       = json_encode($postDatas);
             })
             .catch(error => console.error('Error:', error));
         }
+
         let name              = document.querySelector('#name');
         let post_id           = document.querySelector('#post_id');
         let short_description = document.querySelector('#short_description');
@@ -198,14 +204,14 @@ $jsonData       = json_encode($postDatas);
 
         function handleEdit (e, data) {
             resetFormModal();
-            let listDatas           = <?php echo json_decode($jsonData) ?>;
-            let dataSelect          = listDatas[data?.post_id];
+            let listData           = <?php echo json_decode($jsonData) ?>;
+            let dataSelect          = listData[data?.post_id];
             name.value              = dataSelect?.name;
             post_id.value           = dataSelect?.post_id;
             short_description.value = dataSelect?.short_description;
             editor.setData(dataSelect?.post_content ?? "");
             allow_comment.value = dataSelect?.allow_comment;
-            publish_date.value  = converDateToDisplay(dataSelect?.publish_date);
+            publish_date.value  = convertDateToDisplay(dataSelect?.publish_date);
             treeselectCategories.updateValue(dataSelect?.category_ids);
 
             treeselectTags.updateValue(dataSelect?.tag_ids);
@@ -218,13 +224,13 @@ $jsonData       = json_encode($postDatas);
 
         function handleDuplicate (e, data) {
             resetFormModal();
-            let listDatas           = <?php echo json_decode($jsonData) ?>;
-            let dataSelect          = listDatas[data?.post_id];
+            let listData           = <?php echo json_decode($jsonData) ?>;
+            let dataSelect          = listData[data?.post_id];
             name.value              = dataSelect?.name;
             short_description.value = dataSelect?.short_description;
             editor.setData(dataSelect?.post_content ?? "");
             allow_comment.value = dataSelect?.allow_comment;
-            publish_date.value  =  converDateToDisplay(dataSelect?.publish_date);
+            publish_date.value  = convertDateToDisplay(dataSelect?.publish_date);
             treeselectCategories.updateValue(dataSelect?.category_ids);
             treeselectTags.updateValue(dataSelect?.tag_ids);
             treeselectTopics.updateValue(dataSelect?.topic_ids);
@@ -243,16 +249,20 @@ $jsonData       = json_encode($postDatas);
             treeselectCategories.updateValue([]);
             treeselectTags.updateValue([]);
             treeselectTopics.updateValue([]);
+            var element = document.querySelector('.mp-image-link');
+            if (element) {
+                element.parentNode.removeChild(element);
+            }
         }
 
         function addPreviewImg (value) {
             if (value) {
-                const imageEl = document.getElementById("image")?.parentElement;
-                var linkElement       = document.createElement('a');
-                linkElement.className = 'mp-image-link';
-                linkElement.style = "margin-right: 15px";
-                linkElement.href      = pubUrl + 'mageplaza/blog/post/' + value;
-                linkElement.onclick   = function () {
+                const imageEl          = document.getElementById("image")?.parentElement;
+                var linkElement        = document.createElement('a');
+                linkElement.className  = 'mp-image-link';
+                linkElement.style      = "margin-right: 15px";
+                linkElement.href       = pubUrl + 'mageplaza/blog/post/' + value;
+                linkElement.onclick    = function () {
                     imagePreview('post_image_image');
                     return false;
                 };
@@ -265,21 +275,21 @@ $jsonData       = json_encode($postDatas);
                 imageElement.width     = 40;
                 imageElement.className = 'small-image-preview v-middle';
                 linkElement.appendChild(imageElement);
-                if(imageEl) {
+                if (imageEl) {
                     imageEl.insertBefore(linkElement, imageEl.children[0]);
                 }
-                var deleteSpan = document.createElement('span');
-                deleteSpan.className = 'delete-image';
-                deleteSpan.style.display='inline-flex';
-                var deleteInput = document.createElement('input');
-                deleteInput.type = 'checkbox';
-                deleteInput.name = 'image[delete]';
-                deleteInput.value = '1';
-                deleteInput.className = 'checkbox';
-                deleteInput.id = 'post_image_delete';
+                var deleteSpan           = document.createElement('span');
+                deleteSpan.className     = 'delete-image';
+                deleteSpan.style.display = 'inline-flex';
+                var deleteInput          = document.createElement('input');
+                deleteInput.type         = 'checkbox';
+                deleteInput.name         = 'image[delete]';
+                deleteInput.value        = '1';
+                deleteInput.className    = 'checkbox';
+                deleteInput.id           = 'post_image_delete';
 
-                var deleteLabel = document.createElement('label');
-                deleteLabel.htmlFor = 'post_image_delete';
+                var deleteLabel         = document.createElement('label');
+                deleteLabel.htmlFor     = 'post_image_delete';
                 deleteLabel.textContent = 'Delete Image';
 
                 deleteSpan.appendChild(deleteInput);
@@ -291,8 +301,8 @@ $jsonData       = json_encode($postDatas);
             }
         }
 
-        function converDateToSave(publicDateValue) {
-            var inputDate = new Date(publicDateValue);
+        function convertDateToSave (publicDateValue) {
+            var inputDate     = new Date(publicDateValue);
             var formattedDate = ("0" + (inputDate.getMonth() + 1)).slice(-2) + '/' +
                 ("0" + inputDate.getDate()).slice(-2) + '/' +
                 inputDate.getFullYear() + ' ' +
@@ -301,13 +311,14 @@ $jsonData       = json_encode($postDatas);
                 ("0" + inputDate.getSeconds()).slice(-2);
             return formattedDate
         }
-        function converDateToDisplay(dateString) {
-            var currentDate = new Date(dateString);
-            var year = currentDate.getFullYear();
-            var month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
-            var day = ('0' + currentDate.getDate()).slice(-2);
-            var hours = ('0' + currentDate.getHours()).slice(-2);
-            var minutes = ('0' + currentDate.getMinutes()).slice(-2);
+
+        function convertDateToDisplay (dateString) {
+            var currentDate       = new Date(dateString);
+            var year              = currentDate.getFullYear();
+            var month             = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+            var day               = ('0' + currentDate.getDate()).slice(-2);
+            var hours             = ('0' + currentDate.getHours()).slice(-2);
+            var minutes           = ('0' + currentDate.getMinutes()).slice(-2);
             var formattedDateTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
             return formattedDateTime;
         }

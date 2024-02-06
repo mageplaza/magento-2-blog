@@ -24,8 +24,8 @@
     <update handle="mpblog_author"/>
     <body>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Post\AuthorPost" name="mpblog.author.post" as="mpblog_post" template="Mageplaza_Blog::post/authorPost.phtml" cacheable="false">
-                <block class="Mageplaza\Blog\Block\Post\ManagePost" name="mpblog.manage.post" as="mpblog_manage_post" template="Mageplaza_Blog::post/managePost.phtml">
+            <block class="Mageplaza\Blog\Block\Post\AuthorPost" name="mpblog.author.post" as="mpblog_post" template="Mageplaza_Blog::post/author_post.phtml" cacheable="false">
+                <block class="Mageplaza\Blog\Block\Post\ManagePost" name="mpblog.manage.post" as="mpblog_manage_post" template="Mageplaza_Blog::post/manage_post.phtml">
                     <block name="field_additional"/>
                 </block>
             </block>

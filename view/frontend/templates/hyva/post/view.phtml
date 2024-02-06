@@ -89,12 +89,9 @@ $color        = $helper->getDisplayConfig('font_color');
             {
                 "#mp-blog-review": {
                     "Mageplaza_Blog/js/helpful-rate": {
-                        "url": "<?= /* @noEscape */
-            $block->getUrl('mpblog/post/review') ?>",
-                        "post_id" : <?= /* @noEscape */
-            $_post->getId() ?>,
-                        "mode": <?= /* @noEscape */
-            $helper->getReviewMode() ?>
+                        "url": "<?= /* @noEscape */ $block->getUrl('mpblog/post/review') ?>",
+                        "post_id" : <?= /* @noEscape */ $_post->getId() ?>,
+                        "mode": <?= /* @noEscape */ $helper->getReviewMode() ?>
                     }
                 }
             }
@@ -758,14 +755,22 @@ $color        = $helper->getDisplayConfig('font_color');
             cmtRow.setAttribute('data-reply-id', cmt.reply_cmt);
         }
 
-        cmtRow.innerHTML = '<div class="cmt-row__cmt-username"> <span class="cmt-row__cmt-username username username__' + cmt.cmt_id + '">' + cmt.user_cmt + '</span> </div>' +
-            '<div class="cmt-row__cmt-content"> <p>' + htmlComment(cmt.cmt_text) + '</p> </div>' +
+        cmtRow.innerHTML = '<div class="cmt-row__cmt-username"> ' +
+                '<span class="cmt-row__cmt-username username username__' + cmt.cmt_id + '">' + cmt.user_cmt + '</span> ' +
+            '</div>' +
+            '<div class="cmt-row__cmt-content"> ' +
+                '<p>' + htmlComment(cmt.cmt_text) + '</p> ' +
+            '</div>' +
             '<div class="cmt-row__cmt-interactions interactions"> <div class="interactions__btn-actions"> ' +
-            '<a class="interactions__btn-actions action btn-like mpblog-like" data-cmt-id="' + cmt.cmt_id + '" click="1">' +
-            '<i class="fa fa-thumbs-up" aria-hidden="true" style="margin-right: 3px"></i>' +
-            '<span class="count-like__like-text"></span></a>' +
-            '<a class="interactions__btn-actions action btn-reply" data-cmt-id="' + cmt.cmt_id + '">' + reply + '</a> </div>' +
-            '<div class="interactions__cmt-createdat"> <span>' + cmt.created_at + '</span> </div> </div>';
+                '<a class="interactions__btn-actions action btn-like mpblog-like" data-cmt-id="' + cmt.cmt_id + '" click="1">' +
+                    '<i class="fa fa-thumbs-up" aria-hidden="true" style="margin-right: 3px"></i>' +
+                    '<span class="count-like__like-text"></span>' +
+                '</a>' +
+                '<a class="interactions__btn-actions action btn-reply" data-cmt-id="' + cmt.cmt_id + '">' + reply + '</a> ' +
+            '</div>' +
+            '<div class="interactions__cmt-createdat"> ' +
+                '<span>' + cmt.created_at + '</span> ' +
+            '</div> ';
 
         if (isReply) {
             var replyCmtId   = cmt.reply_cmt;
