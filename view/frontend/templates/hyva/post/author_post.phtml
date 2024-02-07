@@ -163,6 +163,11 @@ HTML
     <script>
         let pubUrl = "<?= $block->escapeHtml($block->getBaseMediaUrl()) ?>";
         let title  = document.querySelector('#popup_author_post');
+        let name              = document.querySelector('#name');
+        let post_id           = document.querySelector('#post_id');
+        let short_description = document.querySelector('#short_description');
+        let allow_comment     = document.querySelector('#allow_comment');
+        let publish_date      = document.querySelector('#publish_date');
 
         function handleDelete (element) {
             var postId = element.closest('.post-info-action').getAttribute('data-postId');
@@ -189,19 +194,13 @@ HTML
             })
             .catch(error => console.error('Error:', error));
         }
-
-        let name              = document.querySelector('#name');
-        let post_id           = document.querySelector('#post_id');
-        let short_description = document.querySelector('#short_description');
-        let allow_comment     = document.querySelector('#allow_comment');
-        let publish_date      = document.querySelector('#publish_date');
-
+        // open modal add new post
         function handleAddPost () {
             resetFormModal();
             title.innerText = 'Add New Post';
             openDialogNewPost();
         }
-
+        // open modal edit new post
         function handleEdit (e, data) {
             resetFormModal();
             let listData           = <?php echo json_decode($jsonData) ?>;
@@ -221,7 +220,7 @@ HTML
             title.innerText = 'Edit Post';
             openDialogNewPost()
         }
-
+        // open modal duplicate new post
         function handleDuplicate (e, data) {
             resetFormModal();
             let listData           = <?php echo json_decode($jsonData) ?>;
@@ -238,7 +237,7 @@ HTML
             title.innerText = 'Duplicate Post';
             openDialogNewPost()
         }
-
+        // reset data when hide modal
         function resetFormModal () {
             name.value              = '';
             post_id.value           = '';
@@ -254,7 +253,7 @@ HTML
                 element.parentNode.removeChild(element);
             }
         }
-
+        // add preview image when open modal edit and duplicate modal
         function addPreviewImg (value) {
             if (value) {
                 const imageEl          = document.getElementById("image")?.parentElement;
@@ -301,6 +300,7 @@ HTML
             }
         }
 
+        // convert date in modal
         function convertDateToSave (publicDateValue) {
             var inputDate     = new Date(publicDateValue);
             var formattedDate = ("0" + (inputDate.getMonth() + 1)).slice(-2) + '/' +

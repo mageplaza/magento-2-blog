@@ -677,6 +677,7 @@ $color        = $helper->getDisplayConfig('font_color');
         }
     }
 
+    // ajax call api to comments
     function ajaxCommentActions (cmtText, inputEl, checkReply, cmtId, parentComment) {
         var isReply      = (typeof checkReply !== 'undefined') ? 1 : 0,
             replyId      = (typeof cmtId !== 'undefined') ? cmtId : 0,
@@ -734,7 +735,7 @@ $color        = $helper->getDisplayConfig('font_color');
         })
         .catch(error => console.error('Error:', error));
     }
-
+    // handle display comments
     function displayComment (cmt, isReply) {
         function htmlComment (text) {
             var html = '';
@@ -805,6 +806,7 @@ $color        = $helper->getDisplayConfig('font_color');
             showReply(cmtRow.querySelectorAll('.btn-reply'));
         }
     }
+    // handle click like comment
     function likeComment (btns) {
         btns.forEach(function (likeEl) {
             likeEl.addEventListener('click', function () {
@@ -865,7 +867,7 @@ $color        = $helper->getDisplayConfig('font_color');
     }
 
     likeComment(likeBtn);
-
+    // handle show reply comment
     function showReply (btns) {
         btns.forEach(function (btn) {
             btn.addEventListener('click', function () {
@@ -919,7 +921,7 @@ $color        = $helper->getDisplayConfig('font_color');
             });
         });
     }
-
+    // handle find comment id closest
     function closestWithDataAttr (element, attribute) {
         while (element && !element.getAttribute(attribute)){
             element = element.parentNode;
@@ -933,6 +935,7 @@ $color        = $helper->getDisplayConfig('font_color');
     if (firstCmtRow) {
         firstCmtRow.style.borderTop = 'none';
     }
+    // handle reply comment
     function submitReply (input, replyId, parentComment) {
         input.addEventListener('keypress', async function (e) {
             var text = input.value;

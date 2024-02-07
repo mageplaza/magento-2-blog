@@ -52,9 +52,7 @@ $_helper            = $block->getHelper();
     }
     $pos = $block->getPositioned();
     ?>
-    <div class="products wrapper <?= /* @noEscape */
-    $viewMode ?> products-<?= /* @noEscape */
-    $viewMode ?>">
+    <div class="products wrapper <?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
         <?php if ($block->relatedMode() !== '1') : ?>
             <div class="products list items product-items mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
                 <?php /** @var Product $_product */ ?>
