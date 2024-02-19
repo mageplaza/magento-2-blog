@@ -35,6 +35,10 @@ class HyvaMenu
      * @var Data
      */
     protected $helper;
+    /**
+     * @var \Magento\Framework\View\LayoutInterface
+     */
+    protected $layout;
 
     /**
      * Topmenu constructor.
