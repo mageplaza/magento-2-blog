@@ -6,7 +6,7 @@
     "facebook/graph-sdk": "^5.*"
   },
   "type": "magento2-module",
-  "version": "4.2.1",
+  "version": "4.2.0",
   "license": "proprietary",
   "keywords": [
     "magento 2",
