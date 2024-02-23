@@ -1,0 +1,50 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+use Mageplaza\Blog\Block\Post\View;
+use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Model\Config\Source\Comments\Type;
+
+/** @var View $block */
+$helper       = $block->getBlogHelper();
+$_post        = $block->getPost();
+$author       = $helper->getAuthorByPost($_post);
+$authorName   = $author !== null ? $author->getName() : '';
+$modifier     = $helper->getAuthorByPost($_post, true);
+$modifierName = $modifier !== null ? $modifier->getName() : '';
+?>
+<?php if ($authorName && $helper->showAuthorInfo()) : ?>
+    |
+    <span><i class="fa fa-user">&nbsp;</i>
+                            <?= /* @noEscape */ __(
+                                'By: %1',
+                                '<a class="mp-info" href="' . $author->getUrl() . '">' . $authorName . '</a>'
+                            ) ?></span>
+    <?php if ($authorName != $modifierName && $modifierName) : ?>
+        |
+        <span><i class="fa fa-edit">&nbsp;</i>
+                                <?= /* @noEscape */ __(
+                                    'Modify By: %1 at %2',
+                                    '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>',
+                                    $block->getDateFormat($_post->getUpdatedAt())
+                                ) ?></span>
+    <?php endif; ?>
+<?php endif; ?>

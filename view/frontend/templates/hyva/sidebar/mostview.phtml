@@ -1,0 +1,94 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+use Mageplaza\Blog\Block\Sidebar\MostView;
+
+/** @var MostView $block */
+$posts       = $block->getMostViewPosts();
+$postsRecent = $block->getRecentPost();
+?>
+<div class="mp-sidebar product info detailed">
+    <div class="product data items" data-mage-init='{"tabs":{"openedState":"active"}}' x-data="{ activeTab:  0 }">
+        <div class="data item title" data-role="collapsible" id="tab-label-popular" @click="activeTab = 0" :class="{ 'active': activeTab === 0 }">
+            <a class="data switch" tabindex="-1" data-toggle="switch" id="tab-label-popular-title" >
+                <div class="text-center"><?= $block->escapeHtml(__('Popular')) ?></div>
+            </a>
+        </div>
+        <div class="data item content" id="tab-content-popular" data-role="content" :class="{ 'active': activeTab === 0 }" x-show.transition.in.opacity.duration.600="activeTab === 0">
+            <?php if ($posts->getSize()) : ?>
+                <?php foreach ($posts as $post) : ?>
+                    <div class="list-post-tabs">
+                        <div class="post-left">
+                            <a href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                <img class="img-responsive"
+                                     src="<?= $block->escapeUrl($block->resizeImage($post->getImage(), '100x')) ?>">
+                            </a>
+                        </div>
+                        <div class="post-right">
+                            <a href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                <span><?= $block->escapeHtml($post->getName()) ?></span>
+                            </a>
+                            <span class="create-at">
+                                <?= $post->getPublishDate()
+                                    ? $block->escapeHtml($block->getDateFormat($post->getPublishDate())) : '' ?>
+                            </span>
+                        </div>
+                        <div class="mp-clear"></div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <div class="mostview-nopost"><?= $block->escapeHtml(__('No Posts')) ?></div>
+            <?php endif; ?>
+        </div>
+
+        <div class="data item title" data-role="collapsible" id="tab-label-mostview" @click="activeTab = 1" :class="{ 'active': activeTab === 1 }">
+            <a class="data switch" tabindex="-1" data-toggle="switch" id="tab-label-mostview-title" >
+                <div class="text-center"><?= $block->escapeHtml(__('Latest')) ?></div>
+            </a>
+        </div>
+        <div class="data item content" id="tab-content-mostview" data-role="content" :class="{ 'active': activeTab === 1 }" x-show.transition.in.opacity.duration.600="activeTab === 1">
+            <?php if ($postsRecent->getSize()) : ?>
+                <?php foreach ($postsRecent as $post) : ?>
+                    <div class="list-post-tabs" href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                        <div class="post-left">
+                            <a href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                <img class="img-responsive"
+                                     src="<?= $block->escapeUrl($block->resizeImage($post->getImage(), '100x')) ?>">
+                            </a>
+                        </div>
+                        <div class="post-right">
+                            <a href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                <span><?= $block->escapeHtml($post->getName()) ?></span>
+                            </a>
+                            <span class="create-at">
+                                <?= $post->getPublishDate()
+                                    ? $block->escapeHtml($block->getDateFormat($post->getPublishDate())) : '' ?>
+                            </span>
+                        </div>
+                        <div class="mp-clear"></div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <div class="mostview-nopost"><?= $block->escapeHtml(__('No Posts')) ?></div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>

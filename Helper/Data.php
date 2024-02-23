@@ -181,10 +181,10 @@ class Data extends CoreHelper
      */
     public function isEnabledReview()
     {
-        $groupId = (string)$this->_httpContext->getValue(CustomerContext::CONTEXT_GROUP);
+        $groupId = (string) $this->_httpContext->getValue(CustomerContext::CONTEXT_GROUP);
 
-        if ($this->getConfigGeneral('is_review')
-            && in_array($groupId, explode(',', (string) $this->getConfigGeneral('review_mode')), true)
+        if ($this->getPostViewPageConfig('is_review')
+            && in_array($groupId, explode(',', (string) $this->getPostViewPageConfig('review_mode')), true)
         ) {
             return true;
         }
@@ -200,7 +200,7 @@ class Data extends CoreHelper
         $login = $this->_httpContext->getValue(CustomerContext::CONTEXT_AUTH);
 
         if (!$login
-            && in_array('0', explode(',', $this->getConfigGeneral('review_mode') ?? ''), true)
+            && in_array('0', explode(',', $this->getPostViewPageConfig('review_mode') ?? ''), true)
         ) {
             return '0';
         }
@@ -297,7 +297,7 @@ class Data extends CoreHelper
      */
     public function getAuthorCollection()
     {
-        if ($customerId = $this->_httpContext->getValue('mp_customer_id')) {
+        if ($customerId = $this->getCustomerIdByContext()) {
             return $this->getFactoryByType('author')->create()->getCollection()
                 ->addFieldToFilter('customer_id', $customerId);
         }
@@ -351,17 +351,72 @@ class Data extends CoreHelper
      *
      * @return mixed
      */
-    public function getSeoConfig($code, $storeId = null)
+    public function getDisplayConfig($code, $storeId = null)
     {
-        return $this->getBlogConfig('seo/' . $code, $storeId);
+        return $this->getBlogConfig('display/' . $code, $storeId);
+    }
+
+    /**
+     * @param $code
+     * @param null $storeId
+     *
+     * @return mixed
+     */
+    public function getIndexPageConfig($code, $storeId = null)
+    {
+        return $this->getBlogConfig('index_page/' . $code, $storeId);
+    }
+
+    /**
+     * @param $code
+     * @param null $storeId
+     *
+     * @return mixed
+     */
+    public function getPostViewPageConfig($code, $storeId = null)
+    {
+        return $this->getBlogConfig('post_view_page/' . $code, $storeId);
+    }
+
+    /**
+     * @param $code
+     * @param null $storeId
+     *
+     * @return mixed
+     */
+    public function getProductPostConfig($code, $storeId = null)
+    {
+        return $this->getBlogConfig('product_post/' . $code, $storeId);
+    }
+
+    /**
+     * @param $code
+     * @param null $storeId
+     *
+     * @return mixed
+     */
+    public function getSidebarConfig($code, $storeId = null)
+    {
+        return $this->getBlogConfig('sidebar/' . $code, $storeId);
+    }
+
+    /**
+     * @param $code
+     * @param null $storeId
+     *
+     * @return mixed
+     */
+    public function getCommentConfig($code, $storeId = null)
+    {
+        return $this->getBlogConfig('comment/' . $code, $storeId);
     }
 
     /**
      * @return mixed
      */
-    public function showAuthorInfo()
+    public function showAuthorInfo($storeId = null)
     {
-        return $this->getConfigGeneral('display_author');
+        return $this->getPostViewPageConfig('display_author', $storeId);
     }
 
     /**
@@ -371,7 +426,7 @@ class Data extends CoreHelper
      */
     public function getBlogName($store = null)
     {
-        return $this->getConfigGeneral('name', $store) ?: __('Blog');
+        return $this->getDisplayConfig('name', $store) ?: __('Blog');
     }
 
     /**
@@ -381,7 +436,7 @@ class Data extends CoreHelper
      */
     public function getRoute($store = null)
     {
-        return $this->getConfigGeneral('url_prefix', $store) ?: 'blog';
+        return $this->getDisplayConfig('url_prefix', $store) ?: 'blog';
     }
 
     /**
@@ -391,8 +446,8 @@ class Data extends CoreHelper
      */
     public function getUrlSuffix($store = null)
     {
-        return $this->getConfigGeneral('url_suffix', $store)
-            ? '.' . $this->getConfigGeneral('url_suffix', $store) : '';
+        return $this->getDisplayConfig('url_suffix', $store)
+            ? '.' . $this->getDisplayConfig('url_suffix', $store) : '';
     }
 
     /**
@@ -665,11 +720,11 @@ class Data extends CoreHelper
             ->from($resource->getMainTable(), '*')
             ->where('url_key = :url_key');
 
-        $binds = ['url_key' => (string)$urlKey];
+        $binds = ['url_key' => (string) $urlKey];
 
         if ($id = $object->getId()) {
             $select->where($resource->getIdFieldName() . ' != :object_id');
-            $binds['object_id'] = (int)$id;
+            $binds['object_id'] = (int) $id;
         }
 
         return $adapter->fetchOne($select, $binds);
@@ -689,9 +744,25 @@ class Data extends CoreHelper
         $dateTime = new \DateTime($date, new DateTimeZone('UTC'));
         $dateTime->setTimezone(new DateTimeZone($this->getTimezone()));
 
-        $dateType = $this->getBlogConfig($monthly ? 'monthly_archive/date_type_monthly' : 'general/date_type');
+        $dateType = $this->getBlogConfig($monthly ? 'sidebar/monthly_archive/date_type_monthly' : 'display/date_type');
 
         return $dateTime->format($dateType);
+    }
+
+    /**
+     * @param $post
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function formatPublishDate($post)
+    {
+        $publicDateTime = new \DateTime($post->getData('publish_date'), new DateTimeZone('UTC'));
+        $publicDateTime->setTimezone(new DateTimeZone($this->getTimezone()));
+        $publicDateTime = $publicDateTime->format('m/d/Y H:i:s');
+        $post->setData('publish_date', $publicDateTime);
+
+        return $post;
     }
 
     /**
@@ -725,6 +796,6 @@ class Data extends CoreHelper
         $storeEnable = explode(',', $object->getStoreIds() ?? '');
 
         return in_array('0', $storeEnable, true)
-            || in_array((string)$this->storeManager->getStore()->getId(), $storeEnable, true);
+            || in_array((string) $this->storeManager->getStore()->getId(), $storeEnable, true);
     }
 }

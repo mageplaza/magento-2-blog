@@ -55,7 +55,7 @@ class InfortisTopmenu
      */
     public function afterRenderCategoriesMenuHtml(Navigation $topmenu, $html)
     {
-        if ($this->helper->isEnabled() && $this->helper->getBlogConfig('general/toplinks')) {
+        if ($this->helper->isEnabled() && $this->helper->getBlogConfig('display/toplinks')) {
             $blogHtml = $topmenu->getLayout()->createBlock(Menu::class)
                 ->setTemplate('Mageplaza_Blog::category/topmenu.phtml')->toHtml();
 

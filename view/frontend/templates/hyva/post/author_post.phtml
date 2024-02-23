@@ -1,0 +1,328 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+use Mageplaza\Blog\Block\Post\AuthorPost;
+use Mageplaza\Blog\Model\Post;
+
+/** @var AuthorPost $block */
+$postCollection = $block->getPostCollection();
+$modalViewModel = $viewModels->require(\Hyva\Theme\ViewModel\Modal::class);
+$postDatas      = $block->getPostDatas($postCollection);
+$jsonData       = json_encode($postDatas);
+
+?>
+<?php if (!$block->getAuthorStatus()) : ?>
+    <div>
+        <h3><?= $block->escapeHtml(__('Your account must be licensed in order to perform the Post creation and management function')) ?></h3>
+    </div>
+<?php else : ?>
+    <div class="mp-blog-new-post" x-data="{
+    ...hyva.modal(),
+    init() {
+        window.openDialogNewPost = function (event) {
+            this.show('add-new-post-name', event);
+        }.bind(this);
+       window.hideMyDialogNewPost = function (event) {
+        this.hide('add-new-post-name', event);
+
+        }.bind(this);
+
+
+    }
+}" x-init="init()">
+        <button onclick="handleAddPost()" type="button" aria-haspopup="dialog"
+                class="action primary btn btn-primary" title="<?= $block->escapeHtmlAttr(__('Add New Post')) ?>">
+            <?= $block->escapeHtml(__('Add New Post')) ?>
+        </button>
+        <?= $modalViewModel->createModal()
+            ->addDialogClass('overflow-y-hidden overflow-x-hidden fixed z-50 justify-center items-center w-3/4 md:inset-0 h-4/5')
+            ->removeDialogClass('p-10')
+            ->withDialogRefName("add-new-post-name")
+            ->withContent(<<<HTML
+     <div id="mp-blog-new-post-popup">
+        <header class="modal-header mb-3">
+            <h3 id="popup_author_post" class="modal-title text-3xl border-b p-4" data-role="title">Add New Post</h3>
+        </header> 
+            {$block->getChildHtml('mpblog_manage_post')} 
+    </div>
+HTML
+            ) ?>
+
+    </div>
+    <div class="post-list-content" id="mpblog-list-container">
+        <?php if ($postCollection && count($postCollection) > 0) : ?>
+            <div class="post-list-body">
+                <?php $i = 1 ?>
+                <?php /** @var Post $post */
+                foreach ($postCollection as $post) : ?>
+                    <div data-post-id="<?= $block->escapeHtml($post->getId()); ?>"
+                         class="post-list-item col-mp post-item-list mp-12">
+                        <div class="post-item-wraper">
+                            <?= /* @noEscape */
+                            $block->getStatusHtmlById($post->getEnabled()) ?>
+                            <?php if ($post->getImage()) : ?>
+                                <div class="post-image">
+                                    <a href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                        <img class="img-responsive"
+                                             src="<?= $block->escapeUrl($block->resizeImage($post->getImage(),
+                                                 '400x')) ?>"
+                                             alt="<?= $block->escapeHtmlAttr($post->getName()) ?>"/>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
+                            <div class="post-info-wraper">
+                                <h2 class="mp-post-title">
+                                    <a class="post-link-title" title="<?= $block->escapeHtml($post->getName()); ?>"
+                                       href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                        <?= $block->escapeHtml($post->getName()) ?>
+                                    </a>
+                                </h2>
+                                <div class="mp-post-info">
+                                    <?= /* @noEscape */
+                                    $block->getPostInfo($post) ?>
+                                </div>
+                                <div class="post-short-description">
+                                    <p>
+                                        <?= /* @noEscape */
+                                        $block->maxShortDescription($post->getShortDescription()) ?>
+                                    </p>
+                                </div>
+                                <div class="mp-clearfix"></div>
+                                <div class="mp-post-meta-info mp-alignright">
+                                    <div class="actions">
+                                        <a class="mp-read-more" href="<?= $block->escapeUrl($post->getUrl()) ?>"
+                                           title="<?= $block->escapeHtmlAttr(__('Read More')) ?>">
+                                            <?= $block->escapeHtml(__('Read More')) ?>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-info-action" data-postId="<?= $block->escapeHtml($post->getId()); ?>">
+                                <div class="mpblog-post-duplicate"
+                                     onclick='handleDuplicate(this,<?= json_encode($post->getData()) ?>)'
+                                >
+                                    <img
+                                            src="<?= $block->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/duplicate.svg')) ?>"
+                                            align="middle"
+                                            alt="<?= $block->escapeHtmlAttr(__('Duplicate')); ?>"
+                                            title="<?= $block->escapeHtmlAttr(__('Duplicate')) ?>"
+                                    />
+                                </div>
+                                <div class="mpblog-post-edit"
+                                     onclick='handleEdit(this,<?= json_encode($post->getData()) ?>)'>
+                                    <img src="<?= $block->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/writing.svg')) ?>"
+                                         align="middle"
+                                         alt="<?= $block->escapeHtmlAttr(__('Edit')); ?>"
+                                         title="<?= $block->escapeHtmlAttr(__('Edit')) ?>"
+                                    />
+                                </div>
+                                <div class="mpblog-post-delete" onclick="handleDelete(this)">
+                                    <img src="<?= $block->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/delete.svg')) ?>"
+                                         align="middle"
+                                         alt="<?= $block->escapeHtmlAttr(__('Delete')) ?>"
+                                         title="<?= $block->escapeHtmlAttr(__('Delete')) ?>"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php $i++; ?>
+                    <?php if ($i % 2 == 0) : ?>
+                        <div class="mp-clear"></div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                <div class="mp-clear"></div>
+            </div>
+            <?= $block->getPagerHtml() ?>
+        <?php else : ?>
+            <?= $block->escapeHtml(__('There are no posts at this moment')) ?>
+        <?php endif; ?>
+        <?= /* @noEscape */
+        $block->getChildHtml('additional') ?>
+    </div>
+
+
+    <script>
+        let pubUrl = "<?= $block->escapeHtml($block->getBaseMediaUrl()) ?>";
+        let title  = document.querySelector('#popup_author_post');
+        let name              = document.querySelector('#name');
+        let post_id           = document.querySelector('#post_id');
+        let short_description = document.querySelector('#short_description');
+        let allow_comment     = document.querySelector('#allow_comment');
+        let publish_date      = document.querySelector('#publish_date');
+
+        function handleDelete (element) {
+            var postId = element.closest('.post-info-action').getAttribute('data-postId');
+            fetch("<?= $block->escapeHtml($block->getUrl('mpblog/post/deletepost')) ?>", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                body: new URLSearchParams({
+                    post_id: postId
+                })
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 1) {
+                    var postListItem = document.querySelector('.post-list-item[data-post-id="' + result.post_id + '"]');
+                    if (postListItem) {
+                        postListItem.remove();
+                        const reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
+                        window.dispatchEvent(reloadCustomerDataEvent);
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        // open modal add new post
+        function handleAddPost () {
+            resetFormModal();
+            title.innerText = 'Add New Post';
+            openDialogNewPost();
+        }
+        // open modal edit new post
+        function handleEdit (e, data) {
+            resetFormModal();
+            let listData           = <?php echo json_decode($jsonData) ?>;
+            let dataSelect          = listData[data?.post_id];
+            name.value              = dataSelect?.name;
+            post_id.value           = dataSelect?.post_id;
+            short_description.value = dataSelect?.short_description;
+            editor.setData(dataSelect?.post_content ?? "");
+            allow_comment.value = dataSelect?.allow_comment;
+            publish_date.value  = convertDateToDisplay(dataSelect?.publish_date);
+            treeselectCategories.updateValue(dataSelect?.category_ids);
+
+            treeselectTags.updateValue(dataSelect?.tag_ids);
+            treeselectTopics.updateValue(dataSelect?.topic_ids);
+            addPreviewImg(data?.image);
+
+            title.innerText = 'Edit Post';
+            openDialogNewPost()
+        }
+        // open modal duplicate new post
+        function handleDuplicate (e, data) {
+            resetFormModal();
+            let listData           = <?php echo json_decode($jsonData) ?>;
+            let dataSelect          = listData[data?.post_id];
+            name.value              = dataSelect?.name;
+            short_description.value = dataSelect?.short_description;
+            editor.setData(dataSelect?.post_content ?? "");
+            allow_comment.value = dataSelect?.allow_comment;
+            publish_date.value  = convertDateToDisplay(dataSelect?.publish_date);
+            treeselectCategories.updateValue(dataSelect?.category_ids);
+            treeselectTags.updateValue(dataSelect?.tag_ids);
+            treeselectTopics.updateValue(dataSelect?.topic_ids);
+            addPreviewImg(data?.image);
+            title.innerText = 'Duplicate Post';
+            openDialogNewPost()
+        }
+        // reset data when hide modal
+        function resetFormModal () {
+            name.value              = '';
+            post_id.value           = '';
+            short_description.value = '';
+            editor.setData("");
+            allow_comment.value = 0;
+            publish_date.value  = '';
+            treeselectCategories.updateValue([]);
+            treeselectTags.updateValue([]);
+            treeselectTopics.updateValue([]);
+            var element = document.querySelector('.mp-image-link');
+            if (element) {
+                element.parentNode.removeChild(element);
+            }
+        }
+        // add preview image when open modal edit and duplicate modal
+        function addPreviewImg (value) {
+            if (value) {
+                const imageEl          = document.getElementById("image")?.parentElement;
+                var linkElement        = document.createElement('a');
+                linkElement.className  = 'mp-image-link';
+                linkElement.style      = "margin-right: 15px";
+                linkElement.href       = pubUrl + 'mageplaza/blog/post/' + value;
+                linkElement.onclick    = function () {
+                    imagePreview('post_image_image');
+                    return false;
+                };
+                var imageElement       = document.createElement('img');
+                imageElement.src       = pubUrl + 'mageplaza/blog/post/' + value;
+                imageElement.id        = 'post_image_image';
+                imageElement.title     = value;
+                imageElement.alt       = value;
+                imageElement.height    = 40;
+                imageElement.width     = 40;
+                imageElement.className = 'small-image-preview v-middle';
+                linkElement.appendChild(imageElement);
+                if (imageEl) {
+                    imageEl.insertBefore(linkElement, imageEl.children[0]);
+                }
+                var deleteSpan           = document.createElement('span');
+                deleteSpan.className     = 'delete-image';
+                deleteSpan.style.display = 'inline-flex';
+                var deleteInput          = document.createElement('input');
+                deleteInput.type         = 'checkbox';
+                deleteInput.name         = 'image[delete]';
+                deleteInput.value        = '1';
+                deleteInput.className    = 'checkbox';
+                deleteInput.id           = 'post_image_delete';
+
+                var deleteLabel         = document.createElement('label');
+                deleteLabel.htmlFor     = 'post_image_delete';
+                deleteLabel.textContent = 'Delete Image';
+
+                deleteSpan.appendChild(deleteInput);
+                deleteSpan.appendChild(deleteLabel);
+                if (!imageEl.querySelector('.delete-image')) {
+                    imageEl.appendChild(deleteSpan);
+                }
+
+            }
+        }
+
+        // convert date in modal
+        function convertDateToSave (publicDateValue) {
+            var inputDate     = new Date(publicDateValue);
+            var formattedDate = ("0" + (inputDate.getMonth() + 1)).slice(-2) + '/' +
+                ("0" + inputDate.getDate()).slice(-2) + '/' +
+                inputDate.getFullYear() + ' ' +
+                ("0" + inputDate.getHours()).slice(-2) + ':' +
+                ("0" + inputDate.getMinutes()).slice(-2) + ':' +
+                ("0" + inputDate.getSeconds()).slice(-2);
+            return formattedDate
+        }
+
+        function convertDateToDisplay (dateString) {
+            var currentDate       = new Date(dateString);
+            var year              = currentDate.getFullYear();
+            var month             = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+            var day               = ('0' + currentDate.getDate()).slice(-2);
+            var hours             = ('0' + currentDate.getHours()).slice(-2);
+            var minutes           = ('0' + currentDate.getMinutes()).slice(-2);
+            var formattedDateTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+            return formattedDateTime;
+        }
+
+
+    </script>
+<?php endif; ?>

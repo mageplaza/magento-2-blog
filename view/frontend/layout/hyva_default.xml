@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <script src="Mageplaza_Blog::js/ckeditor.js" />
+        <script src="Mageplaza_Blog::js/splide.min.js" />
+        <css src="Mageplaza_Blog::css/splide.min.css" />
+
+        <script src="Mageplaza_Blog::js/treeselectjs.umd.js" />
+        <css src="Mageplaza_Blog::css/treeselectjs.css" />
+    </head>
+    <update handle="hyva_form_validation"/>
+    <body>
+        <referenceBlock name="mpblog.sidebar.category">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/category/widget.phtml</argument>
+            </action>
+        </referenceBlock>
+
+        <referenceBlock name="mpblog.design">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/design.phtml</argument>
+            </action>
+        </referenceBlock>
+
+        <referenceBlock name="mpblog.sidebar.search" >
+            <action method="setTemplate" ifconfig="blog/sidebar/search/enable_search">
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/sidebar/search.phtml</argument>
+            </action>
+        </referenceBlock>
+
+
+        <referenceBlock name="mpblog.sidebar.mostview" >
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/sidebar/mostview.phtml</argument>
+            </action>
+        </referenceBlock>
+
+
+        <referenceBlock name="mpblog.post.view" >
+            <action method="setTemplate" >
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/view.phtml</argument>
+            </action>
+        </referenceBlock>
+
+        <referenceBlock name="footer-content">
+            <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_blog_footer_link" template="Mageplaza_Blog::hyva/html/footer.phtml" after="-"/>
+        </referenceBlock>
+
+        <referenceBlock name="related.category.products">
+            <action method="setTemplate" >
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/product/list.phtml</argument>
+            </action>
+        </referenceBlock>
+
+
+        <referenceBlock name="related.post.tab" >
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/relatedpost.phtml</argument>
+            </action>
+        </referenceBlock>
+
+
+    </body>
+</page>
+

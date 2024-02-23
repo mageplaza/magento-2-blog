@@ -31,6 +31,7 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Image;
@@ -84,6 +85,11 @@ class Manage extends Action
     protected $date;
 
     /**
+     * @var TimezoneInterface
+     */
+    protected $timezone;
+
+    /**
      * @var Image
      */
     protected $imageHelper;
@@ -101,6 +107,7 @@ class Manage extends Action
      * @param DateTime $date
      * @param Image $imageHelper
      * @param Data $helperData
+     * @param TimezoneInterface $timezone
      */
     public function __construct(
         Context $context,
@@ -112,17 +119,19 @@ class Manage extends Action
         Registry $coreRegistry,
         DateTime $date,
         Image $imageHelper,
-        Data $helperData
+        Data $helperData,
+        TimezoneInterface $timezone
     ) {
-        $this->_helperBlog = $helperData;
-        $this->resultPageFactory = $resultPageFactory;
+        $this->_helperBlog          = $helperData;
+        $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->authorCollection = $authorCollection;
-        $this->customerSession = $customerSession;
-        $this->coreRegistry = $coreRegistry;
-        $this->postFactory = $postFactory;
-        $this->date = $date;
-        $this->imageHelper = $imageHelper;
+        $this->authorCollection     = $authorCollection;
+        $this->customerSession      = $customerSession;
+        $this->coreRegistry         = $coreRegistry;
+        $this->postFactory          = $postFactory;
+        $this->date                 = $date;
+        $this->imageHelper          = $imageHelper;
+        $this->timezone             = $timezone;
 
         parent::__construct($context);
     }
@@ -130,13 +139,14 @@ class Manage extends Action
     /**
      * @return ResponseInterface|ResultInterface|null
      * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
         $data = $this->getRequest()->getParams();
         $this->_helperBlog->setCustomerContextId();
         $author = $this->_helperBlog->getCurrentAuthor();
-        $post = $this->postFactory->create();
+        $post   = $this->postFactory->create();
 
         if (!$author) {
             return null;
@@ -158,26 +168,25 @@ class Manage extends Action
             ',',
             $data['categories_ids'] ?? ''
         ) : [];
-        $data['tags_ids'] = (isset($data['tags_ids']) && $data['tags_ids'])
+        $data['tags_ids']       = (isset($data['tags_ids']) && $data['tags_ids'])
             ? explode(',', $data['tags_ids'] ?? '') : [];
-        $data['topics_ids'] = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(
+        $data['topics_ids']     = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(
             ',',
             $data['topics_ids'] ?? ''
         ) : [];
 
-        $data['author_id'] = $author->getId();
-
-        $data['store_ids'] = $this->_helperBlog->getCurrentStoreId();
-
-        $data['enabled'] = $this->_helperBlog->getConfigGeneral('auto_post') ? 1 : 0;
-
-        $data['in_rss'] = '0';
-
+        $data['author_id']   = $author->getId();
+        $data['store_ids']   = $this->_helperBlog->getCurrentStoreId();
+        $data['enabled']     = $this->_helperBlog->getConfigGeneral('auto_post') ? 1 : 0;
+        $data['in_rss']      = '0';
         $data['meta_robots'] = 'INDEX,FOLLOW';
-
-        $data['layout'] = 'empty';
-
-        $data['publish_date'] = !empty($data['publish_date']) ? $data['publish_date'] : $this->date->date();
+        $data['layout']      = 'empty';
+        /** Set specify field data */
+        try {
+            $data['publish_date'] = $this->timezone->convertConfigTimeToUtc($data['publish_date']);
+        } catch (Exception $e) {
+            $data['publish_date'] = $this->timezone->convertConfigTimeToUtc($this->date->date());
+        }
 
         if ($data['post_id']) {
             $post->load($data['post_id']);

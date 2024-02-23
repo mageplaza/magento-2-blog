@@ -19,10 +19,12 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
+use Magento\Framework\Escaper;
 use Mageplaza\Blog\Block\Post\View;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\Config\Source\Comments\Type;
 
+/** @var Escaper $escaper */
 /** @var View $block */
 $helper       = $block->getBlogHelper();
 $_post        = $block->getPost();
@@ -31,7 +33,7 @@ $authorName   = $author !== null ? $author->getName() : '';
 $modifier     = $helper->getAuthorByPost($_post, true);
 $modifierName = $modifier !== null ? $modifier->getName() : '';
 $isLogged     = ($block->isLoggedIn()) ? 'Yes' : 'No';
-$color        = $helper->getBlogConfig('general/font_color');
+$color        = $helper->getDisplayConfig('font_color');
 ?>
 <div class="mp-blog-view">
     <div class="mp-blog-rss">
@@ -52,48 +54,9 @@ $color        = $helper->getBlogConfig('general/font_color');
                 <?= /** @noEscape */ $block->getPageFilter($_post->getPostContent() ?: '') ?>
             </div>
             <div class="mp-clear"></div>
-            <div class="col-xs-12">
-                <hr/>
-                <div class="mp-post-info">
-                    <span><i class="fa fa-calendar-times-o">&nbsp;</i>
-                        <?= $block->escapeHtml($block->getDateFormat($_post->getPublishDate())) ?>
-                    </span>
-                    <?php if ($_post->getViewTraffic()) : ?>
-                        |
-                        <span><i class="mp-blog-icon mp-blog-traffic" aria-hidden="true"></i>
-                            <?= /* @noEscape */ __('View: %1', $_post->getViewTraffic()) ?>
-                        </span>
-                    <?php endif; ?>
-                    <?php if ($categoryHtml = $block->getPostCategoryHtml($_post)) : ?>
-                        |
-                        <span><i class="fa fa-folder-open-o">&nbsp;</i>
-                            <?= /* @noEscape */ __('Categories: %1', $categoryHtml); ?>
-                        </span>
-                    <?php endif; ?>
-                    <?php if ($tagList = $block->getTagList($_post)) : ?>
-                        | <span><i class="fa fa-tags"></i>
-                            <?= /* @noEscape */ __('Tags: %1', $tagList); ?></span>
-                    <?php endif; ?>
-                    <?php if ($authorName && $helper->showAuthorInfo()) : ?>
-                        |
-                        <span><i class="fa fa-user">&nbsp;</i>
-                            <?= /* @noEscape */ __(
-                                'By: %1',
-                                '<a class="mp-info" href="' . $author->getUrl() . '">' . $authorName . '</a>'
-                            ) ?></span>
-                        <?php if ($authorName != $modifierName && $modifierName) : ?>
-                            |
-                            <span><i class="fa fa-edit">&nbsp;</i>
-                                <?= /* @noEscape */ __(
-                                    'Modify By: %1 at %2',
-                                    '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>',
-                                    $block->getDateFormat($_post->getUpdatedAt())
-                                ) ?></span>
-                        <?php endif; ?>
-                    <?php endif; ?>
-                </div>
-                <hr/>
-            </div>
+            <?= $block->getChildHtml('mp_blog_post_info') ?>
+
+            <?= $block->getChildHtml('mp_blog_post_slider') ?>
         </div>
     </div>
     <?php if ($helper->isEnabledReview()) : ?>
@@ -133,12 +96,8 @@ $color        = $helper->getBlogConfig('general/font_color');
             }
         </script>
     <?php endif; ?>
-    <?php if ($helper->getBlogConfig('share/enabled')) : ?>
+    <?php if ($helper->getBlogConfig('platforms/fb_platform/fb_share') || $helper->getBlogConfig('platforms/x_platform/x_share')) : ?>
         <div class="mp-clear"></div>
-        <script type="text/javascript"
-                src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?= /* @noEscape */
-                $block->getPubId() ?>"
-                async="async"></script>
         <div class="mpcss">
             <div id="sharing">
                 <div class="share-col-left">
@@ -146,7 +105,24 @@ $color        = $helper->getBlogConfig('general/font_color');
                 </div>
                 <div class="share-col-right">
                     <div class="post-sharing-button">
-                        <div class="addthis_inline_share_toolbox"></div>
+                        <?php if ($helper->getBlogConfig('platforms/x_platform/x_share')) : ?>
+                            <img class="img-responsive"
+                                 src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/twitter.png')) ?>"
+                                 alt="Share on Twitter"
+                                 onclick="window.open('https://twitter.com/share?text=&amp;url=<?= /* @noEscape */
+                                 $_post->getUrl() ?>','Twitter-dialog','width=626,height=436'); return false;"
+                                 style="cursor: pointer;width: 43%;position: relative; left: 1rem"
+                            />
+                        <?php endif; ?>
+                        <?php if ($helper->getBlogConfig('platforms/fb_platform/fb_share')) : ?>
+                            <img class="img-responsive"
+                                 src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/facebook.png')) ?>"
+                                 alt="Share on Facebook"
+                                 onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('<?= /* @noEscape */
+                                 $_post->getUrl() ?>'),'facebook-share-dialog','width=626,height=436'); return false;"
+                                 style="cursor: pointer;"
+                            />
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -409,44 +385,6 @@ $color        = $helper->getBlogConfig('general/font_color');
             <?php endif; ?>
         </div>
     <?php endif; ?>
-    <?php if ($helper->getSeoConfig('snippet/enabled')) : ?>
-        <?php
-        $logo = $helper->getSeoConfig('snippet/upload_image_id');
-        $logo = $logo ? $helper->getImageHelper()->getMediaUrl($logo) : $block->getDefaultImageUrl();
-        ?>
-        <script type="application/ld+json">
-            {
-                "@context": "http://schema.org",
-                "@type": "NewsArticle",
-                "mainEntityOfPage": {
-                    "@type": "WebPage",
-                    "@id": "https://google.com/article"
-                },
-                "headline": "<?= /* @noEscape */ $_post->getName() ?>",
-                "image": {
-                    "@type": "ImageObject",
-                    "url": "<?= /* @noEscape */ $_post->getImage() ? $block->getImageUrl($_post->getImage()) : $block->getDefaultImageUrl() ?>",
-                    "height": 800,
-                    "width": 800
-                },
-                "datePublished": "<?= /* @noEscape */ $block->getDateFormat($_post->getPublishDate()) ?>",
-                "dateModified": "<?= /* @noEscape */ $block->getDateFormat($_post->getUpdatedAt()) ?>",
-                "author": {
-                    "@type": "Person",
-                    "name": "<?= /* @noEscape */ $authorName; ?>"
-                },
-                "publisher": {
-                    "@type": "Organization",
-                    "name": "<?= /* @noEscape */ $helper->getSeoConfig('snippet/organize_name') ?>",
-                    "logo": {
-                        "@type": "ImageObject",
-                        "url": "<?= /* @noEscape */ $logo ?>",
-                        "width": 600,
-                        "height": 60
-                    }
-                },
-                "description": "<?= /* @noEscape */ $_post->getShortDescription() ?>"
-            }
-        </script>
-    <?php endif; ?>
+
+    <?= $block->getChildHtml('mp_blog_post_view_add') ?>
 </div>

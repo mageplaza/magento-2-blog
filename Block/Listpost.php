@@ -45,10 +45,11 @@ class Listpost extends Frontend
         if ($collection && $collection->getSize()) {
             $pager = $this->getLayout()->createBlock(Pager::class, 'mpblog.post.pager');
 
-            $perPageValues = (string)$this->helperData->getConfigGeneral('pagination');
+            $perPageValues = (string) $this->helperData
+                ->getDisplayConfig('pagination', $this->store->getStore()->getId());
+
             $perPageValues = explode(',', $perPageValues ?? '');
             $perPageValues = array_combine($perPageValues, $perPageValues);
-
             $pager->setAvailableLimit($perPageValues)
                 ->setCollection($collection);
 
@@ -106,11 +107,13 @@ class Listpost extends Frontend
      */
     public function isGridView()
     {
-        return $this->helperData->getBlogConfig('general/display_style') == DisplayType::GRID;
+        return $this->helperData->getPostViewPageConfig('display_style') == DisplayType::GRID;
     }
 
     /**
-     * @inheritdoc
+     * @return Listpost
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _prepareLayout()
     {
@@ -118,7 +121,7 @@ class Listpost extends Frontend
             $breadcrumbs->addCrumb('home', [
                 'label' => __('Home'),
                 'title' => __('Go to Home Page'),
-                'link' => $this->_storeManager->getStore()->getBaseUrl()
+                'link'  => $this->_storeManager->getStore()->getBaseUrl()
             ])
                 ->addCrumb($this->helperData->getRoute(), $this->getBreadcrumbsData());
         }
@@ -155,18 +158,18 @@ class Listpost extends Frontend
     {
         $this->pageConfig->getTitle()->set(join($this->getTitleSeparator(), array_reverse($this->getBlogTitle(true))));
 
-        $object = $this->getBlogObject();
-
-        $description = $object ? $object->getMetaDescription() : $this->helperData->getSeoConfig('meta_description');
+        $object      = $this->getBlogObject();
+        $storeId     = $this->store->getStore()->getId();
+        $description = $object ? $object->getMetaDescription() : $this->helperData->getBlogConfig('seo/meta_description', $storeId);
         $this->pageConfig->setDescription($description);
 
-        $keywords = $object ? $object->getMetaKeywords() : $this->helperData->getSeoConfig('meta_keywords');
+        $keywords = $object ? $object->getMetaKeywords() : $this->helperData->getBlogConfig('seo/meta_keywords', $storeId);
         $this->pageConfig->setKeywords($keywords);
 
-        $robots = $object ? $object->getMetaRobots() : $this->helperData->getSeoConfig('meta_robots');
+        $robots = $object ? $object->getMetaRobots() : $this->helperData->getBlogConfig('seo/meta_robots', $storeId);
         $this->pageConfig->setRobots($robots);
 
-        $url = $object ? $object->getUrl() : $this->helperData->getSeoConfig('url_key');
+        $url = $object ? $object->getUrl() : $this->helperData->getBlogConfig('seo/url_key', $storeId);
 
         if ($this->getRequest()->getFullActionName() === 'mpblog_post_view' && $url) {
             $this->pageConfig->addRemotePageAsset(
@@ -190,7 +193,7 @@ class Listpost extends Frontend
      */
     public function getTitleSeparator()
     {
-        $separator = (string)$this->helperData->getConfigValue('catalog/seo/title_separator');
+        $separator = (string) $this->helperData->getConfigValue('catalog/seo/title_separator');
 
         return ' ' . $separator . ' ';
     }
@@ -202,9 +205,9 @@ class Listpost extends Frontend
      */
     public function getBlogTitle($meta = false)
     {
-        $pageTitle = $this->helperData->getConfigGeneral('name') ?: __('Blog');
+        $pageTitle = $this->helperData->getDisplayConfig('name') ?: __('Blog');
         if ($meta) {
-            $title = $this->helperData->getSeoConfig('meta_title') ?: $pageTitle;
+            $title = $this->helperData->getBlogConfig('seo/meta_title') ?: $pageTitle;
 
             return [$title];
         }

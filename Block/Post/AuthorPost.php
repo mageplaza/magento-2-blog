@@ -51,10 +51,9 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
 
             if ($collection && $collection->getSize()) {
                 $pager         = $this->getLayout()->createBlock(Pager::class, 'mpblog.post.pager');
-                $perPageValues = (string) $this->helperData->getConfigGeneral('pagination');
+                $perPageValues = (string) $this->helperData->getDisplayConfig('pagination');
                 $perPageValues = explode(',', $perPageValues ?? '');
                 $perPageValues = array_combine($perPageValues, $perPageValues);
-
                 $pager->setAvailableLimit($perPageValues)->setCollection($collection);
                 $this->setChild('pager', $pager);
             }
@@ -108,7 +107,7 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
      */
     public function getMagentoVersion()
     {
-        return (int) $this->helperData->versionCompare('2.3.0') ? 3 : 2;
+        return (int) $this->helperData->versionCompare('2.4.0', '>=') ? '' : '4';
     }
 
     /**
@@ -130,6 +129,7 @@ class AuthorPost extends \Mageplaza\Blog\Block\Listpost
                     if ($post->getPostContent()) {
                         $post->setData('post_content', $this->getPageFilter($post->getPostContent()));
                     }
+                    $post = $this->helperData->formatPublishDate($post);
                     $result[$post->getId()] = $post->getData();
                 }
             } catch (Exception $e) {
