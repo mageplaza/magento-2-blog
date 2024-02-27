@@ -285,7 +285,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
                     . $userName . '</span>
                                 </div>
                                 <div class="cmt-row__cmt-content">
-                                   ' . $this->commentHtml($comment['content']) . '
+                                   ' . $this->escapeHtml($this->commentHtml($comment['content'])) . '
                                 </div>
                                 <div class="cmt-row__cmt-interactions interactions">
                                     <div class="interactions__btn-actions">
