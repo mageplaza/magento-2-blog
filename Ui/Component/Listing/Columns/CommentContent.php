@@ -21,7 +21,10 @@
 
 namespace Mageplaza\Blog\Ui\Component\Listing\Columns;
 
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Framework\Escaper;
 
 /**
  * Class CommentContent
@@ -29,6 +32,31 @@ use Magento\Ui\Component\Listing\Columns\Column;
  */
 class CommentContent extends Column
 {
+    /**
+     * @var Escaper
+     */
+    protected $escaper;
+
+    /**
+     * CommentContent constructor.
+     *
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param Escaper $escaper
+     * @param array $components
+     * @param array $data
+     */
+    public function __construct(
+        ContextInterface $context,
+        UiComponentFactory $uiComponentFactory,
+        Escaper $escaper,
+        array $components = [],
+        array $data = []
+    ) {
+        $this->escaper = $escaper;
+        parent::__construct($context, $uiComponentFactory, $components, $data);
+    }
+
     /**
      * Prepare Data Source
      *
@@ -42,7 +70,7 @@ class CommentContent extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
                 if (isset($item[$this->getData('name')])) {
-                    $content = $item['content'];
+                    $content = $this->escaper->escapeHtml($item['content']);
                     if (strlen($content) > $limitContent) {
                         $content = mb_substr($content, 0, $limitContent, 'UTF-8') . '.....';
                     }
