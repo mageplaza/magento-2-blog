@@ -142,7 +142,7 @@ require([
         btn.each(function () {
 
             $(this).click(function () {
-                var cmtId = (typeof $(this).closest('.default-cmt__content__cmt-content__cmt-row').parent().parent().attr('data-cmt-id') !== 'undefined') ? $(this).closest('.default-cmt__content__cmt-content__cmt-row').parent().parent().attr('data-cmt-id') : $(this).attr('data-cmt-id'),
+                var cmtId = (typeof $(this).closest('.default-cmt__content__cmt-content__cmt-row').parent().parent().parent().parent().attr('data-cmt-id') !== 'undefined') ? $(this).closest('.default-cmt__content__cmt-content__cmt-row').parent().parent().attr('data-cmt-id') : $(this).attr('data-cmt-id'),
                     inputCmtID = $(this).attr('data-cmt-id'),
                     cmtRowCmt = $("div").find('#cmt-row');
                 var cmtRowContainer = $(this).closest('.default-cmt__content__cmt-content__cmt-row');
@@ -232,6 +232,8 @@ require([
                         break;
                     case 1:
                         displayComment(response, displayReply);
+                        var cmtCount = defaultCmt.find('li').length;
+                        $('.mp-cmt-count').text(cmtCount);
                         inputEl.val('');
                         break;
                     case 'error':

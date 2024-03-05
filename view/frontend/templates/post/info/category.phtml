@@ -1,0 +1,34 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+use Mageplaza\Blog\Block\Post\View;
+use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Model\Config\Source\Comments\Type;
+
+/** @var View $block */
+$_post = $block->getPost();
+?>
+<?php if ($categoryHtml = $block->getPostCategoryHtml($_post)) : ?>
+    |
+    <span><i class="fa fa-folder-open-o">&nbsp;</i>
+        <?= /* @noEscape */ __('Categories: %1', $categoryHtml); ?>
+    </span>
+<?php endif; ?>

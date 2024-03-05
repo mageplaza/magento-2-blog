@@ -125,15 +125,13 @@ class Save extends Post
             /** @var PostModel $post */
             $post = $this->initPost(false, true);
             $this->prepareData($post, $data);
-
-            $this->_eventManager->dispatch(
-                'mageplaza_blog_post_prepare_save',
-                ['post' => $post, 'request' => $this->getRequest()]
-            );
-
             try {
                 if (empty($action) || $action === 'add') {
                     $post->save();
+                    $this->_eventManager->dispatch(
+                        'mageplaza_blog_post_prepare_save',
+                        ['post' => $post, 'request' => $this->getRequest()]
+                    );
                     $this->messageManager->addSuccessMessage(__('The post has been saved.'));
                 }
                 $this->addHistory($post, $action);
@@ -174,7 +172,7 @@ class Save extends Post
         if (!empty($action)) {
             $history      = $this->_postHistory->create();
             $historyCount = $history->getSumPostHistory($post->getPostId());
-            $limitHistory = (int)$this->_helperData->getConfigGeneral('history_limit');
+            $limitHistory = (int) $this->_helperData->getConfigGeneral('history_limit');
             try {
                 $data = $post->getData();
                 unset(
@@ -281,14 +279,14 @@ class Save extends Post
             $data['publish_date'] = $this->timezone->convertConfigTimeToUtc($this->date->date());
         }
 
-        $data['modifier_id'] = $this->_auth->getUser()->getId();
+        $data['modifier_id']    = $this->_auth->getUser()->getId();
         $data['categories_ids'] = (isset($data['categories_ids']) && $data['categories_ids']) ? explode(
             ',',
             $data['categories_ids'] ?? ''
         ) : [];
-        $data['tags_ids'] = (isset($data['tags_ids']) && $data['tags_ids'])
+        $data['tags_ids']       = (isset($data['tags_ids']) && $data['tags_ids'])
             ? explode(',', $data['tags_ids'] ?? '') : [];
-        $data['topics_ids'] = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(
+        $data['topics_ids']     = (isset($data['topics_ids']) && $data['topics_ids']) ? explode(
             ',',
             $data['topics_ids'] ?? ''
         ) : [];

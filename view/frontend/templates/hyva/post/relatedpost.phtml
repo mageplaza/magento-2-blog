@@ -1,0 +1,113 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+use Mageplaza\Blog\Block\Post\RelatedPost;
+use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
+
+/** @var Collection $posts */
+/** @var RelatedPost $block */
+$posts = $block->getRelatedPostList();
+if ($posts && $block->isEnabledBlog()) : ?>
+    <h2 class="text-xl"><?= $posts->getSize() ? $block->escapeHtml(__('Related Posts')) : $block->escapeHtml(__('No Related Posts')) ?></h2>
+    <?php if ($block->getRelatedMode()) : ?>
+        <div class="mp-blog-owl-carousel ">
+            <section id="relatedposts-carousel" class="splide" aria-label="Related Posts">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <?php foreach ($posts as $post) : ?>
+                            <li class="splide__slide">
+                                <div class="item post-list-item col-mp post-item-list mp-4">
+                                    <div class="post-item-wraper">
+                                        <div class="post-info-wraper">
+                                            <a href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                                <img class="img-responsive"
+                                                     src="<?= $block->escapeUrl($block->resizeImage($post->getImage(),
+                                                         '400x')) ?>"
+                                                     alt="<?= $block->escapeHtml($post->getName()); ?>"/>
+                                            </a>
+                                            <h2 class="mp-post-title" style="margin: 20px 0;">
+                                                <a class="post-link-title"
+                                                   title="<?= $block->escapeHtml($post->getName()); ?>"
+                                                   href="<?= $block->escapeUrl($post->getUrl()) ?>">
+                                                    <?= $block->escapeHtml($post->getName()) ?>
+                                                </a>
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </section>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                new Splide('#relatedposts-carousel', {
+                    perPage: 3,
+                    breakpoints: {
+                        1028: {
+                            perPage: 2
+                        }
+                    }
+                }).mount();
+            });
+        </script>
+    <?php else : ?>
+        <ul class="relatedposts-list" style="list-style-type:disc; padding-left: 30px">
+            <?php foreach ($posts as $post) : ?>
+                <li>
+                    <a href="<?= $block->escapeUrl($post->getUrl()) ?>"><?= $block->escapeHtml($post->getName()) ?></a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+<?php endif; ?>
+<style>
+    .post-item-wraper:hover {
+        border: 1px solid #eee;
+        box-shadow: 3px 3px 4px 0 rgba(0, 0, 0, 0.3);
+    }
+    .splide__pagination {
+        bottom: -0.5em;
+    }
+
+    .splide__arrow {
+        display: none !important;
+    }
+
+    .splide__pagination__page.is-active {
+        background: #869791
+    }
+    .post-item-wraper {
+        border: 1px solid #eee;
+        padding: 10px !important;
+
+    }
+    #relatedposts-carousel, .relatedposts-list a:visited, .alink:visited {
+        color: #006bb4;
+        text-decoration: none;
+    }
+
+    #relatedposts-carousel  a:hover, .alink:hover {
+        color: #006bb4;
+        text-decoration: underline;
+    }
+</style>

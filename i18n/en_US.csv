@@ -34,10 +34,6 @@ Reset,Reset
 "New Root 12 Category","New Root 12 Category"
 "Category Information","Category Information"
 "Store Views","Store Views"
-"Meta Title","Meta Title"
-"Meta Description","Meta Description"
-"Meta Keywords","Meta Keywords"
-"Meta Robots","Meta Robots"
 Category,Category
 Position,Position
 "Category Data","Category Data"
@@ -92,7 +88,6 @@ Image,Image
 "In RSS","In RSS"
 "Allow Comment","Allow Comment"
 "Publish Date","Publish Date"
-"Search Engine Optimization","Search Engine Optimization"
 Design,Design
 Layout,Layout
 Sku,Sku
@@ -131,7 +126,6 @@ Home,Home
 "Related Posts","Related Posts"
 "List Posts from %1","List Posts from %1"
 Reply,Reply
-"Site Map","Site Map"
 "This author no longer exists.","This author no longer exists."
 "You can not delete this author. This is the author of %1 post(s)","You can not delete this author. This is the author of %1 post(s)"
 "The Author has been deleted.","The Author has been deleted."
@@ -281,12 +275,21 @@ Back,Back
 "Twitter Link","Twitter Link"
 Submit,Submit
 "No info","No info"
-Sitemap,Sitemap
+Popular,Popular
+"No Posts","No Posts"
+Latest,Latest
+Search,Search
+"Search blogs here...","Search blogs here..."
 "Monthly Archive","Monthly Archive"
 "Your account must be licensed in order to perform the Post creation and management function","Your account must be licensed in order to perform the Post creation and management function"
 "Add New Post","Add New Post"
 "Read More","Read More"
 "There are no posts at this moment","There are no posts at this moment"
+"By: %1","By: %1"
+"Modify By: %1 at %2","Modify By: %1 at %2"
+"Categories: %1","Categories: %1"
+"Tags: %1","Tags: %1"
+"View: %1","View: %1"
 "Post Name","Post Name"
 "Post Content","Post Content"
 "Select Category","Select Category"
@@ -295,11 +298,6 @@ Sitemap,Sitemap
 No,No
 Yes,Yes
 "No Related Posts","No Related Posts"
-"View: %1","View: %1"
-"Categories: %1","Categories: %1"
-"Tags: %1","Tags: %1"
-"By: %1","By: %1"
-"Modify By: %1 at %2","Modify By: %1 at %2"
 "Did you find it helpful?","Did you find it helpful?"
 LIKE,LIKE
 DISLIKE,DISLIKE
@@ -316,11 +314,6 @@ Like,Like
 "In stock","In stock"
 "Out of stock","Out of stock"
 "Learn More","Learn More"
-Popular,Popular
-"No Posts","No Posts"
-Latest,Latest
-Search,Search
-"Search blogs here...","Search blogs here..."
 "Read more","Read more"
 Close,Close
 "Warning message","Warning message"
@@ -332,27 +325,28 @@ Cancel,Cancel
 "Better Blog","Better Blog"
 General,General
 Enable,Enable
+"Allows customers to register as an author","Allows customers to register as an author"
+"Automatically approve requests","Automatically approve requests"
+"Automatically approve customer's posts","Automatically approve customer's posts"
+"Limit of Posts History","Limit of Posts History"
+"Limit number of post history","Limit number of post history"
+Display,Display
 "Blog Name","Blog Name"
 "Route Name","Route Name"
 "URL Suffix","URL Suffix"
 "Leave empty for no suffix. Default: html","Leave empty for no suffix. Default: html"
 "Show Blog Link in Top Menu","Show Blog Link in Top Menu"
 "Show Blog Link in Footer links","Show Blog Link in Footer links"
-"Display author","Display author"
-"Display sitemap","Display sitemap"
+"Choose blog's color","Choose blog's color"
 "Date format","Date format"
-"Limit related post","Limit related post"
-"Number of related post in post view page","Number of related post in post view page"
-"Display Related Posts Mode","Display Related Posts Mode"
-"Display Blogs Mode","Display Blogs Mode"
 "Blogs per Page Allowed Values","Blogs per Page Allowed Values"
 Comma-separated.,Comma-separated.
-"Choose blog's color","Choose blog's color"
-"Allows customers to register as an author","Allows customers to register as an author"
-"Automatically approve requests","Automatically approve requests"
-"Automatically approve customer's posts","Automatically approve customer's posts"
-"Limit of Posts History","Limit of Posts History"
-"Limit number of post history","Limit number of post history"
+"Blog List Page & Post View Page","Blog List Page & Post View Page"
+"Display author","Display author"
+"Limit related post","Limit related post"
+"Number of related post in post view page (Related posts are posts with the same topics)","Number of related post in post view page (Related posts are posts with the same topics)"
+"Display Related Posts Mode","Display Related Posts Mode"
+"Display Blogs Mode","Display Blogs Mode"
 "Allow Voting for Helpfulness","Allow Voting for Helpfulness"
 "Select Yes to allow selected group(s) below to vote for helpfulness.","Select Yes to allow selected group(s) below to vote for helpfulness."
 "Restrict Rating for","Restrict Rating for"
@@ -371,14 +365,14 @@ Comma-separated.,Comma-separated.
 "Title of Related Products","Title of Related Products"
 "Title of related products in post view page","Title of related products in post view page"
 Sidebar,Sidebar
-"Number of recent posts","Number of recent posts"
-"Number of most view posts","Number of most view posts"
 "Sidebar Location","Sidebar Location"
-"Enable Search Box","Enable Search Box"
 "Maximum Query Result","Maximum Query Result"
 "Min Chars","Min Chars"
 "Visible Image","Visible Image"
 "Description length","Description length"
+"Recent posts and Popular posts","Recent posts and Popular posts"
+"Number of recent posts","Number of recent posts"
+"Number of most view posts","Number of most view posts"
 "Enable Monthly Archive","Enable Monthly Archive"
 "Number of records","Number of records"
 "Type of Datetime","Type of Datetime"
@@ -393,17 +387,9 @@ Sidebar,Sidebar
 Light/Dark,Light/Dark
 "Facebook: Order by","Facebook: Order by"
 "The order to use when displaying comments. Can be ""social"", ""reverse_time"", or ""time"".","The order to use when displaying comments. Can be ""social"", ""reverse_time"", or ""time""."
-SEO,SEO
-"Meta title","Meta title"
-"Meta description","Meta description"
-"Meta keywords","Meta keywords"
-"Meta robots","Meta robots"
-"Article Snippet","Article Snippet"
-"Organize or Website name","Organize or Website name"
-Logo,Logo
-"Choose your website or organize logo. (jpeg, gif, png)","Choose your website or organize logo. (jpeg, gif, png)"
-"Social Sharing","Social Sharing"
-"Addthis.com PubId","Addthis.com PubId"
+"Social platforms","Social platforms"
+"Allow sharing posts to Facebook","Allow sharing posts to Facebook"
+"Allow sharing posts to X","Allow sharing posts to X"
 "Category Name","Category Name"
 "Parent Category","Parent Category"
 "Tag Name","Tag Name"
