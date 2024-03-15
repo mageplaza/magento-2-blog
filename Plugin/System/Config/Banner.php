@@ -55,13 +55,20 @@ class Banner
      */
     public function afterRender(Docs $subject, $result, AbstractElement $element)
     {
-        if ($element->getOriginalData()['module_name'] !== 'Mageplaza_Blog'
-            && $this->checkValidate()) {
+        if ($this->checkValidate($element)) {
             return $result;
         }
         $bannerImg = $subject->getViewFileUrl('Mageplaza_Blog::media/banner/banner.png');
         $html      = <<<HTML
-        <img src="{$bannerImg}">
+        <script>
+        require([
+                'jquery'
+                ], function ($) {
+        var session = $(".accordion" );
+        $("<a target='_blank' href='https://www.mageplaza.com/magento-2-better-blog/?utm_source=dashboard&utm_medium=admin&utm_campaign=blogpro'>" +
+         "<img src='{$bannerImg}'></a>").insertBefore(session);
+        })
+        </script>
         HTML;
 
         $result = $html . $result;
@@ -70,10 +77,19 @@ class Banner
     }
 
     /**
+     * @param $element
      * @return bool
      */
-    protected function checkValidate()
+    protected function checkValidate($element)
     {
-        return $this->_moduleManager->isOutputEnabled('Mageplaza_BlogPro');
+        if ($element->getOriginalData()['module_name'] !== 'Mageplaza_Blog') {
+            return true;
+        }
+
+        if ($this->_moduleManager->isOutputEnabled('Mageplaza_BlogPro')) {
+            return true;
+        }
+
+        return false;
     }
 }
