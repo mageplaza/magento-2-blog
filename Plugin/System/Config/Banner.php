@@ -50,24 +50,23 @@ class Banner
     /**
      * @param Docs $subject
      * @param $result
+     * @param AbstractElement $element
      *
      * @return mixed
      */
     public function afterRender(Docs $subject, $result, AbstractElement $element)
     {
-        if ($this->checkValidate($element)) {
+        if ($this->isHideBanner($element)) {
             return $result;
         }
         $bannerImg = $subject->getViewFileUrl('Mageplaza_Blog::media/banner/banner.png');
         $html      = <<<HTML
         <script>
-        require([
-                'jquery'
-                ], function ($) {
-        var session = $(".accordion" );
-        $("<a target='_blank' href='https://www.mageplaza.com/magento-2-better-blog/?utm_source=dashboard&utm_medium=admin&utm_campaign=blogpro'>" +
-         "<img src='{$bannerImg}'></a>").insertBefore(session);
-        })
+            require([ 'jquery'], function ($) {
+                var session = $(".accordion" );
+                $("<a target='_blank' href='https://www.mageplaza.com/magento-2-better-blog/?utm_source=dashboard&utm_medium=admin&utm_campaign=blogpro'>" +
+                 "<img src='{$bannerImg}'></a>").insertBefore(session);
+            })
         </script>
         HTML;
 
@@ -80,7 +79,7 @@ class Banner
      * @param $element
      * @return bool
      */
-    protected function checkValidate($element)
+    protected function isHideBanner($element)
     {
         if ($element->getOriginalData()['module_name'] !== 'Mageplaza_Blog') {
             return true;
