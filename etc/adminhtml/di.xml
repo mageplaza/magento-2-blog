@@ -50,4 +50,8 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product\Collection">
         <plugin name="blog-post-product-sort" type="Mageplaza\Blog\Plugin\Catalog\AttributeSort"/>
     </type>
+    <!-- update banner in config infomation tab -->
+    <type name="Mageplaza\Core\Block\Adminhtml\System\Config\Docs">
+        <plugin name="blog-config-banner" type="Mageplaza\Blog\Plugin\System\Config\Banner"/>
+    </type>
 </config>
