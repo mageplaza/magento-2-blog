@@ -22,17 +22,19 @@
 namespace Mageplaza\Blog\Block;
 
 use Exception;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Theme\Block\Html\Pager;
 use Mageplaza\Blog\Model\Config\Source\DisplayType;
+use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
  * Class Listpost
  * @package Mageplaza\Blog\Block\Post
  */
-class Listpost extends Frontend
+class Listpost extends Frontend implements IdentityInterface
 {
     /**
      * @return Collection
@@ -213,5 +215,12 @@ class Listpost extends Frontend
         }
 
         return $pageTitle;
+    }
+
+    public function getIdentities()
+    {
+        return [
+            Post::CACHE_TAG
+        ];
     }
 }
