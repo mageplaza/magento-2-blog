@@ -19,12 +19,16 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
+declare(strict_types=1);
+
 namespace Mageplaza\Blog\Block\Category;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
+use Magento\Framework\View\Element\BlockInterface;
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\Category;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
@@ -33,10 +37,7 @@ use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
  */
 class Listpost extends \Mageplaza\Blog\Block\Listpost
 {
-    /**
-     * @var string
-     */
-    protected $_category;
+    protected ?Category $category = null;
 
     /**
      * Override this function to apply collection for each type
@@ -53,42 +54,52 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
         return null;
     }
 
-    /**
-     * @return mixed
-     */
-    protected function getBlogObject()
+    protected function getBlogObject(): Category|null
     {
-        if (!$this->_category) {
-            $id = $this->getRequest()->getParam('id');
-            if ($id) {
-                $category = $this->helperData->getObjectByParam($id, null, Data::TYPE_CATEGORY);
-                if ($category && $category->getId()) {
-                    $this->_category = $category;
-                }
-            }
+        if ($this->category instanceof Category === true) {
+            return $this->category;
         }
 
-        return $this->_category;
+        $id = $this->getRequest()->getParam('id');
+        if (empty($id) === true) {
+            return null;
+        }
+
+        $category = $this->helperData->getObjectByParam($id, null, Data::TYPE_CATEGORY);
+        if (isset($category) === true
+            && $category instanceof Category === true
+            && $category->getId() !== null
+        ) {
+            $this->category = $category;
+        }
+
+        return $this->category ?? null;
     }
 
     /**
      * @inheritdoc
      * @throws LocalizedException
      */
-    protected function _prepareLayout()
+    protected function _prepareLayout(): void
     {
         parent::_prepareLayout();
-
-        if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
-            $category = $this->getBlogObject();
-            $categoryName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $category->getName());
-            if ($category) {
-                $breadcrumbs->addCrumb($category->getUrlKey(), [
-                    'label' => __($categoryName),
-                    'title' => __($categoryName)
-                ]);
-            }
+        $breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
+        if ($breadcrumbs instanceof BlockInterface === false && is_bool($breadcrumbs) === false) {
+            return;
         }
+
+        $category = $this->getBlogObject();
+        if ($category instanceof Category === false) {
+            return;
+        }
+
+        $categoryName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $category->getName());
+
+        $breadcrumbs->addCrumb(
+            $category->getUrlKey(), [
+            'label' => __($categoryName),
+            'title' => __($categoryName),
+        ]);
     }
 
     /**
@@ -96,10 +107,11 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
      *
      * @return array|Phrase|string
      */
-    public function getBlogTitle($meta = false)
+    public function getBlogTitle(
+        $meta = false)
     {
         $blogTitle = parent::getBlogTitle($meta);
-        $category  = $this->getBlogObject();
+        $category = $this->getBlogObject();
         if (!$category) {
             return $blogTitle;
         }
