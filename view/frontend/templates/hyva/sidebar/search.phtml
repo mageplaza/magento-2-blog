@@ -59,7 +59,7 @@ use Magento\Framework\Escaper;
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var visibleImage = <?php echo json_encode($block->getSidebarConfig('search/show_image')); ?>;
+        var visibleImage = <?php echo /** @noEscape */   json_encode($block->getSidebarConfig('search/show_image')); ?>;
         var searchBox    = document.getElementById('mpblog-search-box');
         searchBox.addEventListener('input', function () {
             var searchTerm = searchBox.value;
@@ -67,7 +67,7 @@ use Magento\Framework\Escaper;
         });
 
         function fetchSuggestions (searchTerm) {
-            updateAutocompleteResults(<?php echo($block->getSearchBlogData()); ?>, searchTerm);
+            updateAutocompleteResults(<?php echo /** @noEscape */ ($block->getSearchBlogData()); ?>, searchTerm);
         }
 
         function updateAutocompleteResults (suggestions, searchTerm) {

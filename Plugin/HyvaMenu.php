@@ -79,7 +79,7 @@ class HyvaMenu
                     "is_category"      => true,
                     "is_parent_active" => true,
                     "position"         => null,
-                    "path"             => "1/2/38" . $key,
+                    "path"             => $category->getPath(),
                     "childData"        => $blockMenu->getChildDataCate($category)
                 ];
                 array_push($childData, $data);
@@ -95,7 +95,7 @@ class HyvaMenu
                 "is_category"      => true,
                 "is_parent_active" => true,
                 "position"         => null,
-                "path"             => "1/2/39",
+                "path"             => $blockMenu->getPath(),
                 "childData"        => $childData
             ];
         }
