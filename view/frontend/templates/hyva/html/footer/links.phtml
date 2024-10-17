@@ -1,0 +1,87 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Customer;
+use Hyva\Theme\ViewModel\StoreConfig;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var Customer $customer */
+$customer = $viewModels->require(Customer::class);
+/** @var StoreConfig $storeConfig */
+$storeConfig = $viewModels->require(StoreConfig::class);
+?>
+<div class="md:w-1/2 w-full flex flex-wrap pr-4">
+    <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-8 xl:col-span-2">
+        <div>
+            <h2 class="text-md leading-5 font-semibold tracking-wider uppercase">
+                Company
+            </h2>
+            <ul class="mt-4">
+                <li>
+                    <a href="#" class="text-base leading-6">
+                        About
+                    </a>
+                </li>
+                <li class="mt-4">
+                    <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account')) ?>"
+                       class="text-base leading-6">
+                        <?= $escaper->escapeHtml(__('My Account')) ?>
+                    </a>
+                </li>
+                <?php if (!$customer->customerLoggedIn()): ?>
+                    <li class="mt-4">
+                        <a href="<?= $escaper->escapeUrl($block->getUrl('sales/guest/form')) ?>"
+                           class="text-base leading-6">
+                            <?= $escaper->escapeHtml(__('Orders and Returns')) ?>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($storeConfig->getStoreConfig('catalog/seo/search_terms')): ?>
+                    <li class="mt-4">
+                        <a href="<?= $escaper->escapeUrl($block->getUrl('search/term/popular')) ?>"
+                           class="text-base leading-6">
+                            <?= $escaper->escapeHtml(__('Search Terms')) ?>
+                        </a>
+                    </li>
+                <?php endif; ?>
+                <li class="mt-4 mb-4">
+                    <a href="<?= $escaper->escapeUrl($block->getUrl('contact')) ?>"
+                       class="text-base leading-6">
+                        <?= $escaper->escapeHtml(__('Contact')) ?>
+                    </a>
+                </li>
+                <?= $block->getChildHtml() ?>
+            </ul>
+        </div>
+        <div>
+            <h2 class="text-md leading-5 font-semibold tracking-wider uppercase">
+                Legal
+            </h2>
+            <ul class="mt-4">
+                <li class="mt-4">
+                    <a href="#" class="text-base leading-6">
+                        Privacy
+                    </a>
+                </li>
+                <li class="mt-4">
+                    <a href="#" class="text-base leading-6">
+                        Terms and Conditions
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

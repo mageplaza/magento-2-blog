@@ -28,16 +28,12 @@ $helper = $block->getHelperData();
 ?>
 <?php if ($helper->isEnabled()) : ?>
     <?php if ($helper->getBlogConfig('display/footer')) : ?>
-        <div class="pr-4 lg:w-1/4 md:w-1/2">
-            <ul>
-                <li>
-                    <a class="text-base leading-6" <?= /** @noEscape */ $block->getLinkAttributes() ?>>
-                        <?= $escaper->escapeHtml($block->getLabel()); ?>
-                        <?= ($block->getCounter()) ? '<span>' . $escaper->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
-                    </a>
-                </li>
-            </ul>
-        </div>
+        <li class="mt-4">
+            <a class="text-base leading-6" <?= /** @noEscape */
+            $block->getLinkAttributes() ?>>
+                <?= $escaper->escapeHtml($block->getLabel()); ?>
+                <?= ($block->getCounter()) ? '<span>' . $escaper->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
+            </a>
+        </li>
     <?php endif; ?>
-    <?= $block->getChildHtml('mp_blog_footer_add') ?>
 <?php endif; ?>

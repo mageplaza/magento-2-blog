@@ -63,8 +63,12 @@
             </action>
         </referenceBlock>
 
-        <referenceBlock name="footer-content">
-            <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_blog_footer_link" template="Mageplaza_Blog::hyva/html/footer.phtml" after="-"/>
+
+        <referenceBlock name="footer-static-links">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Mageplaza_StoreLocator::hyva/html/footer/links.phtml</argument>
+            </action>
+            <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_blog_footer_link" template="Mageplaza_Blog::hyva/html/footer.phtml" after="-" ifconfig="blog/general/enabled"/>
         </referenceBlock>
 
         <referenceBlock name="related.category.products">

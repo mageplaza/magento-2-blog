@@ -82,4 +82,14 @@ class Posts extends Frontend implements BlockInterface
     {
         return $this->helperData->getBlogUrl($code);
     }
+
+    protected function _toHtml()
+    {
+        if ($this->helperData->checkHyvaTheme()) {
+            $this->setTemplate('Mageplaza_Blog::hyva/widget/posts.phtml');
+        }
+        return parent::_toHtml();
+    }
+
+
 }

@@ -61,6 +61,7 @@ use Magento\Framework\Escaper;
     document.addEventListener('DOMContentLoaded', function () {
         var visibleImage = <?php echo /** @noEscape */   json_encode($block->getSidebarConfig('search/show_image')); ?>;
         var searchBox    = document.getElementById('mpblog-search-box');
+        let minChars =  <?= $block->getSidebarConfig('search/min_chars') ?: 1; ?>;
         searchBox.addEventListener('input', function () {
             var searchTerm = searchBox.value;
             fetchSuggestions(searchTerm);
@@ -73,15 +74,17 @@ use Magento\Framework\Escaper;
         function updateAutocompleteResults (suggestions, searchTerm) {
             var autocompleteResults       = document.getElementById('autocomplete-results');
             autocompleteResults.innerHTML = '';
-            if (searchTerm) {
+            if (searchTerm && searchTerm.length >= minChars) {
                 if (suggestions.length > 0) {
                     autocompleteResults.style.display = 'block';
                     var existedPost                   = false;
-                    var limitPost                     = 10;
+                    var limitPost                     =  <?= $block->getSidebarConfig('search/search_limit') ?: 10; ?>;
+                    let checkNumberPostRender = 0;
                     suggestions.forEach(function (suggestion, index) {
 
                         if (suggestion.value.toLocaleLowerCase().includes(searchTerm.toLowerCase())) {
-                            if (index + 1 > limitPost) {
+                            checkNumberPostRender ++;
+                            if (checkNumberPostRender > limitPost) {
                                 return;
                             }
                             existedPost             = true;
