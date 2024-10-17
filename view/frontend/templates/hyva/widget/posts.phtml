@@ -39,7 +39,7 @@ $posts = $block->getCollection();
                     <?php if ($post->getImage()) : ?>
                         <div class="post-image">
                             <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
-                                <img class="img-responsive" style="height: 220px"
+                                <img class="img-responsive" style="height: 220px; margin:auto"
                                      src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(), '400x')) ?>"
                                      alt="<?= $escaper->escapeHtml($post->getName()); ?>"/>
                             </a>
