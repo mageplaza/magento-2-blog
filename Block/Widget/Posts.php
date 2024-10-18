@@ -83,6 +83,11 @@ class Posts extends Frontend implements BlockInterface
         return $this->helperData->getBlogUrl($code);
     }
 
+    /**
+     * Render block HTML
+     *
+     * @return string
+     */
     protected function _toHtml()
     {
         if ($this->helperData->checkHyvaTheme()) {
@@ -90,6 +95,4 @@ class Posts extends Frontend implements BlockInterface
         }
         return parent::_toHtml();
     }
-
-
 }
