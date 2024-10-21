@@ -1,0 +1,95 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+use Mageplaza\Blog\Block\Widget\Posts;
+use Magento\Framework\Escaper;
+
+/** @var Posts $block */
+/** @var Escaper $escaper */
+$posts = $block->getCollection();
+?>
+
+<div class="blog-widget-title"><a></a></div>
+<div class="post-list-container mpcss" id="mpblog-list-container" style="margin-bottom: 50px">
+    <div class="widget-title">
+        <a href="<?= $escaper->escapeUrl($block->getBlogUrl('')) ?>"><?= $escaper->escapeHtml($block->getTitle()) ?></a>
+    </div>
+    <div class="row">
+        <?php foreach ($posts as $post) : ?>
+            <div class="post-list-item" style="margin-left: 5px">
+                <div class="post-item-wraper">
+                    <?php if ($post->getImage()) : ?>
+                        <div class="post-image">
+                            <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
+                                <img class="img-responsive" style="height: 220px; margin:auto"
+                                     src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(), '400x')) ?>"
+                                     alt="<?= $escaper->escapeHtml($post->getName()); ?>"/>
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                    <div class="post-info-wraper">
+                        <h2 class="mp-post-title" style="font-size: 22px">
+                            <a class="post-link-title" title="<?= $escaper->escapeHtmlAttr($post->getName()) ?>"
+                               href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
+                                <?= $escaper->escapeHtml($post->getName()) ?>
+                            </a>
+                        </h2>
+                        <div class="mp-post-info">
+                            <?= /** @noEscape */ $block->getPostInfo($post) ?>
+                        </div>
+                        <div class="post-short-description">
+                            <p><?= /** @noEscape */ $post->getShortDescription() ?></p>
+                        </div>
+                        <div class="mp-clearfix"></div>
+                        <div class="mp-post-meta-info mp-alignright">
+                            <div class="actions">
+                                <a class="mp-read-more" href="<?= $escaper->escapeUrl($post->getUrl()) ?>"
+                                   title="<?= $escaper->escapeHtmlAttr(__('Read More')) ?>">
+                                    <?= $escaper->escapeHtml(__('Read more')) ?>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<style>
+    .mp-post-info {
+        color: #999999;
+        font-size: 10px;
+        line-height: 30px;
+        margin: 0;
+    }
+    .post-item-wraper:hover {
+        border: 1px solid #eee;
+        box-shadow: 3px 3px 4px 0 rgba(0, 0, 0, 0.3);
+    }
+    .post-item-wraper {
+        padding: 10px !important;
+        border: 1px solid #eee;
+
+    }
+    .post-list-item {
+        margin-bottom: 20px;
+    }
+</style>

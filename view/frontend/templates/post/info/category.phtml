@@ -31,6 +31,6 @@ $_post = $block->getPost();
 <?php if ($categoryHtml = $block->getPostCategoryHtml($_post)) : ?>
     |
     <span><i class="fa fa-folder-open-o">&nbsp;</i>
-        <?= $escaper->escapeHtml(__('Categories: %1', $categoryHtml)); ?>
+        <?= /* @noEscape */ (__('Categories: %1', $categoryHtml)); ?>
     </span>
 <?php endif; ?>

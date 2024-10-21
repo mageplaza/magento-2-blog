@@ -54,7 +54,7 @@ $jsonData       = json_encode($postDatas);
                 class="action primary btn btn-primary" title="<?= $escaper->escapeHtmlAttr(__('Add New Post')) ?>">
             <?= $escaper->escapeHtml(__('Add New Post')) ?>
         </button>
-        <?= $modalViewModel->createModal()
+        <?= /** @noEscape */ $modalViewModel->createModal()
             ->addDialogClass('overflow-y-hidden overflow-x-hidden fixed z-50 justify-center items-center w-3/4 md:inset-0 h-4/5')
             ->removeDialogClass('p-10')
             ->withDialogRefName("add-new-post-name")
@@ -119,7 +119,7 @@ HTML
                             </div>
                             <div class="post-info-action" data-postId="<?= $escaper->escapeHtml($post->getId()); ?>">
                                 <div class="mpblog-post-duplicate"
-                                     onclick='handleDuplicate(this,<?= json_encode($post->getData()) ?>)'
+                                     onclick='handleDuplicate(this,<?= /** @noEscape */ json_encode($post->getData()) ?>)'
                                 >
                                     <img
                                         src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/duplicate.svg')) ?>"
@@ -129,7 +129,7 @@ HTML
                                     />
                                 </div>
                                 <div class="mpblog-post-edit"
-                                     onclick='handleEdit(this,<?= json_encode($post->getData()) ?>)'>
+                                     onclick='handleEdit(this,<?= /** @noEscape */ json_encode($post->getData()) ?>)'>
                                     <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/writing.svg')) ?>"
                                          align="middle"
                                          alt="<?= $escaper->escapeHtmlAttr(__('Edit')); ?>"
@@ -205,7 +205,7 @@ HTML
         // open modal edit new post
         function handleEdit (e, data) {
             resetFormModal();
-            let listData           = <?php echo json_decode($jsonData) ?>;
+            let listData           = <?php echo /** @noEscape */ json_decode($jsonData) ?>;
             let dataSelect          = listData[data?.post_id];
             name.value              = dataSelect?.name;
             post_id.value           = dataSelect?.post_id;
@@ -225,7 +225,7 @@ HTML
         // open modal duplicate new post
         function handleDuplicate (e, data) {
             resetFormModal();
-            let listData           = <?php echo json_decode($jsonData) ?>;
+            let listData           = <?php echo /** @noEscape */ json_decode($jsonData) ?>;
             let dataSelect          = listData[data?.post_id];
             name.value              = dataSelect?.name;
             short_description.value = dataSelect?.short_description;

@@ -37,7 +37,7 @@ use Magento\Framework\Escaper;
                     columns.removeChild(sidebarMain);
                 }
             }
-            var currentTheme = "<?php echo $block->getCurrentTheme(); ?>";
+            var currentTheme = "<?php echo /** @noEscape */ $block->getCurrentTheme() ?>";
             if (currentTheme === "Etheme/yourstore") {
                 body.classList.add('mpblog-etheme-yourstore');
             }
