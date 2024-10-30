@@ -94,7 +94,26 @@
 .mp-field > div {
     width: 100%;
 }
+@media (max-width: 768px) {
+    .mp-field .label {
+        width: 100%;
+    }
 
+    .mp-field {
+        flex-wrap: wrap;
+        padding: 0;
+        width: 100%;
+    }
+    .modal-content {
+        overflow-x: hidden;
+    }
+    .modal-content fieldset.fieldset {
+        display: contents;
+    }
+    .modal-content .actions-toolbar {
+        margin-top: 15px;
+    }
+}
 .mp-custom .mp-field {
     margin: 0 0 20px;
 }
