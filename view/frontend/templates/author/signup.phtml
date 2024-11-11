@@ -152,6 +152,17 @@ $author = $block->getAuthor();
     .sidebar.sidebar-main:before {
         content: unset !important;
     }
+    @media (max-width: 768px) {
+        fieldset.fieldset {
+            display: contents;
+        }
+        fieldset.fieldset .control .mp_full_url {
+            word-break: break-all;
+        }
+        .actions-toolbar {
+            margin-top: 20px;
+        }
+    }
 </style>
 <script>
     require(
