@@ -21,24 +21,17 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <head>
-        <css src="Mageplaza_Core::css/font-awesome.min.css"/>
-        <css src="Mageplaza_Blog::css/hyvaManagePost.css"/>
-        <css src="Mageplaza_Blog::css/hyvaBlog.css"/>
-
-        <script src="Mageplaza_Blog::js/ckeditor.js" />
-
-        <script src="Mageplaza_Blog::js/treeselectjs.umd.js" />
-        <css src="Mageplaza_Blog::css/treeselectjs.css" />
-    </head>
-    <update handle="hyva_form_validation"/>
-
     <body>
-        <referenceBlock name="mpblog.design">
-            <action method="setTemplate">
-                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/design.phtml</argument>
+        <referenceBlock name="mpblog.post.view" >
+            <action method="setTemplate" >
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/view.phtml</argument>
             </action>
         </referenceBlock>
 
+        <referenceBlock name="related.category.products">
+            <action method="setTemplate" >
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/product/list.phtml</argument>
+            </action>
+        </referenceBlock>
     </body>
 </page>

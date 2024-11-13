@@ -119,7 +119,7 @@ HTML
                             </div>
                             <div class="post-info-action" data-postId="<?= $escaper->escapeHtml($post->getId()); ?>">
                                 <div class="mpblog-post-duplicate"
-                                     onclick='handleDuplicate(this,<?= /** @noEscape */ json_encode($post->getData()) ?>)'
+                                     onclick='handleDuplicate(this,<?= /** @noEscape */ $post->getId() ?>, "<?= /** @noEscape */ $post->getImage() ?>")'
                                 >
                                     <img
                                         src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/duplicate.svg')) ?>"
@@ -129,7 +129,8 @@ HTML
                                     />
                                 </div>
                                 <div class="mpblog-post-edit"
-                                     onclick='handleEdit(this,<?= /** @noEscape */ json_encode($post->getData()) ?>)'>
+                                     onclick='handleEdit(this,<?= /** @noEscape */ $post->getId() ?>, "<?= /** @noEscape */ $post->getImage() ?>")'
+                                >
                                     <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/writing.svg')) ?>"
                                          align="middle"
                                          alt="<?= $escaper->escapeHtmlAttr(__('Edit')); ?>"
@@ -203,10 +204,10 @@ HTML
             openDialogNewPost();
         }
         // open modal edit new post
-        function handleEdit (e, data) {
+        function handleEdit (e, post_id, image) {
             resetFormModal();
             let listData           = <?php echo /** @noEscape */ json_decode($jsonData) ?>;
-            let dataSelect          = listData[data?.post_id];
+            let dataSelect          = listData[post_id];
             name.value              = dataSelect?.name;
             post_id.value           = dataSelect?.post_id;
             short_description.value = dataSelect?.short_description;
@@ -217,16 +218,16 @@ HTML
 
             treeselectTags.updateValue(dataSelect?.tag_ids);
             treeselectTopics.updateValue(dataSelect?.topic_ids);
-            addPreviewImg(data?.image);
+            addPreviewImg(image);
 
             title.innerText = 'Edit Post';
             openDialogNewPost()
         }
         // open modal duplicate new post
-        function handleDuplicate (e, data) {
+        function handleDuplicate (e, post_id, image) {
             resetFormModal();
             let listData           = <?php echo /** @noEscape */ json_decode($jsonData) ?>;
-            let dataSelect          = listData[data?.post_id];
+            let dataSelect          = listData[post_id];
             name.value              = dataSelect?.name;
             short_description.value = dataSelect?.short_description;
             editor.setData(dataSelect?.post_content ?? "");
@@ -235,7 +236,7 @@ HTML
             treeselectCategories.updateValue(dataSelect?.category_ids);
             treeselectTags.updateValue(dataSelect?.tag_ids);
             treeselectTopics.updateValue(dataSelect?.topic_ids);
-            addPreviewImg(data?.image);
+            addPreviewImg(image);
             title.innerText = 'Duplicate Post';
             openDialogNewPost()
         }
@@ -254,6 +255,10 @@ HTML
             if (element) {
                 element.parentNode.removeChild(element);
             }
+            let messagesError = document.querySelectorAll('#mp-blog-new-post-popup form .messages');
+            messagesError.forEach(mess => {
+                mess.remove()
+            })
         }
         // add preview image when open modal edit and duplicate modal
         function addPreviewImg (value) {
