@@ -21,14 +21,15 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-
+    <head>
+        <script src="Mageplaza_Blog::js/splide.min.js" />
+        <css src="Mageplaza_Blog::css/splide.min.css" />
+    </head>
     <body>
-        <referenceBlock name="footer-static-links">
+        <referenceBlock name="related.post.tab" >
             <action method="setTemplate">
-                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/html/footer/links.phtml</argument>
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/relatedpost.phtml</argument>
             </action>
-            <block class="Mageplaza\Blog\Block\Html\Footer" name="mp_blog_footer_link" template="Mageplaza_Blog::hyva/html/footer.phtml" after="-" ifconfig="blog/general/enabled"/>
         </referenceBlock>
     </body>
 </page>
-
