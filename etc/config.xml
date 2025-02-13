@@ -25,7 +25,7 @@
         <blog>
             <module>
                 <type>0</type>
-                <user_guide>blog-m2</user_guide>
+                <user_guide>magento/blog-m2/standard</user_guide>
             </module>
             <general>
                 <enabled>1</enabled>
