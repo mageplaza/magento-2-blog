@@ -118,8 +118,8 @@ class Topic extends AbstractModel
         Registry $registry,
         CollectionFactory $postCollectionFactory,
         TopicCollectionFactory $topicCollectionFactory,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->postCollectionFactory = $postCollectionFactory;

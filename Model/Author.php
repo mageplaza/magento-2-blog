@@ -60,8 +60,8 @@ class Author extends AbstractModel
         Context $context,
         Registry $registry,
         Data $helperData,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->helperData = $helperData;

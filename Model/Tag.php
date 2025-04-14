@@ -106,8 +106,8 @@ class Tag extends AbstractModel
         Registry $registry,
         CollectionFactory $postCollectionFactory,
         TagCollectionFactory $tagCollectionFactory,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->postCollectionFactory = $postCollectionFactory;

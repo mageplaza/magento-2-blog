@@ -71,8 +71,8 @@ class Collection extends AbstractCollection
         LoggerInterface $logger,
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
-        AdapterInterface $connection = null,
-        AbstractDb $resource = null
+        ?AdapterInterface $connection = null,
+        ?AbstractDb $resource = null
     ) {
         $this->localeDate = $localeDate;
         $this->locale = $localeResolver->getLocale();
