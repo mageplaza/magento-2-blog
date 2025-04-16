@@ -22,7 +22,7 @@ define([
     'jquery'
 ], function (jQuery) {
 
-    var categorySubmit = function (url, useAjax) {
+    var categorySubmit = function () {
         var activeTab = $('active_tab_id');
         if (activeTab) {
             if (activeTab.tabsJsObject && activeTab.tabsJsObject.tabs('activeAnchor')) {
