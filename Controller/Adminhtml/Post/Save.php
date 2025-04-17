@@ -127,11 +127,11 @@ class Save extends Post
             $this->prepareData($post, $data);
             try {
                 if (empty($action) || $action === 'add') {
-                    $post->save();
                     $this->_eventManager->dispatch(
                         'mageplaza_blog_post_prepare_save',
                         ['post' => $post, 'request' => $this->getRequest()]
                     );
+                    $post->save();
                     $this->messageManager->addSuccessMessage(__('The post has been saved.'));
                 }
                 $this->addHistory($post, $action);
