@@ -82,8 +82,8 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
 
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
             $tag     = $this->getBlogObject();
-            $tagName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $tag->getName());
             if ($tag) {
+                $tagName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $tag->getName());
                 $breadcrumbs->addCrumb($tag->getUrlKey(), [
                     'label' => __($tagName),
                     'title' => __($tagName)
