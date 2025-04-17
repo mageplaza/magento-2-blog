@@ -89,8 +89,8 @@ class Comment extends AbstractModel
         Registry $registry,
         CollectionFactory $postCollectionFactory,
         CommentCollectionFactory $commentCollectionFactory,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->postCollectionFactory = $postCollectionFactory;

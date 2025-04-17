@@ -243,8 +243,8 @@ class Post extends AbstractModel
         CategoryCollectionFactory $categoryCollectionFactory,
         PostCollectionFactory $postCollectionFactory,
         ProductCollectionFactory $productCollectionFactory,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->tagCollectionFactory      = $tagCollectionFactory;

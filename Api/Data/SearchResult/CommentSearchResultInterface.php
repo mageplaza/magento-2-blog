@@ -38,5 +38,5 @@ interface CommentSearchResultInterface extends SearchResultsInterface
      * @param \Mageplaza\Blog\Api\Data\CommentInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(?array $items = null);
 }

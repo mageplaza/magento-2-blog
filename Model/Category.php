@@ -138,8 +138,8 @@ class Category extends AbstractModel
         CategoryFactory $categoryFactory,
         CollectionFactory $postCollectionFactory,
         CategoryCollectionFactory $categoryCollectionFactory,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->categoryFactory = $categoryFactory;

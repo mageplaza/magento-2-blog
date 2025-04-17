@@ -195,8 +195,8 @@ abstract class AbstractImport extends AbstractModel
         HelperData $helperData,
         StoreManagerInterface $storeManager,
         HelperImage $helperImage,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->date                = $date;
