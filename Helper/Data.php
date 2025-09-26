@@ -798,4 +798,59 @@ class Data extends CoreHelper
         return in_array('0', $storeEnable, true)
             || in_array((string) $this->storeManager->getStore()->getId(), $storeEnable, true);
     }
+
+    /**
+     * @param $title
+     *
+     * @return mixed|null
+     * @throws NoSuchEntityException
+     */
+    public function getMetaTitleByStoreId($title)
+    {
+        if (!$title) {
+            return null;
+        }
+
+        $storeId = $this->storeManager->getStore()->getId();
+        $title   = json_decode($title, true) ?: [];
+
+        return $title[$storeId] ?? $title[0] ?? null;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    public function handleSeoValueBeforeSave(array &$data)
+    {
+        $seoFields = ['meta_title', 'meta_description', 'meta_keywords', 'meta_robots'];
+
+        foreach ($seoFields as $field) {
+            if (!isset($data[$field])) {
+                continue;
+            }
+
+            if (is_array($data[$field])) {
+                $filtered = [];
+                foreach ($data[$field] as $k => $v) {
+                    if ($v !== null && !(is_string($v) && trim($v) === '')) {
+                        $filtered[$k] = $v;
+                    }
+                }
+
+                if (!empty($filtered)) {
+                    $data[$field] = json_encode($filtered, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT);
+                } else {
+                    $data[$field] = null;
+                }
+            } else {
+                if ($data[$field] === null || (is_string($data[$field]) && trim($data[$field]) === '')) {
+                    $data[$field] = null;
+                }
+            }
+        }
+
+        return $data;
+    }
 }

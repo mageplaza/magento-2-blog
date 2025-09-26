@@ -94,9 +94,10 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
-     * @param bool $meta
+     * @param $meta
      *
      * @return array|Phrase|string
+     * @throws NoSuchEntityException
      */
     public function getBlogTitle($meta = false)
     {
@@ -107,10 +108,10 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
         }
 
         if ($meta) {
-            if ($topic->getMetaTitle()) {
-                array_push($blogTitle, $topic->getMetaTitle());
+            if ($this->helperData->getMetaTitleByStoreId($topic->getMetaTitle())) {
+                $blogTitle[] = $this->helperData->getMetaTitleByStoreId($topic->getMetaTitle());
             } else {
-                array_push($blogTitle, ucfirst($topic->getName()));
+                $blogTitle[] = ucfirst($topic->getName());
             }
 
             return $blogTitle;

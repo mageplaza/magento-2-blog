@@ -189,6 +189,18 @@ class Post extends AbstractDb
         if (is_array($object->getStoreIds())) {
             $object->setStoreIds(implode(',', $object->getStoreIds()));
         }
+        if (is_array($object->getData('meta_title'))) {
+            $object->setData('meta_title', json_encode($object->getData('meta_title')));
+        }
+        if (is_array($object->getData('meta_description'))) {
+            $object->setData('meta_description', json_encode($object->getData('meta_description')));
+        }
+        if (is_array($object->getData('meta_keywords'))) {
+            $object->setData('meta_keywords', json_encode($object->getData('meta_keywords')));
+        }
+        if (is_array($object->getData('meta_robots'))) {
+            $object->setData('meta_robots', json_encode($object->getData('meta_robots')));
+        }
 
         $object->setUrlKey(
             $this->helperData->generateUrlKey($this, $object, $object->getUrlKey() ?: $object->getName())

@@ -38,6 +38,7 @@ use Magento\Framework\View\LayoutFactory;
 use Mageplaza\Blog\Controller\Adminhtml\Category;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Psr\Log\LoggerInterface;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Save
@@ -74,6 +75,11 @@ class Save extends Category
     public $jsHelper;
 
     /**
+     * @var Data
+     */
+    public $_helperData;
+
+    /**
      * Save constructor.
      *
      * @param Context $context
@@ -83,6 +89,7 @@ class Save extends Category
      * @param JsonFactory $resultJsonFactory
      * @param LayoutFactory $layoutFactory
      * @param Js $jsHelper
+     * @param Data $helperData
      */
     public function __construct(
         Context $context,
@@ -91,12 +98,14 @@ class Save extends Category
         RawFactory $resultRawFactory,
         JsonFactory $resultJsonFactory,
         LayoutFactory $layoutFactory,
-        Js $jsHelper
+        Js $jsHelper,
+        Data $helperData
     ) {
-        $this->resultRawFactory = $resultRawFactory;
+        $this->resultRawFactory  = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->layoutFactory = $layoutFactory;
-        $this->jsHelper = $jsHelper;
+        $this->layoutFactory     = $layoutFactory;
+        $this->jsHelper          = $jsHelper;
+        $this->_helperData       = $helperData;
 
         parent::__construct($context, $coreRegistry, $categoryFactory);
     }
@@ -107,10 +116,11 @@ class Save extends Category
     public function execute()
     {
         if ($this->getRequest()->getPost('return_session_messages_only')) {
-            $category = $this->initCategory();
-            $categoryPostData = $this->getRequest()->getPostValue();
+            $category                      = $this->initCategory();
+            $categoryPostData              = $this->getRequest()->getPostValue();
             $categoryPostData['store_ids'] = 0;
-            $categoryPostData['enabled'] = 1;
+            $categoryPostData['enabled']   = 1;
+            $this->_helperData->handleSeoValueBeforeSave($categoryPostData);
 
             $category->addData($categoryPostData);
 
@@ -136,7 +146,7 @@ class Save extends Category
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             }
 
-            $hasError = (bool)$this->messageManager->getMessages()->getCountByType(
+            $hasError = (bool) $this->messageManager->getMessages()->getCountByType(
                 MessageInterface::TYPE_ERROR
             );
 
@@ -144,7 +154,7 @@ class Save extends Category
             $category->addData([
                 'entity_id' => $category->getId(),
                 'is_active' => $category->getEnabled(),
-                'parent' => $category->getParentId()
+                'parent'    => $category->getParentId()
             ]);
 
             // to obtain truncated category name
@@ -158,7 +168,7 @@ class Save extends Category
             return $resultJson->setData(
                 [
                     'messages' => $block->getGroupedHtml(),
-                    'error' => $hasError,
+                    'error'    => $hasError,
                     'category' => $category->toArray(),
                 ]
             );
@@ -175,6 +185,7 @@ class Save extends Category
 
                 return $resultRedirect;
             }
+            $this->_helperData->handleSeoValueBeforeSave($data);
 
             $category->addData($data);
             if ($posts = $this->getRequest()->getPost('selected_products')) {

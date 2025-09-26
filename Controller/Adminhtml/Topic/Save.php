@@ -39,6 +39,7 @@ use Mageplaza\Blog\Controller\Adminhtml\Topic;
 use Mageplaza\Blog\Model\TopicFactory;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Save
@@ -68,6 +69,11 @@ class Save extends Topic
     public $resultJsonFactory;
 
     /**
+     * @var Data
+     */
+    public $_helperData;
+
+    /**
      * Save constructor.
      *
      * @param Context $context
@@ -76,6 +82,7 @@ class Save extends Topic
      * @param LayoutFactory $layoutFactory
      * @param JsonFactory $resultJsonFactory
      * @param TopicFactory $topicFactory
+     * @param Data $helperData
      */
     public function __construct(
         Context $context,
@@ -83,11 +90,13 @@ class Save extends Topic
         Js $jsHelper,
         LayoutFactory $layoutFactory,
         JsonFactory $resultJsonFactory,
-        TopicFactory $topicFactory
+        TopicFactory $topicFactory,
+        Data $helperData
     ) {
-        $this->jsHelper = $jsHelper;
-        $this->layoutFactory = $layoutFactory;
+        $this->jsHelper          = $jsHelper;
+        $this->layoutFactory     = $layoutFactory;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->_helperData       = $helperData;
 
         parent::__construct($context, $registry, $topicFactory);
     }
@@ -98,10 +107,11 @@ class Save extends Topic
     public function execute()
     {
         if ($this->getRequest()->getPost('return_session_messages_only')) {
-            $topic = $this->initTopic();
-            $topicPostData = $this->getRequest()->getPostValue();
+            $topic                      = $this->initTopic();
+            $topicPostData              = $this->getRequest()->getPostValue();
             $topicPostData['store_ids'] = 0;
-            $topicPostData['enabled'] = 1;
+            $topicPostData['enabled']   = 1;
+            $this->_helperData->handleSeoValueBeforeSave($topicPostData);
 
             $topic->addData($topicPostData);
 
@@ -119,16 +129,16 @@ class Save extends Topic
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             }
 
-            $hasError = (bool)$this->messageManager->getMessages()->getCountByType(
+            $hasError = (bool) $this->messageManager->getMessages()->getCountByType(
                 MessageInterface::TYPE_ERROR
             );
 
             $topic->load($topic->getId());
             $topic->addData([
-                'level' => 1,
+                'level'     => 1,
                 'entity_id' => $topic->getId(),
                 'is_active' => $topic->getEnabled(),
-                'parent' => 0
+                'parent'    => 0
             ]);
 
             // to obtain truncated category name
@@ -142,7 +152,7 @@ class Save extends Topic
             return $resultJson->setData(
                 [
                     'messages' => $block->getGroupedHtml(),
-                    'error' => $hasError,
+                    'error'    => $hasError,
                     'category' => $topic->toArray(),
                 ]
             );
@@ -152,6 +162,8 @@ class Save extends Topic
         if ($data = $this->getRequest()->getPost('topic')) {
             /** @var \Mageplaza\Blog\Model\Topic $topic */
             $topic = $this->initTopic();
+            $this->_helperData->handleSeoValueBeforeSave($data);
+
             $topic->setData($data);
 
             if ($posts = $this->getRequest()->getPost('posts', false)) {

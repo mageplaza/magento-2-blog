@@ -80,7 +80,7 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
         parent::_prepareLayout();
 
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
-            $category = $this->getBlogObject();
+            $category     = $this->getBlogObject();
             $categoryName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $category->getName());
             if ($category) {
                 $breadcrumbs->addCrumb($category->getUrlKey(), [
@@ -92,9 +92,10 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
-     * @param bool $meta
+     * @param $meta
      *
      * @return array|Phrase|string
+     * @throws NoSuchEntityException
      */
     public function getBlogTitle($meta = false)
     {
@@ -105,10 +106,10 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
         }
 
         if ($meta) {
-            if ($category->getMetaTitle()) {
-                array_push($blogTitle, $category->getMetaTitle());
+            if ($this->helperData->getMetaTitleByStoreId($category->getMetaTitle())) {
+                $blogTitle[] = $this->helperData->getMetaTitleByStoreId($category->getMetaTitle());
             } else {
-                array_push($blogTitle, ucfirst($category->getName()));
+                $blogTitle[] = ucfirst($category->getName());
             }
 
             return $blogTitle;

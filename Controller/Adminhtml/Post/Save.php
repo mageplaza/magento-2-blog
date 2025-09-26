@@ -295,6 +295,7 @@ class Save extends Post
             $data['created_at'] = $this->date->date();
         }
         $data['updated_at'] = $this->date->date();
+        $this->_helperData->handleSeoValueBeforeSave($data);
 
         $post->addData($data);
 
