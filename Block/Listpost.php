@@ -245,6 +245,6 @@ class Listpost extends Frontend
 
         $robots = json_decode($robots, true);
 
-        return $robots[$storeId];
+        return $robots[$storeId] ?? ($robots[0] ?? null);
     }
 }
