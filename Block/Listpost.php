@@ -227,7 +227,11 @@ class Listpost extends Frontend
             return null;
         }
 
-        $decoded = json_decode($jsonValue, true) ?: [];
+        $decoded = json_decode($jsonValue, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
+            $decoded = ['0' => $jsonValue];
+        }
+
         return $decoded[$storeId] ?? $decoded[0] ?? null;
     }
 
@@ -244,6 +248,9 @@ class Listpost extends Frontend
         }
 
         $robots = json_decode($robots, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($robots)) {
+            $robots = ['0' => $robots];
+        }
 
         return $robots[$storeId] ?? ($robots[0] ?? null);
     }
