@@ -813,7 +813,7 @@ class Data extends CoreHelper
 
         $storeId = $this->storeManager->getStore()->getId();
         $decoded   = json_decode($title, true);
-        if (json_last_error() !== JSON_ERROR_NONE || !is_array($title)) {
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
             $decoded = ['0' => $title];
         }
 
