@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Block\Tag;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Phrase;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 use Mageplaza\Blog\Model\TagFactory;
@@ -93,9 +94,10 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
-     * @param bool $meta
+     * @param $meta
      *
-     * @return array
+     * @return array|Phrase|string
+     * @throws NoSuchEntityException
      */
     public function getBlogTitle($meta = false)
     {
@@ -106,10 +108,10 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
         }
 
         if ($meta) {
-            if ($tag->getMetaTitle()) {
-                array_push($blogTitle, $tag->getMetaTitle());
+            if ($this->helperData->getMetaTitleByStoreId($tag->getMetaTitle())) {
+                $blogTitle[] = $this->helperData->getMetaTitleByStoreId($tag->getMetaTitle());
             } else {
-                array_push($blogTitle, ucfirst($tag->getName()));
+                $blogTitle[] = ucfirst($tag->getName());
             }
 
             return $blogTitle;

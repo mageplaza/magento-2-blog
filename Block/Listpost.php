@@ -160,14 +160,14 @@ class Listpost extends Frontend
 
         $object      = $this->getBlogObject();
         $storeId     = $this->store->getStore()->getId();
-        $description = $object ? $object->getMetaDescription() : $this->helperData->getBlogConfig('seo/meta_description', $storeId);
-        $this->pageConfig->setDescription($description);
+        $description = $object ? $this->getMetaFieldByStoreId($object->getMetaDescription(), $storeId) : null;
+        $this->pageConfig->setDescription($description ?: $this->helperData->getBlogConfig('seo/meta_description', $storeId));
 
-        $keywords = $object ? $object->getMetaKeywords() : $this->helperData->getBlogConfig('seo/meta_keywords', $storeId);
-        $this->pageConfig->setKeywords($keywords);
+        $keywords = $object ? $this->getMetaFieldByStoreId($object->getMetaKeywords(), $storeId) : null;
+        $this->pageConfig->setKeywords($keywords ?: $this->helperData->getBlogConfig('seo/meta_keywords', $storeId));
 
-        $robots = $object ? $object->getMetaRobots() : $this->helperData->getBlogConfig('seo/meta_robots', $storeId);
-        $this->pageConfig->setRobots($robots);
+        $robots = $object ? $this->getMetaRobotsByStoreId($object->getMetaRobots(), $storeId) : null;
+        $this->pageConfig->setRobots($robots ?: $this->helperData->getBlogConfig('seo/meta_robots', $storeId));
 
         $url = $object ? $object->getUrl() : $this->helperData->getBlogConfig('seo/url_key', $storeId);
 
@@ -213,5 +213,45 @@ class Listpost extends Frontend
         }
 
         return $pageTitle;
+    }
+
+    /**
+     * @param string|null $jsonValue
+     * @param int $storeId
+     *
+     * @return string|null
+     */
+    protected function getMetaFieldByStoreId(?string $jsonValue, int $storeId): ?string
+    {
+        if (empty($jsonValue)) {
+            return null;
+        }
+
+        $decoded = json_decode($jsonValue, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
+            $decoded = ['0' => $jsonValue];
+        }
+
+        return $decoded[$storeId] ?? $decoded[0] ?? null;
+    }
+
+    /**
+     * @param $robots
+     * @param $storeId
+     *
+     * @return mixed
+     */
+    protected function getMetaRobotsByStoreId($robots, $storeId)
+    {
+        if (empty($robots)) {
+            return null;
+        }
+
+        $robots = json_decode($robots, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($robots)) {
+            $robots = ['0' => $robots];
+        }
+
+        return $robots[$storeId] ?? ($robots[0] ?? null);
     }
 }

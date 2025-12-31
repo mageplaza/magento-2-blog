@@ -39,6 +39,7 @@ use Mageplaza\Blog\Controller\Adminhtml\Tag;
 use Mageplaza\Blog\Model\TagFactory;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class Save
@@ -66,6 +67,11 @@ class Save extends Tag
     public $resultJsonFactory;
 
     /**
+     * @var Data
+     */
+    public $_helperData;
+
+    /**
      * Save constructor.
      *
      * @param Context $context
@@ -74,6 +80,7 @@ class Save extends Tag
      * @param LayoutFactory $layoutFactory
      * @param JsonFactory $resultJsonFactory
      * @param TagFactory $tagFactory
+     * @param Data $helperData
      */
     public function __construct(
         Context $context,
@@ -81,11 +88,13 @@ class Save extends Tag
         Js $jsHelper,
         LayoutFactory $layoutFactory,
         JsonFactory $resultJsonFactory,
-        TagFactory $tagFactory
+        TagFactory $tagFactory,
+        Data $helperData
     ) {
-        $this->jsHelper = $jsHelper;
-        $this->layoutFactory = $layoutFactory;
+        $this->jsHelper          = $jsHelper;
+        $this->layoutFactory     = $layoutFactory;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->_helperData       = $helperData;
 
         parent::__construct($context, $registry, $tagFactory);
     }
@@ -96,10 +105,11 @@ class Save extends Tag
     public function execute()
     {
         if ($this->getRequest()->getPost('return_session_messages_only')) {
-            $tag = $this->initTag();
-            $tagPostData = $this->getRequest()->getPostValue();
+            $tag                      = $this->initTag();
+            $tagPostData              = $this->getRequest()->getPostValue();
             $tagPostData['store_ids'] = 0;
-            $tagPostData['enabled'] = 1;
+            $tagPostData['enabled']   = 1;
+            $this->_helperData->handleSeoValueBeforeSave($tagPostData);
 
             $tag->addData($tagPostData);
 
@@ -117,16 +127,16 @@ class Save extends Tag
                 $this->_objectManager->get(LoggerInterface::class)->critical($e);
             }
 
-            $hasError = (bool)$this->messageManager->getMessages()->getCountByType(
+            $hasError = (bool) $this->messageManager->getMessages()->getCountByType(
                 MessageInterface::TYPE_ERROR
             );
 
             $tag->load($tag->getId());
             $tag->addData([
-                'level' => 1,
+                'level'     => 1,
                 'entity_id' => $tag->getId(),
                 'is_active' => $tag->getEnabled(),
-                'parent' => 0
+                'parent'    => 0
             ]);
 
             // to obtain truncated category name
@@ -139,7 +149,7 @@ class Save extends Tag
 
             return $resultJson->setData([
                 'messages' => $block->getGroupedHtml(),
-                'error' => $hasError,
+                'error'    => $hasError,
                 'category' => $tag->toArray(),
             ]);
         }
@@ -148,6 +158,7 @@ class Save extends Tag
         if ($data = $this->getRequest()->getPost('tag')) {
             /** @var \Mageplaza\Blog\Model\Tag $tag */
             $tag = $this->initTag();
+            $this->_helperData->handleSeoValueBeforeSave($data);
 
             $tag->addData($data);
             if ($posts = $this->getRequest()->getPost('posts', false)) {
