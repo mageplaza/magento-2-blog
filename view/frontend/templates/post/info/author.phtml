@@ -36,17 +36,21 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
 <?php if ($authorName && $helper->showAuthorInfo()) : ?>
     |
     <span><i class="fa fa-user">&nbsp;</i>
-                            <?= $escaper->escapeHtml(__(
-                                'By: %1',
-                                '<a class="mp-info" href="' . $author->getUrl() . '">' . $authorName . '</a>'
-                            )) ?></span>
+        <?= /* @noEscape */ __(
+            'By: <a class="mp-info" href="%1">%2</a>',
+            $escaper->escapeUrl($author->getUrl()),
+            $authorName
+        ) ?>
+    </span>
     <?php if ($authorName != $modifierName && $modifierName) : ?>
         |
         <span><i class="fa fa-edit">&nbsp;</i>
-                                <?= $escaper->escapeHtml(__(
-                                    'Modify By: %1 at %2',
-                                    '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>',
-                                    $block->getDateFormat($_post->getUpdatedAt())
-                                )) ?></span>
+            <?= /* @noEscape */ __(
+                'Modify By: <a class="mp-info" href="%1">%2</a> at %3',
+                $escaper->escapeUrl($modifier->getUrl()),
+                $modifierName,
+                $block->getDateFormat($_post->getUpdatedAt())
+            ) ?>
+        </span>
     <?php endif; ?>
 <?php endif; ?>
