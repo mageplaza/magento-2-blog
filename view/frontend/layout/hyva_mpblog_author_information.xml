@@ -23,6 +23,10 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="mpblog_author"/>
 
+    <head>
+        <script src="Mageplaza_Blog::js/ckeditor.js" />
+    </head>
+
     <body>
         <referenceBlock name="blog_edit_form" >
             <action method="setTemplate" >

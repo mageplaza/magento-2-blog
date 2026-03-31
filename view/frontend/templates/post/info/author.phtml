@@ -36,10 +36,10 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
 <?php if ($authorName && $helper->showAuthorInfo()) : ?>
     |
     <span><i class="fa fa-user">&nbsp;</i>
-                            <?= $escaper->escapeHtml(__(
+                            <?= /* @noEscape */ __(
                                 'By: %1',
-                                '<a class="mp-info" href="' . $author->getUrl() . '">' . $authorName . '</a>'
-                            )) ?></span>
+                                '<a class="mp-info" href="' . $escaper->escapeUrl($author->getUrl()) . '">' . $escaper->escapeHtml($authorName) . '</a>'
+                            ) ?></span>
     <?php if ($authorName != $modifierName && $modifierName) : ?>
         |
         <span><i class="fa fa-edit">&nbsp;</i>

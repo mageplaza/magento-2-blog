@@ -24,6 +24,10 @@
     <update handle="mpblog_signup"/>
     <update handle="hyva_form_validation"/>
 
+    <head>
+        <script src="Mageplaza_Blog::js/ckeditor.js" />
+    </head>
+
     <body>
         <referenceBlock name="blog_signup_form" >
             <action method="setTemplate" >
