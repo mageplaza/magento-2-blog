@@ -125,13 +125,13 @@ $postCollection = $block->getPostCollection();
             "*": {
                 "Mageplaza_Blog/js/managePost": {
                     "deleteUrl": "<?= $escaper->escapeHtml($block->getUrl('mpblog/post/deletepost')) ?>",
-                        "basePubUrl": "<?= $escaper->escapeHtml($block->getBaseMediaUrl()) ?>",
-                        "postDatas": <?= $escaper->escapeHtml($block->getPostDatas($postCollection)) ?>,
-                        "editorVersion": "<?= $escaper->escapeHtml($block->getVersion()) ?>",
-                        "magentoVersion": "<?= $escaper->escapeHtml($block->getMagentoVersion()) ?>"
-                    }
+                    "basePubUrl": "<?= $escaper->escapeHtml($block->getBaseMediaUrl()) ?>",
+                    "postDatas": <?= /* @noEscape */ $block->getPostDatas($postCollection) ?>,
+                    "editorVersion": "<?= $escaper->escapeJs($block->getVersion()) ?>",
+                    "magentoVersion": "<?= $escaper->escapeJs($block->getMagentoVersion()) ?>"
                 }
             }
+        }
     </script>
     <script>
         require(['jquery'], function ($) {

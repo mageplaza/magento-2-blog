@@ -43,10 +43,10 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
     <?php if ($authorName != $modifierName && $modifierName) : ?>
         |
         <span><i class="fa fa-edit">&nbsp;</i>
-                                <?= $escaper->escapeHtml(__(
+                                <?= /* @noEscape */ __(
                                     'Modify By: %1 at %2',
                                     '<a class="mp-info" href="' . $modifier->getUrl() . '">' . $modifierName . '</a>',
                                     $block->getDateFormat($_post->getUpdatedAt())
-                                )) ?></span>
+                                ) ?></span>
     <?php endif; ?>
 <?php endif; ?>
