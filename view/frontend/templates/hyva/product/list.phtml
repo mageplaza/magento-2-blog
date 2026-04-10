@@ -153,13 +153,6 @@ $_helper            = $block->getHelper();
                     </div>
                 <?php endforeach; ?>
             </div>
-            <style>
-                .page-products .product-item-info {
-                    width: 220px;
-                    padding: 20px;
-                }
-
-            </style>
         <?php else : ?>
             <div class="">
                 <?php /** @var $_product Product */ ?>
@@ -280,6 +273,9 @@ $_helper            = $block->getHelper();
                         breakpoints: {
                             1028: {
                                 perPage: 2
+                            },
+                            768: {
+                                perPage: 1
                             }
                         }
                     }).mount();
@@ -307,6 +303,14 @@ $_helper            = $block->getHelper();
         margin: 10px 0 25px;
     }
 
+    .product-item-photo img {
+        max-width: 100%;
+        max-height: 260px;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        display: block;
+    }
 
     .item.product.product-item.mp-blog-slider-item {
         width: 85%;
@@ -326,10 +330,10 @@ $_helper            = $block->getHelper();
     }
 
     .product-item-info:hover .btn.btn-primary {
-        display: block;
+        display: inline-block;
     }
 
-    .btn.btn-primary {
+    .products-same-post .btn.btn-primary {
         display: none;
     }
 
