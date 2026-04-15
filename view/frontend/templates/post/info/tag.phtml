@@ -29,5 +29,5 @@ use Magento\Framework\Escaper;
 $_post = $block->getPost();
 ?>
 <?php if ($tagList = $block->getTagList($_post)) : ?>
-    | <span><i class="fa fa-tags"></i><?= __('Tags: %1', $tagList); ?></span>
+    | <span><i class="fa fa-tags"></i><?= /* @noEscape  */ __('Tags: %1', $tagList); ?></span>
 <?php endif; ?>
