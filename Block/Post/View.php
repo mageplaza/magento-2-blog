@@ -329,7 +329,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
         if (!empty($tagCollection)) {
             $listTags = [];
             foreach ($tagCollection as $tag) {
-                $listTags[] = '<a class="mp-info" href="' . $this->getTagUrl($tag) . '">' . $tag->getName() . '</a>';
+                $listTags[] = '<a class="mp-info" href="' . $this->escapeUrl($this->getTagUrl($tag)) . '">' . $this->escapeHtml($tag->getName()) . '</a>';
             }
             $result = implode(', ', $listTags);
         }
