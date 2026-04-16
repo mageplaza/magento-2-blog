@@ -245,7 +245,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
     {
         $html = '';
         foreach (explode("\n", trim($comment)) as $value) {
-            $html .= '<p>' . $this->escapeHtml($value) . '</p>';
+            $html .= '<p>' . $this->_escaper->escapeHtml($value) . '</p>';
         }
 
         return $html;
@@ -329,7 +329,9 @@ class View extends \Mageplaza\Blog\Block\Listpost
         if (!empty($tagCollection)) {
             $listTags = [];
             foreach ($tagCollection as $tag) {
-                $listTags[] = '<a class="mp-info" href="' . $this->getTagUrl($tag) . '">' . $tag->getName() . '</a>';
+                $url  = $this->_escaper->escapeUrl($this->getTagUrl($tag));
+                $name = $this->_escaper->escapeHtml($tag->getName());
+                $listTags[] = '<a class="mp-info" href="' . $url . '">' . $name . '</a>';
             }
             $result = implode(', ', $listTags);
         }

@@ -162,15 +162,15 @@ HTML
         $block->getChildHtml('additional') ?>
     </div>
 
-
+ad
     <script>
         let pubUrl = "<?= $escaper->escapeHtml($block->getBaseMediaUrl()) ?>";
         let title  = document.querySelector('#popup_author_post');
-        let name              = document.querySelector('#name');
-        let post_id           = document.querySelector('#post_id');
-        let short_description = document.querySelector('#short_description');
-        let allow_comment     = document.querySelector('#allow_comment');
-        let publish_date      = document.querySelector('#publish_date');
+        let nameEle              = document.querySelector('#name');
+        let postIdEle           = document.querySelector('#post_id');
+        let shortDescriptionEle = document.querySelector('#short_description');
+        let allowCommentEle     = document.querySelector('#allow_comment');
+        let publishDateEle      = document.querySelector('#publish_date');
 
         function handleDelete (element) {
             var postId = element.closest('.post-info-action').getAttribute('data-postId');
@@ -208,12 +208,12 @@ HTML
             resetFormModal();
             let listData           = <?php echo /** @noEscape */ json_decode($jsonData) ?>;
             let dataSelect          = listData[post_id];
-            name.value              = dataSelect?.name;
-            post_id.value           = dataSelect?.post_id;
-            short_description.value = dataSelect?.short_description;
+            nameEle.value              = dataSelect?.name;
+            postIdEle.value           = dataSelect?.post_id;
+            shortDescriptionEle.value = dataSelect?.short_description;
             editor.setData(dataSelect?.post_content ?? "");
-            allow_comment.value = dataSelect?.allow_comment;
-            publish_date.value  = convertDateToDisplay(dataSelect?.publish_date);
+            allowCommentEle.value = dataSelect?.allow_comment;
+            publishDateEle.value  = convertDateToDisplay(dataSelect?.publish_date);
             treeselectCategories.updateValue(dataSelect?.category_ids);
 
             treeselectTags.updateValue(dataSelect?.tag_ids);
@@ -228,11 +228,11 @@ HTML
             resetFormModal();
             let listData           = <?php echo /** @noEscape */ json_decode($jsonData) ?>;
             let dataSelect          = listData[post_id];
-            name.value              = dataSelect?.name;
-            short_description.value = dataSelect?.short_description;
+            nameEle.value              = dataSelect?.name;
+            shortDescriptionEle.value = dataSelect?.short_description;
             editor.setData(dataSelect?.post_content ?? "");
-            allow_comment.value = dataSelect?.allow_comment;
-            publish_date.value  = convertDateToDisplay(dataSelect?.publish_date);
+            allowCommentEle.value = dataSelect?.allow_comment;
+            publishDateEle.value  = convertDateToDisplay(dataSelect?.publish_date);
             treeselectCategories.updateValue(dataSelect?.category_ids);
             treeselectTags.updateValue(dataSelect?.tag_ids);
             treeselectTopics.updateValue(dataSelect?.topic_ids);
@@ -242,12 +242,12 @@ HTML
         }
         // reset data when hide modal
         function resetFormModal () {
-            name.value              = '';
-            post_id.value           = '';
-            short_description.value = '';
+            nameEle.value              = '';
+            postIdEle.value           = '';
+            shortDescriptionEle.value = '';
             editor.setData("");
-            allow_comment.value = 0;
-            publish_date.value  = '';
+            allowCommentEle.value = 0;
+            publishDateEle.value  = '';
             treeselectCategories.updateValue([]);
             treeselectTags.updateValue([]);
             treeselectTopics.updateValue([]);
@@ -310,13 +310,12 @@ HTML
         // convert date in modal
         function convertDateToSave (publicDateValue) {
             var inputDate     = new Date(publicDateValue);
-            var formattedDate = ("0" + (inputDate.getMonth() + 1)).slice(-2) + '/' +
+            return ("0" + (inputDate.getMonth() + 1)).slice(-2) + '/' +
                 ("0" + inputDate.getDate()).slice(-2) + '/' +
                 inputDate.getFullYear() + ' ' +
                 ("0" + inputDate.getHours()).slice(-2) + ':' +
                 ("0" + inputDate.getMinutes()).slice(-2) + ':' +
-                ("0" + inputDate.getSeconds()).slice(-2);
-            return formattedDate
+                ("0" + inputDate.getSeconds()).slice(-2)
         }
 
         function convertDateToDisplay (dateString) {
@@ -326,8 +325,7 @@ HTML
             var day               = ('0' + currentDate.getDate()).slice(-2);
             var hours             = ('0' + currentDate.getHours()).slice(-2);
             var minutes           = ('0' + currentDate.getMinutes()).slice(-2);
-            var formattedDateTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
-            return formattedDateTime;
+            return year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
         }
 
 

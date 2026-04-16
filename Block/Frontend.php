@@ -42,6 +42,7 @@ use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\Config\Source\AuthorStatus;
+use Mageplaza\Blog\Model\Config\Source\Comments\Status;
 use Mageplaza\Blog\Model\LikeFactory;
 use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\PostFactory;
@@ -337,7 +338,9 @@ class Frontend extends Template
      */
     public function getCommentinPost($post)
     {
-        $cmt = $this->cmtFactory->create()->getCollection()->addFieldToFilter('post_id', $post->getId());
+        $cmt = $this->cmtFactory->create()->getCollection()
+            ->addFieldToFilter('post_id', $post->getId())
+            ->addFieldToFilter('status', Status::APPROVED);
 
         return $cmt->count();
     }

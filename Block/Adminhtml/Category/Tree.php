@@ -82,8 +82,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
             $data
         );
 
-        $this->_categoryTree = $blogCategoryTree;
-        $this->_categoryFactory = $blogCategoryFactory;
+        $this->_categoryTree     = $blogCategoryTree;
+        $this->_categoryFactory  = $blogCategoryFactory;
         $this->_withProductCount = false;
     }
 
@@ -186,15 +186,56 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         $node->setIsActive(true);
 
         if ($item = parent::_getNodeJson($node, $level)) {
-            $item['url'] = $node->getData('url_key');
-            $item['storeIds'] = $node->getData('store_ids');
+            $item['url']       = $node->getData('url_key');
+            $item['storeIds']  = $node->getData('store_ids');
             $item['allowDrag'] = $this->_isCategoryMoveable($node) && ($node->getLevel() == 0 ? false : true);
-            $item['enabled'] = $node->getData('enabled');
+            $item['enabled']   = $node->getData('enabled');
 
             return $item;
         }
 
         return null;
+    }
+
+    /**
+     * Blog categories use a single global root, so store root ids must not be applied.
+     *
+     * @param null|DataObject $parentNodeCategory
+     * @param int $recursionLevel
+     *
+     * @return Node|array|null
+     */
+    public function getRoot($parentNodeCategory = null, $recursionLevel = 3)
+    {
+        if ($parentNodeCategory !== null && $parentNodeCategory->getId()) {
+            return $this->getNode($parentNodeCategory, $recursionLevel);
+        }
+
+        $root = $this->_coreRegistry->registry('root');
+        if ($root === null) {
+            $rootId   = Category::TREE_ROOT_ID;
+            $tree     = $this->_categoryTree->load(null, $recursionLevel);
+            $rootNode = $tree->getNodeById($rootId);
+
+            // Guard against invalid roots to avoid null access in loadEnsuredNodes.
+            if ($this->getCategory() && $rootNode) {
+                $tree->loadEnsuredNodes($this->getCategory(), $rootNode);
+            }
+
+            $tree->addCollectionData($this->getCategoryCollection());
+            $root = $rootNode;
+
+            if ($root) {
+                $root->setIsVisible(true);
+                if ($root->getId() == Category::TREE_ROOT_ID) {
+                    $root->setName(__('Root'));
+                }
+            }
+
+            $this->_coreRegistry->register('root', $root);
+        }
+
+        return $root;
     }
 
     /**

@@ -185,7 +185,7 @@ class Category extends AbstractDb
     protected function _afterSave(AbstractModel $object)
     {
         /** @var CategoryModel $object */
-        if (substr($object->getPath(), -1) === '/') {
+        if (str_ends_with($object->getPath(), '/')) {
             $object->setPath($object->getPath() . $object->getId());
             $this->savePath($object);
         }
