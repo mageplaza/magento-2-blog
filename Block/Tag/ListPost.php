@@ -29,10 +29,10 @@ use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 use Mageplaza\Blog\Model\TagFactory;
 
 /**
- * Class Listpost
+ * Class ListPost
  * @package Mageplaza\Blog\Block\Tag
  */
-class Listpost extends \Mageplaza\Blog\Block\Listpost
+class ListPost extends \Mageplaza\Blog\Block\ListPost
 {
     /**
      * @var TagFactory

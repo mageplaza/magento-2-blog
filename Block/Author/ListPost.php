@@ -26,10 +26,10 @@ use Mageplaza\Blog\Model\AuthorFactory;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
- * Class Listpost
+ * Class ListPost
  * @package Mageplaza\Blog\Block\Author
  */
-class Listpost extends \Mageplaza\Blog\Block\Listpost
+class ListPost extends \Mageplaza\Blog\Block\ListPost
 {
     /**
      * @var AuthorFactory

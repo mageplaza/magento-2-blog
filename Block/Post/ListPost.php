@@ -22,9 +22,9 @@
 namespace Mageplaza\Blog\Block\Post;
 
 /**
- * Class Listpost
+ * Class ListPost
  * @package Mageplaza\Blog\Block\Post
  */
-class Listpost extends \Mageplaza\Blog\Block\Listpost
+class ListPost extends \Mageplaza\Blog\Block\ListPost
 {
 }

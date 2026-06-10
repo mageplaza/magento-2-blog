@@ -31,10 +31,10 @@ use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
- * Class Listpost
+ * Class ListPost
  * @package Mageplaza\Blog\Block\Post
  */
-class Listpost extends Frontend implements IdentityInterface
+class ListPost extends Frontend implements IdentityInterface
 {
     /**
      * @return Collection
@@ -113,7 +113,7 @@ class Listpost extends Frontend implements IdentityInterface
     }
 
     /**
-     * @return Listpost
+     * @return ListPost
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */

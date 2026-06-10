@@ -36,7 +36,7 @@ use Mageplaza\Blog\Model\PostLike;
  * @method Post getPost()
  * @method void setPost($post)
  */
-class View extends \Mageplaza\Blog\Block\Listpost
+class View extends \Mageplaza\Blog\Block\ListPost
 {
     /**
      * config logo blog path

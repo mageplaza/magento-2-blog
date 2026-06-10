@@ -19,36 +19,35 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-namespace Mageplaza\Blog\Block\Topic;
+namespace Mageplaza\Blog\Block\Category;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
-use Mageplaza\Blog\Model\TopicFactory;
 
 /**
- * Class Listpost
- * @package Mageplaza\Blog\Block\Topic
+ * Class ListPost
+ * @package Mageplaza\Blog\Block\Category
  */
-class Listpost extends \Mageplaza\Blog\Block\Listpost
+class ListPost extends \Mageplaza\Blog\Block\ListPost
 {
     /**
-     * @var TopicFactory
+     * @var string
      */
-    protected $_topic;
+    protected $_category;
 
     /**
      * Override this function to apply collection for each type
      *
-     * @return Collection
+     * @return Collection|null
      * @throws NoSuchEntityException
      */
     protected function getCollection()
     {
-        if ($topic = $this->getBlogObject()) {
-            return $this->helperData->getPostCollection(Data::TYPE_TOPIC, $topic->getId());
+        if ($category = $this->getBlogObject()) {
+            return $this->helperData->getPostCollection(Data::TYPE_CATEGORY, $category->getId());
         }
 
         return null;
@@ -59,18 +58,17 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
      */
     protected function getBlogObject()
     {
-        if (!$this->_topic) {
+        if (!$this->_category) {
             $id = $this->getRequest()->getParam('id');
-
             if ($id) {
-                $topic = $this->helperData->getObjectByParam($id, null, Data::TYPE_TOPIC);
-                if ($topic && $topic->getId()) {
-                    $this->_topic = $topic;
+                $category = $this->helperData->getObjectByParam($id, null, Data::TYPE_CATEGORY);
+                if ($category && $category->getId()) {
+                    $this->_category = $category;
                 }
             }
         }
 
-        return $this->_topic;
+        return $this->_category;
     }
 
     /**
@@ -82,12 +80,12 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
         parent::_prepareLayout();
 
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
-            $topic     = $this->getBlogObject();
-            $topicName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $topic->getName());
-            if ($topic) {
-                $breadcrumbs->addCrumb($topic->getUrlKey(), [
-                    'label' => __($topicName),
-                    'title' => __($topicName)
+            $category     = $this->getBlogObject();
+            $categoryName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $category->getName());
+            if ($category) {
+                $breadcrumbs->addCrumb($category->getUrlKey(), [
+                    'label' => __($categoryName),
+                    'title' => __($categoryName)
                 ]);
             }
         }
@@ -102,21 +100,21 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     public function getBlogTitle($meta = false)
     {
         $blogTitle = parent::getBlogTitle($meta);
-        $topic     = $this->getBlogObject();
-        if (!$topic) {
+        $category  = $this->getBlogObject();
+        if (!$category) {
             return $blogTitle;
         }
 
         if ($meta) {
-            if ($this->helperData->getMetaTitleByStoreId($topic->getMetaTitle())) {
-                $blogTitle[] = $this->helperData->getMetaTitleByStoreId($topic->getMetaTitle());
+            if ($this->helperData->getMetaTitleByStoreId($category->getMetaTitle())) {
+                $blogTitle[] = $this->helperData->getMetaTitleByStoreId($category->getMetaTitle());
             } else {
-                $blogTitle[] = ucfirst($topic->getName());
+                $blogTitle[] = ucfirst($category->getName());
             }
 
             return $blogTitle;
         }
 
-        return ucfirst($topic->getName());
+        return ucfirst($category->getName());
     }
 }

@@ -26,10 +26,10 @@ use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
- * Class Listpost
+ * Class ListPost
  * @package Mageplaza\Blog\Block\MonthlyArchive
  */
-class Listpost extends \Mageplaza\Blog\Block\Listpost
+class ListPost extends \Mageplaza\Blog\Block\ListPost
 {
     /**
      * @return Collection|null

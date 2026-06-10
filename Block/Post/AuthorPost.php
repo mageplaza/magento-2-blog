@@ -34,7 +34,7 @@ use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
  * Class AuthorPost
  * @package Mageplaza\Blog\Block\Post
  */
-class AuthorPost extends \Mageplaza\Blog\Block\Listpost
+class AuthorPost extends \Mageplaza\Blog\Block\ListPost
 {
     /**
      * @return AbstractCollection|Collection|null
