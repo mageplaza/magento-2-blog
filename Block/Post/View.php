@@ -424,4 +424,20 @@ class View extends \Mageplaza\Blog\Block\Listpost
 
         return $messagesBlock->toHtml();
     }
+
+    /**
+     * Tag the detail page with only the current post so editing one post does not
+     * bust every other post's cached page (overrides the list-based parent tags).
+     *
+     * @return string[]
+     */
+    public function getIdentities()
+    {
+        $post = $this->getPost();
+        if ($post && $post->getId()) {
+            return [Post::CACHE_TAG . '_' . $post->getId()];
+        }
+
+        return [];
+    }
 }

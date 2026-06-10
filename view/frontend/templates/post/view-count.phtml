@@ -1,0 +1,53 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+use Mageplaza\Blog\Block\Post\View;
+
+/** @var View $block */
+$_post  = $block->getPost();
+$postId = $_post ? (int) $_post->getId() : 0;
+?>
+<?php if ($postId): ?>
+<script>
+    (function () {
+        // Vanilla fetch so it runs on both Luma and Hyva without jQuery/Alpine.
+        var postId = <?= /* @noEscape */ $postId ?>;
+        var url = <?= /* @noEscape */ json_encode($block->getUrl('mpblog/post/updateview')) ?>;
+
+        function sendView() {
+            var data = new FormData();
+            data.append('post_id', postId);
+            fetch(url, {
+                method: 'POST',
+                body: data,
+                credentials: 'same-origin',
+                keepalive: true
+            }).catch(function () {});
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', sendView);
+        } else {
+            sendView();
+        }
+    })();
+</script>
+<?php endif; ?>

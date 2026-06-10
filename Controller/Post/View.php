@@ -46,7 +46,6 @@ use Mageplaza\Blog\Model\Config\Source\Comments\Status;
 use Mageplaza\Blog\Model\Like;
 use Mageplaza\Blog\Model\LikeFactory;
 use Mageplaza\Blog\Model\PostFactory;
-use Mageplaza\Blog\Model\TrafficFactory;
 
 /**
  * Class View
@@ -56,11 +55,6 @@ class View extends Action
 {
     const COMMENT = 1;
     const LIKE    = 2;
-
-    /**
-     * @var TrafficFactory
-     */
-    protected $trafficFactory;
 
     /**
      * @var PageFactory
@@ -143,7 +137,6 @@ class View extends Action
      * @param AccountManagementInterface $accountManagement
      * @param CustomerUrl $customerUrl
      * @param Session $customerSession
-     * @param TrafficFactory $trafficFactory
      * @param PostFactory $postFactory
      */
     public function __construct(
@@ -160,7 +153,6 @@ class View extends Action
         AccountManagementInterface $accountManagement,
         CustomerUrl $customerUrl,
         Session $customerSession,
-        TrafficFactory $trafficFactory,
         PostFactory $postFactory
     ) {
         $this->storeManager         = $storeManager;
@@ -170,7 +162,6 @@ class View extends Action
         $this->customerUrl          = $customerUrl;
         $this->session              = $customerSession;
         $this->timeZone             = $timezone;
-        $this->trafficFactory       = $trafficFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->jsonHelper           = $jsonHelper;
         $this->cmtFactory           = $commentFactory;
@@ -199,15 +190,8 @@ class View extends Action
             return $this->_redirect('noroute');
         }
 
-        $trafficModel = $this->trafficFactory->create()->load($id, 'post_id');
-        if ($trafficModel->getId()) {
-            $trafficModel->setNumbersView($trafficModel->getNumbersView() + 1);
-            $trafficModel->save();
-        } else {
-            $traffic = $this->trafficFactory->create();
-            $traffic->addData(['post_id' => $id, 'numbers_view' => 1])->save();
-        }
-
+        // View count is incremented via the mpblog/post/updateview AJAX action so this
+        // page can be served from Full Page Cache (this controller runs only on a miss).
         if ($this->getRequest()->isAjax()) {
             $params       = $this->getRequest()->getParams();
             $customerData = $this->session->getCustomerData();

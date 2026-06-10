@@ -324,7 +324,9 @@ class Post extends AbstractModel
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        // Global CACHE_TAG busts list pages (e.g. a newly added post); the per-id
+        // tag busts the specific post's detail page.
+        return [self::CACHE_TAG, self::CACHE_TAG . '_' . $this->getId()];
     }
 
     /**

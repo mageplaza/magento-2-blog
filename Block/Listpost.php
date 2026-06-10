@@ -22,17 +22,19 @@
 namespace Mageplaza\Blog\Block;
 
 use Exception;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Theme\Block\Html\Pager;
 use Mageplaza\Blog\Model\Config\Source\DisplayType;
+use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
  * Class Listpost
  * @package Mageplaza\Blog\Block\Post
  */
-class Listpost extends Frontend
+class Listpost extends Frontend implements IdentityInterface
 {
     /**
      * @return Collection
@@ -253,5 +255,25 @@ class Listpost extends Frontend
         }
 
         return $robots[$storeId] ?? ($robots[0] ?? null);
+    }
+
+    /**
+     * Cache tags so Full Page Cache invalidates list pages when posts change.
+     * The global Post::CACHE_TAG also lets a newly added post bust list pages.
+     *
+     * @return string[]
+     */
+    public function getIdentities()
+    {
+        $identities = [Post::CACHE_TAG];
+
+        $collection = $this->getCollection();
+        if ($collection) {
+            foreach ($collection as $post) {
+                $identities[] = Post::CACHE_TAG . '_' . $post->getId();
+            }
+        }
+
+        return array_unique($identities);
     }
 }
