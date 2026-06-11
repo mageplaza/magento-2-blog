@@ -59,8 +59,10 @@ use Magento\Framework\Escaper;
         var visibleImage = <?= /** @noEscape */ $block->getSidebarConfig('search/show_image') ?>;
 
         $('#mpblog-search-box').autocomplete({
-            lookup: <?= /** @noEscape */ $block->getSearchBlogData() ?>,
-            lookupLimit: <?= $block->getSidebarConfig('search/search_limit') ?: 10; ?>,
+            serviceUrl: '<?= $escaper->escapeUrl($block->getSearchUrl()) ?>',
+            paramName: 'query',
+            type: 'GET',
+            deferRequestBy: 200,
             maxHeight: 2000,
             minChars: <?= $block->getSidebarConfig('search/min_chars') ?: 1; ?>,
             autoSelectFirst: true,

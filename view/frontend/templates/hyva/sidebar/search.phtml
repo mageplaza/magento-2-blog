@@ -62,13 +62,27 @@ use Magento\Framework\Escaper;
         var visibleImage = <?php echo /** @noEscape */   json_encode($block->getSidebarConfig('search/show_image')); ?>;
         var searchBox    = document.getElementById('mpblog-search-box');
         let minChars =  <?= $block->getSidebarConfig('search/min_chars') ?: 1; ?>;
+        var searchUrl   = <?php echo /** @noEscape */ json_encode($block->getSearchUrl()); ?>;
+        var searchTimer = null;
         searchBox.addEventListener('input', function () {
             var searchTerm = searchBox.value;
-            fetchSuggestions(searchTerm);
+            clearTimeout(searchTimer);
+            if (!searchTerm || searchTerm.length < minChars) {
+                updateAutocompleteResults([], searchTerm);
+                return;
+            }
+            searchTimer = setTimeout(function () {
+                fetchSuggestions(searchTerm);
+            }, 250);
         });
 
         function fetchSuggestions (searchTerm) {
-            updateAutocompleteResults(<?php echo /** @noEscape */ ($block->getSearchBlogData()); ?>, searchTerm);
+            fetch(searchUrl + '?query=' + encodeURIComponent(searchTerm), {headers: {'X-Requested-With': 'XMLHttpRequest'}})
+                .then(function (response) { return response.json(); })
+                .then(function (data) {
+                    updateAutocompleteResults((data && data.suggestions) ? data.suggestions : [], searchTerm);
+                })
+                .catch(function () {});
         }
 
         function updateAutocompleteResults (suggestions, searchTerm) {

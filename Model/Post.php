@@ -456,7 +456,9 @@ class Post extends AbstractModel
         if (!$this->hasData('view_traffic')) {
             $traffic = $this->_getResource()->getViewTraffic($this);
 
-            $this->setData('view_traffic', $traffic[0]);
+            // A post may have no traffic row yet (view count is created lazily
+            // via the mpblog/post/updateview AJAX action), so default to 0.
+            $this->setData('view_traffic', $traffic[0] ?? 0);
         }
 
         return $this->_getData('view_traffic');

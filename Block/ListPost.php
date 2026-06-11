@@ -258,22 +258,16 @@ class ListPost extends Frontend implements IdentityInterface
     }
 
     /**
-     * Cache tags so Full Page Cache invalidates list pages when posts change.
-     * The global Post::CACHE_TAG also lets a newly added post bust list pages.
+     * Tag list pages with the global blog-post tag only. Any post save/delete
+     * cleans this tag (via Post::getIdentities) so every list page is busted.
+     * We intentionally do NOT iterate the collection to emit per-post tags:
+     * they are redundant with the global tag and would not scale (a 100k-post
+     * page would load the whole collection and emit a huge X-Magento-Tags header).
      *
      * @return string[]
      */
     public function getIdentities()
     {
-        $identities = [Post::CACHE_TAG];
-
-        $collection = $this->getCollection();
-        if ($collection) {
-            foreach ($collection as $post) {
-                $identities[] = Post::CACHE_TAG . '_' . $post->getId();
-            }
-        }
-
-        return array_unique($identities);
+        return [Post::CACHE_TAG];
     }
 }
