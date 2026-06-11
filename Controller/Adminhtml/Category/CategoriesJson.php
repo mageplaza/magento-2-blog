@@ -83,7 +83,7 @@ class CategoriesJson extends Category
     public function execute()
     {
         $this->_objectManager->get(Session::class)->setIsTreeWasExpanded(
-            (boolean) $this->getRequest()->getParam('expand_all')
+            (bool) $this->getRequest()->getParam('expand_all')
         );
 
         $resultJson = $this->resultJsonFactory->create();
