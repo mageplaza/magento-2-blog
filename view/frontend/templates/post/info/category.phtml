@@ -19,18 +19,18 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Mageplaza\Blog\Block\Post\View;
-use Mageplaza\Blog\Helper\Image;
-use Mageplaza\Blog\Model\Config\Source\Comments\Type;
-use Magento\Framework\Escaper;
 
 /** @var View $block */
-/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 $_post = $block->getPost();
 ?>
 <?php if ($categoryHtml = $block->getPostCategoryHtml($_post)) : ?>
-    |
-    <span><i class="fa fa-folder-open-o">&nbsp;</i>
-        <?= /* @noEscape */ (__('Categories: %1', $categoryHtml)); ?>
+    <span class="blog-meta__item">
+        <?= $heroicons->folderHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+        <?= /** @noEscape */ $categoryHtml ?>
     </span>
 <?php endif; ?>
