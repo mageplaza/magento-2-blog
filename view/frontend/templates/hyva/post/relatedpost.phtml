@@ -18,99 +18,81 @@
  * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Mageplaza\Blog\Block\Post\RelatedPost;
-use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 use Magento\Framework\Escaper;
 
-/** @var Collection $posts */
 /** @var RelatedPost $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
 $posts = $block->getRelatedPostList();
-if ($posts && $block->isEnabledBlog()) : ?>
-    <h2 class="text-xl"><?= $posts->getSize() ? $escaper->escapeHtml(__('Related Posts')) : $escaper->escapeHtml(__('No Related Posts')) ?></h2>
-    <?php if ($block->getRelatedMode()) : ?>
-        <div class="mp-blog-owl-carousel ">
-            <section id="relatedposts-carousel" class="splide" aria-label="Related Posts">
-                <div class="splide__track">
-                    <ul class="splide__list">
-                        <?php foreach ($posts as $post) : ?>
-                            <li class="splide__slide">
-                                <div class="item post-list-item col-mp post-item-list mp-4">
-                                    <div class="post-item-wraper">
-                                        <div class="post-info-wraper">
-                                            <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
-                                                <img class="img-responsive"
-                                                     src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(),
-                                                         '400x')) ?>"
-                                                     alt="<?= $escaper->escapeHtml($post->getName()); ?>"/>
-                                            </a>
-                                            <h2 class="mp-post-title" style="margin: 20px 0;">
-                                                <a class="post-link-title"
-                                                   title="<?= $escaper->escapeHtml($post->getName()); ?>"
-                                                   href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
-                                                    <?= $escaper->escapeHtml($post->getName()) ?>
-                                                </a>
-                                            </h2>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            </section>
+
+// getRelatedMode() returns true for SLIDER (blog/post_view_page/related_mode === 1) — Block/Post/View.php:71
+$isSlider = (bool) $block->getRelatedMode();
+
+$renderCard = static function ($post) use ($escaper, $block) {
+    ?>
+    <article class="blog-card">
+        <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>" class="blog-card-media">
+            <?php if ($post->getImage()) : ?>
+                <img src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(), '400x250')) ?>"
+                     alt="<?= $escaper->escapeHtmlAttr($post->getName()) ?>" loading="lazy"/>
+            <?php endif; ?>
+        </a>
+        <div class="blog-card-body">
+            <h3 class="blog-card-title">
+                <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>"
+                   title="<?= $escaper->escapeHtmlAttr($post->getName()) ?>">
+                    <?= $escaper->escapeHtml($post->getName()) ?>
+                </a>
+            </h3>
         </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                new Splide('#relatedposts-carousel', {
-                    perPage: 3,
-                    gap: 15,
-                    breakpoints: {
-                        1028: {
-                            perPage: 2
-                        }
-                    }
-                }).mount();
-            });
-        </script>
-    <?php else : ?>
-        <ul class="relatedposts-list" style="list-style-type:disc; padding-left: 30px">
-            <?php foreach ($posts as $post) : ?>
-                <li>
-                    <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>"><?= $escaper->escapeHtml($post->getName()) ?></a>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    <?php endif; ?>
+    </article>
+    <?php
+};
+?>
+<?php if ($posts && $block->isEnabledBlog()) : ?>
+    <section class="blog-section"<?= $posts->getSize() && $isSlider ? ' x-data x-snap-slider.group-pager x-defer="intersect"' : '' ?>>
+        <header class="blog-section-header">
+            <h2 class="blog-section-title">
+                <?= $posts->getSize()
+                    ? $escaper->escapeHtml(__('Related Posts'))
+                    : $escaper->escapeHtml(__('No Related Posts')) ?>
+            </h2>
+        </header>
+
+        <?php if ($posts->getSize()) : ?>
+            <?php if ($isSlider) : ?>
+                <div class="relative">
+                    <div class="snap-track sm:[--snap-cols:2] lg:[--snap-cols:3]"
+                         data-track tabindex="0" aria-live="polite">
+                        <?php foreach ($posts as $post) : ?>
+                            <?php $renderCard($post); ?>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" class="blog-snap-arrow blog-snap-arrow--prev" data-prev disabled
+                            aria-label="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>">
+                        <?= $heroicons->chevronLeftHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+                    </button>
+                    <button type="button" class="blog-snap-arrow blog-snap-arrow--next" data-next disabled
+                            aria-label="<?= $escaper->escapeHtmlAttr(__('Next')) ?>">
+                        <?= $heroicons->chevronRightHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+                    </button>
+                </div>
+                <div class="snap-pager" data-pager></div>
+            <?php else : ?>
+                <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                    <?php foreach ($posts as $post) : ?>
+                        <?php $renderCard($post); ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+    </section>
 <?php endif; ?>
-<style>
-    .post-item-wraper:hover {
-        border: 1px solid #eee;
-        box-shadow: 3px 3px 4px 0 rgba(0, 0, 0, 0.3);
-    }
-    .splide__pagination {
-        bottom: -0.5em;
-    }
-
-    .splide__arrow {
-        display: none !important;
-    }
-
-    .splide__pagination__page.is-active {
-        background: #869791
-    }
-    .post-item-wraper {
-        border: 1px solid #eee;
-        padding: 10px !important;
-
-    }
-    #relatedposts-carousel, .relatedposts-list a:visited, .alink:visited {
-        color: #006bb4;
-        text-decoration: none;
-    }
-
-    #relatedposts-carousel  a:hover, .alink:hover {
-        color: #006bb4;
-        text-decoration: underline;
-    }
-</style>

@@ -346,6 +346,28 @@ class Frontend extends Template
     }
 
     /**
+     * Estimated reading time in whole minutes (~200 words/min over the post body), never below 1.
+     *
+     * Computed from the post content (falls back to short description when the body is empty)
+     * instead of the admin-entered read_time column, which is frequently left at 0.
+     *
+     * @param Post $post
+     *
+     * @return int
+     */
+    public function getReadingTime($post)
+    {
+        $wordsPerMinute = 200;
+        $content        = (string) $post->getPostContent();
+        if ($content === '') {
+            $content = (string) $post->getShortDescription();
+        }
+        $words = str_word_count(strip_tags($content));
+
+        return max(1, (int) ceil($words / $wordsPerMinute));
+    }
+
+    /**
      * Get list category html of post
      *
      * @param Post $post
