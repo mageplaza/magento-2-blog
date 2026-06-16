@@ -24,4 +24,7 @@
     <event name="customer_register_success">
         <observer name="mp_blog_create_author" instance="Mageplaza\Blog\Observer\CreateAuthor"/>
     </event>
+    <event name="hyva_config_generate_before">
+        <observer name="mp_blog_register_hyva_tailwind" instance="Mageplaza\Blog\Observer\RegisterModuleForHyvaConfig"/>
+    </event>
 </config>
