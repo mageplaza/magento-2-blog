@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Author;
 
+use Magento\Framework\DataObject\IdentityInterface;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\AuthorFactory;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
@@ -66,6 +67,24 @@ class ListPost extends \Mageplaza\Blog\Block\ListPost
         }
 
         return $this->_author;
+    }
+
+    /**
+     * Add the current author tag so editing the author in admin purges this page
+     * (Author model implements IdentityInterface). Base adds the global blog-post tag.
+     *
+     * @return string[]
+     */
+    public function getIdentities()
+    {
+        $identities = parent::getIdentities();
+
+        $author = $this->getAuthor();
+        if ($author instanceof IdentityInterface && $author->getId()) {
+            $identities = array_merge($identities, $author->getIdentities());
+        }
+
+        return array_unique($identities);
     }
 
     /**

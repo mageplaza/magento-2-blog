@@ -23,6 +23,7 @@ namespace Mageplaza\Blog\Model;
 
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
@@ -34,7 +35,7 @@ use Mageplaza\Blog\Helper\Data;
  * Class Author
  * @package Mageplaza\Blog\Model
  */
-class Author extends AbstractModel
+class Author extends AbstractModel implements IdentityInterface
 {
     /**
      * @inheritdoc

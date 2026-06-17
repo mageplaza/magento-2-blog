@@ -258,16 +258,27 @@ class ListPost extends Frontend implements IdentityInterface
     }
 
     /**
-     * Tag list pages with the global blog-post tag only. Any post save/delete
-     * cleans this tag (via Post::getIdentities) so every list page is busted.
-     * We intentionally do NOT iterate the collection to emit per-post tags:
-     * they are redundant with the global tag and would not scale (a 100k-post
-     * page would load the whole collection and emit a huge X-Magento-Tags header).
+     * Tag list pages with the global blog-post tag (any post save/delete cleans it via
+     * Post::getIdentities, so every list page is busted) PLUS the current route entity tag
+     * (category / tag / topic) so editing THAT entity in admin purges THIS page — the entity
+     * models now implement IdentityInterface, so their save/delete clean these tags in Varnish.
+     * We intentionally do NOT iterate the post collection (a 100k-post page would emit a huge
+     * X-Magento-Tags header); the single route-entity tag is scalable.
+     *
+     * getBlogObject() returns the route entity on the Category/Tag/Topic list blocks and resolves
+     * to null via __call on the blog index (ListPost.php:163 already relies on this).
      *
      * @return string[]
      */
     public function getIdentities()
     {
-        return [Post::CACHE_TAG];
+        $identities = [Post::CACHE_TAG];
+
+        $object = $this->getBlogObject();
+        if ($object instanceof IdentityInterface && $object->getId()) {
+            $identities = array_merge($identities, $object->getIdentities());
+        }
+
+        return array_unique($identities);
     }
 }

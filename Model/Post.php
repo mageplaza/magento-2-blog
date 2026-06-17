@@ -26,6 +26,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
@@ -97,7 +98,7 @@ use Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory as TopicCollectio
  * @method array getTopicsIds()
  * @method Post setTopicsIds(array $topicIds)
  */
-class Post extends AbstractModel
+class Post extends AbstractModel implements IdentityInterface
 {
     /**
      * Cache tag

@@ -332,17 +332,40 @@ class Frontend extends Template
     }
 
     /**
-     * @param Post $post
+     * @var array<int,int>|null Request-scoped approved-comment counts keyed by post_id.
+     */
+    private ?array $commentCounts = null;
+
+    /**
+     * Approved comment count for a post. Batched: the first call loads counts for ALL posts in
+     * ONE grouped query and memoizes them, so rendering N cards costs 1 query instead of N
+     * (previously 1 COUNT per card — an N+1 on every list-page render).
+     *
+     * @param Post|int $post
      *
      * @return int
      */
     public function getCommentinPost($post)
     {
-        $cmt = $this->cmtFactory->create()->getCollection()
-            ->addFieldToFilter('post_id', $post->getId())
-            ->addFieldToFilter('status', Status::APPROVED);
+        $postId = (int) (is_object($post) ? $post->getId() : $post);
+        if ($postId === 0) {
+            return 0;
+        }
 
-        return $cmt->count();
+        if ($this->commentCounts === null) {
+            $this->commentCounts = [];
+            $collection = $this->cmtFactory->create()->getCollection()
+                ->addFieldToFilter('status', Status::APPROVED);
+            $collection->getSelect()
+                ->reset(\Magento\Framework\DB\Select::COLUMNS)
+                ->columns(['post_id', 'total' => new \Magento\Framework\DB\Sql\Expression('COUNT(*)')])
+                ->group('post_id');
+            foreach ($collection->getData() as $row) {
+                $this->commentCounts[(int) $row['post_id']] = (int) $row['total'];
+            }
+        }
+
+        return $this->commentCounts[$postId] ?? 0;
     }
 
     /**
