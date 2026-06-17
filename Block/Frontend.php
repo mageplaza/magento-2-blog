@@ -346,10 +346,11 @@ class Frontend extends Template
     }
 
     /**
-     * Estimated reading time in whole minutes (~200 words/min over the post body), never below 1.
+     * Reading time in whole minutes, never below 1.
      *
-     * Computed from the post content (falls back to short description when the body is empty)
-     * instead of the admin-entered read_time column, which is frequently left at 0.
+     * Uses the admin-entered read_time column (BlogPro db_schema.xml:25 — int, nullable) when a
+     * valid positive value is set. Falls back to an estimate from the post body (~200 words/min,
+     * short description when the body is empty) for posts left at 0 / null / empty / non-numeric.
      *
      * @param Post $post
      *
@@ -357,6 +358,11 @@ class Frontend extends Template
      */
     public function getReadingTime($post)
     {
+        $configured = $post->getReadTime();
+        if (is_numeric($configured) && (int) $configured >= 1) {
+            return (int) $configured;
+        }
+
         $wordsPerMinute = 200;
         $content        = (string) $post->getPostContent();
         if ($content === '') {

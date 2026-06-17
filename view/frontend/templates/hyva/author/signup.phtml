@@ -19,190 +19,101 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Mageplaza\Blog\Block\Author\SignupForm;
 use Magento\Framework\Escaper;
 
 /** @var SignupForm $block */
 /** @var Escaper $escaper */
-$author = $block->getAuthor();
-
+/** @var HyvaCsp $hyvaCsp */
+$author    = $block->getAuthor();
+$isNew     = $author['name'] === '';
+$submitTxt = $isNew ? __('Submit') : __('Save');
 ?>
 <form enctype="multipart/form-data"
-      action="<?= $escaper->escapeHtml($block->getUrl('mpblog/author/register')) ?>" method="post" class="form"
-      name="mp_blog_author_form"
-      id="blog_signup_author"
->
-    <?= /* @noEscape */
-    $block->getBlockHtml('formkey'); ?>
-    <fieldset class="fieldset">
-        <div class="legend border-b pb-px">
-            <legend>
-                <span><?= /* @noEscape */
-                    $author['name'] === '' ? __('Signup Author') : __('Author Information') ?></span>
-            </legend>
-        </div>
+      action="<?= $escaper->escapeUrl($block->getUrl('mpblog/author/register')) ?>" method="post"
+      name="mp_blog_author_form" id="blog_signup_author"
+      class="blog-form"
+      x-data="hyva.formValidation" @submit="onSubmit" novalidate>
+    <?= /* @noEscape */ $block->getBlockHtml('formkey'); ?>
 
-        <br>
-        <div class="field required mp-field ">
-            <label for="name" class="label"><span><?= $escaper->escapeHtml(__('Display Name ')) ?></span></label>
-            <div class="control">
-                <input type="text" name="name" id="name" value="<?= $escaper->escapeHtml($author['name']) ?>"
-                       title="<?= $escaper->escapeHtmlAttr(__('Display Name')) ?>"
-                       class="input-text" data-validate='{"required": true}'>
-            </div>
-        </div>
-        <?php if (isset($author['status'])) : ?>
-            <div class="field mp-field" style="margin-top: 1.5rem">
-                <label for="name" class="label"><span><?= $escaper->escapeHtml(__('Status')) ?></span></label>
-                <div class="control">
-                    <span><?= $escaper->escapeHtml($author['status']) ?></span>
-                </div>
-            </div>
-        <?php endif; ?>
+    <div class="blog-form__legend">
+        <?= $escaper->escapeHtml($isNew ? __('Signup Author') : __('Author Information')) ?>
+    </div>
 
-        <div class="field mp-field mb-2">
-            <label for="short_desciption" class="label">
-                <span><?= $escaper->escapeHtml(__('Short Description')) ?></span>
-            </label>
-            <div class="control">
-                <textarea  name="short_description" id="short_description" rows="5" cols="19">
-                    <?= /* @noEscape */
-                    $author['short_description']
-                        ? $block->getPageFilter($author['short_description']) : '' ?>
-                </textarea>
-            </div>
+    <div class="field field-reserved">
+        <label for="name"><?= $escaper->escapeHtml(__('Display Name')) ?> *</label>
+        <input type="text" name="name" id="name" value="<?= $escaper->escapeHtmlAttr($author['name']) ?>"
+               title="<?= $escaper->escapeHtmlAttr(__('Display Name')) ?>"
+               required data-validate='{"required": true}'/>
+    </div>
+
+    <?php if (isset($author['status'])): ?>
+        <div class="field">
+            <label><?= $escaper->escapeHtml(__('Status')) ?></label>
+            <span class="blog-form__hint"><?= $escaper->escapeHtml($author['status']) ?></span>
         </div>
-        <div class="field mp-field" style="margin-top: 1.5rem">
-            <label for="image" class="label"><span><?= /* @noEscape */
-                    __('Avatar') ?></span></label>
-            <div class="control" style="display: flex">
-                <?php if (!empty($author['image'])) : ?>
-                    <a class="mp-image-link" style="margin-right: 15px;"
-                       href="<?= $escaper->escapeUrl($block->getImageUrl($author['image'], 'auth')) ?>">
-                        <img src="<?= $escaper->escapeUrl($block->getImageUrl($author['image'], 'auth')) ?>"
-                             id="post_image_image"
-                             title="<?= $escaper->escapeHtmlAttr($author['image']) ?>"
-                             alt="<?= $escaper->escapeHtmlAttr($author['image']) ?>" height="70" width="70"
-                             class="small-image-preview v-middle">
-                    </a>
-                <?php endif; ?>
-                <input type="file" name="image" id="image" value="<?= $escaper->escapeHtml($author['image']) ?>"
-                       title="<?= $escaper->escapeHtmlAttr(__('Avatar')) ?>"
-                       class="input-file"
-                       style="width: 90%;position: relative;top: -5px">
-                <?php if (!empty($author['image'])) : ?>
-                    <span class="delete-image" style="display: inline-flex;">
-                    <input  type="checkbox" name="image[delete]" value="1" class="checkbox"
-                            id="post_image_delete">
-                    <label for="post_image_delete"> Delete Image</label>
-                    </span>
-                <?php endif; ?>
-            </div>
-        </div>
-        <div class="field mp-field" style="margin-top: 1.5rem">
-            <label for="url_key" class="label"><span><?= $escaper->escapeHtml(__('URL Key')) ?></span></label>
-            <div class="control">
-                <input type="text" name="url_key" id="url_key" value="<?= $escaper->escapeHtmlAttr($author['url_key']) ?>"
-                       title="<?= $escaper->escapeHtmlAttr(__('URL Key')) ?>"
-                       class="input-text">
-            </div>
-        </div>
-        <div class="field mp-field" style="margin-top: 1.5rem">
-            <label for="full_url" class="label"><span><?= $escaper->escapeHtml(__('Full URL')) ?></span></label>
-            <div class="control">
-                <span class="mp_full_url">
-                    <?= $escaper->escapeHtml($block->getUrl("blog/author")
-                        . $author['url_key'] . $block->getUrlSuffix()) ?>
-                </span>
-            </div>
-        </div>
-        <div class="field mp-field" style="margin-top: 1.5rem">
-            <label for="facebook_link" class="label"><span><?= $escaper->escapeHtml(__('Facebook Link')) ?></span></label>
-            <div class="control">
-                <input type="url" name="facebook_link" id="facebook_link"
-                       value="<?= $escaper->escapeHtml($author['facebook_link']) ?>"
-                       title="<?= $escaper->escapeHtmlAttr(__('Facebook Link')) ?>" class="input-text">
-            </div>
-        </div>
-        <div class="field mp-field" style="margin-top: 1.5rem">
-            <label for="twitter_link" class="label"><span><?= $escaper->escapeHtml(__('Twitter Link')) ?></span></label>
-            <div class="control">
-                <input type="url" name="twitter_link" id="twitter_link"
-                       value="<?= $escaper->escapeHtmlAttr($author['twitter_link']) ?>"
-                       title="<?= $escaper->escapeHtmlAttr(__('Twitter Link')) ?>" class="input-text">
-            </div>
-        </div>
-    </fieldset>
-    <div class="actions-toolbar">
-        <div class="primary">
-            <button type="submit" class="action submit primary"
-                    title="<?= /* @noEscape */
-                    $author['name'] === '' ? __('Submit') : __('Save') ?>">
-                <span>
-                    <?= /* @noEscape */
-                    $author['name'] === '' ? __('Submit') : __('Save') ?>
-                </span>
-            </button>
+    <?php endif; ?>
+
+    <div class="field">
+        <label for="short_description"><?= $escaper->escapeHtml(__('Short Description')) ?></label>
+        <textarea name="short_description" id="short_description" rows="5"><?= /* @noEscape */
+            $author['short_description'] ? $block->getPageFilter($author['short_description']) : '' ?></textarea>
+    </div>
+
+    <div class="field">
+        <label for="image"><?= $escaper->escapeHtml(__('Avatar')) ?></label>
+        <div class="blog-form__file">
+            <?php if (!empty($author['image'])): ?>
+                <a class="blog-form__avatar-link" target="_blank"
+                   href="<?= $escaper->escapeUrl($block->getImageUrl($author['image'], 'auth')) ?>">
+                    <img class="blog-form__avatar-preview"
+                         src="<?= $escaper->escapeUrl($block->getImageUrl($author['image'], 'auth')) ?>"
+                         title="<?= $escaper->escapeHtmlAttr($author['image']) ?>"
+                         alt="<?= $escaper->escapeHtmlAttr($author['image']) ?>"/>
+                </a>
+            <?php endif; ?>
+            <input type="file" name="image" id="image"
+                   title="<?= $escaper->escapeHtmlAttr(__('Avatar')) ?>"/>
+            <?php if (!empty($author['image'])): ?>
+                <label class="blog-form__file-delete" for="post_image_delete">
+                    <input type="checkbox" name="image[delete]" value="1" id="post_image_delete"/>
+                    <?= $escaper->escapeHtml(__('Delete Image')) ?>
+                </label>
+            <?php endif; ?>
         </div>
     </div>
+
+    <div class="field">
+        <label for="url_key"><?= $escaper->escapeHtml(__('URL Key')) ?></label>
+        <input type="text" name="url_key" id="url_key" value="<?= $escaper->escapeHtmlAttr($author['url_key']) ?>"
+               title="<?= $escaper->escapeHtmlAttr(__('URL Key')) ?>"/>
+        <span class="blog-form__hint">
+            <?= $escaper->escapeHtml($block->getUrl('blog/author') . $author['url_key'] . $block->getUrlSuffix()) ?>
+        </span>
+    </div>
+
+    <div class="field">
+        <label for="facebook_link"><?= $escaper->escapeHtml(__('Facebook Link')) ?></label>
+        <input type="url" name="facebook_link" id="facebook_link"
+               value="<?= $escaper->escapeHtmlAttr($author['facebook_link']) ?>"
+               title="<?= $escaper->escapeHtmlAttr(__('Facebook Link')) ?>"/>
+    </div>
+
+    <div class="field">
+        <label for="twitter_link"><?= $escaper->escapeHtml(__('Twitter Link')) ?></label>
+        <input type="url" name="twitter_link" id="twitter_link"
+               value="<?= $escaper->escapeHtmlAttr($author['twitter_link']) ?>"
+               title="<?= $escaper->escapeHtmlAttr(__('Twitter Link')) ?>"/>
+    </div>
+
+    <div class="blog-form__actions">
+        <button type="submit" class="blog-form__submit"
+                title="<?= $escaper->escapeHtmlAttr($submitTxt) ?>">
+            <?= $escaper->escapeHtml($submitTxt) ?>
+        </button>
+    </div>
 </form>
-<style>
-    .mp-field {
-        display: flex;
-    }
-
-    .mp-field .control {
-        width: 70%;
-    }
-
-    .mp-field .control .delete-image {
-        width: 65%;
-    }
-
-    .mp-field .label {
-        width: 30%;
-    }
-
-    .sidebar.sidebar-main:before {
-        content: unset !important;
-    }
-    #maincontent h1 {
-        font-weight: 300;
-        line-height: 1.1;
-        font-size: 2.6rem;
-        margin-bottom: 2rem;
-    }
-    #maincontent h2 {
-        font-weight: 300;
-        line-height: 1.1;
-        font-size: 1.8rem;
-        margin-bottom: 1rem;
-    }
-    #maincontent h3 {
-        font-weight: 600;
-        line-height: 1.1;
-        font-size: 1.8rem;
-        margin-bottom: 1rem;
-    }
-    #maincontent h4 {
-        font-weight: 700;
-        line-height: 1.1;
-        font-size: 1.4rem;
-        margin-bottom: 2rem;
-    }
-    #maincontent h5 {
-        font-weight: 700;
-        line-height: 1.1;
-        font-size: 1.2rem;
-        margin-bottom: 2rem;
-    }
-    #maincontent  p {
-        margin-top: 0rem;
-        margin-bottom: 0.5rem;
-    }
-    .ck-editor__editable {min-height: 300px;}
-</style>
-
 
 <script>
     function initAuthorShortDescriptionEditor() {
@@ -285,3 +196,4 @@ $author = $block->getAuthor();
         initAuthorShortDescriptionEditor();
     }
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>

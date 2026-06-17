@@ -77,7 +77,7 @@ $renderCard = static function ($product) use ($block, $escaper, $imageArea) {
         <?= $escaper->escapeHtml(__('We can\'t find products matching the selection.')) ?>
     </div>
 <?php elseif ($isSlider) : ?>
-    <section class="blog-section" x-data x-snap-slider.group-pager x-defer="intersect">
+    <div class="blog-products-slider" x-data x-snap-slider.group-pager x-defer="intersect">
         <div class="relative">
             <div class="snap-track sm:[--snap-cols:2] lg:[--snap-cols:3] xl:[--snap-cols:4]"
                  data-track tabindex="0" aria-live="polite">
@@ -95,7 +95,7 @@ $renderCard = static function ($product) use ($block, $escaper, $imageArea) {
             </button>
         </div>
         <div class="snap-pager" data-pager></div>
-    </section>
+    </div>
 <?php else : ?>
     <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         <?php foreach ($collection as $product) : ?>
