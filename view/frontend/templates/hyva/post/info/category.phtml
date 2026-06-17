@@ -1,0 +1,57 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Mageplaza\Blog\Block\Post\View;
+use Mageplaza\Blog\Helper\Data as BlogHelper;
+
+/** @var View $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$_post       = $block->getPost();
+$helper      = $block->helperData;
+$categoryIds = $_post->getCategoryIds();
+// getCategoryCollection() + the sidebar/categories/maximum cap mirror Frontend::getPostCategoryHtml()
+// (Frontend.php:355-384); rendered here as plain comma-separated text links.
+$categories  = $categoryIds ? $helper->getCategoryCollection($categoryIds) : [];
+$maximum     = (int) $helper->getSidebarConfig('categories/maximum');
+
+$links = [];
+$shown = 0;
+foreach ($categories as $_cat) {
+    if ($maximum && $shown >= $maximum) {
+        break;
+    }
+    $shown++;
+    $links[] = '<a href="' . $escaper->escapeUrl($helper->getBlogUrl($_cat, BlogHelper::TYPE_CATEGORY)) . '">'
+        . $escaper->escapeHtml($_cat->getName()) . '</a>';
+}
+?>
+<?php if ($links) : ?>
+    <span class="blog-meta__item">
+        <?= $heroicons->folderHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+        <span class="blog-post-info__categories"><?= /** @noEscape */ implode(', ', $links) ?></span>
+    </span>
+<?php endif; ?>

@@ -19,37 +19,16 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Mageplaza\Blog\Block\Post\View;
-use Mageplaza\Blog\Helper\Data as BlogHelper;
+use Magento\Framework\Escaper;
 
 /** @var View $block */
-/** @var ViewModelRegistry $viewModels */
-/** @var \Magento\Framework\Escaper $escaper */
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
-
-$_post       = $block->getPost();
-$helper      = $block->helperData;
-$categoryIds = $_post->getCategoryIds();
-// getCategoryCollection() + the sidebar/categories/maximum cap mirror Frontend::getPostCategoryHtml()
-// (Frontend.php:355-384); rendered here as chips instead of a comma-joined string.
-$categories  = $categoryIds ? $helper->getCategoryCollection($categoryIds) : [];
-$maximum     = (int) $helper->getSidebarConfig('categories/maximum');
+/** @var Escaper $escaper */
+$_post = $block->getPost();
 ?>
-<?php if ($categories && count($categories)) : ?>
-    <span class="blog-meta__item">
-        <?= $heroicons->folderHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
-        <span class="blog-post-info__categories">
-            <?php $shown = 0; ?>
-            <?php foreach ($categories as $_cat) : ?>
-                <?php if ($maximum && $shown >= $maximum) { break; } ?>
-                <?php $shown++; ?>
-                <a href="<?= $escaper->escapeUrl($helper->getBlogUrl($_cat, BlogHelper::TYPE_CATEGORY)) ?>">
-                    <?= $escaper->escapeHtml($_cat->getName()) ?>
-                </a>
-            <?php endforeach; ?>
-        </span>
+<?php if ($categoryHtml = $block->getPostCategoryHtml($_post)) : ?>
+    |
+    <span><i class="fa fa-folder-open-o">&nbsp;</i>
+        <?= /* @noEscape */ (__('Categories: %1', $categoryHtml)); ?>
     </span>
 <?php endif; ?>

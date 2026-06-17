@@ -19,16 +19,20 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Mageplaza\Blog\Block\Post\View;
 use Magento\Framework\Escaper;
 
 /** @var View $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 $_post = $block->getPost();
 ?>
 <?php if ($_post->getViewTraffic()) : ?>
-    |
-    <span><i class="mp-blog-icon mp-blog-traffic" aria-hidden="true"></i>
-        <?= $escaper->escapeHtml(__('View: %1', $_post->getViewTraffic())) ?>
+    <span class="blog-meta__item">
+        <?= $heroicons->eyeHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+        <?= $escaper->escapeHtml(__('%1 views', $_post->getViewTraffic())) ?>
     </span>
 <?php endif; ?>
