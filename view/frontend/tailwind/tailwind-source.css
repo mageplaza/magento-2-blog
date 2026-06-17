@@ -85,8 +85,11 @@
         .blog-section-title { font-size: 1.5rem; }
     }
 
-    /* ── Page header strip (search row — page title comes from core page.main.title) ── */
+    /* ── Page header strip — module page title/heading (left) + search (right) on one row.
+       Core page.main.title is removed on blog routes via hyva_mpblog_*.xml; the heading text is the
+       module's getBlogTitle() rendered from search.phtml. ── */
     .blog-page-header { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+    .blog-page-heading { margin: 0; font-size: 1.5rem; font-weight: 700; line-height: 1.25; color: var(--color-fg, #0f172a); }
     .blog-search-form { position: relative; width: 100%; }
     .blog-search-input { width: 100%; padding: 0.625rem 3rem 0.625rem 1rem; border: 1px solid var(--color-slate-200, #e2e8f0); border-radius: 0.5rem; background-color: var(--color-surface, #fff); font-size: 0.875rem; color: var(--color-fg, #0f172a); transition: border-color 0.15s, box-shadow 0.15s; }
     .blog-search-input::placeholder { color: var(--color-slate-400, #94a3b8); }
@@ -95,8 +98,10 @@
     .blog-search-btn:hover { color: var(--color-primary, #1d4ed8); }
 
     @media (min-width: 768px) {
-        .blog-page-header { flex-direction: row; align-items: center; justify-content: flex-end; }
-        .blog-search-form { width: 22rem; }
+        .blog-page-header { flex-direction: row; align-items: center; gap: 1.5rem; }
+        .blog-page-heading { font-size: 1.875rem; }
+        /* margin-left:auto keeps search hard-right whether or not a heading is present */
+        .blog-search-form { width: 22rem; flex-shrink: 0; margin-left: auto; }
     }
 
     /* ── Vertical post card (hero slider items) ──────────────────── */
