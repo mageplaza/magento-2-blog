@@ -23,8 +23,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
 
     <head>
-        <!-- mpBlogIcon icon font is unused on Hyvä (templates use Heroicons / inline SVG); drop it on Hyvä only,
-             leaving Luma (default_head_blocks.xml) untouched. -->
         <remove src="Mageplaza_Blog::css/mpBlogIcon.css"/>
     </head>
 

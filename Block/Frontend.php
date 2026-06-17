@@ -26,6 +26,7 @@ use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Url;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
@@ -332,18 +333,14 @@ class Frontend extends Template
     }
 
     /**
-     * @var array<int,int>|null Request-scoped approved-comment counts keyed by post_id.
+     * @var array|null
      */
     private ?array $commentCounts = null;
 
     /**
-     * Approved comment count for a post. Batched: the first call loads counts for ALL posts in
-     * ONE grouped query and memoizes them, so rendering N cards costs 1 query instead of N
-     * (previously 1 COUNT per card — an N+1 on every list-page render).
-     *
-     * @param Post|int $post
-     *
-     * @return int
+     * @param $post
+     * @return int|mixed
+     * @throws LocalizedException
      */
     public function getCommentinPost($post)
     {
@@ -369,15 +366,8 @@ class Frontend extends Template
     }
 
     /**
-     * Reading time in whole minutes, never below 1.
-     *
-     * Uses the admin-entered read_time column (BlogPro db_schema.xml:25 — int, nullable) when a
-     * valid positive value is set. Falls back to an estimate from the post body (~200 words/min,
-     * short description when the body is empty) for posts left at 0 / null / empty / non-numeric.
-     *
-     * @param Post $post
-     *
-     * @return int
+     * @param $post
+     * @return int|mixed
      */
     public function getReadingTime($post)
     {

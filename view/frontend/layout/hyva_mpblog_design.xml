@@ -22,9 +22,6 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <!-- Hyvä uses Heroicons + x-snap-slider; drop the legacy icon/grid/slider libs the base mpblog_design handle adds.
-             hyva_<handle> loads after the base handle so these <remove> directives win on every blog page.
-             hyvaBlog.css already migrated to view/frontend/tailwind/tailwind-source.css (compiled into theme styles.css). -->
         <remove src="Mageplaza_Core::css/grid-mageplaza.css"/>
         <remove src="Mageplaza_Core::css/font-awesome.min.css"/>
         <remove src="Mageplaza_Core::css/owl.carousel.css"/>
@@ -33,6 +30,8 @@
         <remove src="Mageplaza_Blog::css/splide.min.css"/>
     </head>
     <body>
+        <referenceBlock name="page.main.title" remove="true"/>
+
         <referenceContainer name="columns">
             <container name="div.sidebar.main" htmlTag="div" htmlClass="sidebar sidebar-main" before="main">
                 <container name="blog.sidebar.main" as="sidebar_main" label="Sidebar Main">

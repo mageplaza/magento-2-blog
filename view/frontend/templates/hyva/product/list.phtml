@@ -34,7 +34,6 @@ use Magento\Framework\Escaper;
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 $collection = $block->getLoadedProductCollection();
-// relatedMode() returns the raw config value: '1' = slider, otherwise grid (RelatedProduct.php:127)
 $isSlider   = $block->relatedMode() === '1';
 $imageArea  = 'category_page_grid';
 

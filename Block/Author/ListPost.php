@@ -70,9 +70,6 @@ class ListPost extends \Mageplaza\Blog\Block\ListPost
     }
 
     /**
-     * Add the current author tag so editing the author in admin purges this page
-     * (Author model implements IdentityInterface). Base adds the global blog-post tag.
-     *
      * @return string[]
      */
     public function getIdentities()

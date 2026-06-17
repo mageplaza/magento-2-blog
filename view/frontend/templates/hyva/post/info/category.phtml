@@ -33,8 +33,6 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 $_post       = $block->getPost();
 $helper      = $block->helperData;
 $categoryIds = $_post->getCategoryIds();
-// getCategoryCollection() + the sidebar/categories/maximum cap mirror Frontend::getPostCategoryHtml()
-// (Frontend.php:355-384); rendered here as plain comma-separated text links.
 $categories  = $categoryIds ? $helper->getCategoryCollection($categoryIds) : [];
 $maximum     = (int) $helper->getSidebarConfig('categories/maximum');
 

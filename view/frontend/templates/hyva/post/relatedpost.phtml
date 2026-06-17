@@ -33,7 +33,6 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 $posts = $block->getRelatedPostList();
 
-// getRelatedMode() returns true for SLIDER (blog/post_view_page/related_mode === 1) — Block/Post/View.php:71
 $isSlider = (bool) $block->getRelatedMode();
 
 $renderCard = static function ($post) use ($escaper, $block) {

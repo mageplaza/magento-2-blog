@@ -1,19 +1,21 @@
 /**
- * Mageplaza Blog + BlogPro — Hyvä component layer (Tailwind v4).
+ * Mageplaza
  *
- * Auto-imported into the theme build by @hyva-themes/hyva-modules:
- *   hyva.config.json -> tailwind.include[] -> `npx hyva-sources` writes
- *   `@import ".../app/code/Mageplaza/Blog/view/frontend/tailwind/tailwind-source.css"`
- *   into generated/hyva-source.css (see generate-sources.js:90-92).
- *   Build: cd vendor/hyva-themes/magento2-default-theme/web/tailwind && npm run generate && npm run build
+ * NOTICE OF LICENSE
  *
- * Tokens used resolve from the Hyvä theme @theme block + generated/hyva-tokens.css:
- *   --color-primary, --color-primary-darker, --color-fg, --color-fg-secondary,
- *   --color-surface, --color-slate-*, --radius-lg.
- * Style matches Hyvä's own component CSS convention (raw CSS + design tokens inside
- *   @layer components — cf. vendor .../web/tailwind/components/slider.css).
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
  *
- * Replaces the legacy raw web/css/hyvaBlog.css (was loaded via <css src>).
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 @theme {
@@ -31,14 +33,12 @@
     @media (min-width: 1024px) {
         .blog-layout { flex-direction: row; gap: 2.5rem; }
         .blog-layout-sidebar { width: 20rem; flex-shrink: 0; }
-        /* Sidebar-left variant (display styles 3 & 4): main stays first in DOM (content-first on mobile),
-           row-reverse only flips the visual order at desktop so the sidebar sits on the left. */
+        /* Sidebar-left variant (display styles 3 & 4) */
         .blog-layout--sidebar-left { flex-direction: row-reverse; }
     }
 
-    /* Featured (lead) horizontal card — slightly larger media than the regular list card. */
+    /* Featured (lead) horizontal card */
     @media (min-width: 768px) {
-        /* Featured (lead) card: the biggest / most-highlighted — image on the RIGHT, ~half the card width, taller. */
         .blog-featured .blog-card-h { flex-direction: row-reverse; }
         .blog-featured .blog-card-h__media { width: 40%; flex-shrink: 0; min-height: 22rem; }
         .blog-featured .blog-card-h__body { padding: 2rem; }
@@ -46,9 +46,7 @@
         .blog-featured .blog-card-h__excerpt { -webkit-line-clamp: 4; line-clamp: 4; }
     }
 
-    /* ── Shared equal-height grid: CSS-grid items already stretch to the tallest in their row;
-       this makes the card/cell FILL that stretched height so items on the SAME row match.
-       Add `blog-grid-equal` to any blog card grid (vertical `.blog-card` cards already fill via height:100%). ── */
+    /* ── Shared equal-height grid: CSS-grid items ── */
     .blog-grid-equal { align-items: stretch; }
     .blog-grid-equal > .blog-card { height: 100%; }
 
@@ -56,7 +54,7 @@
     .blog-mv-cell { display: flex; flex-direction: column; height: 100%; }
     .blog-mv-cell > .blog-card { flex: 1 1 auto; height: auto; }
 
-    /* Hero slider (display style 5): shorter, banner-style media (~2/3 of the default 16/10 height). */
+    /* Hero slider (display style 5) */
     .blog-hero-slider .blog-card-media { aspect-ratio: 16 / 7; }
     .blog-subcard { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.75rem; padding: 0.625rem; background-color: var(--color-surface, #fff); border: 1px solid var(--color-slate-200, #e2e8f0); border-radius: var(--blog-card-radius, 0.5rem); text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s; }
     .blog-subcard:hover { border-color: var(--color-slate-300, #cbd5e1); box-shadow: 0 2px 4px -1px rgba(15, 23, 42, 0.08); }
@@ -69,7 +67,7 @@
     .blog-subcard__more { display: inline-flex; align-items: center; gap: 0.2rem; font-size: 0.7rem; font-weight: 600; color: var(--color-primary, #1d4ed8); }
     .blog-subcard__more svg { width: 0.85rem; height: 0.85rem; }
 
-    /* ── Listing pager: neutralise clicks on the dimmed first/last arrows. ── */
+    /* ── Listing pager ── */
     .blog-layout .pages-item-previous[aria-disabled="true"],
     .blog-layout .pages-item-next[aria-disabled="true"] { pointer-events: none; opacity: 0.4; cursor: not-allowed; }
 
@@ -85,9 +83,7 @@
         .blog-section-title { font-size: 1.5rem; }
     }
 
-    /* ── Page header strip — module page title/heading (left) + search (right) on one row.
-       Core page.main.title is removed on blog routes via hyva_mpblog_*.xml; the heading text is the
-       module's getBlogTitle() rendered from search.phtml. ── */
+    /* ── Page header strip ── */
     .blog-page-header { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
     .blog-page-heading { margin: 0; font-size: 1.5rem; font-weight: 700; line-height: 1.25; color: var(--color-fg, #0f172a); }
     .blog-search-form { position: relative; width: 100%; }
@@ -100,7 +96,6 @@
     @media (min-width: 768px) {
         .blog-page-header { flex-direction: row; align-items: center; gap: 1.5rem; }
         .blog-page-heading { font-size: 1.875rem; }
-        /* margin-left:auto keeps search hard-right whether or not a heading is present */
         .blog-search-form { width: 22rem; flex-shrink: 0; margin-left: auto; }
     }
 
@@ -151,7 +146,6 @@
     .blog-read-more:hover { color: var(--color-primary-darker, #1e3a8a); gap: 0.5rem; }
     .blog-read-more svg { width: 1rem; height: 1rem; }
     .blog-stats { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; font-size: 0.75rem; color: var(--color-slate-500, #64748b); }
-    /* Tag badge: up to 3 wrapped chips overlaid on the card image (siblings of the image link — never nested anchors). Container is pointer-events:none so the image link stays clickable in the gaps; chips re-enable pointer events. */
     .blog-tag-badge { position: absolute; left: 0.5rem; right: 0.5rem; bottom: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.3rem; max-height: calc(100% - 1rem); overflow: hidden; pointer-events: none; }
     .blog-tag-badge a, .blog-tag-badge .mp-tag-info { pointer-events: auto; display: inline-block; max-width: 100%; padding: 0.15rem 0.55rem; font-size: 0.7rem; font-weight: 500; line-height: 1.3; color: #fff; background-color: rgba(15, 23, 42, 0.8); border-radius: 9999px; text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: background-color 0.15s; }
     .blog-tag-badge a:hover, .blog-tag-badge .mp-tag-info:hover { background-color: var(--color-primary, #1d4ed8); }
@@ -181,7 +175,7 @@
     .sidebar-widget-link:hover .sidebar-widget-link__icon { color: var(--color-primary, #1d4ed8); }
     .sidebar-widget-count { font-size: 0.75rem; color: var(--color-slate-400, #94a3b8); }
 
-    /* ── Sidebar scroll area (max-height + scroll-shadow affordance) ── */
+    /* ── Sidebar scroll area ── */
     .blog-scroll-area {
         max-height: var(--blog-scroll-max-height, 31.25rem);
         overflow-y: auto;
@@ -199,7 +193,7 @@
     .blog-scroll-area::-webkit-scrollbar-thumb { background-color: var(--color-slate-300, #cbd5e1); border-radius: 9999px; }
     .blog-scroll-area::-webkit-scrollbar-track { background: transparent; }
 
-    /* ── Category tree (recursive, Alpine collapsible) ──────────── */
+    /* ── Category tree ──────────── */
     .category-tree { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.125rem; }
     .category-tree-children { list-style: none; padding-left: 1.25rem; border-left: 1px solid var(--color-slate-100, #f1f5f9); margin: 0.25rem 0 0 0.625rem; }
     .category-tree-item { display: flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0; font-size: 0.875rem; }
@@ -235,21 +229,16 @@
     .blog-post-view__content { color: var(--color-fg, #0f172a); line-height: 1.75; }
     .blog-post-info { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin: 1.25rem 0; padding: 1rem 0; border-top: 1px solid var(--color-slate-100, #f1f5f9); border-bottom: 1px solid var(--color-slate-100, #f1f5f9); font-size: 0.8125rem; color: var(--color-slate-600, #475569); }
     .blog-post-info .blog-meta__item svg { color: var(--color-slate-400, #94a3b8); }
-    /* Reading time forced onto its own line (full flex-basis) so it never shares the row with the categories. */
     .blog-post-info .blog-post-info__readtime { flex-basis: 100%; }
     .blog-post-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 1.25rem 0; }
     .blog-post-tags__label { font-size: 0.8125rem; font-weight: 600; color: var(--color-slate-600, #475569); }
-    /* Detail-page tag links (Mageplaza emits <a class="mp-tag-info">) styled to match the sidebar .tag-chip */
     .blog-post-tags a, .blog-post-tags .mp-tag-info { display: inline-flex; align-items: center; max-width: 100%; padding: 0.25rem 0.625rem; font-size: 0.75rem; font-weight: 500; color: var(--color-slate-700, #334155); background-color: var(--color-slate-100, #f1f5f9); border: 1px solid var(--color-slate-200, #e2e8f0); border-radius: 9999px; text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: background-color 0.15s, color 0.15s, border-color 0.15s; }
     .blog-post-tags a:hover, .blog-post-tags .mp-tag-info:hover { background-color: var(--color-primary, #1d4ed8); color: #fff; border-color: var(--color-primary, #1d4ed8); }
-
-    /* Detail-page category meta: render each category link as a subtle chip instead of a raw comma list */
-    /* Detail-page categories: plain comma-separated text links (NOT chips); hover brightens the text only. */
     .blog-post-info__categories { color: var(--color-slate-600, #475569); }
     .blog-post-info__categories a { color: var(--color-slate-600, #475569); text-decoration: none; transition: color 0.15s; }
     .blog-post-info__categories a:hover { color: var(--color-primary, #1d4ed8); }
 
-    /* ── Author page hero (header card on /blog/author/<key>) ────── */
+    /* ── Author page hero ────── */
     .blog-author-hero { display: flex; flex-direction: column; align-items: flex-start; gap: 1.25rem; padding: 1.5rem; margin-bottom: 2rem; background-color: var(--color-slate-50, #f8fafc); border: 1px solid var(--color-slate-200, #e2e8f0); border-radius: var(--blog-card-radius, 0.5rem); }
     .blog-author-hero__avatar { width: 5rem; height: 5rem; border-radius: 9999px; object-fit: cover; flex-shrink: 0; }
     .blog-author-hero__body { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
@@ -326,28 +315,23 @@
         .blog-comment-form__row { grid-template-columns: 1fr 1fr; }
     }
 
-    /* ── Author signup form — uses NATIVE Hyvä .form/.field/.label/.control/.form-input.
-       Only the CKEditor min-height + the browser file-button (which Hyvä does not style) need a nudge. ── */
+    /* ── Author signup form ──────────────────────────── */
     #blog_signup_author .ck-editor__editable { min-height: 16rem; }
     #blog_signup_author input[type="file"]::file-selector-button { margin-right: 0.75rem; padding: 0.4rem 0.9rem; border: 0; border-radius: 0.375rem; background-color: var(--color-slate-100, #f1f5f9); color: var(--color-fg, #0f172a); font-weight: 600; cursor: pointer; transition: background-color 0.15s; }
     #blog_signup_author input[type="file"]::file-selector-button:hover { background-color: var(--color-slate-200, #e2e8f0); }
 
     /* ── Comments — Facebook-style server-rendered tree ───────────── */
     .default-cmt__content__cmt-content { list-style: none; margin: 0; padding: 0; }
-    /* Top-level list (ul is a child of the .default-cmt__content__cmt-content DIV): NO thread line, no indent. */
     .default-cmt__content__cmt-content.row { padding-inline-start: 0; margin-inline-start: 0; border-inline-start: 0; }
-    /* Nested replies ONLY (ul is a direct child of a comment LI): tight indent + a left thread connector. */
     .default-cmt__content__cmt-content__cmt-row > .default-cmt__content__cmt-content.row { padding-inline-start: 0.875rem; margin-inline-start: 0.5rem; border-inline-start: 2px solid var(--color-slate-200, #e2e8f0); }
     .default-cmt__content__cmt-content__cmt-row { padding: 0.4rem 0; }
     .default-cmt__content__cmt-content__cmt-row + .default-cmt__content__cmt-content__cmt-row { border-top: 1px solid var(--color-slate-100, #f1f5f9); }
-    /* Trim the thread line so it ends at the last reply (no overshoot below the column). */
     .default-cmt__content__cmt-content__cmt-row > .default-cmt__content__cmt-content.row > .default-cmt__content__cmt-content__cmt-row:last-child { padding-bottom: 0; }
     .cmt-row__cmt-username, .cmt-row__cmt-username .username { font-weight: 600; font-size: 0.9375rem; color: var(--color-primary, #1d4ed8); }
     .cmt-row__cmt-content { margin: 0.15rem 0 0.35rem; color: var(--color-slate-700, #334155); font-size: 0.875rem; line-height: 1.55; }
     .cmt-row__cmt-content p { margin: 0 0 0.25rem; }
     .cmt-row__cmt-interactions, .interactions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; font-size: 0.8125rem; }
     .interactions__btn-actions { display: inline-flex; align-items: center; gap: 0.5rem; }
-    /* Unified pill hover at EVERY nesting depth — selector is depth-agnostic. */
     .interactions__btn-actions .action { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.6rem; border-radius: 9999px; font-weight: 600; color: var(--color-slate-500, #64748b); text-decoration: none; cursor: pointer; transition: background-color 0.15s, color 0.15s; }
     .interactions__btn-actions .action:hover { background-color: var(--color-slate-100, #f1f5f9); color: var(--color-primary, #1d4ed8); }
     .interactions__btn-actions .btn-reply { color: var(--color-primary, #1d4ed8); }
@@ -356,7 +340,6 @@
     .interactions__cmt-createdat { color: var(--color-slate-400, #94a3b8); }
     .cmt-row__reply-row { margin-top: 0.75rem; }
     .cmt-row__reply-row input { width: 100%; padding: 0.5rem 0.75rem; font-size: 0.875rem; border: 1px solid var(--color-slate-200, #e2e8f0); border-radius: 9999px; }
-    /* Mobile: shrink the per-level indent so deep reply threads don't squeeze the content column. */
     @media (max-width: 640px) {
         .default-cmt__content__cmt-content__cmt-row > .default-cmt__content__cmt-content.row { padding-inline-start: 0.625rem; margin-inline-start: 0.25rem; }
     }
