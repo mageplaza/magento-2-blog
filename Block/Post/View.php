@@ -401,13 +401,13 @@ class View extends \Mageplaza\Blog\Block\ListPost
             if ($this->helperData->getMetaTitleByStoreId($post->getMetaTitle())) {
                 $blogTitle[] = $this->helperData->getMetaTitleByStoreId($post->getMetaTitle());
             } else {
-                $blogTitle[] = ucfirst($post->getName());
+                $blogTitle[] = ucfirst((string) $post->getName());
             }
 
             return $blogTitle;
         }
 
-        return ucfirst($post->getName());
+        return ucfirst((string) $post->getName());
     }
 
     /**
