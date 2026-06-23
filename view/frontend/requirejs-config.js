@@ -23,5 +23,11 @@ var config = {
         comment: 'Mageplaza_Blog/js/comment',
         categoryTree: 'Mageplaza_Blog/js/categorytree',
         owlCarousel: 'Mageplaza_Core/js/owl.carousel.min'
+    },
+    shim: {
+        // Owl Carousel is a UMD plugin that binds to global window.jQuery,
+        // so jQuery must be loaded first. Mirrors Mageplaza_Core's shim for
+        // the 'mageplaza/core/owl.carousel' alias.
+        owlCarousel: ['jquery']
     }
 };
