@@ -367,7 +367,7 @@ class View extends \Mageplaza\Blog\Block\ListPost
                 $category = $this->categoryFactory->create()
                     ->load($catId);
                 if ($category->getId()) {
-                    $breadcrumbs->addCrumb($category->getUrlKey(), [
+                    $breadcrumbs->addCrumb((string) $category->getUrlKey(), [
                         'label' => $category->getName(),
                         'title' => $category->getName(),
                         'link'  => $this->helperData->getBlogUrl($category, Data::TYPE_CATEGORY)
@@ -376,7 +376,7 @@ class View extends \Mageplaza\Blog\Block\ListPost
             }
 
             $post = $this->getPost();
-            $breadcrumbs->addCrumb($post->getUrlKey(), [
+            $breadcrumbs->addCrumb((string) $post->getUrlKey(), [
                 'label' => $post->getName(),
                 'title' => $post->getName()
             ]);
