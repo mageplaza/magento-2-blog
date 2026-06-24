@@ -102,14 +102,20 @@ class RelatedPost extends Template
         if ($this->_relatedPosts == null) {
             /** @var Collection $collection */
             $collection = $this->helperData->getPostList();
-            $collection->getSelect()
-                ->join(
-                    [
-                        'related' => $collection->getTable('mageplaza_blog_post_product')
-                    ],
-                    'related.post_id=main_table.post_id AND related.entity_id=' . $this->getProductId()
-                )
-                ->limit($this->getLimitPosts());
+            $productId  = (int) $this->getProductId();
+            if ($productId) {
+                $collection->getSelect()
+                    ->join(
+                        [
+                            'related' => $collection->getTable('mageplaza_blog_post_product')
+                        ],
+                        'related.post_id=main_table.post_id AND related.entity_id=' . $productId
+                    )
+                    ->limit($this->getLimitPosts());
+            } else {
+                // No product context -> no related posts, skip the join entirely
+                $collection->getSelect()->where('1 = 0');
+            }
 
             $this->_relatedPosts = $collection;
         }
