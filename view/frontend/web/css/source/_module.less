@@ -716,4 +716,14 @@ li.default-cmt__content__cmt-content__cmt-row.cmt-row {
     width: 98%;
   }
 }
+
+/* Related-posts carousel: each owl-item is one card. Cancel the 3-column grid
+   (col-mp float + mp-4 33% width) and the horizontal table-cell layout that leak in */
+.mp-blog-owl-carousel .post-item-list {
+  width: 100%;
+  float: none;
+}
+.mp-blog-owl-carousel .post-item-list .post-info-wraper {
+  display: block;
+}
 /* mageplaza end blog style */
