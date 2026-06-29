@@ -82,9 +82,9 @@ class ListPost extends \Mageplaza\Blog\Block\ListPost
         parent::_prepareLayout();
 
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
-            $topic     = $this->getBlogObject();
-            $topicName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $topic->getName());
+            $topic = $this->getBlogObject();
             if ($topic) {
+                $topicName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $topic->getName());
                 $breadcrumbs->addCrumb($topic->getUrlKey(), [
                     'label' => __($topicName),
                     'title' => __($topicName)
