@@ -744,6 +744,7 @@ li.default-cmt__content__cmt-content__cmt-row.cmt-row {
     flex-direction: column;
     width: 100%;
     height: auto !important;
+    box-sizing: border-box;
   }
 
   .post-image {
@@ -852,25 +853,64 @@ li.default-cmt__content__cmt-content__cmt-row.cmt-row {
   }
   .product-item-info {
     width: 100%;
+    position: relative;
+    box-sizing: border-box;
+    padding: 9px 9px 52px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    .product-item-details {
+      justify-items: center;
+      .price-box {
+        width: 100%;
+        text-align: center;
+      }
+      .product-item-actions {
+        place-self: center;
+      }
+    }
+  }
+
+  .product-item-inner {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 8px;
+    margin: 0;
+    padding: 0 8px;
+    border: 0;
+    box-shadow: none;
+    opacity: 0;
+    visibility: hidden;
   }
 
   .product-item-info:hover,
   .product-item-info.active {
     margin: 0;
-    padding: 0;
-    border: 0;
-    box-shadow: none;
+    border: 1px solid #bbb;
+    box-shadow: 3px 4px 4px 0 rgba(0, 0, 0, 0.3);
     position: relative;
-    z-index: auto;
+    z-index: 5;
+    background: #fff;
   }
 
-  .product-item-inner {
-    display: block;
-    position: static;
-    margin: 8px 0 0;
-    border: 0;
-    padding: 0;
-    box-shadow: none;
+  .product-item-info:hover .product-item-inner,
+  .product-item-info.active .product-item-inner {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (max-width: 768px) {
+    .product-item-info {
+      padding-bottom: 0;
+    }
+    .product-item-inner {
+      position: static;
+      margin-top: 8px;
+      opacity: 1;
+      visibility: visible;
+    }
   }
 }
 /* mageplaza end blog style */
