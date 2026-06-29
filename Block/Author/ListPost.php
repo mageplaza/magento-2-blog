@@ -94,7 +94,7 @@ class ListPost extends \Mageplaza\Blog\Block\ListPost
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
             $author = $this->getAuthor();
             if ($author) {
-                $breadcrumbs->addCrumb($author->getUrlKey(), [
+                $breadcrumbs->addCrumb((string) $author->getUrlKey(), [
                     'label' => __('Author'),
                     'title' => __('Author')
                 ]);
