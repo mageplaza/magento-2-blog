@@ -28,10 +28,10 @@ use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
- * Class Listpost
+ * Class ListPost
  * @package Mageplaza\Blog\Block\Category
  */
-class Listpost extends \Mageplaza\Blog\Block\Listpost
+class ListPost extends \Mageplaza\Blog\Block\ListPost
 {
     /**
      * @var string
@@ -80,10 +80,10 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
         parent::_prepareLayout();
 
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
-            $category     = $this->getBlogObject();
-            $categoryName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $category->getName());
+            $category = $this->getBlogObject();
             if ($category) {
-                $breadcrumbs->addCrumb($category->getUrlKey(), [
+                $categoryName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $category->getName());
+                $breadcrumbs->addCrumb((string) $category->getUrlKey(), [
                     'label' => __($categoryName),
                     'title' => __($categoryName)
                 ]);

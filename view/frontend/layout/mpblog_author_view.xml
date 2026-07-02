@@ -24,7 +24,7 @@
     <update handle="mpblog_design"/>
     <body>
         <referenceContainer name="content">
-            <block class="Mageplaza\Blog\Block\Author\Listpost" name="mpblog.post.list" template="Mageplaza_Blog::post/list.phtml"/>
+            <block class="Mageplaza\Blog\Block\Author\ListPost" name="mpblog.post.list" template="Mageplaza_Blog::post/list.phtml"/>
         </referenceContainer>
         <referenceContainer name="blog.sidebar.main">
             <block class="Mageplaza\Blog\Block\Author\Widget" after="mpblog.sidebar.mostview" name="mpblog.view.sidebar.author" template="Mageplaza_Blog::author/widget.phtml"/>

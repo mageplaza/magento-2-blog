@@ -36,7 +36,7 @@ use Mageplaza\Blog\Model\PostLike;
  * @method Post getPost()
  * @method void setPost($post)
  */
-class View extends \Mageplaza\Blog\Block\Listpost
+class View extends \Mageplaza\Blog\Block\ListPost
 {
     /**
      * config logo blog path
@@ -293,7 +293,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
                                         <a class="interactions__btn-actions action btn-like '
                     . $isLiked . '" data-cmt-id="'
                     . $comment['comment_id'] . '" click="1">
-                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
                                         <span class="count-like__like-text">'
                     . $countLikes . '</span></a>
                                         <a class="interactions__btn-actions action btn-reply" data-cmt-id="'
@@ -367,7 +367,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
                 $category = $this->categoryFactory->create()
                     ->load($catId);
                 if ($category->getId()) {
-                    $breadcrumbs->addCrumb($category->getUrlKey(), [
+                    $breadcrumbs->addCrumb((string) $category->getUrlKey(), [
                         'label' => $category->getName(),
                         'title' => $category->getName(),
                         'link'  => $this->helperData->getBlogUrl($category, Data::TYPE_CATEGORY)
@@ -376,7 +376,7 @@ class View extends \Mageplaza\Blog\Block\Listpost
             }
 
             $post = $this->getPost();
-            $breadcrumbs->addCrumb($post->getUrlKey(), [
+            $breadcrumbs->addCrumb((string) $post->getUrlKey(), [
                 'label' => $post->getName(),
                 'title' => $post->getName()
             ]);
@@ -401,13 +401,13 @@ class View extends \Mageplaza\Blog\Block\Listpost
             if ($this->helperData->getMetaTitleByStoreId($post->getMetaTitle())) {
                 $blogTitle[] = $this->helperData->getMetaTitleByStoreId($post->getMetaTitle());
             } else {
-                $blogTitle[] = ucfirst($post->getName());
+                $blogTitle[] = ucfirst((string) $post->getName());
             }
 
             return $blogTitle;
         }
 
-        return ucfirst($post->getName());
+        return ucfirst((string) $post->getName());
     }
 
     /**
@@ -423,5 +423,21 @@ class View extends \Mageplaza\Blog\Block\Listpost
         $messagesBlock->{$priority}(__($message));
 
         return $messagesBlock->toHtml();
+    }
+
+    /**
+     * Tag the detail page with only the current post so editing one post does not
+     * bust every other post's cached page (overrides the list-based parent tags).
+     *
+     * @return string[]
+     */
+    public function getIdentities()
+    {
+        $post = $this->getPost();
+        if ($post && $post->getId()) {
+            return [Post::CACHE_TAG . '_' . $post->getId()];
+        }
+
+        return [];
     }
 }

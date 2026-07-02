@@ -29,10 +29,10 @@ use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 use Mageplaza\Blog\Model\TopicFactory;
 
 /**
- * Class Listpost
+ * Class ListPost
  * @package Mageplaza\Blog\Block\Topic
  */
-class Listpost extends \Mageplaza\Blog\Block\Listpost
+class ListPost extends \Mageplaza\Blog\Block\ListPost
 {
     /**
      * @var TopicFactory
@@ -82,10 +82,10 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
         parent::_prepareLayout();
 
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
-            $topic     = $this->getBlogObject();
-            $topicName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $topic->getName());
+            $topic = $this->getBlogObject();
             if ($topic) {
-                $breadcrumbs->addCrumb($topic->getUrlKey(), [
+                $topicName = preg_replace('/[^A-Za-z0-9\-]/', ' ', $topic->getName());
+                $breadcrumbs->addCrumb((string) $topic->getUrlKey(), [
                     'label' => __($topicName),
                     'title' => __($topicName)
                 ]);

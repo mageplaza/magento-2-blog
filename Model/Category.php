@@ -24,6 +24,7 @@ namespace Mageplaza\Blog\Model;
 use Exception;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
@@ -71,7 +72,7 @@ use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
  * @method Category setAffectedPostIds(array $ids)
  * @method bool getAffectedPostIds()
  */
-class Category extends AbstractModel
+class Category extends AbstractModel implements IdentityInterface
 {
     /**
      * Cache tag

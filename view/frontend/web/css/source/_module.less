@@ -705,15 +705,212 @@ li.default-cmt__content__cmt-content__cmt-row.cmt-row {
     }
   }
 }
-@media all and (min-width: 640px) {
-  .post-list-content .products-grid .product-item {
-    width: 48%;
+.block-blog-related > h2 {
+  font-weight: 600;
+}
+
+.block-blog-related .owl-carousel,
+.mp-blog-owl-carousel.owl-carousel {
+  padding: 10px 0;
+  overflow: hidden;
+
+  .owl-stage-outer {
+    overflow: visible;
+  }
+
+  .owl-stage {
+    display: flex;
+  }
+  .owl-item {
+    display: flex;
+    height: auto;
+    float: none;
+  }
+  .owl-item > .item {
+    display: flex;
+    width: 100%;
+  }
+  .mp-post-item-wraper,
+  .post-item-wraper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  .mp-post-info-wraper,
+  .post-info-wraper {
+    display: flex !important;
+    flex-direction: column;
+    width: 100%;
+    height: auto !important;
+    box-sizing: border-box;
+  }
+
+  .post-image {
+    min-height: 0;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 12px;
+
+    > a {
+      display: block;
+      height: 100%;
+    }
+    img.img-responsive {
+      position: static;
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: none;
+      margin: 0;
+      display: block;
+      object-fit: cover;
+    }
+  }
+
+  .mp-blog-post-tags {
+    position: absolute;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    max-width: calc(~"100% - 10px");
+    white-space: normal;
+    overflow: hidden;
+
+    a.mp-tag-info {
+      display: inline-block;
+      max-width: 100%;
+      margin: 0 4px 4px 0;
+      padding: 2px 8px;
+      font-size: 11px;
+      line-height: 1.4;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: bottom;
+    }
+  }
+
+  .mp-post-title {
+    margin: 0 0 8px;
+
+    a.post-link-title {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .mp-blog-post-author {
+    margin-top: auto;
+  }
+  .mp-info-author a {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
-@media all and (max-width: 640px) {
-  .post-list-content .products-grid .product-item {
-    width: 98%;
+.mp-blog-owl-carousel .post-item-list {
+  width: 100%;
+  float: none;
+}
+
+.mp-blog-owl-carousel.owl-carousel {
+  .post-info-wraper > a {
+    display: block;
+    margin-bottom: 12px;
+  }
+  .post-info-wraper > a img.img-responsive {
+    width: 100%;
+    height: 200px;
+    max-width: 100%;
+    max-height: none;
+    margin: 0;
+    display: block;
+    object-fit: cover;
+  }
+  .mp-post-title {
+    margin: 0 !important;
+  }
+}
+
+.block-blog-related.products-same-post .owl-carousel {
+  .item.product-item.mp-blog-slider-item {
+    width: 100%;
+    height: auto;
+    margin-top: 5px;
+    display: flex;
+  }
+  .product-item-info {
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+    padding: 9px 9px 52px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    .product-item-details {
+      justify-items: center;
+      .price-box {
+        width: 100%;
+        text-align: center;
+      }
+      .product-item-actions {
+        place-self: center;
+      }
+    }
+  }
+
+  .product-item-inner {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 8px;
+    margin: 0;
+    padding: 0 8px;
+    border: 0;
+    box-shadow: none;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .product-item-info:hover,
+  .product-item-info.active {
+    margin: 0;
+    border: 1px solid #bbb;
+    box-shadow: 3px 4px 4px 0 rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 5;
+    background: #fff;
+  }
+
+  .product-item-info:hover .product-item-inner,
+  .product-item-info.active .product-item-inner {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (max-width: 768px) {
+    .product-item-info {
+      padding-bottom: 0;
+    }
+    .product-item-inner {
+      position: static;
+      margin-top: 8px;
+      opacity: 1;
+      visibility: visible;
+    }
   }
 }
 /* mageplaza end blog style */

@@ -20,8 +20,6 @@
  */
 
 use Mageplaza\Blog\Block\Post\View;
-use Mageplaza\Blog\Helper\Image;
-use Mageplaza\Blog\Model\Config\Source\Comments\Type;
 use Magento\Framework\Escaper;
 
 /** @var View $block */
@@ -31,6 +29,6 @@ $_post = $block->getPost();
 <?php if ($_post->getViewTraffic()) : ?>
     |
     <span><i class="mp-blog-icon mp-blog-traffic" aria-hidden="true"></i>
-                            <?= $escaper->escapeHtml(__('View: %1', $_post->getViewTraffic())) ?>
-                        </span>
+        <?= $escaper->escapeHtml(__('View: %1', $_post->getViewTraffic())) ?>
+    </span>
 <?php endif; ?>

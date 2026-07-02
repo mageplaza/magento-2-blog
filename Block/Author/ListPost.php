@@ -21,15 +21,16 @@
 
 namespace Mageplaza\Blog\Block\Author;
 
+use Magento\Framework\DataObject\IdentityInterface;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\AuthorFactory;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
- * Class Listpost
+ * Class ListPost
  * @package Mageplaza\Blog\Block\Author
  */
-class Listpost extends \Mageplaza\Blog\Block\Listpost
+class ListPost extends \Mageplaza\Blog\Block\ListPost
 {
     /**
      * @var AuthorFactory
@@ -69,6 +70,21 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
     }
 
     /**
+     * @return string[]
+     */
+    public function getIdentities()
+    {
+        $identities = parent::getIdentities();
+
+        $author = $this->getAuthor();
+        if ($author instanceof IdentityInterface && $author->getId()) {
+            $identities = array_merge($identities, $author->getIdentities());
+        }
+
+        return array_unique($identities);
+    }
+
+    /**
      * @inheritdoc
      */
     protected function _prepareLayout()
@@ -78,7 +94,7 @@ class Listpost extends \Mageplaza\Blog\Block\Listpost
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
             $author = $this->getAuthor();
             if ($author) {
-                $breadcrumbs->addCrumb($author->getUrlKey(), [
+                $breadcrumbs->addCrumb((string) $author->getUrlKey(), [
                     'label' => __('Author'),
                     'title' => __('Author')
                 ]);

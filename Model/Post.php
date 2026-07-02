@@ -26,6 +26,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
@@ -97,7 +98,7 @@ use Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory as TopicCollectio
  * @method array getTopicsIds()
  * @method Post setTopicsIds(array $topicIds)
  */
-class Post extends AbstractModel
+class Post extends AbstractModel implements IdentityInterface
 {
     /**
      * Cache tag
@@ -324,7 +325,9 @@ class Post extends AbstractModel
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        // Global CACHE_TAG busts list pages (e.g. a newly added post); the per-id
+        // tag busts the specific post's detail page.
+        return [self::CACHE_TAG, self::CACHE_TAG . '_' . $this->getId()];
     }
 
     /**
@@ -454,7 +457,9 @@ class Post extends AbstractModel
         if (!$this->hasData('view_traffic')) {
             $traffic = $this->_getResource()->getViewTraffic($this);
 
-            $this->setData('view_traffic', $traffic[0]);
+            // A post may have no traffic row yet (view count is created lazily
+            // via the mpblog/post/updateview AJAX action), so default to 0.
+            $this->setData('view_traffic', $traffic[0] ?? 0);
         }
 
         return $this->_getData('view_traffic');

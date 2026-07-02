@@ -22,8 +22,8 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <script src="Mageplaza_Blog::js/splide.min.js" />
-        <css src="Mageplaza_Blog::css/splide.min.css" />
+        <remove src="Mageplaza_Blog::js/splide.min.js"/>
+        <remove src="Mageplaza_Blog::css/splide.min.css"/>
     </head>
     <body>
         <referenceBlock name="related.post.tab" >

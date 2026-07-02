@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         colors="true"
+         bootstrap="Test/bootstrap.php">
+    <testsuites>
+        <testsuite name="Mageplaza Blog Unit Tests">
+            <directory>Test/Unit</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>Block</directory>
+            <directory>Helper</directory>
+            <directory>Model</directory>
+            <directory>Observer</directory>
+            <directory>Plugin</directory>
+        </include>
+        <exclude>
+            <directory>Test</directory>
+        </exclude>
+    </source>
+</phpunit>

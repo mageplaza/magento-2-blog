@@ -87,14 +87,14 @@ class Widget extends Frontend
     protected function getPostDate()
     {
         if (!$this->_postDate) {
-            $posts     = $this->helperData->getPostList();
-            $postDates = [];
-            if ($posts->getSize()) {
-                foreach ($posts as $post) {
-                    $postDates[] = $post->getPublishDate();
-                }
-            }
-            $this->_postDate = $postDates;
+            // Fetch only the publish_date column instead of hydrating every post
+            // as a model object (OOM/slow at scale).
+            $collection = $this->helperData->getPostList();
+            $select     = $collection->getSelect()
+                ->reset(\Magento\Framework\DB\Select::COLUMNS)
+                ->columns('publish_date');
+
+            $this->_postDate = $collection->getConnection()->fetchCol($select);
         }
 
         return $this->_postDate;

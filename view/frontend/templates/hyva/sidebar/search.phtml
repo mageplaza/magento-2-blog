@@ -53,7 +53,11 @@ use Magento\Framework\Escaper;
     </div>
     <div class="actions">
         <button type="submit" title="<?= $escaper->escapeHtmlAttr(__('Search')) ?>" class="action search">
-            <i class="fa fa-search" aria-hidden="true" style="font-size: 16px;margin-top: 5px;"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor" width="18" height="18" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+            </svg>
         </button>
     </div>
 </div>
@@ -62,13 +66,27 @@ use Magento\Framework\Escaper;
         var visibleImage = <?php echo /** @noEscape */   json_encode($block->getSidebarConfig('search/show_image')); ?>;
         var searchBox    = document.getElementById('mpblog-search-box');
         let minChars =  <?= $block->getSidebarConfig('search/min_chars') ?: 1; ?>;
+        var searchUrl   = <?php echo /** @noEscape */ json_encode($block->getSearchUrl()); ?>;
+        var searchTimer = null;
         searchBox.addEventListener('input', function () {
             var searchTerm = searchBox.value;
-            fetchSuggestions(searchTerm);
+            clearTimeout(searchTimer);
+            if (!searchTerm || searchTerm.length < minChars) {
+                updateAutocompleteResults([], searchTerm);
+                return;
+            }
+            searchTimer = setTimeout(function () {
+                fetchSuggestions(searchTerm);
+            }, 250);
         });
 
         function fetchSuggestions (searchTerm) {
-            updateAutocompleteResults(<?php echo /** @noEscape */ ($block->getSearchBlogData()); ?>, searchTerm);
+            fetch(searchUrl + '?query=' + encodeURIComponent(searchTerm), {headers: {'X-Requested-With': 'XMLHttpRequest'}})
+                .then(function (response) { return response.json(); })
+                .then(function (data) {
+                    updateAutocompleteResults((data && data.suggestions) ? data.suggestions : [], searchTerm);
+                })
+                .catch(function () {});
         }
 
         function updateAutocompleteResults (suggestions, searchTerm) {

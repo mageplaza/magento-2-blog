@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Model;
 
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -48,7 +49,7 @@ use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory as TagCollectionFac
  * @method Tag setAffectedPostIds(array $ids)
  * @method bool getAffectedPostIds()
  */
-class Tag extends AbstractModel
+class Tag extends AbstractModel implements IdentityInterface
 {
     /**
      * Cache tag

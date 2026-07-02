@@ -26,6 +26,7 @@ use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Url;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
@@ -332,17 +333,57 @@ class Frontend extends Template
     }
 
     /**
-     * @param Post $post
-     *
-     * @return int
+     * @var array|null
+     */
+    private ?array $commentCounts = null;
+
+    /**
+     * @param $post
+     * @return int|mixed
+     * @throws LocalizedException
      */
     public function getCommentinPost($post)
     {
-        $cmt = $this->cmtFactory->create()->getCollection()
-            ->addFieldToFilter('post_id', $post->getId())
-            ->addFieldToFilter('status', Status::APPROVED);
+        $postId = (int) (is_object($post) ? $post->getId() : $post);
+        if ($postId === 0) {
+            return 0;
+        }
 
-        return $cmt->count();
+        if ($this->commentCounts === null) {
+            $this->commentCounts = [];
+            $collection = $this->cmtFactory->create()->getCollection()
+                ->addFieldToFilter('status', Status::APPROVED);
+            $collection->getSelect()
+                ->reset(\Magento\Framework\DB\Select::COLUMNS)
+                ->columns(['post_id', 'total' => new \Magento\Framework\DB\Sql\Expression('COUNT(*)')])
+                ->group('post_id');
+            foreach ($collection->getData() as $row) {
+                $this->commentCounts[(int) $row['post_id']] = (int) $row['total'];
+            }
+        }
+
+        return $this->commentCounts[$postId] ?? 0;
+    }
+
+    /**
+     * @param $post
+     * @return int|mixed
+     */
+    public function getReadingTime($post)
+    {
+        $configured = $post->getReadTime();
+        if (is_numeric($configured) && (int) $configured >= 1) {
+            return (int) $configured;
+        }
+
+        $wordsPerMinute = 200;
+        $content        = (string) $post->getPostContent();
+        if ($content === '') {
+            $content = (string) $post->getShortDescription();
+        }
+        $words = str_word_count(strip_tags($content));
+
+        return max(1, (int) ceil($words / $wordsPerMinute));
     }
 
     /**

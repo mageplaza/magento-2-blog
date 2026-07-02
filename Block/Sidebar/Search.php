@@ -32,32 +32,88 @@ use Mageplaza\Blog\Helper\Data;
 class Search extends Frontend
 {
     /**
+     * AJAX endpoint URL for the blog search autocomplete.
+     *
+     * @return string
+     */
+    public function getSearchUrl()
+    {
+        return $this->helperData->getUrl('mpblog/post/search');
+    }
+
+    /**
+     * Suggestions for a search term. Filters in SQL and caps the result so it
+     * never loads the whole post table (the old getSearchBlogData dumped every
+     * post into the page -> OOM at scale).
+     *
+     * @param string $query
+     *
+     * @return array
+     * @throws NoSuchEntityException
+     */
+    public function getSearchSuggestions($query)
+    {
+        $query = trim((string) $query);
+        if ($query === '') {
+            return [];
+        }
+
+        $collection = $this->helperData->getPostList();
+        $collection->addFieldToFilter(
+            ['name', 'short_description'],
+            [['like' => '%' . $query . '%'], ['like' => '%' . $query . '%']]
+        )->setPageSize($this->getSearchLimit());
+
+        return $this->buildSuggestions($collection);
+    }
+
+    /**
+     * Kept for backward compatibility, but capped so it can no longer load the
+     * entire post table; templates now use the AJAX endpoint instead.
+     *
      * @return string
      * @throws NoSuchEntityException
      */
     public function getSearchBlogData()
     {
-        $result = [];
-        $posts = $this->helperData->getPostList();
-        $limitDesc = (int)$this->getSidebarConfig('search/description');
-        if (!empty($posts)) {
-            foreach ($posts as $item) {
-                $shortDescription = ($item->getShortDescription() && $limitDesc > 0) ?
-                    $item->getShortDescription() : '';
-                if (strlen($shortDescription) > $limitDesc) {
-                    $shortDescription = mb_substr($shortDescription, 0, $limitDesc, 'UTF-8') . '...';
-                }
+        $collection = $this->helperData->getPostList()->setPageSize($this->getSearchLimit());
 
-                $result[] = [
-                    'value' => $item->getName(),
-                    'url' => $item->getUrl(),
-                    'image' => $this->resizeImage($item->getImage(), '100x'),
-                    'desc' => $shortDescription
-                ];
+        return Data::jsonEncode($this->buildSuggestions($collection));
+    }
+
+    /**
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post\Collection $collection
+     *
+     * @return array
+     */
+    protected function buildSuggestions($collection)
+    {
+        $result    = [];
+        $limitDesc = (int) $this->getSidebarConfig('search/description');
+        foreach ($collection as $item) {
+            $shortDescription = ($item->getShortDescription() && $limitDesc > 0) ?
+                $item->getShortDescription() : '';
+            if (strlen($shortDescription) > $limitDesc) {
+                $shortDescription = mb_substr($shortDescription, 0, $limitDesc, 'UTF-8') . '...';
             }
+
+            $result[] = [
+                'value' => $item->getName(),
+                'url'   => $item->getUrl(),
+                'image' => $this->resizeImage($item->getImage(), '100x'),
+                'desc'  => $shortDescription
+            ];
         }
 
-        return Data::jsonEncode($result);
+        return $result;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getSearchLimit()
+    {
+        return (int) $this->getSidebarConfig('search/search_limit') ?: 10;
     }
 
     /**

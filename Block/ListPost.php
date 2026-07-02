@@ -22,17 +22,19 @@
 namespace Mageplaza\Blog\Block;
 
 use Exception;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Theme\Block\Html\Pager;
 use Mageplaza\Blog\Model\Config\Source\DisplayType;
+use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\ResourceModel\Post\Collection;
 
 /**
- * Class Listpost
+ * Class ListPost
  * @package Mageplaza\Blog\Block\Post
  */
-class Listpost extends Frontend
+class ListPost extends Frontend implements IdentityInterface
 {
     /**
      * @return Collection
@@ -111,7 +113,7 @@ class Listpost extends Frontend
     }
 
     /**
-     * @return Listpost
+     * @return ListPost
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -253,5 +255,20 @@ class Listpost extends Frontend
         }
 
         return $robots[$storeId] ?? ($robots[0] ?? null);
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function getIdentities()
+    {
+        $identities = [Post::CACHE_TAG];
+
+        $object = $this->getBlogObject();
+        if ($object instanceof IdentityInterface && $object->getId()) {
+            $identities = array_merge($identities, $object->getIdentities());
+        }
+
+        return array_unique($identities);
     }
 }
