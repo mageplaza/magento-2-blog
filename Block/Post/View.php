@@ -74,13 +74,23 @@ class View extends \Mageplaza\Blog\Block\ListPost
     }
 
     /**
-     * @param $value
+     * @param string|null $value
      *
      * @return string
      */
     public function getDecrypt($value)
     {
-        return $this->enc->decrypt($value);
+        $value = (string) $value;
+        if ($value === '') {
+            return '';
+        }
+
+        $decrypted = $this->enc->decrypt($value);
+        if ($decrypted === '' || !mb_check_encoding($decrypted, 'UTF-8')) {
+            return $value;
+        }
+
+        return $decrypted;
     }
 
     /**
