@@ -33,6 +33,9 @@
         </arguments>
     </type>
     <!--Plugin List-->
+    <type name="Magento\Framework\App\Action\Action">
+        <plugin name="mageplaza_blog_check_module_enabled" type="Mageplaza\Blog\Plugin\Frontend\CheckModuleEnabled"/>
+    </type>
     <type name="Magento\Theme\Block\Html\Topmenu">
         <plugin name="blog-topmenu" type="Mageplaza\Blog\Plugin\Topmenu"/>
     </type>
