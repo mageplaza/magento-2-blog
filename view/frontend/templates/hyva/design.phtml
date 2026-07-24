@@ -25,5 +25,16 @@ use Magento\Framework\Escaper;
 /** @var Design $block */
 /** @var Escaper $escaper */
 
-// Intentionally empty — the Hyvä theme handles blog styling via its own templates and stylesheet.
+$color = trim((string) $block->getHelper()->getDisplayConfig('font_color'));
+
+$isValidColor = $color !== ''
+    && preg_match('/^(#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})|rgba?\([0-9.,\s%]+\))$/', $color);
 ?>
+<?php if ($isValidColor): ?>
+    <style>
+        #maincontent {
+            --color-primary: <?= /** @noEscape */ $color ?>;
+            --color-primary-darker: color-mix(in srgb, <?= /** @noEscape */ $color ?> 82%, #000);
+        }
+    </style>
+<?php endif; ?>
