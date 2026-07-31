@@ -26,19 +26,14 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 
 ?>
-<script type="text/javascript">
-    require(['jquery'], function ($) {
-        $(window).on('load',function () {
-            var body = $('body');
-
-            if (body.hasClass('page-layout-1column')) {
-                $('.columns').find('.sidebar.sidebar-main').remove();
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Mageplaza_Blog/js/design-layout": {
+                "isEthemeYourstore": <?= $block->getCurrentTheme() === 'Etheme/yourstore' ? 'true' : 'false' ?>
             }
-            <?php if ($block->getCurrentTheme() === "Etheme/yourstore") : ?>
-            body.addClass('mpblog-etheme-yourstore');
-            <?php endif; ?>
-        });
-    });
+        }
+    }
 </script>
 <?php $color = $block->getHelper()->getDisplayConfig('font_color'); ?>
 <style type="text/css">

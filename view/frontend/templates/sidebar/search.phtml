@@ -54,38 +54,10 @@ use Magento\Framework\Escaper;
         </button>
     </div>
 </div>
-<script>
-    require(['jquery', 'mpDevbridgeAutocomplete'], function ($) {
-        var visibleImage = <?= /** @noEscape */ $block->getSidebarConfig('search/show_image') ?>;
-
-        $('#mpblog-search-box').autocomplete({
-            serviceUrl: '<?= $escaper->escapeUrl($block->getSearchUrl()) ?>',
-            paramName: 'query',
-            type: 'GET',
-            deferRequestBy: 200,
-            maxHeight: 2000,
-            minChars: <?= $block->getSidebarConfig('search/min_chars') ?: 1; ?>,
-            autoSelectFirst: true,
-            showNoSuggestionNotice: true,
-            triggerSelectOnValidInput: false,
-            onSelect: function (suggestion) {
-                window.location.href = suggestion.url;
-            },
-            formatResult: function (suggestion, currentValue) {
-                var additionClass = '',
-                    html          = "<div class='mpblog-suggestion'>";
-
-                if (visibleImage) {
-                    html += "<div class='mpblog-suggestion-left'><img class='img-responsive' src='" + suggestion.image + "' /></div>";
-                    additionClass = 'image-visible';
-                }
-
-                html += "<div class='mpblog-suggestion-right " + additionClass + "'>" +
-                    "<div class='mpblog-product-line mpblog-product-name'>" + suggestion.value + "</div>" +
-                    "<div class='mpblog-product-des'><p class='mpblog-short-des'>" + suggestion.desc + "</p></div></div></div>";
-
-                return html;
-            }
-        });
-    });
+<script type="text/x-magento-init">
+    {
+        "#mpblog-search-box": {
+            "Mageplaza_Blog/js/sidebar-search": <?= /* @noEscape */ $block->getSearchJsonConfig() ?>
+        }
+    }
 </script>

@@ -35,6 +35,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
+use Mageplaza\Blog\Block\Adminhtml\Category\TreeFactory;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category as CategoryOptions;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag as TagOptions;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic as TopicOptions;
@@ -151,6 +152,11 @@ class Frontend extends Template
     public $enc;
 
     /**
+     * @var TreeFactory
+     */
+    protected $treeFactory;
+
+    /**
      * Frontend constructor.
      *
      * @param Context $context
@@ -171,6 +177,7 @@ class Frontend extends Template
      * @param ThemeProviderInterface $themeProvider
      * @param EncryptorInterface $enc
      * @param AuthorStatus $authorStatus
+     * @param TreeFactory $treeFactory
      * @param array $data
      */
     public function __construct(
@@ -192,6 +199,7 @@ class Frontend extends Template
         ThemeProviderInterface $themeProvider,
         EncryptorInterface $enc,
         AuthorStatus $authorStatus,
+        TreeFactory $treeFactory,
         array $data = []
     ) {
         $this->filterProvider     = $filterProvider;
@@ -212,8 +220,26 @@ class Frontend extends Template
         $this->themeProvider      = $themeProvider;
         $this->store              = $context->getStoreManager();
         $this->enc                = $enc;
+        $this->treeFactory        = $treeFactory;
 
         parent::__construct($context, $data);
+    }
+
+    /**
+     * @param int|null $storeId
+     *
+     * @return array|null
+     */
+    protected function buildCategoryTree(?int $storeId): ?array
+    {
+        try {
+            $tree = $this->treeFactory->create();
+            $tree = $tree->getTree(null, $storeId);
+
+            return $tree;
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     /**

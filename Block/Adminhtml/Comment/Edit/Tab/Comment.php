@@ -120,7 +120,7 @@ class Comment extends Generic implements TabInterface
 
         $post = $this->_postFactory->create()->load($comment->getPostId());
         $postText = '<a href="' . $this->getUrl('mageplaza_blog/post/edit', ['id' => $comment->getPostId()])
-            . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($post->getName()) . '</a>';
+            . '" target="blank">' . $this->escapeHtml($post->getName()) . '</a>';
         $fieldset->addField('post_name', 'note', ['text' => $postText, 'label' => __('Post'), 'name' => 'post_name']);
 
         if ($comment->getEntityId() > 0) {
@@ -130,7 +130,7 @@ class Comment extends Generic implements TabInterface
                     'customer/index/edit',
                     ['id' => $customer->getId(), 'active_tab' => 'review']
                 )
-                . '" onclick="this.target=\'blank\'">'
+                . '" target="blank">'
                 . $this->escapeHtml($customer->getFirstname() . ' ' . $customer->getLastname())
                 . '</a> <a href="mailto:%4">(' . $customer->getEmail() . ')</a>';
         } else {
@@ -159,7 +159,7 @@ class Comment extends Generic implements TabInterface
         foreach ($this->storeManager->getStores() as $store) {
             if ($store->getId() === $comment->getStoreIds()) {
                 $viewText .= '<a href="' . $post->getUrl($store->getId()) . '#cmt-id-' . $comment->getId()
-                    . '" onclick="this.target=\'blank\'">View in store ' . $store->getName() . '</a><br>';
+                    . '" target="blank">View in store ' . $store->getName() . '</a><br>';
             }
         }
 

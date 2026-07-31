@@ -97,17 +97,12 @@ use Magento\Framework\Escaper;
             <label for="publish_date" class="label"><span><?= $escaper->escapeHtml(__('Publish Date')) ?></span></label>
             <div class="control">
                 <input name="publish_date" id="publish_date" type="text" data-validate="{'datetime-validation':true}">
-                <script>
-                    require([
-                        "jquery",
-                        "mage/calendar"
-                    ], function($){
-                        $('#publish_date').datetimepicker({
-                                dateFormat:'yy-mm-dd',
-                                beforeShowDay: $.datepicker.noWeekends,
-                            }
-                        );
-                    });
+                <script type="text/x-magento-init">
+                    {
+                        "#publish_date": {
+                            "Mageplaza_Blog/js/publish-date-picker": {}
+                        }
+                    }
                 </script>
             </div>
         </div>

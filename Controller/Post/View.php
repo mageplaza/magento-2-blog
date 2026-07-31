@@ -208,7 +208,7 @@ class View extends Action
 
                 $userName    = $this->session->isLoggedIn()
                     ? $customerData->getFirstname() . ' ' . $customerData->getLastname()
-                    : $params['guestName'] . ' (Guest)';
+                    : htmlspecialchars($params['guestName'] ?? '', ENT_COMPAT, 'UTF-8') . ' (Guest)';
                 $commentData = [
                     'post_id'    => $id,
                     '',

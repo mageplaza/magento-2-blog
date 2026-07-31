@@ -436,6 +436,37 @@ class View extends \Mageplaza\Blog\Block\ListPost
     }
 
     /**
+     * @return string
+     */
+    public function getCommentJsonConfig()
+    {
+        return Data::jsonEncode([
+            'loginUrl'     => $this->getLoginUrl(),
+            'like'         => (string) __('Like'),
+            'reply'        => (string) __('Reply'),
+            'isLogged'     => $this->isLoggedIn() ? 'Yes' : 'No',
+            'likedColor'   => $this->getBlogHelper()->getDisplayConfig('font_color'),
+            'messengerBox' => [
+                'cmt_warning'         => $this->getMessagesHtml('adderror', 'Please write the comment.'),
+                'exist_email_warning' => $this->getMessagesHtml(
+                    'adderror',
+                    'This email is exist. Please <a href="' . $this->getLoginUrl() . '"> Login </a> as our customer.'
+                ),
+                'login_warning'       => $this->getMessagesHtml(
+                    'adderror',
+                    'You are not logged in. Please <a href="' . $this->getLoginUrl()
+                    . '"> Login </a> or <a href="' . $this->getRegisterUrl()
+                    . '"> Signup </a> to like or send a reply.</div>'
+                ),
+                'comment_approve'     => $this->getMessagesHtml(
+                    'addsuccess',
+                    'Your comment has been sent successfully. Please wait admin approve !'
+                ),
+            ],
+        ]);
+    }
+
+    /**
      * Tag the detail page with only the current post so editing one post does not
      * bust every other post's cached page (overrides the list-based parent tags).
      *

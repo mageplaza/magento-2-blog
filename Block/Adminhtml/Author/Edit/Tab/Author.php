@@ -224,18 +224,12 @@ class Author extends Generic implements TabInterface
                 'value' => $author->getUrlKey() ? $authorUrlFormat . $author->getUrlKey() . $urlSuffix : ''
             ]
         )->setAfterElementHtml(
-            "<script>
-                require(['jquery'], function($){
-                    $('#author_url_key').on('keyup', function() {
-                        var url = '" . $authorUrlFormat . "'+$(this).val()+'" . $urlSuffix . "';
-
-                        if ($(this).val() === ''){
-                            url = '';
-                        }
-                        $('.field-full_url .control-value').html(url);
-                    });
-                });
-            </script>"
+            '<div data-mage-init=\'' . $this->escapeHtmlAttr(json_encode([
+                'Mageplaza_Blog/js/author-full-url' => [
+                    'urlFormat' => $authorUrlFormat,
+                    'urlSuffix' => $urlSuffix
+                ]
+            ])) . '\' style="display:none;"></div>'
         );
 
         $fieldset->addField('facebook_link', 'text', [

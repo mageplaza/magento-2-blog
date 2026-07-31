@@ -25,13 +25,13 @@ use Magento\Framework\Escaper;
 /** @var ManagePost $block */
 /** @var Escaper $escaper */
 ?>
-<button title="Close (Esc)" type="button" class="mfp-close" style="position: absolute;top: -5px;right: 10px;font-size: 25px;" onclick="hideMyDialogNewPost()">×</button>
-<form enctype="multipart/form-data" data-mage-init='{"validation": {}}'
+<button title="Close (Esc)" type="button" class="mfp-close" style="position: absolute;top: -5px;right: 10px;font-size: 25px;" @click="hideMyDialogNewPost">×</button>
+<form enctype="multipart/form-data"
       action="<?= $escaper->escapeHtml($block->getUrl('mpblog/post/manage')) ?>" method="post" class="form"
       name="mp_blog_post_form" id="mp_blog_post_form"
       style="overflow-y: auto; height: 700px"
-      x-data="Object.assign(hyva.formValidation($el), initAddNewPost())"
-      @submit.prevent="submitForm();"
+      x-data="initAddNewPost"
+      @submit.prevent="submitForm"
 >
     <?= /* @noEscape */ $block->getBlockHtml('formkey'); ?>
     <fieldset class="fieldset">
@@ -148,189 +148,10 @@ use Magento\Framework\Escaper;
 <style>
     .ck-editor__editable {min-height: 300px;}
 </style>
-<script>
-    CKEDITOR.ClassicEditor.create(document.getElementById("post_content"), {
-        toolbar: {
-            items: [
-                'undo', 'redo', '|',
-                'heading', '|',
-                'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
-                'bulletedList', 'numberedList', 'todoList', '|',
-                'alignment:left', 'alignment:right', 'alignment:center', 'alignment:justify', '|',
-                'blockQuote', '|',
-                'outdent', 'indent'
-            ],
-            shouldNotGroupWhenFull: true
-        },
-        list: {
-            properties: {
-                styles: true,
-                startIndex: true,
-                reversed: true
-            }
-        },
-        heading: {
-            options: [
-                {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
-                {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
-                {model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2'},
-                {model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3'},
-                {model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4'},
-                {model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5'},
-                {model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6'}
-            ]
-        },
-        placeholder: '',
-        removePlugins: [
-            'AIAssistant',
-            'CKBox',
-            'CKFinder',
-            'EasyImage',
-            'RealTimeCollaborativeComments',
-            'RealTimeCollaborativeTrackChanges',
-            'RealTimeCollaborativeRevisionHistory',
-            'PresenceList',
-            'Comments',
-            'TrackChanges',
-            'TrackChangesData',
-            'RevisionHistory',
-            'Pagination',
-            'WProofreader',
-            'MathType',
-            'SlashCommand',
-            'Template',
-            'DocumentOutline',
-            'FormatPainter',
-            'TableOfContents',
-            'PasteFromOfficeEnhanced'
-        ]
-    }).then(editor => {
-        window.editor = editor;
-    }).catch(err => {
-        console.error(err.stack);
-    });
-
-    const categories = <?php echo /** @noEscape */ ($block->getCategoriesTree()) ?>;
-    const topics     = <?php echo /** @noEscape */ ($block->getTopicTree()) ?>;
-    const tags       = <?php echo /** @noEscape */ ($block->getTagTree()) ?>;
-    const optionsCategories = categories?.map(data => {
-        return {
-            name: data?.label,
-            value: data?.value
-        }
-    });
-    const optionsTopics = Object.values(topics)?.map(data => {
-        return {
-            name: data?.label,
-            value: data?.value
-        }
-    });
-    const optionsTags          = Object.values(tags)?.map(data => {
-        return {
-            name: data?.label,
-            value: data?.value
-        }
-    });
-    const domElementCategories = document.querySelector('#categories_ids');
-    const treeselectCategories = new Treeselect({
-        parentHtmlContainer: domElementCategories,
-        options: optionsCategories,
-        value: []
-
-    });
-    const domElementTopics = document.querySelector('#topics_ids');
-    const treeselectTopics = new Treeselect({
-        parentHtmlContainer: domElementTopics,
-        options: optionsTopics,
-        value: []
-
-    });
-    const domElementTags = document.querySelector('#tags_ids');
-    const treeselectTags = new Treeselect({
-        parentHtmlContainer: domElementTags,
-        options: optionsTags,
-        value: []
-
-    });
-    treeselectTags.srcElement.addEventListener('input', (e) => {
-        tags_ids = e.detail?.join(',')
-    });
-    function initAddNewPost () {
-        return {
-            errors: 0,
-            hasCaptchaToken: 0,
-            showPassword: false,
-            displayErrorMessage: false,
-            errorMessages: [],
-            setErrorMessages (messages) {
-                this.errorMessages       = [messages];
-                this.displayErrorMessage = this.errorMessages.length
-            },
-            submitForm () {
-                this.validate()
-                .then(() => {
-                    const $form = document.querySelector('#mp_blog_post_form');
-                    if (this.errors === 0) {
-                        this.dispatchAddNewPostRequest($form);
-                    }
-                })
-                .catch((invalid) => {
-                    if (invalid.length > 0) {
-                        invalid[0].focus();
-                    }
-                });
-            },
-            dispatchAddNewPostRequest: function (form) {
-                const formData = new FormData();
-                var imageInput = document.querySelector('#image');
-                if (imageInput?.files.length > 0) {
-                    formData.append('image', imageInput.files[0]);
-                } else {
-                    var emptyBlob = new Blob([''], {type: 'application/octet-stream'});
-                    formData.append('image', emptyBlob, 'empty_image.txt');
-                }
-                formData.append('name', document.querySelector('#name').value);
-                formData.append('post_id', document.querySelector('#post_id').value);
-                formData.append('short_description', document.querySelector('#short_description').value);
-                formData.append('post_content', document.querySelector('#post_content').value);
-
-                formData.append('categories_ids', treeselectCategories.value?.join(','));
-                formData.append('topics_ids', treeselectTopics.value?.join(','));
-                formData.append('tags_ids', treeselectTags.value?.join(','));
-                formData.append('allow_comment', document.querySelector('#allow_comment').value);
-
-                const publicDateValue = document.querySelector('#publish_date').value;
-                if(publicDateValue) {
-                    formData.append('publish_date', convertDateToSave(publicDateValue));
-                } else {
-                    formData.append('publish_date', '');
-                }
-                var checkboxElement = document.getElementById("post_image_delete");
-                if(checkboxElement && checkboxElement.checked) {
-                    formData.append(checkboxElement.name, checkboxElement.value);
-                }
-                var imgElement= document.getElementById("post_image_image");
-                if(imgElement) {
-
-                    formData.append('image', imgElement.title);
-                }
-
-                fetch("<?= $escaper->escapeHtml($block->getUrl('mpblog/post/manage')) ?>", {
-                    method: 'POST',
-                    headers: {
-                        "X-Requested-With": "XMLHttpRequest"
-                    },
-                    body: formData,
-                    mode: "cors",
-                    credentials: "include"
-                })
-                .then(response => response.json())
-                .then(response => {
-                    window.location.reload();
-                })
-                .catch(error => console.error('Error:', error));
-            }
-        }
-    }
-
-</script>
+<script type="application/json" id="mpblog-manage-post-config"><?= /* @noEscape */ json_encode([
+    'categories' => json_decode($block->getCategoriesTree(), true) ?: [],
+    'topics'     => json_decode($block->getTopicTree(), true) ?: [],
+    'tags'       => json_decode($block->getTagTree(), true) ?: [],
+    'submitUrl'  => $block->getUrl('mpblog/post/manage'),
+], JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
+<script src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::js/hyva/manage-post.js')) ?>" defer></script>

@@ -130,8 +130,7 @@ class Form extends Generic
             'label' => __('Import Type'),
             'title' => __('Import Type'),
             'values' => $this->_importType->toOptionArray(),
-            'required' => true,
-            'onchange' => 'mpBlogImport.initImportFieldsSet()'
+            'required' => true
         ]);
 
         $fieldsetList = $this->_importType->toOptionArray();
@@ -196,8 +195,7 @@ class Form extends Generic
                 'label' => __('Import Behaviour'),
                 'title' => __('Import Behaviour'),
                 'values' => $this->_importBehaviour->toOptionArray(),
-                'note' => __('This action is applied to all data'),
-                'onchange' => 'mpBlogImport.initExpandBehaviour();'
+                'note' => __('This action is applied to all data')
             ]);
 
             $fieldsets[$item["value"]]->addField($item["value"] . '_import_behaviour_expand', 'select', [

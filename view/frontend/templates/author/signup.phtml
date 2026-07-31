@@ -164,26 +164,10 @@ $author = $block->getAuthor();
         }
     }
 </style>
-<script>
-    require(
-        [
-            'jquery',
-            "Mageplaza_Blog/js/get-editor"
-        ], function ($, editor) {
-            $('#url_key').on('keyup', function () {
-                var url = '<?= $escaper->escapeUrl($block->getUrl("blog/author")) ?>'
-                    + $(this).val() + '<?= $escaper->escapeHtml($block->getUrlSuffix())?>';
-
-                if ($(this).val() === '') {
-                    url = '';
-                }
-                $('.mp_full_url').html(url);
-            });
-            editor.config(
-                'short_description',
-                '<?= /* @noEscape */ $block->getVersion() ?>',
-                '<?= /* @noEscape */ $block->getMagentoVersion() ?>',
-                '99%'
-            );
-        });
+<script type="text/x-magento-init">
+    {
+        "#url_key": {
+            "Mageplaza_Blog/js/author-signup": <?= /* @noEscape */ $block->getSignupJsonConfig() ?>
+        }
+    }
 </script>

@@ -28,7 +28,7 @@ $posts       = $block->getMostViewPosts();
 $postsRecent = $block->getRecentPost();
 ?>
 <div class="mp-sidebar product info detailed">
-    <div class="product data items" data-mage-init='{"tabs":{"openedState":"active"}}' x-data="{ activeTab:  0 }">
+    <div class="product data items" x-data="{ activeTab:  0 }">
         <div class="data item title" data-role="collapsible" id="tab-label-popular" @click="activeTab = 0" :class="{ 'active': activeTab === 0 }">
             <a class="data switch" tabindex="-1" data-toggle="switch" id="tab-label-popular-title" >
                 <div class="text-center"><?= $escaper->escapeHtml(__('Popular')) ?></div>

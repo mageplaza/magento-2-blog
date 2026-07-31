@@ -28,7 +28,6 @@ use Magento\Framework\Escaper;
 $postCollection = $block->getPostCollection();
 $modalViewModel = $viewModels->require(\Hyva\Theme\ViewModel\Modal::class);
 $postDatas      = $block->getPostDatas($postCollection);
-$jsonData       = json_encode($postDatas);
 
 ?>
 <?php if (!$block->getAuthorStatus()) : ?>
@@ -50,7 +49,7 @@ $jsonData       = json_encode($postDatas);
 
     }
 }" x-init="init()">
-        <button onclick="handleAddPost()" type="button" aria-haspopup="dialog"
+        <button @click="handleAddPost" type="button" aria-haspopup="dialog"
                 class="action primary btn btn-primary" title="<?= $escaper->escapeHtmlAttr(__('Add New Post')) ?>">
             <?= $escaper->escapeHtml(__('Add New Post')) ?>
         </button>
@@ -69,7 +68,7 @@ HTML
             ) ?>
 
     </div>
-    <div class="post-list-content" id="mpblog-list-container">
+    <div class="post-list-content" id="mpblog-list-container" x-data="mpBlogPostActions">
         <?php if ($postCollection && count($postCollection) > 0) : ?>
             <div class="post-list-body">
                 <?php $i = 1 ?>
@@ -119,7 +118,7 @@ HTML
                             </div>
                             <div class="post-info-action" data-postId="<?= $escaper->escapeHtml($post->getId()); ?>">
                                 <div class="mpblog-post-duplicate"
-                                     onclick='handleDuplicate(this,<?= /** @noEscape */ $post->getId() ?>, "<?= /** @noEscape */ $post->getImage() ?>")'
+                                     @click="handleDuplicate($el, <?= (int) $post->getId() ?>, '<?= /* @noEscape */ $escaper->escapeJs($post->getImage() ?? '') ?>')"
                                 >
                                     <img
                                         src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/duplicate.svg')) ?>"
@@ -129,7 +128,7 @@ HTML
                                     />
                                 </div>
                                 <div class="mpblog-post-edit"
-                                     onclick='handleEdit(this,<?= /** @noEscape */ $post->getId() ?>, "<?= /** @noEscape */ $post->getImage() ?>")'
+                                     @click="handleEdit($el, <?= (int) $post->getId() ?>, '<?= /* @noEscape */ $escaper->escapeJs($post->getImage() ?? '') ?>')"
                                 >
                                     <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/writing.svg')) ?>"
                                          align="middle"
@@ -137,7 +136,7 @@ HTML
                                          title="<?= $escaper->escapeHtmlAttr(__('Edit')) ?>"
                                     />
                                 </div>
-                                <div class="mpblog-post-delete" onclick="handleDelete(this)">
+                                <div class="mpblog-post-delete" @click="handleDelete($el)">
                                     <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/delete.svg')) ?>"
                                          align="middle"
                                          alt="<?= $escaper->escapeHtmlAttr(__('Delete')) ?>"
@@ -162,172 +161,10 @@ HTML
         $block->getChildHtml('additional') ?>
     </div>
 
-ad
-    <script>
-        let pubUrl = "<?= $escaper->escapeHtml($block->getBaseMediaUrl()) ?>";
-        let title  = document.querySelector('#popup_author_post');
-        let nameEle              = document.querySelector('#name');
-        let postIdEle           = document.querySelector('#post_id');
-        let shortDescriptionEle = document.querySelector('#short_description');
-        let allowCommentEle     = document.querySelector('#allow_comment');
-        let publishDateEle      = document.querySelector('#publish_date');
-
-        function handleDelete (element) {
-            var postId = element.closest('.post-info-action').getAttribute('data-postId');
-            fetch("<?= $escaper->escapeHtml($block->getUrl('mpblog/post/deletepost')) ?>", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                body: new URLSearchParams({
-                    post_id: postId
-                })
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.status === 1) {
-                    var postListItem = document.querySelector('.post-list-item[data-post-id="' + result.post_id + '"]');
-                    if (postListItem) {
-                        postListItem.remove();
-                        const reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
-                        window.dispatchEvent(reloadCustomerDataEvent);
-                    }
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-        // open modal add new post
-        function handleAddPost () {
-            resetFormModal();
-            title.innerText = 'Add New Post';
-            openDialogNewPost();
-        }
-        // open modal edit new post
-        function handleEdit (e, post_id, image) {
-            resetFormModal();
-            let listData           = <?php echo /** @noEscape */ json_decode($jsonData) ?>;
-            let dataSelect          = listData[post_id];
-            nameEle.value              = dataSelect?.name;
-            postIdEle.value           = dataSelect?.post_id;
-            shortDescriptionEle.value = dataSelect?.short_description;
-            editor.setData(dataSelect?.post_content ?? "");
-            allowCommentEle.value = dataSelect?.allow_comment;
-            publishDateEle.value  = convertDateToDisplay(dataSelect?.publish_date);
-            treeselectCategories.updateValue(dataSelect?.category_ids);
-
-            treeselectTags.updateValue(dataSelect?.tag_ids);
-            treeselectTopics.updateValue(dataSelect?.topic_ids);
-            addPreviewImg(image);
-
-            title.innerText = 'Edit Post';
-            openDialogNewPost()
-        }
-        // open modal duplicate new post
-        function handleDuplicate (e, post_id, image) {
-            resetFormModal();
-            let listData           = <?php echo /** @noEscape */ json_decode($jsonData) ?>;
-            let dataSelect          = listData[post_id];
-            nameEle.value              = dataSelect?.name;
-            shortDescriptionEle.value = dataSelect?.short_description;
-            editor.setData(dataSelect?.post_content ?? "");
-            allowCommentEle.value = dataSelect?.allow_comment;
-            publishDateEle.value  = convertDateToDisplay(dataSelect?.publish_date);
-            treeselectCategories.updateValue(dataSelect?.category_ids);
-            treeselectTags.updateValue(dataSelect?.tag_ids);
-            treeselectTopics.updateValue(dataSelect?.topic_ids);
-            addPreviewImg(image);
-            title.innerText = 'Duplicate Post';
-            openDialogNewPost()
-        }
-        // reset data when hide modal
-        function resetFormModal () {
-            nameEle.value              = '';
-            postIdEle.value           = '';
-            shortDescriptionEle.value = '';
-            editor.setData("");
-            allowCommentEle.value = 0;
-            publishDateEle.value  = '';
-            treeselectCategories.updateValue([]);
-            treeselectTags.updateValue([]);
-            treeselectTopics.updateValue([]);
-            var element = document.querySelector('.mp-image-link');
-            if (element) {
-                element.parentNode.removeChild(element);
-            }
-            let messagesError = document.querySelectorAll('#mp-blog-new-post-popup form .messages');
-            messagesError.forEach(mess => {
-                mess.remove()
-            })
-        }
-        // add preview image when open modal edit and duplicate modal
-        function addPreviewImg (value) {
-            if (value) {
-                const imageEl          = document.getElementById("image")?.parentElement;
-                var linkElement        = document.createElement('a');
-                linkElement.className  = 'mp-image-link';
-                linkElement.style      = "margin-right: 15px";
-                linkElement.href       = pubUrl + 'mageplaza/blog/post/' + value;
-                linkElement.onclick    = function () {
-                    imagePreview('post_image_image');
-                    return false;
-                };
-                var imageElement       = document.createElement('img');
-                imageElement.src       = pubUrl + 'mageplaza/blog/post/' + value;
-                imageElement.id        = 'post_image_image';
-                imageElement.title     = value;
-                imageElement.alt       = value;
-                imageElement.height    = 40;
-                imageElement.width     = 40;
-                imageElement.className = 'small-image-preview v-middle';
-                linkElement.appendChild(imageElement);
-                if (imageEl) {
-                    imageEl.insertBefore(linkElement, imageEl.children[0]);
-                }
-                var deleteSpan           = document.createElement('span');
-                deleteSpan.className     = 'delete-image';
-                deleteSpan.style.display = 'inline-flex';
-                var deleteInput          = document.createElement('input');
-                deleteInput.type         = 'checkbox';
-                deleteInput.name         = 'image[delete]';
-                deleteInput.value        = '1';
-                deleteInput.className    = 'checkbox';
-                deleteInput.id           = 'post_image_delete';
-
-                var deleteLabel         = document.createElement('label');
-                deleteLabel.htmlFor     = 'post_image_delete';
-                deleteLabel.textContent = 'Delete Image';
-
-                deleteSpan.appendChild(deleteInput);
-                deleteSpan.appendChild(deleteLabel);
-                if (!imageEl.querySelector('.delete-image')) {
-                    imageEl.appendChild(deleteSpan);
-                }
-
-            }
-        }
-
-        // convert date in modal
-        function convertDateToSave (publicDateValue) {
-            var inputDate     = new Date(publicDateValue);
-            return ("0" + (inputDate.getMonth() + 1)).slice(-2) + '/' +
-                ("0" + inputDate.getDate()).slice(-2) + '/' +
-                inputDate.getFullYear() + ' ' +
-                ("0" + inputDate.getHours()).slice(-2) + ':' +
-                ("0" + inputDate.getMinutes()).slice(-2) + ':' +
-                ("0" + inputDate.getSeconds()).slice(-2)
-        }
-
-        function convertDateToDisplay (dateString) {
-            var currentDate       = new Date(dateString);
-            var year              = currentDate.getFullYear();
-            var month             = ('0' + (currentDate.getMonth() + 1)).slice(-2);
-            var day               = ('0' + currentDate.getDate()).slice(-2);
-            var hours             = ('0' + currentDate.getHours()).slice(-2);
-            var minutes           = ('0' + currentDate.getMinutes()).slice(-2);
-            return year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
-        }
-
-
-    </script>
+    <script type="application/json" id="mpblog-author-post-config"><?= /* @noEscape */ json_encode([
+        'pubUrl'    => $block->getBaseMediaUrl(),
+        'deleteUrl' => $block->getUrl('mpblog/post/deletepost'),
+        'posts'     => json_decode($postDatas, true) ?: [],
+    ], JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
+    <script src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::js/hyva/author-post.js')) ?>" defer></script>
 <?php endif; ?>

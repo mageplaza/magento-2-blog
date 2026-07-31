@@ -68,13 +68,49 @@ class Import extends Template
      */
     public function getTypeSelector()
     {
+        return BlogHelper::jsonEncode($this->getTypeSelectorArray());
+    }
+
+    /**
+     * @return array
+     */
+    protected function getTypeSelectorArray()
+    {
         $types = [];
         foreach ($this->importType->toOptionArray() as $item) {
             $types[] = $item['value'];
         }
         array_shift($types);
 
-        return BlogHelper::jsonEncode($types);
+        return $types;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImportJsonConfig()
+    {
+        return BlogHelper::jsonEncode([
+            'Mageplaza_Blog/js/import' => [
+                'typeSelector' => $this->getTypeSelectorArray(),
+                'checkConnectionUrl' => $this->getUrl(
+                    'mageplaza_blog/import/validate',
+                    ['form_key' => $this->getFormKey()]
+                ),
+                'importUrl' => $this->getUrl(
+                    'mageplaza_blog/import/import',
+                    ['form_key' => $this->getFormKey()]
+                ),
+                'successMessageHtml' => $this->getMessagesHtml(
+                    'addsuccess',
+                    'Connect successfully. To start import process press "Import" button'
+                ) . $this->getImportButtonHtml(),
+                'errorMessageHtml' => $this->getMessagesHtml(
+                    'adderror',
+                    'False connection. Please check the credentials and try again!'
+                )
+            ]
+        ]);
     }
 
     /**
@@ -99,7 +135,7 @@ class Import extends Template
     {
         $importUrl = $this->getUrl('mageplaza_blog/import/import');
         $html = '&nbsp;&nbsp;<button id="word-press-import" href="' . $importUrl .
-            '" class="" type="button" onclick="mpBlogImport.importAction();">' .
+            '" class="" type="button">' .
             '<span><span><span>Import</span></span></span></button>';
 
         return $html;

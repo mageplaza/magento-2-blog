@@ -42,6 +42,18 @@ class Search extends Frontend
     }
 
     /**
+     * @return string
+     */
+    public function getSearchJsonConfig()
+    {
+        return Data::jsonEncode([
+            'serviceUrl'   => $this->getSearchUrl(),
+            'minChars'     => (int) $this->getSidebarConfig('search/min_chars') ?: 1,
+            'visibleImage' => (int) $this->getSidebarConfig('search/show_image'),
+        ]);
+    }
+
+    /**
      * Suggestions for a search term. Filters in SQL and caps the result so it
      * never loads the whole post table (the old getSearchBlogData dumped every
      * post into the page -> OOM at scale).

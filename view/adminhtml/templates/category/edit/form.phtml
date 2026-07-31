@@ -28,6 +28,21 @@ $parentId         = $block->getParentCategoryId();
 $categoryId       = $block->getCategoryId();
 $blockGrid        = $block->getLayout()->getBlock('mageplaza_blog_category_edit_tab_post');
 $gridJsObjectName = $blockGrid->getJsObjectName();
+
+$tabsId = '';
+if ($block->isAjax()
+    && ($tabsBlock = $block->getLayout()->getBlock('tabs'))
+    && $tabsBlock->getJsObjectName()
+) {
+    $tabsId = $tabsBlock->getId();
+}
+
+$categoryFormJsonConfig = json_encode([
+    'categoryForm' => [
+        'refreshUrl' => $block->getRefreshPathUrl(),
+        'tabsId'     => $tabsId
+    ]
+]);
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
     <?= $block->getAdditionalButtonsHtml(); ?>
@@ -38,7 +53,8 @@ $gridJsObjectName = $blockGrid->getJsObjectName();
         src="<?= $escaper->escapeUrl($block->getViewFileUrl('blank.html')) ?>"></iframe>
 <form id="category_edit_form" name="category-edit-form"
       action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>" method="post"
-      enctype="multipart/form-data">
+      enctype="multipart/form-data"
+      data-mage-init='<?= /* @noEscape */ $escaper->escapeHtmlAttr($categoryFormJsonConfig) ?>'>
     <div class="no-display">
         <input type="hidden" name="isIframe" value="1"/>
         <input name="form_key" type="hidden" value="<?= /** @noEscape */
@@ -72,117 +88,3 @@ $gridJsObjectName = $blockGrid->getJsObjectName();
         <div><?= $escaper->escapeHtml(__('This operation can take a long time')) ?></div>
     </div>
 </div>
-
-<script>
-    require(['jquery', 'jquery/ui', "mage/mage", "mage/translate"], function ($) {
-        var mageDialog = (function ($) {
-            var self = {dialogOpened: false, callback: [], needShow: false};
-
-            self.callback     = {ok: [], cancel: []};
-            self.createDialog = function () {
-                var onEvent = function (type, dialog) {
-                    self.callback[type].forEach(function (call) {
-                        call();
-                    });
-                    $(dialog).dialog("close");
-                };
-
-                self.dialog = $('[data-id="information-dialog-category"]').dialog({
-                    autoOpen: false,
-                    modal: true,
-                    dialogClass: 'popup-window',
-                    resizable: false,
-                    width: '75%',
-                    title: $.mage.__('Warning message'),
-                    buttons: [{
-                        text: $.mage.__('Ok'),
-                        'class': 'action-primary',
-                        click: function () {
-                            onEvent('ok', this);
-                        }
-                    }, {
-                        text: $.mage.__('Cancel'),
-                        'class': 'action-close',
-                        click: function () {
-                            onEvent('cancel', this);
-                        }
-                    }],
-                    open: function () {
-                        $(this).closest('.ui-dialog').addClass('ui-dialog-active');
-
-                        var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 30;
-                        $(this).closest('.ui-dialog').css('margin-top', topMargin);
-
-                        self.dialogOpened = true;
-                        self.callback.ok.push(function () {
-                            self.needShow = false;
-                        });
-                    },
-                    close: function (event, ui) {
-                        $(this).dialog('destroy');
-                        self.dialogOpened = false;
-                        self.callback     = {ok: [], cancel: []};
-                        delete self.dialog;
-                    }
-                });
-            };
-
-            return {
-                needToShow: function () {
-                    self.needShow = true && !!$('[data-ui-id="tabs-tab-general-information-fieldset-element-hidden-general-id"]').length;
-                    return this;
-                },
-                isNeedShow: function () {
-                    return self.needShow;
-                },
-                onOk: function (call) {
-                    self.callback.ok.push(call);
-                    return this;
-                },
-                onCancel: function (call) {
-                    self.callback.cancel.push(call);
-                    return this;
-                },
-                show: function () {
-                    if (self.dialog == undefined) {
-                        self.createDialog();
-                    }
-                    if (self.dialogOpened == false) {
-                        self.dialog.dialog('open');
-                    }
-                    return this;
-                }
-            };
-        })(jQuery);
-        $(document).on('change', '[data-ui-id="urlkeyrenderer-text-general-url-key"]', function () {
-            mageDialog.needToShow();
-        });
-        $('#category_edit_form')
-        .mage('categoryForm', {refreshUrl: '<?= /** @noEscape */ $block->getRefreshPathUrl() ?>'})
-        .mage('validation', {
-            submitHandler: function (form) {
-                if (mageDialog.isNeedShow()) {
-                    mageDialog.onOk(function () {
-                        form.submit();
-                        displayLoadingMask();
-                    }).show();
-                } else {
-                    form.submit();
-                    displayLoadingMask();
-                }
-            }
-        });
-    });
-
-    <?php if ($block->isAjax()
-    && ($tabsBlock = $block->getLayout()->getBlock('tabs'))
-    && ($_tabsJsObject = $tabsBlock->getJsObjectName())) : ?>
-    require(["jquery", "mage/backend/tabs"], function ($) {
-        var activeAnchor = $('#<?= /** @noEscape */ $tabsBlock->getId() ?>').tabs('activeAnchor');
-        if (activeAnchor.length) {
-            $('active_tab_id').value = activeAnchor.prop('id');
-        }
-        $('active_tab_id').tabsJsObject = $('#<?= /** @noEscape */ $tabsBlock->getId() ?>');
-    });
-    <?php endif; ?>
-</script>
