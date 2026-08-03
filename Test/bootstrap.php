@@ -16,7 +16,7 @@ if (!file_exists($autoload)) {
 }
 
 if (!file_exists($autoload)) {
-    die("Cannot find Magento vendor/autoload.php. Check paths in Test/bootstrap.php\n");
+    throw new \RuntimeException('Cannot find Magento vendor/autoload.php. Check paths in Test/bootstrap.php');
 }
 
 $loader = require $autoload;

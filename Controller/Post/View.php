@@ -207,7 +207,7 @@ class View extends Action
                 $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
 
                 $userName    = $this->session->isLoggedIn()
-                    ? $customerData->getFirstname() . ' ' . $customerData->getLastname()
+                    ? htmlspecialchars($customerData->getFirstname() . ' ' . $customerData->getLastname(), ENT_COMPAT, 'UTF-8')
                     : htmlspecialchars($params['guestName'] ?? '', ENT_COMPAT, 'UTF-8') . ' (Guest)';
                 $commentData = [
                     'post_id'    => $id,
@@ -217,7 +217,9 @@ class View extends Action
                     'reply_id'   => $replyId,
                     'content'    => $cmtText,
                     'user_name'  => $userName,
-                    'user_email' => $this->session->isLoggedIn() ? $customerData->getEmail() : $params['guestEmail'],
+                    'user_email' => $this->session->isLoggedIn()
+                        ? $customerData->getEmail()
+                        : htmlspecialchars($params['guestEmail'] ?? '', ENT_COMPAT, 'UTF-8'),
                     'created_at' => $this->dateTime->date(),
                     'status'     => $this->helperBlog->getBlogConfig('comment/need_approve')
                         ? Status::PENDING : Status::APPROVED,

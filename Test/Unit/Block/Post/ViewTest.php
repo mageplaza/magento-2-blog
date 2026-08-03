@@ -194,7 +194,8 @@ class ViewTest extends TestCase
         $this->block->getCommentsTree([$comment], 0);
         $result = $this->block->getCommentsHtml();
 
-        $this->assertStringContainsString($encodedUserName, $result);
+        $expectedOutputUserName = str_replace("'", '&#039;', $encodedUserName);
+        $this->assertStringContainsString($expectedOutputUserName, $result);
 
         $this->assertStringNotContainsString('<script>', $result);
         $this->assertStringNotContainsString('</script>', $result);
@@ -227,7 +228,7 @@ class ViewTest extends TestCase
         $this->assertStringNotContainsString('&aacute;', $result);
     }
 
-    public function testGetCommentsTreeGuestUserNameRawWouldBeUnsafe(): void
+    public function testGetCommentsTreeEscapesRawUserNameFromDatabase(): void
     {
         $this->injectLikeFactory();
 
@@ -237,7 +238,8 @@ class ViewTest extends TestCase
         $this->block->getCommentsTree([$comment], 0);
         $result = $this->block->getCommentsHtml();
 
-        $this->assertStringContainsString('<script>alert(1)</script>', $result);
+        $this->assertStringNotContainsString('<script>alert(1)</script>', $result);
+        $this->assertStringContainsString('&lt;script&gt;alert(1)&lt;/script&gt;', $result);
     }
 
     // -------------------------------------------------------------------------

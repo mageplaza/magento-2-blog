@@ -299,15 +299,11 @@ $postViewJsConfig = [
                 $helper->getBlogConfig('comment/facebook_colorscheme') ?>"
                      id="post-reviews">
                     <div id="fb-root"></div>
-                    <div class="fb-comments" data-href="<?= /* @noEscape */
-                    $_post->getUrl() ?>"
-                         data-numposts="<?= /* @noEscape */
-                         $block->helperComment('facebook_number_comment') ?>"
+                    <div class="fb-comments" data-href="<?= $escaper->escapeUrl($_post->getUrl()) ?>"
+                         data-numposts="<?= $escaper->escapeHtmlAttr($block->helperComment('facebook_number_comment')) ?>"
                          data-width="100%"
-                         data-colorscheme="<?= /* @noEscape */
-                         $block->helperComment('facebook_colorscheme') ?>"
-                         data-order-by="<?= /* @noEscape */
-                         $block->helperComment('facebook_order_by') ?>">
+                         data-colorscheme="<?= $escaper->escapeHtmlAttr($block->helperComment('facebook_colorscheme')) ?>"
+                         data-order-by="<?= $escaper->escapeHtmlAttr($block->helperComment('facebook_order_by')) ?>">
                     </div>
                 </div>
             <?php elseif ($typeComment == Type::DEFAULT_COMMENT) : ?>

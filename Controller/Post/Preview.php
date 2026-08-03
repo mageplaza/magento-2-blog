@@ -247,7 +247,7 @@ class Preview extends Action
                         'reply_id'   => $replyId,
                         'content'    => $cmtText,
                         'user_name'  => htmlspecialchars($params['guestName'] ?? '', ENT_COMPAT, 'UTF-8'),
-                        'user_email' => $params['guestEmail'],
+                        'user_email' => htmlspecialchars($params['guestEmail'] ?? '', ENT_COMPAT, 'UTF-8'),
                         'created_at' => $this->dateTime->date(),
                         'status'     => $this->helperBlog->getBlogConfig('comment/need_approve')
                             ? Status::PENDING : Status::APPROVED,

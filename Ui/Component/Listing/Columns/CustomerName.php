@@ -21,7 +21,10 @@
 
 namespace Mageplaza\Blog\Ui\Component\Listing\Columns;
 
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Framework\Escaper;
 
 /**
  * Class CustomerName
@@ -29,6 +32,31 @@ use Magento\Ui\Component\Listing\Columns\Column;
  */
 class CustomerName extends Column
 {
+    /**
+     * @var Escaper
+     */
+    protected $escaper;
+
+    /**
+     * CustomerName constructor.
+     *
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param Escaper $escaper
+     * @param array $components
+     * @param array $data
+     */
+    public function __construct(
+        ContextInterface $context,
+        UiComponentFactory $uiComponentFactory,
+        Escaper $escaper,
+        array $components = [],
+        array $data = []
+    ) {
+        $this->escaper = $escaper;
+        parent::__construct($context, $uiComponentFactory, $components, $data);
+    }
+
     /**
      * Prepare Data Source
      *
@@ -41,7 +69,8 @@ class CustomerName extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
                 if ($item['entity_id'] == 0) {
-                    $item['customer_name'] = '<span>' . $item['user_name'] . ' (Guest)</span>';
+                    $userName = $this->escaper->escapeHtml($item['user_name']);
+                    $item['customer_name'] = '<span>' . $userName . ' (Guest)</span>';
                 }
             }
         }

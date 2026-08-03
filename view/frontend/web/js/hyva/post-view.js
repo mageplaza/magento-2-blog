@@ -543,20 +543,15 @@
                                 cmtRowContainer.insertAdjacentHTML('beforeend', '<div id="cmt-row" class="cmt-row__reply-row row row__' + inputCmtID + ' col-md-12">' +
                                     '<div class="reply-form__form-input form-group col-xs-8 col-md-6">' +
                                     '<label for="reply_cmt' + inputCmtID + '"></label>' +
-                                    '<input type="text" id="reply_cmt' + inputCmtID + '" class="form-group__input form-control" placeholder="Press enter to submit reply" value="' + cmtName + ' " autofocus/>' +
+                                    '<input type="text" id="reply_cmt' + inputCmtID + '" class="form-group__input form-control" placeholder="Press enter to submit reply" autofocus/>' +
                                     '</div>' +
                                     '</div>');
 
                                 var input = document.getElementById('reply_cmt' + inputCmtID);
+                                input.value = cmtName + ' ';
                                 input.closest('.form-group').appendChild(
                                     document.querySelector('.default-cmt__content__cmt-block__cmt-box__cmt-btn .default-cmt_loading').cloneNode(true)
                                 );
-                                // Cursor at end of the pre-filled value — moved out of the
-                                // onfocus="" HTML attribute (P-18: this <input> is created via
-                                // innerHTML at runtime, after Alpine has already initialised,
-                                // so an inline event-handler attribute would never be wired up).
-                                // Bound BEFORE focus() so the programmatic focus below still
-                                // triggers it, exactly like the removed attribute did.
                                 input.addEventListener('focus', function () {
                                     this.setSelectionRange(1000, 1001);
                                 });

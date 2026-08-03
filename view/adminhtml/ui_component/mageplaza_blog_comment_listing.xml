@@ -180,7 +180,7 @@
                 </item>
             </argument>
         </column>
-        <column name="user_name">
+        <column name="user_name" class="Mageplaza\Blog\Ui\Component\Listing\Columns\CommentUserName">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>

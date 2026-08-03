@@ -164,10 +164,11 @@ require([
                         cmtRowContainer.append('<div id="cmt-row" class="cmt-row__reply-row row row__' + inputCmtID + ' col-md-12">' +
                             '<div class="reply-form__form-input form-group col-xs-8 col-md-6">' +
                             '<label for="reply_cmt' + inputCmtID + '"></label>' +
-                            '<input type="text" id="reply_cmt' + inputCmtID + '" class="form-group__input form-control" placeholder="Press enter to submit reply" value="' + cmtName + ' " autofocus/>' +
+                            '<input type="text" id="reply_cmt' + inputCmtID + '" class="form-group__input form-control" placeholder="Press enter to submit reply" autofocus/>' +
                             '</div>' +
                             '</div>');
                         var input = $('#reply_cmt' + inputCmtID);
+                        input.val(cmtName + ' ');
                         input.closest('.form-group').append(
                             $('.default-cmt__content__cmt-block__cmt-box__cmt-btn .default-cmt_loading').clone()
                         );
