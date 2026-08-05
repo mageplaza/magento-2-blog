@@ -415,3 +415,16 @@ Disable,Disable
 "Are you sure you wan't to delete selected Topics?","Are you sure you wan't to delete selected Topics?"
 "Post List","Post List"
 Signup,Signup
+ at , at 
+"""Blogs per Page Allowed Values"" must be a comma-separated list of positive integers. Invalid value: ""%1"".","""Blogs per Page Allowed Values"" must be a comma-separated list of positive integers. Invalid value: ""%1""."
+%1 views,%1 views
+By: ,By: 
+Contact,Contact
+Modify By: ,Modify By: 
+My Account,My Account
+Next,Next
+Orders and Returns,Orders and Returns
+Page not found.,Page not found.
+Previous,Previous
+Root,Root
+Search Terms,Search Terms
