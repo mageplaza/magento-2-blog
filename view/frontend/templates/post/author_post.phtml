@@ -133,10 +133,5 @@ $postCollection = $block->getPostCollection();
             }
         }
     </script>
-    <script>
-        require(['jquery'], function ($) {
-            $('.limiter').css('float', 'right');
-        });
-    </script>
     <div id="mp-blog-new-post-popup" style="display: none"><?= $block->getChildHtml('mpblog_manage_post') ?></div>
 <?php endif; ?>

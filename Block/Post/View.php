@@ -273,8 +273,9 @@ class View extends \Mageplaza\Blog\Block\ListPost
         $this->commentTree .= '<ul class="default-cmt__content__cmt-content row">';
         foreach ($comments as $comment) {
             if ($comment['reply_id'] == $cmtId && $comment['status'] == 1) {
-                $isReply = (bool) $comment['is_reply'];
-                $replyId = $isReply ? $comment['reply_id'] : '';
+                $isReply   = (bool) $comment['is_reply'];
+                $commentId = (int) $comment['comment_id'];
+                $replyId   = $isReply ? (int) $comment['reply_id'] : '';
                 if ($comment['entity_id'] == 0) {
                     $userName = $comment['user_name'];
                 } else {
@@ -282,17 +283,19 @@ class View extends \Mageplaza\Blog\Block\ListPost
                     $userName = $userCmt->getFirstName() . ' '
                         . $userCmt->getLastName();
                 }
+
+                $userName          = $this->_escaper->escapeHtml($userName);
                 $countLikes        = $this->getCommentLikes($comment['comment_id']);
                 $isLiked           = ($this->isLiked($comment['comment_id'])) ? "mpblog-liked" : "mpblog-like";
-                $this->commentTree .= '<li id="cmt-id-' . $comment['comment_id']
+                $this->commentTree .= '<li id="cmt-id-' . $commentId
                     . '" class="default-cmt__content__cmt-content__cmt-row cmt-row-'
-                    . $comment['comment_id'] . ' cmt-row col-md-12'
+                    . $commentId . ' cmt-row col-md-12'
                     . ($isReply ? ' reply-row' : '') . '" data-cmt-id="'
-                    . $comment['comment_id'] . '" ' . ($replyId
+                    . $commentId . '" ' . ($replyId
                         ? 'data-reply-id="' . $replyId . '"' : '') . '>
                                 <div class="cmt-row__cmt-username">
                                     <span class="cmt-row__cmt-username username username__'
-                    . $comment['comment_id'] . '">'
+                    . $commentId . '">'
                     . $userName . '</span>
                                 </div>
                                 <div class="cmt-row__cmt-content">
@@ -302,12 +305,12 @@ class View extends \Mageplaza\Blog\Block\ListPost
                                     <div class="interactions__btn-actions">
                                         <a class="interactions__btn-actions action btn-like '
                     . $isLiked . '" data-cmt-id="'
-                    . $comment['comment_id'] . '" click="1">
+                    . $commentId . '" click="1">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="16" height="16" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
                                         <span class="count-like__like-text">'
                     . $countLikes . '</span></a>
                                         <a class="interactions__btn-actions action btn-reply" data-cmt-id="'
-                    . $comment['comment_id'] . '">' . __('Reply') . '</a>
+                    . $commentId . '">' . __('Reply') . '</a>
                                     </div>
                                     <div class="interactions__cmt-createdat">
                                         <span>' . $this->getDateFormat($comment['created_at']) . '</span>
@@ -433,6 +436,37 @@ class View extends \Mageplaza\Blog\Block\ListPost
         $messagesBlock->{$priority}(__($message));
 
         return $messagesBlock->toHtml();
+    }
+
+    /**
+     * @return string
+     */
+    public function getCommentJsonConfig()
+    {
+        return Data::jsonEncode([
+            'loginUrl'     => $this->getLoginUrl(),
+            'like'         => (string) __('Like'),
+            'reply'        => (string) __('Reply'),
+            'isLogged'     => $this->isLoggedIn() ? 'Yes' : 'No',
+            'likedColor'   => $this->getBlogHelper()->getDisplayConfig('font_color'),
+            'messengerBox' => [
+                'cmt_warning'         => $this->getMessagesHtml('adderror', 'Please write the comment.'),
+                'exist_email_warning' => $this->getMessagesHtml(
+                    'adderror',
+                    'This email is exist. Please <a href="' . $this->getLoginUrl() . '"> Login </a> as our customer.'
+                ),
+                'login_warning'       => $this->getMessagesHtml(
+                    'adderror',
+                    'You are not logged in. Please <a href="' . $this->getLoginUrl()
+                    . '"> Login </a> or <a href="' . $this->getRegisterUrl()
+                    . '"> Signup </a> to like or send a reply.</div>'
+                ),
+                'comment_approve'     => $this->getMessagesHtml(
+                    'addsuccess',
+                    'Your comment has been sent successfully. Please wait admin approve !'
+                ),
+            ],
+        ]);
     }
 
     /**

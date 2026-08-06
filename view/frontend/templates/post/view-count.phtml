@@ -24,30 +24,17 @@ use Mageplaza\Blog\Block\Post\View;
 /** @var View $block */
 $_post  = $block->getPost();
 $postId = $_post ? (int) $_post->getId() : 0;
+$viewCounterConfig = json_encode([
+    'postId' => $postId,
+    'url'    => $block->getUrl('mpblog/post/updateview'),
+]);
 ?>
 <?php if ($postId): ?>
-<script>
-    (function () {
-        // Vanilla fetch so it runs on both Luma and Hyva without jQuery/Alpine.
-        var postId = <?= /* @noEscape */ $postId ?>;
-        var url = <?= /* @noEscape */ json_encode($block->getUrl('mpblog/post/updateview')) ?>;
-
-        function sendView() {
-            var data = new FormData();
-            data.append('post_id', postId);
-            fetch(url, {
-                method: 'POST',
-                body: data,
-                credentials: 'same-origin',
-                keepalive: true
-            }).catch(function () {});
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Mageplaza_Blog/js/view-counter": <?= /* @noEscape */ $viewCounterConfig ?>
         }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', sendView);
-        } else {
-            sendView();
-        }
-    })();
+    }
 </script>
 <?php endif; ?>

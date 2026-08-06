@@ -36,8 +36,11 @@ if ($tree) : ?>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        require(['Mageplaza_Blog/js/categorytree'], function () {
-        });
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Mageplaza_Blog/js/categorytree": {}
+            }
+        }
     </script>
 <?php endif; ?>

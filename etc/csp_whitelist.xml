@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="script-src">
+            <values>
+                <value id="mageplaza_blog_facebook_sdk" type="host">connect.facebook.net</value>
+                <value id="mageplaza_blog_disqus_embed" type="host">*.disqus.com</value>
+                <value id="mageplaza_blog_disqus_cdn" type="host">*.disquscdn.com</value>
+            </values>
+        </policy>
+        <policy id="frame-src">
+            <values>
+                <value id="mageplaza_blog_facebook_sdk" type="host">connect.facebook.net</value>
+                <value id="mageplaza_blog_facebook_widget" type="host">*.facebook.com</value>
+                <value id="mageplaza_blog_disqus_embed" type="host">*.disqus.com</value>
+                <value id="mageplaza_blog_disqus_root" type="host">disqus.com</value>
+            </values>
+        </policy>
+        <policy id="connect-src">
+            <values>
+                <value id="mageplaza_blog_facebook_sdk" type="host">connect.facebook.net</value>
+                <value id="mageplaza_blog_facebook_widget" type="host">*.facebook.com</value>
+                <value id="mageplaza_blog_disqus_embed" type="host">*.disqus.com</value>
+                <value id="mageplaza_blog_disqus_root" type="host">disqus.com</value>
+                <value id="mageplaza_blog_disqus_cdn" type="host">*.disquscdn.com</value>
+            </values>
+        </policy>
+        <policy id="img-src">
+            <values>
+                <value id="mageplaza_blog_facebook_sdk" type="host">connect.facebook.net</value>
+                <value id="mageplaza_blog_facebook_widget" type="host">*.facebook.com</value>
+                <value id="mageplaza_blog_facebook_cdn" type="host">*.fbcdn.net</value>
+                <value id="mageplaza_blog_disqus_embed" type="host">*.disqus.com</value>
+                <value id="mageplaza_blog_disqus_cdn" type="host">*.disquscdn.com</value>
+            </values>
+        </policy>
+        <policy id="style-src">
+            <values>
+                <value id="mageplaza_blog_disqus_cdn" type="host">*.disquscdn.com</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

@@ -85,7 +85,13 @@ class Edit extends Container
                 [
                     'label' => __('Duplicate'),
                     'class' => 'duplicate',
-                    'onclick' => sprintf("location.href = '%s';", $this->getDuplicateUrl()),
+                    'data_attribute' => [
+                        'mage-init' => [
+                            'Mageplaza_Blog/js/redirect-on-click' => [
+                                'url' => $this->getDuplicateUrl()
+                            ]
+                        ]
+                    ],
                 ],
                 -101
             );
@@ -117,5 +123,18 @@ class Edit extends Container
     public function getMagentoVersion()
     {
         return (int)$this->_helperData->versionCompare('2.4.0', '>=') ? '' : '4';
+    }
+
+    /**
+     * @return string
+     */
+    public function getContainerJsonConfig()
+    {
+        return json_encode([
+            'Mageplaza_Blog/category/edit' => [
+                'action' => 'bootstrap',
+                'tinymceModule' => 'tinymce' . $this->getMagentoVersion()
+            ]
+        ]);
     }
 }

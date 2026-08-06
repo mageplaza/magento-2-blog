@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Plugin\System\Config;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Escaper;
 use Magento\Framework\Module\Manager;
 use Mageplaza\Core\Block\Adminhtml\System\Config\Docs;
 
@@ -37,14 +38,22 @@ class Banner
     protected $_moduleManager;
 
     /**
+     * @var Escaper
+     */
+    protected $escaper;
+
+    /**
      * Banner constructor.
      *
      * @param Manager $moduleManager
+     * @param Escaper $escaper
      */
     public function __construct(
-        Manager $moduleManager
+        Manager $moduleManager,
+        Escaper $escaper
     ) {
         $this->_moduleManager = $moduleManager;
+        $this->escaper = $escaper;
     }
 
     /**
@@ -60,15 +69,15 @@ class Banner
             return $result;
         }
         $bannerImg = $subject->getViewFileUrl('Mageplaza_Blog::media/banner/banner.png');
-        $html      = <<<HTML
-        <script>
-            require([ 'jquery'], function ($) {
-                var session = $(".accordion" );
-                $("<a target='_blank' href='https://www.mageplaza.com/magento-2-better-blog/?utm_source=dashboard&utm_medium=admin&utm_campaign=blogpro'>" +
-                 "<img src='{$bannerImg}'></a>").insertBefore(session);
-            })
-        </script>
-        HTML;
+        $jsonConfig = json_encode([
+            'Mageplaza_Blog/js/banner-link' => [
+                'image' => $bannerImg,
+                'link' => 'https://www.mageplaza.com/magento-2-better-blog/'
+                    . '?utm_source=dashboard&utm_medium=admin&utm_campaign=blogpro'
+            ]
+        ]);
+        $html = '<div data-mage-init=\'' . $this->escaper->escapeHtmlAttr($jsonConfig) . '\' style="display:none;">'
+            . '</div>';
 
         $result = $html . $result;
 

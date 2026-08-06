@@ -113,7 +113,13 @@ class Edit extends Container
                     [
                         'label' => __('Duplicate'),
                         'class' => 'duplicate',
-                        'onclick' => sprintf("location.href = '%s';", $this->getDuplicateUrl()),
+                        'data_attribute' => [
+                            'mage-init' => [
+                                'Mageplaza_Blog/js/redirect-on-click' => [
+                                    'url' => $this->getDuplicateUrl()
+                                ]
+                            ]
+                        ],
                     ],
                     -101
                 );

@@ -84,11 +84,17 @@ class Edit extends Container
             [
                 'label' => __('Delete'),
                 'class' => 'delete',
-                'onclick' => "setLocation('{$this->getUrl('mageplaza_blog/author/delete', [
-                    'id' => $this->getCurrentAuthor()->getId(),
-                    '_current' => true,
-                    'back' => 'edit'
-                ])}')",
+                'data_attribute' => [
+                    'mage-init' => [
+                        'Mageplaza_Blog/js/redirect-on-click' => [
+                            'url' => $this->getUrl('mageplaza_blog/author/delete', [
+                                'id' => $this->getCurrentAuthor()->getId(),
+                                '_current' => true,
+                                'back' => 'edit'
+                            ])
+                        ]
+                    ]
+                ],
             ],
             -101
         );

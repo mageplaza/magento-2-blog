@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Block\Author;
 
 use Mageplaza\Blog\Block\Frontend;
+use Mageplaza\Blog\Helper\Data;
 
 /**
  * Class SignupForm
@@ -85,5 +86,18 @@ class SignupForm extends Frontend
     public function getMagentoVersion()
     {
         return (int)$this->helperData->versionCompare('2.4.0', '>=') ? '' : '4';
+    }
+
+    /**
+     * @return string
+     */
+    public function getSignupJsonConfig()
+    {
+        return Data::jsonEncode([
+            'authorUrlBase'  => $this->getUrl('blog/author'),
+            'urlSuffix'      => $this->getUrlSuffix(),
+            'editorVersion'  => $this->getVersion(),
+            'magentoVersion' => $this->getMagentoVersion(),
+        ]);
     }
 }

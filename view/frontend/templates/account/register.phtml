@@ -190,36 +190,14 @@
         </div>
     </div>
 </form>
-<script>
-    require([
-        'jquery',
-        'mage/mage'
-    ], function($){
-
-        var dataForm = $('#form-validate');
-        var ignore = <?= /* @noEscape */ $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null' ?>;
-
-        dataForm.mage('validation', {
-            <?php if ($_dob->isEnabled()): ?>
-            errorPlacement: function(error, element) {
-                if (element.prop('id').search('full') !== -1) {
-                    var dobElement = $(element).parents('.customer-dob'),
-                        errorClass = error.prop('class');
-                    error.insertAfter(element.parent());
-                    dobElement.find('.validate-custom').addClass(errorClass)
-                    .after('<div class="' + errorClass + '"></div>');
-                }
-                else {
-                    error.insertAfter(element);
-                }
-            },
-            ignore: ':hidden:not(' + ignore + ')'
-            <?php else: ?>
-            ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
-            <?php endif ?>
-        }).find('input:text').attr('autocomplete', 'off');
-
-    });
+<script type="text/x-magento-init">
+    {
+        "#form-validate": {
+            "Mageplaza_Blog/js/account-register-validation": {
+                "dobEnabled": <?= $_dob->isEnabled() ? 'true' : 'false' ?>
+            }
+        }
+    }
 </script>
 <?php if ($block->getShowAddressFields()): ?>
     <script type="text/x-magento-init">
