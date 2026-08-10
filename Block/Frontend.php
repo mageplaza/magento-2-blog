@@ -429,13 +429,11 @@ class Frontend extends Template
             }
 
             $categories = $this->helperData->getCategoryCollection($post->getCategoryIds());
-            $count      = 0;
-            foreach ($categories as $_cat) {
-                $count++;
-                $maximum = $this->helperData->getSidebarConfig('categories/maximum');
-                if ($maximum && $count > $maximum) {
-                    continue;
-                }
+            // Only the top-priority category is shown here — this was capping by
+            // blog/sidebar/categories/maximum, an unrelated field for the SIDEBAR
+            // widget, which left it unbounded whenever that field was empty.
+            $_cat = $categories->getFirstItem();
+            if ($_cat->getId()) {
                 $categoryHtml[] = '<a class="mp-info" href="'
                     . $this->helperData->getBlogUrl(
                         $_cat,
