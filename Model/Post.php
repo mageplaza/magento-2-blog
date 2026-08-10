@@ -488,8 +488,12 @@ class Post extends AbstractModel implements IdentityInterface
     {
         if (!$this->hasData('author_url')) {
             $author = $this->_getResource()->getAuthor($this);
+            // Falls back to the numeric id when url_key is empty (e.g. the
+            // default "Admin" author never gets one) -- Router.php resolves
+            // a purely numeric segment by id.
+            $identifier = $author['url_key'] ?: $author['user_id'];
 
-            $this->setData('author_url', $this->helperData->getBlogUrl($author['url_key'], Data::TYPE_AUTHOR));
+            $this->setData('author_url', $this->helperData->getBlogUrl($identifier, Data::TYPE_AUTHOR));
         }
 
         return $this->_getData('author_url');

@@ -101,7 +101,10 @@ class Author extends AbstractModel implements IdentityInterface
      */
     public function getUrl()
     {
-        return $this->helperData->getBlogUrl($this, Data::TYPE_AUTHOR);
+        // Falls back to the numeric id when url_key is empty (e.g. the
+        // default "Admin" author never gets one) -- Router.php resolves
+        // a purely numeric segment by id.
+        return $this->helperData->getBlogUrl($this->getUrlKey() ?: $this->getId(), Data::TYPE_AUTHOR);
     }
 
     /**
