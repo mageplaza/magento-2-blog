@@ -21,13 +21,14 @@
 
 namespace Mageplaza\Blog\Model;
 
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 
 /**
  * Class PostLike
  * @package Mageplaza\Blog\Model
  */
-class PostLike extends AbstractModel
+class PostLike extends AbstractModel implements IdentityInterface
 {
     /**
      * Cache tag
@@ -66,10 +67,19 @@ class PostLike extends AbstractModel
     }
 
     /**
+     * Invalidate the post page this vote belongs to.
+     *
+     * The like_id tag is never emitted by any block, so cleaning it invalidated
+     * nothing and the cached page kept serving a stale counter. The post page
+     * tag is the one present in X-Magento-Tags, so it also reaches Varnish and
+     * Fastly through the standard clean_cache_by_tags event.
+     *
      * @return array
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        $postId = (int) $this->getPostId();
+
+        return $postId ? [Post::CACHE_TAG . '_' . $postId] : [];
     }
 }

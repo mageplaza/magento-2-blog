@@ -26,6 +26,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\PostLikeFactory;
@@ -59,6 +60,16 @@ class Review extends Action
     protected $_postLikeCollection;
 
     /**
+     * Session key holding [post_id => like_id] for guest votes.
+     */
+    const SESSION_VOTE_KEY = 'mpblog_post_like';
+
+    /**
+     * @var SessionManagerInterface
+     */
+    protected $session;
+
+    /**
      * Review constructor.
      *
      * @param Context $context
@@ -66,20 +77,56 @@ class Review extends Action
      * @param Collection $postLikeCollection
      * @param PostLikeFactory $postLikeFactory
      * @param Data $helperData
+     * @param SessionManagerInterface $session
      */
     public function __construct(
         Context $context,
         PostFactory $postFactory,
         Collection $postLikeCollection,
         PostLikeFactory $postLikeFactory,
-        Data $helperData
+        Data $helperData,
+        SessionManagerInterface $session
     ) {
         $this->_helperBlog = $helperData;
         $this->_postLikeCollection = $postLikeCollection;
         $this->_postLike = $postLikeFactory;
         $this->postFactory = $postFactory;
+        $this->session = $session;
 
         parent::__construct($context);
+    }
+
+    /**
+     * Vote id this visitor owns for the post, tracked server side.
+     *
+     * @param int $postId
+     *
+     * @return int
+     */
+    private function getSessionVoteId($postId)
+    {
+        $votes = (array) $this->session->getData(self::SESSION_VOTE_KEY);
+
+        return isset($votes[$postId]) ? (int) $votes[$postId] : 0;
+    }
+
+    /**
+     * @param int $postId
+     * @param int $likeId 0 removes the entry
+     *
+     * @return void
+     */
+    private function setSessionVoteId($postId, $likeId)
+    {
+        $votes = (array) $this->session->getData(self::SESSION_VOTE_KEY);
+
+        if ($likeId) {
+            $votes[$postId] = (int) $likeId;
+        } else {
+            unset($votes[$postId]);
+        }
+
+        $this->session->setData(self::SESSION_VOTE_KEY, $votes);
     }
 
     /**
@@ -88,12 +135,36 @@ class Review extends Action
      */
     public function execute()
     {
-        $id = $this->getRequest()->getParam('post_id');
-        $action = $this->getRequest()->getParam('action');
-        $mode = $this->getRequest()->getParam('mode');
-        $likeId = $this->getRequest()->getParam('likeId');
+        $id = (int) $this->getRequest()->getParam('post_id');
+        $action = (string) $this->getRequest()->getParam('action');
+
+        // The template only hides the block; without this the controller still
+        // accepted votes when voting is off or the customer group is excluded.
+        if (!$this->_helperBlog->isEnabledReview()) {
+            return $this->getResponse()->representJson(Data::jsonEncode([
+                'status' => 0,
+                'type' => $action
+            ]));
+        }
+
+        // Mode decides whether the vote is tracked by session or by customer id,
+        // so it has to come from the server, not from the request body.
+        $mode = $this->_helperBlog->getReviewMode();
         $customerId = $this->_helperBlog->getCurrentUser() ?: 0;
         $post = $this->postFactory->create()->load($id);
+
+        // The vote id is resolved server side. Taking it from the request let a
+        // visitor send likeId=0 on every click and pile up unlimited votes.
+        $likeId = $this->getSessionVoteId($id);
+
+        $allowed = $mode === '1' ? ['0', '1', '3'] : ['0', '1'];
+
+        if (!$post->getId() || !in_array($action, $allowed, true)) {
+            return $this->getResponse()->representJson(Data::jsonEncode([
+                'status' => 0,
+                'type' => $action
+            ]));
+        }
 
         if ($mode === '1') {
             $like = $this->_postLikeCollection->addFieldToFilter('entity_id', $customerId)
@@ -137,6 +208,8 @@ class Review extends Action
                     ]
                 )->save();
             }
+
+            $this->setSessionVoteId($id, $postLike->getId());
 
             $sumLike = $this->_postLike->create()->getCollection()->addFieldToFilter('action', '1')
                 ->addFieldToFilter('post_id', $id);

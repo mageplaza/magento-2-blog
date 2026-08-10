@@ -31,6 +31,7 @@
                 mode: config.review.mode
             };
 
+
             function create() {
                 var formKey = hyva.getFormKey();
 
@@ -128,10 +129,6 @@
                                 }
                                 var reloadCustomerDataEvent = new CustomEvent('reload-customer-section-data');
                                 window.dispatchEvent(reloadCustomerDataEvent);
-                                window.scrollTo({
-                                    top: document.body.offsetTop,
-                                    behavior: 'smooth'
-                                });
                             })
                             .catch(function (error) { console.error('Error:', error); });
                     });
