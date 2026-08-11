@@ -21,69 +21,42 @@
 
 namespace Mageplaza\Blog\ViewModel;
 
-use Magento\Framework\Escaper;
-use Magento\Framework\View\Element\AbstractBlock;
+use Mageplaza\Blog\Block\Partial;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Throwable;
+use Magento\Framework\View\Element\Template;
 
 /**
- * Renders a shared partial template in an isolated scope.
- *
- * Replaces plain `include $partial` inside templates: the partial no longer sees
- * the caller's whole variable scope, only `$block`, `$escaper` and the variables
- * explicitly passed in.
+ * Renders a shared partial template through Magento's own block/template engine
+ * (Magento\Framework\View\TemplateEngine\Php), instead of a hand-rolled `include`
+ * inside the module's own code.
  *
  * @package Mageplaza\Blog\ViewModel
  */
 class PartialRenderer implements ArgumentInterface
 {
     /**
-     * @var Escaper
-     */
-    private $escaper;
-
-    /**
-     * @param Escaper $escaper
-     */
-    public function __construct(Escaper $escaper)
-    {
-        $this->escaper = $escaper;
-    }
-
-    /**
      * Render a resolved template file with an explicit variable set.
      *
-     * @param AbstractBlock $block Caller block, exposed to the partial as $block
+     * @param Template $block Caller block, reachable from the partial via $block->callerMethod()
      * @param string $file Absolute path from $block->getTemplateFile()
-     * @param array $vars Variables exposed to the partial
+     * @param array $vars Variables exposed to the partial as plain $varName
      *
      * @return string
      */
-    public function render(AbstractBlock $block, $file, array $vars = [])
+    public function render(Template $block, $file, array $vars = [])
     {
         if (!$file || !is_file($file)) {
             return '';
         }
 
-        $escaper = $this->escaper;
+        /** @var Partial $partial */
+        $partial = $block->getLayout()->createBlock(Partial::class);
+        $partial->setCallerBlock($block);
+        $partial->assign($vars);
 
-        // Bind only what the partial is allowed to see. EXTR_SKIP keeps the
-        // caller from overwriting $block, $escaper or the local bookkeeping vars.
-        $render = static function () use ($block, $escaper, $file, $vars) {
-            extract($vars, EXTR_SKIP);
-
-            ob_start();
-            try {
-                include $file;
-
-                return (string) ob_get_clean();
-            } catch (Throwable $e) {
-                ob_end_clean();
-
-                throw $e;
-            }
-        };
-
-        return $render();
+        // fetchView() takes the already-resolved absolute path directly and validates
+        // it via Template\File\Validator; setTemplate()+toHtml() would instead treat
+        // $file as a "Module::path" identifier and re-resolve it, which is wrong here.
+        return $partial->fetchView($file);
     }
 }
