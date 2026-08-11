@@ -21,66 +21,42 @@
 
 namespace Mageplaza\Blog\Controller\Post;
 
-use Exception;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\Controller\Result\Json;
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\View\LayoutInterface;
-use Mageplaza\Blog\Block\Sidebar\Search as SearchBlock;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
- * AJAX blog search: returns a small, query-filtered list of posts instead of
- * dumping the whole post table into every page (which OOMs at scale).
+ * Blog search result page. Autocomplete suggestions live on mpblog/post/suggest.
  *
  * @package Mageplaza\Blog\Controller\Post
  */
 class Search extends Action implements HttpGetActionInterface
 {
     /**
-     * @var JsonFactory
+     * @var PageFactory
      */
-    protected $resultJsonFactory;
-
-    /**
-     * @var LayoutInterface
-     */
-    protected $layout;
+    protected $resultPageFactory;
 
     /**
      * @param Context $context
-     * @param JsonFactory $resultJsonFactory
-     * @param LayoutInterface $layout
+     * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
-        JsonFactory $resultJsonFactory,
-        LayoutInterface $layout
+        PageFactory $resultPageFactory
     ) {
-        $this->resultJsonFactory = $resultJsonFactory;
-        $this->layout            = $layout;
+        $this->resultPageFactory = $resultPageFactory;
 
         parent::__construct($context);
     }
 
     /**
-     * @return Json
+     * @return Page
      */
     public function execute()
     {
-        $result      = $this->resultJsonFactory->create();
-        $query       = (string) $this->getRequest()->getParam('query', '');
-        $suggestions = [];
-
-        try {
-            /** @var SearchBlock $block */
-            $block       = $this->layout->createBlock(SearchBlock::class);
-            $suggestions = $block->getSearchSuggestions($query);
-        } catch (Exception $e) {
-            $suggestions = [];
-        }
-
-        return $result->setData(['query' => $query, 'suggestions' => $suggestions]);
+        return $this->resultPageFactory->create();
     }
 }

@@ -32,7 +32,8 @@ use Magento\Framework\Escaper;
 </style>
 <div class="mpblog-search"
      id="mpblog-sidebar-search"
-     data-search-url="<?= $escaper->escapeHtmlAttr((string) $block->getSearchUrl()) ?>"
+     data-search-url="<?= $escaper->escapeHtmlAttr((string) $block->getSuggestUrl()) ?>"
+     data-search-page-url="<?= $escaper->escapeHtmlAttr((string) $block->getSearchUrl()) ?>"
      data-min-chars="<?= $escaper->escapeHtmlAttr((string) ($block->getSidebarConfig('search/min_chars') ?: 1)) ?>"
      data-search-limit="<?= $escaper->escapeHtmlAttr((string) ($block->getSidebarConfig('search/search_limit') ?: 10)) ?>"
      data-show-image="<?= $block->getSidebarConfig('search/show_image') ? '1' : '0' ?>">
