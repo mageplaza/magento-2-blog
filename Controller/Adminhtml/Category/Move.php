@@ -92,7 +92,7 @@ class Move extends Category
         $parentNodeId = $this->getRequest()->getPost('pid', false);
 
         /** Blog category id after which we have put our Blog category */
-        $prevNodeId = $this->getRequest()->getPost('aid', false);
+        $prevNodeId = $this->getRequest()->getPost('paid', false);
 
         /** @var $block Messages */
         $block = $this->layoutFactory->create()->getMessagesBlock();
