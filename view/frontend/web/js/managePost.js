@@ -111,12 +111,25 @@ define([
                         deleteEL,
                         date;
                     if (field.is('[type="file"]') && value) {
-                        imageEL = '<a class="mp-image-link" href="' + pubUrl + 'mageplaza/blog/post/' + value
-                            + '" onclick="imagePreview(\'post_image_image\'); return false;" >' +
-                            '<img src="' + pubUrl + 'mageplaza/blog/post/' + value + '" id="post_image_image"' +
-                            ' title="' + value + '" alt="' + value + '" height="22" width="22"' +
-                            ' class="small-image-preview v-middle">' +
-                            '</a>';
+                        imageEL = document.createElement('a');
+                        imageEL.className = 'mp-image-link';
+                        imageEL.href = pubUrl + 'mageplaza/blog/post/' + value;
+                        imageEL.onclick = function () {
+                            imagePreview('post_image_image');
+
+                            return false;
+                        };
+
+                        var previewImg = document.createElement('img');
+                        previewImg.src = pubUrl + 'mageplaza/blog/post/' + value;
+                        previewImg.id = 'post_image_image';
+                        previewImg.title = value;
+                        previewImg.alt = value;
+                        previewImg.height = 22;
+                        previewImg.width = 22;
+                        previewImg.className = 'small-image-preview v-middle';
+                        imageEL.appendChild(previewImg);
+
                         field.parent().prepend(imageEL);
                         deleteEL =  '<span class="delete-image">'
                             + '<input style="width: 8%" type="checkbox" name="image[delete]"'

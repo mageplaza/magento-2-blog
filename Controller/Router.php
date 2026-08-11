@@ -146,6 +146,11 @@ class Router implements RouterInterface
                 break;
             case 'author':
                 $author = $this->helper->getObjectByParam($action, 'url_key', Data::TYPE_AUTHOR);
+                // getUrl()/getAuthorUrl() build a numeric-id link when an
+                // author has no url_key -- resolve that same fallback here.
+                if (!$author->getId() && ctype_digit((string) $action)) {
+                    $author = $this->helper->getObjectByParam($action, null, Data::TYPE_AUTHOR);
+                }
                 $request->setParam('id', $author->getId());
                 $action = 'view';
                 break;

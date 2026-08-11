@@ -440,8 +440,10 @@ class Category extends AbstractDb
         if (empty($afterCategoryId)) {
             $positionNew = 1;
         } else {
-            $select      = $connect->select()->from($table, 'position')->where('category_id = :category_id');
-            $positionNew = $connect->fetchOne($select, ['category_id' => $afterCategoryId]);
+            $select = $connect->select()->from($table, 'position')->where('category_id = :category_id');
+            // fetchOne() returns false when the row is gone; casting keeps the
+            // later increment and comparison working on an integer.
+            $positionNew = (int) $connect->fetchOne($select, ['category_id' => $afterCategoryId]);
         }
 
         /** Update position when the item is moved */

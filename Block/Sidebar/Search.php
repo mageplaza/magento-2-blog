@@ -36,9 +36,31 @@ class Search extends Frontend
      *
      * @return string
      */
+    public function getSuggestUrl()
+    {
+        return $this->helperData->getUrl('mpblog/post/suggest');
+    }
+
+    /**
+     * Full-page URL for a submitted search.
+     *
+     * @return string
+     */
     public function getSearchUrl()
     {
         return $this->helperData->getUrl('mpblog/post/search');
+    }
+
+    /**
+     * @return string
+     */
+    public function getSearchJsonConfig()
+    {
+        return Data::jsonEncode([
+            'serviceUrl'   => $this->getSuggestUrl(),
+            'minChars'     => (int) $this->getSidebarConfig('search/min_chars') ?: 1,
+            'visibleImage' => (int) $this->getSidebarConfig('search/show_image'),
+        ]);
     }
 
     /**

@@ -243,25 +243,21 @@ $_helper            = $block->getHelper();
                     </div>
                 <?php endforeach; ?>
             </div>
-            <script>
-                require([
-                    'jquery',
-                    'owlCarousel'
-                ], function ($) {
-                    'use strict';
-                    $(document).ready(function () {
-                        $(".owl-carousel").owlCarousel({
-                            items: 4,
-                            loop: false,
-                            margin: 10,
-                            responsive: {
-                                600: {
-                                    items: 4
+            <script type="text/x-magento-init">
+                {
+                    ".owl-carousel": {
+                        "Mageplaza_Blog/js/owl-carousel-init": {
+                            "items": 4,
+                            "loop": false,
+                            "margin": 10,
+                            "responsive": {
+                                "600": {
+                                    "items": 4
                                 }
                             }
-                        });
-                    });
-                });
+                        }
+                    }
+                }
             </script>
         <?php endif; ?>
     </div>

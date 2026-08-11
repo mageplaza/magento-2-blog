@@ -117,6 +117,14 @@ class Register extends Action
 
         if ($data) {
             if ($this->_helperBlog->isAuthor()) {
+                // "Sign up to be an Author" is hidden in the UI when this is off,
+                // but nothing else stopped a direct POST from creating one anyway.
+                if (!$this->_helperBlog->getConfigGeneral('customer_approve')) {
+                    $resultRedirect->setPath('customer/account');
+
+                    return $resultRedirect;
+                }
+
                 $data   = $this->prepareData($data);
                 $author = $this->author->create()->addData($data);
                 $notify = __('Register Successful');

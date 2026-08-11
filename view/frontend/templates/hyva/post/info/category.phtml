@@ -34,17 +34,15 @@ $_post       = $block->getPost();
 $helper      = $block->helperData;
 $categoryIds = $_post->getCategoryIds();
 $categories  = $categoryIds ? $helper->getCategoryCollection($categoryIds) : [];
-$maximum     = (int) $helper->getSidebarConfig('categories/maximum');
 
-$links = [];
-$shown = 0;
-foreach ($categories as $_cat) {
-    if ($maximum && $shown >= $maximum) {
-        break;
-    }
-    $shown++;
-    $links[] = '<a href="' . $escaper->escapeUrl($helper->getBlogUrl($_cat, BlogHelper::TYPE_CATEGORY)) . '">'
-        . $escaper->escapeHtml($_cat->getName()) . '</a>';
+// Only the top-priority category is shown here — this was capping by
+// blog/sidebar/categories/maximum, an unrelated field for the SIDEBAR widget,
+// which left it unbounded whenever that field was empty.
+$links   = [];
+$topCat  = $categories ? $categories->getFirstItem() : null;
+if ($topCat && $topCat->getId()) {
+    $links[] = '<a href="' . $escaper->escapeUrl($helper->getBlogUrl($topCat, BlogHelper::TYPE_CATEGORY)) . '">'
+        . $escaper->escapeHtml($topCat->getName()) . '</a>';
 }
 ?>
 <?php if ($links) : ?>

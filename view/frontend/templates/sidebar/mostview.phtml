@@ -94,21 +94,10 @@ $postsRecent = $block->getRecentPost();
         </div>
     </div>
 </div>
-<script>
-    require([
-        'jquery'
-    ], function ($) {
-        $("#popular-tab").click(function () {
-            $("#tab-1").addClass('active');
-            $("#tab-2").removeClass('active');
-            $('#mostview').show();
-            $('#mostrecent').hide();
-        });
-        $("#recent-tab").click(function () {
-            $("#tab-1").removeClass('active');
-            $("#tab-2").addClass('active');
-            $('#mostview').hide();
-            $('#mostrecent').show();
-        });
-    });
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Mageplaza_Blog/js/mostview-tabs": {}
+        }
+    }
 </script>

@@ -46,6 +46,7 @@ class Edit extends Container
         $this->buttonList->add(
             'check-connection',
             [
+                'id' => 'check-connection',
                 'label' => __('Check Connection'),
                 'class' => 'primary',
                 'data_attribute' => [
@@ -55,8 +56,7 @@ class Edit extends Container
 
                         ]
                     ]
-                ],
-                'onclick' => 'mpBlogImport.initImportCheckConnection();'
+                ]
             ],
             -100
         );

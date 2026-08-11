@@ -119,20 +119,36 @@ class Form extends AbstractCategory
         // Delete button
         if ($categoryId && $categoryId != 1 && !$this->getRequest()->getParam('duplicate')) {
             $this->addButton('delete', [
-                'id'      => 'delete',
-                'label'   => __('Delete Category'),
-                'onclick' => "categoryDelete('" . $this->getUrl('mageplaza_blog/*/delete', ['_current' => true]) . "')",
-                'class'   => 'delete'
+                'id'             => 'delete',
+                'label'          => __('Delete Category'),
+                'class'          => 'delete',
+                'data_attribute' => [
+                    'mage-init' => [
+                        'Mageplaza_Blog/category/edit' => [
+                            'action'  => 'delete',
+                            'url'     => $this->getUrl('mageplaza_blog/*/delete', ['_current' => true]),
+                            'message' => (string) __('Are you sure you want to delete this Category?')
+                        ]
+                    ]
+                ]
             ]);
         }
 
         // Reset button
         $resetPath = $categoryId ? 'mageplaza_blog/*/edit' : 'mageplaza_blog/*/add';
         $this->addButton('reset', [
-            'id'      => 'reset',
-            'label'   => __('Reset'),
-            'onclick' => "categoryReset('" . $this->getUrl($resetPath, ['_current' => true]) . "',false)",
-            'class'   => 'reset'
+            'id'             => 'reset',
+            'label'          => __('Reset'),
+            'class'          => 'reset',
+            'data_attribute' => [
+                'mage-init' => [
+                    'Mageplaza_Blog/category/edit' => [
+                        'action'  => 'reset',
+                        'url'     => $this->getUrl($resetPath, ['_current' => true]),
+                        'useAjax' => false
+                    ]
+                ]
+            ]
         ]);
 
         return parent::_prepareLayout();

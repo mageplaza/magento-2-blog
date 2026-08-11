@@ -65,8 +65,13 @@ class ListPost extends \Mageplaza\Blog\Block\ListPost
     {
         parent::_prepareLayout();
 
-        if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
-            $breadcrumbs->addCrumb($this->getMonthKey(), [
+        // month_key is missing when this block renders through a Varnish ESI
+        // sub-request (its own request carries no route params), which made
+        // addCrumb() use null as the array key -- deprecated in PHP 8.5, a
+        // TypeError on newer PHP.
+        $monthKey = $this->getMonthKey();
+        if ($monthKey && ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs'))) {
+            $breadcrumbs->addCrumb($monthKey, [
                 'label' => __('Monthy Archive'),
                 'title' => __('Monthy Archive')
             ]);

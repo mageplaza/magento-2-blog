@@ -1,0 +1,163 @@
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+define([
+    'jquery'
+], function ($) {
+    'use strict';
+
+    return function (config, element) {
+        config = config || {};
+
+        var typeSelector = config.typeSelector || [],
+            defaultTablePrefix = ['wp_', 'm1_', 'm2_'],
+            imagePathHint = [
+                '*Please copy the <b>wp_content/uploads</b> folder to <b>pub/media/wysiwyg/</b> folder for post image content <br>' +
+                '*Please copy the <b>wp_content/uploads</b> folder to <b>pub/media/mageplaza/blog/post/</b> folder for post image banner <br>',
+                '*Please copy the <b>media</b> folder to <b>pub/media/</b> folder',
+                '*Please copy the <b>pub/media/magefan_blog</b> folder to <b>pub/media/mageplaza/blog/post/</b> folder for post image banner '
+            ],
+            dataImport = {};
+
+        var mpBlogImport = {
+            typeSelector: typeSelector,
+            initImportFieldsSet: function () {
+                for (var i = 0; i < this.typeSelector.length; i++){
+                    if ($('#import_type').val() === this.typeSelector[i]) {
+                        this.showFieldSet('#' + this.typeSelector[i] + '_fieldset');
+                        dataImport = {
+                            type: this.typeSelector[i],
+                            importName: '#' + this.typeSelector[i] + '_import_name',
+                            dbName: '#' + this.typeSelector[i] + '_db_name',
+                            userName: '#' + this.typeSelector[i] + '_user_name',
+                            pwd: '#' + this.typeSelector[i] + '_db_password',
+                            host: '#' + this.typeSelector[i] + '_db_host',
+                            tablePrefix: '#' + this.typeSelector[i] + '_table_prefix',
+                            behaviourSelector: '#' + this.typeSelector[i] + '_import_behaviour',
+                            expandBehaviourSelector: '#' + this.typeSelector[i] + '_import_behaviour_expand'
+                        };
+
+                        $(dataImport.tablePrefix).val(defaultTablePrefix[i]);
+                        $("#" + this.typeSelector[i] + "_import_image_path").html(imagePathHint[i]);
+                        $("#" + this.typeSelector[i] + "_db_name").addClass('required-entry');
+                        $("#" + this.typeSelector[i] + "_user_name").addClass('required-entry');
+                        $("#" + this.typeSelector[i] + "_db_host").addClass('required-entry');
+                    } else {
+                        this.hideFieldSet('#' + this.typeSelector[i] + '_fieldset');
+                        $("#" + this.typeSelector[i] + "_db_name").removeClass('required-entry');
+                        $("#" + this.typeSelector[i] + "_user_name").removeClass('required-entry');
+                        $("#" + this.typeSelector[i] + "_db_host").removeClass('required-entry');
+                    }
+                }
+            },
+
+            initExpandBehaviour: function () {
+                if ($(dataImport.behaviourSelector).attr("value") === 'update') {
+                    $(dataImport.expandBehaviourSelector).parent().parent().removeClass('hidden');
+                } else {
+                    $(dataImport.expandBehaviourSelector).parent().parent().addClass('hidden');
+                }
+            },
+
+            showFieldSet: function (selector) {
+                $(selector).show();
+            },
+
+            hideFieldSet: function (selector) {
+                $(selector).hide();
+            },
+
+            initImportCheckConnection: function () {
+                if ($('#edit_form').valid()) {
+                    $('body').loader('show');
+                    $.ajax({
+                        url: config.checkConnectionUrl,
+                        data: {
+                            type: dataImport.type,
+                            import_name: $(dataImport.importName).val(),
+                            database: $(dataImport.dbName).val(),
+                            user_name: $(dataImport.userName).val(),
+                            password: $(dataImport.pwd).val(),
+                            host: $(dataImport.host).val(),
+                            table_prefix: $(dataImport.tablePrefix).val(),
+                            behaviour: $(dataImport.behaviourSelector).val(),
+                            expand_behaviour: $(dataImport.expandBehaviourSelector).val()
+                        },
+                        cache: false,
+                        success: function (result) {
+                            var messageHtml;
+                            if (result.status === 'false') {
+                                messageHtml = config.errorMessageHtml;
+                                $(".message-error").hide();
+                                $(messageHtml).appendTo($(".page-columns"));
+                                $(".message-success").hide();
+                            } else {
+                                messageHtml = config.successMessageHtml;
+                                $(".message-success").hide();
+                                $(messageHtml).appendTo($(".page-columns"));
+                                $(".message-error").hide();
+                            }
+                        },
+                        complete: function () {
+                            $('body').loader('hide');
+                        }
+                    });
+                }
+            },
+
+            importAction: function () {
+                $('body').loader('show');
+                $.ajax({
+                    url: config.importUrl,
+                    cache: false,
+                    success: function (result) {
+                        var statisticMessage = result.statistic;
+                        $(".message-success").hide();
+                        $(".message-error").hide();
+                        $(statisticMessage).appendTo($(".page-columns"));
+                    },
+                    complete: function () {
+                        $('body').loader('hide');
+                    }
+                });
+            }
+        };
+
+        $(document).on('change', '#import_type', function () {
+            mpBlogImport.initImportFieldsSet();
+        });
+
+        $.each(typeSelector, function (i, type) {
+            $(document).on('change', '#' + type + '_import_behaviour', function () {
+                mpBlogImport.initExpandBehaviour();
+            });
+        });
+
+        $(document).on('click', '#check-connection', function () {
+            mpBlogImport.initImportCheckConnection();
+        });
+
+        $(document).on('click', '#word-press-import', function () {
+            mpBlogImport.importAction();
+        });
+
+        window.mpBlogImport = mpBlogImport;
+    };
+});

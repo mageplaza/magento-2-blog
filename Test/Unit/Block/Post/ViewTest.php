@@ -40,7 +40,7 @@ class ViewTest extends TestCase
         // Use real escaper behavior for meaningful security assertions
         $this->escaper = $this->createMock(Escaper::class);
         $this->escaper->method('escapeHtml')->willReturnCallback(
-            fn($value) => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+            fn($value) => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false)
         );
         $this->escaper->method('escapeUrl')->willReturnCallback(
             fn($value) => htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8')
@@ -68,7 +68,6 @@ class ViewTest extends TestCase
         while ($class) {
             if ($class->hasProperty($name)) {
                 $prop = $class->getProperty($name);
-                $prop->setAccessible(true);
                 $prop->setValue($this->block, $value);
                 return;
             }
@@ -115,6 +114,13 @@ class ViewTest extends TestCase
     {
         $result = $this->block->commentHtml('a & b');
         $this->assertStringContainsString('&amp;', $result);
+    }
+
+    public function testCommentHtmlDoesNotDoubleEncodeExistingEntities(): void
+    {
+        $result = $this->block->commentHtml('Tom &amp; Jerry');
+        $this->assertStringContainsString('Tom &amp; Jerry', $result);
+        $this->assertStringNotContainsString('&amp;amp;', $result);
     }
 
     // -------------------------------------------------------------------------
@@ -176,6 +182,66 @@ class ViewTest extends TestCase
         $this->assertStringContainsString('&lt;script&gt;', $result);
     }
 
+    public function testGetCommentsTreeGuestUserNameStaysEscaped(): void
+    {
+        $this->injectLikeFactory();
+
+        $rawPayload = '<script>alert(1)</script> & "quoted" \'single\'';
+        $encodedUserName = htmlspecialchars($rawPayload, ENT_COMPAT, 'UTF-8');
+
+        $comment = $this->makeCommentRow(['user_name' => $encodedUserName]);
+
+        $this->block->getCommentsTree([$comment], 0);
+        $result = $this->block->getCommentsHtml();
+
+        $expectedOutputUserName = str_replace("'", '&#039;', $encodedUserName);
+        $this->assertStringContainsString($expectedOutputUserName, $result);
+
+        $this->assertStringNotContainsString('<script>', $result);
+        $this->assertStringNotContainsString('</script>', $result);
+
+        $this->assertStringContainsString('&lt;script&gt;', $result);
+        $this->assertStringContainsString('&amp;', $result);
+        $this->assertStringContainsString('&quot;quoted&quot;', $result);
+    }
+
+    public function testGuestUserNameEncodingLeavesNonAsciiIntact(): void
+    {
+        $this->injectLikeFactory();
+
+        $vietnameseName = 'Nguyễn Thái Sơn';
+
+        // The encoding actually applied by T-XSS-1 in both controllers.
+        $encoded = htmlspecialchars($vietnameseName, ENT_COMPAT, 'UTF-8');
+
+        // Nothing to escape in a plain Vietnamese name — it must pass through
+        // byte-for-byte. (htmlentities() would yield 'Nguyễn Th&aacute;i Sơn'.)
+        $this->assertSame($vietnameseName, $encoded);
+        $this->assertStringNotContainsString('&aacute;', $encoded);
+
+        // And it must still render intact through the comment tree.
+        $comment = $this->makeCommentRow(['user_name' => $encoded]);
+        $this->block->getCommentsTree([$comment], 0);
+        $result = $this->block->getCommentsHtml();
+
+        $this->assertStringContainsString($vietnameseName, $result);
+        $this->assertStringNotContainsString('&aacute;', $result);
+    }
+
+    public function testGetCommentsTreeEscapesRawUserNameFromDatabase(): void
+    {
+        $this->injectLikeFactory();
+
+        $rawPayload = '<script>alert(1)</script>';
+        $comment    = $this->makeCommentRow(['user_name' => $rawPayload]);
+
+        $this->block->getCommentsTree([$comment], 0);
+        $result = $this->block->getCommentsHtml();
+
+        $this->assertStringNotContainsString('<script>alert(1)</script>', $result);
+        $this->assertStringContainsString('&lt;script&gt;alert(1)&lt;/script&gt;', $result);
+    }
+
     // -------------------------------------------------------------------------
     // isLoggedIn()
     // -------------------------------------------------------------------------
@@ -224,5 +290,69 @@ class ViewTest extends TestCase
         $tag->method('getName')->willReturn($name);
         $tag->method('getUrl')->willReturn($url ?: "https://example.com/tag/{$name}");
         return $tag;
+    }
+
+    private function injectLikeFactory(): void
+    {
+        $likeCollection = new class {
+            public function addFieldToFilter($field, $value): self
+            {
+                return $this;
+            }
+
+            public function getSize(): int
+            {
+                return 0;
+            }
+        };
+
+        $likeModel = new class($likeCollection) {
+            private object $collection;
+
+            public function __construct(object $collection)
+            {
+                $this->collection = $collection;
+            }
+
+            public function getCollection(): object
+            {
+                return $this->collection;
+            }
+        };
+
+        $likeFactory = new class($likeModel) {
+            private object $model;
+
+            public function __construct(object $model)
+            {
+                $this->model = $model;
+            }
+
+            public function create(): object
+            {
+                return $this->model;
+            }
+        };
+
+        $this->injectProperty('likeFactory', $likeFactory);
+    }
+
+    /**
+     * @param array $overrides
+     * @return array
+     */
+    private function makeCommentRow(array $overrides = []): array
+    {
+        return array_merge([
+            'comment_id' => 1,
+            'reply_id'   => 0,
+            'status'     => 1,
+            'is_reply'   => 0,
+            'entity_id'  => 0,
+            'user_name'  => 'Guest',
+            'content'    => 'Nice post!',
+            'created_at' => '2026-01-01 00:00:00',
+            'has_reply'  => 0,
+        ], $overrides);
     }
 }

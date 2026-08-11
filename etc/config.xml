@@ -50,6 +50,8 @@
                 <related_mode>1</related_mode>
                 <display_style>1</display_style>
                 <is_review>1</is_review>
+                <!-- Without a default every group is excluded, which silently hides the voting block. -->
+                <review_mode>0,1,2,3</review_mode>
                 <resize_image>
                     <resize_width>900</resize_width>
                     <resize_height>500</resize_height>

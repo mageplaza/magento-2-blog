@@ -100,6 +100,23 @@ class Menu extends Template
     }
 
     /**
+     * Drop categories already expanded on the current branch. A cycle in the
+     * parent_id chain (e.g. a row whose parent_id is its own id) would otherwise
+     * recurse until the request exhausts memory.
+     *
+     * @param CategoryInterface[] $categories
+     * @param array $visited
+     *
+     * @return CategoryInterface[]
+     */
+    private function filterVisited($categories, array $visited)
+    {
+        return array_filter($categories, static function ($category) use ($visited) {
+            return !isset($visited[$category->getId()]);
+        });
+    }
+
+    /**
      * @return Collection
      * @throws NoSuchEntityException
      */
@@ -116,7 +133,7 @@ class Menu extends Template
      *
      * @return string
      */
-    public function getMenuHtml($parentCategory)
+    public function getMenuHtml($parentCategory, array $visited = [])
     {
         $categoryUrl = $this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey());
         $html = '<li class="level' . $parentCategory->getLevel()
@@ -124,7 +141,8 @@ class Menu extends Template
             . '<a href="' . $categoryUrl . '" class="ui-corner-all" tabindex="-1" role="menuitem">'
             . '<span>' . $parentCategory->getName() . '</span></a>';
 
-        $childCategorys = $this->getChildCategory($parentCategory->getId());
+        $visited[$parentCategory->getId()] = true;
+        $childCategorys = $this->filterVisited($this->getChildCategory($parentCategory->getId()), $visited);
 
         if (count($childCategorys) > 0) {
             $html .= '<ul class="level' . $parentCategory->getLevel() . ' submenu ui-menu ui-widget'
@@ -134,7 +152,7 @@ class Menu extends Template
 
             /** @var Category $childCategory */
             foreach ($childCategorys as $childCategory) {
-                $html .= $this->getMenuHtml($childCategory);
+                $html .= $this->getMenuHtml($childCategory, $visited);
             }
             $html .= '</ul>';
         }
@@ -148,7 +166,7 @@ class Menu extends Template
      *
      * @return string
      */
-    public function getPortoMenuHtml($parentCategory)
+    public function getPortoMenuHtml($parentCategory, array $visited = [])
     {
         $categoryUrl = $this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey());
         $html = '<li class="ui-menu-item level' . $parentCategory->getLevel() . ' parent" role="presentation">'
@@ -156,7 +174,8 @@ class Menu extends Template
             . '<a href="' . $categoryUrl . '" class="ui-corner-all" tabindex="-1" role="menuitem">'
             . '<span>' . $parentCategory->getName() . '</span></a>';
 
-        $childCategories = $this->getChildCategory($parentCategory->getId());
+        $visited[$parentCategory->getId()] = true;
+        $childCategories = $this->filterVisited($this->getChildCategory($parentCategory->getId()), $visited);
 
         if (count($childCategories) > 0) {
             $html .= '<ul class="subchildmenu level' . $parentCategory->getLevel() . ''
@@ -166,7 +185,7 @@ class Menu extends Template
 
             /** @var Category $childCategory */
             foreach ($childCategories as $childCategory) {
-                $html .= $this->getMenuHtml($childCategory);
+                $html .= $this->getMenuHtml($childCategory, $visited);
             }
             $html .= '</ul>';
         }
@@ -198,9 +217,10 @@ class Menu extends Template
         return $this->helper->getBlogUrl('category/' . $urlKey);
     }
 
-    public function getChildDataCate($category)
+    public function getChildDataCate($category, array $visited = [])
     {
-        $childCategorys    = $this->getChildCategory($category->getId());
+        $visited[$category->getId()] = true;
+        $childCategorys    = $this->filterVisited($this->getChildCategory($category->getId()), $visited);
         $childCategoryData = [];
         if (count($childCategorys) > 0) {
             foreach ($childCategorys as $childCategory) {
@@ -217,7 +237,7 @@ class Menu extends Template
                         "is_parent_active" => true,
                         "position"         => null,
                         "path"             => "1/2/38",
-                        "childData"        => $this->getChildDataCate($childCategory)
+                        "childData"        => $this->getChildDataCate($childCategory, $visited)
                     ]
                 );
             }

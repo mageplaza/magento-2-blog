@@ -50,25 +50,21 @@ if ($posts && $block->isEnabledBlog()) : ?>
                 </div>
             <?php endforeach; ?>
         </div>
-        <script>
-            require([
-                'jquery',
-                'owlCarousel'
-            ], function ($) {
-                'use strict';
-                $(document).ready(function () {
-                    $('.mp-blog-owl-carousel.owl-carousel').owlCarousel({
-                        items: 2,
-                        loop: false,
-                        margin: 10,
-                        responsive: {
-                            600: {
-                                items: 4
+        <script type="text/x-magento-init">
+            {
+                ".mp-blog-owl-carousel.owl-carousel": {
+                    "Mageplaza_Blog/js/owl-carousel-init": {
+                        "items": 2,
+                        "loop": false,
+                        "margin": 10,
+                        "responsive": {
+                            "600": {
+                                "items": 4
                             }
                         }
-                    });
-                });
-            });
+                    }
+                }
+            }
         </script>
     <?php else : ?>
         <ul>

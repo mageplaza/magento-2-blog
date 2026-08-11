@@ -21,10 +21,7 @@
 
 namespace Mageplaza\Blog\Block\Category;
 
-use Exception;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Phrase;
-use Mageplaza\Blog\Block\Adminhtml\Category\Tree;
 use Mageplaza\Blog\Block\Frontend;
 use Mageplaza\Blog\Helper\Data;
 
@@ -39,14 +36,7 @@ class Widget extends Frontend
      */
     public function getTree()
     {
-        try {
-            $tree = ObjectManager::getInstance()->create(Tree::class);
-            $tree = $tree->getTree(null, $this->store->getStore()->getId());
-
-            return $tree;
-        } catch (Exception $e) {
-            return null;
-        }
+        return $this->buildCategoryTree((int) $this->store->getStore()->getId());
     }
 
     /**

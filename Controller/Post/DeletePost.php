@@ -83,8 +83,18 @@ class DeletePost extends Action
             return null;
         }
 
+        $post->load($postId);
+
+        // Being logged in as some author only proves who's asking; without this,
+        // any author could delete a post_id they don't own.
+        if (!$post->getId() || (int) $post->getAuthorId() !== (int) $author->getId()) {
+            return $this->getResponse()->representJson(Data::jsonEncode([
+                'status' => 0
+            ]));
+        }
+
         try {
-            $post->load($postId)->delete();
+            $post->delete();
             $this->messageManager->addSuccessMessage(__('The post has been deleted.'));
 
             return $this->getResponse()->representJson(Data::jsonEncode([
