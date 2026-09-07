@@ -75,7 +75,11 @@ class CreateAuthor implements ObserverInterface
         $customer          = $observer->getData('customer');
 
         /** @var CreatePost $accountController */
-        if ($this->_helper->isEnabled() && $accountController->getRequest()->getParam('is_mp_author')) {
+        if ($accountController === null || $customer === null || !$this->_helper->isEnabled()) {
+            return;
+        }
+
+        if ($accountController->getRequest()->getParam('is_mp_author')) {
             $data   = [
                 'customer_id' => $customer->getId(),
                 'name'        => $customer->getFirstname(),
