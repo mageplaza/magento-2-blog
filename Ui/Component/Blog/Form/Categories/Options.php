@@ -77,7 +77,8 @@ class Options implements OptionSourceInterface
             ];
 
             foreach ($collection as $category) {
-                foreach ([$category->getId(), $category->getParentId()] as $categoryId) {
+                $parentId = $category->getParentId() ?? '';
+                foreach ([$category->getId(), $parentId] as $categoryId) {
                     if (!isset($categoryById[$categoryId])) {
                         $categoryById[$categoryId] = ['value' => $categoryId];
                     }
@@ -85,7 +86,7 @@ class Options implements OptionSourceInterface
 
                 $categoryById[$category->getId()]['is_active'] = 1;
                 $categoryById[$category->getId()]['label'] = $category->getName();
-                $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
+                $categoryById[$parentId]['optgroup'][] = &$categoryById[$category->getId()];
             }
 
             $this->categoriesTree = $categoryById[Category::TREE_ROOT_ID]['optgroup'];
