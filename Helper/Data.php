@@ -288,8 +288,13 @@ class Data extends CoreHelper
     public function getCurrentAuthor()
     {
         $collection = $this->getAuthorCollection();
+        if (!$collection) {
+            return null;
+        }
 
-        return $collection ? $collection->getFirstItem() : null;
+        $author = $collection->getFirstItem();
+
+        return $author->getId() ? $author : null;
     }
 
     /**
@@ -353,7 +358,13 @@ class Data extends CoreHelper
      */
     public function getDisplayConfig($code, $storeId = null)
     {
-        return $this->getBlogConfig('display/' . $code, $storeId);
+        $value = $this->getBlogConfig('display/' . $code, $storeId);
+
+        if ($code === 'font_color' && $value !== null) {
+            $value = preg_replace('/[^#a-zA-Z0-9(),.%\s-]/', '', (string) $value);
+        }
+
+        return $value;
     }
 
     /**

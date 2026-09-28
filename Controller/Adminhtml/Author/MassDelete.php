@@ -39,6 +39,11 @@ use Mageplaza\Blog\Model\ResourceModel\Author\CollectionFactory;
 class MassDelete extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::author';
+
+    /**
      * Mass Action Filter
      *
      * @var Filter

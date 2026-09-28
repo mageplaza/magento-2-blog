@@ -33,6 +33,11 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 class NewAction extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::tag';
+
+    /**
      * @var ForwardFactory
      */
     public $resultForwardFactory;

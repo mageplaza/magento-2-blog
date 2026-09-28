@@ -31,6 +31,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Json\Helper\Data as JsonData;
@@ -134,6 +135,11 @@ class Preview extends Action
     protected $postFactory;
 
     /**
+     * @var FormKeyValidator
+     */
+    protected $formKeyValidator;
+
+    /**
      * Preview constructor.
      *
      * @param Context $context
@@ -167,7 +173,8 @@ class Preview extends Action
         CustomerUrl $customerUrl,
         Session $customerSession,
         TrafficFactory $trafficFactory,
-        PostFactory $postFactory
+        PostFactory $postFactory,
+        FormKeyValidator $formKeyValidator
     ) {
         $this->storeManager         = $storeManager;
         $this->helperBlog           = $helperBlog;
@@ -183,6 +190,7 @@ class Preview extends Action
         $this->likeFactory          = $likeFactory;
         $this->dateTime             = $dateTime;
         $this->postFactory          = $postFactory;
+        $this->formKeyValidator     = $formKeyValidator;
 
         parent::__construct($context);
     }
@@ -200,6 +208,15 @@ class Preview extends Action
         $post      = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($history->getPostId());
         $this->helperBlog->setCustomerContextId();
 
+        $author = $this->helperBlog->getCurrentAuthor();
+        if (!$history->getId()
+            || !$post->getId()
+            || !$author
+            || (int) $post->getAuthorId() !== (int) $author->getId()
+        ) {
+            return $this->_redirect('noroute');
+        }
+
         $data = $this->prepareData($history);
         $post->addData($data);
 
@@ -207,11 +224,14 @@ class Preview extends Action
         $pageLayout = ($post->getLayout() === 'empty') ? $this->helperBlog->getSidebarLayout() : $post->getLayout();
         $page->getConfig()->setPageLayout($pageLayout);
 
-        if (!$post->getEnabled() || !$this->helperBlog->checkStore($post)) {
+        if (!$this->helperBlog->checkStore($post)) {
             return $this->_redirect('noroute');
         }
 
-        if ($this->getRequest()->isAjax()) {
+        if ($this->getRequest()->isAjax()
+            && $this->getRequest()->isPost()
+            && $this->formKeyValidator->validate($this->getRequest())
+        ) {
             $params       = $this->getRequest()->getParams();
             $customerData = $this->session->getCustomerData();
             $result       = [];

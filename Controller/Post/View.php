@@ -32,6 +32,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Json\Helper\Data as JsonData;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
@@ -122,6 +123,11 @@ class View extends Action
     protected $postFactory;
 
     /**
+     * @var FormKeyValidator
+     */
+    protected $formKeyValidator;
+
+    /**
      * View constructor.
      *
      * @param Context $context
@@ -153,7 +159,8 @@ class View extends Action
         AccountManagementInterface $accountManagement,
         CustomerUrl $customerUrl,
         Session $customerSession,
-        PostFactory $postFactory
+        PostFactory $postFactory,
+        FormKeyValidator $formKeyValidator
     ) {
         $this->storeManager         = $storeManager;
         $this->helperBlog           = $helperBlog;
@@ -168,6 +175,7 @@ class View extends Action
         $this->likeFactory          = $likeFactory;
         $this->dateTime             = $dateTime;
         $this->postFactory          = $postFactory;
+        $this->formKeyValidator     = $formKeyValidator;
 
         parent::__construct($context);
     }
@@ -190,9 +198,10 @@ class View extends Action
             return $this->_redirect('noroute');
         }
 
-        // View count is incremented via the mpblog/post/updateview AJAX action so this
-        // page can be served from Full Page Cache (this controller runs only on a miss).
-        if ($this->getRequest()->isAjax()) {
+        if ($this->getRequest()->isAjax()
+            && $this->getRequest()->isPost()
+            && $this->formKeyValidator->validate($this->getRequest())
+        ) {
             $params       = $this->getRequest()->getParams();
             $customerData = $this->session->getCustomerData();
             $result       = [];

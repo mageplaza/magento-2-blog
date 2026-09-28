@@ -329,7 +329,7 @@ class Frontend extends Template
 
             $author = $this->helperData->getAuthorByPost($post);
             if ($author && $author->getName() && $this->helperData->showAuthorInfo()) {
-                $aTag = '<a class="mp-info" href="' . $author->getUrl() . '">'
+                $aTag = '<a class="mp-info" href="' . $this->escapeUrl($author->getUrl()) . '">'
                     . $this->escapeHtml($author->getName()) . '</a>';
                 $html .= __('| <i class="mp-blog-icon mp-blog-user"></i> %1', $aTag);
             }
@@ -435,11 +435,11 @@ class Frontend extends Template
             $_cat = $categories->getFirstItem();
             if ($_cat->getId()) {
                 $categoryHtml[] = '<a class="mp-info" href="'
-                    . $this->helperData->getBlogUrl(
+                    . $this->escapeUrl($this->helperData->getBlogUrl(
                         $_cat,
                         HelperData::TYPE_CATEGORY
-                    )
-                    . '">' . $_cat->getName() . '</a>';
+                    ))
+                    . '">' . $this->escapeHtml($_cat->getName()) . '</a>';
             }
         } catch (Exception $e) {
             return null;

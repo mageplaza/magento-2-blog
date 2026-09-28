@@ -33,6 +33,11 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 class Index extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::category';
+
+    /**
      * Forward factory
      *
      * @var ForwardFactory

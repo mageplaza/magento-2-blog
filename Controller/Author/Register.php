@@ -25,10 +25,15 @@ use Exception;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Helper\Image;
@@ -38,7 +43,7 @@ use Mageplaza\Blog\Model\AuthorFactory;
  * Class View
  * @package Mageplaza\Blog\Controller\Author
  */
-class Register extends Action
+class Register extends Action implements HttpPostActionInterface, CsrfAwareActionInterface
 {
     /**
      * @var PageFactory
@@ -71,6 +76,11 @@ class Register extends Action
     protected $author;
 
     /**
+     * @var FormKeyValidator
+     */
+    protected $formKeyValidator;
+
+    /**
      * View constructor.
      *
      * @param Context $context
@@ -80,6 +90,7 @@ class Register extends Action
      * @param Image $imageHelper
      * @param AuthorFactory $authorFactory
      * @param HelperData $helperData
+     * @param FormKeyValidator $formKeyValidator
      */
     public function __construct(
         Context $context,
@@ -88,7 +99,8 @@ class Register extends Action
         Session $customerSession,
         Image $imageHelper,
         AuthorFactory $authorFactory,
-        HelperData $helperData
+        HelperData $helperData,
+        FormKeyValidator $formKeyValidator
     ) {
         $this->_helperBlog          = $helperData;
         $this->resultPageFactory    = $resultPageFactory;
@@ -96,8 +108,25 @@ class Register extends Action
         $this->customerSession      = $customerSession;
         $this->imageHelper          = $imageHelper;
         $this->author               = $authorFactory;
+        $this->formKeyValidator     = $formKeyValidator;
 
         parent::__construct($context);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return $this->formKeyValidator->validate($request);
     }
 
     /**
@@ -156,8 +185,11 @@ class Register extends Action
      */
     public function prepareData($data, $author = null)
     {
+        unset($data['user_id'], $data['customer_id'], $data['type'], $data['status']);
+
         if ($author) {
-            unset($data['status']);
+            $data['customer_id'] = $author->getCustomerId();
+            $data['type']        = $author->getType();
         } else {
             $data['customer_id'] = $this->customerSession->getId();
             $data['type']        = '1';

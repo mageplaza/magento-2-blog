@@ -34,6 +34,11 @@ use Magento\Framework\View\LayoutFactory;
 class CustomerGrid extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::author';
+
+    /**
      * @var RawFactory
      */
     protected $resultRawFactory;

@@ -39,6 +39,11 @@ use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
 class MassStatus extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::post';
+
+    /**
      * Mass Action Filter
      *
      * @var Filter

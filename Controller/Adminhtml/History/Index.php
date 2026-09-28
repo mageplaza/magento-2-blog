@@ -32,6 +32,11 @@ use Magento\Framework\Controller\ResultInterface;
  */
 class Index extends Action
 {
+    /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::post';
+
 
     /**
      * @return ResponseInterface|Redirect|ResultInterface

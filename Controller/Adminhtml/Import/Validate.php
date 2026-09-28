@@ -37,6 +37,11 @@ use RuntimeException;
 class Validate extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::import';
+
+    /**
      * @var BlogHelper
      */
     public $blogHelper;
@@ -65,11 +70,20 @@ class Validate extends Action
         $data = $this->getRequest()->getParams();
 
         try {
-            $connect    = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
+            $host = (string) ($data['host'] ?? '');
+            if ($host === '' || !preg_match('/^[a-zA-Z0-9.\-]+(:\d{1,5})?$/', $host)) {
+                $result = ['import_name' => $data['import_name'] ?? '', 'status' => 'false'];
+
+                return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
+            }
+
+            $connect    = mysqli_connect($host, $data['user_name'], $data['password'], $data['database']);
             $importName = $data['import_name'];
 
+            $sessionData = $data;
+            unset($sessionData['password'], $sessionData['form_key'], $sessionData['key']);
             /** @var Session */
-            $this->_getSession()->setData('mageplaza_blog_import_data', $data);
+            $this->_getSession()->setData('mageplaza_blog_import_data', $sessionData);
             $result = ['import_name' => $importName, 'status' => 'ok'];
 
             mysqli_close($connect);

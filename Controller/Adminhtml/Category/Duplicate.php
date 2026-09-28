@@ -33,6 +33,11 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 class Duplicate extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::category';
+
+    /**
      * Redirect result factory
      *
      * @var ForwardFactory

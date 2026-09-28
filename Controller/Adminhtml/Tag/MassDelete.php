@@ -39,6 +39,11 @@ use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory;
 class MassDelete extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::tag';
+
+    /**
      * @var Filter
      */
     public $filter;

@@ -135,11 +135,11 @@ class Menu extends Template
      */
     public function getMenuHtml($parentCategory, array $visited = [])
     {
-        $categoryUrl = $this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey());
-        $html = '<li class="level' . $parentCategory->getLevel()
+        $categoryUrl = $this->escapeUrl($this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey()));
+        $html = '<li class="level' . (int) $parentCategory->getLevel()
             . ' category-item ui-menu-item" role="presentation">'
             . '<a href="' . $categoryUrl . '" class="ui-corner-all" tabindex="-1" role="menuitem">'
-            . '<span>' . $parentCategory->getName() . '</span></a>';
+            . '<span>' . $this->escapeHtml($parentCategory->getName()) . '</span></a>';
 
         $visited[$parentCategory->getId()] = true;
         $childCategorys = $this->filterVisited($this->getChildCategory($parentCategory->getId()), $visited);
@@ -168,11 +168,11 @@ class Menu extends Template
      */
     public function getPortoMenuHtml($parentCategory, array $visited = [])
     {
-        $categoryUrl = $this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey());
-        $html = '<li class="ui-menu-item level' . $parentCategory->getLevel() . ' parent" role="presentation">'
+        $categoryUrl = $this->escapeUrl($this->helper->getBlogUrl('category/' . $parentCategory->getUrlKey()));
+        $html = '<li class="ui-menu-item level' . (int) $parentCategory->getLevel() . ' parent" role="presentation">'
             . '<div class="open-children-toggle"></div>'
             . '<a href="' . $categoryUrl . '" class="ui-corner-all" tabindex="-1" role="menuitem">'
-            . '<span>' . $parentCategory->getName() . '</span></a>';
+            . '<span>' . $this->escapeHtml($parentCategory->getName()) . '</span></a>';
 
         $visited[$parentCategory->getId()] = true;
         $childCategories = $this->filterVisited($this->getChildCategory($parentCategory->getId()), $visited);

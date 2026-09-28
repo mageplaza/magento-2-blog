@@ -167,11 +167,10 @@ $postViewJsConfig = [
                              : $block->getDefaultAuthorImage() ?>">
                 </div>
                 <div class="author-content-information">
-                    <div class="author-name"><?= /* @noEscape */
-                        $authorName ?></div>
+                    <div class="author-name"><?= $escaper->escapeHtml($authorName) ?></div>
                     <p class="author-description">
-                        <?= /* @noEscape */
-                        $author->getShortDescription() ? $block->getPageFilter($author->getShortDescription()) : '' ?>
+                        <?= $author->getShortDescription()
+                            ? $escaper->escapeHtml($author->getShortDescription()) : '' ?>
                     </p>
                 </div>
                 <div class="mp-clear"></div>

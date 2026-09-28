@@ -25,7 +25,11 @@ use Exception;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -33,6 +37,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\PostFactory;
@@ -42,7 +47,7 @@ use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
  * Class Manage
  * @package Mageplaza\Blog\Controller\Post
  */
-class Manage extends Action
+class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionInterface
 {
     /**
      * @var PageFactory
@@ -95,6 +100,11 @@ class Manage extends Action
     protected $imageHelper;
 
     /**
+     * @var FormKeyValidator
+     */
+    protected $formKeyValidator;
+
+    /**
      * View constructor.
      *
      * @param Context $context
@@ -108,6 +118,7 @@ class Manage extends Action
      * @param Image $imageHelper
      * @param Data $helperData
      * @param TimezoneInterface $timezone
+     * @param FormKeyValidator $formKeyValidator
      */
     public function __construct(
         Context $context,
@@ -120,7 +131,8 @@ class Manage extends Action
         DateTime $date,
         Image $imageHelper,
         Data $helperData,
-        TimezoneInterface $timezone
+        TimezoneInterface $timezone,
+        FormKeyValidator $formKeyValidator
     ) {
         $this->_helperBlog          = $helperData;
         $this->resultPageFactory    = $resultPageFactory;
@@ -132,6 +144,7 @@ class Manage extends Action
         $this->date                 = $date;
         $this->imageHelper          = $imageHelper;
         $this->timezone             = $timezone;
+        $this->formKeyValidator     = $formKeyValidator;
 
         parent::__construct($context);
     }
@@ -152,7 +165,14 @@ class Manage extends Action
             return null;
         }
 
-        if ($this->getRequest()->getFiles('image')['size'] > 0) {
+        foreach (['post_content', 'short_description'] as $field) {
+            if (isset($data[$field]) && $data[$field] !== '') {
+                $data[$field] = $this->sanitizeAuthorHtml((string) $data[$field]);
+            }
+        }
+
+        $imageFile = $this->getRequest()->getFiles('image');
+        if (is_array($imageFile) && !empty($imageFile['size'])) {
             try {
                 $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_POST, $post->getImage());
             } catch (Exception $exception) {
@@ -190,6 +210,11 @@ class Manage extends Action
 
         if ($data['post_id']) {
             $post->load($data['post_id']);
+            if ($post->getId() && (int) $post->getAuthorId() !== (int) $author->getId()) {
+                return $this->getResponse()->representJson(Data::jsonEncode([
+                    'status' => 0
+                ]));
+            }
             if ($post->getId()) {
                 $post->setData($data);
             }
@@ -214,5 +239,47 @@ class Manage extends Action
                 'status' => 0
             ]));
         }
+    }
+
+    /**
+     * @param string $html
+     *
+     * @return string
+     */
+    private function sanitizeAuthorHtml(string $html): string
+    {
+        $html = str_replace(['{{', '}}'], ['&#123;&#123;', '&#125;&#125;'], $html);
+
+        $html = preg_replace(
+            '#<\s*(script|iframe|style|object|embed|form)\b[^>]*>.*?<\s*/\s*\1\s*>#is',
+            '',
+            $html
+        );
+        $html = preg_replace(
+            '#<\s*/?\s*(script|iframe|style|object|embed|form)\b[^>]*>#is',
+            '',
+            $html
+        );
+
+        $html = preg_replace('#\son[a-z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)#is', '', $html);
+        $html = preg_replace('#(href|src)\s*=\s*("|\')?\s*javascript:[^"\'>\s]*#is', '$1=""', $html);
+
+        return $html;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return $this->formKeyValidator->validate($request);
     }
 }

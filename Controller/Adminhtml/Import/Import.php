@@ -39,6 +39,11 @@ use Mageplaza\Blog\Model\Import\WordPress;
 class Import extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::import';
+
+    /**
      * @var WordPress
      */
     protected $_wordpressModel;
@@ -96,6 +101,10 @@ class Import extends Action
     public function execute()
     {
         $data = $this->_getSession()->getData('mageplaza_blog_import_data');
+        $password = $this->getRequest()->getParam('password');
+        if ($password !== null && $password !== '') {
+            $data['password'] = $password;
+        }
         switch ($data['type']) {
             case 'wordpress':
                 $response = $this->processImport($this->_wordpressModel, $data);
@@ -168,7 +177,11 @@ class Import extends Action
     {
         // phpcs:disable Magento2.Functions.DiscouragedFunction
         $statisticHtml = '';
-        $connection    = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
+        $host = (string) ($data['host'] ?? '');
+        if ($host === '' || !preg_match('/^[a-zA-Z0-9.\-]+(:\d{1,5})?$/', $host)) {
+            return __('Invalid database host.');
+        }
+        $connection    = mysqli_connect($host, $data['user_name'], $data['password'], $data['database']);
         $messagesBlock = $this->_view->getLayout()->createBlock(Messages::class);
         if ($object->run($data, $connection)) {
             $postStatistic = $this->registry->registry('mageplaza_import_post_statistic');

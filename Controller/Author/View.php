@@ -29,6 +29,7 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Blog\Helper\Data;
+use Mageplaza\Blog\Model\Config\Source\AuthorStatus;
 
 /**
  * Class View
@@ -78,11 +79,21 @@ class View extends Action
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
+        if (!$id) {
+            return $this->_redirect('noroute');
+        }
+
+        $author = $this->_helperBlog->getObjectByParam($id, null, Data::TYPE_AUTHOR);
+        if (!$author
+            || !$author->getId()
+            || (string) $author->getStatus() !== AuthorStatus::APPROVED
+        ) {
+            return $this->_redirect('noroute');
+        }
+
         $page = $this->resultPageFactory->create();
         $page->getConfig()->setPageLayout($this->_helperBlog->getSidebarLayout());
 
-        return ($id)
-            ? $page
-            : $this->_redirect('noroute');
+        return $page;
     }
 }

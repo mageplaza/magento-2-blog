@@ -108,7 +108,7 @@ require([
                         $.ajax({
                             type: "POST",
                             url: window.location.href,
-                            data: {cmtId: cmtId},
+                            data: {form_key: window.FORM_KEY, cmtId: cmtId},
                             success: function (response) {
                                 if (response.status === 'ok') {
                                     $(likeEl).attr('click', '1');
@@ -225,7 +225,7 @@ require([
             type: 'POST',
             url: window.location.href,
             // async: false,
-            data: {cmt_text: cmtText, isReply: isReply, replyId: replyId, guestName: guestName, guestEmail: guestEmail},
+            data: {form_key: window.FORM_KEY, cmt_text: cmtText, isReply: isReply, replyId: replyId, guestName: guestName, guestEmail: guestEmail},
             success: function (response) {
                 switch (response.status) {
                     case 'duplicated':

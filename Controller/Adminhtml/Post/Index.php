@@ -33,6 +33,11 @@ use Magento\Framework\View\Result\PageFactory;
 class Index extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::post';
+
+    /**
      * Page result factory
      *
      * @var PageFactory
