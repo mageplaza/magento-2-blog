@@ -182,11 +182,13 @@ define([
                 var url = self.options.deleteUrl,
                     id = $(widget).parent().data('postid');
 
+                var fkMatch = document.cookie.match(/(?:^|;\s*)form_key=([^;]+)/);
                 $.ajax({
                     url: url,
                     type: "post",
                     data: {
-                        post_id: id
+                        post_id: id,
+                        form_key: fkMatch ? decodeURIComponent(fkMatch[1]) : (window.FORM_KEY || '')
                     },
                     showLoader: true,
                     success: function (result) {

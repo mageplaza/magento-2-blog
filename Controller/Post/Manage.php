@@ -158,11 +158,13 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
     {
         $data = $this->getRequest()->getParams();
         $this->_helperBlog->setCustomerContextId();
-        $author = $this->_helperBlog->getCurrentAuthor();
+        $author = $this->_helperBlog->getCurrentApprovedAuthor();
         $post   = $this->postFactory->create();
 
         if (!$author) {
-            return null;
+            return $this->getResponse()->representJson(Data::jsonEncode([
+                'status' => 0
+            ]));
         }
 
         foreach (['post_content', 'short_description'] as $field) {
@@ -261,8 +263,10 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
             $html
         );
 
-        $html = preg_replace('#\son[a-z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)#is', '', $html);
-        $html = preg_replace('#(href|src)\s*=\s*("|\')?\s*javascript:[^"\'>\s]*#is', '$1=""', $html);
+        $html = preg_replace('#[\s/]on[a-z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)#is', '', $html);
+        $html = preg_replace('#(href|src)\s*=\s*"\s*javascript:[^"]*"#is', '$1=""', $html);
+        $html = preg_replace("#(href|src)\s*=\s*'\s*javascript:[^']*'#is", '$1=""', $html);
+        $html = preg_replace('#(href|src)\s*=\s*javascript:[^\s>]*#is', '$1=""', $html);
 
         return $html;
     }

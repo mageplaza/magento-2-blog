@@ -206,6 +206,13 @@ class View extends Action
             $customerData = $this->session->getCustomerData();
             $result       = [];
             if (isset($params['cmt_text'])) {
+                $commentType = (string) $this->helperBlog->getBlogConfig('comment/type');
+                if (!$post->getAllowComment() || $commentType === '0') {
+                    return $this->getResponse()->representJson(
+                        $this->jsonHelper->jsonEncode(['status' => 'error'])
+                    );
+                }
+
                 $cmt_text   = $params['cmt_text'];
                 $content    = htmlentities($cmt_text, ENT_COMPAT, 'UTF-8');
                 $htmlEntity = htmlentities($content, ENT_COMPAT, 'UTF-8');
@@ -214,6 +221,15 @@ class View extends Action
                 $cmtText = $content;
                 $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
                 $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
+
+                if ($isReply && $replyId) {
+                    $parentCmt = $this->cmtFactory->create()->load($replyId);
+                    if (!$parentCmt->getId() || (int) $parentCmt->getPostId() !== (int) $id) {
+                        return $this->getResponse()->representJson(
+                            $this->jsonHelper->jsonEncode(['status' => 'error'])
+                        );
+                    }
+                }
 
                 $userName    = $this->session->isLoggedIn()
                     ? htmlspecialchars($customerData->getFirstname() . ' ' . $customerData->getLastname(), ENT_COMPAT, 'UTF-8')
@@ -240,6 +256,11 @@ class View extends Action
             }
 
             if (isset($params['cmtId'])) {
+                if (!$this->session->isLoggedIn() || !$customerData) {
+                    return $this->getResponse()->representJson(
+                        $this->jsonHelper->jsonEncode(['status' => 'error', 'message' => __('Please login to like.')])
+                    );
+                }
                 $cmtId    = $params['cmtId'];
                 $likeData = [
                     'comment_id' => $cmtId,

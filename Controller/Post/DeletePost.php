@@ -24,8 +24,13 @@ namespace Mageplaza\Blog\Controller\Post;
 use Exception;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\PostFactory;
@@ -34,7 +39,7 @@ use Mageplaza\Blog\Model\PostFactory;
  * Class Manage
  * @package Mageplaza\Blog\Controller\Post
  */
-class DeletePost extends Action
+class DeletePost extends Action implements HttpPostActionInterface, CsrfAwareActionInterface
 {
     /**
      * @var PostFactory
@@ -52,21 +57,45 @@ class DeletePost extends Action
     protected $_helperBlog;
 
     /**
+     * @var FormKeyValidator
+     */
+    protected $formKeyValidator;
+
+    /**
      * DeletePost constructor.
      *
      * @param Context $context
      * @param PostFactory $postFactory
      * @param Data $helperData
+     * @param FormKeyValidator $formKeyValidator
      */
     public function __construct(
         Context $context,
         PostFactory $postFactory,
-        Data $helperData
+        Data $helperData,
+        FormKeyValidator $formKeyValidator
     ) {
-        $this->_helperBlog = $helperData;
-        $this->postFactory = $postFactory;
+        $this->_helperBlog      = $helperData;
+        $this->postFactory      = $postFactory;
+        $this->formKeyValidator = $formKeyValidator;
 
         parent::__construct($context);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return $this->formKeyValidator->validate($request);
     }
 
     /**
@@ -76,11 +105,13 @@ class DeletePost extends Action
     {
         $postId = $this->getRequest()->getParam('post_id');
         $this->_helperBlog->setCustomerContextId();
-        $author = $this->_helperBlog->getCurrentAuthor();
+        $author = $this->_helperBlog->getCurrentApprovedAuthor();
         $post = $this->postFactory->create();
 
         if (!$author || !$postId) {
-            return null;
+            return $this->getResponse()->representJson(Data::jsonEncode([
+                'status' => 0
+            ]));
         }
 
         $post->load($postId);

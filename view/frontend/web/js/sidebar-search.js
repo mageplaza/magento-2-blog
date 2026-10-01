@@ -40,17 +40,22 @@ define([
                 window.location.href = suggestion.url;
             },
             formatResult: function (suggestion, currentValue) {
+                var esc = function (s) {
+                    return String(s == null ? '' : s)
+                        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                };
                 var additionClass = '',
                     html          = "<div class='mpblog-suggestion'>";
 
                 if (visibleImage) {
-                    html += "<div class='mpblog-suggestion-left'><img class='img-responsive' src='" + suggestion.image + "' /></div>";
+                    html += "<div class='mpblog-suggestion-left'><img class='img-responsive' src='" + esc(suggestion.image) + "' /></div>";
                     additionClass = 'image-visible';
                 }
 
                 html += "<div class='mpblog-suggestion-right " + additionClass + "'>" +
-                    "<div class='mpblog-product-line mpblog-product-name'>" + suggestion.value + "</div>" +
-                    "<div class='mpblog-product-des'><p class='mpblog-short-des'>" + suggestion.desc + "</p></div></div></div>";
+                    "<div class='mpblog-product-line mpblog-product-name'>" + esc(suggestion.value) + "</div>" +
+                    "<div class='mpblog-product-des'><p class='mpblog-short-des'>" + esc(suggestion.desc) + "</p></div></div></div>";
 
                 return html;
             }

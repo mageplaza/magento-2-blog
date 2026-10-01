@@ -298,6 +298,47 @@ class Data extends CoreHelper
     }
 
     /**
+     * @param string $host hostname or "host:port"
+     *
+     * @return bool true if the host must be refused
+     */
+    public static function isBlockedImportHost($host)
+    {
+        $host = (string) $host;
+        if ($host === '' || !preg_match('/^[a-zA-Z0-9.\-]+(:\d{1,5})?$/', $host)) {
+            return true;
+        }
+        $hostOnly = explode(':', $host)[0];
+        $ip = filter_var($hostOnly, FILTER_VALIDATE_IP) ? $hostOnly : gethostbyname($hostOnly);
+        if (filter_var($ip, FILTER_VALIDATE_IP)) {
+            if (!filter_var(
+                $ip,
+                FILTER_VALIDATE_IP,
+                FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+            )) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return DataObject|null
+     */
+    public function getCurrentApprovedAuthor()
+    {
+        $author = $this->getCurrentAuthor();
+        if ($author
+            && (string) $author->getStatus() === \Mageplaza\Blog\Model\Config\Source\AuthorStatus::APPROVED
+        ) {
+            return $author;
+        }
+
+        return null;
+    }
+
+    /**
      * @return AbstractCollection
      */
     public function getAuthorCollection()

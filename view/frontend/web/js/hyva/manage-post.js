@@ -163,6 +163,7 @@ function initAddNewPost() {
             },
             dispatchAddNewPostRequest: function (form) {
                 var formData = new FormData();
+                formData.append('form_key', hyva.getFormKey());
                 var imageInput = document.querySelector('#image');
                 if (imageInput && imageInput.files.length > 0) {
                     formData.append('image', imageInput.files[0]);

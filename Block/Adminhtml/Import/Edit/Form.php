@@ -164,7 +164,7 @@ class Form extends Generic
                 'note' => __('Your SQL database User name')
             ]);
 
-            $fieldsets[$item["value"]]->addField($item["value"] . '_db_password', 'text', [
+            $fieldsets[$item["value"]]->addField($item["value"] . '_db_password', 'password', [
                 'name' => 'db_password',
                 'title' => __('Database Password'),
                 'label' => __('Database Password'),

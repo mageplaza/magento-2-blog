@@ -25,6 +25,7 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Messages;
 use Mageplaza\Blog\Helper\Data as BlogHelper;
@@ -69,6 +70,11 @@ class Import extends Action
     public $registry;
 
     /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
      * Import constructor.
      *
      * @param Context $context
@@ -77,6 +83,7 @@ class Import extends Action
      * @param MageFanM2 $mageFanM2
      * @param BlogHelper $blogHelper
      * @param Registry $registry
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
         Action\Context $context,
@@ -84,13 +91,15 @@ class Import extends Action
         AheadWorksM1 $aheadWorksM1,
         MageFanM2 $mageFanM2,
         BlogHelper $blogHelper,
-        Registry $registry
+        Registry $registry,
+        EncryptorInterface $encryptor
     ) {
         $this->blogHelper         = $blogHelper;
         $this->_wordpressModel    = $wordPress;
         $this->_aheadWorksM1Model = $aheadWorksM1;
         $this->_mageFanM2Model    = $mageFanM2;
         $this->registry           = $registry;
+        $this->encryptor          = $encryptor;
 
         parent::__construct($context);
     }
@@ -101,10 +110,9 @@ class Import extends Action
     public function execute()
     {
         $data = $this->_getSession()->getData('mageplaza_blog_import_data');
-        $password = $this->getRequest()->getParam('password');
-        if ($password !== null && $password !== '') {
-            $data['password'] = $password;
-        }
+        $data['password'] = !empty($data['password'])
+            ? $this->encryptor->decrypt($data['password'])
+            : '';
         switch ($data['type']) {
             case 'wordpress':
                 $response = $this->processImport($this->_wordpressModel, $data);
@@ -178,7 +186,7 @@ class Import extends Action
         // phpcs:disable Magento2.Functions.DiscouragedFunction
         $statisticHtml = '';
         $host = (string) ($data['host'] ?? '');
-        if ($host === '' || !preg_match('/^[a-zA-Z0-9.\-]+(:\d{1,5})?$/', $host)) {
+        if (BlogHelper::isBlockedImportHost($host)) {
             return __('Invalid database host.');
         }
         $connection    = mysqli_connect($host, $data['user_name'], $data['password'], $data['database']);

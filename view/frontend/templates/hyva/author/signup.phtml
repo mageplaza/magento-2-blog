@@ -60,8 +60,8 @@ $submitTxt = $isNew ? __('Submit') : __('Save');
         <div class="field">
             <label class="label" for="short_description"><span><?= $escaper->escapeHtml(__('Short Description')) ?></span></label>
             <div class="control">
-                <textarea name="short_description" id="short_description" class="form-input w-full" rows="5"><?= /* @noEscape */
-                    $author['short_description'] ? $block->getPageFilter($author['short_description']) : '' ?></textarea>
+                <textarea name="short_description" id="short_description" class="form-input w-full" rows="5"><?=
+                    $author['short_description'] ? $escaper->escapeHtml($author['short_description']) : '' ?></textarea>
             </div>
         </div>
 

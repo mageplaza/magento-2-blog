@@ -54,12 +54,25 @@ class View extends \Mageplaza\Blog\Block\ListPost
         $id        = $this->getRequest()->getParam('id');
         $historyId = $this->getRequest()->getParam('historyId');
 
+        $loadedFromHistory = false;
         if ($historyId) {
             $history = $this->helperData->getFactoryByType(Data::TYPE_HISTORY)->create()->load($historyId);
-            $post    = $this->helperData->getFactoryByType(Data::TYPE_POST)->create()->load($history->getPostId());
-            $data    = $history->getData();
-            $post->addData($data);
-        } elseif ($id) {
+            $historyPost = $this->helperData->getFactoryByType(Data::TYPE_POST)->create()->load($history->getPostId());
+
+            $this->helperData->setCustomerContextId();
+            $author = $this->helperData->getCurrentAuthor();
+            if ($history->getId()
+                && $historyPost->getId()
+                && $author
+                && (int) $historyPost->getAuthorId() === (int) $author->getId()
+            ) {
+                $post = $historyPost;
+                $post->addData($history->getData());
+                $loadedFromHistory = true;
+            }
+        }
+
+        if (!$loadedFromHistory && $id) {
             $post->load($id);
         }
         $this->setPost($post);

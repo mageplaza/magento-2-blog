@@ -170,7 +170,7 @@ $postViewJsConfig = [
                     <div class="author-name"><?= $escaper->escapeHtml($authorName) ?></div>
                     <p class="author-description">
                         <?= $author->getShortDescription()
-                            ? $escaper->escapeHtml($author->getShortDescription()) : '' ?>
+                            ? $escaper->escapeHtml($author->getShortDescription(), ['p','br','b','i','strong','em','a','ul','ol','li','span']) : '' ?>
                     </p>
                 </div>
                 <div class="mp-clear"></div>
