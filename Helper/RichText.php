@@ -26,46 +26,71 @@ use DOMElement;
 use DOMNode;
 
 /**
- * Class RichText
- * @package Mageplaza\Blog\Helper
+ * Sanitizes rich text before it is rendered on the storefront
  */
 class RichText
 {
-    const INLINE_TAGS = ['p', 'br', 'b', 'i', 'strong', 'em', 'a', 'ul', 'ol', 'li', 'span'];
+    public const INLINE_TAGS = ['p', 'br', 'b', 'i', 'strong', 'em', 'a', 'ul', 'ol', 'li', 'span'];
 
-    const CONTENT_TAGS = [
+    public const CONTENT_TAGS = [
         'p', 'br', 'b', 'i', 'u', 's', 'strong', 'em', 'a', 'ul', 'ol', 'li',
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre', 'code', 'hr', 'img',
         'figure', 'figcaption', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
         'span', 'div', 'sub', 'sup', 'iframe'
     ];
 
-    const VOID_TAGS = ['br', 'hr', 'img'];
+    public const VOID_TAGS = ['br', 'hr', 'img'];
 
-    const DROP_WITH_CONTENT = [
+    public const DROP_WITH_CONTENT = [
         'script', 'style', 'iframe', 'object', 'embed', 'noscript', 'template',
         'svg', 'math', 'head', 'title', 'applet', 'frame', 'frameset', 'select', 'textarea'
     ];
 
-    const CONTENT_ATTRIBUTES = [
-        'a'      => ['href', 'title'],
-        'img'    => ['src', 'alt', 'width', 'height'],
-        'td'     => ['colspan', 'rowspan'],
-        'th'     => ['colspan', 'rowspan'],
+    public const CONTENT_ATTRIBUTES = [
+        'a'      => ['href', 'title', 'target', 'rel'],
+        'img'    => ['src', 'alt', 'width', 'height', 'loading', 'srcset', 'sizes', 'data-src', 'style', 'align'],
+        'table'  => ['style', 'align'],
+        'td'     => ['colspan', 'rowspan', 'style', 'align'],
+        'th'     => ['colspan', 'rowspan', 'style', 'align'],
+        'p'      => ['style', 'align'],
+        'h1'     => ['style'],
+        'h2'     => ['style'],
+        'h3'     => ['style'],
+        'h4'     => ['style'],
+        'h5'     => ['style'],
+        'h6'     => ['style'],
+        'div'    => ['style'],
+        'span'   => ['style'],
+        'figure' => ['style'],
         'iframe' => ['src', 'width', 'height', 'title', 'allowfullscreen', 'frameborder']
     ];
 
-    const INLINE_ATTRIBUTES = [
+    public const INLINE_ATTRIBUTES = [
         'a' => ['href', 'title']
     ];
 
-    const IFRAME_HOSTS = ['www.youtube.com', 'youtube.com', 'www.youtube-nocookie.com', 'player.vimeo.com'];
+    public const IFRAME_HOSTS = ['www.youtube.com', 'youtube.com', 'www.youtube-nocookie.com', 'player.vimeo.com'];
 
-    const LINK_SCHEMES = ['http', 'https', 'mailto'];
+    public const LINK_SCHEMES = ['http', 'https', 'mailto'];
 
-    const MEDIA_SCHEMES = ['http', 'https'];
+    public const MEDIA_SCHEMES = ['http', 'https'];
+
+    public const LINK_TARGETS = ['_blank', '_self', '_parent', '_top'];
+
+    public const LOADING_VALUES = ['lazy', 'eager'];
+
+    public const ALIGN_VALUES = ['left', 'right', 'center', 'justify'];
+
+    public const STYLE_PROPERTIES = [
+        'width', 'height', 'max-width', 'text-align', 'vertical-align', 'font-weight', 'font-style',
+        'text-decoration', 'color', 'background-color'
+    ];
+
+    public const STYLE_PROPERTY_PREFIXES = ['padding', 'margin', 'border'];
 
     /**
+     * Sanitize rich text that only allows basic inline markup
+     *
      * @param string $html
      *
      * @return string
@@ -76,6 +101,8 @@ class RichText
     }
 
     /**
+     * Sanitize full post content
+     *
      * @param string $html
      *
      * @return string
@@ -86,6 +113,8 @@ class RichText
     }
 
     /**
+     * Parse the markup and render only the allowed tags and attributes
+     *
      * @param string $html
      * @param array $tags
      * @param array $attributes
@@ -102,8 +131,8 @@ class RichText
         $previous = libxml_use_internal_errors(true);
         $dom      = new DOMDocument();
         $dom->loadHTML(
-            '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body>'
-            . $html . '</body></html>'
+            '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">'
+            . '</head><body>' . $html . '</body></html>'
         );
         libxml_clear_errors();
         libxml_use_internal_errors($previous);
@@ -117,6 +146,8 @@ class RichText
     }
 
     /**
+     * Render the child nodes of a node
+     *
      * @param DOMNode $node
      * @param array $tags
      * @param array $attributes
@@ -139,6 +170,8 @@ class RichText
     }
 
     /**
+     * Render one element when its tag is allowed
+     *
      * @param DOMElement $element
      * @param array $tags
      * @param array $attributes
@@ -177,6 +210,8 @@ class RichText
     }
 
     /**
+     * Render the allowed attributes of an element
+     *
      * @param DOMElement $element
      * @param string $name
      * @param array $attributes
@@ -184,23 +219,35 @@ class RichText
      *
      * @return string
      */
-    private function renderAttributes(DOMElement $element, string $name, array $attributes, bool $globalAttributes): string
-    {
+    private function renderAttributes(
+        DOMElement $element,
+        string $name,
+        array $attributes,
+        bool $globalAttributes
+    ): string {
         $allowed = $attributes[$name] ?? [];
         if ($globalAttributes) {
             $allowed = array_merge($allowed, ['class', 'id']);
         }
 
-        $out = '';
+        $clean = [];
         foreach (iterator_to_array($element->attributes) as $attribute) {
             $attrName = strtolower($attribute->nodeName);
-            if (!in_array($attrName, $allowed, true)) {
+            if (!in_array($attrName, $allowed, true) && !($globalAttributes && $this->isAriaAttribute($attrName))) {
                 continue;
             }
             $value = $this->cleanAttribute($name, $attrName, (string) $attribute->nodeValue);
-            if ($value === null) {
-                continue;
+            if ($value !== null) {
+                $clean[$attrName] = $value;
             }
+        }
+
+        if ($name === 'a' && ($clean['target'] ?? '') === '_blank') {
+            $clean['rel'] = $this->withNoopener($clean['rel'] ?? '');
+        }
+
+        $out = '';
+        foreach ($clean as $attrName => $value) {
             $out .= ' ' . $attrName . '="' . htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '"';
         }
 
@@ -208,6 +255,8 @@ class RichText
     }
 
     /**
+     * Validate and normalize one attribute value, null means drop it
+     *
      * @param string $tag
      * @param string $attribute
      * @param string $value
@@ -216,6 +265,10 @@ class RichText
      */
     private function cleanAttribute(string $tag, string $attribute, string $value): ?string
     {
+        if ($this->isAriaAttribute($attribute)) {
+            return preg_match('/[<>]/', $value) ? null : $value;
+        }
+
         switch ($attribute) {
             case 'href':
                 return $this->isSafeUrl($value, self::LINK_SCHEMES) ? $value : null;
@@ -225,6 +278,27 @@ class RichText
                 }
 
                 return $this->isSafeUrl($value, self::MEDIA_SCHEMES) ? $value : null;
+            case 'data-src':
+                return $this->isSafeUrl($value, self::MEDIA_SCHEMES) ? $value : null;
+            case 'srcset':
+                return $this->cleanSrcset($value);
+            case 'sizes':
+                return preg_match('/^[\w\s,.:()%+*\/\-]+$/', $value) ? trim($value) : null;
+            case 'loading':
+                return in_array(strtolower(trim($value)), self::LOADING_VALUES, true) ? strtolower(trim($value)) : null;
+            case 'target':
+                return in_array(strtolower(trim($value)), self::LINK_TARGETS, true) ? strtolower(trim($value)) : null;
+            case 'rel':
+                $tokens = preg_split('/\s+/', strtolower(trim($value)), -1, PREG_SPLIT_NO_EMPTY);
+                $tokens = array_filter($tokens, static function ($token) {
+                    return preg_match('/^[a-z]+$/', $token);
+                });
+
+                return $tokens ? implode(' ', $tokens) : null;
+            case 'align':
+                return in_array(strtolower(trim($value)), self::ALIGN_VALUES, true) ? strtolower(trim($value)) : null;
+            case 'style':
+                return $this->cleanStyle($value);
             case 'width':
             case 'height':
                 return preg_match('/^\d{1,5}(px|%)?$/', trim($value)) ? trim($value) : null;
@@ -245,6 +319,113 @@ class RichText
     }
 
     /**
+     * Check whether the attribute name is aria-*
+     *
+     * @param string $attribute
+     *
+     * @return bool
+     */
+    private function isAriaAttribute(string $attribute): bool
+    {
+        return (bool) preg_match('/^aria-[a-z]+$/', $attribute);
+    }
+
+    /**
+     * Make sure a rel value carries noopener and no opener
+     *
+     * @param string $rel
+     *
+     * @return string
+     */
+    private function withNoopener(string $rel): string
+    {
+        $tokens = array_diff(preg_split('/\s+/', $rel, -1, PREG_SPLIT_NO_EMPTY), ['opener']);
+        if (!in_array('noopener', $tokens, true)) {
+            $tokens[] = 'noopener';
+        }
+
+        return implode(' ', $tokens);
+    }
+
+    /**
+     * Keep a srcset only when every candidate URL is safe
+     *
+     * @param string $value
+     *
+     * @return string|null
+     */
+    private function cleanSrcset(string $value): ?string
+    {
+        $candidates = [];
+        foreach (explode(',', $value) as $candidate) {
+            $parts = preg_split('/\s+/', trim($candidate), -1, PREG_SPLIT_NO_EMPTY);
+            if (!$parts || count($parts) > 2 || !$this->isSafeUrl($parts[0], self::MEDIA_SCHEMES)) {
+                return null;
+            }
+            if (isset($parts[1]) && !preg_match('/^\d+(\.\d+)?[wx]$/', $parts[1])) {
+                return null;
+            }
+            $candidates[] = implode(' ', $parts);
+        }
+
+        return $candidates ? implode(', ', $candidates) : null;
+    }
+
+    /**
+     * Keep only allowlisted CSS declarations with safe values
+     *
+     * @param string $value
+     *
+     * @return string|null
+     */
+    private function cleanStyle(string $value): ?string
+    {
+        $declarations = [];
+        foreach (explode(';', $value) as $declaration) {
+            $pair = explode(':', $declaration, 2);
+            if (count($pair) !== 2) {
+                continue;
+            }
+            $property = strtolower(trim($pair[0]));
+            $cssValue = trim($pair[1]);
+            if ($cssValue === '' || !$this->isAllowedStyleProperty($property)) {
+                continue;
+            }
+            if (preg_match('/url\s*\(|expression|javascript|@import|[\\\\<>]/i', $cssValue)
+                || !preg_match('/^[\w\s#%.,()+!\-]+$/', $cssValue)
+            ) {
+                continue;
+            }
+            $declarations[] = $property . ':' . $cssValue;
+        }
+
+        return $declarations ? implode(';', $declarations) : null;
+    }
+
+    /**
+     * Check whether a CSS property is allowlisted
+     *
+     * @param string $property
+     *
+     * @return bool
+     */
+    private function isAllowedStyleProperty(string $property): bool
+    {
+        if (in_array($property, self::STYLE_PROPERTIES, true)) {
+            return true;
+        }
+        foreach (self::STYLE_PROPERTY_PREFIXES as $prefix) {
+            if ($property === $prefix || strpos($property, $prefix . '-') === 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Strip entities and control characters so scheme checks see the real URL
+     *
      * @param string $value
      *
      * @return string
@@ -263,6 +444,8 @@ class RichText
     }
 
     /**
+     * Check that a URL is relative or uses an allowed scheme
+     *
      * @param string $value
      * @param array $schemes
      *
@@ -282,6 +465,8 @@ class RichText
     }
 
     /**
+     * Check that an iframe source points to an allowlisted host
+     *
      * @param string $value
      *
      * @return bool
