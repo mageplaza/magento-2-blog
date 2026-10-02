@@ -428,3 +428,5 @@ Disable,Disable
 Signup,Signup
 "Invalid database host.","Invalid database host."
 "Please login to like.","Please login to like."
+"Please check the connection again before importing.","Please check the connection again before importing."
+"Something went wrong. Please try again.","Something went wrong. Please try again."

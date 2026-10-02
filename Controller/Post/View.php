@@ -221,7 +221,7 @@ class View extends Action
 
                 $cmtText = $content;
                 $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
-                $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
+                $replyId = $isReply && isset($params['replyId']) ? (int) $params['replyId'] : 0;
 
                 if ($isReply && $replyId) {
                     $parentCmt = $this->cmtFactory->create()->load($replyId);

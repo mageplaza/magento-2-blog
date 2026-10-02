@@ -110,7 +110,17 @@ class Import extends Action
     public function execute()
     {
         $data = $this->_getSession()->getData('mageplaza_blog_import_data');
-        $data['password'] = !empty($data['password'])
+        $this->_getSession()->unsetData('mageplaza_blog_import_data');
+        if (empty($data['type'])) {
+            $statisticHtml = $this->_view->getLayout()->createBlock(Messages::class)
+                ->{'adderror'}(__('Please check the connection again before importing.'))
+                ->toHtml();
+
+            return $this->getResponse()->representJson(
+                BlogHelper::jsonEncode(['statistic' => $statisticHtml, 'status' => 'ok'])
+            );
+        }
+        $data['password'] =!empty($data['password'])
             ? $this->encryptor->decrypt($data['password'])
             : '';
         switch ($data['type']) {
