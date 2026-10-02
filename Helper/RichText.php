@@ -36,10 +36,10 @@ class RichText
         'p', 'br', 'b', 'i', 'u', 's', 'strong', 'em', 'a', 'ul', 'ol', 'li',
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre', 'code', 'hr', 'img',
         'figure', 'figcaption', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
-        'span', 'div', 'sub', 'sup', 'iframe'
+        'span', 'div', 'sub', 'sup', 'iframe', 'video', 'audio', 'source'
     ];
 
-    public const VOID_TAGS = ['br', 'hr', 'img'];
+    public const VOID_TAGS = ['br', 'hr', 'img', 'source'];
 
     public const DROP_WITH_CONTENT = [
         'script', 'style', 'iframe', 'object', 'embed', 'noscript', 'template',
@@ -62,7 +62,10 @@ class RichText
         'div'    => ['style'],
         'span'   => ['style'],
         'figure' => ['style'],
-        'iframe' => ['src', 'width', 'height', 'title', 'allowfullscreen', 'frameborder']
+        'iframe' => ['src', 'width', 'height', 'title', 'allowfullscreen', 'frameborder'],
+        'video'  => ['src', 'poster', 'width', 'height', 'controls', 'autoplay', 'muted', 'loop', 'playsinline', 'preload'],
+        'audio'  => ['src', 'controls', 'autoplay', 'muted', 'loop', 'preload'],
+        'source' => ['src', 'type']
     ];
 
     public const INLINE_ATTRIBUTES = [
@@ -78,6 +81,8 @@ class RichText
     public const LINK_TARGETS = ['_blank', '_self', '_parent', '_top'];
 
     public const LOADING_VALUES = ['lazy', 'eager'];
+
+    public const PRELOAD_VALUES = ['none', 'metadata', 'auto'];
 
     public const ALIGN_VALUES = ['left', 'right', 'center', 'justify'];
 
@@ -279,6 +284,7 @@ class RichText
 
                 return $this->isSafeUrl($value, self::MEDIA_SCHEMES) ? $value : null;
             case 'data-src':
+            case 'poster':
                 return $this->isSafeUrl($value, self::MEDIA_SCHEMES) ? $value : null;
             case 'srcset':
                 return $this->cleanSrcset($value);
@@ -310,6 +316,16 @@ class RichText
                 $value = trim((string) preg_replace('/[^\w\- ]/u', '', $value));
 
                 return $value === '' ? null : $value;
+            case 'controls':
+            case 'autoplay':
+            case 'muted':
+            case 'loop':
+            case 'playsinline':
+                return '';
+            case 'preload':
+                return in_array(strtolower(trim($value)), self::PRELOAD_VALUES, true) ? strtolower(trim($value)) : null;
+            case 'type':
+                return preg_match('/^[a-z]+\/[\w.+\-]+$/i', trim($value)) ? trim($value) : null;
             case 'allowfullscreen':
             case 'frameborder':
                 return $value === '' ? 'true' : preg_replace('/[^\w\-]/', '', $value);
