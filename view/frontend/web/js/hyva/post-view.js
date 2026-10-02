@@ -477,7 +477,7 @@
                                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                                         'X-Requested-With': 'XMLHttpRequest'
                                     },
-                                    body: 'cmtId=' + cmtId,
+                                    body: 'form_key=' + hyva.getFormKey() + '&cmtId=' + cmtId,
                                     mode: 'cors',
                                     credentials: 'include'
                                 })
