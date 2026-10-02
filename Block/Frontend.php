@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block;
 
+use DateTimeZone;
 use Exception;
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -536,5 +537,44 @@ class Frontend extends Template
     public function getDefaultAuthorImage()
     {
         return $this->getViewFileUrl('Mageplaza_Blog::media/images/no-artist-image.jpg');
+    }
+
+    /**
+     * Get monthly archive items grouped by month in the store timezone, newest first
+     *
+     * @return array
+     * @throws NoSuchEntityException
+     * @throws Exception
+     */
+    public function getMonthlyArchiveItems()
+    {
+        $limit = (int) $this->helperData->getBlogConfig(
+            'sidebar/monthly_archive/number_records',
+            $this->helperData->getCurrentStoreId()
+        ) ?: 5;
+
+        $collection = $this->helperData->getPostList();
+        $select     = $collection->getSelect()
+            ->reset(\Magento\Framework\DB\Select::COLUMNS)
+            ->columns('publish_date');
+
+        $utc      = new DateTimeZone('UTC');
+        $timezone = new DateTimeZone($this->helperData->getTimezone());
+        $months   = [];
+        foreach ($collection->getConnection()->fetchCol($select) as $postDate) {
+            $month = (new \DateTime($postDate, $utc))->setTimezone($timezone)->format('Y-m');
+            if (!isset($months[$month])) {
+                $months[$month] = ['label' => $this->helperData->getDateFormat($postDate, true), 'count' => 0];
+            }
+            $months[$month]['count']++;
+        }
+        krsort($months);
+
+        $items = [];
+        foreach (array_slice($months, 0, $limit, true) as $month => $data) {
+            $items[] = $data + ['url' => $this->helperData->getBlogUrl($month, HelperData::TYPE_MONTHLY)];
+        }
+
+        return $items;
     }
 }
