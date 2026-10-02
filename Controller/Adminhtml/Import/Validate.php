@@ -80,7 +80,7 @@ class Validate extends Action
 
         try {
             $host = (string) ($data['host'] ?? '');
-            if (BlogHelper::isBlockedImportHost($host)) {
+            if (BlogHelper::isBlockedImportHost($host, $this->blogHelper->getImportAllowedHosts())) {
                 $result = ['import_name' => $data['import_name'] ?? '', 'status' => 'false'];
 
                 return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));

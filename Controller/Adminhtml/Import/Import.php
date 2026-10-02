@@ -186,7 +186,7 @@ class Import extends Action
         // phpcs:disable Magento2.Functions.DiscouragedFunction
         $statisticHtml = '';
         $host = (string) ($data['host'] ?? '');
-        if (BlogHelper::isBlockedImportHost($host)) {
+        if (BlogHelper::isBlockedImportHost($host, $this->blogHelper->getImportAllowedHosts())) {
             return __('Invalid database host.');
         }
         $connection    = mysqli_connect($host, $data['user_name'], $data['password'], $data['database']);

@@ -60,6 +60,10 @@
                     <validate>validate-digits</validate>
                     <comment>Limit number of post history</comment>
                 </field>
+                <field id="import_allowed_hosts" translate="label comment" type="textarea" sortOrder="70" showInDefault="1">
+                    <label>Allowed Import Database Hosts</label>
+                    <comment>Import refuses database hosts on private or reserved networks. List trusted hosts here, one per line (e.g. db, 10.0.0.5).</comment>
+                </field>
             </group>
             <group id="display" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Display</label>

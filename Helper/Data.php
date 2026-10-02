@@ -299,16 +299,20 @@ class Data extends CoreHelper
 
     /**
      * @param string $host hostname or "host:port"
+     * @param string[] $allowedHosts
      *
      * @return bool true if the host must be refused
      */
-    public static function isBlockedImportHost($host)
+    public static function isBlockedImportHost($host, array $allowedHosts = [])
     {
         $host = (string) $host;
         if ($host === '' || !preg_match('/^[a-zA-Z0-9.\-]+(:\d{1,5})?$/', $host)) {
             return true;
         }
         $hostOnly = explode(':', $host)[0];
+        if (in_array(strtolower($hostOnly), $allowedHosts, true)) {
+            return false;
+        }
         $ip = filter_var($hostOnly, FILTER_VALIDATE_IP) ? $hostOnly : gethostbyname($hostOnly);
         if (filter_var($ip, FILTER_VALIDATE_IP)) {
             if (!filter_var(
@@ -321,6 +325,14 @@ class Data extends CoreHelper
         }
 
         return false;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getImportAllowedHosts()
+    {
+        return array_values(array_filter(preg_split('/[\s,]+/', strtolower((string) $this->getConfigGeneral('import_allowed_hosts')))));
     }
 
     /**
