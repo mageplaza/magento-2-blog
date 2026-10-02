@@ -41,7 +41,8 @@
                 'X-Requested-With': 'XMLHttpRequest'
             },
             body: new URLSearchParams({
-                post_id: postId
+                post_id: postId,
+                form_key: hyva.getFormKey()
             })
         })
             .then(function (response) { return response.json(); })
