@@ -44,6 +44,7 @@ use Mageplaza\Blog\Helper\Data as HelperBlog;
 use Mageplaza\Blog\Model\Comment;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
+use Mageplaza\Blog\Model\Config\Source\Comments\Type as CommentType;
 use Mageplaza\Blog\Model\Like;
 use Mageplaza\Blog\Model\LikeFactory;
 use Mageplaza\Blog\Model\PostFactory;
@@ -206,8 +207,8 @@ class View extends Action
             $customerData = $this->session->getCustomerData();
             $result       = [];
             if (isset($params['cmt_text'])) {
-                $commentType = (string) $this->helperBlog->getBlogConfig('comment/type');
-                if (!$post->getAllowComment() || $commentType === '0') {
+                $commentType = (int) $this->helperBlog->getBlogConfig('comment/type');
+                if (!$post->getAllowComment() || $commentType !== CommentType::DEFAULT_COMMENT) {
                     return $this->getResponse()->representJson(
                         $this->jsonHelper->jsonEncode(['status' => 'error'])
                     );
