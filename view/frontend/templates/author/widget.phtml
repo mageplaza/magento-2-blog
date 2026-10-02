@@ -39,7 +39,7 @@ if ($author) : ?>
             </div>
             <div class="author-content col-xs-12">
                 <?= $author->getShortDescription()
-                    ? $escaper->escapeHtml($author->getShortDescription(), ['p','br','b','i','strong','em','a','ul','ol','li','span'])
+                    ? $block->getAuthorBioHtml($author)
                     : $escaper->escapeHtml(__('No info')) ?>
             </div>
             <div class="author-social col-xs-12">

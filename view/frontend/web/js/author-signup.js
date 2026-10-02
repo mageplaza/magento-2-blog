@@ -31,7 +31,7 @@ define([
             if ($(this).val() === '') {
                 url = '';
             }
-            $('.mp_full_url').html(url);
+            $('.mp_full_url').text(url);
         });
 
         editor.config(

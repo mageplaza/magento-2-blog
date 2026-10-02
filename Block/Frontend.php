@@ -41,6 +41,7 @@ use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag as TagOptions;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic as TopicOptions;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Helper\RichText;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\Config\Source\AuthorStatus;
@@ -157,6 +158,11 @@ class Frontend extends Template
     protected $treeFactory;
 
     /**
+     * @var RichText
+     */
+    protected $richText;
+
+    /**
      * Frontend constructor.
      *
      * @param Context $context
@@ -178,6 +184,7 @@ class Frontend extends Template
      * @param EncryptorInterface $enc
      * @param AuthorStatus $authorStatus
      * @param TreeFactory $treeFactory
+     * @param RichText $richText
      * @param array $data
      */
     public function __construct(
@@ -200,6 +207,7 @@ class Frontend extends Template
         EncryptorInterface $enc,
         AuthorStatus $authorStatus,
         TreeFactory $treeFactory,
+        RichText $richText,
         array $data = []
     ) {
         $this->filterProvider     = $filterProvider;
@@ -221,6 +229,7 @@ class Frontend extends Template
         $this->store              = $context->getStoreManager();
         $this->enc                = $enc;
         $this->treeFactory        = $treeFactory;
+        $this->richText           = $richText;
 
         parent::__construct($context, $data);
     }
@@ -270,6 +279,37 @@ class Frontend extends Template
         } catch (Exception $e) {
             return '';
         }
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
+    public function getPostContentHtml($content)
+    {
+        return $this->richText->sanitizeContent($this->getPageFilter($content));
+    }
+
+    /**
+     * @param \Magento\Framework\DataObject $item
+     * @param bool $shorten
+     *
+     * @return string
+     */
+    public function getShortDescriptionHtml($item, $shorten = true)
+    {
+        return $this->richText->sanitizeInline((string) $item->getShortDescription($shorten));
+    }
+
+    /**
+     * @param \Magento\Framework\DataObject $author
+     *
+     * @return string
+     */
+    public function getAuthorBioHtml($author)
+    {
+        return $this->richText->sanitizeInline((string) $author->getShortDescription());
     }
 
     /**
