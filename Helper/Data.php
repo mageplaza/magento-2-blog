@@ -557,7 +557,17 @@ class Data extends CoreHelper
                 $collection->getSelect()->order('position asc');
                 break;
             case self::TYPE_MONTHLY:
-                $collection->addFieldToFilter('publish_date', ['like' => $id . '%']);
+                if (!preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', (string) $id)) {
+                    $collection->addFieldToFilter('publish_date', ['like' => $id . '%']);
+                    break;
+                }
+                $start = new \DateTime($id . '-01 00:00:00', new DateTimeZone($this->getTimezone()));
+                $end   = (clone $start)->modify('+1 month');
+                $utc   = new DateTimeZone('UTC');
+                $collection->addFieldToFilter('publish_date', [
+                    'from' => $start->setTimezone($utc)->format('Y-m-d H:i:s'),
+                    'to'   => $end->setTimezone($utc)->modify('-1 second')->format('Y-m-d H:i:s')
+                ]);
                 break;
         }
 
