@@ -344,7 +344,9 @@ class Preview extends Action
 
                     $lastCmt   = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
                     $lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
-                    $users     = $user ? $user->getFirstname() . ' ' . $user->getLastname() : $data['user_name'];
+                    $users     = $user
+                        ? htmlspecialchars($user->getFirstname() . ' ' . $user->getLastname(), ENT_COMPAT, 'UTF-8')
+                        : $data['user_name'];
 
                     $result = [
                         'cmt_id'     => $lastCmtId,
