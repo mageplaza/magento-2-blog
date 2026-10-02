@@ -339,7 +339,7 @@ class View extends Action
                     break;
             }
         } catch (Exception $e) {
-            $result = ['status' => 'error', 'error' => $e->getMessage()];
+            $result = ['status' => 'error', 'error' => __('Something went wrong. Please try again.')];
         }
 
         return $result;
