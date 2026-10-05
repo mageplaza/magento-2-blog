@@ -419,7 +419,7 @@
                     var replyCmtList = document.querySelectorAll('.default-cmt__content__cmt-content__cmt-row');
 
                     replyCmtList.forEach(function (cmtEl) {
-                        if (cmtEl.getAttribute('data-cmt-id') === replyCmtId) {
+                        if (cmtEl.getAttribute('data-cmt-id') === String(replyCmtId)) {
                             var replyList = cmtEl.querySelector('ul.default-cmt__content__cmt-content:first-child');
 
                             if (!replyList) {

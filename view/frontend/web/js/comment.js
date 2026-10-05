@@ -281,7 +281,7 @@ require([
 
             replyCmt.each(function () {
                 var cmtEl = $(this);
-                if (cmtEl.attr('data-cmt-id') === replyCmtId) {
+                if (cmtEl.attr('data-cmt-id') === String(replyCmtId)) {
                     var replyList = cmtEl.find('ul.default-cmt__content__cmt-content:first');
 
                     if (!replyList.length) {
