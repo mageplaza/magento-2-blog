@@ -206,6 +206,19 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
             $data['topics_ids'] ?? ''
         ) : [];
 
+        $data = array_intersect_key($data, array_flip([
+            'post_id',
+            'name',
+            'short_description',
+            'post_content',
+            'image',
+            'categories_ids',
+            'tags_ids',
+            'topics_ids',
+            'allow_comment',
+            'publish_date'
+        ]));
+
         $data['author_id']   = $author->getId();
         $data['store_ids']   = $this->_helperBlog->getCurrentStoreId();
         $data['enabled']     = $this->_helperBlog->getConfigGeneral('auto_post') ? 1 : 0;
