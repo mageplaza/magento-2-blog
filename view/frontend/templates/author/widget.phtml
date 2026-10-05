@@ -38,7 +38,9 @@ if ($author) : ?>
                      alt="<?= $escaper->escapeHtml($author->getName()); ?>"/>
             </div>
             <div class="author-content col-xs-12">
-                <?= $block->getPageFilter(($author->getShortDescription())) ?: $escaper->escapeHtml(__('No info')) ?>
+                <?= $author->getShortDescription()
+                    ? $block->getAuthorBioHtml($author)
+                    : $escaper->escapeHtml(__('No info')) ?>
             </div>
             <div class="author-social col-xs-12">
                 <?php if ($author->getFacebookLink()) : ?>

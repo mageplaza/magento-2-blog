@@ -426,3 +426,7 @@ Disable,Disable
 "Are you sure you wan't to delete selected Topics?","Are you sure you wan't to delete selected Topics?"
 "Post List","Post List"
 Signup,Signup
+"Invalid database host.","Invalid database host."
+"Please login to like.","Please login to like."
+"Please check the connection again before importing.","Please check the connection again before importing."
+"Something went wrong. Please try again.","Something went wrong. Please try again."

@@ -24,6 +24,11 @@ require([
 ], function ($) {
     'use strict';
 
+    function getFormKey() {
+        var m = document.cookie.match(/(?:^|;\s*)form_key=([^;]+)/);
+        return m ? decodeURIComponent(m[1]) : (window.FORM_KEY || '');
+    }
+
     var cmtBox = $('.default-cmt__content__cmt-block__cmt-box__cmt-input'),
         submitCmt = $('.default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit'),
         defaultCmt = $('ul.default-cmt__content__cmt-content:first'),
@@ -108,7 +113,7 @@ require([
                         $.ajax({
                             type: "POST",
                             url: window.location.href,
-                            data: {cmtId: cmtId},
+                            data: {form_key: getFormKey(), cmtId: cmtId},
                             success: function (response) {
                                 if (response.status === 'ok') {
                                     $(likeEl).attr('click', '1');
@@ -225,7 +230,7 @@ require([
             type: 'POST',
             url: window.location.href,
             // async: false,
-            data: {cmt_text: cmtText, isReply: isReply, replyId: replyId, guestName: guestName, guestEmail: guestEmail},
+            data: {form_key: getFormKey(), cmt_text: cmtText, isReply: isReply, replyId: replyId, guestName: guestName, guestEmail: guestEmail},
             success: function (response) {
                 switch (response.status) {
                     case 'duplicated':
@@ -276,7 +281,7 @@ require([
 
             replyCmt.each(function () {
                 var cmtEl = $(this);
-                if (cmtEl.attr('data-cmt-id') === replyCmtId) {
+                if (cmtEl.attr('data-cmt-id') === String(replyCmtId)) {
                     var replyList = cmtEl.find('ul.default-cmt__content__cmt-content:first');
 
                     if (!replyList.length) {

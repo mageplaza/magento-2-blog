@@ -147,7 +147,7 @@ class RelatedProduct extends ListProduct
     public function _getProductCollection()
     {
         if ($this->_productCollection === null) {
-            $postId     = $this->getRequest()->getParam('id');
+            $postId     = (int) $this->getRequest()->getParam('id');
             $collection = $this->_productCollectionFactory->create()
                 ->addAttributeToSelect('*')
                 ->addStoreFilter();
@@ -157,7 +157,7 @@ class RelatedProduct extends ListProduct
                     ['product_post' => $collection->getTable('mageplaza_blog_post_product')],
                     'e.entity_id = product_post.entity_id'
                 )
-                ->where('product_post.post_id = ' . $postId)
+                ->where('product_post.post_id = ?', $postId)
                 ->order('product_post.position ASC')
                 ->limit((int) $this->helper->getBlogConfig('product_post/post_detail/product_limit') ?: self::LIMIT);
 

@@ -85,8 +85,8 @@ $postViewJsConfig = [
                 <?php endif; ?>
             </div>
             <div class="post-post_content col-xs-12">
-                <?= /** @noEscape */
-                $block->getPageFilter($_post->getPostContent() ?: '') ?>
+                <?=
+                $block->getPostContentHtml($_post->getPostContent() ?: '') ?>
             </div>
             <div class="mp-clear"></div>
             <?= $block->getChildHtml('mp_blog_post_info') ?>
@@ -167,11 +167,10 @@ $postViewJsConfig = [
                              : $block->getDefaultAuthorImage() ?>">
                 </div>
                 <div class="author-content-information">
-                    <div class="author-name"><?= /* @noEscape */
-                        $authorName ?></div>
+                    <div class="author-name"><?= $escaper->escapeHtml($authorName) ?></div>
                     <p class="author-description">
-                        <?= /* @noEscape */
-                        $author->getShortDescription() ? $block->getPageFilter($author->getShortDescription()) : '' ?>
+                        <?= $author->getShortDescription()
+                            ? $block->getAuthorBioHtml($author) : '' ?>
                     </p>
                 </div>
                 <div class="mp-clear"></div>

@@ -25,7 +25,11 @@ use Exception;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -33,8 +37,10 @@ use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Helper\RichText;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
 
@@ -42,7 +48,7 @@ use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
  * Class Manage
  * @package Mageplaza\Blog\Controller\Post
  */
-class Manage extends Action
+class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionInterface
 {
     /**
      * @var PageFactory
@@ -95,6 +101,16 @@ class Manage extends Action
     protected $imageHelper;
 
     /**
+     * @var FormKeyValidator
+     */
+    protected $formKeyValidator;
+
+    /**
+     * @var RichText
+     */
+    protected $richText;
+
+    /**
      * View constructor.
      *
      * @param Context $context
@@ -108,6 +124,8 @@ class Manage extends Action
      * @param Image $imageHelper
      * @param Data $helperData
      * @param TimezoneInterface $timezone
+     * @param FormKeyValidator $formKeyValidator
+     * @param RichText $richText
      */
     public function __construct(
         Context $context,
@@ -120,7 +138,9 @@ class Manage extends Action
         DateTime $date,
         Image $imageHelper,
         Data $helperData,
-        TimezoneInterface $timezone
+        TimezoneInterface $timezone,
+        FormKeyValidator $formKeyValidator,
+        RichText $richText
     ) {
         $this->_helperBlog          = $helperData;
         $this->resultPageFactory    = $resultPageFactory;
@@ -132,6 +152,8 @@ class Manage extends Action
         $this->date                 = $date;
         $this->imageHelper          = $imageHelper;
         $this->timezone             = $timezone;
+        $this->formKeyValidator     = $formKeyValidator;
+        $this->richText             = $richText;
 
         parent::__construct($context);
     }
@@ -145,14 +167,23 @@ class Manage extends Action
     {
         $data = $this->getRequest()->getParams();
         $this->_helperBlog->setCustomerContextId();
-        $author = $this->_helperBlog->getCurrentAuthor();
+        $author = $this->_helperBlog->getCurrentApprovedAuthor();
         $post   = $this->postFactory->create();
 
         if (!$author) {
-            return null;
+            return $this->getResponse()->representJson(Data::jsonEncode([
+                'status' => 0
+            ]));
         }
 
-        if ($this->getRequest()->getFiles('image')['size'] > 0) {
+        foreach (['post_content', 'short_description'] as $field) {
+            if (isset($data[$field]) && $data[$field] !== '') {
+                $data[$field] = $this->sanitizeAuthorHtml((string) $data[$field], $field === 'short_description');
+            }
+        }
+
+        $imageFile = $this->getRequest()->getFiles('image');
+        if (is_array($imageFile) && !empty($imageFile['size'])) {
             try {
                 $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_POST, $post->getImage());
             } catch (Exception $exception) {
@@ -175,6 +206,19 @@ class Manage extends Action
             $data['topics_ids'] ?? ''
         ) : [];
 
+        $data = array_intersect_key($data, array_flip([
+            'post_id',
+            'name',
+            'short_description',
+            'post_content',
+            'image',
+            'categories_ids',
+            'tags_ids',
+            'topics_ids',
+            'allow_comment',
+            'publish_date'
+        ]));
+
         $data['author_id']   = $author->getId();
         $data['store_ids']   = $this->_helperBlog->getCurrentStoreId();
         $data['enabled']     = $this->_helperBlog->getConfigGeneral('auto_post') ? 1 : 0;
@@ -190,9 +234,17 @@ class Manage extends Action
 
         if ($data['post_id']) {
             $post->load($data['post_id']);
-            if ($post->getId()) {
-                $post->setData($data);
+            if ($post->getId() && (int) $post->getAuthorId() !== (int) $author->getId()) {
+                return $this->getResponse()->representJson(Data::jsonEncode([
+                    'status' => 0
+                ]));
             }
+            if (!$post->getId()) {
+                return $this->getResponse()->representJson(Data::jsonEncode([
+                    'status' => 0
+                ]));
+            }
+            $post->setData($data);
             $data['updated_at'] = $this->date->date();
         } else {
             unset($data['post_id']);
@@ -214,5 +266,34 @@ class Manage extends Action
                 'status' => 0
             ]));
         }
+    }
+
+    /**
+     * @param string $html
+     * @param bool $inline
+     *
+     * @return string
+     */
+    private function sanitizeAuthorHtml(string $html, bool $inline = false): string
+    {
+        $html = $inline ? $this->richText->sanitizeInline($html) : $this->richText->sanitizeContent($html);
+
+        return str_replace(['{{', '}}'], ['&#123;&#123;', '&#125;&#125;'], $html);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return $this->formKeyValidator->validate($request);
     }
 }

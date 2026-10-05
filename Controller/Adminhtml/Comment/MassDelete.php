@@ -39,6 +39,11 @@ use Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory;
 class MassDelete extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::comment';
+
+    /**
      * Mass Action Filter
      *
      * @var Filter

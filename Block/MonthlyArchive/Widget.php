@@ -21,10 +21,7 @@
 
 namespace Mageplaza\Blog\Block\MonthlyArchive;
 
-use Exception;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Mageplaza\Blog\Block\Frontend;
-use Mageplaza\Blog\Helper\Data as DataHelper;
 
 /**
  * Class Widget
@@ -32,11 +29,6 @@ use Mageplaza\Blog\Helper\Data as DataHelper;
  */
 class Widget extends Frontend
 {
-    /**
-     * @var array
-     */
-    protected $_postDate;
-
     /**
      * @return mixed
      */
@@ -46,100 +38,5 @@ class Widget extends Frontend
             'sidebar/monthly_archive/enable_monthly',
             $this->helperData->getCurrentStoreId()
         );
-    }
-
-    /**
-     * @return array
-     * @throws NoSuchEntityException
-     */
-    public function getDateArrayCount()
-    {
-        return array_values(array_count_values($this->getDateArray()));
-    }
-
-    /**
-     * @return array
-     * @throws NoSuchEntityException
-     */
-    public function getDateArrayUnique()
-    {
-        return array_values(array_unique($this->getDateArray()));
-    }
-
-    /**
-     * @return array
-     * @throws NoSuchEntityException
-     */
-    public function getDateArray()
-    {
-        $dateArray = [];
-        foreach ($this->getPostDate() as $postDate) {
-            $dateArray[] = date("F Y", $this->dateTime->timestamp($postDate));
-        }
-
-        return $dateArray;
-    }
-
-    /**
-     * @return array
-     * @throws NoSuchEntityException
-     */
-    protected function getPostDate()
-    {
-        if (!$this->_postDate) {
-            // Fetch only the publish_date column instead of hydrating every post
-            // as a model object (OOM/slow at scale).
-            $collection = $this->helperData->getPostList();
-            $select     = $collection->getSelect()
-                ->reset(\Magento\Framework\DB\Select::COLUMNS)
-                ->columns('publish_date');
-
-            $this->_postDate = $collection->getConnection()->fetchCol($select);
-        }
-
-        return $this->_postDate;
-    }
-
-    /**
-     * @return int|void
-     * @throws NoSuchEntityException
-     */
-    public function getDateCount()
-    {
-        $limit = $this->helperData->getBlogConfig(
-            'sidebar/monthly_archive/number_records',
-            $this->helperData->getCurrentStoreId())
-            ?: 5;
-        $dateArrayCount = $this->getDateArrayCount();
-        $count          = count($dateArrayCount);
-
-        return ($count < $limit) ? $count : $limit;
-    }
-
-    /**
-     * @param $month
-     *
-     * @return string
-     */
-    public function getMonthlyUrl($month)
-    {
-        return $this->helperData->getBlogUrl($month, DataHelper::TYPE_MONTHLY);
-    }
-
-    /**
-     * @return array
-     * @throws Exception
-     */
-    public function getDateLabel()
-    {
-        $postDates      = $this->getPostDate();
-        $postDatesLabel = [];
-        if (count($postDates)) {
-            foreach ($postDates as $date) {
-                $postDatesLabel[] = $this->helperData->getDateFormat($date, true);
-            }
-        }
-
-        return array_values(array_unique($postDatesLabel));
     }
 }

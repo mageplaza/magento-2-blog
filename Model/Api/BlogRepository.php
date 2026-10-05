@@ -150,20 +150,10 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getMonthlyArchive()
     {
-        $dateArrayCount  = $this->monthlyWidget->getDateArrayCount();
-        $dateArrayUnique = $this->monthlyWidget->getDateArrayUnique();
-        $dateLabel       = $this->monthlyWidget->getDateLabel();
-        $monthlyAr       = [];
-        // phpcs:disable Generic.CodeAnalysis.ForLoopWithTestFunctionCall
-        for ($i = 0; $i < $this->monthlyWidget->getDateCount(); $i++) {
+        $monthlyAr = [];
+        foreach ($this->monthlyWidget->getMonthlyArchiveItems() as $item) {
             $monthly = new MonthlyArchive();
-            $monthly->setLabel($dateLabel[$i])->setPostCount((int) $dateArrayCount[$i])
-                ->setLink(
-                    $this->_helperData->getBlogUrl(
-                        date('Y-m', $this->date->timestamp($dateArrayUnique[$i])),
-                        Data::TYPE_MONTHLY
-                    )
-                );
+            $monthly->setLabel($item['label'])->setPostCount((int) $item['count'])->setLink($item['url']);
             $monthlyAr[] = $monthly;
         }
 

@@ -29,6 +29,7 @@ $author = $block->getAuthor();
 <form enctype="multipart/form-data" data-mage-init='{"validation": {}}'
       action="<?= $escaper->escapeHtml($block->getUrl('mpblog/author/register')) ?>" method="post" class="form"
       name="mp_blog_author_form">
+    <?= /* @noEscape */ $block->getBlockHtml('formkey'); ?>
     <fieldset class="fieldset">
         <legend class="legend">
             <span><?= /* @noEscape */ $author['name'] === '' ? __('Signup Author') : __('Author Information') ?></span>
@@ -55,10 +56,9 @@ $author = $block->getAuthor();
                 <span><?= $escaper->escapeHtml(__('Short Description')) ?></span>
             </label>
             <div class="control">
-                <textarea name="short_description" id="short_description" rows="5" cols="19">
-                    <?= /* @noEscape */ $author['short_description']
-                        ? $block->getPageFilter($author['short_description']) : '' ?>
-                </textarea>
+                <textarea name="short_description" id="short_description" rows="5" cols="19"><?=
+                    $author['short_description']
+                        ? $escaper->escapeHtml($author['short_description']) : '' ?></textarea>
             </div>
         </div>
         <div class="field mp-field">

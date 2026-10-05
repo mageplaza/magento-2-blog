@@ -25,6 +25,7 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Messages;
 use Mageplaza\Blog\Helper\Data as BlogHelper;
@@ -38,6 +39,11 @@ use Mageplaza\Blog\Model\Import\WordPress;
  */
 class Import extends Action
 {
+    /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::import';
+
     /**
      * @var WordPress
      */
@@ -64,6 +70,11 @@ class Import extends Action
     public $registry;
 
     /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
      * Import constructor.
      *
      * @param Context $context
@@ -72,6 +83,7 @@ class Import extends Action
      * @param MageFanM2 $mageFanM2
      * @param BlogHelper $blogHelper
      * @param Registry $registry
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
         Action\Context $context,
@@ -79,13 +91,15 @@ class Import extends Action
         AheadWorksM1 $aheadWorksM1,
         MageFanM2 $mageFanM2,
         BlogHelper $blogHelper,
-        Registry $registry
+        Registry $registry,
+        EncryptorInterface $encryptor
     ) {
         $this->blogHelper         = $blogHelper;
         $this->_wordpressModel    = $wordPress;
         $this->_aheadWorksM1Model = $aheadWorksM1;
         $this->_mageFanM2Model    = $mageFanM2;
         $this->registry           = $registry;
+        $this->encryptor          = $encryptor;
 
         parent::__construct($context);
     }
@@ -96,6 +110,19 @@ class Import extends Action
     public function execute()
     {
         $data = $this->_getSession()->getData('mageplaza_blog_import_data');
+        $this->_getSession()->unsetData('mageplaza_blog_import_data');
+        if (empty($data['type'])) {
+            $statisticHtml = $this->_view->getLayout()->createBlock(Messages::class)
+                ->{'adderror'}(__('Please check the connection again before importing.'))
+                ->toHtml();
+
+            return $this->getResponse()->representJson(
+                BlogHelper::jsonEncode(['statistic' => $statisticHtml, 'status' => 'ok'])
+            );
+        }
+        $data['password'] =!empty($data['password'])
+            ? $this->encryptor->decrypt($data['password'])
+            : '';
         switch ($data['type']) {
             case 'wordpress':
                 $response = $this->processImport($this->_wordpressModel, $data);
@@ -168,7 +195,11 @@ class Import extends Action
     {
         // phpcs:disable Magento2.Functions.DiscouragedFunction
         $statisticHtml = '';
-        $connection    = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
+        $host = (string) ($data['host'] ?? '');
+        if (BlogHelper::isBlockedImportHost($host, $this->blogHelper->getImportAllowedHosts())) {
+            return __('Invalid database host.');
+        }
+        $connection    = mysqli_connect($host, $data['user_name'], $data['password'], $data['database']);
         $messagesBlock = $this->_view->getLayout()->createBlock(Messages::class);
         if ($object->run($data, $connection)) {
             $postStatistic = $this->registry->registry('mageplaza_import_post_statistic');

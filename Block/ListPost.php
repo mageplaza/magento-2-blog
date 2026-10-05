@@ -73,7 +73,7 @@ class ListPost extends Frontend implements IdentityInterface
         if (is_string($description)) {
             $html = '';
             foreach (explode("\n", trim($description)) as $value) {
-                $html .= '<p>' . $value . '</p>';
+                $html .= '<p>' . $this->escapeHtml($value) . '</p>';
             }
 
             return $html;

@@ -40,6 +40,11 @@ use RuntimeException;
 class InlineEdit extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::comment';
+
+    /**
      * JSON Factory
      *
      * @var JsonFactory

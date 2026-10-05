@@ -27,6 +27,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Session;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Mageplaza\Blog\Helper\Data as BlogHelper;
 use RuntimeException;
 
@@ -37,21 +38,34 @@ use RuntimeException;
 class Validate extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::import';
+
+    /**
      * @var BlogHelper
      */
     public $blogHelper;
+
+    /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
 
     /**
      * Validate constructor.
      *
      * @param Context $context
      * @param BlogHelper $blogHelper
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
         Context $context,
-        BlogHelper $blogHelper
+        BlogHelper $blogHelper,
+        EncryptorInterface $encryptor
     ) {
         $this->blogHelper = $blogHelper;
+        $this->encryptor  = $encryptor;
 
         parent::__construct($context);
     }
@@ -65,11 +79,23 @@ class Validate extends Action
         $data = $this->getRequest()->getParams();
 
         try {
-            $connect    = mysqli_connect($data['host'], $data['user_name'], $data['password'], $data['database']);
+            $host = (string) ($data['host'] ?? '');
+            if (BlogHelper::isBlockedImportHost($host, $this->blogHelper->getImportAllowedHosts())) {
+                $result = ['import_name' => $data['import_name'] ?? '', 'status' => 'false'];
+
+                return $this->getResponse()->representJson(BlogHelper::jsonEncode($result));
+            }
+
+            $connect    = mysqli_connect($host, $data['user_name'], $data['password'], $data['database']);
             $importName = $data['import_name'];
 
+            $sessionData = $data;
+            unset($sessionData['form_key'], $sessionData['key']);
+            $sessionData['password'] = isset($data['password']) && $data['password'] !== ''
+                ? $this->encryptor->encrypt($data['password'])
+                : '';
             /** @var Session */
-            $this->_getSession()->setData('mageplaza_blog_import_data', $data);
+            $this->_getSession()->setData('mageplaza_blog_import_data', $sessionData);
             $result = ['import_name' => $importName, 'status' => 'ok'];
 
             mysqli_close($connect);

@@ -288,8 +288,66 @@ class Data extends CoreHelper
     public function getCurrentAuthor()
     {
         $collection = $this->getAuthorCollection();
+        if (!$collection) {
+            return null;
+        }
 
-        return $collection ? $collection->getFirstItem() : null;
+        $author = $collection->getFirstItem();
+
+        return $author->getId() ? $author : null;
+    }
+
+    /**
+     * @param string $host hostname or "host:port"
+     * @param string[] $allowedHosts
+     *
+     * @return bool true if the host must be refused
+     */
+    public static function isBlockedImportHost($host, array $allowedHosts = [])
+    {
+        $host = (string) $host;
+        if ($host === '' || !preg_match('/^[a-zA-Z0-9.\-]+(:\d{1,5})?$/', $host)) {
+            return true;
+        }
+        $hostOnly = explode(':', $host)[0];
+        if (in_array(strtolower($hostOnly), $allowedHosts, true)) {
+            return false;
+        }
+        $ip = filter_var($hostOnly, FILTER_VALIDATE_IP) ? $hostOnly : gethostbyname($hostOnly);
+        if (filter_var($ip, FILTER_VALIDATE_IP)) {
+            if (!filter_var(
+                $ip,
+                FILTER_VALIDATE_IP,
+                FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+            )) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getImportAllowedHosts()
+    {
+        return array_values(array_filter(preg_split('/[\s,]+/', strtolower((string) $this->getConfigGeneral('import_allowed_hosts')))));
+    }
+
+    /**
+     * @return DataObject|null
+     */
+    public function getCurrentApprovedAuthor()
+    {
+        $author = $this->getCurrentAuthor();
+        if ($author
+            && (string) $author->getStatus() === \Mageplaza\Blog\Model\Config\Source\AuthorStatus::APPROVED
+        ) {
+            return $author;
+        }
+
+        return null;
     }
 
     /**
@@ -353,7 +411,13 @@ class Data extends CoreHelper
      */
     public function getDisplayConfig($code, $storeId = null)
     {
-        return $this->getBlogConfig('display/' . $code, $storeId);
+        $value = $this->getBlogConfig('display/' . $code, $storeId);
+
+        if ($code === 'font_color' && $value !== null) {
+            $value = preg_replace('/[^#a-zA-Z0-9(),.%\s-]/', '', (string) $value);
+        }
+
+        return $value;
     }
 
     /**
@@ -505,7 +569,17 @@ class Data extends CoreHelper
                 $collection->getSelect()->order('position asc');
                 break;
             case self::TYPE_MONTHLY:
-                $collection->addFieldToFilter('publish_date', ['like' => $id . '%']);
+                if (!preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', (string) $id)) {
+                    $collection->addFieldToFilter('publish_date', ['like' => $id . '%']);
+                    break;
+                }
+                $start = new \DateTime($id . '-01 00:00:00', new DateTimeZone($this->getTimezone()));
+                $end   = (clone $start)->modify('+1 month');
+                $utc   = new DateTimeZone('UTC');
+                $collection->addFieldToFilter('publish_date', [
+                    'from' => $start->setTimezone($utc)->format('Y-m-d H:i:s'),
+                    'to'   => $end->setTimezone($utc)->modify('-1 second')->format('Y-m-d H:i:s')
+                ]);
                 break;
         }
 

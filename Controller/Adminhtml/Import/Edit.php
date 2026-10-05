@@ -35,6 +35,11 @@ use Magento\Framework\View\Result\PageFactory;
 class Edit extends Action
 {
     /**
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Mageplaza_Blog::import';
+
+    /**
      * @var PageFactory
      */
     public $resultPageFactory;
