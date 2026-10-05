@@ -270,6 +270,7 @@ class View extends Action
 
                 $likeModel = $this->likeFactory->create();
                 $result    = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
+                $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $post]);
             }
 
             return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
