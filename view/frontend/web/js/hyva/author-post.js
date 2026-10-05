@@ -66,13 +66,19 @@
         openDialogNewPost();
     }
 
+    function decodeEntities(value) {
+        var ta = document.createElement('textarea');
+        ta.innerHTML = value == null ? '' : value;
+        return ta.value;
+    }
+
     // open modal edit new post
     function handleEdit(e, post_id, image) {
         resetFormModal();
         var dataSelect = listData[post_id];
-        nameEle.value = dataSelect ? dataSelect.name : undefined;
+        nameEle.value = dataSelect ? decodeEntities(dataSelect.name) : undefined;
         postIdEle.value = dataSelect ? dataSelect.post_id : undefined;
-        shortDescriptionEle.value = dataSelect ? dataSelect.short_description : undefined;
+        shortDescriptionEle.value = dataSelect ? decodeEntities(dataSelect.short_description) : undefined;
         editor.setData((dataSelect && dataSelect.post_content) || '');
         allowCommentEle.value = dataSelect ? dataSelect.allow_comment : undefined;
         publishDateEle.value = convertDateToDisplay(dataSelect ? dataSelect.publish_date : undefined);
@@ -89,8 +95,8 @@
     function handleDuplicate(e, post_id, image) {
         resetFormModal();
         var dataSelect = listData[post_id];
-        nameEle.value = dataSelect ? dataSelect.name : undefined;
-        shortDescriptionEle.value = dataSelect ? dataSelect.short_description : undefined;
+        nameEle.value = dataSelect ? decodeEntities(dataSelect.name) : undefined;
+        shortDescriptionEle.value = dataSelect ? decodeEntities(dataSelect.short_description) : undefined;
         editor.setData((dataSelect && dataSelect.post_content) || '');
         allowCommentEle.value = dataSelect ? dataSelect.allow_comment : undefined;
         publishDateEle.value = convertDateToDisplay(dataSelect ? dataSelect.publish_date : undefined);
