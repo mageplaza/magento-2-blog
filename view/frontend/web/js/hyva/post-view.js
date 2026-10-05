@@ -136,7 +136,7 @@
             }
 
             function disableReview(action) {
-                if (action === '1') {
+                if ('' + action === '1') {
                     document.querySelector('.mp-blog-like').style.backgroundColor = '#658259';
                 } else {
                     document.querySelector('.mp-blog-dislike').style.backgroundColor = '#9a6464';
@@ -144,7 +144,7 @@
             }
 
             function enableReview(action) {
-                if (action === '1') {
+                if ('' + action === '1') {
                     document.querySelector('.mp-blog-like').style.backgroundColor = '#6AA84F';
                 } else {
                     document.querySelector('.mp-blog-dislike').style.backgroundColor = '#EC3A3C';
