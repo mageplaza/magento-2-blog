@@ -239,9 +239,12 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
                     'status' => 0
                 ]));
             }
-            if ($post->getId()) {
-                $post->setData($data);
+            if (!$post->getId()) {
+                return $this->getResponse()->representJson(Data::jsonEncode([
+                    'status' => 0
+                ]));
             }
+            $post->setData($data);
             $data['updated_at'] = $this->date->date();
         } else {
             unset($data['post_id']);
