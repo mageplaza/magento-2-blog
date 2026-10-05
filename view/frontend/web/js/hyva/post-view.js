@@ -105,7 +105,7 @@
                                     storedPostIds = receiveCookiePostIds(post_id, action, response.postLike);
                                     jsonStringIds = JSON.stringify(storedPostIds);
 
-                                    document.cookie = 'mpblog_post_data=' + jsonStringIds + '; expires=Sun, 1 Jan 2023 00:00:00 GMT; path=/';
+                                    document.cookie = 'mpblog_post_data=' + jsonStringIds;
                                 }
 
                                 if (response.status) {
