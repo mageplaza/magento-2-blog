@@ -29,6 +29,12 @@
             </action>
         </referenceBlock>
 
+        <referenceBlock name="mpblog.post.viewcount">
+            <action method="setTemplate" >
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/view-count.phtml</argument>
+            </action>
+        </referenceBlock>
+
         <referenceBlock name="related.category.products">
             <action method="setTemplate" >
                 <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/product/list.phtml</argument>
