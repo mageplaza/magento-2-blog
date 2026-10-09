@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Blog\Block;
 
+use DateTimeZone;
 use Exception;
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -41,6 +42,7 @@ use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag as TagOptions;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic as TopicOptions;
 use Mageplaza\Blog\Helper\Data as HelperData;
 use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Helper\RichText;
 use Mageplaza\Blog\Model\CategoryFactory;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\Config\Source\AuthorStatus;
@@ -157,6 +159,11 @@ class Frontend extends Template
     protected $treeFactory;
 
     /**
+     * @var RichText
+     */
+    protected $richText;
+
+    /**
      * Frontend constructor.
      *
      * @param Context $context
@@ -178,6 +185,7 @@ class Frontend extends Template
      * @param EncryptorInterface $enc
      * @param AuthorStatus $authorStatus
      * @param TreeFactory $treeFactory
+     * @param RichText $richText
      * @param array $data
      */
     public function __construct(
@@ -200,6 +208,7 @@ class Frontend extends Template
         EncryptorInterface $enc,
         AuthorStatus $authorStatus,
         TreeFactory $treeFactory,
+        RichText $richText,
         array $data = []
     ) {
         $this->filterProvider     = $filterProvider;
@@ -221,6 +230,7 @@ class Frontend extends Template
         $this->store              = $context->getStoreManager();
         $this->enc                = $enc;
         $this->treeFactory        = $treeFactory;
+        $this->richText           = $richText;
 
         parent::__construct($context, $data);
     }
@@ -270,6 +280,37 @@ class Frontend extends Template
         } catch (Exception $e) {
             return '';
         }
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
+    public function getPostContentHtml($content)
+    {
+        return $this->richText->sanitizeContent($this->getPageFilter($content));
+    }
+
+    /**
+     * @param \Magento\Framework\DataObject $item
+     * @param bool $shorten
+     *
+     * @return string
+     */
+    public function getShortDescriptionHtml($item, $shorten = true)
+    {
+        return $this->richText->sanitizeInline((string) $item->getShortDescription($shorten));
+    }
+
+    /**
+     * @param \Magento\Framework\DataObject $author
+     *
+     * @return string
+     */
+    public function getAuthorBioHtml($author)
+    {
+        return $this->richText->sanitizeInline((string) $author->getShortDescription());
     }
 
     /**
@@ -496,5 +537,44 @@ class Frontend extends Template
     public function getDefaultAuthorImage()
     {
         return $this->getViewFileUrl('Mageplaza_Blog::media/images/no-artist-image.jpg');
+    }
+
+    /**
+     * Get monthly archive items grouped by month in the store timezone, newest first
+     *
+     * @return array
+     * @throws NoSuchEntityException
+     * @throws Exception
+     */
+    public function getMonthlyArchiveItems()
+    {
+        $limit = (int) $this->helperData->getBlogConfig(
+            'sidebar/monthly_archive/number_records',
+            $this->helperData->getCurrentStoreId()
+        ) ?: 5;
+
+        $collection = $this->helperData->getPostList();
+        $select     = $collection->getSelect()
+            ->reset(\Magento\Framework\DB\Select::COLUMNS)
+            ->columns('publish_date');
+
+        $utc      = new DateTimeZone('UTC');
+        $timezone = new DateTimeZone($this->helperData->getTimezone());
+        $months   = [];
+        foreach ($collection->getConnection()->fetchCol($select) as $postDate) {
+            $month = (new \DateTime($postDate, $utc))->setTimezone($timezone)->format('Y-m');
+            if (!isset($months[$month])) {
+                $months[$month] = ['label' => $this->helperData->getDateFormat($postDate, true), 'count' => 0];
+            }
+            $months[$month]['count']++;
+        }
+        krsort($months);
+
+        $items = [];
+        foreach (array_slice($months, 0, $limit, true) as $month => $data) {
+            $items[] = $data + ['url' => $this->helperData->getBlogUrl($month, HelperData::TYPE_MONTHLY)];
+        }
+
+        return $items;
     }
 }

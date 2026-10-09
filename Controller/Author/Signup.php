@@ -83,7 +83,7 @@ class Signup extends Action
         $this->_helperBlog->setCustomerContextId();
 
         if (!$this->_helperBlog->isEnabled()
-            || !$this->_helperBlog->isEnabledAuthor()
+            || !$this->_helperBlog->isLogin()
             || ($this->_helperBlog->isAuthor() && !$this->_helperBlog->getConfigGeneral('customer_approve') && !$this->_helperBlog->getPostViewPageConfig('enable_to_save'))) {
             $resultRedirect->setPath('customer/account');
 

@@ -24,6 +24,7 @@
     <head>
         <css src="Mageplaza_Core::css/font-awesome.min.css"/>
         <css src="Mageplaza_Blog::css/hyvaManagePost.css"/>
+        <remove src="Mageplaza_Blog::css/managePost.css"/>
 
         <script src="Mageplaza_Blog::js/ckeditor.js" />
 

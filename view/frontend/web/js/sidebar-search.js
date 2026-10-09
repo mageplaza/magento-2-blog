@@ -60,5 +60,7 @@ define([
                 return html;
             }
         });
+
+        $($(element).data('autocomplete').suggestionsContainer).addClass('mpblog-autocomplete');
     };
 });

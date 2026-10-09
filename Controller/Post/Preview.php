@@ -47,6 +47,7 @@ use Mageplaza\Blog\Model\Category;
 use Mageplaza\Blog\Model\Comment;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
+use Mageplaza\Blog\Model\Config\Source\Comments\Type as CommentType;
 use Mageplaza\Blog\Model\Like;
 use Mageplaza\Blog\Model\LikeFactory;
 use Mageplaza\Blog\Model\Post;
@@ -202,7 +203,6 @@ class Preview extends Action
      */
     public function execute()
     {
-        $id        = $this->getRequest()->getParam('id');
         $historyId = $this->getRequest()->getParam('historyId');
         $history   = $this->helperBlog->getFactoryByType(Data::TYPE_HISTORY)->create()->load($historyId);
         $post      = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($history->getPostId());
@@ -217,6 +217,7 @@ class Preview extends Action
             return $this->_redirect('noroute');
         }
 
+        $id   = (int) $post->getId();
         $data = $this->prepareData($history);
         $post->addData($data);
 
@@ -236,6 +237,13 @@ class Preview extends Action
             $customerData = $this->session->getCustomerData();
             $result       = [];
             if (isset($params['cmt_text'])) {
+                $commentType = (int) $this->helperBlog->getBlogConfig('comment/type');
+                if (!$post->getAllowComment() || $commentType !== CommentType::DEFAULT_COMMENT) {
+                    return $this->getResponse()->representJson(
+                        $this->jsonHelper->jsonEncode(['status' => 'error'])
+                    );
+                }
+
                 $cmt_text   = $params['cmt_text'];
                 $content    = htmlentities($cmt_text, ENT_COMPAT, 'UTF-8') . "<br />";
                 $htmlEntity = htmlentities($content, ENT_COMPAT, 'UTF-8');
@@ -244,7 +252,15 @@ class Preview extends Action
 
                 $cmtText = $content;
                 $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
-                $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
+                $replyId = $isReply && isset($params['replyId']) ? (int) $params['replyId'] : 0;
+                if ($isReply && $replyId) {
+                    $parentCmt = $this->cmtFactory->create()->load($replyId);
+                    if (!$parentCmt->getId() || (int) $parentCmt->getPostId() !== $id) {
+                        return $this->getResponse()->representJson(
+                            $this->jsonHelper->jsonEncode(['status' => 'error'])
+                        );
+                    }
+                }
                 if ($this->session->isLoggedIn()) {
                     $commentData = [
                         'post_id'    => $id,
@@ -344,7 +360,9 @@ class Preview extends Action
 
                     $lastCmt   = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
                     $lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
-                    $users     = $user ? $user->getFirstname() . ' ' . $user->getLastname() : $data['user_name'];
+                    $users     = $user
+                        ? htmlspecialchars($user->getFirstname() . ' ' . $user->getLastname(), ENT_COMPAT, 'UTF-8')
+                        : $data['user_name'];
 
                     $result = [
                         'cmt_id'     => $lastCmtId,
@@ -377,7 +395,7 @@ class Preview extends Action
                     break;
             }
         } catch (Exception $e) {
-            $result = ['status' => 'error', 'error' => $e->getMessage()];
+            $result = ['status' => 'error', 'error' => __('Something went wrong. Please try again.')];
         }
 
         return $result;

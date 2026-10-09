@@ -138,7 +138,7 @@ class Register extends Action implements HttpPostActionInterface, CsrfAwareActio
         $data           = $this->getRequest()->getParams();
         $this->_helperBlog->setCustomerContextId();
 
-        if (!$this->_helperBlog->isEnabledAuthor()) {
+        if (!$this->_helperBlog->isLogin()) {
             $resultRedirect->setPath('customer/account');
 
             return $resultRedirect;

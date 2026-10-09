@@ -110,7 +110,17 @@ class Import extends Action
     public function execute()
     {
         $data = $this->_getSession()->getData('mageplaza_blog_import_data');
-        $data['password'] = !empty($data['password'])
+        $this->_getSession()->unsetData('mageplaza_blog_import_data');
+        if (empty($data['type'])) {
+            $statisticHtml = $this->_view->getLayout()->createBlock(Messages::class)
+                ->{'adderror'}(__('Please check the connection again before importing.'))
+                ->toHtml();
+
+            return $this->getResponse()->representJson(
+                BlogHelper::jsonEncode(['statistic' => $statisticHtml, 'status' => 'ok'])
+            );
+        }
+        $data['password'] =!empty($data['password'])
             ? $this->encryptor->decrypt($data['password'])
             : '';
         switch ($data['type']) {
@@ -186,7 +196,7 @@ class Import extends Action
         // phpcs:disable Magento2.Functions.DiscouragedFunction
         $statisticHtml = '';
         $host = (string) ($data['host'] ?? '');
-        if (BlogHelper::isBlockedImportHost($host)) {
+        if (BlogHelper::isBlockedImportHost($host, $this->blogHelper->getImportAllowedHosts())) {
             return __('Invalid database host.');
         }
         $connection    = mysqli_connect($host, $data['user_name'], $data['password'], $data['database']);

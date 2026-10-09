@@ -40,6 +40,7 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Helper\RichText;
 use Mageplaza\Blog\Model\PostFactory;
 use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
 
@@ -105,6 +106,11 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
     protected $formKeyValidator;
 
     /**
+     * @var RichText
+     */
+    protected $richText;
+
+    /**
      * View constructor.
      *
      * @param Context $context
@@ -119,6 +125,7 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
      * @param Data $helperData
      * @param TimezoneInterface $timezone
      * @param FormKeyValidator $formKeyValidator
+     * @param RichText $richText
      */
     public function __construct(
         Context $context,
@@ -132,7 +139,8 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
         Image $imageHelper,
         Data $helperData,
         TimezoneInterface $timezone,
-        FormKeyValidator $formKeyValidator
+        FormKeyValidator $formKeyValidator,
+        RichText $richText
     ) {
         $this->_helperBlog          = $helperData;
         $this->resultPageFactory    = $resultPageFactory;
@@ -145,6 +153,7 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
         $this->imageHelper          = $imageHelper;
         $this->timezone             = $timezone;
         $this->formKeyValidator     = $formKeyValidator;
+        $this->richText             = $richText;
 
         parent::__construct($context);
     }
@@ -169,7 +178,7 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
 
         foreach (['post_content', 'short_description'] as $field) {
             if (isset($data[$field]) && $data[$field] !== '') {
-                $data[$field] = $this->sanitizeAuthorHtml((string) $data[$field]);
+                $data[$field] = $this->sanitizeAuthorHtml((string) $data[$field], $field === 'short_description');
             }
         }
 
@@ -197,6 +206,19 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
             $data['topics_ids'] ?? ''
         ) : [];
 
+        $data = array_intersect_key($data, array_flip([
+            'post_id',
+            'name',
+            'short_description',
+            'post_content',
+            'image',
+            'categories_ids',
+            'tags_ids',
+            'topics_ids',
+            'allow_comment',
+            'publish_date'
+        ]));
+
         $data['author_id']   = $author->getId();
         $data['store_ids']   = $this->_helperBlog->getCurrentStoreId();
         $data['enabled']     = $this->_helperBlog->getConfigGeneral('auto_post') ? 1 : 0;
@@ -217,9 +239,12 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
                     'status' => 0
                 ]));
             }
-            if ($post->getId()) {
-                $post->setData($data);
+            if (!$post->getId()) {
+                return $this->getResponse()->representJson(Data::jsonEncode([
+                    'status' => 0
+                ]));
             }
+            $post->setData($data);
             $data['updated_at'] = $this->date->date();
         } else {
             unset($data['post_id']);
@@ -245,30 +270,15 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
 
     /**
      * @param string $html
+     * @param bool $inline
      *
      * @return string
      */
-    private function sanitizeAuthorHtml(string $html): string
+    private function sanitizeAuthorHtml(string $html, bool $inline = false): string
     {
-        $html = str_replace(['{{', '}}'], ['&#123;&#123;', '&#125;&#125;'], $html);
+        $html = $inline ? $this->richText->sanitizeInline($html) : $this->richText->sanitizeContent($html);
 
-        $html = preg_replace(
-            '#<\s*(script|iframe|style|object|embed|form)\b[^>]*>.*?<\s*/\s*\1\s*>#is',
-            '',
-            $html
-        );
-        $html = preg_replace(
-            '#<\s*/?\s*(script|iframe|style|object|embed|form)\b[^>]*>#is',
-            '',
-            $html
-        );
-
-        $html = preg_replace('#[\s/]on[a-z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)#is', '', $html);
-        $html = preg_replace('#(href|src)\s*=\s*"\s*javascript:[^"]*"#is', '$1=""', $html);
-        $html = preg_replace("#(href|src)\s*=\s*'\s*javascript:[^']*'#is", '$1=""', $html);
-        $html = preg_replace('#(href|src)\s*=\s*javascript:[^\s>]*#is', '$1=""', $html);
-
-        return $html;
+        return str_replace(['{{', '}}'], ['&#123;&#123;', '&#125;&#125;'], $html);
     }
 
     /**

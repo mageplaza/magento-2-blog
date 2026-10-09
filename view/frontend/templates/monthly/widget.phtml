@@ -24,11 +24,9 @@ use Magento\Framework\Escaper;
 
 /** @var Widget $block */
 /** @var Escaper $escaper */
-$dateArrayCount  = $block->getDateArrayCount();
-$dateArrayUnique = $block->getDateArrayUnique();
-$dateLabel       = $block->getDateLabel();
+$archiveItems = $block->getMonthlyArchiveItems();
 
-if ($block->isEnable() && $dateArrayUnique) : ?>
+if ($block->isEnable() && $archiveItems) : ?>
     <div class="mp-sidebar mpcss">
         <div class="row">
             <div class="block-title col-xs-12 sidebar-archives">
@@ -37,16 +35,15 @@ if ($block->isEnable() && $dateArrayUnique) : ?>
             </div>
             <div class="col-xs-12">
                 <ul class="menu-archives">
-                    <?php $size = $block->getDateCount() ?>
-                    <?php for ($i = 0; $i < $size; $i++) : ?>
+                    <?php foreach ($archiveItems as $item) : ?>
                         <li class="archive-item">
                             <a class="list-archives"
-                               href="<?= $escaper->escapeUrl($block->getMonthlyUrl(date("Y-m", $block->dateTime->timestamp($dateArrayUnique[$i])))) ?>">
+                               href="<?= $escaper->escapeUrl($item['url']) ?>">
                                 <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;&nbsp;
-                                <?= $escaper->escapeHtml($dateLabel[$i] . '   (' . $dateArrayCount[$i] . ')') ?>
+                                <?= $escaper->escapeHtml($item['label'] . '   (' . $item['count'] . ')') ?>
                             </a>
                         </li>
-                    <?php endfor; ?>
+                    <?php endforeach; ?>
                 </ul>
             </div>
         </div>

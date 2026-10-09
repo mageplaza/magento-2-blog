@@ -33,6 +33,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
+use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Json\Helper\Data as JsonData;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
@@ -44,7 +45,9 @@ use Mageplaza\Blog\Helper\Data as HelperBlog;
 use Mageplaza\Blog\Model\Comment;
 use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
+use Mageplaza\Blog\Model\Config\Source\Comments\Type as CommentType;
 use Mageplaza\Blog\Model\Like;
+use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\LikeFactory;
 use Mageplaza\Blog\Model\PostFactory;
 
@@ -128,6 +131,11 @@ class View extends Action
     protected $formKeyValidator;
 
     /**
+     * @var CacheContext
+     */
+    protected $cacheContext;
+
+    /**
      * View constructor.
      *
      * @param Context $context
@@ -144,6 +152,8 @@ class View extends Action
      * @param CustomerUrl $customerUrl
      * @param Session $customerSession
      * @param PostFactory $postFactory
+     * @param FormKeyValidator $formKeyValidator
+     * @param CacheContext $cacheContext
      */
     public function __construct(
         Context $context,
@@ -160,7 +170,8 @@ class View extends Action
         CustomerUrl $customerUrl,
         Session $customerSession,
         PostFactory $postFactory,
-        FormKeyValidator $formKeyValidator
+        FormKeyValidator $formKeyValidator,
+        CacheContext $cacheContext
     ) {
         $this->storeManager         = $storeManager;
         $this->helperBlog           = $helperBlog;
@@ -176,6 +187,7 @@ class View extends Action
         $this->dateTime             = $dateTime;
         $this->postFactory          = $postFactory;
         $this->formKeyValidator     = $formKeyValidator;
+        $this->cacheContext         = $cacheContext;
 
         parent::__construct($context);
     }
@@ -206,8 +218,8 @@ class View extends Action
             $customerData = $this->session->getCustomerData();
             $result       = [];
             if (isset($params['cmt_text'])) {
-                $commentType = (string) $this->helperBlog->getBlogConfig('comment/type');
-                if (!$post->getAllowComment() || $commentType === '0') {
+                $commentType = (int) $this->helperBlog->getBlogConfig('comment/type');
+                if (!$post->getAllowComment() || $commentType !== CommentType::DEFAULT_COMMENT) {
                     return $this->getResponse()->representJson(
                         $this->jsonHelper->jsonEncode(['status' => 'error'])
                     );
@@ -220,7 +232,7 @@ class View extends Action
 
                 $cmtText = $content;
                 $isReply = isset($params['isReply']) ? $params['isReply'] : 0;
-                $replyId = isset($params['replyId']) ? $params['replyId'] : 0;
+                $replyId = $isReply && isset($params['replyId']) ? (int) $params['replyId'] : 0;
 
                 if ($isReply && $replyId) {
                     $parentCmt = $this->cmtFactory->create()->load($replyId);
@@ -269,6 +281,8 @@ class View extends Action
 
                 $likeModel = $this->likeFactory->create();
                 $result    = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
+                $this->cacheContext->registerEntities(Post::CACHE_TAG, [$post->getId()]);
+                $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
             }
 
             return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
@@ -303,7 +317,9 @@ class View extends Action
 
                     $lastCmt   = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
                     $lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
-                    $users     = $user ? $user->getFirstname() . ' ' . $user->getLastname() : $data['user_name'];
+                    $users     = $user
+                        ? htmlspecialchars($user->getFirstname() . ' ' . $user->getLastname(), ENT_COMPAT, 'UTF-8')
+                        : $data['user_name'];
 
                     $result = [
                         'cmt_id'     => $lastCmtId,
@@ -336,7 +352,7 @@ class View extends Action
                     break;
             }
         } catch (Exception $e) {
-            $result = ['status' => 'error', 'error' => $e->getMessage()];
+            $result = ['status' => 'error', 'error' => __('Something went wrong. Please try again.')];
         }
 
         return $result;

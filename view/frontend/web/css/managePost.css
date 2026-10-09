@@ -29,6 +29,12 @@
     z-index: 5;
 }
 
+.mp-post-status:has(+ .post-info-wraper) {
+    position: static;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
 .mp-post-disapproved {
     background-color: #e67878;
 }

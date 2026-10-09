@@ -105,7 +105,7 @@
                                     storedPostIds = receiveCookiePostIds(post_id, action, response.postLike);
                                     jsonStringIds = JSON.stringify(storedPostIds);
 
-                                    document.cookie = 'mpblog_post_data=' + jsonStringIds + '; expires=Sun, 1 Jan 2023 00:00:00 GMT; path=/';
+                                    document.cookie = 'mpblog_post_data=' + jsonStringIds;
                                 }
 
                                 if (response.status) {
@@ -136,7 +136,7 @@
             }
 
             function disableReview(action) {
-                if (action === '1') {
+                if ('' + action === '1') {
                     document.querySelector('.mp-blog-like').style.backgroundColor = '#658259';
                 } else {
                     document.querySelector('.mp-blog-dislike').style.backgroundColor = '#9a6464';
@@ -144,7 +144,7 @@
             }
 
             function enableReview(action) {
-                if (action === '1') {
+                if ('' + action === '1') {
                     document.querySelector('.mp-blog-like').style.backgroundColor = '#6AA84F';
                 } else {
                     document.querySelector('.mp-blog-dislike').style.backgroundColor = '#EC3A3C';
@@ -419,7 +419,7 @@
                     var replyCmtList = document.querySelectorAll('.default-cmt__content__cmt-content__cmt-row');
 
                     replyCmtList.forEach(function (cmtEl) {
-                        if (cmtEl.getAttribute('data-cmt-id') === replyCmtId) {
+                        if (cmtEl.getAttribute('data-cmt-id') === String(replyCmtId)) {
                             var replyList = cmtEl.querySelector('ul.default-cmt__content__cmt-content:first-child');
 
                             if (!replyList) {
@@ -477,7 +477,7 @@
                                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                                         'X-Requested-With': 'XMLHttpRequest'
                                     },
-                                    body: 'cmtId=' + cmtId,
+                                    body: 'form_key=' + hyva.getFormKey() + '&cmtId=' + cmtId,
                                     mode: 'cors',
                                     credentials: 'include'
                                 })

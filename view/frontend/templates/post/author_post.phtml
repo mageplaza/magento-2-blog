@@ -126,7 +126,7 @@ $postCollection = $block->getPostCollection();
                 "Mageplaza_Blog/js/managePost": {
                     "deleteUrl": "<?= $escaper->escapeHtml($block->getUrl('mpblog/post/deletepost')) ?>",
                     "basePubUrl": "<?= $escaper->escapeHtml($block->getBaseMediaUrl()) ?>",
-                    "postDatas": "<?=  $escaper->escapeHtml($block->getPostDatas($postCollection)) ?>",
+                    "postDatas": <?= /* @noEscape */ json_encode(json_decode($block->getPostDatas($postCollection), true) ?: new \stdClass(), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>,
                     "editorVersion": "<?= $escaper->escapeJs($block->getVersion()) ?>",
                     "magentoVersion": "<?= $escaper->escapeJs($block->getMagentoVersion()) ?>"
                 }

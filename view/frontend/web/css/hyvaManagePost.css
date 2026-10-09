@@ -37,6 +37,12 @@
     z-index: 5;
 }
 
+.mp-post-status:has(+ .post-info-wraper) {
+    position: static;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
 .mp-post-disapproved {
     background-color: #e67878;
 }
@@ -105,6 +111,40 @@
 
 .mp-custom .mp-field {
     margin: 0 0 20px;
+}
+
+@media (max-width: 1023px) {
+    dialog:has(#mp-blog-new-post-popup) {
+        width: 92vw;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    #mp_blog_post_form {
+        height: auto !important;
+        overflow-y: visible !important;
+    }
+
+    #mp-blog-new-post-popup .fieldset {
+        min-width: 0;
+    }
+
+    #mp-blog-new-post-popup .mp-field {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    #mp-blog-new-post-popup .mp-field .label {
+        width: 100%;
+    }
+
+    #mp-blog-new-post-popup .mp-field input:not([type="checkbox"]),
+    #mp-blog-new-post-popup .mp-field select,
+    #mp-blog-new-post-popup .mp-field textarea {
+        box-sizing: border-box;
+        max-width: 100%;
+        width: 100%;
+    }
 }
 
 .mp-custom .field label.label {
@@ -698,13 +738,13 @@ input[type='checkbox'] {
     min-width: 13rem;
 }
 
-.action-default, button, .block-footer .action-add, .block-footer .action-add {
+.action-default, :where(.mp-blog-new-post button), #mp-blog-new-post-popup button, .block-footer .action-add, .block-footer .action-add {
     background: #e3e3e3;
     border-color: #adadad;
     color: #514943;
 }
 
-.action-default, button {
+.action-default, :where(.mp-blog-new-post button), #mp-blog-new-post-popup button {
     all: unset;
 }
 
