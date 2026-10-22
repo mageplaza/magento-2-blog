@@ -756,15 +756,25 @@ class BlogRepository implements BlogRepositoryInterface
 
     /**
      * @param string $authorId
+     * @param bool $force
      *
      * @return bool|string
      * @throws Exception
      */
-    public function deleteAuthor($authorId)
+    public function deleteAuthor($authorId, $force = false)
     {
         $author = $this->_helperData->getFactoryByType('author')->create()->load($authorId);
 
         if ($author) {
+            $postCount = $author->getId() ? $author->getPostCount() : 0;
+            if ($postCount && !$force) {
+                throw new LocalizedException(__(
+                    'This author has %1 post(s). Deleting the author will also delete these post(s).'
+                    . ' Resend the request with force=true to confirm.',
+                    $postCount
+                ));
+            }
+            $author->delete();
             $author->delete();
 
             return true;

@@ -23,6 +23,8 @@ namespace Mageplaza\Blog\Block\Adminhtml\Author;
 
 use Magento\Backend\Block\Widget\Context;
 use Magento\Backend\Block\Widget\Form\Container;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
 use Mageplaza\Blog\Model\Author;
 
@@ -91,7 +93,11 @@ class Edit extends Container
                                 'id' => $this->getCurrentAuthor()->getId(),
                                 '_current' => true,
                                 'back' => 'edit'
-                            ])
+                            ]),
+                            'confirm' => [
+                                'title' => __('Delete Author'),
+                                'message' => $this->getDeleteConfirmMessage()
+                            ]
                         ]
                     ]
                 ],
@@ -114,6 +120,23 @@ class Edit extends Container
         }
 
         return __('New Author');
+    }
+
+    /**
+     * @return Phrase
+     * @throws LocalizedException
+     */
+    public function getDeleteConfirmMessage()
+    {
+        $postCount = $this->getCurrentAuthor()->getId() ? $this->getCurrentAuthor()->getPostCount() : 0;
+        if ($postCount) {
+            return __(
+                'This author has %1 post(s). Deleting the author will also delete these post(s). Are you sure?',
+                $postCount
+            );
+        }
+
+        return __('Are you sure you want to delete this author?');
     }
 
     /**

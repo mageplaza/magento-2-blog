@@ -85,18 +85,14 @@ class MassDelete extends Action
         $authorRemove = 0;
 
         foreach ($collection->getItems() as $author) {
-            if ($author->hasPost()) {
-                $this->messageManager->addWarningMessage(__('One of the authors has post. You can not delete this one.'));
-            } else {
-                try {
-                    $author->delete();
-                    $authorRemove++;
-                } catch (Exception $e) {
-                    $this->_getSession()->addException(
-                        $e,
-                        __('Something went wrong while updating status for %1.', $author->getName())
-                    );
-                }
+            try {
+                $author->delete();
+                $authorRemove++;
+            } catch (Exception $e) {
+                $this->_getSession()->addException(
+                    $e,
+                    __('Something went wrong while updating status for %1.', $author->getName())
+                );
             }
         }
 
