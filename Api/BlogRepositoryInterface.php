@@ -382,10 +382,11 @@ interface BlogRepositoryInterface
      * Delete Author
      *
      * @param string $authorId
+     * @param bool $force
      *
      * @return string
      */
-    public function deleteAuthor($authorId);
+    public function deleteAuthor($authorId, $force = false);
 
     /**
      * @param string $authorId

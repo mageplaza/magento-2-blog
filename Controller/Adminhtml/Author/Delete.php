@@ -69,19 +69,18 @@ class Delete extends Author
         if ($id = $this->getRequest()->getParam('id')) {
             $post = $this->_postFactory->create();
             $postCollectionSize = $post->getCollection()->addFieldToFilter('author_id', ['eq' => $id])->getSize();
-            if ($postCollectionSize > 0) {
-                $this->messageManager->addErrorMessage(__('You can not delete this author.'
-                    . ' This is the author of %1 post(s)', $postCollectionSize));
-                $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $id]);
-
-                return $resultRedirect;
-            }
             try {
                 $this->authorFactory->create()
                     ->load($id)
                     ->delete();
 
-                $this->messageManager->addSuccessMessage(__('The Author has been deleted.'));
+                if ($postCollectionSize > 0) {
+                    $this->messageManager->addSuccessMessage(
+                        __('The Author and %1 post(s) have been deleted.', $postCollectionSize)
+                    );
+                } else {
+                    $this->messageManager->addSuccessMessage(__('The Author has been deleted.'));
+                }
             } catch (Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $resultRedirect->setPath('mageplaza_blog/*/edit', ['id' => $id]);

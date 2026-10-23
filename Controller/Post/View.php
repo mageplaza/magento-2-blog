@@ -33,6 +33,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
+use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Json\Helper\Data as JsonData;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
@@ -46,6 +47,7 @@ use Mageplaza\Blog\Model\CommentFactory;
 use Mageplaza\Blog\Model\Config\Source\Comments\Status;
 use Mageplaza\Blog\Model\Config\Source\Comments\Type as CommentType;
 use Mageplaza\Blog\Model\Like;
+use Mageplaza\Blog\Model\Post;
 use Mageplaza\Blog\Model\LikeFactory;
 use Mageplaza\Blog\Model\PostFactory;
 
@@ -129,6 +131,11 @@ class View extends Action
     protected $formKeyValidator;
 
     /**
+     * @var CacheContext
+     */
+    protected $cacheContext;
+
+    /**
      * View constructor.
      *
      * @param Context $context
@@ -145,6 +152,8 @@ class View extends Action
      * @param CustomerUrl $customerUrl
      * @param Session $customerSession
      * @param PostFactory $postFactory
+     * @param FormKeyValidator $formKeyValidator
+     * @param CacheContext $cacheContext
      */
     public function __construct(
         Context $context,
@@ -161,7 +170,8 @@ class View extends Action
         CustomerUrl $customerUrl,
         Session $customerSession,
         PostFactory $postFactory,
-        FormKeyValidator $formKeyValidator
+        FormKeyValidator $formKeyValidator,
+        CacheContext $cacheContext
     ) {
         $this->storeManager         = $storeManager;
         $this->helperBlog           = $helperBlog;
@@ -177,6 +187,7 @@ class View extends Action
         $this->dateTime             = $dateTime;
         $this->postFactory          = $postFactory;
         $this->formKeyValidator     = $formKeyValidator;
+        $this->cacheContext         = $cacheContext;
 
         parent::__construct($context);
     }
@@ -270,7 +281,8 @@ class View extends Action
 
                 $likeModel = $this->likeFactory->create();
                 $result    = $this->commentActions(self::LIKE, $customerData, $likeData, $likeModel, $cmtId);
-                $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $post]);
+                $this->cacheContext->registerEntities(Post::CACHE_TAG, [$post->getId()]);
+                $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
             }
 
             return $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));

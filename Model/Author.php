@@ -118,4 +118,13 @@ class Author extends AbstractModel implements IdentityInterface
             return false;
         }
     }
+
+    /**
+     * @return int
+     * @throws LocalizedException
+     */
+    public function getPostCount()
+    {
+        return count($this->_getResource()->getPostIds($this));
+    }
 }

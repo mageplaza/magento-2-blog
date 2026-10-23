@@ -19,17 +19,34 @@
  */
 
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+    'Magento_Ui/js/modal/confirm'
+], function ($, confirm) {
     'use strict';
 
     return function (config, element) {
         config = config || {};
 
         $(element).on('click', function () {
-            if (config.url) {
-                location.href = config.url;
+            if (!config.url) {
+                return;
             }
+
+            if (!config.confirm) {
+                location.href = config.url;
+
+                return;
+            }
+
+            confirm({
+                title: config.confirm.title,
+                content: config.confirm.message,
+                actions: {
+                    confirm: function () {
+                        location.href = config.url;
+                    }
+                }
+            });
         });
     };
 });
