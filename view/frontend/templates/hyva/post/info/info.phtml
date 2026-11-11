@@ -1,0 +1,30 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Mageplaza\Blog\Block\Post\View;
+use Magento\Framework\Escaper;
+
+/** @var View $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+$helper = $block->getBlogHelper();
+$_post = $block->getPost();
+$showReadTime = $helper->getPostViewPageConfig('display_read_time');
+$showReadTime = $showReadTime === null ? true : (bool) $showReadTime;
+?>
+<div class="blog-post-info">
+    <?= /** @noEscape */ $block->getChildHtml('mp_blog_post_info_date') ?>
+    <?= /** @noEscape */ $block->getChildHtml('mp_blog_post_info_author') ?>
+    <?= /** @noEscape */ $block->getChildHtml('mp_blog_post_info_traffic') ?>
+    <?= /** @noEscape */ $block->getChildHtml('mp_blog_post_info_category') ?>
+    <?php if ($showReadTime) : ?>
+        <span class="blog-meta__item blog-post-info__readtime">
+            <?= $heroicons->clockHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+            <?= $escaper->escapeHtml(__('%1 minutes', $block->getReadingTime($_post))) ?>
+        </span>
+    <?php endif; ?>
+</div>
+<?= /** @noEscape */ $block->getChildHtml('mp_blog_post_info_tag') ?>

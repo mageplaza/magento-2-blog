@@ -1,69 +1,21 @@
-/**
- * Mageplaza
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Mageplaza.com license that is
- * available through the world-wide-web at this URL:
- * https://www.mageplaza.com/LICENSE.txt
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this extension to newer
- * version in the future.
- *
- * @category    Mageplaza
- * @package     Mageplaza_Blog
- * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
- * @license     https://www.mageplaza.com/LICENSE.txt
- */
 (function () {
+    var DIALOG = 'add-new-post-name';
     var configEl = document.getElementById('mpblog-author-post-config');
     var config = configEl ? JSON.parse(configEl.textContent) : {};
-
     var pubUrl = config.pubUrl || '';
     var deleteUrl = config.deleteUrl || '';
     var listData = config.posts || {};
+    var labels = config.labels || {};
 
-    var title = document.querySelector('#popup_author_post');
-    var nameEle = document.querySelector('#name');
-    var postIdEle = document.querySelector('#post_id');
-    var shortDescriptionEle = document.querySelector('#short_description');
-    var allowCommentEle = document.querySelector('#allow_comment');
-    var publishDateEle = document.querySelector('#publish_date');
-
-    function handleDelete(element) {
-        var postId = element.closest('.post-info-action').getAttribute('data-postId');
-        fetch(deleteUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: new URLSearchParams({
-                post_id: postId,
-                form_key: hyva.getFormKey()
-            })
-        })
-            .then(function (response) { return response.json(); })
-            .then(function (result) {
-                if (result.status === 1) {
-                    var postListItem = document.querySelector('.post-list-item[data-post-id="' + result.post_id + '"]');
-                    if (postListItem) {
-                        postListItem.remove();
-                        var reloadCustomerDataEvent = new CustomEvent('reload-customer-section-data');
-                        window.dispatchEvent(reloadCustomerDataEvent);
-                    }
-                }
-            })
-            .catch(function (error) { console.error('Error:', error); });
+    function byId(id) {
+        return document.getElementById(id);
     }
 
-    // open modal add new post
-    function handleAddPost() {
-        resetFormModal();
-        title.innerText = 'Add New Post';
-        openDialogNewPost();
+    function setValue(id, value) {
+        var el = byId(id);
+        if (el) {
+            el.value = value === undefined || value === null ? '' : value;
+        }
     }
 
     function decodeEntities(value) {
@@ -72,142 +24,195 @@
         return ta.value;
     }
 
-    // open modal edit new post
-    function handleEdit(e, post_id, image) {
-        resetFormModal();
-        var dataSelect = listData[post_id];
-        nameEle.value = dataSelect ? decodeEntities(dataSelect.name) : undefined;
-        postIdEle.value = dataSelect ? dataSelect.post_id : undefined;
-        shortDescriptionEle.value = dataSelect ? decodeEntities(dataSelect.short_description) : undefined;
-        editor.setData((dataSelect && dataSelect.post_content) || '');
-        allowCommentEle.value = dataSelect ? dataSelect.allow_comment : undefined;
-        publishDateEle.value = convertDateToDisplay(dataSelect ? dataSelect.publish_date : undefined);
-        treeselectCategories.updateValue(dataSelect ? dataSelect.category_ids : undefined);
-        treeselectTags.updateValue(dataSelect ? dataSelect.tag_ids : undefined);
-        treeselectTopics.updateValue(dataSelect ? dataSelect.topic_ids : undefined);
-        addPreviewImg(image);
-
-        title.innerText = 'Edit Post';
-        openDialogNewPost();
-    }
-
-    // open modal duplicate new post
-    function handleDuplicate(e, post_id, image) {
-        resetFormModal();
-        var dataSelect = listData[post_id];
-        nameEle.value = dataSelect ? decodeEntities(dataSelect.name) : undefined;
-        shortDescriptionEle.value = dataSelect ? decodeEntities(dataSelect.short_description) : undefined;
-        editor.setData((dataSelect && dataSelect.post_content) || '');
-        allowCommentEle.value = dataSelect ? dataSelect.allow_comment : undefined;
-        publishDateEle.value = convertDateToDisplay(dataSelect ? dataSelect.publish_date : undefined);
-        treeselectCategories.updateValue(dataSelect ? dataSelect.category_ids : undefined);
-        treeselectTags.updateValue(dataSelect ? dataSelect.tag_ids : undefined);
-        treeselectTopics.updateValue(dataSelect ? dataSelect.topic_ids : undefined);
-        addPreviewImg(image);
-        title.innerText = 'Duplicate Post';
-        openDialogNewPost();
-    }
-
-    // reset data when hide modal
-    function resetFormModal() {
-        nameEle.value = '';
-        postIdEle.value = '';
-        shortDescriptionEle.value = '';
-        editor.setData('');
-        allowCommentEle.value = 0;
-        publishDateEle.value = '';
-        treeselectCategories.updateValue([]);
-        treeselectTags.updateValue([]);
-        treeselectTopics.updateValue([]);
-        var element = document.querySelector('.mp-image-link');
-        if (element) {
-            element.parentNode.removeChild(element);
-        }
-        var messagesError = document.querySelectorAll('#mp-blog-new-post-popup form .messages');
-        messagesError.forEach(function (mess) {
-            mess.remove();
-        });
-    }
-
-    // add preview image when open modal edit and duplicate modal
-    function addPreviewImg(value) {
-        if (value) {
-            var imageEl = document.getElementById('image') ? document.getElementById('image').parentElement : null;
-            var linkElement = document.createElement('a');
-            linkElement.className = 'mp-image-link';
-            linkElement.style = 'margin-right: 15px';
-            linkElement.href = pubUrl + 'mageplaza/blog/post/' + value;
-            linkElement.onclick = function () {
-                imagePreview('post_image_image');
-                return false;
-            };
-            var imageElement = document.createElement('img');
-            imageElement.src = pubUrl + 'mageplaza/blog/post/' + value;
-            imageElement.id = 'post_image_image';
-            imageElement.title = value;
-            imageElement.alt = value;
-            imageElement.height = 40;
-            imageElement.width = 40;
-            imageElement.className = 'small-image-preview v-middle';
-            linkElement.appendChild(imageElement);
-            if (imageEl) {
-                imageEl.insertBefore(linkElement, imageEl.children[0]);
-            }
-            var deleteSpan = document.createElement('span');
-            deleteSpan.className = 'delete-image';
-            deleteSpan.style.display = 'inline-flex';
-            var deleteInput = document.createElement('input');
-            deleteInput.type = 'checkbox';
-            deleteInput.name = 'image[delete]';
-            deleteInput.value = '1';
-            deleteInput.className = 'checkbox';
-            deleteInput.id = 'post_image_delete';
-
-            var deleteLabel = document.createElement('label');
-            deleteLabel.htmlFor = 'post_image_delete';
-            deleteLabel.textContent = 'Delete Image';
-
-            deleteSpan.appendChild(deleteInput);
-            deleteSpan.appendChild(deleteLabel);
-            if (imageEl && !imageEl.querySelector('.delete-image')) {
-                imageEl.appendChild(deleteSpan);
-            }
+    function setEditorData(value) {
+        if (window.editor) {
+            window.editor.setData(value || '');
         }
     }
 
-    // convert date in modal
-    function convertDateToSave(publicDateValue) {
-        var inputDate = new Date(publicDateValue);
-        return ('0' + (inputDate.getMonth() + 1)).slice(-2) + '/' +
-            ('0' + inputDate.getDate()).slice(-2) + '/' +
-            inputDate.getFullYear() + ' ' +
-            ('0' + inputDate.getHours()).slice(-2) + ':' +
-            ('0' + inputDate.getMinutes()).slice(-2) + ':' +
-            ('0' + inputDate.getSeconds()).slice(-2);
+    function setTree(tree, value) {
+        if (tree) {
+            tree.updateValue(value || []);
+        }
+    }
+
+    function setTitle(text) {
+        var title = byId('popup_author_post');
+        if (title) {
+            title.textContent = text;
+        }
     }
 
     function convertDateToDisplay(dateString) {
+        if (!dateString) {
+            return '';
+        }
         var currentDate = new Date(dateString);
-        var year = currentDate.getFullYear();
+        if (isNaN(currentDate.getTime())) {
+            return '';
+        }
         var month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
         var day = ('0' + currentDate.getDate()).slice(-2);
         var hours = ('0' + currentDate.getHours()).slice(-2);
         var minutes = ('0' + currentDate.getMinutes()).slice(-2);
-        return year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+        return currentDate.getFullYear() + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
     }
 
-    window.handleDelete = handleDelete;
-    window.handleAddPost = handleAddPost;
-    window.handleEdit = handleEdit;
-    window.handleDuplicate = handleDuplicate;
+    function resetFormModal() {
+        setValue('name', '');
+        setValue('post_id', '');
+        setValue('short_description', '');
+        setEditorData('');
+        setValue('allow_comment', 0);
+        setValue('publish_date', '');
+        setTree(window.treeselectCategories, []);
+        setTree(window.treeselectTags, []);
+        setTree(window.treeselectTopics, []);
+        var preview = document.querySelector('#mp_blog_post_form .mp-image-link');
+        if (preview) {
+            preview.remove();
+        }
+        var deleteImage = document.querySelector('#mp_blog_post_form .mp-delete-image');
+        if (deleteImage) {
+            deleteImage.remove();
+        }
+        var imageInput = byId('image');
+        if (imageInput) {
+            imageInput.value = '';
+        }
+        document.querySelectorAll('#mp_blog_post_form .messages').forEach(function (message) {
+            message.remove();
+        });
+    }
+
+    function fillForm(postId, image, keepId) {
+        var data = listData[postId];
+        setValue('name', data ? decodeEntities(data.name) : '');
+        if (keepId) {
+            setValue('post_id', data ? data.post_id : '');
+        }
+        setValue('short_description', data ? decodeEntities(data.short_description) : '');
+        setEditorData(data ? data.post_content : '');
+        setValue('allow_comment', data ? data.allow_comment : 0);
+        setValue('publish_date', convertDateToDisplay(data ? data.publish_date : ''));
+        setTree(window.treeselectCategories, data ? data.category_ids : []);
+        setTree(window.treeselectTags, data ? data.tag_ids : []);
+        setTree(window.treeselectTopics, data ? data.topic_ids : []);
+        addPreviewImg(image);
+    }
+
+    function addPreviewImg(value) {
+        if (!value) {
+            return;
+        }
+        var imageInput = byId('image');
+        var holder = imageInput ? imageInput.parentElement : null;
+        if (!holder) {
+            return;
+        }
+        var src = pubUrl + 'mageplaza/blog/post/' + value;
+
+        var link = document.createElement('a');
+        link.className = 'mp-image-link inline-block';
+        link.href = src;
+        link.target = '_blank';
+        link.rel = 'noopener';
+
+        var img = document.createElement('img');
+        img.src = src;
+        img.id = 'post_image_image';
+        img.title = value;
+        img.alt = value;
+        img.height = 40;
+        img.width = 40;
+        img.className = 'h-10 w-10 rounded object-cover';
+        link.appendChild(img);
+        holder.insertBefore(link, holder.firstChild);
+
+        var wrap = document.createElement('label');
+        wrap.className = 'mp-delete-image inline-flex items-center gap-2 text-sm';
+        wrap.htmlFor = 'post_image_delete';
+        var box = document.createElement('input');
+        box.type = 'checkbox';
+        box.name = 'image[delete]';
+        box.value = '1';
+        box.id = 'post_image_delete';
+        wrap.appendChild(box);
+        wrap.appendChild(document.createTextNode(labels.deleteImg || 'Delete Image'));
+        holder.appendChild(wrap);
+    }
+
+    function postActionData(event) {
+        var el = event && event.currentTarget;
+        var button = el && el.closest ? el.closest('[data-post-id]') : null;
+        return {
+            id: button ? button.getAttribute('data-post-id') : '',
+            image: button ? button.getAttribute('data-post-image') || '' : ''
+        };
+    }
+
+    function handleDelete(event) {
+        var data = postActionData(event);
+        if (!data.id) {
+            return;
+        }
+        fetch(deleteUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: new URLSearchParams({
+                post_id: data.id,
+                form_key: hyva.getFormKey()
+            })
+        })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                if (result.status === 1) {
+                    var row = document.querySelector('#mpblog-list-container li[data-post-id="' + result.post_id + '"]');
+                    if (row) {
+                        row.remove();
+                        window.dispatchEvent(new CustomEvent('reload-customer-section-data'));
+                    }
+                }
+            })
+            .catch(function (error) { console.error('Error:', error); });
+    }
 
     window.addEventListener('alpine:init', function () {
         window.Alpine.data('mpBlogPostActions', function () {
-            return {
-                handleEdit: handleEdit,
-                handleDuplicate: handleDuplicate,
-                handleDelete: handleDelete
-            };
+            return Object.assign(window.hyva.modal({ dialog: DIALOG }), {
+                init: function () {
+                    var self = this;
+                    window.openDialogNewPost = function (event) {
+                        self.show(DIALOG, event);
+                    };
+                    window.hideMyDialogNewPost = function (event) {
+                        self.hide(DIALOG, event);
+                    };
+                },
+                openNewPost: function (event) {
+                    resetFormModal();
+                    setTitle(labels.add || 'Add New Post');
+                    this.show(DIALOG, event);
+                },
+                editPost: function (event) {
+                    var data = postActionData(event);
+                    resetFormModal();
+                    fillForm(data.id, data.image, true);
+                    setTitle(labels.edit || 'Edit Post');
+                    this.show(DIALOG, event);
+                },
+                duplicatePost: function (event) {
+                    var data = postActionData(event);
+                    resetFormModal();
+                    fillForm(data.id, data.image, false);
+                    setTitle(labels.duplicate || 'Duplicate Post');
+                    this.show(DIALOG, event);
+                },
+                deletePost: handleDelete
+            });
         });
     }, { once: true });
 })();

@@ -1,0 +1,52 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Mageplaza\Blog\Block\Author\Widget;
+use Mageplaza\Blog\Helper\Image;
+
+/** @var Widget $block */
+/** @var Escaper $escaper */
+
+$author = $block->getCurrentAuthor();
+?>
+<?php if ($author): ?>
+    <section class="sidebar-widget">
+        <h2 class="sidebar-widget-title"><?= $escaper->escapeHtml(__('About the author')) ?></h2>
+        <div class="flex flex-col items-start gap-3">
+            <div class="flex items-center gap-3">
+                <img class="blog-author-card__avatar"
+                     src="<?= $escaper->escapeUrl($author->getImage()
+                         ? $block->resizeImage($author->getImage(), '135x', Image::TEMPLATE_MEDIA_TYPE_AUTH)
+                         : $block->getDefaultAuthorImage()) ?>"
+                     alt="<?= $escaper->escapeHtmlAttr($author->getName()) ?>"/>
+                <p class="blog-author-card__name"><?= $escaper->escapeHtml($author->getName()) ?></p>
+            </div>
+            <div class="blog-author-hero__bio">
+                <?php if ($author->getShortDescription()): ?>
+                    <?= /** @noEscape */ $block->getAuthorBioHtml($author) ?>
+                <?php else: ?>
+                    <?= $escaper->escapeHtml(__('No info')) ?>
+                <?php endif; ?>
+            </div>
+            <?php if ($author->getFacebookLink() || $author->getTwitterLink()): ?>
+                <div class="blog-author-hero__social">
+                    <?php if ($author->getFacebookLink()): ?>
+                        <a href="<?= $escaper->escapeUrl($author->getFacebookLink()) ?>"
+                           target="_blank" rel="noopener nofollow"
+                           aria-label="<?= $escaper->escapeHtmlAttr(__('Facebook')) ?>">
+                            <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/facebook.png')) ?>" alt=""/>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($author->getTwitterLink()): ?>
+                        <a href="<?= $escaper->escapeUrl($author->getTwitterLink()) ?>"
+                           target="_blank" rel="noopener nofollow"
+                           aria-label="<?= $escaper->escapeHtmlAttr(__('Twitter')) ?>">
+                            <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/twitter.png')) ?>" alt=""/>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
+<?php endif; ?>

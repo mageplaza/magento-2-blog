@@ -29,6 +29,42 @@
             </action>
         </referenceBlock>
 
+        <referenceBlock name="mp_blog_post_info">
+            <action method="setTemplate" >
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/info/info.phtml</argument>
+            </action>
+        </referenceBlock>
+
+        <referenceBlock name="mp_blog_post_info_date">
+            <action method="setTemplate" >
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/info/date.phtml</argument>
+            </action>
+        </referenceBlock>
+
+        <referenceBlock name="mp_blog_post_info_author">
+            <action method="setTemplate" >
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/info/author.phtml</argument>
+            </action>
+        </referenceBlock>
+
+        <referenceBlock name="mp_blog_post_info_traffic">
+            <action method="setTemplate" >
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/info/traffic.phtml</argument>
+            </action>
+        </referenceBlock>
+
+        <referenceBlock name="mp_blog_post_info_category">
+            <action method="setTemplate" >
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/info/category.phtml</argument>
+            </action>
+        </referenceBlock>
+
+        <referenceBlock name="mp_blog_post_info_tag">
+            <action method="setTemplate" >
+                <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/info/tag.phtml</argument>
+            </action>
+        </referenceBlock>
+
         <referenceBlock name="mpblog.post.viewcount">
             <action method="setTemplate" >
                 <argument name="template" xsi:type="string">Mageplaza_Blog::hyva/post/view-count.phtml</argument>

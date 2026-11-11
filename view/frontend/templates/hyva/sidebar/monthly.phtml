@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Mageplaza\Blog\Block\MonthlyArchive\Widget;
+use Magento\Framework\Escaper;
+
+/** @var Widget $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+$heroicons    = $viewModels->require(HeroiconsOutline::class);
+$archiveItems = $block->isEnable() ? $block->getMonthlyArchiveItems() : [];
+?>
+<?php if ($archiveItems): ?>
+    <section class="sidebar-widget">
+        <h2 class="sidebar-widget-title"><?= $escaper->escapeHtml(__('Monthly Archive')) ?></h2>
+        <div class="blog-scroll-area pr-1">
+            <ul class="sidebar-widget-list">
+                <?php foreach ($archiveItems as $item): ?>
+                    <li>
+                        <a class="monthly-archive-link" href="<?= $escaper->escapeUrl($item['url']) ?>">
+                            <?= $heroicons->calendarHtml('sidebar-widget-link__icon', 16, 16, ['aria-hidden' => 'true']) ?>
+                            <span class="flex-1"><?= $escaper->escapeHtml($item['label']) ?></span>
+                            <span class="sidebar-widget-count">(<?= (int) $item['count'] ?>)</span>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </section>
+<?php endif; ?>

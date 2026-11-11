@@ -1,170 +1,211 @@
 <?php
-/**
- * Mageplaza
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Mageplaza.com license that is
- * available through the world-wide-web at this URL:
- * https://www.mageplaza.com/LICENSE.txt
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this extension to newer
- * version in the future.
- *
- * @category    Mageplaza
- * @package     Mageplaza_Blog
- * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
- * @license     https://www.mageplaza.com/LICENSE.txt
- */
+declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\Modal;
+use Magento\Framework\Escaper;
 use Mageplaza\Blog\Block\Post\AuthorPost;
 use Mageplaza\Blog\Model\Post;
-use Magento\Framework\Escaper;
+use Mageplaza\Blog\ViewModel\PostLikes;
 
 /** @var AuthorPost $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons      = $viewModels->require(HeroiconsOutline::class);
+/** @var Modal $modalViewModel */
+$modalViewModel = $viewModels->require(Modal::class);
+/** @var PostLikes $postLikes */
+$postLikes      = $viewModels->require(PostLikes::class);
+
+$helperBlog     = $block->helperData;
 $postCollection = $block->getPostCollection();
-$modalViewModel = $viewModels->require(\Hyva\Theme\ViewModel\Modal::class);
 $postDatas      = $block->getPostDatas($postCollection);
-
+$showAuthor     = (bool) $helperBlog->showAuthorInfo();
+$likeCounts     = [];
+foreach ($postCollection ?: [] as $likePost) {
+    $likeCounts[] = (int) $likePost->getId();
+}
+$likeCounts     = $postLikes->getLikeCounts($likeCounts);
+$author         = $block->getAuthor();
+$iconButton     = 'inline-flex items-center justify-center rounded-md p-2 text-slate-600! transition-colors '
+    . 'hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
+$statusClasses  = [
+    '0' => 'bg-amber-100 text-amber-800',
+    '1' => 'bg-green-100 text-green-800',
+    '2' => 'bg-red-100 text-red-800',
+];
+$statusLabels   = [
+    '0' => __('Pending'),
+    '1' => __('Approved'),
+    '2' => __('Disapproved'),
+];
 ?>
-<?php if (!$block->getAuthorStatus()) : ?>
-    <div>
-        <h3><?= $escaper->escapeHtml(__('Your account must be licensed in order to perform the Post creation and management function')) ?></h3>
+<?php if (!$block->getAuthorStatus()): ?>
+    <div class="blog-empty">
+        <?= $escaper->escapeHtml(__('Your account must be licensed in order to perform the Post creation and management function')) ?>
     </div>
-<?php else : ?>
-    <div class="mp-blog-new-post" x-data="{
-    ...hyva.modal(),
-    init() {
-        window.openDialogNewPost = function (event) {
-            this.show('add-new-post-name', event);
-        }.bind(this);
-       window.hideMyDialogNewPost = function (event) {
-        this.hide('add-new-post-name', event);
+<?php else: ?>
+    <div id="mpblog-author-posts" x-data="mpBlogPostActions">
+        <div class="mb-5 flex justify-end">
+            <button type="button"
+                    @click="openNewPost"
+                    aria-haspopup="dialog"
+                    class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm! font-semibold! text-white! shadow-sm transition-colors hover:bg-primary-darker focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                    title="<?= $escaper->escapeHtmlAttr(__('Add New Post')) ?>">
+                <?= $heroicons->plusHtml('', 18, 18, ['aria-hidden' => 'true']) ?>
+                <span><?= $escaper->escapeHtml(__('Add New Post')) ?></span>
+            </button>
+        </div>
 
-        }.bind(this);
-
-
-    }
-}" x-init="init()">
-        <button @click="handleAddPost" type="button" aria-haspopup="dialog"
-                class="action primary btn btn-primary" title="<?= $escaper->escapeHtmlAttr(__('Add New Post')) ?>">
-            <?= $escaper->escapeHtml(__('Add New Post')) ?>
-        </button>
         <?= /** @noEscape */ $modalViewModel->createModal()
-            ->addDialogClass('overflow-y-hidden overflow-x-hidden fixed z-50 justify-center items-center w-3/4 md:inset-0 h-4/5')
-            ->removeDialogClass('p-10')
-            ->withDialogRefName("add-new-post-name")
-            ->withContent(<<<HTML
-     <div id="mp-blog-new-post-popup">
-        <header class="modal-header mb-3">
-            <h3 id="popup_author_post" class="modal-title text-3xl border-b p-4" data-role="title">Add New Post</h3>
-        </header>
-            {$block->getChildHtml('mpblog_manage_post')}
-    </div>
-HTML
+            ->addDialogClass('fixed inset-0 m-auto h-fit max-h-[92vh] w-[min(94vw,56rem)] overflow-y-auto rounded-lg bg-white p-0 text-slate-900 shadow-xl backdrop:bg-black/50')
+            ->withDialogRefName('add-new-post-name')
+            ->withAriaLabelledby('popup_author_post')
+            ->withContent(
+                '<div class="relative px-4 pb-6 pt-4 sm:px-8">'
+                . '<header class="mb-4 border-b border-slate-200 pb-3 pr-10">'
+                . '<h2 id="popup_author_post" class="text-xl font-bold" data-role="title">'
+                . $escaper->escapeHtml(__('Add New Post'))
+                . '</h2></header>'
+                . $block->getChildHtml('mpblog_manage_post')
+                . '</div>'
             ) ?>
 
-    </div>
-    <div class="post-list-content" id="mpblog-list-container" x-data="mpBlogPostActions">
-        <?php if ($postCollection && count($postCollection) > 0) : ?>
-            <div class="post-list-body">
-                <?php $i = 1 ?>
-                <?php /** @var Post $post */
-                foreach ($postCollection as $post) : ?>
-                    <div data-post-id="<?= $escaper->escapeHtml($post->getId()); ?>"
-                         class="post-list-item col-mp post-item-list mp-12">
-                        <div class="post-item-wraper">
-                            <?= /* @noEscape */
-                            $block->getStatusHtmlById($post->getEnabled()) ?>
-                            <?php if ($post->getImage()) : ?>
-                                <div class="post-image">
-                                    <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
-                                        <img class="img-responsive"
-                                             src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(),
-                                                 '400x')) ?>"
-                                             alt="<?= $escaper->escapeHtmlAttr($post->getName()) ?>"/>
+        <div id="mpblog-list-container">
+            <?php if ($postCollection && count($postCollection) > 0): ?>
+                <ul class="m-0 list-none p-0">
+                    <?php /** @var Post $post */
+                    foreach ($postCollection as $post):
+                        $postId       = (int) $post->getId();
+                        $statusId     = (string) $post->getEnabled();
+                        $statusClass  = $statusClasses[$statusId] ?? $statusClasses['0'];
+                        $statusLabel  = $statusLabels[$statusId] ?? $statusLabels['0'];
+                        $categoryHtml = $block->getPostCategoryHtml($post);
+                        $commentCount = (int) ($block->getCommentinPost($post) ?: 0);
+                        $viewCount    = (int) ($post->getViewTraffic() ?: 0);
+                        $likeCount    = $likeCounts[$postId] ?? 0;
+                        ?>
+                        <li class="blog-card-h" data-post-id="<?= $postId ?>">
+                            <?php if ($post->getImage()): ?>
+                                <div class="blog-card-h__media">
+                                    <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>" class="blog-card-h__media-link">
+                                        <img src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(), '400x')) ?>"
+                                             alt="<?= $escaper->escapeHtmlAttr($post->getName()) ?>"
+                                             loading="lazy"/>
                                     </a>
                                 </div>
                             <?php endif; ?>
-                            <div class="post-info-wraper">
-                                <h2 class="mp-post-title">
-                                    <a class="post-link-title" title="<?= $escaper->escapeHtml($post->getName()); ?>"
+                            <div class="blog-card-h__body">
+                                <div class="mb-2 flex flex-wrap items-center gap-2">
+                                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium <?= $escaper->escapeHtmlAttr($statusClass) ?>">
+                                        <?= $escaper->escapeHtml($statusLabel) ?>
+                                    </span>
+                                </div>
+                                <h2 class="blog-card-h__title">
+                                    <a title="<?= $escaper->escapeHtmlAttr($post->getName()) ?>"
                                        href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
                                         <?= $escaper->escapeHtml($post->getName()) ?>
                                     </a>
                                 </h2>
-                                <div class="mp-post-info">
-                                    <?= /* @noEscape */
-                                    $block->getPostInfo($post) ?>
+                                <div class="blog-meta">
+                                    <span class="blog-meta__item">
+                                        <?= $heroicons->calendarHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                                        <?= $escaper->escapeHtml((string) $block->getDateFormat($post->getPublishDate())) ?>
+                                    </span>
+                                    <?php if ($categoryHtml): ?>
+                                        <span class="blog-meta__item">
+                                            <?= $heroicons->folderHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                                            <?= /** @noEscape */ $categoryHtml ?>
+                                        </span>
+                                    <?php endif; ?>
+                                    <?php if ($showAuthor && $author && $author->getName()): ?>
+                                        <span class="blog-meta__item">
+                                            <?= $heroicons->userHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                                            <a href="<?= $escaper->escapeUrl($author->getUrl()) ?>"><?= $escaper->escapeHtml($author->getName()) ?></a>
+                                        </span>
+                                    <?php endif; ?>
+                                    <?php if ($commentCount): ?>
+                                        <span class="blog-meta__item">
+                                            <?= $heroicons->chatAltHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                                            <?= $commentCount ?>
+                                            <span class="blog-sr-only"><?= $escaper->escapeHtml(__('Comments')) ?></span>
+                                        </span>
+                                    <?php endif; ?>
+                                    <?php if ($viewCount): ?>
+                                        <span class="blog-meta__item">
+                                            <?= $heroicons->eyeHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                                            <?= $viewCount ?>
+                                            <span class="blog-sr-only"><?= $escaper->escapeHtml(__('Views')) ?></span>
+                                        </span>
+                                    <?php endif; ?>
+                                    <?php if ($likeCount): ?>
+                                        <span class="blog-meta__item">
+                                            <?= $heroicons->thumbUpHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                                            <?= $likeCount ?>
+                                            <span class="blog-sr-only"><?= $escaper->escapeHtml(__('Likes')) ?></span>
+                                        </span>
+                                    <?php endif; ?>
                                 </div>
-                                <div class="post-short-description">
-                                    <p>
-                                        <?= /* @noEscape */
-                                        $block->maxShortDescription($post->getShortDescription()) ?>
-                                    </p>
+                                <div class="blog-card-h__excerpt">
+                                    <?= /** @noEscape */ $block->maxShortDescription($post->getShortDescription()) ?>
                                 </div>
-                                <div class="mp-clearfix"></div>
-                                <div class="mp-post-meta-info mp-alignright">
-                                    <div class="actions">
-                                        <a class="mp-read-more" href="<?= $escaper->escapeUrl($post->getUrl()) ?>"
-                                           title="<?= $escaper->escapeHtmlAttr(__('Read More')) ?>">
-                                            <?= $escaper->escapeHtml(__('Read More')) ?>
-                                        </a>
+                                <div class="blog-card-footer">
+                                    <a class="blog-read-more" href="<?= $escaper->escapeUrl($post->getUrl()) ?>"
+                                       title="<?= $escaper->escapeHtmlAttr(__('Read More')) ?>">
+                                        <?= $escaper->escapeHtml(__('Read More')) ?>
+                                        <?= $heroicons->arrowRightHtml('', 16, 16, ['aria-hidden' => 'true']) ?>
+                                    </a>
+                                    <div class="flex items-center gap-1">
+                                        <button type="button" class="<?= $escaper->escapeHtmlAttr($iconButton) ?> hover:text-primary!"
+                                                @click="duplicatePost"
+                                                data-post-id="<?= $postId ?>"
+                                                data-post-image="<?= $escaper->escapeHtmlAttr((string) $post->getImage()) ?>"
+                                                aria-label="<?= $escaper->escapeHtmlAttr(__('Duplicate')) ?>"
+                                                title="<?= $escaper->escapeHtmlAttr(__('Duplicate')) ?>">
+                                            <?= $heroicons->duplicateHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+                                        </button>
+                                        <button type="button" class="<?= $escaper->escapeHtmlAttr($iconButton) ?> hover:text-primary!"
+                                                @click="editPost"
+                                                data-post-id="<?= $postId ?>"
+                                                data-post-image="<?= $escaper->escapeHtmlAttr((string) $post->getImage()) ?>"
+                                                aria-label="<?= $escaper->escapeHtmlAttr(__('Edit')) ?>"
+                                                title="<?= $escaper->escapeHtmlAttr(__('Edit')) ?>">
+                                            <?= $heroicons->pencilAltHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+                                        </button>
+                                        <button type="button" class="<?= $escaper->escapeHtmlAttr($iconButton) ?> hover:text-red-600!"
+                                                @click="deletePost"
+                                                data-post-id="<?= $postId ?>"
+                                                aria-label="<?= $escaper->escapeHtmlAttr(__('Delete')) ?>"
+                                                title="<?= $escaper->escapeHtmlAttr(__('Delete')) ?>">
+                                            <?= $heroicons->trashHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="post-info-action" data-postId="<?= $escaper->escapeHtml($post->getId()); ?>">
-                                <div class="mpblog-post-duplicate"
-                                     @click="handleDuplicate($el, <?= (int) $post->getId() ?>, '<?= /* @noEscape */ $escaper->escapeJs($post->getImage() ?? '') ?>')"
-                                >
-                                    <img
-                                        src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/duplicate.svg')) ?>"
-                                        align="middle"
-                                        alt="<?= $escaper->escapeHtmlAttr(__('Duplicate')); ?>"
-                                        title="<?= $escaper->escapeHtmlAttr(__('Duplicate')) ?>"
-                                    />
-                                </div>
-                                <div class="mpblog-post-edit"
-                                     @click="handleEdit($el, <?= (int) $post->getId() ?>, '<?= /* @noEscape */ $escaper->escapeJs($post->getImage() ?? '') ?>')"
-                                >
-                                    <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/writing.svg')) ?>"
-                                         align="middle"
-                                         alt="<?= $escaper->escapeHtmlAttr(__('Edit')); ?>"
-                                         title="<?= $escaper->escapeHtmlAttr(__('Edit')) ?>"
-                                    />
-                                </div>
-                                <div class="mpblog-post-delete" @click="handleDelete($el)">
-                                    <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/delete.svg')) ?>"
-                                         align="middle"
-                                         alt="<?= $escaper->escapeHtmlAttr(__('Delete')) ?>"
-                                         title="<?= $escaper->escapeHtmlAttr(__('Delete')) ?>"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <?php $i++; ?>
-                    <?php if ($i % 2 == 0) : ?>
-                        <div class="mp-clear"></div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-                <div class="mp-clear"></div>
-            </div>
-            <?= $block->getPagerHtml() ?>
-        <?php else : ?>
-            <?= $escaper->escapeHtml(__('There are no posts at this moment')) ?>
-        <?php endif; ?>
-        <?= /* @noEscape */
-        $block->getChildHtml('additional') ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+                <?= /** @noEscape */ $block->getPagerHtml() ?>
+            <?php else: ?>
+                <div class="blog-empty"><?= $escaper->escapeHtml(__('There are no posts at this moment')) ?></div>
+            <?php endif; ?>
+            <?= /** @noEscape */ $block->getChildHtml('additional') ?>
+        </div>
     </div>
 
-    <script type="application/json" id="mpblog-author-post-config"><?= /* @noEscape */ json_encode([
+    <script type="application/json" id="mpblog-author-post-config"><?= /** @noEscape */ json_encode([
         'pubUrl'    => $block->getBaseMediaUrl(),
         'deleteUrl' => $block->getUrl('mpblog/post/deletepost'),
         'posts'     => json_decode($postDatas, true) ?: [],
+        'labels'    => [
+            'add'       => (string) __('Add New Post'),
+            'edit'      => (string) __('Edit Post'),
+            'duplicate' => (string) __('Duplicate Post'),
+            'deleteImg' => (string) __('Delete Image'),
+        ],
     ], JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
     <script src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::js/hyva/author-post.js')) ?>" defer></script>
 <?php endif; ?>

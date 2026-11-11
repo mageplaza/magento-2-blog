@@ -19,53 +19,79 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Mageplaza\Blog\Block\Sidebar\Search;
 use Magento\Framework\Escaper;
 
 /** @var Search $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+$heroicons    = $viewModels->require(HeroiconsOutline::class);
+$showImage    = (bool) $block->getSidebarConfig('search/show_image');
+$minChars     = (int) ($block->getSidebarConfig('search/min_chars') ?: 1);
+$searchLimit  = (int) ($block->getSidebarConfig('search/search_limit') ?: 10);
+$currentQuery = (string) $block->getRequest()->getParam('query', '');
 ?>
-<style>
-    .sidebar.sidebar-main:before {
-        content: unset;
-    }
-</style>
-<div class="mpblog-search"
-     id="mpblog-sidebar-search"
-     data-search-url="<?= $escaper->escapeHtmlAttr((string) $block->getSuggestUrl()) ?>"
-     data-search-page-url="<?= $escaper->escapeHtmlAttr((string) $block->getSearchUrl()) ?>"
-     data-min-chars="<?= $escaper->escapeHtmlAttr((string) ($block->getSidebarConfig('search/min_chars') ?: 1)) ?>"
-     data-search-limit="<?= $escaper->escapeHtmlAttr((string) ($block->getSidebarConfig('search/search_limit') ?: 10)) ?>"
-     data-show-image="<?= $block->getSidebarConfig('search/show_image') ? '1' : '0' ?>">
-    <div class="field search">
-        <label class="label" for="mpblog-search-box" data-role="minisearch-label">
-            <span><?= $escaper->escapeHtml(__('Search')) ?></span>
+<section class="sidebar-widget"
+         x-data="initBlogSearch"
+         data-search-url="<?= $escaper->escapeHtmlAttr((string) $block->getSuggestUrl()) ?>"
+         data-search-page-url="<?= $escaper->escapeHtmlAttr((string) $block->getSearchUrl()) ?>"
+         data-min-chars="<?= $escaper->escapeHtmlAttr((string) $minChars) ?>"
+         data-search-limit="<?= $escaper->escapeHtmlAttr((string) $searchLimit) ?>"
+         data-show-image="<?= $showImage ? '1' : '0' ?>"
+         data-query="<?= $escaper->escapeHtmlAttr($currentQuery) ?>">
+    <div class="blog-search-form w-full ml-0" @click.outside="closeSuggestions">
+        <label for="mpblog-search-box" class="blog-sr-only">
+            <?= $escaper->escapeHtml(__('Search')) ?>
         </label>
-        <div class="control">
-            <input id="mpblog-search-box"
-                   type="text"
-                   name="query"
-                   value="<?= $escaper->escapeHtmlAttr($block->getRequest()->getParam('query')) ?>"
-                   placeholder="<?= $escaper->escapeHtmlAttr(__('Search blogs here...')) ?>"
-                   class="input-text"
-                   role="combobox"
-                   aria-haspopup="false"
-                   aria-autocomplete="both"
-            />
-            <div id="autocomplete-results" class="autocomplete-suggestions" style="display: none;position: absolute;z-index: 100;width: 100%" >
-                <!-- Autocomplete results here -->
+        <input id="mpblog-search-box"
+               type="search"
+               name="query"
+               class="blog-search-input"
+               autocomplete="off"
+               x-model="query"
+               x-ref="input"
+               @input.debounce.250ms="fetchSuggestions"
+               @keydown.enter.prevent="submitSearch"
+               @keydown.escape="closeSuggestions"
+               value="<?= $escaper->escapeHtmlAttr($currentQuery) ?>"
+               placeholder="<?= $escaper->escapeHtmlAttr(__('Search blogs here...')) ?>"
+               aria-label="<?= $escaper->escapeHtmlAttr(__('Search blogs')) ?>"/>
+        <button type="button"
+                class="blog-search-btn"
+                @click="submitSearch"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Search')) ?>">
+            <?= $heroicons->searchHtml('w-5 h-5', 20, 20, ['aria-hidden' => 'true']) ?>
+        </button>
+
+        <div class="blog-suggestions-panel"
+             x-show="open"
+             x-cloak
+             x-transition.opacity>
+            <div class="blog-suggestions-empty" x-show="loading" x-cloak>
+                <?= $escaper->escapeHtml(__('Searching...')) ?>
             </div>
+            <div class="blog-suggestions-empty" x-show="showEmpty" x-cloak>
+                <?= $escaper->escapeHtml(__('No results')) ?>
+            </div>
+            <ul class="blog-suggestions-list" x-show="showList" x-cloak>
+                <template x-for="item in suggestions" :key="item.url">
+                    <li>
+                        <a :href="item.url" class="blog-suggestion-link">
+                            <template x-if="item.hasImage">
+                                <img :src="item.image" :alt="item.value" class="blog-suggestion-thumb"/>
+                            </template>
+                            <span class="blog-suggestion-text">
+                                <span class="blog-suggestion-title" x-text="item.value"></span>
+                                <span class="blog-suggestion-desc" x-text="item.desc"></span>
+                            </span>
+                        </a>
+                    </li>
+                </template>
+            </ul>
         </div>
     </div>
-    <div class="actions">
-        <button type="submit" title="<?= $escaper->escapeHtmlAttr(__('Search')) ?>" class="action search">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                 stroke="currentColor" width="18" height="18" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
-            </svg>
-        </button>
-    </div>
-</div>
-<script src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::js/hyva/sidebar-search.js')) ?>" defer></script>
-
+</section>
+<script src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::js/hyva/search.js')) ?>" defer></script>

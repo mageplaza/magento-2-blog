@@ -157,6 +157,11 @@ function initAddNewPost() {
             showPassword: false,
             displayErrorMessage: false,
             errorMessages: [],
+            closeDialog: function (event) {
+                if (window.hideMyDialogNewPost) {
+                    window.hideMyDialogNewPost(event);
+                }
+            },
             setErrorMessages(messages) {
                 this.errorMessages = [messages];
                 this.displayErrorMessage = this.errorMessages.length;

@@ -1,154 +1,117 @@
 <?php
-/**
- * Mageplaza
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Mageplaza.com license that is
- * available through the world-wide-web at this URL:
- * https://www.mageplaza.com/LICENSE.txt
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this extension to newer
- * version in the future.
- *
- * @category    Mageplaza
- * @package     Mageplaza_Blog
- * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
- * @license     https://www.mageplaza.com/LICENSE.txt
- */
+declare(strict_types=1);
 
-use Mageplaza\Blog\Block\Post\ManagePost;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
+use Mageplaza\Blog\Block\Post\ManagePost;
 
 /** @var ManagePost $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons  = $viewModels->require(HeroiconsOutline::class);
+$labelClass = 'mb-1 block text-sm font-semibold text-slate-800';
+$inputClass = 'block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm! text-slate-900! '
+    . 'focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary';
 ?>
-<button title="Close (Esc)" type="button" class="mfp-close" style="position: absolute;top: -5px;right: 10px;font-size: 25px;" @click="hideMyDialogNewPost">×</button>
 <form enctype="multipart/form-data"
-      action="<?= $escaper->escapeHtml($block->getUrl('mpblog/post/manage')) ?>" method="post" class="form"
-      name="mp_blog_post_form" id="mp_blog_post_form"
-      style="overflow-y: auto; height: 700px"
+      action="<?= $escaper->escapeUrl($block->getUrl('mpblog/post/manage')) ?>"
+      method="post"
+      name="mp_blog_post_form"
+      id="mp_blog_post_form"
       x-data="initAddNewPost"
-      @submit.prevent="submitForm"
->
-    <?= /* @noEscape */ $block->getBlockHtml('formkey'); ?>
-    <fieldset class="fieldset">
-        <div class="field required mp-field">
-            <label for="name" class="label">
-                <span>
-                    <b><?= $escaper->escapeHtml(__('Post Name')) ?></b>
-                </span></label>
-            <div class="control">
-                <input type="text" name="name" id="name" title="<?= $escaper->escapeHtmlAttr(__('Post Name')) ?>"
-                       class="input-text" data-validate='{"required": true}'>
-            </div>
-        </div>
+      @submit.prevent="submitForm">
+    <button type="button"
+            @click="closeDialog"
+            title="<?= $escaper->escapeHtmlAttr(__('Close')) ?>"
+            aria-label="<?= $escaper->escapeHtmlAttr(__('Close')) ?>"
+            class="absolute! right-3! top-3! inline-flex! items-center! justify-center! h-11! w-11! rounded-md! p-2! text-slate-500! cursor-pointer! hover:bg-slate-100! hover:text-slate-900!">
+        <?= $heroicons->xHtml('', 22, 22, ['aria-hidden' => 'true']) ?>
+    </button>
+    <div class="max-h-[calc(75vh-6rem)] overflow-y-auto">
+        <?= /** @noEscape */ $block->getBlockHtml('formkey') ?>
         <input type="hidden" name="post_id" id="post_id">
-        <div class="field mp-field" style="margin-top: 1.5rem">
-            <b for="short_description" class="label">
-                <span><?= $escaper->escapeHtml(__('Short Description')) ?></span>
-            </b>
-            <div class="control">
-                <textarea name="short_description" id="short_description" rows="5" cols="19" class="w-full"></textarea>
+        <fieldset class="fieldset m-0 flex min-w-0 flex-col gap-5 border-0 p-0 [&>.mp-field]:block! [&>.mp-field]:p-0! [&>.mp-field>.label]:mb-1! [&>.mp-field>.label]:block! [&>.mp-field>.label]:w-full! [&>.mp-field_input]:w-full!">
+            <div>
+                <label for="name" class="<?= $escaper->escapeHtmlAttr($labelClass) ?>">
+                    <?= $escaper->escapeHtml(__('Post Name')) ?>
+                    <span class="text-red-600" aria-hidden="true">*</span>
+                </label>
+                <input type="text" name="name" id="name"
+                       title="<?= $escaper->escapeHtmlAttr(__('Post Name')) ?>"
+                       class="<?= $escaper->escapeHtmlAttr($inputClass) ?>"
+                       data-validate='{"required": true}'>
             </div>
-        </div>
-        <div class="field mp-field" style="margin-top: 1.5rem">
-            <b for="post_content" class="label">
-                <span><?= $escaper->escapeHtml(__('Post Content')) ?></span>
-            </b>
-            <div class="control">
-                <textarea name="post_content" id="post_content" class="post_content_hyva" rows="5" cols="19">
-                </textarea>
+            <div>
+                <label for="short_description" class="<?= $escaper->escapeHtmlAttr($labelClass) ?>">
+                    <?= $escaper->escapeHtml(__('Short Description')) ?>
+                </label>
+                <textarea name="short_description" id="short_description" rows="4"
+                          class="<?= $escaper->escapeHtmlAttr($inputClass) ?>"></textarea>
             </div>
-        </div>
-        <div class="field mp-field" style="margin-top: 1.5rem">
-            <label for="image" class="label"><b><?= $escaper->escapeHtml(__('Image')) ?></b></label>
-            <div class="control" style="display: flex">
-                <input type="file" name="image" id="image" title="<?= $escaper->escapeHtmlAttr(__('Image')) ?>"
-                       class="input-file">
+            <div class="[&_.ck-editor__editable]:min-h-[300px]">
+                <label for="post_content" class="<?= $escaper->escapeHtmlAttr($labelClass) ?>">
+                    <?= $escaper->escapeHtml(__('Post Content')) ?>
+                </label>
+                <textarea name="post_content" id="post_content" class="post_content_hyva" rows="5"></textarea>
             </div>
-        </div>
-        <div class="mp-custom">
-            <div class="field mp-field" style="margin-top: 1.5rem">
-                <label class="label"><span><?= $escaper->escapeHtml(__('Select Category')) ?></span></label>
-                <div data-bind="scope: 'customCategory'">
+            <div>
+                <label for="image" class="<?= $escaper->escapeHtmlAttr($labelClass) ?>">
+                    <?= $escaper->escapeHtml(__('Image')) ?>
+                </label>
+                <div class="flex flex-wrap items-center gap-3">
+                    <input type="file" name="image" id="image"
+                           title="<?= $escaper->escapeHtmlAttr(__('Image')) ?>"
+                           class="input-file block text-sm!">
+                </div>
+            </div>
+            <div class="grid gap-5">
+                <div>
+                    <span class="<?= $escaper->escapeHtmlAttr($labelClass) ?>"><?= $escaper->escapeHtml(__('Select Category')) ?></span>
                     <div id="categories_ids"></div>
                 </div>
-            </div>
-            <div class="field mp-field" style="margin-top: 1.5rem">
-                <label class="label"><span><?= $escaper->escapeHtml(__('Select Topic')) ?></span></label>
-                <div data-bind="scope: 'customTopic'">
+                <div>
+                    <span class="<?= $escaper->escapeHtmlAttr($labelClass) ?>"><?= $escaper->escapeHtml(__('Select Topic')) ?></span>
                     <div id="topics_ids"></div>
-                    <!-- ko template: getTemplate() --><!-- /ko -->
                 </div>
-            </div>
-            <div class="field mp-field" style="margin-top: 1.5rem">
-                <label class="label"><span><?= $escaper->escapeHtml(__('Select Tag')) ?></span></label>
-                <div data-bind="scope: 'customTag'">
+                <div>
+                    <span class="<?= $escaper->escapeHtmlAttr($labelClass) ?>"><?= $escaper->escapeHtml(__('Select Tag')) ?></span>
                     <div id="tags_ids"></div>
-                    <!-- ko template: getTemplate() --><!-- /ko -->
                 </div>
             </div>
-        </div>
-        <div class="field mp-field" style="margin-top: 1.5rem">
-            <label for="allow_comment" class="label"><b><?= $escaper->escapeHtml(__('Allow Comment')) ?></b></label>
-            <div class="control">
-                <select id="allow_comment" name="allow_comment" class="w-full">
-                    <option value="0"><span><?= $escaper->escapeHtml(__('No')) ?></option>
-                    <option value="1"><span><?= $escaper->escapeHtml(__('Yes')) ?></option>
-                </select>
+            <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                    <label for="allow_comment" class="<?= $escaper->escapeHtmlAttr($labelClass) ?>">
+                        <?= $escaper->escapeHtml(__('Allow Comment')) ?>
+                    </label>
+                    <select id="allow_comment" name="allow_comment" class="<?= $escaper->escapeHtmlAttr($inputClass) ?>">
+                        <option value="0"><?= $escaper->escapeHtml(__('No')) ?></option>
+                        <option value="1"><?= $escaper->escapeHtml(__('Yes')) ?></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="publish_date" class="<?= $escaper->escapeHtmlAttr($labelClass) ?>">
+                        <?= $escaper->escapeHtml(__('Publish Date')) ?>
+                    </label>
+                    <input name="publish_date" id="publish_date" type="datetime-local"
+                           class="<?= $escaper->escapeHtmlAttr($inputClass) ?>">
+                </div>
             </div>
-        </div>
-        <div class="field mp-field" style="margin-top: 1.5rem">
-            <label for="publish_date" class="label"><b><?= $escaper->escapeHtml(__('Publish Date')) ?></b></label>
-            <div class="control">
-                <input name="publish_date" id="publish_date"   type="datetime-local">
-
-            </div>
-        </div>
-        <?= $block->getChildHtml('field_additional') ?>
-    </fieldset>
-    <div class="actions-toolbar">
-        <div class="primary">
-            <button type="submit" class="action submit primary mpblog-action-new"
-                    title="<?= $escaper->escapeHtmlAttr(__('Save')) ?>">
+            <?= /** @noEscape */ $block->getChildHtml('field_additional') ?>
+        </fieldset>
+        <div class="mt-6 flex justify-end border-t border-slate-200 pt-4">
+            <button type="submit"
+                    title="<?= $escaper->escapeHtmlAttr(__('Save')) ?>"
+                    class="mpblog-action-new inline-flex! items-center! gap-2! rounded-md! bg-primary! px-5! py-2! text-sm! font-semibold! text-white! cursor-pointer! hover:bg-primary-darker!">
+                <?= $heroicons->checkHtml('', 18, 18, ['aria-hidden' => 'true']) ?>
                 <span><?= $escaper->escapeHtml(__('Save')) ?></span>
             </button>
         </div>
     </div>
-    <?php if ($block->checkTheme()) : ?>
-        <style>
-            .admin__action-multiselect-crumb .action-close:before {
-                top: -6px;
-                right: 8px;
-            }
-
-            .admin__action-multiselect-menu-inner-item._root .action-menu-item .admin__action-multiselect-label:before {
-                content: '\f846';
-                font-family: 'porto-icons';
-            }
-
-            .admin__action-multiselect-dropdown:before {
-                content: '\f803';
-                font-family: 'porto-icons';
-            }
-
-            .admin__action-multiselect-tree .action-menu-item._expended .admin__action-multiselect-dropdown:before {
-                right: 5px;
-                position: absolute;
-                content: '\f800';
-                font-family: 'porto-icons';
-            }
-
-        </style>
-    <?php endif; ?>
 </form>
-<style>
-    .ck-editor__editable {min-height: 300px;}
-</style>
-<script type="application/json" id="mpblog-manage-post-config"><?= /* @noEscape */ json_encode([
+<script type="application/json" id="mpblog-manage-post-config"><?= /** @noEscape */ json_encode([
     'categories' => json_decode($block->getCategoriesTree(), true) ?: [],
     'topics'     => json_decode($block->getTopicTree(), true) ?: [],
     'tags'       => json_decode($block->getTagTree(), true) ?: [],

@@ -19,22 +19,24 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
 use Mageplaza\Blog\Block\Post\View;
 use Mageplaza\Blog\Helper\Image;
 use Mageplaza\Blog\Model\Config\Source\Comments\Type;
 
-/** @var Escaper $escaper */
 /** @var View $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 $helper       = $block->getBlogHelper();
 $_post        = $block->getPost();
 $author       = $helper->getAuthorByPost($_post);
 $authorName   = $author !== null ? $author->getName() : '';
-$modifier     = $helper->getAuthorByPost($_post, true);
-$modifierName = $modifier !== null ? $modifier->getName() : '';
 $isLogged     = ($block->isLoggedIn()) ? 'Yes' : 'No';
 $color        = $helper->getDisplayConfig('font_color');
 $typeComment  = $block->helperComment('type');
+$heroicons    = $viewModels->require(HeroiconsOutline::class);
 
 $postViewJsConfig = [
     'review'          => [
@@ -59,7 +61,7 @@ $postViewJsConfig = [
             'login_warning'       => (string) $block->getMessagesHtml(
                 'adderror',
                 'You are not logged in. Please <a href="' . $block->getLoginUrl() . '"> Login </a> or <a href="'
-                . $block->getRegisterUrl() . '"> Signup </a> to like or send a reply.</div>'
+                . $block->getRegisterUrl() . '"> Signup </a> to like or send a reply.'
             ),
             'comment_approve'     => (string) $block->getMessagesHtml(
                 'addsuccess',
@@ -69,330 +71,302 @@ $postViewJsConfig = [
     ],
 ];
 ?>
-<div class="mp-blog-view">
-    <div class="mp-blog-rss">
-        <a href="<?= $escaper->escapeUrl($block->getRssUrl('post/rss')) ?>" class="bb-rss-icon">
-            <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/rss.png')) ?>"
-                 width="16px">
-        </a>
-    </div>
-    <div class="mpcss post-view" id="mpblog-list-container">
-        <div class="post-list-content col-md-12 col-sm-8">
-            <div class="post-view-image col-xs-12">
-                <?php if ($_post->getImage()) : ?>
-                    <img class="img-responsive" src="<?= $escaper->escapeUrl($block->getImageUrl($_post->getImage())) ?>"
-                         alt="<?= $escaper->escapeHtmlAttr($_post->getName()) ?>"/>
-                <?php endif; ?>
-            </div>
-            <div class="post-post_content col-xs-12">
-                <?=
-                $block->getPostContentHtml($_post->getPostContent() ?: '') ?>
-            </div>
-            <div class="mp-clear"></div>
-            <?= $block->getChildHtml('mp_blog_post_info') ?>
-
-            <?= $block->getChildHtml('mp_blog_post_slider') ?>
+<h1 class="blog-page-heading mb-5"><?= $escaper->escapeHtml($_post->getName()) ?></h1>
+<article class="blog-post-view" id="mpblog-list-container">
+    <?php if ($_post->getImage()) : ?>
+        <div class="blog-post-view__media">
+            <img src="<?= $escaper->escapeUrl($block->getImageUrl($_post->getImage())) ?>"
+                 alt="<?= $escaper->escapeHtmlAttr($_post->getName()) ?>"/>
         </div>
-    </div>
-    <?php if ($helper->isEnabledReview()) : ?>
-        <div class="mp-blog-review-title">
-            <span><?= $escaper->escapeHtml(__('Did you find it helpful?')) ?></span>
+    <?php endif; ?>
+    <div class="blog-post-view__body">
+        <div class="blog-post-view__content">
+            <?= /** @noEscape */ $block->getPostContentHtml($_post->getPostContent() ?: '') ?>
         </div>
-        <div id="mp-blog-review">
-            <div class="mp-blog-like" style="width: 155px">
-                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+        <?= /** @noEscape */ $block->getChildHtml('mp_blog_post_info') ?>
+    </div>
+</article>
+<?php if ($helper->isEnabledReview()) : ?>
+    <div class="blog-review">
+        <div class="mp-blog-review-title blog-review__title">
+            <?= $escaper->escapeHtml(__('Did you find it helpful?')) ?>
+        </div>
+        <div id="mp-blog-review" class="blog-review__actions">
+            <div class="mp-blog-like blog-review__btn blog-review__btn--like" role="button" tabindex="0" aria-pressed="false">
+                <?= $heroicons->thumbUpHtml('', 18, 18, ['aria-hidden' => 'true']) ?>
                 <span><?= $escaper->escapeHtml(__('LIKE')) ?></span>
                 <span class="mp-blog-view">
-                    <?php if (!empty($block->getPostLike($_post->getId(), '1'))) : ?>
-                        (<?= $escaper->escapeHtml($block->getPostLike($_post->getId(), '1')) ?>)
-                    <?php endif; ?>
-                    </span>
+                <?php if (!empty($block->getPostLike($_post->getId(), '1'))) : ?>
+                    (<?= $escaper->escapeHtml($block->getPostLike($_post->getId(), '1')) ?>)
+                <?php endif; ?>
+                </span>
             </div>
-            <div class="mp-blog-dislike" style="width: 155px">
-                <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+            <div class="mp-blog-dislike blog-review__btn blog-review__btn--dislike" role="button" tabindex="0" aria-pressed="false">
+                <?= $heroicons->thumbDownHtml('', 18, 18, ['aria-hidden' => 'true']) ?>
                 <span><?= $escaper->escapeHtml(__('DISLIKE')) ?></span>
                 <span class="mp-blog-view">
-                    <?php if (!empty($block->getPostLike($_post->getId(), '0'))) : ?>
-                        (<?= $escaper->escapeHtml($block->getPostLike($_post->getId(), '0')) ?>)
-                    <?php endif; ?>
-                    </span>
+                <?php if (!empty($block->getPostLike($_post->getId(), '0'))) : ?>
+                    (<?= $escaper->escapeHtml($block->getPostLike($_post->getId(), '0')) ?>)
+                <?php endif; ?>
+                </span>
             </div>
         </div>
         <div class="mp-blog-review-label"></div>
-    <?php endif; ?>
-    <?php if ($helper->getBlogConfig('platforms/fb_platform/fb_share') || $helper->getBlogConfig('platforms/x_platform/x_share')) : ?>
-        <div class="mp-clear"></div>
-        <div class="mpcss">
-            <div id="sharing">
-                <div class="share-col-left">
-                    <h5><?= $escaper->escapeHtml(__('Share this post')) ?></h5>
-                </div>
-                <div class="share-col-right">
-                    <div class="post-sharing-button flex">
-                        <?php if ($helper->getBlogConfig('platforms/x_platform/x_share')) : ?>
-                            <img class="img-responsive"
-                                 src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/twitter.png')) ?>"
-                                 alt="Share on Twitter"
-                                 data-share="twitter"
-                                 data-share-url="<?= $escaper->escapeHtmlAttr($_post->getUrl()) ?>"
-                                 style="cursor: pointer;width: 43%;position: relative; left: 0.5rem"
-                            />
-                        <?php endif; ?>
-                        <?php if ($helper->getBlogConfig('platforms/fb_platform/fb_share')) : ?>
-                            <img class="img-responsive"
-                                 src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/facebook.png')) ?>"
-                                 alt="Share on Facebook"
-                                 data-share="facebook"
-                                 data-share-url="<?= $escaper->escapeHtmlAttr($_post->getUrl()) ?>"
-                                 style="cursor: pointer;"
-                            />
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
+    </div>
+<?php endif; ?>
+<?php if ($authorName && $helper->showAuthorInfo()) : ?>
+    <div class="blog-author-card">
+        <img class="blog-author-card__avatar"
+             src="<?= $escaper->escapeUrl($author->getImage()
+                 ? $block->resizeImage($author->getImage(), '135x', Image::TEMPLATE_MEDIA_TYPE_AUTH)
+                 : $block->getDefaultAuthorImage()) ?>"
+             alt="<?= $escaper->escapeHtmlAttr($authorName) ?>"/>
+        <div>
+            <div class="blog-author-card__name"><?= $escaper->escapeHtml($authorName) ?></div>
+            <?php if ($author->getShortDescription()) : ?>
+                <p class="text-sm text-slate-600 mt-1">
+                    <?= /** @noEscape */ $block->getAuthorBioHtml($author) ?>
+                </p>
+            <?php endif; ?>
+            <a class="blog-author-card__link" href="<?= $escaper->escapeUrl($author->getUrl()) ?>">
+                <?= $escaper->escapeHtml(__('Profile')) ?>
+            </a>
         </div>
-        <script src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::js/social-share.js')) ?>" defer></script>
-    <?php endif; ?>
-    <?php if ($authorName && $helper->showAuthorInfo()) :
-        $block->resizeImage($author->getImage(), '135x', Image::TEMPLATE_MEDIA_TYPE_AUTH);
-        ?>
-        <div class="block-blog-related about-admin">
-            <h2><?= $escaper->escapeHtml(__('About the Author')) ?></h2>
-            <div class="related-content-container">
-                <div class="author-content-image">
-                    <img class="img-responsive"
-                         src="<?= /* @noEscape */
-                         $author->getImage()
-                             ? $block->resizeImage($author->getImage(), '135x', Image::TEMPLATE_MEDIA_TYPE_AUTH)
-                             : $block->getDefaultAuthorImage() ?>">
-                </div>
-                <div class="author-content-information">
-                    <div class="author-name"><?= $escaper->escapeHtml($authorName) ?></div>
-                    <p class="author-description">
-                        <?= $author->getShortDescription()
-                            ? $block->getAuthorBioHtml($author) : '' ?>
-                    </p>
-                </div>
-                <div class="mp-clear"></div>
-            </div>
-        </div>
-    <?php endif; ?>
-    <?php $relatedPosts = $_post->getRelatedPostsCollection(); ?>
-    <?php if ($relatedPosts && count($relatedPosts)) : ?>
-        <div class="block-blog-related topic-list mpcss" style="width: 90%;">
-            <h2><?= $escaper->escapeHtml(__('Related Posts')) ?></h2>
-            <?php if ($block->getRelatedMode()) : ?>
-                <div class="">
-                    <section id="card-carousel" class="splide" aria-label="Related Posts">
-                        <div class="splide__track">
-                            <ul class="splide__list">
-                                <?php foreach ($relatedPosts as $post) : ?>
-                                    <li class="splide__slide">
-                                        <div class="item post-list-item" style="margin-right: 10px">
-                                            <div class="post-item-wraper">
-                                                <div class="post-image">
-                                                    <?php if ($post->getImage()) : ?>
-                                                        <a href="<?= /* @noEscape */
-                                                        $post->getUrl() ?>">
-                                                            <img class="img-responsive"
-                                                                 src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(),
-                                                                     '400x')) ?>"
-                                                                 alt="<?= $escaper->escapeHtmlAttr($post->getName()) ?>"/>
-                                                        </a>
-                                                    <?php endif; ?>
-                                                </div>
-                                                <div class="post-info-wraper">
-                                                    <h2 class="mp-post-title">
-                                                        <a class="post-link-title"
-                                                           title="<?= $escaper->escapeHtmlAttr($post->getName()) ?>"
-                                                           href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
-                                                            <?= $escaper->escapeHtml($post->getName()) ?>
-                                                        </a>
-                                                    </h2>
-                                                    <div class="mp-post-info">
-                                                        <?= /* @noEscape */
-                                                        $block->getPostInfo($post); ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    </section>
-                </div>
-                <style>
-                    .splide__pagination {
-                        bottom: -0.5em;
-                    }
-
-                    .splide__arrow {
-                        display: none !important;
-                    }
-
-                    .splide__pagination__page.is-active {
-                        background: #869791
-                    }
-
-
-                </style>
-
-            <?php else : ?>
-                <div class="related-content-container" style="display: flex; flex-wrap: wrap;">
-                    <?php foreach ($relatedPosts as $post) : ?>
-                        <div class="post-list-item col-mp mp-6 mp-lg-4 mp-md-6 mp-xs-12">
-                            <div class="post-item-wraper">
-                                <div class="post-image">
-                                    <?php if ($post->getImage()) : ?>
-                                        <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
-                                            <img class="img-responsive"
-                                                 src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(),
-                                                     '400x')) ?>"
-                                                 alt="<?= $escaper->escapeHtmlAttr($post->getName()) ?>"/>
-                                        </a>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="post-info-wraper">
-                                    <h2 class="mp-post-title">
-                                        <a class="post-link-title"
-                                           title="<?= $escaper->escapeHtmlAttr($post->getName()); ?>"
-                                           href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
-                                            <?= $escaper->escapeHtml($post->getName()) ?>
-                                        </a>
-                                    </h2>
-                                    <div class="mp-post-info">
-                                        <?= /* @noEscape */
-                                        $block->getPostInfo($post) ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                    <div class="mp-clear"></div>
-                </div>
+    </div>
+<?php endif; ?>
+<?php
+$xShare = $helper->getBlogConfig('platforms/x_platform/x_share');
+$fbShare = $helper->getBlogConfig('platforms/fb_platform/fb_share');
+?>
+<?php if ($xShare || $fbShare) : ?>
+    <div class="blog-share">
+        <span class="blog-share__label">
+            <?= $escaper->escapeHtml(__('Please like share if you find the article useful')) ?>
+        </span>
+        <div class="blog-share__links">
+            <?php if ($xShare) : ?>
+                <a class="blog-share__link" target="_blank" rel="noopener nofollow"
+                   href="https://twitter.com/share?url=<?= $escaper->escapeUrl($_post->getUrl()) ?>"
+                   aria-label="<?= $escaper->escapeHtmlAttr(__('Share on Twitter')) ?>">
+                    <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/twitter.png')) ?>"
+                         alt=""/>
+                </a>
+            <?php endif; ?>
+            <?php if ($fbShare) : ?>
+                <a class="blog-share__link" target="_blank" rel="noopener nofollow"
+                   href="https://www.facebook.com/sharer/sharer.php?u=<?= $escaper->escapeUrl($_post->getUrl()) ?>"
+                   aria-label="<?= $escaper->escapeHtmlAttr(__('Share on Facebook')) ?>">
+                    <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/facebook.png')) ?>"
+                         alt=""/>
+                </a>
             <?php endif; ?>
         </div>
+    </div>
+<?php endif; ?>
+<?= /** @noEscape */ $block->getChildHtml('mp_blog_post_slider') ?>
+<?php $relatedPosts = $_post->getRelatedPostsCollection(); ?>
+<?php if ($relatedPosts && count($relatedPosts)) : ?>
+    <?php
+    $relatedIsSlider = (bool) $block->getRelatedMode();
+    $rShowTags       = $helper->getPostViewPageConfig('display_tags');
+    $rShowTags       = $rShowTags === null ? true : (bool) $rShowTags;
+    $rShowAuthor     = (bool) $helper->showAuthorInfo();
+    $rShowReadTime   = $helper->getPostViewPageConfig('display_read_time');
+    $rShowReadTime   = $rShowReadTime === null ? true : (bool) $rShowReadTime;
+    $renderRelatedCard = function ($post) use ($block, $escaper, $heroicons, $helper, $rShowTags, $rShowAuthor, $rShowReadTime) {
+        $rTags   = [];
+        if ($rShowTags) {
+            foreach ($post->getSelectedTagsCollection() as $rTag) {
+                $rTags[] = $rTag;
+                if (count($rTags) >= 3) {
+                    break;
+                }
+            }
+        }
+        $rAuthor = $rShowAuthor ? $helper->getAuthorByPost($post) : null;
+        ?>
+        <article class="blog-card">
+            <div class="blog-card-media">
+                <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>" class="blog-card-media-link">
+                    <?php if ($post->getImage()) : ?>
+                        <img src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(), '400x250')) ?>"
+                             alt="<?= $escaper->escapeHtmlAttr($post->getName()) ?>" loading="lazy"/>
+                    <?php endif; ?>
+                </a>
+                <?php if ($rTags) : ?>
+                    <span class="blog-tag-badge">
+                        <?php foreach ($rTags as $rTag) : ?>
+                            <a class="mp-tag-info" href="<?= $escaper->escapeUrl($block->getTagUrl($rTag)) ?>"><?= $escaper->escapeHtml($rTag->getName()) ?></a>
+                        <?php endforeach; ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+            <div class="blog-card-body">
+                <h3 class="blog-card-title">
+                    <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>"><?= $escaper->escapeHtml($post->getName()) ?></a>
+                </h3>
+                <div class="blog-meta">
+                    <?php if ($rAuthor && $rAuthor->getName()) : ?>
+                        <span class="blog-meta__item"><a href="<?= $escaper->escapeUrl($rAuthor->getUrl()) ?>"><?= $escaper->escapeHtml($rAuthor->getName()) ?></a></span>
+                    <?php endif; ?>
+                    <span class="blog-meta__item">
+                        <?= $heroicons->calendarHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                        <?= $escaper->escapeHtml($block->getDateFormat($post->getPublishDate())) ?>
+                    </span>
+                    <?php if ($rShowReadTime) : ?>
+                        <span class="blog-meta__item">
+                            <?= $heroicons->clockHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                            <?= $escaper->escapeHtml(__('%1 minutes', $block->getReadingTime($post))) ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </article>
+        <?php
+    };
+    ?>
+    <section class="blog-section mt-8"<?= $relatedIsSlider ? ' aria-label="' . $escaper->escapeHtmlAttr(__('Related Posts')) . '" x-data x-snap-slider.auto-pager.group-pager x-defer="intersect"' : '' ?>>
+        <header class="blog-section-header">
+            <h2 class="blog-section-title"><?= $escaper->escapeHtml(__('Related Posts')) ?></h2>
+            <?php if ($relatedIsSlider) : ?>
+                <div class="blog-snap-nav">
+                    <button type="button" class="blog-snap-arrow" data-prev disabled
+                            aria-label="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>">
+                        <?= $heroicons->chevronLeftHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+                    </button>
+                    <button type="button" class="blog-snap-arrow" data-next disabled
+                            aria-label="<?= $escaper->escapeHtmlAttr(__('Next')) ?>">
+                        <?= $heroicons->chevronRightHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+                    </button>
+                </div>
+            <?php endif; ?>
+        </header>
+        <?php if ($relatedIsSlider) : ?>
+            <div class="snap-track sm:[--snap-cols:2] lg:[--snap-cols:3]"
+                 data-track tabindex="0" aria-live="polite">
+                <?php foreach ($relatedPosts as $post) : ?>
+                    <?php $renderRelatedCard($post); ?>
+                <?php endforeach; ?>
+            </div>
+            <div class="snap-pager" data-pager></div>
+        <?php else : ?>
+            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                <?php foreach ($relatedPosts as $post) : ?>
+                    <?php $renderRelatedCard($post); ?>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </section>
+<?php endif; ?>
+<?php if ($helper->getBlogConfig('product_post/post_detail/enable_product')) : ?>
+    <?php $relatedBlock = $block->getChildBlock('related_products'); ?>
+    <?php if ($relatedBlock && $relatedBlock->hasProduct()) : ?>
+        <section class="blog-section">
+            <header class="blog-section-header">
+                <h2 class="blog-section-title">
+                    <?= $escaper->escapeHtml($helper->getBlogConfig('product_post/post_detail/title') ?: __('Related Products')) ?>
+                </h2>
+            </header>
+            <?= /** @noEscape */ $relatedBlock->toHtml() ?>
+        </section>
     <?php endif; ?>
-    <?php if ($helper->getBlogConfig('product_post/post_detail/enable_product')) : ?>
-        <?php $relatedBlock = $block->getChildBlock('related_products'); ?>
-        <?php if ($relatedBlock->hasProduct()) : ?>
-            <div class="block-blog-related products-same-post page-products mpcss" style="width: 90%;">
-                <h2><?= $helper->getBlogConfig('product_post/post_detail/title') ?: $escaper->escapeHtml(__('Related Products')) ?></h2>
-                <div class="related-content-container">
-                    <?= $relatedBlock->toHtml(); ?>
+<?php endif; ?>
+<?php if (((int) $typeComment !== Type::DISABLE) && $_post->getAllowComment()) : ?>
+    <section class="blog-comment blog-section">
+        <header class="blog-section-header">
+            <h2 class="blog-section-title"><?= $escaper->escapeHtml(__('Comments')) ?></h2>
+        </header>
+        <?php if ((int) $typeComment === Type::DISQUS) : ?>
+            <div class="text-[#1f2937] bg-white" id="post-reviews">
+                <div class="text-[#1f2937]" id="disqus_thread"></div>
+            </div>
+        <?php elseif ((int) $typeComment === Type::FACEBOOK) : ?>
+            <div class="<?= $escaper->escapeHtmlAttr($helper->getBlogConfig('comment/facebook_colorscheme')) ?>"
+                 id="post-reviews">
+                <div id="fb-root"></div>
+                <div class="fb-comments" data-href="<?= $escaper->escapeUrl($_post->getUrl()) ?>"
+                     data-numposts="<?= $escaper->escapeHtmlAttr($block->helperComment('facebook_number_comment')) ?>"
+                     data-width="100%"
+                     data-colorscheme="<?= $escaper->escapeHtmlAttr($block->helperComment('facebook_colorscheme')) ?>"
+                     data-order-by="<?= $escaper->escapeHtmlAttr($block->helperComment('facebook_order_by')) ?>">
+                </div>
+            </div>
+        <?php elseif ((int) $typeComment === Type::DEFAULT_COMMENT) : ?>
+            <div class="default-cmt">
+                <?php if (!$block->isLoggedIn()) : ?>
+                    <div class="default-cmt__cmt-login">
+                        <button type="button" class="default-cmt__cmt-login__btn-login">
+                            <?= $escaper->escapeHtml(__('Login')) ?>
+                        </button>
+                    </div>
+                <?php endif; ?>
+                <div>
+                    <div class="default-cmt__content">
+                        <div class="default-cmt__content__cmt-block">
+                            <form id="blog-comment-form" class="blog-comment-form"
+                                  x-data="initBlogCommentForm" @submit.prevent="submitForm">
+                                <?= /** @noEscape */ $block->getBlockHtml('formkey') ?>
+                                <?php if (!$block->isLoggedIn()) : ?>
+                                    <div class="blog-comment-form__row">
+                                        <div class="field field-reserved required">
+                                            <label for="default-cmt__content__cmt-block__guest-box__name-input">
+                                                <?= $escaper->escapeHtml(__('Name')) ?>
+                                            </label>
+                                            <div class="control">
+                                                <input id="default-cmt__content__cmt-block__guest-box__name-input"
+                                                       type="text" name="guestName"
+                                                       placeholder="<?= $escaper->escapeHtmlAttr(__('Your display name')) ?>"
+                                                       required data-validate='{"required": true}'/>
+                                            </div>
+                                        </div>
+                                        <div class="field field-reserved required">
+                                            <label for="default-cmt__content__cmt-block__guest-box__email-input">
+                                                <?= $escaper->escapeHtml(__('Email')) ?>
+                                            </label>
+                                            <div class="control">
+                                                <input id="default-cmt__content__cmt-block__guest-box__email-input"
+                                                       type="email" name="guestEmail"
+                                                       placeholder="<?= $escaper->escapeHtmlAttr(__('Your email')) ?>"
+                                                       required data-validate='{"required": true, "email": true}'/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="field field-reserved required">
+                                    <label for="mp-guest-cmt-commentbox"><?= $escaper->escapeHtml(__('Comment')) ?></label>
+                                    <div class="control">
+                                        <textarea id="mp-guest-cmt-commentbox"
+                                                  class="default-cmt__content__cmt-block__cmt-box__cmt-input w-full"
+                                                  name="cmt_text" rows="4" maxlength="255"
+                                                  placeholder="<?= $escaper->escapeHtmlAttr(__('Type comments here...')) ?>"
+                                                  required data-validate='{"required": true}'></textarea>
+                                    </div>
+                                </div>
+                                <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn blog-comment-form__actions">
+                                    <div class="default-cmt_loading hidden">
+                                        <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif')) ?>"
+                                             alt="<?= $escaper->escapeHtmlAttr(__('Loading...')) ?>"/>
+                                    </div>
+                                    <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit blog-comment-form__submit"
+                                            type="submit">
+                                        <?= $escaper->escapeHtml(__('Comment')) ?>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="default-cmt__content__cmt-content">
+                            <?php
+                            $comments = $block->getPostComments($_post->getId());
+                            $block->getCommentsTree($comments, 0);
+                            ?>
+                            <?= /** @noEscape */ $block->getCommentsHtml() ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         <?php endif; ?>
-    <?php endif; ?>
-    <?php if (((int) $typeComment !== Type::DISABLE) && $_post->getAllowComment()) : ?>
-        <div class="block-blog-related blog-comment">
-            <h2><?= $escaper->escapeHtml(__('Comments')) ?></h2>
-            <?php if ((int) $typeComment === Type::DISQUS) : ?>
-                <div class="related-content-container box-collateral box-reviews" id="post-reviews">
-                    <div id="disqus_thread"></div>
-                </div>
-            <?php elseif ($typeComment == Type::FACEBOOK) : ?>
-                <div class="related-content-container box-collateral box-reviews
-                <?= /* @noEscape */
-                $helper->getBlogConfig('comment/facebook_colorscheme') ?>"
-                     id="post-reviews">
-                    <div id="fb-root"></div>
-                    <div class="fb-comments" data-href="<?= $escaper->escapeUrl($_post->getUrl()) ?>"
-                         data-numposts="<?= $escaper->escapeHtmlAttr($block->helperComment('facebook_number_comment')) ?>"
-                         data-width="100%"
-                         data-colorscheme="<?= $escaper->escapeHtmlAttr($block->helperComment('facebook_colorscheme')) ?>"
-                         data-order-by="<?= $escaper->escapeHtmlAttr($block->helperComment('facebook_order_by')) ?>">
-                    </div>
-                </div>
-            <?php elseif ($typeComment == Type::DEFAULT_COMMENT) : ?>
-                <div class="related-content-container container default-cmt">
-                    <?php if (!$block->isLoggedIn()) : ?>
-                        <div class="col-mp default-cmt__cmt-login">
-                            <button class="primary btn default-cmt__cmt-login__btn-login">
-                                <?= $escaper->escapeHtml(__('Login')) ?>
-                            </button>
-                        </div>
-                    <?php endif; ?>
-                    <div class="col-mp mp-12" style="float: left;">
-                        <div class="default-cmt__content">
-                            <div class="default-cmt__content__cmt-block">
-                                <?php if (!$block->isLoggedIn()) : ?>
-                                    <form id="default-cmt__content__cmt-block__guest-form"
-
-                                          x-data="initCustomerCommentForm"
-                                          @submit.prevent="submitForm"
-                                    >
-                                        <?= /* @noEscape */
-                                        $block->getBlockHtml('formkey'); ?>
-                                        <div class="col-mp mp-6 default-cmt__content__cmt-block__guest-box">
-                                            <label for="default-cmt__content__cmt-block__guest-box__name-input">Name
-                                                *</label>
-                                            <input id="default-cmt__content__cmt-block__guest-box__name-input"
-                                                   type="text"
-                                                   name="default-cmt__content__cmt-block__guest-box__name-input"
-                                                   placeholder="<?= $escaper->escapeHtmlAttr(__('Your display name')) ?>"
-                                                   data-validate='{"required": true}'>
-                                        </div>
-                                        <div class="col-mp mp-6 default-cmt__content__cmt-block__guest-box">
-                                            <label for="default-cmt__content__cmt-block__guest-box__email-input">Email
-                                                *</label>
-                                            <input id="default-cmt__content__cmt-block__guest-box__email-input"
-                                                   type="text"
-                                                   name="default-cmt__content__cmt-block__guest-box__email-input"
-                                                   placeholder="<?= $escaper->escapeHtmlAttr(__('Your email')) ?> "
-                                                   data-validate='{"required": true, "email": true}'
-                                            >
-                                        </div>
-                                    </form>
-                                <?php endif; ?>
-                                <div class="default-cmt__content__cmt-block__cmt-box">
-                                    <div class="col-mp mp-12">
-                                        <label for="mp-guest-cmt-commentbox">Comment</label>
-                                        <div>
-                                              <textarea
-                                                  class="default-cmt__content__cmt-block__cmt-box__cmt-input w-full"
-                                                  maxlength="255"
-                                                  placeholder="<?= $escaper->escapeHtmlAttr(__('Type comments here...')) ?>">
-
-                                        </textarea>
-                                        </div>
-
-                                    </div>
-                                    <div class="default-cmt__content__cmt-block__cmt-box__cmt-btn">
-                                        <div class="default-cmt_loading" style="display: none">
-                                            <img
-                                                src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif')) ?>"
-                                                alt="Loading...">
-                                        </div>
-                                        <button class="default-cmt__content__cmt-block__cmt-box__cmt-btn__btn-submit
-                                         primary btn btn-primary" type="submit" style="display: block"
-                                                form="default-cmt__content__cmt-block__guest-form">
-                                            <?= $escaper->escapeHtml(__('Comment')) ?>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="default-cmt__content__cmt-content">
-                                <?php
-                                $comments = $block->getPostComments($_post->getId());
-                                $block->getCommentsTree($comments, 0);
-                                ?>
-                                <?= $block->getCommentsHtml() ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endif; ?>
-        </div>
-    <?php endif; ?>
-
-    <?= $block->getChildHtml('mp_blog_post_view_add') ?>
-</div>
-<style>
-    .default-cmt__content__cmt-content.row {
-        padding-inline-start: 40px;
-    }
-</style>
-<script type="application/json" id="mpblog-post-view-config"><?= /* @noEscape */ json_encode($postViewJsConfig, JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
+    </section>
+<?php endif; ?>
+<?= /** @noEscape */ $block->getChildHtml('mp_blog_post_view_add') ?>
+<script type="application/json" id="mpblog-post-view-config"><?= /** @noEscape */ json_encode($postViewJsConfig, JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
 <script src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::js/hyva/post-view.js')) ?>" defer></script>

@@ -1,0 +1,112 @@
+<?php
+declare(strict_types=1);
+
+use Mageplaza\Blog\Helper\Data as BlogHelper;
+
+/**
+ * @var \Mageplaza\Blog\Block\Partial $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Hyva\Theme\ViewModel\HeroiconsOutline $heroicons
+ * @var \Mageplaza\Blog\Model\Post $post
+ * @var \Mageplaza\Blog\Helper\Data $helperBlog
+ * @var bool $showTags
+ * @var bool $showCategories
+ * @var bool $showAuthor
+ * @var bool $showReadTime
+ * @var bool $showViewCount
+ * @var int $headingLevel
+ * @var bool $eagerImage
+ */
+
+$cardTags = [];
+if ($showTags ?? false) {
+    $cardTagCollection = $post->getSelectedTagsCollection();
+    $cardTagCollection->setPageSize(3);
+    foreach ($cardTagCollection as $cardTag) {
+        $cardTags[] = $cardTag;
+    }
+}
+
+$cardCategory = null;
+if ($showCategories ?? false) {
+    $cardCategoryIds = $post->getCategoryIds();
+    $cardCategories  = $cardCategoryIds ? $helperBlog->getCategoryCollection($cardCategoryIds) : null;
+    $cardCategory    = $cardCategories ? $cardCategories->getFirstItem() : null;
+}
+
+$cardAuthor  = ($showAuthor ?? false) ? $helperBlog->getAuthorByPost($post) : null;
+$cardHeading = ($headingLevel ?? 3) === 2 ? 'h2' : 'h3';
+
+$cardImgEager = (bool) ($eagerImage ?? false);
+?>
+<article class="blog-card">
+    <div class="blog-card-media">
+        <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>" class="blog-card-media-link">
+            <?php if ($post->getImage()): ?>
+                <img src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(), '400x250')) ?>"
+                     alt="<?= $escaper->escapeHtmlAttr($post->getName()) ?>"
+                     <?php if ($cardImgEager): ?>fetchpriority="high"<?php else: ?>loading="lazy"<?php endif; ?>/>
+            <?php endif; ?>
+        </a>
+        <?php if ($cardTags): ?>
+            <span class="blog-tag-badge">
+                <?php foreach ($cardTags as $cardTag): ?>
+                    <a class="mp-tag-info"
+                       href="<?= $escaper->escapeUrl($helperBlog->getBlogUrl($cardTag, BlogHelper::TYPE_TAG)) ?>"><?= $escaper->escapeHtml($cardTag->getName()) ?></a>
+                <?php endforeach; ?>
+            </span>
+        <?php endif; ?>
+    </div>
+    <div class="blog-card-body">
+        <<?= $cardHeading ?> class="blog-card-title">
+            <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>"
+               title="<?= $escaper->escapeHtmlAttr($post->getName()) ?>">
+                <?= $escaper->escapeHtml($post->getName()) ?>
+            </a>
+        </<?= $cardHeading ?>>
+        <div class="blog-meta">
+            <?php if ($cardAuthor && $cardAuthor->getName()): ?>
+                <span class="blog-meta__item">
+                    <a href="<?= $escaper->escapeUrl($cardAuthor->getUrl()) ?>"><?= $escaper->escapeHtml($cardAuthor->getName()) ?></a>
+                </span>
+            <?php endif; ?>
+            <span class="blog-meta__item">
+                <?= $heroicons->calendarHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                <?= $escaper->escapeHtml($block->getDateFormat($post->getPublishDate())) ?>
+            </span>
+            <span class="blog-meta__item">
+                <?= $heroicons->chatAltHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                <?= (int) ($block->getCommentinPost($post) ?: 0) ?>
+                <?= $escaper->escapeHtml(__('Comments')) ?>
+            </span>
+            <?php if ($showReadTime ?? false): ?>
+                <span class="blog-meta__item">
+                    <?= $heroicons->clockHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                    <?= $escaper->escapeHtml(__('%1 minutes', $block->getReadingTime($post))) ?>
+                </span>
+            <?php endif; ?>
+        </div>
+        <p class="blog-card-excerpt"><?= /** @noEscape */ $block->getShortDescriptionHtml($post) ?></p>
+        <div class="blog-card-footer mt-auto">
+            <a class="blog-read-more" href="<?= $escaper->escapeUrl($post->getUrl()) ?>"
+               title="<?= $escaper->escapeHtmlAttr(__('Read More')) ?>">
+                <?= $escaper->escapeHtml(__('Read More')) ?>
+                <?= $heroicons->arrowRightHtml('', 16, 16, ['aria-hidden' => 'true']) ?>
+            </a>
+            <div class="blog-stats">
+                <?php if ($cardCategory && $cardCategory->getName()): ?>
+                    <span class="blog-meta__item">
+                        <?= $heroicons->folderHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                        <?= $escaper->escapeHtml($cardCategory->getName()) ?>
+                    </span>
+                <?php endif; ?>
+                <?php if ($showViewCount ?? false): ?>
+                    <span class="blog-meta__item">
+                        <?= $heroicons->eyeHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                        <?= $escaper->escapeHtml(__('%1 views', (int) ($post->getViewTraffic() ?: 0))) ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</article>

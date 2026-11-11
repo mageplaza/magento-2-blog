@@ -19,77 +19,122 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-use Mageplaza\Blog\Block\Widget\Posts;
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
+use Mageplaza\Blog\Block\Widget\Posts;
+use Mageplaza\Blog\Model\Post;
+use Mageplaza\Blog\ViewModel\PostLikes;
 
 /** @var Posts $block */
 /** @var Escaper $escaper */
-$posts = $block->getCollection();
-?>
+/** @var ViewModelRegistry $viewModels */
 
-<div class="blog-widget-title"><a></a></div>
-<div class="post-list-container mpcss" id="mpblog-list-container" style="margin-bottom: 50px">
-    <div class="widget-title">
-        <a href="<?= $escaper->escapeUrl($block->getBlogUrl('')) ?>"><?= $escaper->escapeHtml($block->getTitle()) ?></a>
-    </div>
-    <div class="row">
-        <?php foreach ($posts as $post) : ?>
-            <div class="post-list-item" style="margin-left: 5px">
-                <div class="post-item-wraper">
-                    <?php if ($post->getImage()) : ?>
-                        <div class="post-image">
-                            <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
-                                <img class="img-responsive" style="height: 220px; margin:auto"
-                                     src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(), '400x')) ?>"
-                                     alt="<?= $escaper->escapeHtml($post->getName()); ?>"/>
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var PostLikes $postLikes */
+$postLikes = $viewModels->require(PostLikes::class);
+
+$helperBlog  = $block->getHelperData();
+$posts       = $block->getCollection();
+$widgetTitle = trim((string) $block->getTitle());
+$showAuthor  = (bool) $helperBlog->showAuthorInfo();
+$cardHeading = $widgetTitle !== '' ? 'h3' : 'h2';
+$likeCounts  = [];
+foreach ($posts ?: [] as $likePost) {
+    $likeCounts[] = (int) $likePost->getId();
+}
+$likeCounts  = $postLikes->getLikeCounts($likeCounts);
+?>
+<?php if (count($posts)): ?>
+    <section class="blog-section">
+        <?php if ($widgetTitle !== ''): ?>
+            <div class="blog-section-header">
+                <h2 class="blog-section-title">
+                    <a href="<?= $escaper->escapeUrl($block->getBlogUrl('')) ?>"><?= $escaper->escapeHtml($widgetTitle) ?></a>
+                </h2>
+            </div>
+        <?php endif; ?>
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 blog-grid-equal">
+            <?php /** @var Post $post */
+            foreach ($posts as $post):
+                $postId       = (int) $post->getId();
+                $postUrl      = $post->getUrl();
+                $author       = $showAuthor ? $helperBlog->getAuthorByPost($post) : null;
+                $categoryHtml = $block->getPostCategoryHtml($post);
+                $commentCount = (int) ($block->getCommentinPost($post) ?: 0);
+                $viewCount    = (int) ($post->getViewTraffic() ?: 0);
+                $likeCount    = $likeCounts[$postId] ?? 0;
+                ?>
+                <article class="blog-card">
+                    <?php if ($post->getImage()): ?>
+                        <div class="blog-card-media">
+                            <a href="<?= $escaper->escapeUrl($postUrl) ?>" class="blog-card-media-link">
+                                <img src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(), '400x250')) ?>"
+                                     alt="<?= $escaper->escapeHtmlAttr($post->getName()) ?>"
+                                     loading="lazy"/>
                             </a>
                         </div>
                     <?php endif; ?>
-                    <div class="post-info-wraper">
-                        <h2 class="mp-post-title" style="font-size: 22px">
-                            <a class="post-link-title" title="<?= $escaper->escapeHtmlAttr($post->getName()) ?>"
-                               href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
+                    <div class="blog-card-body">
+                        <<?= $cardHeading ?> class="blog-card-title">
+                            <a href="<?= $escaper->escapeUrl($postUrl) ?>"
+                               title="<?= $escaper->escapeHtmlAttr($post->getName()) ?>">
                                 <?= $escaper->escapeHtml($post->getName()) ?>
                             </a>
-                        </h2>
-                        <div class="mp-post-info">
-                            <?= /** @noEscape */ $block->getPostInfo($post) ?>
+                        </<?= $cardHeading ?>>
+                        <div class="blog-meta">
+                            <span class="blog-meta__item">
+                                <?= $heroicons->calendarHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                                <?= $escaper->escapeHtml((string) $block->getDateFormat($post->getPublishDate())) ?>
+                            </span>
+                            <?php if ($categoryHtml): ?>
+                                <span class="blog-meta__item">
+                                    <?= $heroicons->folderHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                                    <?= /** @noEscape */ $categoryHtml ?>
+                                </span>
+                            <?php endif; ?>
+                            <?php if ($author && $author->getName()): ?>
+                                <span class="blog-meta__item">
+                                    <?= $heroicons->userHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                                    <a href="<?= $escaper->escapeUrl($author->getUrl()) ?>"><?= $escaper->escapeHtml($author->getName()) ?></a>
+                                </span>
+                            <?php endif; ?>
+                            <?php if ($commentCount): ?>
+                                <span class="blog-meta__item">
+                                    <?= $heroicons->chatAltHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                                    <?= $commentCount ?>
+                                    <span class="blog-sr-only"><?= $escaper->escapeHtml(__('Comments')) ?></span>
+                                </span>
+                            <?php endif; ?>
+                            <?php if ($viewCount): ?>
+                                <span class="blog-meta__item">
+                                    <?= $heroicons->eyeHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                                    <?= $viewCount ?>
+                                    <span class="blog-sr-only"><?= $escaper->escapeHtml(__('Views')) ?></span>
+                                </span>
+                            <?php endif; ?>
+                            <?php if ($likeCount): ?>
+                                <span class="blog-meta__item">
+                                    <?= $heroicons->thumbUpHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+                                    <?= $likeCount ?>
+                                    <span class="blog-sr-only"><?= $escaper->escapeHtml(__('Likes')) ?></span>
+                                </span>
+                            <?php endif; ?>
                         </div>
-                        <div class="post-short-description">
-                            <p><?= $block->getShortDescriptionHtml($post, false) ?></p>
-                        </div>
-                        <div class="mp-clearfix"></div>
-                        <div class="mp-post-meta-info mp-alignright">
-                            <div class="actions">
-                                <a class="mp-read-more" href="<?= $escaper->escapeUrl($post->getUrl()) ?>"
-                                   title="<?= $escaper->escapeHtmlAttr(__('Read More')) ?>">
-                                    <?= $escaper->escapeHtml(__('Read more')) ?>
-                                </a>
-                            </div>
+                        <p class="blog-card-excerpt"><?= /** @noEscape */ $block->getShortDescriptionHtml($post, false) ?></p>
+                        <div class="blog-card-footer mt-auto">
+                            <a class="blog-read-more" href="<?= $escaper->escapeUrl($postUrl) ?>"
+                               title="<?= $escaper->escapeHtmlAttr(__('Read More')) ?>">
+                                <?= $escaper->escapeHtml(__('Read More')) ?>
+                                <?= $heroicons->arrowRightHtml('', 16, 16, ['aria-hidden' => 'true']) ?>
+                            </a>
                         </div>
                     </div>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
-</div>
-<style>
-    .mp-post-info {
-        color: #999999;
-        font-size: 10px;
-        line-height: 30px;
-        margin: 0;
-    }
-    .post-item-wraper:hover {
-        border: 1px solid #eee;
-        box-shadow: 3px 3px 4px 0 rgba(0, 0, 0, 0.3);
-    }
-    .post-item-wraper {
-        padding: 10px !important;
-        border: 1px solid #eee;
-
-    }
-    .post-list-item {
-        margin-bottom: 20px;
-    }
-</style>
+                </article>
+            <?php endforeach; ?>
+        </div>
+    </section>
+<?php endif; ?>

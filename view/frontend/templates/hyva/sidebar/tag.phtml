@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+use Mageplaza\Blog\Block\Tag\Widget;
+use Magento\Framework\Escaper;
+
+/** @var Widget $block */
+/** @var Escaper $escaper */
+
+$enabled = $block->helperData->getBlogConfig('sidebar/tags/enable', $block->helperData->getCurrentStoreId());
+$tags    = ($enabled === null || (bool) $enabled) ? $block->getTagList() : null;
+?>
+<?php if ($tags && $tags->getSize()): ?>
+    <section class="sidebar-widget">
+        <h2 class="sidebar-widget-title"><?= $escaper->escapeHtml(__('Tags')) ?></h2>
+        <div class="blog-scroll-area pr-1">
+            <ul class="tag-cloud">
+                <?php foreach ($tags as $tag): ?>
+                    <li>
+                        <a class="tag-chip" href="<?= $escaper->escapeUrl($block->getTagUrl($tag)) ?>">
+                            <?= $escaper->escapeHtml($tag->getName()) ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </section>
+<?php endif; ?>
