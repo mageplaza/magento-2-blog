@@ -1,5 +1,5 @@
 (function () {
-    function initBlogSearch() {
+    function initBlogSidebarSearch() {
         return {
             open: false,
             loading: false,
@@ -83,6 +83,6 @@
         };
     }
     window.addEventListener('alpine:init', function () {
-        window.Alpine.data('initBlogSearch', initBlogSearch);
+        window.Alpine.data('initBlogSidebarSearch', initBlogSidebarSearch);
     }, { once: true });
 })();

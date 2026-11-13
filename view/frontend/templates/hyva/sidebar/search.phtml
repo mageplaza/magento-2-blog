@@ -35,7 +35,7 @@ $searchLimit  = (int) ($block->getSidebarConfig('search/search_limit') ?: 10);
 $currentQuery = (string) $block->getRequest()->getParam('query', '');
 ?>
 <section class="sidebar-widget"
-         x-data="initBlogSearch"
+         x-data="initBlogSidebarSearch"
          data-search-url="<?= $escaper->escapeHtmlAttr((string) $block->getSuggestUrl()) ?>"
          data-search-page-url="<?= $escaper->escapeHtmlAttr((string) $block->getSearchUrl()) ?>"
          data-min-chars="<?= $escaper->escapeHtmlAttr((string) $minChars) ?>"
