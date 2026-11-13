@@ -50,9 +50,7 @@
                             return;
                         }
                         const raw = (data && data.suggestions) ? data.suggestions : [];
-                        const lower = term.toLowerCase();
                         self.suggestions = raw
-                            .filter(function (s) { return (s.value || '').toLowerCase().indexOf(lower) !== -1; })
                             .slice(0, self.limit)
                             .map(function (s) {
                                 return {
