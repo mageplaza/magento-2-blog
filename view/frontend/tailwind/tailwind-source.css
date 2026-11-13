@@ -246,14 +246,21 @@
     .blog-post-view__content h3 { font-size: 1.25rem; }
     .blog-post-view__content h4 { font-size: 1.125rem; }
     .blog-post-view__content :is(h5, h6) { font-size: 1rem; }
-    .blog-post-view__content :is(p, ul, ol, blockquote) { margin-bottom: 1rem; }
-    .blog-post-view__content :is(ul, ol) { padding-left: 1.5rem; }
+    .blog-post-view__content :is(p, ul, ol, blockquote, pre, table) { margin-bottom: 1rem; }
+    .blog-post-view__content :is(ul, ol) { padding-inline-start: 1.5rem; }
+    .blog-post-view__content :is(ul, ol) :is(ul, ol) { margin-bottom: 0; }
     .blog-post-view__content ul { list-style: disc; }
     .blog-post-view__content ol { list-style: decimal; }
     .blog-post-view__content li { margin-bottom: 0.25rem; }
-    .blog-post-view__content blockquote { padding-left: 1rem; border-left: 4px solid var(--color-slate-200, #e2e8f0); font-style: italic; }
+    .blog-post-view__content blockquote { padding-inline-start: 1rem; border-inline-start: 4px solid var(--color-slate-200, #e2e8f0); font-style: italic; }
+    .blog-post-view__content blockquote > :last-child { margin-bottom: 0; }
     .blog-post-view__content a { color: var(--color-primary, #1d4ed8); text-decoration: underline; }
-    .blog-post-view__content img { max-width: 100%; height: auto; }
+    .blog-post-view__content hr { margin-block: 1.5rem; border-color: var(--color-slate-200, #e2e8f0); }
+    .blog-post-view__content pre { padding: 1rem; overflow-x: auto; background-color: var(--color-slate-100, #f1f5f9); border-radius: 0.375rem; font-size: 0.875rem; }
+    .blog-post-view__content :not(pre) > code { padding: 0.125rem 0.25rem; background-color: var(--color-slate-100, #f1f5f9); border-radius: 0.25rem; font-size: 0.875em; }
+    .blog-post-view__content table { width: 100%; border-collapse: collapse; }
+    .blog-post-view__content :is(th, td) { padding: 0.5rem 0.75rem; border: 1px solid var(--color-slate-200, #e2e8f0); text-align: start; }
+    .blog-post-view__content th { font-weight: 600; background-color: var(--color-slate-50, #f8fafc); }
     .blog-post-view__content > :first-child { margin-top: 0; }
     .blog-post-info { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin: 1.25rem 0; padding: 1rem 0; border-top: 1px solid var(--color-slate-100, #f1f5f9); border-bottom: 1px solid var(--color-slate-100, #f1f5f9); font-size: 0.8125rem; color: var(--color-slate-600, #475569); }
     .blog-post-info .blog-meta__item svg { color: var(--color-slate-400, #94a3b8); }
