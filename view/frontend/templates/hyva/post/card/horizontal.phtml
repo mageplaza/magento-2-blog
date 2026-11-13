@@ -61,12 +61,12 @@ $cardImgEager = (bool) ($eagerImage ?? false);
     </div>
 
     <div class="blog-card-h__body">
-        <<?= $cardHeading ?> class="blog-card-h__title">
+        <<?= $escaper->escapeHtml($cardHeading) ?> class="blog-card-h__title">
             <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>"
                title="<?= $escaper->escapeHtmlAttr($post->getName()) ?>">
                 <?= $escaper->escapeHtml($post->getName()) ?>
             </a>
-        </<?= $cardHeading ?>>
+        </<?= $escaper->escapeHtml($cardHeading) ?>>
 
         <div class="blog-meta">
             <?php if ($cardAuthor && $cardAuthor->getName()): ?>

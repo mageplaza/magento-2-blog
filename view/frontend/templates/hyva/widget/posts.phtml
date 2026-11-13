@@ -79,12 +79,12 @@ $likeCounts  = $postLikes->getLikeCounts($likeCounts);
                         </div>
                     <?php endif; ?>
                     <div class="blog-card-body">
-                        <<?= $cardHeading ?> class="blog-card-title">
+                        <<?= $escaper->escapeHtml($cardHeading) ?> class="blog-card-title">
                             <a href="<?= $escaper->escapeUrl($postUrl) ?>"
                                title="<?= $escaper->escapeHtmlAttr($post->getName()) ?>">
                                 <?= $escaper->escapeHtml($post->getName()) ?>
                             </a>
-                        </<?= $cardHeading ?>>
+                        </<?= $escaper->escapeHtml($cardHeading) ?>>
                         <div class="blog-meta">
                             <span class="blog-meta__item">
                                 <?= $heroicons->calendarHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
@@ -105,21 +105,21 @@ $likeCounts  = $postLikes->getLikeCounts($likeCounts);
                             <?php if ($commentCount): ?>
                                 <span class="blog-meta__item">
                                     <?= $heroicons->chatAltHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
-                                    <?= $commentCount ?>
+                                    <?= (int) $commentCount ?>
                                     <span class="blog-sr-only"><?= $escaper->escapeHtml(__('Comments')) ?></span>
                                 </span>
                             <?php endif; ?>
                             <?php if ($viewCount): ?>
                                 <span class="blog-meta__item">
                                     <?= $heroicons->eyeHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
-                                    <?= $viewCount ?>
+                                    <?= (int) $viewCount ?>
                                     <span class="blog-sr-only"><?= $escaper->escapeHtml(__('Views')) ?></span>
                                 </span>
                             <?php endif; ?>
                             <?php if ($likeCount): ?>
                                 <span class="blog-meta__item">
                                     <?= $heroicons->thumbUpHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
-                                    <?= $likeCount ?>
+                                    <?= (int) $likeCount ?>
                                     <span class="blog-sr-only"><?= $escaper->escapeHtml(__('Likes')) ?></span>
                                 </span>
                             <?php endif; ?>

@@ -88,7 +88,7 @@ $statusLabels   = [
                         $viewCount    = (int) ($post->getViewTraffic() ?: 0);
                         $likeCount    = $likeCounts[$postId] ?? 0;
                         ?>
-                        <li class="blog-card-h" data-post-id="<?= $postId ?>">
+                        <li class="blog-card-h" data-post-id="<?= (int) $postId ?>">
                             <?php if ($post->getImage()): ?>
                                 <div class="blog-card-h__media">
                                     <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>" class="blog-card-h__media-link">
@@ -130,21 +130,21 @@ $statusLabels   = [
                                     <?php if ($commentCount): ?>
                                         <span class="blog-meta__item">
                                             <?= $heroicons->chatAltHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
-                                            <?= $commentCount ?>
+                                            <?= (int) $commentCount ?>
                                             <span class="blog-sr-only"><?= $escaper->escapeHtml(__('Comments')) ?></span>
                                         </span>
                                     <?php endif; ?>
                                     <?php if ($viewCount): ?>
                                         <span class="blog-meta__item">
                                             <?= $heroicons->eyeHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
-                                            <?= $viewCount ?>
+                                            <?= (int) $viewCount ?>
                                             <span class="blog-sr-only"><?= $escaper->escapeHtml(__('Views')) ?></span>
                                         </span>
                                     <?php endif; ?>
                                     <?php if ($likeCount): ?>
                                         <span class="blog-meta__item">
                                             <?= $heroicons->thumbUpHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
-                                            <?= $likeCount ?>
+                                            <?= (int) $likeCount ?>
                                             <span class="blog-sr-only"><?= $escaper->escapeHtml(__('Likes')) ?></span>
                                         </span>
                                     <?php endif; ?>
@@ -161,7 +161,7 @@ $statusLabels   = [
                                     <div class="flex items-center gap-1">
                                         <button type="button" class="<?= $escaper->escapeHtmlAttr($iconButton) ?> hover:text-primary!"
                                                 @click="duplicatePost"
-                                                data-post-id="<?= $postId ?>"
+                                                data-post-id="<?= (int) $postId ?>"
                                                 data-post-image="<?= $escaper->escapeHtmlAttr((string) $post->getImage()) ?>"
                                                 aria-label="<?= $escaper->escapeHtmlAttr(__('Duplicate')) ?>"
                                                 title="<?= $escaper->escapeHtmlAttr(__('Duplicate')) ?>">
@@ -169,7 +169,7 @@ $statusLabels   = [
                                         </button>
                                         <button type="button" class="<?= $escaper->escapeHtmlAttr($iconButton) ?> hover:text-primary!"
                                                 @click="editPost"
-                                                data-post-id="<?= $postId ?>"
+                                                data-post-id="<?= (int) $postId ?>"
                                                 data-post-image="<?= $escaper->escapeHtmlAttr((string) $post->getImage()) ?>"
                                                 aria-label="<?= $escaper->escapeHtmlAttr(__('Edit')) ?>"
                                                 title="<?= $escaper->escapeHtmlAttr(__('Edit')) ?>">
@@ -177,7 +177,7 @@ $statusLabels   = [
                                         </button>
                                         <button type="button" class="<?= $escaper->escapeHtmlAttr($iconButton) ?> hover:text-red-600!"
                                                 @click="deletePost"
-                                                data-post-id="<?= $postId ?>"
+                                                data-post-id="<?= (int) $postId ?>"
                                                 aria-label="<?= $escaper->escapeHtmlAttr(__('Delete')) ?>"
                                                 title="<?= $escaper->escapeHtmlAttr(__('Delete')) ?>">
                                             <?= $heroicons->trashHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
