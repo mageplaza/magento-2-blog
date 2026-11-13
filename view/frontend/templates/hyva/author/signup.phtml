@@ -32,7 +32,7 @@ $submitTxt = $isNew ? __('Submit') : __('Save');
       action="<?= $escaper->escapeUrl($block->getUrl('mpblog/author/register')) ?>" method="post"
       name="mp_blog_author_form" id="blog_signup_author"
       class="form w-full"
-      x-data="hyva.formValidation" @submit="onSubmit" novalidate>
+      x-data="initBlogAuthorSignup" @submit="onSubmit" novalidate>
     <?= /* @noEscape */ $block->getBlockHtml('formkey'); ?>
 
     <fieldset class="fieldset">

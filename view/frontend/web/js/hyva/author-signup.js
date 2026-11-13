@@ -92,6 +92,12 @@ function initAuthorShortDescriptionEditor() {
     });
 }
 
+window.addEventListener('alpine:init', function () {
+    window.Alpine.data('initBlogAuthorSignup', function () {
+        return hyva.formValidation(document.getElementById('blog_signup_author'));
+    });
+}, { once: true });
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAuthorShortDescriptionEditor, { once: true });
 } else {
