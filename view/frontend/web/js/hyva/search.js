@@ -1,7 +1,6 @@
 (function () {
     function initBlogSearch() {
         return {
-            query: '',
             open: false,
             loading: false,
             suggestions: [],
@@ -18,7 +17,6 @@
                 this.minChars = parseInt(d.minChars, 10) || 1;
                 this.limit = parseInt(d.searchLimit, 10) || 10;
                 this.showImage = d.showImage === '1';
-                this.query = d.query || '';
             },
             get hasSuggestions() {
                 return this.suggestions.length > 0;
@@ -30,7 +28,7 @@
                 return !this.loading && this.suggestions.length > 0;
             },
             fetchSuggestions() {
-                const term = (this.query || '').trim();
+                const term = (this.$refs.input.value || '').trim();
                 if (term.length < this.minChars) {
                     this.suggestions = [];
                     this.loading = false;
@@ -72,7 +70,7 @@
                     });
             },
             submitSearch() {
-                const term = (this.query || '').trim();
+                const term = (this.$refs.input.value || '').trim();
                 if (!term) {
                     this.$refs.input.focus();
                     return;

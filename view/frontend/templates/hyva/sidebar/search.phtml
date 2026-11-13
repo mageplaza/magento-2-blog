@@ -40,8 +40,7 @@ $currentQuery = (string) $block->getRequest()->getParam('query', '');
          data-search-page-url="<?= $escaper->escapeHtmlAttr((string) $block->getSearchUrl()) ?>"
          data-min-chars="<?= $escaper->escapeHtmlAttr((string) $minChars) ?>"
          data-search-limit="<?= $escaper->escapeHtmlAttr((string) $searchLimit) ?>"
-         data-show-image="<?= $showImage ? '1' : '0' ?>"
-         data-query="<?= $escaper->escapeHtmlAttr($currentQuery) ?>">
+         data-show-image="<?= $showImage ? '1' : '0' ?>">
     <div class="blog-search-form w-full ml-0" @click.outside="closeSuggestions">
         <label for="mpblog-search-box" class="blog-sr-only">
             <?= $escaper->escapeHtml(__('Search')) ?>
@@ -51,7 +50,6 @@ $currentQuery = (string) $block->getRequest()->getParam('query', '');
                name="query"
                class="blog-search-input"
                autocomplete="off"
-               x-model="query"
                x-ref="input"
                @input.debounce.250ms="fetchSuggestions"
                @keydown.enter.prevent="submitSearch"
