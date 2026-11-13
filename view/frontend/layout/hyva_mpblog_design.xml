@@ -33,7 +33,7 @@
         <referenceBlock name="page.main.title" remove="true"/>
 
         <referenceContainer name="columns">
-            <container name="div.sidebar.main" htmlTag="div" htmlClass="sidebar sidebar-main in-[.page-layout-1column]:hidden" before="main">
+            <container name="div.sidebar.main" htmlTag="div" htmlClass="sidebar sidebar-main max-md:order-1 in-[.page-layout-1column]:hidden" before="main">
                 <container name="blog.sidebar.main" as="sidebar_main" label="Sidebar Main">
                     <block class="Mageplaza\Blog\Block\Sidebar\Search" name="mpblog.sidebar.search" template="Mageplaza_Blog::hyva/sidebar/search.phtml" ifconfig="blog/sidebar/search/enable_search"/>
                     <block class="Mageplaza\Blog\Block\Sidebar\MostView" name="mpblog.sidebar.mostview" template="Mageplaza_Blog::hyva/sidebar/mostview.phtml" ifconfig="blog/sidebar/recent_post/enable_widget"/>
