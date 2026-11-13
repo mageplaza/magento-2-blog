@@ -21,9 +21,11 @@
 
 use Mageplaza\Blog\Block\Design;
 use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /** @var Design $block */
 /** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
 
 $color = trim((string) $block->getHelper()->getDisplayConfig('font_color'));
 
@@ -31,10 +33,7 @@ $isValidColor = $color !== ''
     && preg_match('/^(#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})|rgba?\([0-9.,\s%]+\))$/', $color);
 ?>
 <?php if ($isValidColor): ?>
-    <style>
-        #maincontent {
-            --color-primary: <?= /** @noEscape */ $color ?>;
-            --color-primary-darker: color-mix(in srgb, <?= /** @noEscape */ $color ?> 82%, #000);
-        }
-    </style>
+    <?php $css = '#maincontent { --color-primary: ' . $color . '; '
+        . '--color-primary-darker: color-mix(in srgb, ' . $color . ' 82%, #000); }'; ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('style', [], $css, false) ?>
 <?php endif; ?>
