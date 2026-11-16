@@ -216,12 +216,11 @@ class View extends \Mageplaza\Blog\Block\ListPost
     {
         if ($this->helperData->isLogin()) {
             $customerId = $this->helperData->getCustomerIdByContext();
-            $likes      = $this->likeFactory->create()->getCollection();
-            foreach ($likes as $like) {
-                if ($like->getEntityId() == $customerId && $like->getCommentId() == $cmtId) {
-                    return true;
-                }
-            }
+            $likes      = $this->likeFactory->create()->getCollection()
+                ->addFieldToFilter('entity_id', $customerId)
+                ->addFieldToFilter('comment_id', $cmtId);
+
+            return $likes->getSize() > 0;
         }
 
         return false;
