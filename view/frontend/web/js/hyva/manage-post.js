@@ -185,6 +185,10 @@ function initAddNewPost() {
                 formData.append('topics_ids', treeselectTopics.value ? treeselectTopics.value.join(',') : '');
                 formData.append('tags_ids', treeselectTags.value ? treeselectTags.value.join(',') : '');
                 formData.append('allow_comment', document.querySelector('#allow_comment').value);
+                var readTimeInput = document.querySelector('#read_time');
+                if (readTimeInput) {
+                    formData.append('read_time', readTimeInput.value);
+                }
 
                 var publicDateValue = document.querySelector('#publish_date').value;
                 if (publicDateValue) {

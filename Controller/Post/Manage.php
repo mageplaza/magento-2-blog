@@ -216,7 +216,8 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
             'tags_ids',
             'topics_ids',
             'allow_comment',
-            'publish_date'
+            'publish_date',
+            'read_time'
         ]));
 
         $data['author_id']   = $author->getId();
