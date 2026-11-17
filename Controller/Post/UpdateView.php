@@ -44,6 +44,11 @@ use Mageplaza\Blog\Model\TrafficFactory;
 class UpdateView extends Action implements HttpPostActionInterface, CsrfAwareActionInterface
 {
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Traffic
+     */
+    protected $trafficResource;
+
+    /**
      * @var TrafficFactory
      */
     protected $trafficFactory;
@@ -59,12 +64,15 @@ class UpdateView extends Action implements HttpPostActionInterface, CsrfAwareAct
      * @param Context $context
      * @param TrafficFactory $trafficFactory
      * @param JsonFactory $resultJsonFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Traffic $trafficResource
      */
     public function __construct(
         Context $context,
         TrafficFactory $trafficFactory,
-        JsonFactory $resultJsonFactory
+        JsonFactory $resultJsonFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Traffic $trafficResource
     ) {
+        $this->trafficResource = $trafficResource;
         $this->trafficFactory    = $trafficFactory;
         $this->resultJsonFactory = $resultJsonFactory;
 
@@ -85,14 +93,15 @@ class UpdateView extends Action implements HttpPostActionInterface, CsrfAwareAct
         }
 
         try {
-            $trafficModel = $this->trafficFactory->create()->load($postId, 'post_id');
+            $trafficModel = $this->trafficFactory->create();
+            $this->trafficResource->load($trafficModel, $postId, 'post_id');
             if ($trafficModel->getId()) {
                 $trafficModel->setNumbersView($trafficModel->getNumbersView() + 1);
-                $trafficModel->save();
+                $this->trafficResource->save($trafficModel);
             } else {
-                $this->trafficFactory->create()
-                    ->addData(['post_id' => $postId, 'numbers_view' => 1])
-                    ->save();
+                $trafficModel = $this->trafficFactory->create()
+                    ->addData(['post_id' => $postId, 'numbers_view' => 1]);
+                $this->trafficResource->save($trafficModel);
             }
         } catch (Exception $e) {
             return $result->setData(['success' => false]);

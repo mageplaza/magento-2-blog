@@ -58,18 +58,20 @@ class Save extends Author
      * @param AuthorFactory $authorFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param Image $imageHelper
+     * @param \Mageplaza\Blog\Model\ResourceModel\Author $authorResource
      */
     public function __construct(
         Context $context,
         Registry $registry,
         AuthorFactory $authorFactory,
         CustomerRepositoryInterface $customerRepository,
-        Image $imageHelper
+        Image $imageHelper,
+        \Mageplaza\Blog\Model\ResourceModel\Author $authorResource
     ) {
         $this->imageHelper        = $imageHelper;
         $this->customerRepository = $customerRepository;
 
-        parent::__construct($context, $registry, $authorFactory);
+        parent::__construct($context, $registry, $authorFactory, $authorResource);
     }
 
     /**
@@ -90,7 +92,7 @@ class Save extends Author
             );
 
             try {
-                $author->save();
+                $this->authorResource->save($author);
 
                 $this->messageManager->addSuccessMessage(__('The Author has been saved.'));
                 $this->_getSession()->setData('mageplaza_blog_author_data', false);

@@ -48,6 +48,16 @@ class Author extends AbstractModel implements IdentityInterface
     protected $helperData;
 
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Author
+     */
+    private $entityResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Author\CollectionFactory
+     */
+    private $authorCollectionFactory;
+
+    /**
      * Author constructor.
      *
      * @param Context $context
@@ -58,6 +68,8 @@ class Author extends AbstractModel implements IdentityInterface
      * @param array $data
      */
     public function __construct(
+        \Mageplaza\Blog\Model\ResourceModel\Author $entityResource,
+        \Mageplaza\Blog\Model\ResourceModel\Author\CollectionFactory $authorCollectionFactory,
         Context $context,
         Registry $registry,
         Data $helperData,
@@ -65,6 +77,8 @@ class Author extends AbstractModel implements IdentityInterface
         ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
+        $this->entityResource = $entityResource;
+        $this->authorCollectionFactory = $authorCollectionFactory;
         $this->helperData = $helperData;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -85,7 +99,7 @@ class Author extends AbstractModel implements IdentityInterface
      */
     public function getAuthorByName($name)
     {
-        return $this->getCollection()->addFieldToFilter('name', $name)->getFirstItem();
+        return $this->authorCollectionFactory->create()->addFieldToFilter('name', $name)->getFirstItem();
     }
 
     /**
@@ -113,7 +127,7 @@ class Author extends AbstractModel implements IdentityInterface
     public function hasPost()
     {
         try {
-            return (bool)count($this->_getResource()->getPostIds($this));
+            return (bool)count($this->entityResource->getPostIds($this));
         } catch (LocalizedException $exception) {
             return false;
         }
@@ -125,6 +139,6 @@ class Author extends AbstractModel implements IdentityInterface
      */
     public function getPostCount()
     {
-        return count($this->_getResource()->getPostIds($this));
+        return count($this->entityResource->getPostIds($this));
     }
 }

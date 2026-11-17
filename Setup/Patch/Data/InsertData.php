@@ -26,7 +26,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchRevertableInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Mageplaza\Blog\Model\AuthorFactory;
+use Mageplaza\Blog\Model\ResourceModel\Author\CollectionFactory as AuthorFactory;
 
 /**
  * Class InsertData
@@ -84,7 +84,7 @@ class InsertData implements
             'created_at' => $this->date->date()
         ];
 
-        if (!$this->authorFactory->create()->getCollection()->getSize()) {
+        if (!$this->authorFactory->create()->getSize()) {
             $this->moduleDataSetup->getConnection()->insertOnDuplicate(
                 $this->moduleDataSetup->getTable('mageplaza_blog_author'),
                 $defaultData

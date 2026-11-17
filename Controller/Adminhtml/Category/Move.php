@@ -67,6 +67,8 @@ class Move extends Category
      * @param CategoryFactory $categoryFactory
      * @param Registry $coreRegistry
      * @param Context $context
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      */
     public function __construct(
         Context $context,
@@ -74,13 +76,15 @@ class Move extends Category
         CategoryFactory $categoryFactory,
         JsonFactory $resultJsonFactory,
         LayoutFactory $layoutFactory,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->logger = $logger;
 
-        parent::__construct($context, $coreRegistry, $categoryFactory);
+        parent::__construct($context, $coreRegistry, $categoryFactory, $categoryResource, $categoryCollectionFactory);
     }
 
     /**

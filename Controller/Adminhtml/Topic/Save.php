@@ -83,6 +83,7 @@ class Save extends Topic
      * @param JsonFactory $resultJsonFactory
      * @param TopicFactory $topicFactory
      * @param Data $helperData
+     * @param \Mageplaza\Blog\Model\ResourceModel\Topic $topicResource
      */
     public function __construct(
         Context $context,
@@ -91,14 +92,15 @@ class Save extends Topic
         LayoutFactory $layoutFactory,
         JsonFactory $resultJsonFactory,
         TopicFactory $topicFactory,
-        Data $helperData
+        Data $helperData,
+        \Mageplaza\Blog\Model\ResourceModel\Topic $topicResource
     ) {
         $this->jsHelper          = $jsHelper;
         $this->layoutFactory     = $layoutFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->_helperData       = $helperData;
 
-        parent::__construct($context, $registry, $topicFactory);
+        parent::__construct($context, $registry, $topicFactory, $topicResource);
     }
 
     /**
@@ -116,7 +118,7 @@ class Save extends Topic
             $topic->addData($topicPostData);
 
             try {
-                $topic->save();
+                $this->topicResource->save($topic);
                 $this->messageManager->addSuccessMessage(__('You saved the topic.'));
             } catch (AlreadyExistsException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
@@ -133,7 +135,7 @@ class Save extends Topic
                 MessageInterface::TYPE_ERROR
             );
 
-            $topic->load($topic->getId());
+            $this->topicResource->load($topic, $topic->getId());
             $topic->addData([
                 'level'     => 1,
                 'entity_id' => $topic->getId(),
@@ -171,7 +173,7 @@ class Save extends Topic
             }
 
             try {
-                $topic->save();
+                $this->topicResource->save($topic);
 
                 $this->messageManager->addSuccessMessage(__('The Topic has been saved.'));
                 $this->_getSession()->setData('mageplaza_blog_topic_data', false);

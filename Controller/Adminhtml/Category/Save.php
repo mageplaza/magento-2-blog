@@ -90,6 +90,8 @@ class Save extends Category
      * @param LayoutFactory $layoutFactory
      * @param Js $jsHelper
      * @param Data $helperData
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      */
     public function __construct(
         Context $context,
@@ -99,7 +101,9 @@ class Save extends Category
         JsonFactory $resultJsonFactory,
         LayoutFactory $layoutFactory,
         Js $jsHelper,
-        Data $helperData
+        Data $helperData,
+        \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
     ) {
         $this->resultRawFactory  = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
@@ -107,7 +111,7 @@ class Save extends Category
         $this->jsHelper          = $jsHelper;
         $this->_helperData       = $helperData;
 
-        parent::__construct($context, $coreRegistry, $categoryFactory);
+        parent::__construct($context, $coreRegistry, $categoryFactory, $categoryResource, $categoryCollectionFactory);
     }
 
     /**
@@ -128,12 +132,13 @@ class Save extends Category
             if (!$parentId) {
                 $parentId = CategoryModel::TREE_ROOT_ID;
             }
-            $parentCategory = $this->categoryFactory->create()->load($parentId);
+            $parentCategory = $this->categoryFactory->create();
+            $this->categoryResource->load($parentCategory, $parentId);
             $category->setPath($parentCategory->getPath());
             $category->setParentId($parentId);
 
             try {
-                $category->save();
+                $this->categoryResource->save($category);
                 $this->messageManager->addSuccessMessage(__('You saved the category.'));
             } catch (AlreadyExistsException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
@@ -150,7 +155,7 @@ class Save extends Category
                 MessageInterface::TYPE_ERROR
             );
 
-            $category->load($category->getId());
+            $this->categoryResource->load($category, $category->getId());
             $category->addData([
                 'entity_id' => $category->getId(),
                 'is_active' => $category->getEnabled(),
@@ -198,7 +203,8 @@ class Save extends Category
                 if (!$parentId) {
                     $parentId = CategoryModel::TREE_ROOT_ID;
                 }
-                $parentCategory = $this->categoryFactory->create()->load($parentId);
+                $parentCategory = $this->categoryFactory->create();
+                $this->categoryResource->load($parentCategory, $parentId);
                 $category->setPath($parentCategory->getPath());
                 $category->setParentId($parentId);
             }
@@ -209,7 +215,7 @@ class Save extends Category
             );
 
             try {
-                $category->save();
+                $this->categoryResource->save($category);
                 $this->messageManager->addSuccessMessage(__('You saved the Blog Category.'));
                 $this->_getSession()->setData('mageplaza_blog_category_data', false);
             } catch (Exception $e) {

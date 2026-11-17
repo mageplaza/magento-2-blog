@@ -36,6 +36,11 @@ use Mageplaza\Blog\Model\PostFactory;
 class Delete extends Author
 {
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
+     */
+    protected $postCollectionFactory;
+
+    /**
      * @var PostFactory
      */
     protected $_postFactory;
@@ -47,16 +52,21 @@ class Delete extends Author
      * @param Registry $coreRegistry
      * @param AuthorFactory $authorFactory
      * @param PostFactory $postFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Author $authorResource
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
         AuthorFactory $authorFactory,
-        PostFactory $postFactory
+        PostFactory $postFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Author $authorResource
     ) {
+        $this->postCollectionFactory = $postCollectionFactory;
         $this->_postFactory = $postFactory;
 
-        parent::__construct($context, $coreRegistry, $authorFactory);
+        parent::__construct($context, $coreRegistry, $authorFactory, $authorResource);
     }
 
     /**
@@ -68,11 +78,11 @@ class Delete extends Author
 
         if ($id = $this->getRequest()->getParam('id')) {
             $post = $this->_postFactory->create();
-            $postCollectionSize = $post->getCollection()->addFieldToFilter('author_id', ['eq' => $id])->getSize();
+            $postCollectionSize = $this->postCollectionFactory->create()->addFieldToFilter('author_id', ['eq' => $id])->getSize();
             try {
-                $this->authorFactory->create()
-                    ->load($id)
-                    ->delete();
+                $author = $this->authorFactory->create();
+                $this->authorResource->load($author, $id);
+                $this->authorResource->delete($author);
 
                 if ($postCollectionSize > 0) {
                     $this->messageManager->addSuccessMessage(

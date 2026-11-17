@@ -46,16 +46,18 @@ class Posts extends Tag
      * @param Registry $registry
      * @param LayoutFactory $resultLayoutFactory
      * @param TagFactory $postFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Tag $tagResource
      */
     public function __construct(
         Context $context,
         Registry $registry,
         LayoutFactory $resultLayoutFactory,
-        TagFactory $postFactory
+        TagFactory $postFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Tag $tagResource
     ) {
         $this->resultLayoutFactory = $resultLayoutFactory;
 
-        parent::__construct($context, $registry, $postFactory);
+        parent::__construct($context, $registry, $postFactory, $tagResource);
     }
 
     /**

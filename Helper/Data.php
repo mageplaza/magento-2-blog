@@ -63,6 +63,42 @@ use Mageplaza\Core\Helper\AbstractData as CoreHelper;
  */
 class Data extends CoreHelper
 {
+    /** @var \Mageplaza\Blog\Model\ResourceModel\PostFactory */
+    private $postResource;
+
+    /** @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory */
+    private $postCollectionFactory;
+
+    /** @var \Mageplaza\Blog\Model\ResourceModel\CategoryFactory */
+    private $categoryResource;
+
+    /** @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory */
+    private $categoryCollectionFactory;
+
+    /** @var \Mageplaza\Blog\Model\ResourceModel\TagFactory */
+    private $tagResource;
+
+    /** @var \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory */
+    private $tagCollectionFactory;
+
+    /** @var \Mageplaza\Blog\Model\ResourceModel\TopicFactory */
+    private $topicResource;
+
+    /** @var \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory */
+    private $topicCollectionFactory;
+
+    /** @var \Mageplaza\Blog\Model\ResourceModel\AuthorFactory */
+    private $authorResource;
+
+    /** @var \Mageplaza\Blog\Model\ResourceModel\Author\CollectionFactory */
+    private $authorCollectionFactory;
+
+    /** @var \Mageplaza\Blog\Model\ResourceModel\PostHistoryFactory */
+    private $postHistoryResource;
+
+    /** @var \Mageplaza\Blog\Model\ResourceModel\PostHistory\CollectionFactory */
+    private $postHistoryCollectionFactory;
+
     const CONFIG_MODULE_PATH = 'blog';
     const TYPE_POST          = 'post';
     const TYPE_CATEGORY      = 'category';
@@ -159,8 +195,32 @@ class Data extends CoreHelper
         ProductMetadataInterface $productMetadata,
         Session $customerSession,
         HttpContext $httpContext,
-        DateTime $dateTime
+        DateTime $dateTime,
+        \Mageplaza\Blog\Model\ResourceModel\PostFactory $postResource,
+        \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\CategoryFactory $categoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\TagFactory $tagResource,
+        \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $tagCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\TopicFactory $topicResource,
+        \Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory $topicCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\AuthorFactory $authorResource,
+        \Mageplaza\Blog\Model\ResourceModel\Author\CollectionFactory $authorCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\PostHistoryFactory $postHistoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\PostHistory\CollectionFactory $postHistoryCollectionFactory
     ) {
+        $this->postResource = $postResource;
+        $this->postCollectionFactory = $postCollectionFactory;
+        $this->categoryResource = $categoryResource;
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
+        $this->tagResource = $tagResource;
+        $this->tagCollectionFactory = $tagCollectionFactory;
+        $this->topicResource = $topicResource;
+        $this->topicCollectionFactory = $topicCollectionFactory;
+        $this->authorResource = $authorResource;
+        $this->authorCollectionFactory = $authorCollectionFactory;
+        $this->postHistoryResource = $postHistoryResource;
+        $this->postHistoryCollectionFactory = $postHistoryCollectionFactory;
         $this->postFactory        = $postFactory;
         $this->categoryFactory    = $categoryFactory;
         $this->tagFactory         = $tagFactory;
@@ -356,7 +416,7 @@ class Data extends CoreHelper
     public function getAuthorCollection()
     {
         if ($customerId = $this->getCustomerIdByContext()) {
-            return $this->getFactoryByType('author')->create()->getCollection()
+            return $this->getCollection('author')
                 ->addFieldToFilter('customer_id', $customerId);
         }
 
@@ -633,9 +693,7 @@ class Data extends CoreHelper
     public function getObjectList($type = null, $storeId = null)
     {
         /** @var AuthorCollection|CategoryCollection|PostCollection|TagCollection|Collection $collection */
-        $collection = $this->getFactoryByType($type)
-            ->create()
-            ->getCollection()
+        $collection = $this->getCollection($type)
             ->addFieldToFilter('enabled', 1);
 
         $this->addStoreFilter($collection, $storeId);
@@ -676,7 +734,7 @@ class Data extends CoreHelper
 
         $authorId = $modify ? $post->getModifierId() : $post->getAuthorId();
         if ($authorId) {
-            $author->load($authorId);
+            $this->authorResource->create()->load($author, $authorId);
         }
 
         return $author;
@@ -712,9 +770,8 @@ class Data extends CoreHelper
      */
     public function getObjectByParam($value, $code = null, $type = null)
     {
-        $object = $this->getFactoryByType($type)
-            ->create()
-            ->load($value, $code);
+        $object = $this->getFactoryByType($type)->create();
+        $this->getResourceModel($type)->load($object, $value, $code);
 
         return $object;
     }
@@ -747,6 +804,50 @@ class Data extends CoreHelper
         }
 
         return $object;
+    }
+
+    /**
+     * @param string|null $type
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post|\Mageplaza\Blog\Model\ResourceModel\Category|\Mageplaza\Blog\Model\ResourceModel\Tag|\Mageplaza\Blog\Model\ResourceModel\Topic|\Mageplaza\Blog\Model\ResourceModel\Author|\Mageplaza\Blog\Model\ResourceModel\PostHistory
+     */
+    public function getResourceModel($type = null)
+    {
+        switch ($type) {
+            case 'category':
+                return $this->categoryResource->create();
+            case 'tag':
+                return $this->tagResource->create();
+            case 'topic':
+                return $this->topicResource->create();
+            case 'author':
+                return $this->authorResource->create();
+            case 'history':
+                return $this->postHistoryResource->create();
+            default:
+                return $this->postResource->create();
+        }
+    }
+
+    /**
+     * @param string|null $type
+     * @return \Mageplaza\Blog\Model\ResourceModel\Post\Collection|\Mageplaza\Blog\Model\ResourceModel\Category\Collection|\Mageplaza\Blog\Model\ResourceModel\Tag\Collection|\Mageplaza\Blog\Model\ResourceModel\Topic\Collection|\Mageplaza\Blog\Model\ResourceModel\Author\Collection|\Mageplaza\Blog\Model\ResourceModel\PostHistory\Collection
+     */
+    public function getCollection($type = null)
+    {
+        switch ($type) {
+            case 'category':
+                return $this->categoryCollectionFactory->create();
+            case 'tag':
+                return $this->tagCollectionFactory->create();
+            case 'topic':
+                return $this->topicCollectionFactory->create();
+            case 'author':
+                return $this->authorCollectionFactory->create();
+            case 'history':
+                return $this->postHistoryCollectionFactory->create();
+            default:
+                return $this->postCollectionFactory->create();
+        }
     }
 
     /**

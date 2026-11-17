@@ -81,6 +81,7 @@ class Save extends Tag
      * @param JsonFactory $resultJsonFactory
      * @param TagFactory $tagFactory
      * @param Data $helperData
+     * @param \Mageplaza\Blog\Model\ResourceModel\Tag $tagResource
      */
     public function __construct(
         Context $context,
@@ -89,14 +90,15 @@ class Save extends Tag
         LayoutFactory $layoutFactory,
         JsonFactory $resultJsonFactory,
         TagFactory $tagFactory,
-        Data $helperData
+        Data $helperData,
+        \Mageplaza\Blog\Model\ResourceModel\Tag $tagResource
     ) {
         $this->jsHelper          = $jsHelper;
         $this->layoutFactory     = $layoutFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->_helperData       = $helperData;
 
-        parent::__construct($context, $registry, $tagFactory);
+        parent::__construct($context, $registry, $tagFactory, $tagResource);
     }
 
     /**
@@ -114,7 +116,7 @@ class Save extends Tag
             $tag->addData($tagPostData);
 
             try {
-                $tag->save();
+                $this->tagResource->save($tag);
                 $this->messageManager->addSuccessMessage(__('You saved the tag.'));
             } catch (AlreadyExistsException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
@@ -131,7 +133,7 @@ class Save extends Tag
                 MessageInterface::TYPE_ERROR
             );
 
-            $tag->load($tag->getId());
+            $this->tagResource->load($tag, $tag->getId());
             $tag->addData([
                 'level'     => 1,
                 'entity_id' => $tag->getId(),
@@ -171,7 +173,7 @@ class Save extends Tag
             );
 
             try {
-                $tag->save();
+                $this->tagResource->save($tag);
 
                 $this->messageManager->addSuccessMessage(__('The Tag has been saved.'));
                 $this->_session->setData('mageplaza_blog_tag_data', false);

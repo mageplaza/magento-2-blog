@@ -30,7 +30,6 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Model\Author;
 use Mageplaza\Blog\Model\AuthorFactory;
-use Mageplaza\Blog\Model\Post;
 use RuntimeException;
 
 /**
@@ -39,6 +38,11 @@ use RuntimeException;
  */
 class InlineEdit extends Action
 {
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Author
+     */
+    protected $authorResource;
+
     /**
      * @see _isAllowed()
      */
@@ -64,12 +68,15 @@ class InlineEdit extends Action
      * @param Context $context
      * @param JsonFactory $jsonFactory
      * @param AuthorFactory $postFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Author $authorResource
      */
     public function __construct(
         Context $context,
         JsonFactory $jsonFactory,
-        AuthorFactory $postFactory
+        AuthorFactory $postFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Author $authorResource
     ) {
+        $this->authorResource = $authorResource;
         $this->jsonFactory = $jsonFactory;
         $this->authorFactory = $postFactory;
 
@@ -95,17 +102,18 @@ class InlineEdit extends Action
 
         $key = array_keys($authorItems);
         $authorId = !empty($key) ? (int)$key[0] : '';
-        /** @var Post $post */
-        $author = $this->authorFactory->create()->load($authorId);
+        /** @var Author $author */
+        $author = $this->authorFactory->create();
+        $this->authorResource->load($author, $authorId);
         try {
             $authorData = $authorItems[$authorId];
             $author->addData($authorData);
-            $author->save();
+            $this->authorResource->save($author);
         } catch (LocalizedException $e) {
-            $messages[] = $this->getErrorWithPostId($post, $e->getMessage());
+            $messages[] = $this->getErrorWithPostId($author, $e->getMessage());
             $error = true;
         } catch (RuntimeException $e) {
-            $messages[] = $this->getErrorWithPostId($post, $e->getMessage());
+            $messages[] = $this->getErrorWithPostId($author, $e->getMessage());
             $error = true;
         } catch (Exception $e) {
             $messages[] = $this->getErrorWithPostId(

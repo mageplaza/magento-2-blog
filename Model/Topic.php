@@ -104,6 +104,11 @@ class Topic extends AbstractModel implements IdentityInterface
     public $topicCollectionFactory;
 
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Topic
+     */
+    private $entityResource;
+
+    /**
      * Topic constructor.
      *
      * @param Context $context
@@ -115,6 +120,7 @@ class Topic extends AbstractModel implements IdentityInterface
      * @param array $data
      */
     public function __construct(
+        \Mageplaza\Blog\Model\ResourceModel\Topic $entityResource,
         Context $context,
         Registry $registry,
         CollectionFactory $postCollectionFactory,
@@ -123,6 +129,7 @@ class Topic extends AbstractModel implements IdentityInterface
         ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
+        $this->entityResource = $entityResource;
         $this->postCollectionFactory = $postCollectionFactory;
         $this->topicCollectionFactory = $topicCollectionFactory;
 
@@ -173,7 +180,7 @@ class Topic extends AbstractModel implements IdentityInterface
         }
         $array = $this->getData('posts_position');
         if ($array === null) {
-            $array = $this->getResource()->getPostsPosition($this);
+            $array = $this->entityResource->getPostsPosition($this);
             $this->setData('posts_position', $array);
         }
 
@@ -188,7 +195,7 @@ class Topic extends AbstractModel implements IdentityInterface
         if ($this->postCollection === null) {
             $collection = $this->postCollectionFactory->create();
             $collection->join(
-                ['topic' => $this->getResource()->getTable('mageplaza_blog_post_topic')],
+                ['topic' => $this->entityResource->getTable('mageplaza_blog_post_topic')],
                 'main_table.post_id=topic.post_id AND topic.topic_id=' . $this->getId(),
                 ['position']
             );

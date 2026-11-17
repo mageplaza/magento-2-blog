@@ -51,6 +51,11 @@ use Mageplaza\Blog\Model\ResourceModel\Author\Collection as AuthorCollection;
 class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionInterface
 {
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Post
+     */
+    protected $postResource;
+
+    /**
      * @var PageFactory
      */
     public $resultPageFactory;
@@ -126,6 +131,7 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
      * @param TimezoneInterface $timezone
      * @param FormKeyValidator $formKeyValidator
      * @param RichText $richText
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post $postResource
      */
     public function __construct(
         Context $context,
@@ -140,8 +146,10 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
         Data $helperData,
         TimezoneInterface $timezone,
         FormKeyValidator $formKeyValidator,
-        RichText $richText
+        RichText $richText,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource
     ) {
+        $this->postResource = $postResource;
         $this->_helperBlog          = $helperData;
         $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
@@ -233,7 +241,7 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
         }
 
         if ($data['post_id']) {
-            $post->load($data['post_id']);
+            $this->postResource->load($post, $data['post_id']);
             if ($post->getId() && (int) $post->getAuthorId() !== (int) $author->getId()) {
                 return $this->getResponse()->representJson(Data::jsonEncode([
                     'status' => 0
@@ -253,7 +261,7 @@ class Manage extends Action implements HttpPostActionInterface, CsrfAwareActionI
         }
 
         try {
-            $post->save();
+            $this->postResource->save($post);
             $this->messageManager->addSuccessMessage(__('The post has been saved.'));
 
             return $this->getResponse()->representJson(Data::jsonEncode([

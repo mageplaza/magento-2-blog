@@ -32,6 +32,11 @@ use Mageplaza\Blog\Model\TagFactory;
  */
 abstract class Tag extends Action
 {
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Tag
+     */
+    protected $tagResource;
+
     /** Authorization level of a basic admin session */
     const ADMIN_RESOURCE = 'Mageplaza_Blog::tag';
 
@@ -55,12 +60,15 @@ abstract class Tag extends Action
      * @param Context $context
      * @param Registry $coreRegistry
      * @param TagFactory $tagFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Tag $tagResource
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        TagFactory $tagFactory
+        TagFactory $tagFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Tag $tagResource
     ) {
+        $this->tagResource = $tagResource;
         $this->tagFactory = $tagFactory;
         $this->coreRegistry = $coreRegistry;
 
@@ -79,7 +87,7 @@ abstract class Tag extends Action
         /** @var \Mageplaza\Blog\Model\Tag $tag */
         $tag = $this->tagFactory->create();
         if ($tagId) {
-            $tag->load($tagId);
+            $this->tagResource->load($tag, $tagId);
             if (!$tag->getId()) {
                 $this->messageManager->addErrorMessage(__('This tag no longer exists.'));
 

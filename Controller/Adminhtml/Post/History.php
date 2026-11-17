@@ -46,14 +46,16 @@ class History extends Post
      * @param PostFactory $productFactory
      * @param Registry $registry
      * @param LayoutFactory $resultLayoutFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post $postResource
      */
     public function __construct(
         Context $context,
         Registry $registry,
         PostFactory $productFactory,
-        LayoutFactory $resultLayoutFactory
+        LayoutFactory $resultLayoutFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource
     ) {
-        parent::__construct($productFactory, $registry, $context);
+        parent::__construct($productFactory, $registry, $context, $postResource);
 
         $this->resultLayoutFactory = $resultLayoutFactory;
     }

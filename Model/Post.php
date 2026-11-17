@@ -217,6 +217,16 @@ class Post extends AbstractModel implements IdentityInterface
     protected $trafficFactory;
 
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Post
+     */
+    private $entityResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Traffic
+     */
+    private $trafficResource;
+
+    /**
      * Post constructor.
      *
      * @param Context $context
@@ -234,6 +244,8 @@ class Post extends AbstractModel implements IdentityInterface
      * @param array $data
      */
     public function __construct(
+        \Mageplaza\Blog\Model\ResourceModel\Post $entityResource,
+        \Mageplaza\Blog\Model\ResourceModel\Traffic $trafficResource,
         Context $context,
         Registry $registry,
         DateTime $dateTime,
@@ -248,6 +260,8 @@ class Post extends AbstractModel implements IdentityInterface
         ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
+        $this->entityResource = $entityResource;
+        $this->trafficResource = $trafficResource;
         $this->tagCollectionFactory      = $tagCollectionFactory;
         $this->topicCollectionFactory    = $topicCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
@@ -276,13 +290,14 @@ class Post extends AbstractModel implements IdentityInterface
     public function afterSave()
     {
         if ($this->isObjectNew()) {
-            $trafficModel = $this->trafficFactory->create()
-                ->load($this->getId(), 'post_id');
+            $trafficModel = $this->trafficFactory->create();
+            $this->trafficResource->load($trafficModel, $this->getId(), 'post_id');
             if (!$trafficModel->getId()) {
                 $trafficModel->setData([
                     'post_id'      => $this->getId(),
                     'numbers_view' => 0
-                ])->save();
+                ]);
+                $this->trafficResource->save($trafficModel);
             }
         }
 
@@ -354,9 +369,9 @@ class Post extends AbstractModel implements IdentityInterface
         if ($this->tagCollection === null) {
             $collection = $this->tagCollectionFactory->create();
             $collection->getSelect()->join(
-                $this->getResource()->getTable('mageplaza_blog_post_tag'),
-                'main_table.tag_id=' . $this->getResource()->getTable('mageplaza_blog_post_tag') . '.tag_id AND '
-                . $this->getResource()->getTable('mageplaza_blog_post_tag') . '.post_id=' . $this->getId(),
+                $this->entityResource->getTable('mageplaza_blog_post_tag'),
+                'main_table.tag_id=' . $this->entityResource->getTable('mageplaza_blog_post_tag') . '.tag_id AND '
+                . $this->entityResource->getTable('mageplaza_blog_post_tag') . '.post_id=' . $this->getId(),
                 ['position']
             )->where("main_table.enabled='1'");
             $this->tagCollection = $collection;
@@ -373,9 +388,9 @@ class Post extends AbstractModel implements IdentityInterface
         if ($this->topicCollection === null) {
             $collection = $this->topicCollectionFactory->create();
             $collection->join(
-                $this->getResource()->getTable('mageplaza_blog_post_topic'),
-                'main_table.topic_id=' . $this->getResource()->getTable('mageplaza_blog_post_topic') . '.topic_id AND '
-                . $this->getResource()->getTable('mageplaza_blog_post_topic') . '.post_id=' . $this->getId(),
+                $this->entityResource->getTable('mageplaza_blog_post_topic'),
+                'main_table.topic_id=' . $this->entityResource->getTable('mageplaza_blog_post_topic') . '.topic_id AND '
+                . $this->entityResource->getTable('mageplaza_blog_post_topic') . '.post_id=' . $this->getId(),
                 ['position']
             );
             $this->topicCollection = $collection;
@@ -392,9 +407,9 @@ class Post extends AbstractModel implements IdentityInterface
         if ($this->categoryCollection === null) {
             $collection = $this->categoryCollectionFactory->create();
             $collection->join(
-                $this->getResource()->getTable('mageplaza_blog_post_category'),
-                'main_table.category_id=' . $this->getResource()->getTable('mageplaza_blog_post_category') .
-                '.category_id AND ' . $this->getResource()->getTable('mageplaza_blog_post_category') . '.post_id="'
+                $this->entityResource->getTable('mageplaza_blog_post_category'),
+                'main_table.category_id=' . $this->entityResource->getTable('mageplaza_blog_post_category') .
+                '.category_id AND ' . $this->entityResource->getTable('mageplaza_blog_post_category') . '.post_id="'
                 . $this->getId() . '"',
                 ['position']
             );
@@ -411,7 +426,7 @@ class Post extends AbstractModel implements IdentityInterface
     public function getCategoryIds()
     {
         if (!$this->hasData('category_ids')) {
-            $ids = $this->_getResource()->getCategoryIds($this);
+            $ids = $this->entityResource->getCategoryIds($this);
             $this->setData('category_ids', $ids);
         }
 
@@ -425,7 +440,7 @@ class Post extends AbstractModel implements IdentityInterface
     public function getTagIds()
     {
         if (!$this->hasData('tag_ids')) {
-            $ids = $this->_getResource()->getTagIds($this);
+            $ids = $this->entityResource->getTagIds($this);
 
             $this->setData('tag_ids', $ids);
         }
@@ -440,7 +455,7 @@ class Post extends AbstractModel implements IdentityInterface
     public function getTopicIds()
     {
         if (!$this->hasData('topic_ids')) {
-            $ids = $this->_getResource()->getTopicIds($this);
+            $ids = $this->entityResource->getTopicIds($this);
 
             $this->setData('topic_ids', $ids);
         }
@@ -455,7 +470,7 @@ class Post extends AbstractModel implements IdentityInterface
     public function getViewTraffic()
     {
         if (!$this->hasData('view_traffic')) {
-            $traffic = $this->_getResource()->getViewTraffic($this);
+            $traffic = $this->entityResource->getViewTraffic($this);
 
             // A post may have no traffic row yet (view count is created lazily
             // via the mpblog/post/updateview AJAX action), so default to 0.
@@ -472,7 +487,7 @@ class Post extends AbstractModel implements IdentityInterface
     public function getAuthorName()
     {
         if (!$this->hasData('author_name')) {
-            $author = $this->_getResource()->getAuthor($this);
+            $author = $this->entityResource->getAuthor($this);
 
             $this->setData('author_name', $author['name']);
         }
@@ -487,7 +502,7 @@ class Post extends AbstractModel implements IdentityInterface
     public function getAuthorUrl()
     {
         if (!$this->hasData('author_url')) {
-            $author = $this->_getResource()->getAuthor($this);
+            $author = $this->entityResource->getAuthor($this);
             // Falls back to the numeric id when url_key is empty (e.g. the
             // default "Admin" author never gets one) -- Router.php resolves
             // a purely numeric segment by id.
@@ -506,7 +521,7 @@ class Post extends AbstractModel implements IdentityInterface
     public function getAuthorUrlKey()
     {
         if (!$this->hasData('author_url_key')) {
-            $author = $this->_getResource()->getAuthor($this);
+            $author = $this->entityResource->getAuthor($this);
 
             $this->setData('author_url_key', $author['url_key']);
         }
@@ -535,14 +550,16 @@ class Post extends AbstractModel implements IdentityInterface
     public function updateViewTraffic()
     {
         if ($this->getId()) {
-            $trafficModel = $this->trafficFactory->create()->load($this->getId(), 'post_id');
+            $trafficModel = $this->trafficFactory->create();
+            $this->trafficResource->load($trafficModel, $this->getId(), 'post_id');
 
             if ($trafficModel->getId()) {
                 $trafficModel->setNumbersView($trafficModel->getNumbersView() + 1);
-                $trafficModel->save();
+                $this->trafficResource->save($trafficModel);
             } else {
                 $traffic = $this->trafficFactory->create();
-                $traffic->addData(['post_id' => $this->getId(), 'numbers_view' => 1])->save();
+                $traffic->addData(['post_id' => $this->getId(), 'numbers_view' => 1]);
+                $this->trafficResource->save($traffic);
             }
         }
     }
@@ -554,12 +571,12 @@ class Post extends AbstractModel implements IdentityInterface
      */
     public function getRelatedPostsCollection()
     {
-        $topicIds = $this->_getResource()->getTopicIds($this);
+        $topicIds = $this->entityResource->getTopicIds($this);
         if (count($topicIds)) {
             $collection = $this->postCollectionFactory->create();
             $collection->getSelect()
                 ->join(
-                    ['topic' => $this->getResource()->getTable('mageplaza_blog_post_topic')],
+                    ['topic' => $this->entityResource->getTable('mageplaza_blog_post_topic')],
                     'main_table.post_id=topic.post_id AND topic.post_id != "' . $this->getId()
                     . '" AND topic.topic_id IN (' . implode(',', $topicIds) . ')',
                     ['position']
@@ -586,9 +603,9 @@ class Post extends AbstractModel implements IdentityInterface
         if ($this->productCollection === null) {
             $collection = $this->productCollectionFactory->create();
             $collection->getSelect()->join(
-                $this->getResource()->getTable('mageplaza_blog_post_product'),
-                'e.entity_id=' . $this->getResource()->getTable('mageplaza_blog_post_product')
-                . '.entity_id AND ' . $this->getResource()->getTable('mageplaza_blog_post_product') . '.post_id='
+                $this->entityResource->getTable('mageplaza_blog_post_product'),
+                'e.entity_id=' . $this->entityResource->getTable('mageplaza_blog_post_product')
+                . '.entity_id AND ' . $this->entityResource->getTable('mageplaza_blog_post_product') . '.post_id='
                 . $this->getId(),
                 ['position']
             );
@@ -608,7 +625,7 @@ class Post extends AbstractModel implements IdentityInterface
         }
         $array = $this->getData('products_position');
         if ($array === null) {
-            $array = $this->getResource()->getProductsPosition($this);
+            $array = $this->entityResource->getProductsPosition($this);
             $this->setData('products_position', $array);
         }
 

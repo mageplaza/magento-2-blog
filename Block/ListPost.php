@@ -50,7 +50,7 @@ class ListPost extends Frontend implements IdentityInterface
             $perPageValues = (string) $this->helperData
                 ->getDisplayConfig('pagination', $this->store->getStore()->getId());
 
-            $perPageValues = explode(',', $perPageValues ?? '');
+            $perPageValues = explode(',', $perPageValues);
             $perPageValues = array_combine($perPageValues, $perPageValues);
             $pager->setAvailableLimit($perPageValues)
                 ->setCollection($collection);

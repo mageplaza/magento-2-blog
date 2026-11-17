@@ -43,18 +43,20 @@ class Delete extends Category
             try {
                 $categoryFactory = $this->categoryFactory->create();
                 if ($id !== 1) {
-                    $parentCategoryCollection = $categoryFactory->getCollection()
+                    $parentCategoryCollection = $this->categoryCollectionFactory->create()
                         ->addFieldToFilter('category_id', ['eq' => $id])
                         ->addFieldToFilter('parent_id', ['eq' => 1]);
                     if ($parentCategoryCollection->getSize()) {
-                        $pathCategory = $categoryFactory->load($id)->getPath();
-                        $collections  = $categoryFactory->getCollection()
+                        $this->categoryResource->load($categoryFactory, $id);
+                        $pathCategory = $categoryFactory->getPath();
+                        $collections  = $this->categoryCollectionFactory->create()
                             ->addFieldToFilter('path', ['like' => $pathCategory . '%']);
                         foreach ($collections as $collection) {
-                            $collection->delete();
+                            $this->categoryResource->delete($collection);
                         }
                     } else {
-                        $categoryFactory->load($id)->delete();
+                        $this->categoryResource->load($categoryFactory, $id);
+                        $this->categoryResource->delete($categoryFactory);
                     }
 
                     $this->messageManager->addSuccessMessage(__('The Blog Category has been deleted.'));

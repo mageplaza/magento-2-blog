@@ -152,6 +152,56 @@ abstract class AbstractImport extends AbstractModel
     protected $authorFactory;
 
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Post
+     */
+    protected $postResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Tag
+     */
+    protected $tagResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Category
+     */
+    protected $categoryResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Topic
+     */
+    protected $topicResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Comment
+     */
+    protected $commentResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Author
+     */
+    protected $authorResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
+     */
+    protected $postCollectionFactory;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory
+     */
+    protected $tagCollectionFactory;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
+     */
+    protected $categoryCollectionFactory;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory
+     */
+    protected $commentCollectionFactory;
+
+    /**
      * AbstractImport constructor.
      *
      * @param Context $context
@@ -172,6 +222,16 @@ abstract class AbstractImport extends AbstractModel
      * @param HelperData $helperData
      * @param StoreManagerInterface $storeManager
      * @param HelperImage $helperImage
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post $postResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Tag $tagResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Topic $topicResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Comment $commentResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Author $authorResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $tagCollectionFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory $commentCollectionFactory
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
@@ -195,10 +255,30 @@ abstract class AbstractImport extends AbstractModel
         HelperData $helperData,
         StoreManagerInterface $storeManager,
         HelperImage $helperImage,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource,
+        \Mageplaza\Blog\Model\ResourceModel\Tag $tagResource,
+        \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\Topic $topicResource,
+        \Mageplaza\Blog\Model\ResourceModel\Comment $commentResource,
+        \Mageplaza\Blog\Model\ResourceModel\Author $authorResource,
+        \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory $tagCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory $commentCollectionFactory,
         ?AbstractResource $resource = null,
         ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
+        $this->postResource = $postResource;
+        $this->tagResource = $tagResource;
+        $this->categoryResource = $categoryResource;
+        $this->topicResource = $topicResource;
+        $this->commentResource = $commentResource;
+        $this->authorResource = $authorResource;
+        $this->postCollectionFactory = $postCollectionFactory;
+        $this->tagCollectionFactory = $tagCollectionFactory;
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
+        $this->commentCollectionFactory = $commentCollectionFactory;
         $this->date                = $date;
         $this->importType          = $importType;
         $this->_type               = $this->_getImportType();

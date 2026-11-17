@@ -32,6 +32,16 @@ use Mageplaza\Blog\Model\CategoryFactory;
  */
 abstract class Category extends Action
 {
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Category
+     */
+    protected $categoryResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory
+     */
+    protected $categoryCollectionFactory;
+
     /** Authorization level of a basic admin session */
     const ADMIN_RESOURCE = 'Mageplaza_Blog::category';
 
@@ -55,12 +65,18 @@ abstract class Category extends Action
      * @param Context $context
      * @param Registry $coreRegistry
      * @param CategoryFactory $categoryFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        CategoryFactory $categoryFactory
+        CategoryFactory $categoryFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
     ) {
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
+        $this->categoryResource = $categoryResource;
         $this->categoryFactory = $categoryFactory;
         $this->coreRegistry = $coreRegistry;
 
@@ -86,7 +102,7 @@ abstract class Category extends Action
         $category = $this->categoryFactory->create();
         if (!$this->getRequest()->getParam('duplicate') || !$isSave) {
             if ($categoryId) {
-                $category->load($categoryId);
+                $this->categoryResource->load($category, $categoryId);
                 if (!$category->getId()) {
                     $this->messageManager->addErrorMessage(__('This category no longer exists.'));
 

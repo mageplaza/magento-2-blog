@@ -32,6 +32,11 @@ use Mageplaza\Blog\Model\AuthorFactory;
  */
 abstract class Author extends Action
 {
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Author
+     */
+    protected $authorResource;
+
     /** Authorization level of a basic admin session */
     const ADMIN_RESOURCE = 'Mageplaza_Blog::author';
 
@@ -51,12 +56,15 @@ abstract class Author extends Action
      * @param Context $context
      * @param Registry $coreRegistry
      * @param AuthorFactory $authorFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Author $authorResource
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        AuthorFactory $authorFactory
+        AuthorFactory $authorFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Author $authorResource
     ) {
+        $this->authorResource = $authorResource;
         $this->authorFactory = $authorFactory;
         $this->coreRegistry = $coreRegistry;
 
@@ -75,7 +83,7 @@ abstract class Author extends Action
         /** @var \Mageplaza\Blog\Model\Author $author */
         $author = $this->authorFactory->create();
         if ($authorId) {
-            $author->load($authorId);
+            $this->authorResource->load($author, $authorId);
             if (!$author->getId()) {
                 $this->messageManager->addErrorMessage(__('This author no longer exists.'));
 

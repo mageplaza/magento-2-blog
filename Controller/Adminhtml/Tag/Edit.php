@@ -49,16 +49,18 @@ class Edit extends Tag
      * @param Registry $registry
      * @param TagFactory $tagFactory
      * @param PageFactory $resultPageFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Tag $tagResource
      */
     public function __construct(
         Context $context,
         Registry $registry,
         TagFactory $tagFactory,
-        PageFactory $resultPageFactory
+        PageFactory $resultPageFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Tag $tagResource
     ) {
         $this->resultPageFactory = $resultPageFactory;
 
-        parent::__construct($context, $registry, $tagFactory);
+        parent::__construct($context, $registry, $tagFactory, $tagResource);
     }
 
     /**

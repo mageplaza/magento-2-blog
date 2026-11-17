@@ -39,6 +39,11 @@ use RuntimeException;
 class InlineEdit extends Action
 {
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Topic
+     */
+    protected $topicResource;
+
+    /**
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Mageplaza_Blog::topic';
@@ -63,12 +68,15 @@ class InlineEdit extends Action
      * @param Context $context
      * @param JsonFactory $jsonFactory
      * @param TopicFactory $topicFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Topic $topicResource
      */
     public function __construct(
         Context $context,
         JsonFactory $jsonFactory,
-        TopicFactory $topicFactory
+        TopicFactory $topicFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Topic $topicResource
     ) {
+        $this->topicResource = $topicResource;
         $this->jsonFactory = $jsonFactory;
         $this->topicFactory = $topicFactory;
 
@@ -96,10 +104,11 @@ class InlineEdit extends Action
         $key = array_keys($postItems);
         $topicId = !empty($key) ? (int)$key[0] : '';
         /** @var Topic $topic */
-        $topic = $this->topicFactory->create()->load($topicId);
+        $topic = $this->topicFactory->create();
+        $this->topicResource->load($topic, $topicId);
         try {
-            $topic->addData($postItems[$topicId])
-                ->save();
+            $topic->addData($postItems[$topicId]);
+            $this->topicResource->save($topic);
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithTopicId($topic, $e->getMessage());
             $error = true;

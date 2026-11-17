@@ -61,13 +61,18 @@ class Post extends Extended implements TabInterface
      * @param Data $backendHelper
      * @param array $data
      */
+    /** @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory */
+    private $postCollectionFactory;
+
     public function __construct(
         Registry $coreRegistry,
         PostFactory $postFactory,
         Context $context,
         Data $backendHelper,
+        \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $postCollectionFactory,
         array $data = []
     ) {
+        $this->postCollectionFactory = $postCollectionFactory;
         $this->coreRegistry = $coreRegistry;
         $this->postFactory  = $postFactory;
 
@@ -95,7 +100,7 @@ class Post extends Extended implements TabInterface
     protected function _prepareCollection()
     {
         /** @var Collection $collection */
-        $collection = $this->postFactory->create()->getCollection();
+        $collection = $this->postCollectionFactory->create();
         $collection->getSelect()->joinLeft(
             ['related' => $collection->getTable('mageplaza_blog_post_topic')],
             'related.post_id=main_table.post_id AND related.topic_id=' . (int) $this->getRequest()->getParam('id', 0),

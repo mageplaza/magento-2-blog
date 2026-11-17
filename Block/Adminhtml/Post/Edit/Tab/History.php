@@ -34,7 +34,6 @@ use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Categories;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Store;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Tags;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\History\Topics;
-use Mageplaza\Blog\Model\AuthorFactory;
 use Mageplaza\Blog\Model\ResourceModel\PostHistory\Collection;
 use Mageplaza\Blog\Model\Tag;
 
@@ -290,10 +289,9 @@ class History extends Extended implements TabInterface
      */
     private function _getModifierOptions()
     {
-        /** @var AuthorFactory $authors */
-        $authors = $this->_helperData->getFactoryByType('author');
+        $authors = $this->_helperData->getCollection('author');
 
-        $authors = $authors->create()->getCollection()->addFieldToSelect(['user_id', 'name'])->getItems();
+        $authors = $authors->addFieldToSelect(['user_id', 'name'])->getItems();
         $options = [];
         foreach ($authors as $author) {
             $options[$author->getUserId()] = $author->getName();

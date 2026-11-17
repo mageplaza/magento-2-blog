@@ -89,6 +89,8 @@ class ListPost extends \Mageplaza\Blog\Block\ListPost
                 ]);
             }
         }
+
+        return $this;
     }
 
     /**

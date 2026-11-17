@@ -47,12 +47,12 @@ class PortoTopmenu
     }
 
     /**
-     * @param \Smartwave\Megamenu\Block\Topmenu $topmenu
+     * @param object $topmenu
      * @param $html
      *
      * @return string
      */
-    public function afterGetMegamenuHtml(\Smartwave\Megamenu\Block\Topmenu $topmenu, $html)
+    public function afterGetMegamenuHtml($topmenu, $html)
     {
         if ($this->helper->isEnabled() && $this->helper->getBlogConfig('display/toplinks')) {
             $blogHtml = $topmenu->getLayout()->createBlock(Menu::class)

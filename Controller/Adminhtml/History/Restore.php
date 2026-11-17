@@ -45,13 +45,16 @@ class Restore extends History
         $historyId = $this->getRequest()->getParam('id');
         if ($historyId) {
             try {
-                $history = $this->postHistoryFactory->create()
-                    ->load($historyId);
-                $post = $this->postFactory->create()->load($postId);
+                $history = $this->postHistoryFactory->create();
+                $this->postHistoryResource->load($history, $historyId);
+                $post = $this->postFactory->create();
+                $this->postResource->load($post, $postId);
 
                 $data = $this->prepareData($history);
 
-                $post->addData($data)->save();
+                $post->addData($data);
+
+                $this->postResource->save($post);
 
                 $this->messageManager->addSuccessMessage(__('The Post History has been restore.'));
             } catch (Exception $e) {

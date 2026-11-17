@@ -64,7 +64,7 @@ class Tags extends Text
             $text = '';
             $tagIds = explode(',', $row->getData($this->getColumn()->getIndex()));
             foreach ($tagIds as $tagId) {
-                $tag = $this->_helperData->getFactoryByType('tag')->create()->load($tagId);
+                $tag = $this->_helperData->getObjectByParam($tagId, null, 'tag');
                 $text .= $tag->getName() . ',';
             }
             $row->setData($this->getColumn()->getIndex(), trim($text, ','));

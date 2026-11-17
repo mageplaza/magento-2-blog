@@ -38,6 +38,11 @@ use Mageplaza\Blog\Helper\Data as HelperBlog;
 class View extends Action
 {
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Category
+     */
+    protected $categoryResource;
+
+    /**
      * @var PageFactory
      */
     public $resultPageFactory;
@@ -59,13 +64,16 @@ class View extends Action
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
      * @param HelperBlog $helperBlog
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource
      */
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
-        HelperBlog $helperBlog
+        HelperBlog $helperBlog,
+        \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource
     ) {
+        $this->categoryResource = $categoryResource;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->helperBlog = $helperBlog;
@@ -80,7 +88,8 @@ class View extends Action
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $category = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_CATEGORY)->create()->load($id);
+        $category = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_CATEGORY)->create();
+        $this->categoryResource->load($category, $id);
 
         if (!$this->helperBlog->checkStore($category)) {
             return $this->_redirect('noroute');

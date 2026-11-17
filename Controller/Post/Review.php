@@ -38,6 +38,11 @@ use Mageplaza\Blog\Model\ResourceModel\PostLike\Collection;
  */
 class Review extends Action
 {
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Post
+     */
+    protected $postResource;
+
 
     /**
      * @var Data
@@ -78,6 +83,7 @@ class Review extends Action
      * @param PostLikeFactory $postLikeFactory
      * @param Data $helperData
      * @param SessionManagerInterface $session
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post $postResource
      */
     public function __construct(
         Context $context,
@@ -85,8 +91,10 @@ class Review extends Action
         Collection $postLikeCollection,
         PostLikeFactory $postLikeFactory,
         Data $helperData,
-        SessionManagerInterface $session
+        SessionManagerInterface $session,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource
     ) {
+        $this->postResource = $postResource;
         $this->_helperBlog = $helperData;
         $this->_postLikeCollection = $postLikeCollection;
         $this->_postLike = $postLikeFactory;
@@ -151,7 +159,8 @@ class Review extends Action
         // so it has to come from the server, not from the request body.
         $mode = $this->_helperBlog->getReviewMode();
         $customerId = $this->_helperBlog->getCurrentUser() ?: 0;
-        $post = $this->postFactory->create()->load($id);
+        $post = $this->postFactory->create();
+        $this->postResource->load($post, $id);
 
         // The vote id is resolved server side. Taking it from the request let a
         // visitor send likeId=0 on every click and pile up unlimited votes.

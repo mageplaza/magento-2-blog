@@ -32,6 +32,11 @@ use Mageplaza\Blog\Model\TopicFactory;
  */
 abstract class Topic extends Action
 {
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Topic
+     */
+    protected $topicResource;
+
     /** Authorization level of a basic admin session */
     const ADMIN_RESOURCE = 'Mageplaza_Blog::topic';
 
@@ -55,12 +60,15 @@ abstract class Topic extends Action
      * @param TopicFactory $topicFactory
      * @param Registry $coreRegistry
      * @param Context $context
+     * @param \Mageplaza\Blog\Model\ResourceModel\Topic $topicResource
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        TopicFactory $topicFactory
+        TopicFactory $topicFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Topic $topicResource
     ) {
+        $this->topicResource = $topicResource;
         $this->topicFactory = $topicFactory;
         $this->coreRegistry = $coreRegistry;
 
@@ -79,7 +87,7 @@ abstract class Topic extends Action
         /** @var \Mageplaza\Blog\Model\Topic $topic */
         $topic = $this->topicFactory->create();
         if ($topicId) {
-            $topic->load($topicId);
+            $this->topicResource->load($topic, $topicId);
             if (!$topic->getId()) {
                 $this->messageManager->addErrorMessage(__('This topic no longer exists.'));
 

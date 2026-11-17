@@ -50,16 +50,18 @@ class Duplicate extends Post
      * @param Registry $registry
      * @param PostFactory $postFactory
      * @param ForwardFactory $resultForwardFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post $postResource
      */
     public function __construct(
         Context $context,
         Registry $registry,
         PostFactory $postFactory,
-        ForwardFactory $resultForwardFactory
+        ForwardFactory $resultForwardFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource
     ) {
         $this->resultForwardFactory = $resultForwardFactory;
 
-        parent::__construct($postFactory, $registry, $context);
+        parent::__construct($postFactory, $registry, $context, $postResource);
     }
 
     /**

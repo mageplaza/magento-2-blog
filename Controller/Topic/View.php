@@ -37,6 +37,11 @@ use Mageplaza\Blog\Helper\Data as HelperBlog;
 class View extends Action
 {
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Topic
+     */
+    protected $topicResource;
+
+    /**
      * @var PageFactory
      */
     public $resultPageFactory;
@@ -58,13 +63,16 @@ class View extends Action
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
      * @param HelperBlog $helperBlog
+     * @param \Mageplaza\Blog\Model\ResourceModel\Topic $topicResource
      */
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
-        HelperBlog $helperBlog
+        HelperBlog $helperBlog,
+        \Mageplaza\Blog\Model\ResourceModel\Topic $topicResource
     ) {
+        $this->topicResource = $topicResource;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->helperBlog = $helperBlog;
@@ -78,7 +86,8 @@ class View extends Action
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $topic = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_TOPIC)->create()->load($id);
+        $topic = $this->helperBlog->getFactoryByType(HelperBlog::TYPE_TOPIC)->create();
+        $this->topicResource->load($topic, $id);
         $page = $this->resultPageFactory->create();
         $page->getConfig()->setPageLayout($this->helperBlog->getSidebarLayout());
 

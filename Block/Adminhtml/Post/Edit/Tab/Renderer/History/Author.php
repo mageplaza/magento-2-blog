@@ -62,7 +62,7 @@ class Author extends Text
     {
         if (!empty($row->getData($this->getColumn()->getIndex()))) {
             $userId = $row->getData($this->getColumn()->getIndex());
-            $author = $this->_helperData->getFactoryByType('author')->create()->load($userId);
+            $author = $this->_helperData->getObjectByParam($userId, null, 'author');
             $row->setData($this->getColumn()->getIndex(), $author->getName());
         }
 

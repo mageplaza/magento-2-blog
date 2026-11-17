@@ -59,8 +59,11 @@ class Topmenu
         $html
     ) {
         if ($this->helper->isEnabled() && $this->helper->getBlogConfig('display/toplinks')) {
-            $blogHtml = $subject->getLayout()->createBlock(Menu::class)
-                ->setTemplate('Mageplaza_Blog::category/topmenu.phtml')->toHtml();
+            $blogHtml = $subject->getLayout()->createBlock(
+                Menu::class,
+                '',
+                ['data' => ['template' => 'Mageplaza_Blog::category/topmenu.phtml']]
+            )->toHtml();
 
             return $html . $blogHtml;
         }

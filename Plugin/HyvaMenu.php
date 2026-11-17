@@ -24,7 +24,6 @@ namespace Mageplaza\Blog\Plugin;
 use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Block\Category\Menu;
 use Mageplaza\Blog\Helper\Data;
-use Magento\Framework\View\Element\Template;
 /**
  * Class Topmenu
  * @package Mageplaza\Blog\Plugin
@@ -54,14 +53,14 @@ class HyvaMenu
     }
 
     /**
-     * @param /Hyva\Theme\ViewModel\Navigation $subject
+     * @param object $subject
      * @param $data
      *
      * @return string
      * @throws LocalizedException
      */
     public function afterGetNavigation(
-        \Hyva\Theme\ViewModel\Navigation $subject,
+        $subject,
         array $dataSubject = []
     ) {
         if ($this->helper->isEnabled() && $this->helper->getBlogConfig('display/toplinks')) {

@@ -36,6 +36,11 @@ use Mageplaza\Blog\Model\PostHistoryFactory;
 class Products extends Post
 {
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\PostHistory
+     */
+    protected $postHistoryResource;
+
+    /**
      * @var LayoutFactory
      */
     protected $resultLayoutFactory;
@@ -53,15 +58,20 @@ class Products extends Post
      * @param PostFactory $productFactory
      * @param PostHistoryFactory $postHistoryFactory
      * @param LayoutFactory $resultLayoutFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\PostHistory $postHistoryResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post $postResource
      */
     public function __construct(
         Context $context,
         Registry $registry,
         PostFactory $productFactory,
         PostHistoryFactory $postHistoryFactory,
-        LayoutFactory $resultLayoutFactory
+        LayoutFactory $resultLayoutFactory,
+        \Mageplaza\Blog\Model\ResourceModel\PostHistory $postHistoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource
     ) {
-        parent::__construct($productFactory, $registry, $context);
+        $this->postHistoryResource = $postHistoryResource;
+        parent::__construct($productFactory, $registry, $context, $postResource);
 
         $this->resultLayoutFactory = $resultLayoutFactory;
         $this->postHistoryFactory = $postHistoryFactory;
@@ -75,7 +85,8 @@ class Products extends Post
     public function execute()
     {
         if ($this->getRequest()->getParam('history')) {
-            $history = $this->postHistoryFactory->create()->load($this->getRequest()->getParam('id'));
+            $history = $this->postHistoryFactory->create();
+            $this->postHistoryResource->load($history, $this->getRequest()->getParam('id'));
             $this->coreRegistry->register('mageplaza_blog_post', $history);
         } else {
             $this->initPost(true);

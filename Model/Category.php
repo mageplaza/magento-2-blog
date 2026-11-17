@@ -122,6 +122,11 @@ class Category extends AbstractModel implements IdentityInterface
     public $categoryCollectionFactory;
 
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Category
+     */
+    private $entityResource;
+
+    /**
      * Category constructor.
      *
      * @param Context $context
@@ -134,6 +139,7 @@ class Category extends AbstractModel implements IdentityInterface
      * @param array $data
      */
     public function __construct(
+        \Mageplaza\Blog\Model\ResourceModel\Category $entityResource,
         Context $context,
         Registry $registry,
         CategoryFactory $categoryFactory,
@@ -143,6 +149,7 @@ class Category extends AbstractModel implements IdentityInterface
         ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
+        $this->entityResource = $entityResource;
         $this->categoryFactory = $categoryFactory;
         $this->postCollectionFactory = $postCollectionFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
@@ -223,7 +230,8 @@ class Category extends AbstractModel implements IdentityInterface
     public function move($parentId, $afterCategoryId)
     {
         try {
-            $parent = $this->categoryFactory->create()->load($parentId);
+            $parent = $this->categoryFactory->create();
+            $this->entityResource->load($parent, $parentId);
         } catch (NoSuchEntityException $e) {
             throw new LocalizedException(
                 __('Sorry, but we can\'t move the Blog Category because we can\'t find the new parent Blog Category you selected.'),
@@ -253,17 +261,17 @@ class Category extends AbstractModel implements IdentityInterface
             'parent_id' => $parentId,
         ];
 
-        $this->_getResource()->beginTransaction();
+        $this->entityResource->beginTransaction();
         try {
             $this->_eventManager->dispatch($this->_eventPrefix . '_move_before', $eventParams);
-            $this->getResource()->changeParent($this, $parent, $afterCategoryId);
+            $this->entityResource->changeParent($this, $parent, $afterCategoryId);
             $this->_eventManager->dispatch($this->_eventPrefix . '_move_after', $eventParams);
-            $this->_getResource()->commit();
+            $this->entityResource->commit();
 
             // Set data for indexer
             $this->setAffectedCategoryIds([$this->getId(), $oldParentId, $parentId]);
         } catch (Exception $e) {
-            $this->_getResource()->rollBack();
+            $this->entityResource->rollBack();
             throw $e;
         }
         $this->_eventManager->dispatch($this->_eventPrefix . '_move', $eventParams);
@@ -282,7 +290,7 @@ class Category extends AbstractModel implements IdentityInterface
         }
         $array = $this->getData('posts_position');
         if ($array === null) {
-            $array = $this->getResource()->getPostsPosition($this);
+            $array = $this->entityResource->getPostsPosition($this);
             $this->setData('posts_position', $array);
         }
 
@@ -297,7 +305,7 @@ class Category extends AbstractModel implements IdentityInterface
         if (!$this->postCollection) {
             $collection = $this->postCollectionFactory->create();
             $collection->join(
-                ['cat' => $this->getResource()->getTable('mageplaza_blog_post_category')],
+                ['cat' => $this->entityResource->getTable('mageplaza_blog_post_category')],
                 'main_table.post_id=cat.post_id AND cat.category_id=' . (int) $this->getId(),
                 ['position']
             );

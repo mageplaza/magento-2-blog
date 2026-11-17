@@ -77,6 +77,9 @@ class Comment extends Generic implements TabInterface
      * @param Store $systemStore
      * @param array $data
      */
+    /** @var \Mageplaza\Blog\Model\ResourceModel\Post */
+    private $postResource;
+
     public function __construct(
         Context $context,
         Registry $registry,
@@ -85,8 +88,10 @@ class Comment extends Generic implements TabInterface
         PostFactory $postFactory,
         Status $commentStatus,
         Store $systemStore,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource,
         array $data = []
     ) {
+        $this->postResource = $postResource;
         $this->_commentStatus = $commentStatus;
         $this->_customerRepository = $customerRepository;
         $this->_postFactory = $postFactory;
@@ -118,7 +123,8 @@ class Comment extends Generic implements TabInterface
             $fieldset->addField('comment_id', 'hidden', ['name' => 'comment_id']);
         }
 
-        $post = $this->_postFactory->create()->load($comment->getPostId());
+        $post = $this->_postFactory->create();
+        $this->postResource->load($post, $comment->getPostId());
         $postText = '<a href="' . $this->getUrl('mageplaza_blog/post/edit', ['id' => $comment->getPostId()])
             . '" target="blank">' . $this->escapeHtml($post->getName()) . '</a>';
         $fieldset->addField('post_name', 'note', ['text' => $postText, 'label' => __('Post'), 'name' => 'post_name']);

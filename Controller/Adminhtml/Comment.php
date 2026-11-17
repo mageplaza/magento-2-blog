@@ -32,6 +32,11 @@ use Mageplaza\Blog\Model\CommentFactory;
  */
 abstract class Comment extends Action
 {
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Comment
+     */
+    protected $commentResource;
+
     /** Authorization level of a basic admin session */
     const ADMIN_RESOURCE = 'Mageplaza_Blog::comment';
 
@@ -53,12 +58,15 @@ abstract class Comment extends Action
      * @param CommentFactory $commentFactory
      * @param Registry $coreRegistry
      * @param Context $context
+     * @param \Mageplaza\Blog\Model\ResourceModel\Comment $commentResource
      */
     public function __construct(
         CommentFactory $commentFactory,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
+        \Mageplaza\Blog\Model\ResourceModel\Comment $commentResource
     ) {
+        $this->commentResource = $commentResource;
         $this->commentFactory = $commentFactory;
         $this->coreRegistry = $coreRegistry;
 
@@ -78,7 +86,7 @@ abstract class Comment extends Action
         $comment = $this->commentFactory->create();
 
         if ($cmtId) {
-            $comment->load($cmtId);
+            $this->commentResource->load($comment, $cmtId);
             if (!$comment->getId()) {
                 $this->messageManager->addErrorMessage(__('This comment no longer exists.'));
 

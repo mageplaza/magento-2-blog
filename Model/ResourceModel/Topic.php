@@ -185,6 +185,9 @@ class Topic extends AbstractDb
         $id = $topic->getId();
         $posts = $topic->getPostsData();
         $oldPosts = $topic->getPostsPosition();
+        $insert = [];
+        $delete = [];
+        $update = [];
         if (is_array($posts)) {
             $insert = array_diff_key($posts, $oldPosts);
             $delete = array_diff_key($oldPosts, $posts);

@@ -180,6 +180,9 @@ class Tag extends AbstractDb
         $id = $tag->getId();
         $posts = $tag->getPostsData();
         $oldPosts = $tag->getPostsPosition();
+        $insert = [];
+        $delete = [];
+        $update = [];
         if (is_array($posts)) {
             $insert = array_diff_key($posts, $oldPosts);
             $delete = array_diff_key($oldPosts, $posts);

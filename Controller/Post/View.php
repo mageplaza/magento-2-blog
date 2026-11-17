@@ -57,6 +57,31 @@ use Mageplaza\Blog\Model\PostFactory;
  */
 class View extends Action
 {
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Post
+     */
+    protected $postResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Comment
+     */
+    protected $commentResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Like
+     */
+    protected $likeResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory
+     */
+    protected $commentCollectionFactory;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Like\CollectionFactory
+     */
+    protected $likeCollectionFactory;
+
     const COMMENT = 1;
     const LIKE    = 2;
 
@@ -154,6 +179,11 @@ class View extends Action
      * @param PostFactory $postFactory
      * @param FormKeyValidator $formKeyValidator
      * @param CacheContext $cacheContext
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post $postResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Comment $commentResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Like $likeResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory $commentCollectionFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Like\CollectionFactory $likeCollectionFactory
      */
     public function __construct(
         Context $context,
@@ -171,8 +201,18 @@ class View extends Action
         Session $customerSession,
         PostFactory $postFactory,
         FormKeyValidator $formKeyValidator,
-        CacheContext $cacheContext
+        CacheContext $cacheContext,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource,
+        \Mageplaza\Blog\Model\ResourceModel\Comment $commentResource,
+        \Mageplaza\Blog\Model\ResourceModel\Like $likeResource,
+        \Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory $commentCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Like\CollectionFactory $likeCollectionFactory
     ) {
+        $this->likeCollectionFactory = $likeCollectionFactory;
+        $this->commentCollectionFactory = $commentCollectionFactory;
+        $this->likeResource = $likeResource;
+        $this->commentResource = $commentResource;
+        $this->postResource = $postResource;
         $this->storeManager         = $storeManager;
         $this->helperBlog           = $helperBlog;
         $this->resultPageFactory    = $resultPageFactory;
@@ -199,7 +239,8 @@ class View extends Action
     public function execute()
     {
         $id   = $this->getRequest()->getParam('id');
-        $post = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create()->load($id);
+        $post = $this->helperBlog->getFactoryByType(Data::TYPE_POST)->create();
+        $this->postResource->load($post, $id);
         $this->helperBlog->setCustomerContextId();
 
         $page       = $this->resultPageFactory->create();
@@ -235,7 +276,8 @@ class View extends Action
                 $replyId = $isReply && isset($params['replyId']) ? (int) $params['replyId'] : 0;
 
                 if ($isReply && $replyId) {
-                    $parentCmt = $this->cmtFactory->create()->load($replyId);
+                    $parentCmt = $this->cmtFactory->create();
+                    $this->commentResource->load($parentCmt, $replyId);
                     if (!$parentCmt->getId() || (int) $parentCmt->getPostId() !== (int) $id) {
                         return $this->getResponse()->representJson(
                             $this->jsonHelper->jsonEncode(['status' => 'error'])
@@ -306,16 +348,18 @@ class View extends Action
             switch ($action) {
                 /** Comment action */
                 case self::COMMENT:
-                    $model->addData($data)->save();
-                    $cmtHasReply = $model->getCollection()
+                    $model->addData($data);
+                    $this->commentResource->save($model);
+                    $cmtHasReply = $this->commentCollectionFactory->create()
                         ->addFieldToFilter('comment_id', $data['reply_id'])
                         ->getFirstItem();
                     if ($cmtHasReply->getId()) {
-                        $cmtHasReply->setHasReply(1)->save();
+                        $cmtHasReply->setHasReply(1);
+                        $this->commentResource->save($cmtHasReply);
                     }
                     $this->_eventManager->dispatch('blog_post_comment', ['comment_data' => $data]);
 
-                    $lastCmt   = $model->getCollection()->setOrder('comment_id', 'desc')->getFirstItem();
+                    $lastCmt   = $this->commentCollectionFactory->create()->setOrder('comment_id', 'desc')->getFirstItem();
                     $lastCmtId = $lastCmt !== null ? $lastCmt->getId() : 1;
                     $users     = $user
                         ? htmlspecialchars($user->getFirstname() . ' ' . $user->getLastname(), ENT_COMPAT, 'UTF-8')
@@ -335,9 +379,10 @@ class View extends Action
                 case self::LIKE:
                     $checkLike = $this->isLikedComment($cmtId, $user->getId(), $model);
                     if (!$checkLike) {
-                        $model->addData($data)->save();
+                        $model->addData($data);
+                        $this->likeResource->save($model);
                     }
-                    $likes      = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
+                    $likes      = $this->likeCollectionFactory->create()->addFieldToFilter('comment_id', $cmtId);
                     $countLikes = $likes->getSize() ?: '';
                     $isLiked    = $checkLike ? 'yes' : 'no';
                     $result     = [
@@ -369,11 +414,11 @@ class View extends Action
      */
     public function isLikedComment($cmtId, $userId, $model)
     {
-        $liked = $model->getCollection()->addFieldToFilter('comment_id', $cmtId);
+        $liked = $this->likeCollectionFactory->create()->addFieldToFilter('comment_id', $cmtId);
         foreach ($liked as $item) {
             if ($item->getEntityId() == $userId) {
                 try {
-                    $item->delete();
+                    $this->likeResource->delete($item);
 
                     return true;
                 } catch (Exception $e) {
