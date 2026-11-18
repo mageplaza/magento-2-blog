@@ -78,6 +78,14 @@ class ServiceTest extends TestCase
         );
     }
 
+    public function testGetLanguageConvertsLocaleCode(): void
+    {
+        $this->config->method('getValue')->willReturnOnConsecutiveCalls('vi_VN', ' Vietnamese ', '');
+        $this->assertSame('Vietnamese (Vietnam)', $this->service->getLanguage(1));
+        $this->assertSame('Vietnamese', $this->service->getLanguage(1));
+        $this->assertSame('', $this->service->getLanguage(1));
+    }
+
     public function testAvailabilityAndLimits(): void
     {
         $this->status->method('isAvailable')->willReturn(true);

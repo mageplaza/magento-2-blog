@@ -114,7 +114,12 @@ class Service
      */
     public function getLanguage(int $storeId = 0): string
     {
-        return trim((string)$this->scopeConfig->getValue(self::XML_PATH_LANGUAGE, ScopeInterface::SCOPE_STORE, $storeId));
+        $value = trim((string)$this->scopeConfig->getValue(self::XML_PATH_LANGUAGE, ScopeInterface::SCOPE_STORE, $storeId));
+        if (preg_match('/^[a-z]{2,3}_[A-Z]{2}$/', $value)) {
+            return \Locale::getDisplayName($value, 'en');
+        }
+
+        return $value;
     }
 
     /**

@@ -308,9 +308,10 @@
             </group>
             <group id="ai" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>AI</label>
-                <field id="language" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="language" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Output language</label>
-                    <comment>Leave empty to use the same language as the content.</comment>
+                    <source_model>Mageplaza\Blog\Model\Config\Source\AiLanguage</source_model>
+                    <comment>Select the first option to use the same language as the content.</comment>
                 </field>
                 <field id="model" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Model</label>
