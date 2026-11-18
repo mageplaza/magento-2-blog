@@ -31,6 +31,7 @@
         <add id="Mageplaza_Blog::comment" title="Manage Comments" module="Mageplaza_Blog" sortOrder="60" action="mageplaza_blog/comment" resource="Mageplaza_Blog::comment" parent="Mageplaza_Blog::blog"/>
         <add id="Mageplaza_Blog::import" title="Import" module="Mageplaza_Blog" sortOrder="65" action="mageplaza_blog/import/edit" resource="Mageplaza_Blog::import" parent="Mageplaza_Blog::blog"/>
         <add id="Mageplaza_Blog::ai_ideas" title="Topic Ideas" module="Mageplaza_Blog" sortOrder="70" action="mageplaza_blog/idea" resource="Mageplaza_Blog::ai_ideas" parent="Mageplaza_Blog::blog"/>
+        <add id="Mageplaza_Blog::outdated" title="Outdated Posts" module="Mageplaza_Blog" sortOrder="72" action="mageplaza_blog/outdated" resource="Mageplaza_Blog::outdated" parent="Mageplaza_Blog::blog"/>
         <add id="Mageplaza_Blog::configuration" title="Configuration" module="Mageplaza_Blog" sortOrder="1000" action="adminhtml/system_config/edit/section/blog" resource="Mageplaza_Blog::configuration" parent="Mageplaza_Blog::blog"/>
     </menu>
 </config>

@@ -43,3 +43,5 @@
 @media (max-width: 1100px) { .mpblog-ai-cards { grid-template-columns: 1fr; } }
 .page-actions .page-actions-buttons > button.mpblog-btn-light, .page-actions > button.mpblog-btn-light { background: #e3e3e3; border: 1px solid #adadad; color: #514943; font-size: 1.6rem; font-weight: 600; line-height: 1.36; padding: 1.3rem 1.7rem; border-radius: 0; cursor: pointer; }
 .page-actions button.mpblog-btn-light:hover { background: #dbdbdb; color: #514943; }
+.mpblog-lockbox { border: 1px dashed #ccc; background: #fafafa; padding: 18px 20px; }
+.mpblog-lockbox .mpblog-ai-note { margin: 6px 0 0; }
