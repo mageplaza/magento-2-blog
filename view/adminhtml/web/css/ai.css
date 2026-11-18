@@ -48,4 +48,7 @@
 .mpblog-lockbox { border: 1px dashed #ccc; background: #fafafa; padding: 18px 20px; }
 .mpblog-lockbox .mpblog-ai-note { margin: 6px 0 0; }
 .mpblog-ai-assist { display: none; }
-.mpblog-ai-assist._on { display: block; }
+.mpblog-ai-assist._on, .mpblog-ai-assist._pro { display: block; }
+.mpblog-ai-sep, .mpblog-ai-assist._pro:not(._on) .mpblog-ai-std { display: none; }
+.mpblog-ai-assist._pro .mpblog-ai-sep { display: inline-block; width: 1px; height: 22px; margin: 0 10px 0 4px; background: #ccc; vertical-align: middle; }
+.mpblog-ai-pro { display: inline; }

@@ -21,20 +21,25 @@
 
 /** @var \Mageplaza\Blog\Block\Adminhtml\Post\Edit\AiAssist $block */
 $available = $block->isAvailable();
+$pro       = trim($block->getChildHtml('pro'));
 ?>
-<div class="admin__field field field-ai_assist mpblog-ai-assist">
+<div class="admin__field field field-ai_assist mpblog-ai-assist<?= $pro !== '' ? ' _pro' : '' ?>">
     <label class="admin__field-label label"><span><?= $block->escapeHtml(__('AI Assist')) ?></span></label>
     <div class="admin__field-control control">
         <div class="mpblog-ai-bar"
              data-mage-init='<?= $block->escapeHtmlAttr($available ? $block->getJsConfig() : '{"Mageplaza_Blog/js/ai/assist":{}}') ?>'>
             <div class="mpblog-ai-bar-title"><?= $block->escapeHtml(__('AI Assist')) ?></div>
-            <?php foreach (['short' => __('Short description'), 'taxonomy' => __('Suggest tags/topics'), 'titles' => __('5 titles')] as $type => $label): ?>
-                <button type="button" class="action-default action-secondary mpblog-ai-tip" data-ai-type="<?= $block->escapeHtmlAttr($type) ?>"
-                        <?php if ($available): ?>data-tip="<?= $block->escapeHtmlAttr(__('Calls your AI provider and uses tokens')) ?>"
-                        <?php else: ?>disabled="disabled"<?php endif; ?>>
-                    <span><?= $block->escapeHtml($label) ?></span>
-                </button>
-            <?php endforeach; ?>
+            <span class="mpblog-ai-std">
+                <?php foreach (['short' => __('Short description'), 'taxonomy' => __('Suggest tags/topics'), 'titles' => __('5 titles')] as $type => $label): ?>
+                    <button type="button" class="action-default action-secondary mpblog-ai-tip" data-ai-type="<?= $block->escapeHtmlAttr($type) ?>"
+                            <?php if ($available): ?>data-tip="<?= $block->escapeHtmlAttr(__('Calls your AI provider and uses tokens')) ?>"
+                            <?php else: ?>disabled="disabled"<?php endif; ?>>
+                        <span><?= $block->escapeHtml($label) ?></span>
+                    </button>
+                <?php endforeach; ?>
+                <span class="mpblog-ai-sep"></span>
+            </span>
+            <?= /* @noEscape */ $pro ?>
             <?php if ($available): ?>
                 <div class="mpblog-ai-message" role="alert"></div>
                 <div class="mpblog-ai-result"></div>
