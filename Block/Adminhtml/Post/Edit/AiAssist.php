@@ -94,7 +94,14 @@ class AiAssist extends Template implements RendererInterface
     public function getJsConfig(): string
     {
         return (string)json_encode([
-            'Mageplaza_Blog/js/ai/assist' => ['url' => $this->getUrl('mageplaza_blog/ai/assist')]
+            'Mageplaza_Blog/js/ai/assist' => [
+                'url' => $this->getUrl('mageplaza_blog/ai/assist'),
+                'createUrl' => $this->getUrl('mageplaza_blog/ai/createTerm'),
+                'canCreate' => [
+                    'tags' => $this->_authorization->isAllowed('Mageplaza_Blog::tag'),
+                    'topics' => $this->_authorization->isAllowed('Mageplaza_Blog::topic')
+                ]
+            ]
         ]);
     }
 }

@@ -22,7 +22,9 @@
 .mpblog-ai-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .mpblog-ai-chip { display: inline-block; padding: 3px 9px; border: 1px solid #1979c3; background: #e8f3fb; color: #1979c3; cursor: pointer; font-size: 12px; }
 .mpblog-ai-chip._on { background: #1979c3; color: #fff; cursor: default; }
-.mpblog-ai-new { color: #666; font-size: 12px; padding: 3px 0; }
+.mpblog-ai-chip._new { border-style: dashed; }
+.mpblog-ai-chip._static { cursor: default; }
+.mpblog-ai-chip._busy { opacity: .6; pointer-events: none; }
 .mpblog-ai-note { color: #777; font-size: 12px; margin: 4px 0 0; }
 .mpblog-ai-panel { margin: 0 0 12px; border: 1px solid #ccc; background: #fff; padding: 12px 14px; }
 .mpblog-ai-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }

@@ -92,6 +92,16 @@ define([
         return true;
     }
 
+    function addOption(scope, term) {
+        var component = registry.get(scope);
+
+        if (component && !_.some(component.options(), function (o) {
+            return String(o.value) === String(term.id);
+        })) {
+            component.setOption({value: String(term.id), label: term.name, is_active: 1, parent: 0});
+        }
+    }
+
     return function (config, element) {
         var $root = $(element),
             $buttons = $root.find('[data-ai-type]'),
@@ -161,8 +171,8 @@ define([
         function renderTaxonomy(response) {
             var $section = section(''),
                 groups = {
-                    tags: {scope: 'blogTag.blog_select_tag', title: $t('Tags')},
-                    topics: {scope: 'blogTopic.blog_select_topic', title: $t('Topics')}
+                    tags: {scope: 'blogTag.blog_select_tag', title: $t('Tags'), type: 'tag'},
+                    topics: {scope: 'blogTopic.blog_select_topic', title: $t('Topics'), type: 'topic'}
                 },
                 found = false;
 
@@ -192,7 +202,31 @@ define([
                     });
                 });
                 _.each(group['new'] || [], function (name) {
-                    $('<span class="mpblog-ai-new"/>').text($t('%1 (new)').replace('%1', name)).appendTo($chips);
+                    var $chip = $('<span class="mpblog-ai-chip _new"/>').text('+ ' + $t('%1 (new)').replace('%1', name))
+                        .appendTo($chips);
+
+                    if (!(config.canCreate || {})[key]) {
+                        $chip.addClass('_static');
+
+                        return;
+                    }
+                    $chip.attr('title', $t('New, click to create and add')).on('click', function () {
+                        if ($chip.hasClass('_busy')) {
+                            return;
+                        }
+                        $chip.addClass('_busy');
+                        client.post(config.createUrl, {type: info.type, name: name}, $chip)
+                            .done(function (response) {
+                                addOption(info.scope, response);
+                                selectTerm(info.scope, response.id);
+                                $chip.removeClass('_new').addClass('_on').off('click')
+                                    .text(response.name).attr('title', $t('Created and added'));
+                            }).fail(function (text) {
+                                client.message($message, 'error', text);
+                            }).always(function () {
+                                $chip.removeClass('_busy');
+                            });
+                    });
                 });
             });
             if (!found) {
@@ -200,8 +234,7 @@ define([
 
                 return;
             }
-            note($t('Blue chips are existing and can be added with one click. ' +
-                'Plain text is a new suggestion and is not created automatically.')).appendTo($section);
+            note($t('Blue chips are existing. Dashed chips are new and are created when clicked.')).appendTo($section);
         }
 
         /**
