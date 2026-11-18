@@ -1,6 +1,8 @@
 .mpblog-ai-bar { margin: 0 0 6px; padding: 12px 14px; border: 1px solid #ccc; background: #f8f8f8; }
 .mpblog-ai-bar-title { font-weight: 600; margin: 0 0 8px; }
-.mpblog-ai-bar button { margin: 0 6px 6px 0; }
+.mpblog-ai-bar button { margin: 0 6px 6px 0; font-weight: 700; }
+.mpblog-ai-tip { position: relative; }
+.mpblog-ai-tip:hover::after { content: attr(data-tip); position: absolute; left: 0; bottom: calc(100% + 6px); white-space: nowrap; background: #303030; color: #fff; font-size: 12px; padding: 5px 8px; z-index: 50; pointer-events: none; }
 .mpblog-ai-bar button:disabled { opacity: .45; cursor: not-allowed; }
 .mpblog-ai-unavailable { margin: 4px 0 0; color: #666; }
 .mpblog-ai-unavailable a { margin-left: 4px; }
