@@ -180,6 +180,8 @@ class Post extends Generic implements TabInterface
                 'value' => 1
             ]);
         }
+        $fieldset->addField('ai_assist', 'note', ['label' => ''])
+            ->setRenderer($this->getLayout()->createBlock(AiAssist::class));
         $fieldset->addField('name', 'text', [
             'name'     => 'name',
             'label'    => __('Name'),
@@ -223,8 +225,6 @@ class Post extends Generic implements TabInterface
                 'add_directives' => true
             ])
         ]);
-        $fieldset->addField('ai_assist', 'note', ['label' => ''])
-            ->setRenderer($this->getLayout()->createBlock(AiAssist::class));
 
         if ($this->_storeManager->isSingleStoreMode()) {
             $fieldset->addField('store_ids', 'hidden', [

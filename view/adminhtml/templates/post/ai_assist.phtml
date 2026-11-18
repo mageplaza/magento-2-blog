@@ -25,8 +25,8 @@ $available = $block->isAvailable();
 <div class="admin__field field field-ai_assist mpblog-ai-assist">
     <label class="admin__field-label label"><span><?= $block->escapeHtml(__('AI Assist')) ?></span></label>
     <div class="admin__field-control control">
-        <div class="mpblog-ai-bar"<?php if ($available): ?>
-             data-mage-init='<?= $block->escapeHtmlAttr($block->getJsConfig()) ?>'<?php endif; ?>>
+        <div class="mpblog-ai-bar"
+             data-mage-init='<?= $block->escapeHtmlAttr($available ? $block->getJsConfig() : '{"Mageplaza_Blog/js/ai/assist":{}}') ?>'>
             <div class="mpblog-ai-bar-title"><?= $block->escapeHtml(__('AI Assist')) ?></div>
             <?php foreach (['short' => __('Short description'), 'taxonomy' => __('Suggest tags/topics'), 'titles' => __('5 titles')] as $type => $label): ?>
                 <button type="button" class="action-default action-secondary mpblog-ai-tip" data-ai-type="<?= $block->escapeHtmlAttr($type) ?>"

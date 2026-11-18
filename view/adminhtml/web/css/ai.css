@@ -47,3 +47,5 @@
 .page-actions button.mpblog-btn-light:hover { background: #dbdbdb; color: #514943; }
 .mpblog-lockbox { border: 1px dashed #ccc; background: #fafafa; padding: 18px 20px; }
 .mpblog-lockbox .mpblog-ai-note { margin: 6px 0 0; }
+.mpblog-ai-assist { display: none; }
+.mpblog-ai-assist._on { display: block; }

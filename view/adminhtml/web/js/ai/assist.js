@@ -106,7 +106,21 @@ define([
         var $root = $(element),
             $buttons = $root.find('[data-ai-type]'),
             $message = $root.find('.mpblog-ai-message'),
-            $result = $root.find('.mpblog-ai-result');
+            $result = $root.find('.mpblog-ai-result'),
+            $panel = $root.closest('.mpblog-ai-assist');
+
+        function toggle() {
+            $panel.toggleClass('_on', !!($('#post_name').val() || getContent()));
+        }
+
+        $(document).on('input change keyup', '#post_name, #' + EDITOR_ID, toggle);
+        // ponytail: poll for TinyMCE edits instead of wiring editor events, ceiling 500ms latency
+        setInterval(toggle, 500);
+        toggle();
+
+        if (!config.url) {
+            return;
+        }
 
         /**
          * @param {String} title
