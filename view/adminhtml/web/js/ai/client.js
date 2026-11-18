@@ -27,6 +27,20 @@ define([
 
     return {
         /**
+         * @param {jQuery} $el
+         * @param {String} type
+         * @param {String} text
+         */
+        message: function ($el, type, text) {
+            $el.empty();
+            if (text) {
+                $('<div class="messages"/>').append(
+                    $('<div/>').addClass('message message-' + type).append($('<div/>').text(text))
+                ).appendTo($el);
+            }
+        },
+
+        /**
          * @param {String} url
          * @param {Object} data
          * @param {jQuery} buttons

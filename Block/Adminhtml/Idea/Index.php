@@ -24,9 +24,11 @@ declare(strict_types=1);
 namespace Mageplaza\Blog\Block\Adminhtml\Idea;
 
 use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Widget\Button;
 use Magento\Backend\Block\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\AiAssist;
+use Mageplaza\Blog\Controller\Adminhtml\Idea\Generate;
 use Mageplaza\Blog\Model\Ai\Ideas;
 use Mageplaza\Blog\Model\Ai\Service;
 
@@ -50,6 +52,11 @@ class Index extends Template
     private $service;
 
     /**
+     * @var array
+     */
+    private $terms;
+
+    /**
      * @param Context $context
      * @param Ideas $ideas
      * @param StoreManagerInterface $storeManager
@@ -71,13 +78,61 @@ class Index extends Template
     }
 
     /**
+     * @return $this
+     */
+    protected function _prepareLayout()
+    {
+        $toolbar = $this->getLayout()->getBlock('page.actions.toolbar');
+        if ($toolbar) {
+            $enabled = $this->isAvailable() && $this->getTerms()['enough'];
+            $buttons = [
+                'mpblog_ideas_refresh' => [
+                    'id' => 'mpblog-ideas-refresh',
+                    'label' => __('Run again'),
+                    'class' => 'mpblog-btn-light',
+                    'title' => __('Calls your AI provider and uses tokens'),
+                    'style' => 'display:none'
+                ],
+                'mpblog_ideas_generate' => [
+                    'id' => 'mpblog-ideas-generate',
+                    'label' => __('Generate ideas'),
+                    'class' => 'primary',
+                    'title' => __('Calls your AI provider and uses tokens'),
+                    'disabled' => !$enabled
+                ]
+            ];
+            foreach ($buttons as $name => $data) {
+                if ($enabled || $name === 'mpblog_ideas_generate') {
+                    $toolbar->setChild($name, $this->getLayout()->createBlock(Button::class, $name, ['data' => $data]));
+                }
+            }
+        }
+
+        return parent::_prepareLayout();
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxTopics(): int
+    {
+        $limits = $this->service->getLimits('ideas');
+
+        return max(0, (int)($limits['max_topics'] ?? Generate::DEFAULT_MAX_TOPICS));
+    }
+
+    /**
      * @return array
      */
     public function getTerms(): array
     {
         $store = $this->storeManager->getDefaultStoreView() ?: $this->storeManager->getStore();
 
-        return $this->ideas->loadTerms((int)$store->getId());
+        if ($this->terms === null) {
+            $this->terms = $this->ideas->loadTerms((int)$store->getId());
+        }
+
+        return $this->terms;
     }
 
     /**
@@ -115,6 +170,7 @@ class Index extends Template
             'Mageplaza_Blog/js/ai/ideas' => [
                 'url' => $this->getUrl('mageplaza_blog/idea/generate'),
                 'writeButton' => !empty($limits['write_button']),
+                'maxTopics' => $this->getMaxTopics(),
                 'proUrl' => self::PRO_URL
             ]
         ]);

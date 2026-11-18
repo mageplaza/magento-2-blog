@@ -21,6 +21,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mageplaza_Blog::css/ai.css"/>
+    </head>
     <body>
         <referenceContainer name="content">
             <block class="Mageplaza\Blog\Block\Adminhtml\Idea\Index" name="mageplaza_blog_idea_index" template="Mageplaza_Blog::idea/index.phtml"/>

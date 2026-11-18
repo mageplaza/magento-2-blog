@@ -25,38 +25,27 @@ $available = $block->isAvailable();
 <div class="admin__field mpblog-ai-assist">
     <label class="admin__field-label"><span><?= $block->escapeHtml(__('AI Assist')) ?></span></label>
     <div class="admin__field-control">
-        <?php if ($available): ?>
-            <div class="mpblog-ai-bar" data-mage-init='<?= $block->escapeHtmlAttr($block->getJsConfig()) ?>'>
-                <button type="button" class="action-default" data-ai-type="short"
-                        title="<?= $block->escapeHtmlAttr(__('Calls your AI provider and uses tokens')) ?>">
-                    <span><?= $block->escapeHtml(__('Short description')) ?></span>
+        <div class="mpblog-ai-bar"<?php if ($available): ?>
+             data-mage-init='<?= $block->escapeHtmlAttr($block->getJsConfig()) ?>'<?php endif; ?>>
+            <div class="mpblog-ai-bar-title"><?= $block->escapeHtml(__('AI Assist')) ?></div>
+            <?php foreach (['short' => __('Short description'), 'taxonomy' => __('Suggest tags/topics'), 'titles' => __('5 titles')] as $type => $label): ?>
+                <button type="button" class="action-default action-secondary" data-ai-type="<?= $block->escapeHtmlAttr($type) ?>"
+                        <?php if ($available): ?>title="<?= $block->escapeHtmlAttr(__('Calls your AI provider and uses tokens')) ?>"
+                        <?php else: ?>disabled="disabled"<?php endif; ?>>
+                    <span><?= $block->escapeHtml($label) ?></span>
                 </button>
-                <button type="button" class="action-default" data-ai-type="taxonomy"
-                        title="<?= $block->escapeHtmlAttr(__('Calls your AI provider and uses tokens')) ?>">
-                    <span><?= $block->escapeHtml(__('Suggest tags/topics')) ?></span>
-                </button>
-                <button type="button" class="action-default" data-ai-type="titles"
-                        title="<?= $block->escapeHtmlAttr(__('Calls your AI provider and uses tokens')) ?>">
-                    <span><?= $block->escapeHtml(__('5 titles')) ?></span>
-                </button>
+            <?php endforeach; ?>
+            <?php if ($available): ?>
                 <div class="mpblog-ai-message" role="alert"></div>
                 <div class="mpblog-ai-result"></div>
-            </div>
-        <?php else: ?>
-            <button type="button" class="action-default" disabled="disabled">
-                <span><?= $block->escapeHtml(__('Short description')) ?></span>
-            </button>
-            <button type="button" class="action-default" disabled="disabled">
-                <span><?= $block->escapeHtml(__('Suggest tags/topics')) ?></span>
-            </button>
-            <button type="button" class="action-default" disabled="disabled">
-                <span><?= $block->escapeHtml(__('5 titles')) ?></span>
-            </button>
-            <div class="admin__field-note">
-                <a href="<?= $block->escapeUrl($block->getConfigUrl()) ?>">
-                    <?= $block->escapeHtml(__('Configure AI to use this feature')) ?>
-                </a>
-            </div>
-        <?php endif; ?>
+            <?php else: ?>
+                <div class="mpblog-ai-unavailable">
+                    <?= $block->escapeHtml(__('AI is not configured.')) ?>
+                    <a href="<?= $block->escapeUrl($block->getConfigUrl()) ?>">
+                        <?= $block->escapeHtml(__('Configure AI to use this feature')) ?>
+                    </a>
+                </div>
+            <?php endif; ?>
+        </div>
     </div>
 </div>
