@@ -31,7 +31,7 @@ class TermFilter
 
     private const MIN_DIGIT_RUN = 7;
 
-    private const ATTACK_PATTERN = '/\b(select|union)\s|<\s*script|\bscript\b/i';
+    private const ATTACK_PATTERN = '/\bunion\s+(all\s+)?select\b|\bselect\s.+\sfrom\b|<\s*script|[\'"]\s*or\s+[\'"\d]|\bdrop\s+table\b/i';
 
     /**
      * @param array $rows
@@ -72,7 +72,7 @@ class TermFilter
             return false;
         }
 
-        if (preg_match('/\d{' . self::MIN_DIGIT_RUN . ',}/', preg_replace('/[\s().+\-]/u', '', $text))) {
+        if (preg_match('/^\d{' . self::MIN_DIGIT_RUN . ',}$/', preg_replace('/[\s().+\-]/u', '', $text))) {
             return false;
         }
 

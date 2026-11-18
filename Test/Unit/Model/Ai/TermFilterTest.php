@@ -57,7 +57,10 @@ class TermFilterTest extends TestCase
             [str_repeat('a', 81)],
             ['1 union select password'],
             ['select * from admin_user'],
-            ['alert script'],
+            ["x' or 1=1"],
+            ['1 union all select 1'],
+            ['drop table users'],
+            ['1234567'],
             ['<script>'],
         ];
     }
@@ -80,10 +83,13 @@ class TermFilterTest extends TestCase
         $result = (new TermFilter())->filter([
             ['query_text' => 'prescription glasses', 'popularity' => 1],
             ['query_text' => 'subscription box', 'popularity' => 1],
-            ['query_text' => 'description', 'popularity' => 1]
+            ['query_text' => 'description', 'popularity' => 1],
+            ['query_text' => 'union jack flag', 'popularity' => 1],
+            ['query_text' => 'description script font', 'popularity' => 1],
+            ['query_text' => 'sku ab-1234567-x', 'popularity' => 1]
         ]);
 
-        $this->assertCount(3, $result['terms']);
+        $this->assertCount(6, $result['terms']);
         $this->assertSame(0, $result['removed']);
     }
 
