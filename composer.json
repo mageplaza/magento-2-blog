@@ -3,7 +3,8 @@
   "description": "Magento 2 Blog extension",
   "require": {
     "mageplaza/module-core": "^1.6.0",
-    "mageplaza/facebook-graph-sdk": "^1.0.2"
+    "mageplaza/facebook-graph-sdk": "^1.0.2",
+    "mageplaza/module-ai-integration": "^1.0"
   },
   "type": "magento2-module",
   "version": "4.3.5",

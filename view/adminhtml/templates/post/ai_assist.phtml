@@ -1,0 +1,62 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Blog\Block\Adminhtml\Post\Edit\AiAssist $block */
+$available = $block->isAvailable();
+?>
+<div class="admin__field mpblog-ai-assist">
+    <label class="admin__field-label"><span><?= $block->escapeHtml(__('AI Assist')) ?></span></label>
+    <div class="admin__field-control">
+        <?php if ($available): ?>
+            <div class="mpblog-ai-bar" data-mage-init='<?= $block->escapeHtmlAttr($block->getJsConfig()) ?>'>
+                <button type="button" class="action-default" data-ai-type="short"
+                        title="<?= $block->escapeHtmlAttr(__('Calls your AI provider and uses tokens')) ?>">
+                    <span><?= $block->escapeHtml(__('Short description')) ?></span>
+                </button>
+                <button type="button" class="action-default" data-ai-type="taxonomy"
+                        title="<?= $block->escapeHtmlAttr(__('Calls your AI provider and uses tokens')) ?>">
+                    <span><?= $block->escapeHtml(__('Suggest tags/topics')) ?></span>
+                </button>
+                <button type="button" class="action-default" data-ai-type="titles"
+                        title="<?= $block->escapeHtmlAttr(__('Calls your AI provider and uses tokens')) ?>">
+                    <span><?= $block->escapeHtml(__('5 titles')) ?></span>
+                </button>
+                <div class="mpblog-ai-message" role="alert"></div>
+                <div class="mpblog-ai-result"></div>
+            </div>
+        <?php else: ?>
+            <button type="button" class="action-default" disabled="disabled">
+                <span><?= $block->escapeHtml(__('Short description')) ?></span>
+            </button>
+            <button type="button" class="action-default" disabled="disabled">
+                <span><?= $block->escapeHtml(__('Suggest tags/topics')) ?></span>
+            </button>
+            <button type="button" class="action-default" disabled="disabled">
+                <span><?= $block->escapeHtml(__('5 titles')) ?></span>
+            </button>
+            <div class="admin__field-note">
+                <a href="<?= $block->escapeUrl($block->getConfigUrl()) ?>">
+                    <?= $block->escapeHtml(__('Configure AI to use this feature')) ?>
+                </a>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>

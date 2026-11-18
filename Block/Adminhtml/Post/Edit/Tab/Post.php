@@ -38,6 +38,7 @@ use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Store\Model\System\Store;
+use Mageplaza\Blog\Block\Adminhtml\Post\Edit\AiAssist;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Category;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Tag;
 use Mageplaza\Blog\Block\Adminhtml\Post\Edit\Tab\Renderer\Topic;
@@ -222,6 +223,8 @@ class Post extends Generic implements TabInterface
                 'add_directives' => true
             ])
         ]);
+        $fieldset->addField('ai_assist', 'note', ['label' => ''])
+            ->setRenderer($this->getLayout()->createBlock(AiAssist::class));
 
         if ($this->_storeManager->isSingleStoreMode()) {
             $fieldset->addField('store_ids', 'hidden', [

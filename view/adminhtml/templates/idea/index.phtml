@@ -1,0 +1,64 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Blog\Block\Adminhtml\Idea\Index $block */
+$data = $block->getTerms();
+?>
+<div class="mpblog-ideas">
+    <p><?= $block->escapeHtml(__('Free edition uses search terms of the default store view only.')) ?></p>
+    <ul>
+        <li><?= $block->escapeHtml(__('Popular terms: %1', count($data['popular']))) ?></li>
+        <li><?= $block->escapeHtml(__('Zero-result terms: %1', count($data['zero_result']))) ?></li>
+    </ul>
+    <?php if ($data['removed'] > 0): ?>
+        <p class="message message-notice">
+            <?= $block->escapeHtml(__('%1 terms removed because they may contain personal data.', $data['removed'])) ?>
+        </p>
+    <?php endif; ?>
+    <?php if (!$data['enough']): ?>
+        <p class="message message-warning"><?= $block->escapeHtml($block->getNotEnoughMessage()) ?></p>
+    <?php endif; ?>
+    <?php if ($data['enough'] && $block->isAvailable()): ?>
+        <div class="mpblog-ideas-ai" data-mage-init='<?= $block->escapeHtmlAttr($block->getJsConfig()) ?>'>
+            <button type="button" class="action-primary" id="mpblog-ideas-generate"
+                    title="<?= $block->escapeHtmlAttr(__('Calls your AI provider and uses tokens')) ?>">
+                <span><?= $block->escapeHtml(__('Generate ideas')) ?></span>
+            </button>
+            <button type="button" class="action-secondary" id="mpblog-ideas-refresh" style="display:none"
+                    title="<?= $block->escapeHtmlAttr(__('Calls your AI provider and uses tokens')) ?>">
+                <span><?= $block->escapeHtml(__('Run again')) ?></span>
+            </button>
+            <div class="mpblog-ai-message" role="alert"></div>
+            <div class="mpblog-ai-result"></div>
+        </div>
+    <?php else: ?>
+        <button type="button" class="action-primary" disabled="disabled">
+            <span><?= $block->escapeHtml(__('Generate ideas')) ?></span>
+        </button>
+        <?php if (!$block->isAvailable()): ?>
+            <div class="admin__field-note">
+                <a href="<?= $block->escapeUrl($block->getConfigUrl()) ?>">
+                    <?= $block->escapeHtml(__('Configure AI to use this feature')) ?>
+                </a>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
+</div>
