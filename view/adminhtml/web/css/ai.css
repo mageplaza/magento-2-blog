@@ -10,7 +10,8 @@
 .mpblog-ai-message .messages { margin: 0; }
 .mpblog-ai-loading::before { content: ''; display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: -2px; border: 2px solid #ccc; border-top-color: #eb5202; border-radius: 50%; animation: mpblog-ai-spin .8s linear infinite; }
 @keyframes mpblog-ai-spin { to { transform: rotate(360deg); } }
-.mpblog-ai-busy::before { content: ''; display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: -2px; border: 2px solid #ccc; border-top-color: #eb5202; border-radius: 50%; animation: mpblog-ai-spin .8s linear infinite; }
+.mpblog-ai-busy::before,
+.mpblog-ai-chip._busy::before { content: ''; display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: -2px; border: 2px solid #ccc; border-top-color: #eb5202; border-radius: 50%; animation: mpblog-ai-spin .8s linear infinite; }
 button.mpblog-ai-busy:disabled, .mpblog-ai-bar button.mpblog-ai-busy:disabled { opacity: 1; cursor: progress; }
 .mpblog-ai-bar .mpblog-ai-result:not(:empty) { margin-top: 8px; border: 1px solid #ccc; background: #fff; padding: 12px 14px; }
 .mpblog-ai-section + .mpblog-ai-section { margin-top: 14px; padding-top: 6px; border-top: 1px solid #eee; }
