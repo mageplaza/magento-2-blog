@@ -25,6 +25,12 @@ define([
 ], function ($, $t) {
     'use strict';
 
+    var lastClicked = null;
+
+    document.addEventListener('click', function (event) {
+        lastClicked = event.target.closest ? event.target.closest('button') : null;
+    }, true);
+
     return {
         /**
          * @param {jQuery} $el
@@ -47,9 +53,11 @@ define([
          * @returns {jQuery.Deferred}
          */
         post: function (url, data, buttons) {
-            var deferred = $.Deferred();
+            var deferred = $.Deferred(),
+                $active = buttons.filter(lastClicked);
 
             buttons.prop('disabled', true).addClass('disabled');
+            $active.addClass('mpblog-ai-busy');
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -65,6 +73,7 @@ define([
                 deferred.reject($t('Request failed.'));
             }).always(function () {
                 buttons.prop('disabled', false).removeClass('disabled');
+                $active.removeClass('mpblog-ai-busy');
             });
 
             return deferred.promise();
