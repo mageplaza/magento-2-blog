@@ -49,16 +49,18 @@ class Edit extends Topic
      * @param Registry $registry
      * @param PageFactory $resultPageFactory
      * @param TopicFactory $topicFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Topic $topicResource
      */
     public function __construct(
         Context $context,
         Registry $registry,
         PageFactory $resultPageFactory,
-        TopicFactory $topicFactory
+        TopicFactory $topicFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Topic $topicResource
     ) {
         $this->resultPageFactory = $resultPageFactory;
 
-        parent::__construct($context, $registry, $topicFactory);
+        parent::__construct($context, $registry, $topicFactory, $topicResource);
     }
 
     /**

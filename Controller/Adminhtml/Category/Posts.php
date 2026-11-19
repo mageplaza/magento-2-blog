@@ -48,16 +48,20 @@ class Posts extends Category
      * @param Registry $coreRegistry
      * @param CategoryFactory $categoryFactory
      * @param LayoutFactory $resultLayoutFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
         CategoryFactory $categoryFactory,
-        LayoutFactory $resultLayoutFactory
+        LayoutFactory $resultLayoutFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
     ) {
         $this->resultLayoutFactory = $resultLayoutFactory;
 
-        parent::__construct($context, $coreRegistry, $categoryFactory);
+        parent::__construct($context, $coreRegistry, $categoryFactory, $categoryResource, $categoryCollectionFactory);
     }
 
     /**

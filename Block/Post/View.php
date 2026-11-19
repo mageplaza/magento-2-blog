@@ -28,7 +28,6 @@ use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\Messages;
 use Mageplaza\Blog\Helper\Data;
 use Mageplaza\Blog\Model\Post;
-use Mageplaza\Blog\Model\PostLike;
 
 /**
  * Class View
@@ -56,8 +55,8 @@ class View extends \Mageplaza\Blog\Block\ListPost
 
         $loadedFromHistory = false;
         if ($historyId) {
-            $history = $this->helperData->getFactoryByType(Data::TYPE_HISTORY)->create()->load($historyId);
-            $historyPost = $this->helperData->getFactoryByType(Data::TYPE_POST)->create()->load($history->getPostId());
+            $history = $this->helperData->getObjectByParam($historyId, null, Data::TYPE_HISTORY);
+            $historyPost = $this->helperData->getObjectByParam($history->getPostId(), null, Data::TYPE_POST);
 
             $this->helperData->setCustomerContextId();
             $author = $this->helperData->getCurrentAuthor();
@@ -73,7 +72,7 @@ class View extends \Mageplaza\Blog\Block\ListPost
         }
 
         if (!$loadedFromHistory && $id) {
-            $post->load($id);
+            $this->helperData->getResourceModel()->load($post, $id);
         }
         $this->setPost($post);
     }
@@ -199,8 +198,7 @@ class View extends \Mageplaza\Blog\Block\ListPost
      */
     public function getCommentLikes($cmtId)
     {
-        $likes = $this->likeFactory->create()
-            ->getCollection()
+        $likes = $this->likeCollectionFactory->create()
             ->addFieldToFilter('comment_id', $cmtId)
             ->getSize();
 
@@ -216,7 +214,7 @@ class View extends \Mageplaza\Blog\Block\ListPost
     {
         if ($this->helperData->isLogin()) {
             $customerId = $this->helperData->getCustomerIdByContext();
-            $likes      = $this->likeFactory->create()->getCollection();
+            $likes      = $this->likeCollectionFactory->create();
             foreach ($likes as $like) {
                 if ($like->getEntityId() == $customerId && $like->getCommentId() == $cmtId) {
                     return true;
@@ -235,7 +233,7 @@ class View extends \Mageplaza\Blog\Block\ListPost
     public function getPostComments($postId)
     {
         $result   = [];
-        $comments = $this->cmtFactory->create()->getCollection()
+        $comments = $this->commentCollectionFactory->create()
             ->addFieldToFilter('main_table.post_id', $postId);
         foreach ($comments as $comment) {
             $result[] = $comment->getData();
@@ -252,10 +250,7 @@ class View extends \Mageplaza\Blog\Block\ListPost
      */
     public function getPostLike($postId, $action)
     {
-        /** @var PostLike $postLike */
-        $postLike = $this->postLikeFactory->create();
-
-        return $postLike->getCollection()->addFieldToFilter('post_id', $postId)
+        return $this->postLikeCollectionFactory->create()->addFieldToFilter('post_id', $postId)
             ->addFieldToFilter('action', $action)->count();
     }
 
@@ -390,8 +385,7 @@ class View extends \Mageplaza\Blog\Block\ListPost
 
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
             if ($catId = $this->getRequest()->getParam('cat')) {
-                $category = $this->categoryFactory->create()
-                    ->load($catId);
+                $category = $this->helperData->getObjectByParam($catId, null, Data::TYPE_CATEGORY);
                 if ($category->getId()) {
                     $breadcrumbs->addCrumb((string) $category->getUrlKey(), [
                         'label' => $category->getName(),
@@ -407,6 +401,8 @@ class View extends \Mageplaza\Blog\Block\ListPost
                 'title' => $post->getName()
             ]);
         }
+
+        return $this;
     }
 
     /**

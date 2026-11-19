@@ -42,7 +42,7 @@ class AuthorPost extends \Mageplaza\Blog\Block\ListPost
     public function getPostCollection()
     {
         try {
-            $collection = $this->helperData->getFactoryByType()->create()->getCollection();
+            $collection = $this->helperData->getCollection();
             $this->helperData->addStoreFilter($collection, $this->store->getStore()->getId());
 
             $userId = $this->getAuthor()->getId();
@@ -52,7 +52,7 @@ class AuthorPost extends \Mageplaza\Blog\Block\ListPost
             if ($collection && $collection->getSize()) {
                 $pager         = $this->getLayout()->createBlock(Pager::class, 'mpblog.post.pager');
                 $perPageValues = (string) $this->helperData->getDisplayConfig('pagination');
-                $perPageValues = explode(',', $perPageValues ?? '');
+                $perPageValues = explode(',', $perPageValues);
                 $perPageValues = array_combine($perPageValues, $perPageValues);
                 $pager->setAvailableLimit($perPageValues)->setCollection($collection);
                 $this->setChild('pager', $pager);

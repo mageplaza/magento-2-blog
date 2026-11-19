@@ -49,16 +49,18 @@ class Edit extends Post
      * @param Registry $registry
      * @param PostFactory $postFactory
      * @param PageFactory $resultPageFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post $postResource
      */
     public function __construct(
         Context $context,
         Registry $registry,
         PostFactory $postFactory,
-        PageFactory $resultPageFactory
+        PageFactory $resultPageFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource
     ) {
         $this->resultPageFactory = $resultPageFactory;
 
-        parent::__construct($postFactory, $registry, $context);
+        parent::__construct($postFactory, $registry, $context, $postResource);
     }
 
     /**

@@ -56,6 +56,30 @@ class PostHistory extends AbstractModel
      */
     protected $_idFieldName = 'like_id';
 
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Mageplaza\Blog\Model\ResourceModel\PostHistory\CollectionFactory $historyCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\PostHistory $historyResource,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        $this->historyCollectionFactory = $historyCollectionFactory;
+        $this->historyResource = $historyResource;
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+    }
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\PostHistory\CollectionFactory
+     */
+    private $historyCollectionFactory;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\PostHistory
+     */
+    private $historyResource;
+
     /**
      * Initialize resource model
      *
@@ -81,7 +105,7 @@ class PostHistory extends AbstractModel
      */
     public function getSumPostHistory($postId)
     {
-        return $this->getCollection()->addFieldToFilter('post_id', $postId)->count();
+        return $this->historyCollectionFactory->create()->addFieldToFilter('post_id', $postId)->count();
     }
 
     /**
@@ -89,7 +113,8 @@ class PostHistory extends AbstractModel
      */
     public function removeFirstHistory($postId)
     {
-        $this->getCollection()->addFieldToFilter('post_id', $postId)->getFirstItem()->delete();
+        $history = $this->historyCollectionFactory->create()->addFieldToFilter('post_id', $postId)->getFirstItem();
+        $this->historyResource->delete($history);
     }
 
     /**

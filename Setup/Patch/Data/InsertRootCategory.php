@@ -25,7 +25,7 @@ namespace Mageplaza\Blog\Setup\Patch\Data;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchRevertableInterface;
-use Mageplaza\Blog\Model\CategoryFactory;
+use Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory as CategoryFactory;
 
 /**
  * Class InsertRootCategory
@@ -76,7 +76,7 @@ class InsertRootCategory implements
             'name'           => 'ROOT',
             'url_key'        => 'root'
         ];
-        if (!$this->categoryFactory->create()->getCollection()->getSize()) {
+        if (!$this->categoryFactory->create()->getSize()) {
             $this->moduleDataSetup->getConnection()->insertOnDuplicate(
                 $this->moduleDataSetup->getTable('mageplaza_blog_category'),
                 $defaultData

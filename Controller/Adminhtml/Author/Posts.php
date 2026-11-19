@@ -46,16 +46,18 @@ class Posts extends Author
      * @param Registry $coreRegistry
      * @param LayoutFactory $resultLayoutFactory
      * @param AuthorFactory $authorFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Author $authorResource
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
         LayoutFactory $resultLayoutFactory,
-        AuthorFactory $authorFactory
+        AuthorFactory $authorFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Author $authorResource
     ) {
         $this->resultLayoutFactory = $resultLayoutFactory;
 
-        parent::__construct($context, $coreRegistry, $authorFactory);
+        parent::__construct($context, $coreRegistry, $authorFactory, $authorResource);
     }
 
     /**

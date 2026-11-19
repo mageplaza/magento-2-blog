@@ -111,6 +111,11 @@ class Post extends AbstractDb
     protected $postAuthorTable;
 
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Author
+     */
+    private $authorResource;
+
+    /**
      * Post constructor.
      *
      * @param Context $context
@@ -122,6 +127,7 @@ class Post extends AbstractDb
      * @param AuthorFactory $authorFactory
      */
     public function __construct(
+        \Mageplaza\Blog\Model\ResourceModel\Author $authorResource,
         Context $context,
         DateTime $date,
         ManagerInterface $eventManager,
@@ -130,6 +136,7 @@ class Post extends AbstractDb
         RequestInterface $request,
         AuthorFactory $authorFactory
     ) {
+        $this->authorResource = $authorResource;
         $this->date           = $date;
         $this->eventManager   = $eventManager;
         $this->_auth          = $auth;
@@ -477,6 +484,9 @@ class Post extends AbstractDb
         $products    = $post->getProductsData();
         $oldProducts = $post->getProductsPosition();
 
+        $insert = [];
+        $delete = [];
+        $update = [];
         if (is_array($products)) {
             $insert  = array_diff_key($products, $oldProducts);
             $delete  = array_diff_key($oldProducts, $products);
@@ -586,12 +596,14 @@ class Post extends AbstractDb
         if ($currentUser) {
             $currentUserId = $currentUser->getId();
             /** @var Author $author */
-            $author = $this->_authorFactory->create()->load($currentUserId);
+            $author = $this->_authorFactory->create();
+            $this->authorResource->load($author, $currentUserId);
 
             /** Create the new author if that author isn't exist */
             if (!$author->getId()) {
                 $author->setId($currentUserId)
-                    ->setName($currentUser->getName())->save();
+                    ->setName($currentUser->getName());
+                $this->authorResource->save($author);
             }
         }
     }

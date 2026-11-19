@@ -39,6 +39,11 @@ use RuntimeException;
 class InlineEdit extends Action
 {
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Tag
+     */
+    protected $tagResource;
+
+    /**
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Mageplaza_Blog::tag';
@@ -59,12 +64,15 @@ class InlineEdit extends Action
      * @param Context $context
      * @param JsonFactory $jsonFactory
      * @param TagFactory $tagFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Tag $tagResource
      */
     public function __construct(
         Context $context,
         JsonFactory $jsonFactory,
-        TagFactory $tagFactory
+        TagFactory $tagFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Tag $tagResource
     ) {
+        $this->tagResource = $tagResource;
         $this->jsonFactory = $jsonFactory;
         $this->tagFactory = $tagFactory;
 
@@ -91,10 +99,11 @@ class InlineEdit extends Action
         $key = array_keys($postItems);
         $tagId = !empty($key) ? (int)$key[0] : '';
         /** @var Tag $tag */
-        $tag = $this->tagFactory->create()->load($tagId);
+        $tag = $this->tagFactory->create();
+        $this->tagResource->load($tag, $tagId);
         try {
-            $tag->addData($postItems[$tagId])
-                ->save();
+            $tag->addData($postItems[$tagId]);
+            $this->tagResource->save($tag);
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithTagId($tag, $e->getMessage());
             $error = true;

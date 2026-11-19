@@ -42,6 +42,11 @@ use Mageplaza\Blog\Model\PostFactory;
 class DeletePost extends Action implements HttpPostActionInterface, CsrfAwareActionInterface
 {
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Post
+     */
+    protected $postResource;
+
+    /**
      * @var PostFactory
      */
     protected $postFactory;
@@ -68,13 +73,16 @@ class DeletePost extends Action implements HttpPostActionInterface, CsrfAwareAct
      * @param PostFactory $postFactory
      * @param Data $helperData
      * @param FormKeyValidator $formKeyValidator
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post $postResource
      */
     public function __construct(
         Context $context,
         PostFactory $postFactory,
         Data $helperData,
-        FormKeyValidator $formKeyValidator
+        FormKeyValidator $formKeyValidator,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource
     ) {
+        $this->postResource = $postResource;
         $this->_helperBlog      = $helperData;
         $this->postFactory      = $postFactory;
         $this->formKeyValidator = $formKeyValidator;
@@ -114,7 +122,7 @@ class DeletePost extends Action implements HttpPostActionInterface, CsrfAwareAct
             ]));
         }
 
-        $post->load($postId);
+        $this->postResource->load($post, $postId);
 
         // Being logged in as some author only proves who's asking; without this,
         // any author could delete a post_id they don't own.
@@ -125,7 +133,7 @@ class DeletePost extends Action implements HttpPostActionInterface, CsrfAwareAct
         }
 
         try {
-            $post->delete();
+            $this->postResource->delete($post);
             $this->messageManager->addSuccessMessage(__('The post has been deleted.'));
 
             return $this->getResponse()->representJson(Data::jsonEncode([

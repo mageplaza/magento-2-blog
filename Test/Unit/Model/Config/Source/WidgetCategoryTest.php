@@ -36,10 +36,7 @@ class WidgetCategoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->collectionFactoryMock = $this->createStub(CollectionFactory::class);
 
         $this->model = new WidgetCategory($this->collectionFactoryMock);
     }

@@ -41,9 +41,9 @@ class Delete extends Post
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id = $this->getRequest()->getParam('id')) {
             try {
-                $this->postFactory->create()
-                    ->load($id)
-                    ->delete();
+                $post = $this->postFactory->create();
+                $this->postResource->load($post, $id);
+                $this->postResource->delete($post);
 
                 $this->messageManager->addSuccessMessage(__('The Post has been deleted.'));
             } catch (Exception $e) {

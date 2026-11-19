@@ -61,18 +61,22 @@ class CategoriesJson extends Category
      * @param CategoryFactory $categoryFactory
      * @param JsonFactory $resultJsonFactory
      * @param LayoutFactory $layoutFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
         CategoryFactory $categoryFactory,
         JsonFactory $resultJsonFactory,
-        LayoutFactory $layoutFactory
+        LayoutFactory $layoutFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory     = $layoutFactory;
 
-        parent::__construct($context, $coreRegistry, $categoryFactory);
+        parent::__construct($context, $coreRegistry, $categoryFactory, $categoryResource, $categoryCollectionFactory);
     }
 
     /**

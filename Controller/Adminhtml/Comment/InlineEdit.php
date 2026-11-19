@@ -40,6 +40,11 @@ use RuntimeException;
 class InlineEdit extends Action
 {
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Comment
+     */
+    protected $commentResource;
+
+    /**
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Mageplaza_Blog::comment';
@@ -64,12 +69,15 @@ class InlineEdit extends Action
      * @param Context $context
      * @param JsonFactory $jsonFactory
      * @param CommentFactory $commentFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Comment $commentResource
      */
     public function __construct(
         Context $context,
         JsonFactory $jsonFactory,
-        CommentFactory $commentFactory
+        CommentFactory $commentFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Comment $commentResource
     ) {
+        $this->commentResource = $commentResource;
         $this->jsonFactory = $jsonFactory;
         $this->commentFactory = $commentFactory;
 
@@ -100,11 +108,12 @@ class InlineEdit extends Action
         $commentId = !empty($key) ? (int)$key[0] : '';
 
         /** @var Post $post */
-        $comment = $this->commentFactory->create()->load($commentId);
+        $comment = $this->commentFactory->create();
+        $this->commentResource->load($comment, $commentId);
         try {
             $commentData = $commentItems[$commentId];
             $comment->addData($commentData);
-            $comment->save();
+            $this->commentResource->save($comment);
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithCommentId($comment, $e->getMessage());
             $error = true;

@@ -64,7 +64,7 @@ class Categories extends Text
             $text = '';
             $CategoryIds = explode(',', $row->getData($this->getColumn()->getIndex()) ?? '');
             foreach ($CategoryIds as $categoryId) {
-                $category = $this->_helperData->getFactoryByType('category')->create()->load($categoryId);
+                $category = $this->_helperData->getObjectByParam($categoryId, null, 'category');
                 $text .= $category->getName() . ',';
             }
             $row->setData($this->getColumn()->getIndex(), trim($text, ','));

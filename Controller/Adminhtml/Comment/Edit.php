@@ -49,16 +49,18 @@ class Edit extends Comment
      * @param CommentFactory $commentFactory
      * @param Registry $coreRegistry
      * @param Context $context
+     * @param \Mageplaza\Blog\Model\ResourceModel\Comment $commentResource
      */
     public function __construct(
         PageFactory $pageFactory,
         CommentFactory $commentFactory,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
+        \Mageplaza\Blog\Model\ResourceModel\Comment $commentResource
     ) {
         $this->resultPageFactory = $pageFactory;
 
-        parent::__construct($commentFactory, $coreRegistry, $context);
+        parent::__construct($commentFactory, $coreRegistry, $context, $commentResource);
     }
 
     /**

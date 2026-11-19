@@ -21,24 +21,21 @@ use ReflectionProperty;
 class ViewTest extends TestCase
 {
     /** @var View|MockObject */
-    private MockObject $block;
+    private View $block;
 
     /** @var Escaper|MockObject */
-    private MockObject $escaper;
+    private Escaper $escaper;
 
     /** @var Data|MockObject */
-    private MockObject $helperData;
+    private Data $helperData;
 
     protected function setUp(): void
     {
         // Disable original constructor to avoid resolving all generated factory classes
-        $this->block = $this->getMockBuilder(View::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([]) // use real implementation for all methods
-            ->getMock();
+        $this->block = (new \ReflectionClass(View::class))->newInstanceWithoutConstructor();
 
         // Use real escaper behavior for meaningful security assertions
-        $this->escaper = $this->createMock(Escaper::class);
+        $this->escaper = $this->createStub(Escaper::class);
         $this->escaper->method('escapeHtml')->willReturnCallback(
             fn($value) => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false)
         );
@@ -46,7 +43,7 @@ class ViewTest extends TestCase
             fn($value) => htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8')
         );
 
-        $this->helperData = $this->createMock(Data::class);
+        $this->helperData = $this->createStub(Data::class);
 
         // Inject _escaper (protected property inherited from AbstractBlock)
         $this->injectProperty('_escaper', $this->escaper);
@@ -80,21 +77,21 @@ class ViewTest extends TestCase
     // commentHtml()
     // -------------------------------------------------------------------------
 
-    /** @test — single line wrapped in one <p> tag */
+    /** single line wrapped in one <p> tag */
     public function testCommentHtmlSingleLine(): void
     {
         $result = $this->block->commentHtml('Hello World');
         $this->assertSame('<p>Hello World</p>', $result);
     }
 
-    /** @test — multiple newlines produce multiple <p> tags */
+    /** multiple newlines produce multiple <p> tags */
     public function testCommentHtmlMultipleLines(): void
     {
         $result = $this->block->commentHtml("Line one\nLine two");
         $this->assertSame('<p>Line one</p><p>Line two</p>', $result);
     }
 
-    /** @test — XSS payload must be HTML-escaped */
+    /** XSS payload must be HTML-escaped */
     public function testCommentHtmlEscapesXss(): void
     {
         $result = $this->block->commentHtml('<script>alert(1)</script>');
@@ -102,14 +99,14 @@ class ViewTest extends TestCase
         $this->assertStringContainsString('&lt;script&gt;', $result);
     }
 
-    /** @test — leading/trailing whitespace and empty lines are trimmed */
+    /** leading/trailing whitespace and empty lines are trimmed */
     public function testCommentHtmlTrimmed(): void
     {
         $result = $this->block->commentHtml("  Hello  \n");
         $this->assertSame('<p>Hello</p>', $result);
     }
 
-    /** @test — & character is escaped to &amp; */
+    /** & character is escaped to &amp; */
     public function testCommentHtmlEscapesAmpersand(): void
     {
         $result = $this->block->commentHtml('a & b');
@@ -127,22 +124,22 @@ class ViewTest extends TestCase
     // getTagList()
     // -------------------------------------------------------------------------
 
-    /** @test — empty collection returns empty string */
+    /** empty collection returns empty string */
     public function testGetTagListEmptyCollection(): void
     {
-        $post = $this->createMock(Post::class);
+        $post = $this->createStub(Post::class);
         $post->method('getSelectedTagsCollection')->willReturn([]);
 
         $this->assertSame('', $this->block->getTagList($post));
     }
 
-    /** @test — single tag renders correct anchor markup */
+    /** single tag renders correct anchor markup */
     public function testGetTagListRendersAnchor(): void
     {
         $tag = $this->createTagMock('PHP', 'https://example.com/blog/tag/php');
         $this->helperData->method('getBlogUrl')->willReturn('https://example.com/blog/tag/php');
 
-        $post = $this->createMock(Post::class);
+        $post = $this->createStub(Post::class);
         $post->method('getSelectedTagsCollection')->willReturn([$tag]);
 
         $result = $this->block->getTagList($post);
@@ -151,12 +148,12 @@ class ViewTest extends TestCase
         $this->assertStringContainsString('>PHP<', $result);
     }
 
-    /** @test — multiple tags are joined by ", " */
+    /** multiple tags are joined by ", " */
     public function testGetTagListMultipleTagsJoined(): void
     {
         $this->helperData->method('getBlogUrl')->willReturn('https://example.com/tag/x');
 
-        $post = $this->createMock(Post::class);
+        $post = $this->createStub(Post::class);
         $post->method('getSelectedTagsCollection')->willReturn([
             $this->createTagMock('PHP'),
             $this->createTagMock('Magento'),
@@ -167,12 +164,12 @@ class ViewTest extends TestCase
         $this->assertCount(2, $parts);
     }
 
-    /** @test — tag name with XSS is escaped in output */
+    /** tag name with XSS is escaped in output */
     public function testGetTagListEscapesTagName(): void
     {
         $this->helperData->method('getBlogUrl')->willReturn('https://example.com/tag/x');
 
-        $post = $this->createMock(Post::class);
+        $post = $this->createStub(Post::class);
         $post->method('getSelectedTagsCollection')->willReturn([
             $this->createTagMock('<script>xss</script>'),
         ]);
@@ -246,14 +243,12 @@ class ViewTest extends TestCase
     // isLoggedIn()
     // -------------------------------------------------------------------------
 
-    /** @test */
     public function testIsLoggedInReturnsTrue(): void
     {
         $this->helperData->method('isLogin')->willReturn(true);
         $this->assertTrue($this->block->isLoggedIn());
     }
 
-    /** @test */
     public function testIsLoggedInReturnsFalse(): void
     {
         $this->helperData->method('isLogin')->willReturn(false);
@@ -264,14 +259,14 @@ class ViewTest extends TestCase
     // getRelatedMode()
     // -------------------------------------------------------------------------
 
-    /** @test — config value "1" returns true */
+    /** config value "1" returns true */
     public function testGetRelatedModeTrueWhenOne(): void
     {
         $this->helperData->method('getPostViewPageConfig')->with('related_mode')->willReturn('1');
         $this->assertTrue($this->block->getRelatedMode());
     }
 
-    /** @test — config value "0" returns false */
+    /** config value "0" returns false */
     public function testGetRelatedModeFalseWhenZero(): void
     {
         $this->helperData->method('getPostViewPageConfig')->with('related_mode')->willReturn('0');
@@ -282,11 +277,9 @@ class ViewTest extends TestCase
     // Private helpers
     // -------------------------------------------------------------------------
 
-    private function createTagMock(string $name, string $url = ''): MockObject
+    private function createTagMock(string $name, string $url = ''): TagStub
     {
-        $tag = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->addMethods(['getName', 'getUrl'])
-            ->getMock();
+        $tag = $this->createStub(TagStub::class);
         $tag->method('getName')->willReturn($name);
         $tag->method('getUrl')->willReturn($url ?: "https://example.com/tag/{$name}");
         return $tag;
@@ -306,7 +299,7 @@ class ViewTest extends TestCase
             }
         };
 
-        $likeModel = new class($likeCollection) {
+        $likeFactory = new class($likeCollection) {
             private object $collection;
 
             public function __construct(object $collection)
@@ -314,27 +307,13 @@ class ViewTest extends TestCase
                 $this->collection = $collection;
             }
 
-            public function getCollection(): object
+            public function create(): object
             {
                 return $this->collection;
             }
         };
 
-        $likeFactory = new class($likeModel) {
-            private object $model;
-
-            public function __construct(object $model)
-            {
-                $this->model = $model;
-            }
-
-            public function create(): object
-            {
-                return $this->model;
-            }
-        };
-
-        $this->injectProperty('likeFactory', $likeFactory);
+        $this->injectProperty('likeCollectionFactory', $likeFactory);
     }
 
     /**

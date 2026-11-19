@@ -21,7 +21,6 @@
 
 namespace Mageplaza\Blog\Plugin;
 
-use Infortis\UltraMegamenu\Block\Navigation;
 use Mageplaza\Blog\Block\Category\Menu;
 use Mageplaza\Blog\Helper\Data;
 
@@ -48,12 +47,12 @@ class InfortisTopmenu
     }
 
     /**
-     * @param Navigation $topmenu
+     * @param object $topmenu
      * @param $html
      *
      * @return string
      */
-    public function afterRenderCategoriesMenuHtml(Navigation $topmenu, $html)
+    public function afterRenderCategoriesMenuHtml($topmenu, $html)
     {
         if ($this->helper->isEnabled() && $this->helper->getBlogConfig('display/toplinks')) {
             $blogHtml = $topmenu->getLayout()->createBlock(Menu::class)

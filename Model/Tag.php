@@ -92,6 +92,11 @@ class Tag extends AbstractModel implements IdentityInterface
     public $tagCollectionFactory;
 
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Tag
+     */
+    private $entityResource;
+
+    /**
      * Tag constructor.
      *
      * @param Context $context
@@ -103,6 +108,7 @@ class Tag extends AbstractModel implements IdentityInterface
      * @param array $data
      */
     public function __construct(
+        \Mageplaza\Blog\Model\ResourceModel\Tag $entityResource,
         Context $context,
         Registry $registry,
         CollectionFactory $postCollectionFactory,
@@ -111,6 +117,7 @@ class Tag extends AbstractModel implements IdentityInterface
         ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
+        $this->entityResource = $entityResource;
         $this->postCollectionFactory = $postCollectionFactory;
         $this->tagCollectionFactory = $tagCollectionFactory;
 
@@ -148,7 +155,7 @@ class Tag extends AbstractModel implements IdentityInterface
 
         $array = $this->getData('posts_position');
         if (!$array) {
-            $array = $this->getResource()->getPostsPosition($this);
+            $array = $this->entityResource->getPostsPosition($this);
             $this->setData('posts_position', $array);
         }
 
@@ -163,7 +170,7 @@ class Tag extends AbstractModel implements IdentityInterface
         if ($this->postCollection === null) {
             $collection = $this->postCollectionFactory->create();
             $collection->join(
-                ['post_tag' => $this->getResource()->getTable('mageplaza_blog_post_tag')],
+                ['post_tag' => $this->entityResource->getTable('mageplaza_blog_post_tag')],
                 'main_table.post_id=post_tag.post_id AND post_tag.tag_id=' . $this->getId(),
                 ['position']
             );

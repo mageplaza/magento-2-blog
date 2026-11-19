@@ -35,6 +35,16 @@ use Mageplaza\Blog\Model\PostHistoryFactory;
  */
 abstract class History extends Action
 {
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\PostHistory
+     */
+    protected $postHistoryResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Post
+     */
+    protected $postResource;
+
     /** Authorization level of a basic admin session */
     const ADMIN_RESOURCE = 'Mageplaza_Blog::post';
 
@@ -70,14 +80,20 @@ abstract class History extends Action
      * @param Registry $coreRegistry
      * @param DateTime $date
      * @param Context $context
+     * @param \Mageplaza\Blog\Model\ResourceModel\PostHistory $postHistoryResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post $postResource
      */
     public function __construct(
         PostHistoryFactory $postHistoryFactory,
         PostFactory $postFactory,
         Registry $coreRegistry,
         DateTime $date,
-        Context $context
+        Context $context,
+        \Mageplaza\Blog\Model\ResourceModel\PostHistory $postHistoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource
     ) {
+        $this->postResource = $postResource;
+        $this->postHistoryResource = $postHistoryResource;
         $this->postHistoryFactory = $postHistoryFactory;
         $this->postFactory = $postFactory;
         $this->coreRegistry = $coreRegistry;
@@ -98,7 +114,7 @@ abstract class History extends Action
         /** @var \Mageplaza\Blog\Model\Post $post */
         $history = $this->postHistoryFactory->create();
         if ($historyId) {
-            $history->load($historyId);
+            $this->postHistoryResource->load($history, $historyId);
             if (!$history->getId()) {
                 $this->messageManager->addErrorMessage(__('This History no longer exists.'));
 

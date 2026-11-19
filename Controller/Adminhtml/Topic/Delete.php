@@ -39,9 +39,9 @@ class Delete extends Topic
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id = $this->getRequest()->getParam('id')) {
             try {
-                $this->topicFactory->create()
-                    ->load($id)
-                    ->delete();
+                $topic = $this->topicFactory->create();
+                $this->topicResource->load($topic, $id);
+                $this->topicResource->delete($topic);
 
                 $this->messageManager->addSuccessMessage(__('The Topic has been deleted.'));
             } catch (Exception $e) {

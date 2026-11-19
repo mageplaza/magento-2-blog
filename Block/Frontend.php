@@ -188,6 +188,15 @@ class Frontend extends Template
      * @param RichText $richText
      * @param array $data
      */
+    /** @var \Mageplaza\Blog\Model\ResourceModel\Like\CollectionFactory */
+    protected $likeCollectionFactory;
+
+    /** @var \Mageplaza\Blog\Model\ResourceModel\PostLike\CollectionFactory */
+    protected $postLikeCollectionFactory;
+
+    /** @var \Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory */
+    protected $commentCollectionFactory;
+
     public function __construct(
         Context $context,
         FilterProvider $filterProvider,
@@ -209,8 +218,14 @@ class Frontend extends Template
         AuthorStatus $authorStatus,
         TreeFactory $treeFactory,
         RichText $richText,
+        \Mageplaza\Blog\Model\ResourceModel\Like\CollectionFactory $likeCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\PostLike\CollectionFactory $postLikeCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory $commentCollectionFactory,
         array $data = []
     ) {
+        $this->likeCollectionFactory = $likeCollectionFactory;
+        $this->postLikeCollectionFactory = $postLikeCollectionFactory;
+        $this->commentCollectionFactory = $commentCollectionFactory;
         $this->filterProvider     = $filterProvider;
         $this->cmtFactory         = $commentFactory;
         $this->likeFactory        = $likeFactory;
@@ -356,7 +371,7 @@ class Frontend extends Template
     public function getPostInfo($post)
     {
         try {
-            $likeCollection = $this->postLikeFactory->create()->getCollection();
+            $likeCollection = $this->postLikeCollectionFactory->create();
             $couldLike      = $likeCollection->addFieldToFilter('post_id', $post->getId())
                 ->addFieldToFilter('action', '1')->count();
             $html           = __(
@@ -418,7 +433,7 @@ class Frontend extends Template
 
         if ($this->commentCounts === null) {
             $this->commentCounts = [];
-            $collection = $this->cmtFactory->create()->getCollection()
+            $collection = $this->commentCollectionFactory->create()
                 ->addFieldToFilter('status', Status::APPROVED);
             $collection->getSelect()
                 ->reset(\Magento\Framework\DB\Select::COLUMNS)

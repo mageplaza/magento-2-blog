@@ -48,16 +48,18 @@ class Edit extends Author
      * @param Registry $registry
      * @param AuthorFactory $authorFactory
      * @param PageFactory $resultPageFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Author $authorResource
      */
     public function __construct(
         Context $context,
         Registry $registry,
         AuthorFactory $authorFactory,
-        PageFactory $resultPageFactory
+        PageFactory $resultPageFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Author $authorResource
     ) {
         $this->resultPageFactory = $resultPageFactory;
 
-        parent::__construct($context, $registry, $authorFactory);
+        parent::__construct($context, $registry, $authorFactory, $authorResource);
     }
 
     /**

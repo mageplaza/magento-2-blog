@@ -54,6 +54,8 @@ class Edit extends History
      * @param DateTime $date
      * @param PageFactory $resultPageFactory
      * @param Context $context
+     * @param \Mageplaza\Blog\Model\ResourceModel\PostHistory $postHistoryResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post $postResource
      */
     public function __construct(
         PostHistoryFactory $postHistoryFactory,
@@ -61,10 +63,12 @@ class Edit extends History
         Registry $coreRegistry,
         DateTime $date,
         PageFactory $resultPageFactory,
-        Context $context
+        Context $context,
+        \Mageplaza\Blog\Model\ResourceModel\PostHistory $postHistoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource
     ) {
         $this->resultPageFactory = $resultPageFactory;
-        parent::__construct($postHistoryFactory, $postFactory, $coreRegistry, $date, $context);
+        parent::__construct($postHistoryFactory, $postFactory, $coreRegistry, $date, $context, $postHistoryResource, $postResource);
     }
 
     /**

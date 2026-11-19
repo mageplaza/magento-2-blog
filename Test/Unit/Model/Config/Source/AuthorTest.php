@@ -25,8 +25,7 @@ namespace Mageplaza\Blog\Test\Unit\Model\Config\Source;
 
 use ArrayIterator;
 use Magento\Framework\DataObject;
-use Mageplaza\Blog\Model\Author as AuthorModel;
-use Mageplaza\Blog\Model\AuthorFactory;
+use Mageplaza\Blog\Model\ResourceModel\Author\CollectionFactory as AuthorFactory;
 use Mageplaza\Blog\Model\Config\Source\Author;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -38,10 +37,7 @@ class AuthorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->authorFactoryMock = $this->getMockBuilder(AuthorFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->authorFactoryMock = $this->createStub(AuthorFactory::class);
 
         $this->model = new Author($this->authorFactoryMock);
     }
@@ -53,7 +49,6 @@ class AuthorTest extends TestCase
             8 => new DataObject(['name' => 'Jane Roe']),
         ]);
 
-        // getCollection()->addFieldToFilter('status', '1') returns the iterable author set
         $collection = new class ($authors) {
             public function __construct(private $authors)
             {
@@ -65,9 +60,7 @@ class AuthorTest extends TestCase
             }
         };
 
-        $authorModel = $this->createMock(AuthorModel::class);
-        $authorModel->method('getCollection')->willReturn($collection);
-        $this->authorFactoryMock->method('create')->willReturn($authorModel);
+        $this->authorFactoryMock->method('create')->willReturn($collection);
 
         $result = $this->model->toOptionArray();
 

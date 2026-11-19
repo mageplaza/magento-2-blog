@@ -101,6 +101,21 @@ class BlogRepository implements BlogRepositoryInterface
     protected $monthlyWidget;
 
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Comment
+     */
+    protected $commentResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory
+     */
+    protected $commentCollectionFactory;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\PostLike\CollectionFactory
+     */
+    protected $likeCollectionFactory;
+
+    /**
      * BlogRepository constructor.
      *
      * @param Data $helperData
@@ -112,6 +127,9 @@ class BlogRepository implements BlogRepositoryInterface
      * @param BlogConfig $blogConfig
      * @param MonthlyWidget $monthlyWidget
      * @param DateTime $date
+     * @param \Mageplaza\Blog\Model\ResourceModel\Comment $commentResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory $commentCollectionFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\PostLike\CollectionFactory $likeCollectionFactory
      */
     public function __construct(
         Data $helperData,
@@ -122,8 +140,14 @@ class BlogRepository implements BlogRepositoryInterface
         RequestInterface $request,
         BlogConfig $blogConfig,
         MonthlyWidget $monthlyWidget,
-        DateTime $date
+        DateTime $date,
+        \Mageplaza\Blog\Model\ResourceModel\Comment $commentResource,
+        \Mageplaza\Blog\Model\ResourceModel\Comment\CollectionFactory $commentCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\PostLike\CollectionFactory $likeCollectionFactory
     ) {
+        $this->commentResource = $commentResource;
+        $this->commentCollectionFactory = $commentCollectionFactory;
+        $this->likeCollectionFactory = $likeCollectionFactory;
         $this->_request                     = $request;
         $this->_helperData                  = $helperData;
         $this->_customerRepositoryInterface = $customerRepositoryInterface;
@@ -140,7 +164,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getAllPost()
     {
-        $collection = $this->_helperData->getFactoryByType()->create()->getCollection();
+        $collection = $this->_helperData->getCollection();
 
         return $this->getAllItem($collection);
     }
@@ -178,7 +202,8 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getPostView($postId)
     {
-        $post = $this->_helperData->getFactoryByType()->create()->load($postId);
+        $post = $this->_helperData->getFactoryByType()->create();
+        $this->_helperData->getResourceModel()->load($post, $postId);
         $post->updateViewTraffic();
 
         return $post;
@@ -191,7 +216,7 @@ class BlogRepository implements BlogRepositoryInterface
     {
         $author = $this->_helperData->getFactoryByType('author')->create()->getAuthorByName($authorName);
 
-        return $this->_helperData->getFactoryByType()->create()->getCollection()
+        return $this->_helperData->getCollection()
             ->addFieldToFilter('author_id', $author->getId())->getItems();
     }
 
@@ -200,7 +225,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getPostViewByAuthorId($authorId)
     {
-        return $this->_helperData->getFactoryByType()->create()->getCollection()
+        return $this->_helperData->getCollection()
             ->addFieldToFilter('author_id', $authorId)->getItems();
     }
 
@@ -209,7 +234,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getPostComment($postId)
     {
-        return $this->_commentFactory->create()->getCollection()
+        return $this->commentCollectionFactory->create()
             ->addFieldToFilter('post_id', $postId)->getItems();
     }
 
@@ -218,7 +243,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getAllComment()
     {
-        $collection = $this->_commentFactory->create()->getCollection();
+        $collection = $this->commentCollectionFactory->create();
 
         return $this->getAllItem($collection);
     }
@@ -228,7 +253,10 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getCommentView($commentId)
     {
-        return $this->_commentFactory->create()->load($commentId);
+        $comment = $this->_commentFactory->create();
+        $this->commentResource->load($comment, $commentId);
+
+        return $comment;
     }
 
     /**
@@ -236,7 +264,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getCommentList(SearchCriteriaInterface $searchCriteria)
     {
-        $collection = $this->_commentFactory->create()->getCollection();
+        $collection = $this->commentCollectionFactory->create();
 
         return $this->getListEntity($collection, $searchCriteria);
     }
@@ -246,7 +274,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getPostByTagName($tagName)
     {
-        $tag = $this->_helperData->getFactoryByType('tag')->create()->getCollection()
+        $tag = $this->_helperData->getCollection('tag')
             ->addFieldToFilter('name', $tagName)->getFirstItem();
 
         return $tag->getSelectedPostsCollection()->getItems();
@@ -257,7 +285,8 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getProductByPost($postId)
     {
-        $post = $this->_helperData->getFactoryByType()->create()->load($postId);
+        $post = $this->_helperData->getFactoryByType()->create();
+        $this->_helperData->getResourceModel()->load($post, $postId);
 
         return $post->getSelectedProductsCollection()->getItems();
     }
@@ -267,7 +296,8 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getPostRelated($postId)
     {
-        $post = $this->_helperData->getFactoryByType()->create()->load($postId);
+        $post = $this->_helperData->getFactoryByType()->create();
+        $this->_helperData->getResourceModel()->load($post, $postId);
 
         return $post->getRelatedPostsCollection() ? $post->getRelatedPostsCollection()->getItems() : [];
     }
@@ -282,7 +312,8 @@ class BlogRepository implements BlogRepositoryInterface
         $commentData->setIsReply(0);
         $commentData->setReplyId(0);
         $commentData->setCreatedAt($this->date->date());
-        $comment->setData($commentData->getData())->save();
+        $comment->setData($commentData->getData());
+        $this->commentResource->save($comment);
 
         return $comment;
     }
@@ -292,7 +323,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getPostLike($postId)
     {
-        return $this->_likeFactory->create()->getCollection()
+        return $this->likeCollectionFactory->create()
             ->addFieldToFilter('post_id', $postId)->count();
     }
 
@@ -318,7 +349,7 @@ class BlogRepository implements BlogRepositoryInterface
         if ($this->checkPostData($data)) {
             $this->prepareData($data);
             $post->addData($data);
-            $post->save();
+            $this->_helperData->getResourceModel('post')->save($post);
         }
 
         return $post;
@@ -332,10 +363,11 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function deletePost($postId)
     {
-        $post = $this->_helperData->getFactoryByType()->create()->load($postId);
+        $post = $this->_helperData->getFactoryByType()->create();
+        $this->_helperData->getResourceModel()->load($post, $postId);
 
         if ($post) {
-            $post->delete();
+            $this->_helperData->getResourceModel('post')->delete($post);
 
             return true;
         }
@@ -351,7 +383,8 @@ class BlogRepository implements BlogRepositoryInterface
         if (empty($postId)) {
             throw new InputException(__('Invalid post id %1', $postId));
         }
-        $subPost = $this->_helperData->getFactoryByType()->create()->load($postId);
+        $subPost = $this->_helperData->getFactoryByType()->create();
+        $this->_helperData->getResourceModel()->load($subPost, $postId);
 
         if (!$subPost->getId()) {
             throw new NoSuchEntityException(
@@ -362,7 +395,8 @@ class BlogRepository implements BlogRepositoryInterface
             );
         }
 
-        $subPost->addData($post->getData())->save();
+        $subPost->addData($post->getData());
+        $this->_helperData->getResourceModel('post')->save($subPost);
 
         return $subPost;
     }
@@ -372,7 +406,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getAllTag()
     {
-        $collection = $this->_helperData->getFactoryByType('tag')->create()->getCollection();
+        $collection = $this->_helperData->getCollection('tag');
 
         return $this->getAllItem($collection);
     }
@@ -382,7 +416,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getTagList(SearchCriteriaInterface $searchCriteria)
     {
-        $collection = $this->_helperData->getFactoryByType('tag')->create()->getCollection();
+        $collection = $this->_helperData->getCollection('tag');
 
         return $this->getListEntity($collection, $searchCriteria);
     }
@@ -392,7 +426,10 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getTagView($tagId)
     {
-        return $this->_helperData->getFactoryByType('tag')->create()->load($tagId);
+        $item = $this->_helperData->getFactoryByType('tag')->create();
+        $this->_helperData->getResourceModel('tag')->load($item, $tagId);
+
+        return $item;
     }
 
     /**
@@ -415,7 +452,7 @@ class BlogRepository implements BlogRepositoryInterface
             if (empty($tag->getMetaRobots())) {
                 $tag->setMetaRobots('INDEX,FOLLOW');
             }
-            $tag->save();
+            $this->_helperData->getResourceModel('tag')->save($tag);
         }
 
         return $tag;
@@ -429,10 +466,11 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function deleteTag($tagId)
     {
-        $tag = $this->_helperData->getFactoryByType('tag')->create()->load($tagId);
+        $tag = $this->_helperData->getFactoryByType('tag')->create();
+        $this->_helperData->getResourceModel('tag')->load($tag, $tagId);
 
         if ($tag) {
-            $tag->delete();
+            $this->_helperData->getResourceModel('tag')->delete($tag);
 
             return true;
         }
@@ -448,7 +486,8 @@ class BlogRepository implements BlogRepositoryInterface
         if (empty($tagId)) {
             throw new InputException(__('Invalid tag id %1', $tagId));
         }
-        $subTag = $this->_helperData->getFactoryByType('tag')->create()->load($tagId);
+        $subTag = $this->_helperData->getFactoryByType('tag')->create();
+        $this->_helperData->getResourceModel('tag')->load($subTag, $tagId);
 
         if (!$subTag->getId()) {
             throw new NoSuchEntityException(
@@ -459,7 +498,8 @@ class BlogRepository implements BlogRepositoryInterface
             );
         }
 
-        $subTag->addData($tag->getData())->save();
+        $subTag->addData($tag->getData());
+        $this->_helperData->getResourceModel('tag')->save($subTag);
 
         return $subTag;
     }
@@ -469,7 +509,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getAllTopic()
     {
-        $collection = $this->_helperData->getFactoryByType('topic')->create()->getCollection();
+        $collection = $this->_helperData->getCollection('topic');
 
         return $this->getAllItem($collection);
     }
@@ -479,7 +519,10 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getTopicView($topicId)
     {
-        return $this->_helperData->getFactoryByType('topic')->create()->load($topicId);
+        $item = $this->_helperData->getFactoryByType('topic')->create();
+        $this->_helperData->getResourceModel('topic')->load($item, $topicId);
+
+        return $item;
     }
 
     /**
@@ -487,7 +530,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getTopicList(SearchCriteriaInterface $searchCriteria)
     {
-        $collection = $this->_helperData->getFactoryByType('topic')->create()->getCollection();
+        $collection = $this->_helperData->getCollection('topic');
 
         return $this->getListEntity($collection, $searchCriteria);
     }
@@ -497,7 +540,8 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getPostsByTopic($topicId)
     {
-        $topic = $this->_helperData->getFactoryByType('topic')->create()->load($topicId);
+        $topic = $this->_helperData->getFactoryByType('topic')->create();
+        $this->_helperData->getResourceModel('topic')->load($topic, $topicId);
 
         return $topic->getSelectedPostsCollection()->getItems();
     }
@@ -522,7 +566,7 @@ class BlogRepository implements BlogRepositoryInterface
             if (empty($topic->getMetaRobots())) {
                 $topic->setMetaRobots('INDEX,FOLLOW');
             }
-            $topic->save();
+            $this->_helperData->getResourceModel('topic')->save($topic);
         }
 
         return $topic;
@@ -536,10 +580,11 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function deleteTopic($topicId)
     {
-        $topic = $this->_helperData->getFactoryByType('topic')->create()->load($topicId);
+        $topic = $this->_helperData->getFactoryByType('topic')->create();
+        $this->_helperData->getResourceModel('topic')->load($topic, $topicId);
 
         if ($topic) {
-            $topic->delete();
+            $this->_helperData->getResourceModel('topic')->delete($topic);
 
             return true;
         }
@@ -555,7 +600,8 @@ class BlogRepository implements BlogRepositoryInterface
         if (empty($topicId)) {
             throw new InputException(__('Invalid topic id %1', $topicId));
         }
-        $subTopic = $this->_helperData->getFactoryByType('topic')->create()->load($topicId);
+        $subTopic = $this->_helperData->getFactoryByType('topic')->create();
+        $this->_helperData->getResourceModel('topic')->load($subTopic, $topicId);
 
         if (!$subTopic->getId()) {
             throw new NoSuchEntityException(
@@ -566,7 +612,8 @@ class BlogRepository implements BlogRepositoryInterface
             );
         }
 
-        $subTopic->addData($topic->getData())->save();
+        $subTopic->addData($topic->getData());
+        $this->_helperData->getResourceModel('topic')->save($subTopic);
 
         return $subTopic;
     }
@@ -576,7 +623,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getCategoryList(SearchCriteriaInterface $searchCriteria)
     {
-        $collection = $this->_helperData->getFactoryByType('category')->create()->getCollection();
+        $collection = $this->_helperData->getCollection('category');
 
         return $this->getListEntity($collection, $searchCriteria);
     }
@@ -586,7 +633,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getAllCategory()
     {
-        $collection = $this->_helperData->getFactoryByType('category')->create()->getCollection();
+        $collection = $this->_helperData->getCollection('category');
 
         return $this->getAllItem($collection);
     }
@@ -596,7 +643,8 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getPostsByCategoryId($categoryId)
     {
-        $category = $this->_helperData->getFactoryByType('category')->create()->load($categoryId);
+        $category = $this->_helperData->getFactoryByType('category')->create();
+        $this->_helperData->getResourceModel('category')->load($category, $categoryId);
 
         return $category->getSelectedPostsCollection()->getItems();
     }
@@ -606,7 +654,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getPostsByCategory($categoryKey)
     {
-        $category = $this->_helperData->getFactoryByType('category')->create()->getCollection()
+        $category = $this->_helperData->getCollection('category')
             ->addFieldToFilter('url_key', $categoryKey)->getFirstItem();
 
         return $category->getSelectedPostsCollection()->getItems();
@@ -617,7 +665,8 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getCategoriesByPostId($postId)
     {
-        $post = $this->_helperData->getFactoryByType()->create()->load($postId);
+        $post = $this->_helperData->getFactoryByType()->create();
+        $this->_helperData->getResourceModel()->load($post, $postId);
 
         return $post->getSelectedCategoriesCollection()->getItems();
     }
@@ -627,7 +676,10 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getCategoryView($categoryId)
     {
-        return $this->_helperData->getFactoryByType('category')->create()->load($categoryId);
+        $item = $this->_helperData->getFactoryByType('category')->create();
+        $this->_helperData->getResourceModel('category')->load($item, $categoryId);
+
+        return $item;
     }
 
     /**
@@ -653,7 +705,7 @@ class BlogRepository implements BlogRepositoryInterface
             if (empty($category->getParentId())) {
                 $category->setParentId(1);
             }
-            $category->save();
+            $this->_helperData->getResourceModel('category')->save($category);
         }
 
         return $category;
@@ -667,7 +719,8 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function deleteCategory($categoryId)
     {
-        $category = $this->_helperData->getFactoryByType('category')->create()->load($categoryId);
+        $category = $this->_helperData->getFactoryByType('category')->create();
+        $this->_helperData->getResourceModel('category')->load($category, $categoryId);
 
         if ($categoryId === '1') {
             throw new NoSuchEntityException(
@@ -676,7 +729,7 @@ class BlogRepository implements BlogRepositoryInterface
         }
 
         if ($category) {
-            $category->delete();
+            $this->_helperData->getResourceModel('category')->delete($category);
 
             return true;
         }
@@ -692,7 +745,8 @@ class BlogRepository implements BlogRepositoryInterface
         if (empty($categoryId)) {
             throw new InputException(__('Invalid category id %1', $categoryId));
         }
-        $subCategory = $this->_helperData->getFactoryByType('category')->create()->load($categoryId);
+        $subCategory = $this->_helperData->getFactoryByType('category')->create();
+        $this->_helperData->getResourceModel('category')->load($subCategory, $categoryId);
 
         if (!$subCategory->getId()) {
             throw new NoSuchEntityException(
@@ -703,7 +757,8 @@ class BlogRepository implements BlogRepositoryInterface
             );
         }
 
-        $subCategory->addData($category->getData())->save();
+        $subCategory->addData($category->getData());
+        $this->_helperData->getResourceModel('category')->save($subCategory);
 
         return $subCategory;
     }
@@ -713,7 +768,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function getAuthorList()
     {
-        $collection = $this->_helperData->getFactoryByType('author')->create()->getCollection();
+        $collection = $this->_helperData->getCollection('author');
 
         return $collection->getItems();
     }
@@ -727,7 +782,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function createAuthor($author)
     {
-        $collection = $this->_helperData->getFactoryByType('author')->create()->getCollection();
+        $collection = $this->_helperData->getCollection('author');
 
         if (!empty($author->getCustomerId())) {
             $customerId = $author->getCustomerId();
@@ -748,7 +803,7 @@ class BlogRepository implements BlogRepositoryInterface
             if (empty($author->getCreatedAt())) {
                 $author->setCreatedAt($this->date->date());
             }
-            $author->save();
+            $this->_helperData->getResourceModel('author')->save($author);
         }
 
         return $author;
@@ -763,7 +818,8 @@ class BlogRepository implements BlogRepositoryInterface
      */
     public function deleteAuthor($authorId, $force = false)
     {
-        $author = $this->_helperData->getFactoryByType('author')->create()->load($authorId);
+        $author = $this->_helperData->getFactoryByType('author')->create();
+        $this->_helperData->getResourceModel('author')->load($author, $authorId);
 
         if ($author) {
             $postCount = $author->getId() ? $author->getPostCount() : 0;
@@ -774,8 +830,8 @@ class BlogRepository implements BlogRepositoryInterface
                     $postCount
                 ));
             }
-            $author->delete();
-            $author->delete();
+            $this->_helperData->getResourceModel('author')->delete($author);
+            $this->_helperData->getResourceModel('author')->delete($author);
 
             return true;
         }
@@ -791,7 +847,8 @@ class BlogRepository implements BlogRepositoryInterface
         if (empty($authorId)) {
             throw new InputException(__('Invalid author id %1', $authorId));
         }
-        $subAuthor = $this->_helperData->getFactoryByType('author')->create()->load($authorId);
+        $subAuthor = $this->_helperData->getFactoryByType('author')->create();
+        $this->_helperData->getResourceModel('author')->load($subAuthor, $authorId);
 
         if (!$subAuthor->getId()) {
             throw new NoSuchEntityException(
@@ -802,7 +859,8 @@ class BlogRepository implements BlogRepositoryInterface
             );
         }
 
-        $subAuthor->addData($author->getData())->save();
+        $subAuthor->addData($author->getData());
+        $this->_helperData->getResourceModel('author')->save($subAuthor);
 
         return $subAuthor;
     }
@@ -889,7 +947,7 @@ class BlogRepository implements BlogRepositoryInterface
         }
 
         if (!empty($data['categories_ids'])) {
-            $collection = $this->_helperData->getFactoryByType('category')->create()->getCollection();
+            $collection = $this->_helperData->getCollection('category');
             foreach (explode(',', $data['categories_ids']) as $id) {
                 if ($collection->addFieldToFilter('category_id', $id)->count() < 1) {
                     return false;
@@ -898,7 +956,7 @@ class BlogRepository implements BlogRepositoryInterface
         }
 
         if (!empty($data['tags_ids'])) {
-            $collection = $this->_helperData->getFactoryByType('tag')->create()->getCollection();
+            $collection = $this->_helperData->getCollection('tag');
             foreach (explode(',', $data['tags_ids']) as $id) {
                 if ($collection->addFieldToFilter('tag_id', $id)->count() < 1) {
                     return false;
@@ -907,7 +965,7 @@ class BlogRepository implements BlogRepositoryInterface
         }
 
         if (!empty($data['topics_ids'])) {
-            $collection = $this->_helperData->getFactoryByType('topic')->create()->getCollection();
+            $collection = $this->_helperData->getCollection('topic');
             foreach (explode(',', $data['topics_ids']) as $id) {
                 if ($collection->addFieldToFilter('topic_id', $id)->count() < 1) {
                     return false;
@@ -925,7 +983,7 @@ class BlogRepository implements BlogRepositoryInterface
      */
     protected function checkAuthor($authorId)
     {
-        $collection = $this->_helperData->getFactoryByType('author')->create()->getCollection()
+        $collection = $this->_helperData->getCollection('author')
             ->addFieldToFilter('user_id', $authorId);
 
         return $collection->count() > 0;

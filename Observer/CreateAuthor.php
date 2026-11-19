@@ -52,15 +52,22 @@ class CreateAuthor implements ObserverInterface
     protected $messageManager;
 
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Author
+     */
+    private $authorResource;
+
+    /**
      * @param Data $helper
      * @param AuthorFactory $authorFactory
      * @param ManagerInterface $manager
      */
     public function __construct(
+        \Mageplaza\Blog\Model\ResourceModel\Author $authorResource,
         Data $helper,
         AuthorFactory $authorFactory,
         ManagerInterface $manager
     ) {
+        $this->authorResource = $authorResource;
         $this->author         = $authorFactory;
         $this->_helper        = $helper;
         $this->messageManager = $manager;
@@ -91,7 +98,7 @@ class CreateAuthor implements ObserverInterface
             $author = $this->author->create();
             $author->addData($data);
             try {
-                $author->save();
+                $this->authorResource->save($author);
             } catch (Exception $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Author.'));
             }

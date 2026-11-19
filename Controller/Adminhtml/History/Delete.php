@@ -42,10 +42,10 @@ class Delete extends History
         $postId = null;
         if ($id = $this->getRequest()->getParam('id')) {
             try {
-                $history = $this->postHistoryFactory->create()
-                    ->load($id);
+                $history = $this->postHistoryFactory->create();
+                $this->postHistoryResource->load($history, $id);
                 $postId = $history->getPostId();
-                $history->delete();
+                $this->postHistoryResource->delete($history);
 
                 $this->messageManager->addSuccessMessage(__('The Post History has been deleted.'));
             } catch (Exception $e) {

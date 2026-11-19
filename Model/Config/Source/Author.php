@@ -23,7 +23,7 @@ namespace Mageplaza\Blog\Model\Config\Source;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\Option\ArrayInterface;
-use Mageplaza\Blog\Model\AuthorFactory;
+use Mageplaza\Blog\Model\ResourceModel\Author\CollectionFactory as AuthorFactory;
 
 /**
  * Class Author
@@ -63,6 +63,6 @@ class Author implements ArrayInterface
      */
     public function getAuthors()
     {
-        return $this->_authorFactory->create()->getCollection()->addFieldToFilter('status', '1');
+        return $this->_authorFactory->create()->addFieldToFilter('status', '1');
     }
 }

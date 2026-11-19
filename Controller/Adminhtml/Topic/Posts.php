@@ -48,16 +48,18 @@ class Posts extends Topic
      * @param TopicFactory $postFactory
      * @param Registry $registry
      * @param Context $context
+     * @param \Mageplaza\Blog\Model\ResourceModel\Topic $topicResource
      */
     public function __construct(
         Context $context,
         Registry $registry,
         LayoutFactory $resultLayoutFactory,
-        TopicFactory $postFactory
+        TopicFactory $postFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Topic $topicResource
     ) {
         $this->resultLayoutFactory = $resultLayoutFactory;
 
-        parent::__construct($context, $registry, $postFactory);
+        parent::__construct($context, $registry, $postFactory, $topicResource);
     }
 
     /**

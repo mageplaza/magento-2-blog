@@ -32,6 +32,11 @@ use Mageplaza\Blog\Model\PostFactory;
  */
 abstract class Post extends Action
 {
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\Post
+     */
+    protected $postResource;
+
     /** Authorization level of a basic admin session */
     const ADMIN_RESOURCE = 'Mageplaza_Blog::post';
 
@@ -55,12 +60,15 @@ abstract class Post extends Action
      * @param PostFactory $postFactory
      * @param Registry $coreRegistry
      * @param Context $context
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post $postResource
      */
     public function __construct(
         PostFactory $postFactory,
         Registry $coreRegistry,
-        Context $context
+        Context $context,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource
     ) {
+        $this->postResource = $postResource;
         $this->postFactory = $postFactory;
         $this->coreRegistry = $coreRegistry;
 
@@ -82,7 +90,7 @@ abstract class Post extends Action
         $post = $this->postFactory->create();
         if ($postId) {
             if (!$isSave || !$duplicate) {
-                $post->load($postId);
+                $this->postResource->load($post, $postId);
                 if (!$post->getId()) {
                     $this->messageManager->addErrorMessage(__('This post no longer exists.'));
 

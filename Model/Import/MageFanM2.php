@@ -22,7 +22,7 @@
 namespace Mageplaza\Blog\Model\Import;
 
 use Exception;
-use Magento\Catalog\Model\Category;
+use Mageplaza\Blog\Model\Category;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Framework\Exception\LocalizedException;
@@ -157,8 +157,8 @@ class MageFanM2 extends AbstractImport
 
         /** delete behaviour action */
         if ($data['behaviour'] === 'delete' || $data['behaviour'] === 'replace') {
-            $postModel->getResource()->deleteImportItems($data['type']);
-            $topicModel->getResource()->deleteImportItems($data['type']);
+            $this->postResource->deleteImportItems($data['type']);
+            $this->topicResource->deleteImportItems($data['type']);
             $this->_hasData = true;
             $isReplace      = ($data['behaviour'] !== 'delete');
         }
@@ -166,14 +166,14 @@ class MageFanM2 extends AbstractImport
         while ($post = mysqli_fetch_assoc($result)) {
             /** store the source item */
             $sourceItems[] = [
-                'is_imported'       => $postModel->getResource()->isImported($importSource, $post['post_id']),
-                'is_duplicated_url' => $postModel->getResource()->isDuplicateUrlKey($post['identifier']),
+                'is_imported'       => $this->postResource->isImported($importSource, $post['post_id']),
+                'is_duplicated_url' => $this->postResource->isDuplicateUrlKey($post['identifier']),
                 'id'                => $post['post_id'],
                 'name'              => $post['title'],
                 'short_description' => $post['short_content'],
                 'post_content'      => $post['content'],
                 'url_key'           => $this->helperData->generateUrlKey(
-                    $postModel->getResource(),
+                    $this->postResource,
                     $postModel,
                     $post['identifier']
                 ),
@@ -207,7 +207,9 @@ class MageFanM2 extends AbstractImport
                         $this->_hasData = true;
                     } else {
                         /** Add new posts */
-                        $postModel->load($post['is_imported'])->setImportSource('')->save();
+                        $this->postResource->load($postModel, $post['is_imported']);
+                        $postModel->setImportSource('');
+                        $this->postResource->save($postModel);
                         try {
                             $this->_addPosts($postModel, $post);
                             $this->_successCount++;
@@ -246,7 +248,7 @@ class MageFanM2 extends AbstractImport
             /**
              * Store old post ids
              */
-            foreach ($postModel->getCollection() as $item) {
+            foreach ($this->postCollectionFactory->create() as $item) {
                 if ($item->getImportSource() != null) {
                     $postImportSource = explode('-', $item->getImportSource());
                     $importType       = array_shift($postImportSource);
@@ -268,14 +270,15 @@ class MageFanM2 extends AbstractImport
             $result      = mysqli_query($connection, $topicSql);
 
             while ($topic = mysqli_fetch_assoc($result)) {
-                if ($topicModel->getResource()->isImported($importSource, $topic['post_id']) == false) {
+                if ($this->topicResource->isImported($importSource, $topic['post_id']) == false) {
                     try {
                         $topicModel->setData([
                             'name'          => 'magefan-topic-' . $topicCount,
                             'enabled'       => 1,
                             'store_ids'     => $this->_storeManager->getStore()->getId(),
                             'import_source' => $importSource . '-' . $topic['post_id']
-                        ])->save();
+                        ]);
+                        $this->topicResource->save($topicModel);
                         $oldTopicIds[$topicModel->getId()] = $topic['post_id'];
                     } catch (Exception $e) {
                         continue;
@@ -336,7 +339,7 @@ class MageFanM2 extends AbstractImport
 
         /** delete behaviour action */
         if ($data['behaviour'] === 'delete' || $data['behaviour'] === 'replace') {
-            $tagModel->getResource()->deleteImportItems($data['type']);
+            $this->tagResource->deleteImportItems($data['type']);
             $this->_hasData = true;
             $isReplace      = !($data['behaviour'] === 'delete');
         }
@@ -345,12 +348,12 @@ class MageFanM2 extends AbstractImport
         while ($tag = mysqli_fetch_assoc($result)) {
             /** store the source item */
             $sourceItems[] = [
-                'is_imported'       => $tagModel->getResource()->isImported($importSource, $tag['tag_id']),
-                'is_duplicated_url' => $tagModel->getResource()->isDuplicateUrlKey($tag['identifier']),
+                'is_imported'       => $this->tagResource->isImported($importSource, $tag['tag_id']),
+                'is_duplicated_url' => $this->tagResource->isDuplicateUrlKey($tag['identifier']),
                 'id'                => $tag['tag_id'],
                 'name'              => $tag['title'],
                 'url_key'           => $this->helperData->generateUrlKey(
-                    $tagModel->getResource(),
+                    $this->tagResource,
                     $tagModel,
                     $tag['identifier']
                 ),
@@ -382,7 +385,9 @@ class MageFanM2 extends AbstractImport
                         }
                     } else {
                         /** Add new tags */
-                        $tagModel->load($tag['is_imported'])->setImportSource('')->save();
+                        $this->tagResource->load($tagModel, $tag['is_imported']);
+                        $tagModel->setImportSource('');
+                        $this->tagResource->save($tagModel);
                         try {
                             $this->_addTags($tagModel, $tag);
                             $this->_successCount++;
@@ -428,7 +433,7 @@ class MageFanM2 extends AbstractImport
             mysqli_free_result($result);
 
             /** Store old tag ids */
-            foreach ($tagModel->getCollection() as $item) {
+            foreach ($this->tagCollectionFactory->create() as $item) {
                 if ($item->getImportSource() != null) {
                     $tagImportSource = explode('-', $item->getImportSource());
                     $importType      = array_shift($tagImportSource);
@@ -488,7 +493,7 @@ class MageFanM2 extends AbstractImport
 
         /** delete behaviour action */
         if ($data['behaviour'] === 'delete' || $data['behaviour'] === 'replace') {
-            $categoryModel->getResource()->deleteImportItems($data['type']);
+            $this->categoryResource->deleteImportItems($data['type']);
             $this->_hasData = true;
             $isReplace      = !($data['behaviour'] === 'delete');
         }
@@ -497,15 +502,15 @@ class MageFanM2 extends AbstractImport
         while ($category = mysqli_fetch_assoc($result)) {
             /** store the source item */
             $sourceItems[] = [
-                'is_imported'       => $categoryModel->getResource()->isImported(
+                'is_imported'       => $this->categoryResource->isImported(
                     $importSource,
                     $category['category_id']
                 ),
-                'is_duplicated_url' => $categoryModel->getResource()->isDuplicateUrlKey($category['identifier']),
+                'is_duplicated_url' => $this->categoryResource->isDuplicateUrlKey($category['identifier']),
                 'id'                => $category['category_id'],
                 'name'              => $category['title'],
                 'url_key'           => $this->helperData->generateUrlKey(
-                    $categoryModel->getResource(),
+                    $this->categoryResource,
                     $categoryModel,
                     $category['identifier']
                 ),
@@ -539,7 +544,9 @@ class MageFanM2 extends AbstractImport
                         }
                     } else {
                         /** Add new categories */
-                        $categoryModel->load($category['is_imported'])->setImportSource('')->save();
+                        $this->categoryResource->load($categoryModel, $category['is_imported']);
+                        $categoryModel->setImportSource('');
+                        $this->categoryResource->save($categoryModel);
                         try {
                             $this->_addCategories($categoryModel, $category);
                             $newCategories[$categoryModel->getId()] = $category;
@@ -591,7 +598,7 @@ class MageFanM2 extends AbstractImport
             /**
              * Store old category ids
              */
-            foreach ($categoryModel->getCollection() as $item) {
+            foreach ($this->categoryCollectionFactory->create() as $item) {
                 if ($item->getImportSource() != null) {
                     $catImportSource = explode('-', $item->getImportSource());
                     $importType      = array_shift($catImportSource);
@@ -608,12 +615,15 @@ class MageFanM2 extends AbstractImport
                     $oldParentId     = explode('/', $newCategory['path']);
                     $oldParentId     = array_pop($oldParentId);
                     $parentId        = array_search($oldParentId, $oldCategoryIds);
-                    $parentPath      = $categoryModel->load($parentId)->getPath();
+                    $this->categoryResource->load($categoryModel, $parentId);
+                    $parentPath = $categoryModel->getPath();
                     $parentPaths     = explode('/', $categoryModel->getPath());
                     $level           = count($parentPaths);
                     $newPath         = $parentPath . '/' . $newCatId;
-                    $currentCategory = $categoryModel->load($newCatId);
-                    $currentCategory->setPath($newPath)->setParentId($parentId)->setLevel($level)->save();
+                    $this->categoryResource->load($categoryModel, $newCatId);
+                    $currentCategory = $categoryModel;
+                    $currentCategory->setPath($newPath)->setParentId($parentId)->setLevel($level);
+                    $this->categoryResource->save($currentCategory);
                 }
             }
             mysqli_free_result($result);
@@ -672,7 +682,7 @@ class MageFanM2 extends AbstractImport
 
         /** delete behaviour action */
         if ($data['behaviour'] === 'delete' || $data['behaviour'] === 'replace') {
-            $commentModel->getResource()->deleteImportItems($data['type']);
+            $this->commentResource->deleteImportItems($data['type']);
             $this->_hasData = true;
             if ($data['behaviour'] === 'delete') {
                 $isReplace = false;
@@ -718,7 +728,7 @@ class MageFanM2 extends AbstractImport
 
             /** store the source item */
             $sourceItems[] = [
-                'is_imported'   => $commentModel->getResource()->isImported($importSource, $comment['comment_id']),
+                'is_imported'   => $this->commentResource->isImported($importSource, $comment['comment_id']),
                 'id'            => $comment['comment_id'],
                 'post_id'       => $newPostId,
                 'entity_id'     => $entityId,
@@ -780,7 +790,8 @@ class MageFanM2 extends AbstractImport
                             'user_name'     => $comment['user_name'],
                             'user_email'    => $comment['user_email'],
                             'import_source' => $comment['import_source']
-                        ])->save();
+                        ]);
+                        $this->commentResource->save($commentModel);
                         $newComments[$commentModel->getId()] = $comment;
                         $this->_successCount++;
                         $this->_hasData = true;
@@ -794,7 +805,7 @@ class MageFanM2 extends AbstractImport
             mysqli_free_result($result);
 
             /** Store old comment ids */
-            foreach ($commentModel->getCollection() as $item) {
+            foreach ($this->commentCollectionFactory->create() as $item) {
                 if ($item->getImportSource() != null) {
                     $commentImportSource = explode('-', $item->getImportSource());
                     $importType          = array_shift($commentImportSource);
@@ -810,12 +821,16 @@ class MageFanM2 extends AbstractImport
                 if ($newComment['parent_id'] != '0') {
                     $oldParentId          = $newComment['parent_id'];
                     $parentId             = array_search($oldParentId, $oldCommentIds);
-                    $currentParentComment = $commentModel->load($parentId);
+                    $this->commentResource->load($commentModel, $parentId);
+                    $currentParentComment = $commentModel;
                     if ($currentParentComment->getHasReply() == '0') {
-                        $currentParentComment->setHasReply('1')->save();
+                        $currentParentComment->setHasReply('1');
+                        $this->commentResource->save($currentParentComment);
                     }
-                    $currentComment = $commentModel->load($newCommentId);
-                    $currentComment->setIsReply('1')->setReplyId($parentId)->save();
+                    $this->commentResource->load($commentModel, $newCommentId);
+                    $currentComment = $commentModel;
+                    $currentComment->setIsReply('1')->setReplyId($parentId);
+                    $this->commentResource->save($currentComment);
                 }
             }
         }
@@ -853,10 +868,10 @@ class MageFanM2 extends AbstractImport
             $userModel = $this->authorFactory->create();
             if (array_key_exists($user['email'], $magentoUserEmail)) {
                 $customerId = $magentoUserEmail[$user['email']];
-                $userModel->load($customerId, 'customer_id');
+                $this->authorResource->load($userModel, $customerId, 'customer_id');
             } else {
                 $customerId = 0;
-                $userModel->load($user['email'], 'email');
+                $this->authorResource->load($userModel, $user['email'], 'email');
             }
 
             if (!$userModel->getId()) {
@@ -867,7 +882,8 @@ class MageFanM2 extends AbstractImport
                         'email'       => $user['email'],
                         'customer_id' => $customerId,
                         'type'        => $userModel->getId() ? AuthorType::CUSTOMER : AuthorType::ADMIN
-                    ])->save();
+                    ]);
+                    $this->authorResource->save($userModel);
                     $this->_successCount++;
                     $this->_hasData = true;
                 } catch (Exception $e) {
@@ -935,7 +951,8 @@ class MageFanM2 extends AbstractImport
             'meta_description'  => $post['meta_description'],
             'author_id'         => $post['author_id'],
             'import_source'     => $post['import_source']
-        ])->save();
+        ]);
+        $this->postResource->save($postModel);
     }
 
     /**
@@ -991,7 +1008,8 @@ class MageFanM2 extends AbstractImport
             'store_ids'        => $tag['store_ids'],
             'enabled'          => $tag['enabled'],
             'import_source'    => $tag['import_source']
-        ])->save();
+        ]);
+        $this->tagResource->save($tagModel);
     }
 
     /**
@@ -1037,7 +1055,8 @@ class MageFanM2 extends AbstractImport
             'meta_keywords'    => $category['meta_keywords'],
             'meta_title'       => $category['meta_title'],
             'import_source'    => $category['import_source']
-        ])->save();
+        ]);
+        $this->categoryResource->save($categoryModel);
     }
 
     /**

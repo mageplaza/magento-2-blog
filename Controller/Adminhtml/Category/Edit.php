@@ -68,6 +68,8 @@ class Edit extends Category
      * @param CategoryFactory $categoryFactory
      * @param Registry $registry
      * @param Context $context
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      */
     public function __construct(
         Context $context,
@@ -75,13 +77,15 @@ class Edit extends Category
         CategoryFactory $categoryFactory,
         DataObject $dataObject,
         PageFactory $resultPageFactory,
-        JsonFactory $resultJsonFactory
+        JsonFactory $resultJsonFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
     ) {
         $this->dataObject        = $dataObject;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
 
-        parent::__construct($context, $registry, $categoryFactory);
+        parent::__construct($context, $registry, $categoryFactory, $categoryResource, $categoryCollectionFactory);
     }
 
     /**

@@ -39,9 +39,9 @@ class Delete extends Comment
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id = $this->getRequest()->getParam('id')) {
             try {
-                $this->commentFactory->create()
-                    ->load($id)
-                    ->delete();
+                $comment = $this->commentFactory->create();
+                $this->commentResource->load($comment, $id);
+                $this->commentResource->delete($comment);
 
                 $this->messageManager->addSuccessMessage(__('The Comment has been deleted.'));
             } catch (Exception $e) {

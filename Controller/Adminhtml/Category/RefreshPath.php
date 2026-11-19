@@ -48,28 +48,33 @@ class RefreshPath extends Category
      * @param CategoryFactory $categoryFactory
      * @param Registry $coreRegistry
      * @param Context $context
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
         CategoryFactory $categoryFactory,
-        JsonFactory $resultJsonFactory
+        JsonFactory $resultJsonFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Category $categoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
 
-        parent::__construct($context, $coreRegistry, $categoryFactory);
+        parent::__construct($context, $coreRegistry, $categoryFactory, $categoryResource, $categoryCollectionFactory);
     }
 
     /**
      * Build response for refresh input element 'path' in form
      *
-     * @return Json
+     * @return Json|null
      */
     public function execute()
     {
         $categoryId = (int)$this->getRequest()->getParam('id');
         if ($categoryId) {
-            $category = $this->categoryFactory->create()->load($categoryId);
+            $category = $this->categoryFactory->create();
+            $this->categoryResource->load($category, $categoryId);
 
             /** @var Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();

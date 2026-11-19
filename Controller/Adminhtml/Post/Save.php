@@ -47,6 +47,16 @@ use RuntimeException;
 class Save extends Post
 {
     /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\PostHistory
+     */
+    protected $postHistoryResource;
+
+    /**
+     * @var \Mageplaza\Blog\Model\ResourceModel\PostHistory\CollectionFactory
+     */
+    protected $postHistoryCollectionFactory;
+
+    /**
      * JS helper
      *
      * @var Js
@@ -90,6 +100,9 @@ class Save extends Post
      * @param PostHistoryFactory $postHistory
      * @param DateTime $date
      * @param TimezoneInterface $timezone
+     * @param \Mageplaza\Blog\Model\ResourceModel\PostHistory $postHistoryResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\PostHistory\CollectionFactory $postHistoryCollectionFactory
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post $postResource
      */
     public function __construct(
         Context $context,
@@ -100,8 +113,13 @@ class Save extends Post
         Data $helperData,
         PostHistoryFactory $postHistory,
         DateTime $date,
-        TimezoneInterface $timezone
+        TimezoneInterface $timezone,
+        \Mageplaza\Blog\Model\ResourceModel\PostHistory $postHistoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\PostHistory\CollectionFactory $postHistoryCollectionFactory,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource
     ) {
+        $this->postHistoryCollectionFactory = $postHistoryCollectionFactory;
+        $this->postHistoryResource = $postHistoryResource;
         $this->jsHelper     = $jsHelper;
         $this->_helperData  = $helperData;
         $this->_postHistory = $postHistory;
@@ -109,7 +127,7 @@ class Save extends Post
         $this->date         = $date;
         $this->timezone     = $timezone;
 
-        parent::__construct($postFactory, $registry, $context);
+        parent::__construct($postFactory, $registry, $context, $postResource);
     }
 
     /**
@@ -127,7 +145,7 @@ class Save extends Post
             $this->prepareData($post, $data);
             try {
                 if (empty($action) || $action === 'add') {
-                    $post->save();
+                    $this->postResource->save($post);
                     $this->_eventManager->dispatch(
                         'mageplaza_blog_post_prepare_save',
                         ['post' => $post, 'request' => $this->getRequest()]
@@ -191,7 +209,7 @@ class Save extends Post
                         $history->removeFirstHistory($post->getPostId());
                     }
                     $history->addData($data);
-                    $history->save();
+                    $this->postHistoryResource->save($history);
                 }
             } catch (RuntimeException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
@@ -212,7 +230,7 @@ class Save extends Post
     protected function checkHistory($data)
     {
         unset($data['updated_at']);
-        $historyItems = $this->_postHistory->create()->getCollection()
+        $historyItems = $this->postHistoryCollectionFactory->create()
             ->addFieldToFilter('post_id', $data['post_id'])->getItems();
 
         if (count($historyItems) < 1) {

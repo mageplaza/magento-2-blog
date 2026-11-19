@@ -89,6 +89,8 @@ class Save extends History
      * @param Data $helperData
      * @param TimezoneInterface $timezone
      * @param Context $context
+     * @param \Mageplaza\Blog\Model\ResourceModel\PostHistory $postHistoryResource
+     * @param \Mageplaza\Blog\Model\ResourceModel\Post $postResource
      */
     public function __construct(
         PostHistoryFactory $postHistoryFactory,
@@ -99,14 +101,16 @@ class Save extends History
         Image $imageHelper,
         Data $helperData,
         TimezoneInterface $timezone,
-        Context $context
+        Context $context,
+        \Mageplaza\Blog\Model\ResourceModel\PostHistory $postHistoryResource,
+        \Mageplaza\Blog\Model\ResourceModel\Post $postResource
     ) {
         $this->jsHelper = $jsHelper;
         $this->_helperData = $helperData;
         $this->imageHelper = $imageHelper;
         $this->_timezone = $timezone;
 
-        parent::__construct($postHistoryFactory, $postFactory, $coreRegistry, $date, $context);
+        parent::__construct($postHistoryFactory, $postFactory, $coreRegistry, $date, $context, $postHistoryResource, $postResource);
     }
 
     /**
