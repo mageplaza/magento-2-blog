@@ -1,0 +1,22 @@
+<?php
+declare(strict_types=1);
+
+use Mageplaza\Blog\Block\Post\View;
+use Magento\Framework\Escaper;
+
+/** @var View $block */
+/** @var Escaper $escaper */
+$helper = $block->getBlogHelper();
+$_post = $block->getPost();
+$showTags = $helper->getPostViewPageConfig('display_tags');
+$showTags = $showTags === null ? true : (bool) $showTags;
+$tags = $showTags ? $_post->getSelectedTagsCollection() : [];
+?>
+<?php if (!empty($tags) && count($tags)) : ?>
+    <div class="blog-post-tags">
+        <span class="blog-post-tags__label"><?= $escaper->escapeHtml(__('Tags:')) ?></span>
+        <?php foreach ($tags as $tag) : ?>
+            <a class="mp-tag-info" href="<?= $escaper->escapeUrl($block->getTagUrl($tag)) ?>"><?= $escaper->escapeHtml($tag->getName()) ?></a>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>

@@ -80,10 +80,11 @@ class Search extends Frontend
             return [];
         }
 
+        $like       = '%' . addcslashes($query, '\\%_') . '%';
         $collection = $this->helperData->getPostList();
         $collection->addFieldToFilter(
             ['name', 'short_description'],
-            [['like' => '%' . $query . '%'], ['like' => '%' . $query . '%']]
+            [['like' => $like], ['like' => $like]]
         )->setPageSize($this->getSearchLimit());
 
         return $this->buildSuggestions($collection);
@@ -113,9 +114,12 @@ class Search extends Frontend
         $result    = [];
         $limitDesc = (int) $this->getSidebarConfig('search/description');
         foreach ($collection as $item) {
-            $shortDescription = ($item->getShortDescription() && $limitDesc > 0) ?
-                $item->getShortDescription() : '';
-            if (strlen($shortDescription) > $limitDesc) {
+            $shortDescription = '';
+            if ($item->getShortDescription() && $limitDesc > 0) {
+                $shortDescription = strip_tags((string) $item->getShortDescription());
+                $shortDescription = trim(html_entity_decode($shortDescription, ENT_QUOTES, 'UTF-8'));
+            }
+            if (mb_strlen($shortDescription, 'UTF-8') > $limitDesc) {
                 $shortDescription = mb_substr($shortDescription, 0, $limitDesc, 'UTF-8') . '...';
             }
 

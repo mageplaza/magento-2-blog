@@ -19,78 +19,79 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Mageplaza\Blog\Block\Sidebar\MostView;
 use Magento\Framework\Escaper;
 
 /** @var MostView $block */
 /** @var Escaper $escaper */
-$posts       = $block->getMostViewPosts();
-$postsRecent = $block->getRecentPost();
-?>
-<div class="mp-sidebar product info detailed">
-    <div class="product data items" x-data="{ activeTab:  0 }">
-        <div class="data item title" data-role="collapsible" id="tab-label-popular" @click="activeTab = 0" :class="{ 'active': activeTab === 0 }">
-            <a class="data switch" tabindex="-1" data-toggle="switch" id="tab-label-popular-title" >
-                <div class="text-center"><?= $escaper->escapeHtml(__('Popular')) ?></div>
-            </a>
-        </div>
-        <div class="data item content" id="tab-content-popular" data-role="content" :class="{ 'active': activeTab === 0 }" x-show.transition.in.opacity.duration.600="activeTab === 0">
-            <?php if ($posts->getSize()) : ?>
-                <?php foreach ($posts as $post) : ?>
-                    <div class="list-post-tabs">
-                        <div class="post-left">
-                            <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
-                                <img class="img-responsive"
-                                     src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(), '100x')) ?>">
-                            </a>
-                        </div>
-                        <div class="post-right">
-                            <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
-                                <span><?= $escaper->escapeHtml($post->getName()) ?></span>
-                            </a>
-                            <span class="create-at">
-                                <?= $post->getPublishDate()
-                                    ? $escaper->escapeHtml($block->getDateFormat($post->getPublishDate())) : '' ?>
-                            </span>
-                        </div>
-                        <div class="mp-clear"></div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else : ?>
-                <div class="mostview-nopost"><?= $escaper->escapeHtml(__('No Posts')) ?></div>
-            <?php endif; ?>
-        </div>
+/** @var ViewModelRegistry $viewModels */
 
-        <div class="data item title" data-role="collapsible" id="tab-label-mostview" @click="activeTab = 1" :class="{ 'active': activeTab === 1 }">
-            <a class="data switch" tabindex="-1" data-toggle="switch" id="tab-label-mostview-title" >
-                <div class="text-center"><?= $escaper->escapeHtml(__('Latest')) ?></div>
-            </a>
-        </div>
-        <div class="data item content" id="tab-content-mostview" data-role="content" :class="{ 'active': activeTab === 1 }" x-show.transition.in.opacity.duration.600="activeTab === 1">
-            <?php if ($postsRecent->getSize()) : ?>
-                <?php foreach ($postsRecent as $post) : ?>
-                    <div class="list-post-tabs" href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
-                        <div class="post-left">
-                            <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
-                                <img class="img-responsive"
-                                     src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(), '100x')) ?>">
-                            </a>
-                        </div>
-                        <div class="post-right">
-                            <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>">
-                                <span><?= $escaper->escapeHtml($post->getName()) ?></span>
-                            </a>
-                            <span class="create-at">
-                                <?= $post->getPublishDate()
-                                    ? $escaper->escapeHtml($block->getDateFormat($post->getPublishDate())) : '' ?>
-                            </span>
-                        </div>
-                        <div class="mp-clear"></div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else : ?>
-                <div class="mostview-nopost"><?= $escaper->escapeHtml(__('No Posts')) ?></div>
-            <?php endif; ?>
-        </div>
+$heroicons   = $viewModels->require(HeroiconsOutline::class);
+$popular     = $block->getMostViewPosts()->getItems();
+$recent      = $block->getRecentPost()->getItems();
+$tabClass    = 'flex-1 px-3 py-2 text-sm font-semibold text-slate-500 border-b-2 border-transparent '
+    . 'hover:text-primary aria-selected:text-primary aria-selected:border-primary';
+$renderPosts = function (array $posts) use ($block, $escaper, $heroicons): string {
+    if (!$posts) {
+        return '<p class="py-3 text-center text-sm text-slate-500">' . $escaper->escapeHtml(__('No Posts')) . '</p>';
+    }
+    $html = '';
+    foreach ($posts as $post) {
+        $html .= '<a class="blog-subcard" href="' . $escaper->escapeUrl($post->getUrl()) . '">';
+        if ($post->getImage()) {
+            $html .= '<span class="blog-subcard__media"><img src="'
+                . $escaper->escapeUrl($block->resizeImage($post->getImage(), '160x'))
+                . '" alt="' . $escaper->escapeHtmlAttr($post->getName()) . '" loading="lazy"/></span>';
+        }
+        $html .= '<span class="blog-subcard__body"><span class="blog-subcard__title">'
+            . $escaper->escapeHtml($post->getName()) . '</span>';
+        if ($post->getPublishDate()) {
+            $html .= '<span class="blog-subcard__date">'
+                . $escaper->escapeHtml($block->getDateFormat($post->getPublishDate())) . '</span>';
+        }
+        $html .= '<span class="blog-subcard__more">' . $escaper->escapeHtml(__('Read More'))
+            . $heroicons->arrowRightHtml('', 14, 14, ['aria-hidden' => 'true']) . '</span>';
+        $html .= '</span></a>';
+    }
+
+    return $html;
+};
+?>
+<section class="sidebar-widget" x-data="blogSidebarTabs">
+    <div class="flex border-b border-slate-200 mb-2" role="tablist" aria-label="<?= $escaper->escapeHtmlAttr(__('Posts')) ?>">
+        <button type="button"
+                role="tab"
+                id="mpblog-tab-popular"
+                aria-controls="mpblog-tabpanel-popular"
+                aria-selected="true"
+                :aria-selected="popularActive"
+                class="<?= $escaper->escapeHtmlAttr($tabClass) ?>"
+                @click="showPopular"
+                @keydown.right.prevent="showLatest"><?= $escaper->escapeHtml(__('Popular')) ?></button>
+        <button type="button"
+                role="tab"
+                id="mpblog-tab-latest"
+                aria-controls="mpblog-tabpanel-latest"
+                aria-selected="false"
+                :aria-selected="latestActive"
+                class="<?= $escaper->escapeHtmlAttr($tabClass) ?>"
+                @click="showLatest"
+                @keydown.left.prevent="showPopular"><?= $escaper->escapeHtml(__('Latest')) ?></button>
     </div>
-</div>
+    <div id="mpblog-tabpanel-popular"
+         role="tabpanel"
+         aria-labelledby="mpblog-tab-popular"
+         x-show="popularActive">
+        <?= /** @noEscape */ $renderPosts($popular) ?>
+    </div>
+    <div id="mpblog-tabpanel-latest"
+         role="tabpanel"
+         aria-labelledby="mpblog-tab-latest"
+         x-show="latestActive"
+         x-cloak>
+        <?= /** @noEscape */ $renderPosts($recent) ?>
+    </div>
+</section>
+<script src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::js/hyva/sidebar-tabs.js')) ?>" defer></script>

@@ -1,0 +1,34 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Mageplaza\Blog\Block\Post\View;
+use Magento\Framework\Escaper;
+
+/** @var View $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+$helper = $block->getBlogHelper();
+$_post = $block->getPost();
+$author = $helper->getAuthorByPost($_post);
+$authorName = $author !== null ? (string) $author->getName() : '';
+$modifier = $helper->getAuthorByPost($_post, true);
+$modifierName = $modifier !== null ? (string) $modifier->getName() : '';
+?>
+<?php if ($authorName && $helper->showAuthorInfo()) : ?>
+    <span class="blog-meta__item">
+        <?= $heroicons->userHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+        <?= $escaper->escapeHtml(__('By:')) ?>
+        <a href="<?= $escaper->escapeUrl($author->getUrl()) ?>"><?= $escaper->escapeHtml($authorName) ?></a>
+    </span>
+    <?php if ($modifierName && $authorName !== $modifierName) : ?>
+        <span class="blog-meta__item">
+            <?= $heroicons->pencilHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
+            <?= $escaper->escapeHtml(__('Modified by:')) ?>
+            <a href="<?= $escaper->escapeUrl($modifier->getUrl()) ?>"><?= $escaper->escapeHtml($modifierName) ?></a>
+            <?= $escaper->escapeHtml(__('at %1', $block->getDateFormat($_post->getUpdatedAt()))) ?>
+        </span>
+    <?php endif; ?>
+<?php endif; ?>

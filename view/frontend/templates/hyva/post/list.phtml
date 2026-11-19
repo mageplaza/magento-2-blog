@@ -1,0 +1,72 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Framework\Escaper;
+use Mageplaza\Blog\Block\ListPost;
+use Mageplaza\Blog\Model\Post;
+use Mageplaza\Blog\ViewModel\PartialRenderer;
+
+/** @var ListPost $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var PartialRenderer $partials */
+$partials  = $viewModels->require(PartialRenderer::class);
+
+$helperBlog     = $block->helperData;
+$isOn           = static fn ($value): bool => $value === null ? true : (bool) $value;
+$postCollection = $block->getPostCollection();
+$isGrid         = $block->isGridView();
+$pageHeading    = trim((string) $block->getBlogTitle());
+
+$cardFile = $block->getTemplateFile(
+    $isGrid ? 'Mageplaza_Blog::hyva/post/card/vertical.phtml' : 'Mageplaza_Blog::hyva/post/card/horizontal.phtml'
+);
+$cardVars = [
+    'helperBlog'     => $helperBlog,
+    'heroicons'      => $heroicons,
+    'headingLevel'   => 2,
+    'showAuthor'     => (bool) $helperBlog->showAuthorInfo(),
+    'showTags'       => $isOn($helperBlog->getPostViewPageConfig('display_tags')),
+    'showCategories' => $isOn($helperBlog->getPostViewPageConfig('display_categories')),
+    'showReadTime'   => $isOn($helperBlog->getPostViewPageConfig('display_read_time')),
+    'showViewCount'  => $isOn($helperBlog->getPostViewPageConfig('display_view_count')),
+    'showTwitter'    => (bool) $helperBlog->getBlogConfig('platforms/x_platform/x_share'),
+    'showFacebook'   => (bool) $helperBlog->getBlogConfig('platforms/fb_platform/fb_share'),
+];
+?>
+<div id="mpblog-list-container">
+    <header class="blog-page-header">
+        <?php if ($pageHeading !== ''): ?>
+            <h1 class="blog-page-heading"><?= $escaper->escapeHtml($pageHeading) ?></h1>
+        <?php endif; ?>
+        <a href="<?= $escaper->escapeUrl($block->getRssUrl('post/rss')) ?>"
+           class="inline-flex items-center gap-1 text-sm text-slate-600 md:ml-auto"
+           aria-label="<?= $escaper->escapeHtmlAttr(__('RSS feed')) ?>">
+            <?= $heroicons->rssHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+            <span><?= $escaper->escapeHtml(__('RSS')) ?></span>
+        </a>
+    </header>
+
+    <?php if ($postCollection && $postCollection->getSize()): ?>
+        <?php if ($isGrid): ?>
+            <div class="grid gap-5 md:grid-cols-2 blog-grid-equal">
+        <?php endif; ?>
+        <?php /** @var Post $post */
+        $cardIndex = 0;
+        foreach ($postCollection as $post): ?>
+            <?= /** @noEscape */ $partials->render($block, $cardFile, $cardVars + ['post' => $post, 'eagerImage' => $cardIndex++ === 0]) ?>
+        <?php endforeach; ?>
+        <?php if ($isGrid): ?>
+            </div>
+        <?php endif; ?>
+        <?= /** @noEscape */ $block->getPagerHtml() ?>
+    <?php else: ?>
+        <div class="blog-empty"><?= $escaper->escapeHtml(__('There are no posts at this moment')) ?></div>
+    <?php endif; ?>
+    <?= /** @noEscape */ $block->getChildHtml('additional') ?>
+</div>

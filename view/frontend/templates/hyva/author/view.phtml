@@ -1,0 +1,102 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Magento\Framework\Escaper;
+use Mageplaza\Blog\Block\Author\ListPost;
+use Mageplaza\Blog\Helper\Data as BlogHelper;
+use Mageplaza\Blog\Helper\Image;
+use Mageplaza\Blog\Model\Post;
+use Mageplaza\Blog\ViewModel\PartialRenderer;
+
+/** @var ListPost $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var PartialRenderer $partials */
+$partials  = $viewModels->require(PartialRenderer::class);
+
+$helperBlog = $block->helperData;
+$isOn       = static fn ($value): bool => $value === null ? true : (bool) $value;
+
+$authorId   = $block->getRequest()->getParam('id');
+$pageAuthor = $authorId ? $helperBlog->getObjectByParam($authorId, null, BlogHelper::TYPE_AUTHOR) : null;
+$pageAuthor = $pageAuthor && $pageAuthor->getId() ? $pageAuthor : null;
+$listPost   = $pageAuthor ? $block->getPostCollection() : null;
+
+$cardFile = $block->getTemplateFile('Mageplaza_Blog::hyva/post/card/horizontal.phtml');
+$cardVars = [
+    'helperBlog'     => $helperBlog,
+    'heroicons'      => $heroicons,
+    'headingLevel'   => 3,
+    'showAuthor'     => (bool) $helperBlog->showAuthorInfo(),
+    'showTags'       => $isOn($helperBlog->getPostViewPageConfig('display_tags')),
+    'showCategories' => $isOn($helperBlog->getPostViewPageConfig('display_categories')),
+    'showReadTime'   => $isOn($helperBlog->getPostViewPageConfig('display_read_time')),
+    'showViewCount'  => $isOn($helperBlog->getPostViewPageConfig('display_view_count')),
+    'showTwitter'    => (bool) $helperBlog->getBlogConfig('platforms/x_platform/x_share'),
+    'showFacebook'   => (bool) $helperBlog->getBlogConfig('platforms/fb_platform/fb_share'),
+];
+?>
+<?php if ($pageAuthor): ?>
+    <section class="blog-author-hero">
+        <img class="blog-author-hero__avatar"
+             src="<?= $escaper->escapeUrl($pageAuthor->getImage()
+                 ? $block->resizeImage($pageAuthor->getImage(), '160x', Image::TEMPLATE_MEDIA_TYPE_AUTH)
+                 : $block->getDefaultAuthorImage()) ?>"
+             alt="<?= $escaper->escapeHtmlAttr($pageAuthor->getName()) ?>"/>
+        <div class="blog-author-hero__body">
+            <h1 class="blog-author-hero__name"><?= $escaper->escapeHtml($pageAuthor->getName()) ?></h1>
+            <?php if ($pageAuthor->getShortDescription()): ?>
+                <div class="blog-author-hero__bio">
+                    <?= /** @noEscape */ $block->getAuthorBioHtml($pageAuthor) ?>
+                </div>
+            <?php endif; ?>
+            <?php if ($pageAuthor->getFacebookLink() || $pageAuthor->getTwitterLink()): ?>
+                <div class="blog-author-hero__social">
+                    <span><?= $escaper->escapeHtml(__('Follow me on other media platforms:')) ?></span>
+                    <?php if ($pageAuthor->getFacebookLink()): ?>
+                        <a href="<?= $escaper->escapeUrl($pageAuthor->getFacebookLink()) ?>"
+                           target="_blank" rel="noopener nofollow"
+                           aria-label="<?= $escaper->escapeHtmlAttr(__('Facebook')) ?>">
+                            <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/facebook.png')) ?>" alt=""/>
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($pageAuthor->getTwitterLink()): ?>
+                        <a href="<?= $escaper->escapeUrl($pageAuthor->getTwitterLink()) ?>"
+                           target="_blank" rel="noopener nofollow"
+                           aria-label="<?= $escaper->escapeHtmlAttr(__('Twitter')) ?>">
+                            <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::media/images/twitter.png')) ?>" alt=""/>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
+<?php else: ?>
+    <header class="blog-page-header">
+        <h1 class="blog-page-heading"><?= $escaper->escapeHtml((string) $block->getBlogTitle()) ?></h1>
+    </header>
+<?php endif; ?>
+
+<section class="blog-section" id="mpblog-list-container">
+    <?php if ($pageAuthor): ?>
+        <header class="blog-section-header">
+            <h2 class="blog-section-title"><?= $escaper->escapeHtml(__('Uploaded posts')) ?></h2>
+        </header>
+    <?php endif; ?>
+    <?php if ($listPost && $listPost->getSize()): ?>
+        <?php /** @var Post $post */
+        $cardIndex = 0;
+        foreach ($listPost as $post): ?>
+            <?= /** @noEscape */ $partials->render($block, $cardFile, $cardVars + ['post' => $post, 'eagerImage' => $cardIndex++ === 0]) ?>
+        <?php endforeach; ?>
+        <?= /** @noEscape */ $block->getPagerHtml() ?>
+    <?php else: ?>
+        <div class="blog-empty"><?= $escaper->escapeHtml(__('There are no posts at this moment')) ?></div>
+    <?php endif; ?>
+    <?= /** @noEscape */ $block->getChildHtml('additional') ?>
+</section>

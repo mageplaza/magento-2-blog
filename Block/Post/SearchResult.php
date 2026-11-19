@@ -42,10 +42,11 @@ class SearchResult extends \Mageplaza\Blog\Block\ListPost
             return null;
         }
 
+        $like       = '%' . addcslashes($query, '\\%_') . '%';
         $collection = $this->helperData->getPostList();
         $collection->addFieldToFilter(
             ['name', 'short_description'],
-            [['like' => '%' . $query . '%'], ['like' => '%' . $query . '%']]
+            [['like' => $like], ['like' => $like]]
         );
 
         return $collection;
