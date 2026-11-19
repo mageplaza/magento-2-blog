@@ -243,6 +243,45 @@ class ViewTest extends TestCase
     }
 
     // -------------------------------------------------------------------------
+    // isLiked()
+    // -------------------------------------------------------------------------
+
+    public function testIsLikedDoesNotLoadLikeModels(): void
+    {
+        $this->helperData->method('isLogin')->willReturn(true);
+        $this->helperData->method('getCustomerIdByContext')->willReturn('7');
+
+        $cases = [
+            [[], false],
+            [[['entity_id' => 7, 'comment_id' => 11]], true],
+            [[['entity_id' => '7', 'comment_id' => '11']], true],
+            [[['entity_id' => 8, 'comment_id' => 11]], false],
+            [[['entity_id' => 7, 'comment_id' => 12]], false],
+            [[
+                ['entity_id' => 8, 'comment_id' => 11],
+                ['entity_id' => 7, 'comment_id' => 12],
+                ['entity_id' => 7, 'comment_id' => 11],
+                ['entity_id' => 7, 'comment_id' => 11],
+            ], true],
+        ];
+
+        foreach ($cases as [$rows, $expected]) {
+            $collection = $this->injectLikeFactory($rows);
+
+            $this->assertSame($expected, $this->block->isLiked('11'));
+            $this->assertSame(0, $collection->hydratedRows);
+        }
+    }
+
+    public function testIsLikedForGuestDoesNotAccessLikes(): void
+    {
+        $this->helperData->method('isLogin')->willReturn(false);
+        $this->helperData->expects($this->never())->method('getCustomerIdByContext');
+
+        $this->assertFalse($this->block->isLiked(11));
+    }
+
+    // -------------------------------------------------------------------------
     // isLoggedIn()
     // -------------------------------------------------------------------------
 
@@ -292,17 +331,49 @@ class ViewTest extends TestCase
         return $tag;
     }
 
-    private function injectLikeFactory(): void
+    private function injectLikeFactory(array $rows = []): object
     {
-        $likeCollection = new class {
+        $likeCollection = new class($rows) implements \IteratorAggregate {
+            public int $hydratedRows = 0;
+            private array $rows;
+            private array $filters = [];
+
+            public function __construct(array $rows)
+            {
+                $this->rows = $rows;
+            }
+
             public function addFieldToFilter($field, $value): self
             {
+                $this->filters[$field] = $value;
+
                 return $this;
             }
 
             public function getSize(): int
             {
-                return 0;
+                return count($this->getMatchingRows());
+            }
+
+            public function getIterator(): \Traversable
+            {
+                foreach ($this->getMatchingRows() as $row) {
+                    $this->hydratedRows++;
+                    yield new \Magento\Framework\DataObject($row);
+                }
+            }
+
+            private function getMatchingRows(): array
+            {
+                return array_filter($this->rows, function (array $row): bool {
+                    foreach ($this->filters as $field => $value) {
+                        if ($row[$field] != $value) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                });
             }
         };
 
@@ -335,6 +406,8 @@ class ViewTest extends TestCase
         };
 
         $this->injectProperty('likeFactory', $likeFactory);
+
+        return $likeCollection;
     }
 
     /**
