@@ -87,6 +87,7 @@ define([
                 type: 'POST',
                 dataType: 'json',
                 global: false,
+                error: $.noop,
                 data: $.extend({}, data, {'form_key': window.FORM_KEY})
             }).done(function (response) {
                 if (response && response.success) {
