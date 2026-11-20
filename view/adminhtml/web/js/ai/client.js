@@ -68,7 +68,7 @@ define([
          * @param {String} url
          * @param {Object} data
          * @param {jQuery} buttons
-         * @param {Object} options keepLock: true leaves buttons locked, caller must call unlock(promise.locked)
+         * @param {Object} options
          * @returns {jQuery.Deferred}
          */
         post: function (url, data, buttons, options) {
