@@ -47,16 +47,40 @@ define([
         },
 
         /**
+         * @returns {jQuery}
+         */
+        panelButtons: function () {
+            return $('.mpblog-ai-assist button').not('[data-ai-cancel]');
+        },
+
+        /**
+         * @param {jQuery} locked
+         * @param {jQuery} active
+         */
+        unlock: function (locked, active) {
+            locked.prop('disabled', false).removeClass('disabled');
+            if (active) {
+                active.removeClass('mpblog-ai-busy');
+            }
+        },
+
+        /**
          * @param {String} url
          * @param {Object} data
          * @param {jQuery} buttons
+         * @param {Object} options keepLock: true leaves buttons locked, caller must call unlock(promise.locked)
          * @returns {jQuery.Deferred}
          */
-        post: function (url, data, buttons) {
+        post: function (url, data, buttons, options) {
             var deferred = $.Deferred(),
-                $active = buttons.filter(lastClicked);
+                self = this,
+                $active = buttons.filter(lastClicked),
+                $locked = buttons.add(this.panelButtons()).filter(function () {
+                    return !this.disabled;
+                }),
+                keep = options && options.keepLock;
 
-            buttons.prop('disabled', true).addClass('disabled');
+            $locked.prop('disabled', true).addClass('disabled');
             $active.addClass('mpblog-ai-busy');
             $.ajax({
                 url: url,
@@ -72,11 +96,14 @@ define([
             }).fail(function () {
                 deferred.reject($t('Request failed.'));
             }).always(function () {
-                buttons.prop('disabled', false).removeClass('disabled');
-                $active.removeClass('mpblog-ai-busy');
+                if (keep) {
+                    $active.removeClass('mpblog-ai-busy');
+                } else {
+                    self.unlock($locked, $active);
+                }
             });
 
-            return deferred.promise();
+            return $.extend(deferred.promise(), {locked: $locked});
         }
     };
 });

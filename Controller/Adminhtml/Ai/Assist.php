@@ -31,6 +31,7 @@ use Mageplaza\Blog\Model\Ai\PostStore;
 use Mageplaza\Blog\Model\Ai\Service;
 use Mageplaza\Blog\Model\ResourceModel\Tag\CollectionFactory as TagCollectionFactory;
 use Mageplaza\Blog\Model\ResourceModel\Topic\CollectionFactory as TopicCollectionFactory;
+use Psr\Log\LoggerInterface;
 
 class Assist extends AbstractAi
 {
@@ -65,6 +66,7 @@ class Assist extends AbstractAi
      * @param PostStore $postStore
      * @param TagCollectionFactory $tagCollectionFactory
      * @param TopicCollectionFactory $topicCollectionFactory
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         Context $context,
@@ -73,14 +75,15 @@ class Assist extends AbstractAi
         AssistModel $assist,
         PostStore $postStore,
         TagCollectionFactory $tagCollectionFactory,
-        TopicCollectionFactory $topicCollectionFactory
+        TopicCollectionFactory $topicCollectionFactory,
+        ?LoggerInterface $logger = null
     ) {
         $this->assist = $assist;
         $this->postStore = $postStore;
         $this->tagCollectionFactory = $tagCollectionFactory;
         $this->topicCollectionFactory = $topicCollectionFactory;
 
-        parent::__construct($context, $resultJsonFactory, $service);
+        parent::__construct($context, $resultJsonFactory, $service, $logger);
     }
 
     /**

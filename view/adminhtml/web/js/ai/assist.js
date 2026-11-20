@@ -92,6 +92,13 @@ define([
         return true;
     }
 
+    function keyClick(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            $(this).trigger('click');
+        }
+    }
+
     function addOption(scope, term) {
         var component = registry.get(scope);
 
@@ -164,7 +171,7 @@ define([
          * @param {Array} titles
          */
         function renderTitles(titles) {
-            var $section = section($t('5 titles (click to set as Name)')),
+            var $section = section($t('Title suggestions (click to set as Name)')),
                 $list = $('<ul class="mpblog-ai-list"/>').appendTo($section);
 
             _.each(titles, function (title) {
@@ -172,9 +179,9 @@ define([
                     .append($('<small/>').text($t('%1 chars').replace('%1', title.length)))
                     .on('click', function () {
                         if (setField('#post_name', title, $t('Replace the current Name?'))) {
-                            client.message($message, 'success', $t('Name updated. URL Key is unchanged.'));
+                            client.message($message, 'success', $t('Name updated.'));
                         }
-                    }).appendTo($list);
+                    }).appendTo($list).attr({role: 'button', tabindex: 0}).on('keydown', keyClick);
             });
             note($t('The URL Key is not changed.')).appendTo($section);
         }
@@ -201,7 +208,7 @@ define([
                 $('<h4/>').text(info.title).appendTo($section);
                 $chips = $('<div class="mpblog-ai-chips"/>').appendTo($section);
                 _.each(group.existing || [], function (item) {
-                    var $chip = $('<span class="mpblog-ai-chip"/>').text(item.name)
+                    var $chip = $('<span class="mpblog-ai-chip" role="button" tabindex="0"/>').on('keydown', keyClick).text(item.name)
                         .attr('title', $t('Existing, click to add')).appendTo($chips);
 
                     if (isSelected(info.scope, item.id)) {
@@ -216,7 +223,8 @@ define([
                     });
                 });
                 _.each(group['new'] || [], function (name) {
-                    var $chip = $('<span class="mpblog-ai-chip _new"/>').text('+ ' + $t('%1 (new)').replace('%1', name))
+                    var $chip = $('<span class="mpblog-ai-chip _new" role="button" tabindex="0"/>').on('keydown', keyClick)
+                        .text($t('+ %1 (new)').replace('%1', name))
                         .appendTo($chips);
 
                     if (!(config.canCreate || {})[key]) {

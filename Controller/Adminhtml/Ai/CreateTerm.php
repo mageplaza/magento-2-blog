@@ -29,6 +29,7 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Blog\Model\Ai\Service;
 use Mageplaza\Blog\Model\Ai\TermCreator;
+use Psr\Log\LoggerInterface;
 
 class CreateTerm extends AbstractAi
 {
@@ -44,16 +45,26 @@ class CreateTerm extends AbstractAi
      * @param JsonFactory $resultJsonFactory
      * @param Service $service
      * @param TermCreator $termCreator
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
         Service $service,
-        TermCreator $termCreator
+        TermCreator $termCreator,
+        ?LoggerInterface $logger = null
     ) {
         $this->termCreator = $termCreator;
 
-        parent::__construct($context, $resultJsonFactory, $service);
+        parent::__construct($context, $resultJsonFactory, $service, $logger);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function requiresAi(): bool
+    {
+        return false;
     }
 
     /**

@@ -77,6 +77,11 @@ class AssistTest extends TestCase
     private $response;
 
     /**
+     * @var \Psr\Log\LoggerInterface|MockObject
+     */
+    private $logger;
+
+    /**
      * @var Assist
      */
     private $controller;
@@ -104,6 +109,7 @@ class AssistTest extends TestCase
         $this->assist = $this->createMock(AssistModel::class);
         $this->postStore = $this->createMock(PostStore::class);
         $this->postStore->method('getStoreId')->willReturn(1);
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->controller = new Assist(
             $context,
             $factory,
@@ -111,7 +117,8 @@ class AssistTest extends TestCase
             $this->assist,
             $this->postStore,
             $this->createMock(TagCollectionFactory::class),
-            $this->createMock(TopicCollectionFactory::class)
+            $this->createMock(TopicCollectionFactory::class),
+            $this->logger
         );
     }
 
@@ -175,6 +182,16 @@ class AssistTest extends TestCase
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('Invalid request.')));
         $this->controller->execute();
         $this->assertSame(['success' => false, 'message' => 'Invalid request.'], $this->response);
+    }
+
+    public function testThrowableIsLoggedAndGeneric(): void
+    {
+        $this->allow();
+        $this->assist->method('generate')->willThrowException(new \RuntimeException('boom'));
+        $this->logger->expects($this->once())->method('critical');
+        $this->controller->execute();
+        $this->assertFalse($this->response['success']);
+        $this->assertStringNotContainsString('boom', $this->response['message']);
     }
 
     public function testAiExceptionMapped(): void
