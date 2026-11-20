@@ -96,9 +96,7 @@ define([
             }).fail(function () {
                 deferred.reject($t('Request failed.'));
             }).always(function () {
-                if (keep) {
-                    $active.removeClass('mpblog-ai-busy');
-                } else {
+                if (!keep) {
                     self.unlock($locked, $active);
                 }
             });
