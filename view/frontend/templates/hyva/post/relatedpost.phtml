@@ -38,12 +38,12 @@ $isSlider = (bool) $block->getRelatedMode();
 $renderCard = static function ($post) use ($escaper, $block) {
     ?>
     <article class="blog-card">
-        <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>" class="blog-card-media">
-            <?php if ($post->getImage()) : ?>
+        <?php if ($post->getImage()) : ?>
+            <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>" class="blog-card-media">
                 <img src="<?= $escaper->escapeUrl($block->resizeImage($post->getImage(), '400x250')) ?>"
                      alt="<?= $escaper->escapeHtmlAttr($post->getName()) ?>" loading="lazy"/>
-            <?php endif; ?>
-        </a>
+            </a>
+        <?php endif; ?>
         <div class="blog-card-body">
             <h3 class="blog-card-title">
                 <a href="<?= $escaper->escapeUrl($post->getUrl()) ?>"

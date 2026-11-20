@@ -820,7 +820,7 @@ class Data extends CoreHelper
 
         $dateType = $this->getBlogConfig($monthly ? 'sidebar/monthly_archive/date_type_monthly' : 'display/date_type');
 
-        return $dateTime->format($dateType);
+        return str_replace(' ,', ',', $dateTime->format($dateType));
     }
 
     /**

@@ -32,7 +32,7 @@ $pro       = trim($block->getChildHtml('pro'));
                 <?php foreach (['short' => __('Short description'), 'taxonomy' => __('Suggest tags/topics'), 'titles' => __('5 titles')] as $type => $label): ?>
                     <button type="button" class="action-default action-secondary mpblog-ai-tip" data-ai-type="<?= $block->escapeHtmlAttr($type) ?>"
                             <?php if ($available): ?>data-tip="<?= $block->escapeHtmlAttr(__('Calls your AI provider and uses tokens')) ?>"
-                            <?php else: ?>disabled="disabled"<?php endif; ?>>
+                            <?php else: ?>disabled="disabled" title="<?= $block->escapeHtmlAttr(__('Enable AI Integration and set an API key to use this.')) ?>"<?php endif; ?>>
                         <span><?= $block->escapeHtml($label) ?></span>
                     </button>
                 <?php endforeach; ?>

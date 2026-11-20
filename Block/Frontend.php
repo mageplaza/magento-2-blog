@@ -454,6 +454,21 @@ class Frontend extends Template
     }
 
     /**
+     * @param Post $post
+     * @param bool $withRead
+     * @return Phrase
+     */
+    public function getReadTimeLabel($post, $withRead = true)
+    {
+        $time = $this->getReadingTime($post);
+        if ($time === 1) {
+            return $withRead ? __('1 minute read') : __('1 minute');
+        }
+
+        return $withRead ? __('%1 minutes read', $time) : __('%1 minutes', $time);
+    }
+
+    /**
      * Get list category html of post
      *
      * @param Post $post

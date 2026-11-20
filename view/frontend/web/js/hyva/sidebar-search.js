@@ -47,6 +47,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 250);
     });
 
+    function submitSearch() {
+        var term = searchBox.value.trim();
+        if (term) {
+            window.location.href = (container.dataset.searchPageUrl || '') + '?query=' + encodeURIComponent(term);
+        }
+    }
+
+    searchBox.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            submitSearch();
+        }
+    });
+
+    var searchButton = container.querySelector('button.search');
+    if (searchButton) {
+        searchButton.addEventListener('click', submitSearch);
+    }
+
     function fetchSuggestions(searchTerm) {
         fetch(searchUrl + '?query=' + encodeURIComponent(searchTerm), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
             .then(function (response) { return response.json(); })
