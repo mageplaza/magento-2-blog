@@ -33,6 +33,9 @@
                         <resource id="Mageplaza_Blog::author" title="Author Information" sortOrder="50"/>
                         <resource id="Mageplaza_Blog::comment" title="Manage Comments" sortOrder="60"/>
                         <resource id="Mageplaza_Blog::import" title="Import" sortOrder="65"/>
+                        <resource id="Mageplaza_Blog::ai_assist" title="AI Assist" sortOrder="70"/>
+                        <resource id="Mageplaza_Blog::ai_ideas" title="AI Topic Ideas" sortOrder="75"/>
+                        <resource id="Mageplaza_Blog::outdated" title="Outdated Posts" sortOrder="80"/>
                     </resource>
                 </resource>
                 <resource id="Magento_Backend::stores">

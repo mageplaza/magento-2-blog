@@ -1,0 +1,33 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Magento\Backend\Block\Template $block */
+?>
+<div class="mpblog-lockbox">
+    <b><?= $block->escapeHtml(__('Outdated Posts')) ?></b>
+    <span class="mpblog-ai-badge"><?= $block->escapeHtml(__('PRO')) ?></span>
+    <p class="mpblog-ai-note">
+        <?= $block->escapeHtml(__('This report is part of Better Blog Pro.')) ?>
+        <a href="<?= $block->escapeUrl(\Mageplaza\Blog\Block\Adminhtml\Idea\Index::PRO_URL) ?>" target="_blank" rel="noopener">
+            <?= $block->escapeHtml(__('Learn about Pro')) ?>
+        </a>
+    </p>
+</div>

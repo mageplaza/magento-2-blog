@@ -24,6 +24,7 @@
     <update handle="editor"/>
     <head>
         <css src="Mageplaza_Blog::css/post/edit/post.css"/>
+        <css src="Mageplaza_Blog::css/ai.css"/>
     </head>
     <body>
         <referenceContainer name="content">

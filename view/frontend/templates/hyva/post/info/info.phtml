@@ -23,7 +23,7 @@ $showReadTime = $showReadTime === null ? true : (bool) $showReadTime;
     <?php if ($showReadTime) : ?>
         <span class="blog-meta__item blog-post-info__readtime">
             <?= $heroicons->clockHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
-            <?= $escaper->escapeHtml(__('%1 minutes', $block->getReadingTime($_post))) ?>
+            <?= $escaper->escapeHtml($block->getReadTimeLabel($_post, false)) ?>
         </span>
     <?php endif; ?>
 </div>

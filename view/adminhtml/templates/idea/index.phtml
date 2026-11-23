@@ -1,0 +1,52 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Blog\Block\Adminhtml\Idea\Index $block */
+$data = $block->getTerms();
+?>
+<div class="mpblog-ideas">
+    <div class="mpblog-ai-panel">
+        <div><?= $block->escapeHtml(__('Store view: Default Store View only. Other store views need Better Blog Pro.')) ?></div>
+        <p class="mpblog-ai-note">
+            <?= $block->escapeHtml(__('Free: top %1 topics from one run of up to %2 search terms.', $block->getMaxTopics(), \Mageplaza\Blog\Model\Ai\Ideas::MAX_TERMS)) ?>
+        </p>
+    </div>
+    <?php if (!$data['enough']): ?>
+        <div class="messages"><div class="message message-notice"><div><?= $block->escapeHtml($block->getNotEnoughMessage()) ?></div></div></div>
+    <?php endif; ?>
+    <?php if (!$block->isAvailable()): ?>
+        <div class="mpblog-ai-unavailable">
+            <?= $block->escapeHtml(__('AI is not configured.')) ?>
+            <a href="<?= $block->escapeUrl($block->getConfigUrl()) ?>">
+                <?= $block->escapeHtml(__('Configure AI to use this feature')) ?>
+            </a>
+        </div>
+    <?php elseif ($data['enough']): ?>
+        <div class="mpblog-ideas-ai" data-mage-init='<?= $block->escapeHtmlAttr($block->getJsConfig()) ?>'>
+            <div class="mpblog-ai-message" role="alert"></div>
+            <div class="mpblog-ai-head"></div>
+            <div class="mpblog-ai-result"></div>
+            <p class="mpblog-ai-note mpblog-ai-hint">
+                <?= $block->escapeHtml(__('Click Generate ideas to turn your popular and zero-result search terms into post topics.')) ?>
+            </p>
+        </div>
+    <?php endif; ?>
+</div>
