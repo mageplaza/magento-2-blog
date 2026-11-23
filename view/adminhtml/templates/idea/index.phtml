@@ -25,9 +25,11 @@ $data = $block->getTerms();
 <div class="mpblog-ideas">
     <div class="mpblog-ai-panel">
         <div><?= $block->escapeHtml(__('Store view: Default Store View only. Other store views need Better Blog Pro.')) ?></div>
-        <p class="mpblog-ai-note">
-            <?= $block->escapeHtml(__('Free: top %1 topics from one run of up to %2 search terms.', $block->getMaxTopics(), \Mageplaza\Blog\Model\Ai\Ideas::MAX_TERMS)) ?>
-        </p>
+        <?php if ($block->isAvailable()): ?>
+            <p class="mpblog-ai-note">
+                <?= $block->escapeHtml(__('Free: top %1 topics from one run of up to %2 search terms.', $block->getMaxTopics(), \Mageplaza\Blog\Model\Ai\Ideas::MAX_TERMS)) ?>
+            </p>
+        <?php endif; ?>
     </div>
     <?php if (!$data['enough']): ?>
         <div class="messages"><div class="message message-notice"><div><?= $block->escapeHtml($block->getNotEnoughMessage()) ?></div></div></div>
