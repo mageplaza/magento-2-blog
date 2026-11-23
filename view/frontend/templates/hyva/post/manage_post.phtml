@@ -17,7 +17,7 @@ $inputClass = 'block w-full rounded-md border border-slate-300 bg-white px-3 py-
     . 'focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary';
 ?>
 <form enctype="multipart/form-data"
-      action="<?= $escaper->escapeUrl($block->getUrl('mpblog/post/manage')) ?>"
+      action="<?= $escaper->escapeUrl($block->getManageUrl()) ?>"
       method="post"
       name="mp_blog_post_form"
       id="mp_blog_post_form"
@@ -115,6 +115,6 @@ $inputClass = 'block w-full rounded-md border border-slate-300 bg-white px-3 py-
     'categories' => json_decode($block->getCategoriesTree(), true) ?: [],
     'topics'     => json_decode($block->getTopicTree(), true) ?: [],
     'tags'       => json_decode($block->getTagTree(), true) ?: [],
-    'submitUrl'  => $block->getUrl('mpblog/post/manage'),
+    'submitUrl'  => $block->getManageUrl(),
 ], JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
 <script src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::js/hyva/manage-post.js')) ?>" defer></script>
