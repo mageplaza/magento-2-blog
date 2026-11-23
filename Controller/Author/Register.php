@@ -200,7 +200,7 @@ class Register extends Action implements HttpPostActionInterface, CsrfAwareActio
             $data['status']      = $this->_helperBlog->getConfigGeneral('auto_approve');
         }
 
-        if ($this->getRequest()->getFiles()['image']['size'] > 0) {
+        if (($this->getRequest()->getFiles('image')['size'] ?? 0) > 0) {
             try {
                 $this->imageHelper->uploadImage($data, 'image', Image::TEMPLATE_MEDIA_TYPE_AUTH);
             } catch (Exception $exception) {
