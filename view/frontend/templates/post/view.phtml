@@ -141,9 +141,9 @@ $modifierName = $modifier !== null ? $modifier->getName() : '';
             <div class="related-content-container">
                 <div class="author-content-image">
                     <img class="img-responsive"
-                         src="<?= /* @noEscape */ $author->getImage()
+                         src="<?= $escaper->escapeUrl($author->getImage()
                              ? $block->resizeImage($author->getImage(), '135x', Image::TEMPLATE_MEDIA_TYPE_AUTH)
-                             : $block->getDefaultAuthorImage() ?>">
+                             : $block->getDefaultAuthorImage()) ?>">
                 </div>
                 <div class="author-content-information">
                     <div class="author-name"><?= $escaper->escapeHtml($authorName) ?></div>
