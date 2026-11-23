@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Mageplaza\Blog\Block\Topic\Widget;
+use Magento\Framework\Escaper;
+
+/** @var Widget $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+$enabled   = $block->helperData->getBlogConfig('sidebar/topics/enable', $block->helperData->getCurrentStoreId());
+$topics    = ($enabled === null || (bool) $enabled) ? $block->getTopicList() : null;
+?>
+<?php if ($topics && $topics->getSize()): ?>
+    <section class="sidebar-widget">
+        <h2 class="sidebar-widget-title"><?= $escaper->escapeHtml(__('Topics')) ?></h2>
+        <div class="blog-scroll-area pr-1">
+            <ul class="sidebar-widget-list">
+                <?php foreach ($topics as $topic): ?>
+                    <li>
+                        <a class="sidebar-widget-link" href="<?= $escaper->escapeUrl($block->getTopicUrl($topic)) ?>">
+                            <?= $heroicons->tagHtml('sidebar-widget-link__icon', 16, 16, ['aria-hidden' => 'true']) ?>
+                            <span><?= $escaper->escapeHtml(ucfirst((string) $topic->getName())) ?></span>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </section>
+<?php endif; ?>

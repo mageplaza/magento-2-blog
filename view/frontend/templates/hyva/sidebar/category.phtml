@@ -1,0 +1,67 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Mageplaza\Blog\Block\Category\Widget;
+use Magento\Framework\Escaper;
+
+/** @var Widget $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+$enabled   = $block->helperData->getBlogConfig('sidebar/categories/enable', $block->helperData->getCurrentStoreId());
+$tree      = ($enabled === null || (bool) $enabled) ? $block->getTree() : null;
+
+$renderTree = function (array $nodes, int $level = 1) use (&$renderTree, $heroicons, $escaper, $block): string {
+    $html = '';
+    foreach ($nodes as $node) {
+        if (!$node || empty($node['enabled'])) {
+            continue;
+        }
+        $hasChildren = !empty($node['children']) && $level < 4;
+        $url         = $escaper->escapeUrl($block->getCategoryUrl($node['url'] ?? ''));
+        $name        = $escaper->escapeHtml(ucfirst(html_entity_decode((string) ($node['text'] ?? ''), ENT_QUOTES | ENT_HTML5)));
+
+        $html .= '<li' . ($hasChildren ? ' x-data="blogCategoryNode" data-open="' . ($level === 1 ? 'true' : 'false') . '"' : '') . '>';
+        $html .= '<div class="category-tree-item">';
+
+        if ($hasChildren) {
+            $html .= '<button type="button" class="category-tree-toggle" :aria-expanded="open" @click="toggle"'
+                . ' aria-label="' . $escaper->escapeHtmlAttr(__('Toggle subcategories')) . '">'
+                . $heroicons->chevronRightHtml('', 14, 14, ['aria-hidden' => 'true'])
+                . '</button>';
+        } else {
+            $html .= '<span class="category-tree-spacer"></span>';
+        }
+
+        $html .= '<a class="category-tree-link" href="' . $url . '">'
+            . $heroicons->folderHtml('sidebar-widget-link__icon', 16, 16, ['aria-hidden' => 'true'])
+            . '<span>' . $name . '</span>'
+            . '</a>';
+        $html .= '</div>';
+
+        if ($hasChildren) {
+            $childHtml = $renderTree($node['children'], $level + 1);
+            if ($childHtml !== '') {
+                $html .= '<div x-show="open" x-cloak><ul class="category-tree category-tree-children">' . $childHtml . '</ul></div>';
+            }
+        }
+
+        $html .= '</li>';
+    }
+
+    return $html;
+};
+$treeHtml = is_array($tree) ? $renderTree($tree) : '';
+?>
+<?php if ($treeHtml !== ''): ?>
+    <section class="sidebar-widget">
+        <h2 class="sidebar-widget-title"><?= $escaper->escapeHtml(__('Categories')) ?></h2>
+        <div class="blog-scroll-area pr-1">
+            <ul class="category-tree"><?= /** @noEscape */ $treeHtml ?></ul>
+        </div>
+    </section>
+    <script src="<?= $escaper->escapeUrl($block->getViewFileUrl('Mageplaza_Blog::js/hyva/category-node.js')) ?>" defer></script>
+<?php endif; ?>
