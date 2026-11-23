@@ -22,6 +22,7 @@
 namespace Mageplaza\Blog\Model;
 
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -33,7 +34,7 @@ use Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory;
  * Class Comment
  * @package Mageplaza\Blog\Model
  */
-class Comment extends AbstractModel
+class Comment extends AbstractModel implements IdentityInterface
 {
     /**
      * Cache tag
@@ -112,6 +113,11 @@ class Comment extends AbstractModel
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        $identities = [self::CACHE_TAG . '_' . $this->getId()];
+        if ($this->getPostId()) {
+            $identities[] = Post::CACHE_TAG . '_' . $this->getPostId();
+        }
+
+        return $identities;
     }
 }
