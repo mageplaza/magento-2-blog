@@ -122,6 +122,16 @@ class Index extends Template
     }
 
     /**
+     * @return bool
+     */
+    public function hasStoreFilter(): bool
+    {
+        $limits = $this->service->getLimits('ideas');
+
+        return !empty($limits['store_filter']);
+    }
+
+    /**
      * @return array
      */
     public function getTerms(): array

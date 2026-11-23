@@ -265,10 +265,6 @@ class View extends Action
 
                 $commentModel = $this->cmtFactory->create();
                 $result       = $this->commentActions(self::COMMENT, $customerData, $commentData, $commentModel);
-                if (($result['status'] ?? null) === Status::APPROVED) {
-                    $this->cacheContext->registerEntities(Post::CACHE_TAG, [$post->getId()]);
-                    $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
-                }
             }
 
             if (isset($params['cmtId'])) {

@@ -24,7 +24,9 @@ $data = $block->getTerms();
 ?>
 <div class="mpblog-ideas">
     <div class="mpblog-ai-panel">
-        <div><?= $block->escapeHtml(__('Store view: Default Store View only. Other store views need Better Blog Pro.')) ?></div>
+        <?php if (!$block->hasStoreFilter()): ?>
+            <div><?= $block->escapeHtml(__('Store view: Default Store View only. Other store views need Better Blog Pro.')) ?></div>
+        <?php endif; ?>
         <?php if ($block->isAvailable()): ?>
             <p class="mpblog-ai-note">
                 <?= $block->escapeHtml(__('Free: top %1 topics from one run of up to %2 search terms.', $block->getMaxTopics(), \Mageplaza\Blog\Model\Ai\Ideas::MAX_TERMS)) ?>

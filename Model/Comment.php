@@ -117,6 +117,10 @@ class Comment extends AbstractModel implements IdentityInterface
         if ($this->getPostId()) {
             $identities[] = Post::CACHE_TAG . '_' . $this->getPostId();
         }
+        $oldPostId = $this->getOrigData('post_id');
+        if ($oldPostId && $oldPostId != $this->getPostId()) {
+            $identities[] = Post::CACHE_TAG . '_' . $oldPostId;
+        }
 
         return $identities;
     }
