@@ -187,6 +187,10 @@ class Register extends Action implements HttpPostActionInterface, CsrfAwareActio
     {
         unset($data['user_id'], $data['customer_id'], $data['type'], $data['status']);
 
+        if (isset($data['image']) && !isset($data['image']['delete'])) {
+            unset($data['image']);
+        }
+
         if ($author) {
             $data['customer_id'] = $author->getCustomerId();
             $data['type']        = $author->getType();
