@@ -121,7 +121,7 @@ $cardImgEager = (bool) ($eagerImage ?? false);
                 <?php if ($showReadTime ?? false): ?>
                     <span class="blog-meta__item">
                         <?= $heroicons->clockHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
-                        <?= $escaper->escapeHtml(__('%1 minutes', $block->getReadingTime($post))) ?>
+                        <?= $escaper->escapeHtml($block->getReadTimeLabel($post, false)) ?>
                     </span>
                 <?php endif; ?>
                 <?php if ($showViewCount ?? false): ?>

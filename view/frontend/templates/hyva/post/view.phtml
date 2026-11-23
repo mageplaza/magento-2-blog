@@ -216,7 +216,7 @@ $fbShare = $helper->getBlogConfig('platforms/fb_platform/fb_share');
                     <?php if ($rShowReadTime) : ?>
                         <span class="blog-meta__item">
                             <?= $heroicons->clockHtml('', 14, 14, ['aria-hidden' => 'true']) ?>
-                            <?= $escaper->escapeHtml(__('%1 minutes', $block->getReadingTime($post))) ?>
+                            <?= $escaper->escapeHtml($block->getReadTimeLabel($post, false)) ?>
                         </span>
                     <?php endif; ?>
                 </div>
