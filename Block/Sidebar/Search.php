@@ -60,6 +60,7 @@ class Search extends Frontend
             'serviceUrl'   => $this->getSuggestUrl(),
             'minChars'     => (int) $this->getSidebarConfig('search/min_chars') ?: 1,
             'visibleImage' => (int) $this->getSidebarConfig('search/show_image'),
+            'searchUrl'    => $this->getSearchUrl(),
         ]);
     }
 

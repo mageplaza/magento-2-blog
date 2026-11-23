@@ -62,5 +62,15 @@ define([
         });
 
         $($(element).data('autocomplete').suggestionsContainer).addClass('mpblog-autocomplete');
+
+        $(element).closest('.mpblog-search').find('.action.search').on('click', function (e) {
+            var query = $.trim($(element).val());
+
+            e.preventDefault();
+            if (query) {
+                window.location.href = config.searchUrl + (config.searchUrl.indexOf('?') === -1 ? '?' : '&') +
+                    'query=' + encodeURIComponent(query);
+            }
+        });
     };
 });
