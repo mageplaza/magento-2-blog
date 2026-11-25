@@ -55,6 +55,16 @@ class ManagePost extends Frontend
     }
 
     /**
+     * @return string
+     */
+    public function getManageUrl()
+    {
+        return $this->getUrl('mpblog/post/manage', [
+            '_query' => ['___store' => $this->_storeManager->getStore()->getCode()]
+        ]);
+    }
+
+    /**
      * @return bool
      */
     public function checkTheme()

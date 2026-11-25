@@ -26,7 +26,7 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 ?>
 <form enctype="multipart/form-data" data-mage-init='{"validation": {}}'
-      action="<?= $escaper->escapeHtml($block->getUrl('mpblog/post/manage'))?>" method="post" class="form"
+      action="<?= $escaper->escapeHtml($block->getManageUrl())?>" method="post" class="form"
       name="mp_blog_post_form" id="mp_blog_post_form">
     <?= /* @noEscape */ $block->getBlockHtml('formkey'); ?>
     <fieldset class="fieldset">
